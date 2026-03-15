@@ -1,17 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Project\\GitHub\\yu\\",
+  "WorkspaceRootPath": "D:\\Project\\godotproject\\yu\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\github\\yu\\scripts\\framework\\core\\modulesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\godotproject\\yu\\scripts\\framework\\core\\modulesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|solutionrelative:scripts\\framework\\core\\modulesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\github\\yu\\scripts\\framework\\core\\module.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\godotproject\\yu\\scripts\\framework\\core\\module.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|solutionrelative:scripts\\framework\\core\\module.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\github\\yu\\scripts\\framework\\utility\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|d:\\project\\godotproject\\yu\\scripts\\framework\\utility\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA268E94-CBA7-4A75-BA0B-6F7E0FA6B54B}|yu.csproj|solutionrelative:scripts\\framework\\utility\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -28,23 +28,24 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Logger.cs",
-              "DocumentMoniker": "D:\\Project\\GitHub\\yu\\scripts\\framework\\utility\\Logger.cs",
+              "DocumentMoniker": "D:\\Project\\godotproject\\yu\\scripts\\framework\\utility\\Logger.cs",
               "RelativeDocumentMoniker": "scripts\\framework\\utility\\Logger.cs",
-              "ToolTip": "D:\\Project\\GitHub\\yu\\scripts\\framework\\utility\\Logger.cs",
+              "ToolTip": "D:\\Project\\godotproject\\yu\\scripts\\framework\\utility\\Logger.cs",
               "RelativeToolTip": "scripts\\framework\\utility\\Logger.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwMAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-15T15:24:25.08Z"
+              "WhenOpened": "2026-03-15T15:24:25.08Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "ModuleSystem.cs",
-              "DocumentMoniker": "D:\\Project\\GitHub\\yu\\scripts\\framework\\core\\ModuleSystem.cs",
+              "DocumentMoniker": "D:\\Project\\godotproject\\yu\\scripts\\framework\\core\\ModuleSystem.cs",
               "RelativeDocumentMoniker": "scripts\\framework\\core\\ModuleSystem.cs",
-              "ToolTip": "D:\\Project\\GitHub\\yu\\scripts\\framework\\core\\ModuleSystem.cs",
+              "ToolTip": "D:\\Project\\godotproject\\yu\\scripts\\framework\\core\\ModuleSystem.cs",
               "RelativeToolTip": "scripts\\framework\\core\\ModuleSystem.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAAwDMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAADwvzcAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-15T15:19:41.04Z",
               "EditorCaption": ""
@@ -53,13 +54,14 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Module.cs",
-              "DocumentMoniker": "D:\\Project\\GitHub\\yu\\scripts\\framework\\core\\Module.cs",
+              "DocumentMoniker": "D:\\PROJECT\\GODOTPROJECT\\YU\\scripts\\framework\\core\\Module.cs",
               "RelativeDocumentMoniker": "scripts\\framework\\core\\Module.cs",
-              "ToolTip": "D:\\Project\\GitHub\\yu\\scripts\\framework\\core\\Module.cs",
+              "ToolTip": "D:\\PROJECT\\GODOTPROJECT\\YU\\scripts\\framework\\core\\Module.cs",
               "RelativeToolTip": "scripts\\framework\\core\\Module.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-15T15:16:42.502Z"
+              "WhenOpened": "2026-03-15T15:16:42.502Z",
+              "EditorCaption": ""
             }
           ]
         }

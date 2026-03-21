@@ -1,7 +1,7 @@
 using Godot;
-namespace Framework.Utility
+namespace Framework
 {
-    public static class Logger
+    public static class Debugger
     {
         public static bool EnableInfo = true;
         public static bool EnableWarning = true;

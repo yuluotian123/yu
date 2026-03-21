@@ -1,4 +1,4 @@
-namespace Framework.Core
+namespace Framework
 {
     public abstract class Module
     {
@@ -25,7 +25,9 @@ namespace Framework.Core
         /// 游戏框架模块轮询。
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
-        void Process(float elapseSeconds);
+        /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
+
+        void Process(double elapseSeconds, double realElapseSeconds);
     }
 
 }

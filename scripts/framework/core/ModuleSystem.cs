@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Framework.Core
+namespace Framework
 {
     /// <summary>
     /// 游戏框架模块实现类管理系统。
@@ -25,7 +25,8 @@ namespace Framework.Core
         /// 所有游戏框架模块轮询。
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
-        public static void Process(float elapseSeconds)
+        /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
+        public static void Process(double elapseSeconds, double realElapseSeconds)
         {
             if (_isExecuteListDirty)
             {
@@ -36,7 +37,7 @@ namespace Framework.Core
             int executeCount = _processExecuteList.Count;
             for (int i = 0; i < executeCount; i++)
             {
-                _processExecuteList[i].Process(elapseSeconds);
+                _processExecuteList[i].Process(elapseSeconds, realElapseSeconds);
             }
         }
 

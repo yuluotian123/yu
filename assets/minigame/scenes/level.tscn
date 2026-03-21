@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://740rko54cgn2"]
+
+[ext_resource type="PackedScene" uid="uid://cb2svtca8mpeh" path="res://assets/minigame/meshes/1.fbx" id="1_d2n54"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d2n54"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_xjxdj"]
+sky_material = SubResource("ProceduralSkyMaterial_d2n54")
+
+[sub_resource type="Environment" id="Environment_ifgbr"]
+background_mode = 2
+sky = SubResource("Sky_xjxdj")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Level" type="Node3D" unique_id=1372880718]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1797011301]
+environment = SubResource("Environment_ifgbr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2066753767]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1568138303]
+transform = Transform3D(1, 0, 0, 0, 0.8708023, 0.49163347, 0, -0.49163347, 0.8708023, 0, 1.6198238, 1.0724256)
+
+[node name="1" parent="." unique_id=1978140424 instance=ExtResource("1_d2n54")]

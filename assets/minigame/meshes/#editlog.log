@@ -1,0 +1,21 @@
+
+--[2026-03-20T23:15:38.391277]
+---- Created Backup file
+--[2026-03-20T23:15:38.550272]
+---- Performed minimal cleanup for working MMD
+--[2026-03-20T23:15:57.895114]
+---- == Enhanced Model Textures ==
+---- ==========
+---- ==========
+--[2026-03-20T23:16:00.072733]
+---- Pruned 315 vertices and removed 432 faces
+---- > Skipped(TooSmall): [11, 19]
+--[2026-03-20T23:16:00.336333]
+---- Modified Rigging
+---- > Removed 97 rigidbodies and 175 joints.
+--[2026-03-20T23:16:00.346299]
+---- Added Material Morphs
+--[2026-03-20T23:16:00.495279]
+---- EyeSlider Value: 0.66
+--[2026-03-20T23:16:48.149519][model_better2]
+---- Cleaned up Physics

@@ -6,3 +6,5 @@
 [node name="Root" type="Node" unique_id=1907522443]
 script = ExtResource("1_m1qdt")
 settings = ExtResource("2_0sllv")
+
+[node name="UICanvas" type="Node" parent="." unique_id=155308512]

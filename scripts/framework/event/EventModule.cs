@@ -4,219 +4,151 @@ using System.Collections.Generic;
 namespace Framework
 {
     /// <summary>
-    /// 游戏事件模块实现。
+    /// 事件模块实现。
     /// <para>
-    /// 通过 <see cref="ModuleSystem.GetModule{T}"/> 以 <see cref="IEventModule"/> 接口获取实例。
-    /// 命名遵循框架约定：接口名去掉 'I' 前缀即为实现类名（<c>IEventModule</c> → <c>EventModule</c>）。
-    /// </para>
-    /// <para>
-    /// 功能概览：
+    /// 对齐 TEngine EventDispatcher 设计：
     /// <list type="bullet">
-    ///   <item>基于事件 ID 的发布-订阅机制，每个事件 ID 对应一个处理器链表。</item>
-    ///   <item><see cref="Fire"/> 将事件推入队列，在每帧 <see cref="Process"/> 时统一派发，避免回调中嵌套触发事件的问题。</item>
-    ///   <item><see cref="FireNow"/> 立即同步派发，适用于需要当帧响应的场景。</item>
+    ///   <item>使用 <see cref="Action{T}"/> 泛型委托，直接传参，编译期类型安全，无拆装箱；</item>
+    ///   <item>通过 <see cref="EventDelegateData"/> 的脏数据机制保证回调中 Subscribe/Unsubscribe 安全；</item>
+    ///   <item>所有 Send 均为同步立即派发，无队列延迟；</item>
+    ///   <item>事件 ID 推荐通过 <see cref="EventId.Get{T}"/> 生成（单调递增，天然无碰撞）。</item>
     /// </list>
     /// </para>
     /// </summary>
-    internal sealed class EventModule : Module, IEventModule, IProcessModule
+    public class EventModule : Module, IEventModule
     {
-        // 事件处理器表：eventId → 处理器链表
-        private readonly Dictionary<int, LinkedList<EventHandler<GameEventArgs>>> _eventHandlerMap;
+        /// <summary>eventId → 该 ID 对应的委托数据。</summary>
+        private readonly Dictionary<int, EventDelegateData> _eventTable
+            = new Dictionary<int, EventDelegateData>();
 
-        // 事件队列节点：存储 sender 和 EventArgs
-        private struct EventNode
-        {
-            public object Sender;
-            public GameEventArgs EventArgs;
+        // ------------------------------------------------------------------ Module 生命周期
 
-            public EventNode(object sender, GameEventArgs eventArgs)
-            {
-                Sender = sender;
-                EventArgs = eventArgs;
-            }
-        }
+        public override void OnInit() { }
 
-        // 待派发的事件队列（Fire 推入，Process 消费）
-        private readonly Queue<EventNode> _eventQueue;
-
-        // 正在派发中的临时缓冲（避免 Process 过程中 Fire 影响迭代）
-        private readonly List<EventNode> _dispatchBuffer;
-
-        public EventModule()
-        {
-            _eventHandlerMap = new Dictionary<int, LinkedList<EventHandler<GameEventArgs>>>();
-            _eventQueue = new Queue<EventNode>();
-            _dispatchBuffer = new List<EventNode>();
-        }
-
-        /// <inheritdoc/>
-        public override int Priority => 0;
-
-        // ---- Module 生命周期 ----
-
-        /// <inheritdoc/>
-        public override void OnInit()
-        {
-            Debugger.Info("[EventModule] Initialized.");
-        }
-
-        /// <inheritdoc/>
         public override void Shutdown()
         {
-            _eventHandlerMap.Clear();
-            _eventQueue.Clear();
-            _dispatchBuffer.Clear();
-            Debugger.Info("[EventModule] Shutdown.");
+            _eventTable.Clear();
         }
 
-        // ---- IProcessModule ----
+        // ------------------------------------------------------------------ 内部辅助
 
-        /// <summary>
-        /// 每帧消费事件队列，依次派发所有待处理事件。
-        /// </summary>
-        /// <param name="elapseSeconds">逻辑流逝时间（秒）。</param>
-        /// <param name="realElapseSeconds">真实流逝时间（秒）。</param>
-        public void Process(double elapseSeconds, double realElapseSeconds)
+        /// <summary>获取或创建 eventId 对应的数据条目。</summary>
+        private EventDelegateData GetOrCreate(int eventId)
         {
-            if (_eventQueue.Count == 0)
+            if (!_eventTable.TryGetValue(eventId, out var data))
             {
-                return;
+                data = new EventDelegateData(eventId);
+                _eventTable.Add(eventId, data);
             }
-
-            // 将队列内容转移到缓冲区，允许处理器内部继续调用 Fire 而不影响本次迭代
-            _dispatchBuffer.Clear();
-            while (_eventQueue.Count > 0)
-            {
-                _dispatchBuffer.Add(_eventQueue.Dequeue());
-            }
-
-            int count = _dispatchBuffer.Count;
-            for (int i = 0; i < count; i++)
-            {
-                var node = _dispatchBuffer[i];
-                HandleEvent(node.Sender, node.EventArgs);
-            }
+            return data;
         }
 
-        // ---- IEventModule ----
+        // ------------------------------------------------------------------ 订阅
 
         /// <inheritdoc/>
-        public int EventCount => _eventQueue.Count;
+        public bool Subscribe(int eventId, Action handler)
+            => GetOrCreate(eventId).AddHandler(handler);
 
         /// <inheritdoc/>
-        public bool HasEventHandler(int eventId)
+        public bool Subscribe<T1>(int eventId, Action<T1> handler)
+            => GetOrCreate(eventId).AddHandler(handler);
+
+        /// <inheritdoc/>
+        public bool Subscribe<T1, T2>(int eventId, Action<T1, T2> handler)
+            => GetOrCreate(eventId).AddHandler(handler);
+
+        /// <inheritdoc/>
+        public bool Subscribe<T1, T2, T3>(int eventId, Action<T1, T2, T3> handler)
+            => GetOrCreate(eventId).AddHandler(handler);
+
+        /// <inheritdoc/>
+        public bool Subscribe<T1, T2, T3, T4>(int eventId, Action<T1, T2, T3, T4> handler)
+            => GetOrCreate(eventId).AddHandler(handler);
+
+        // ------------------------------------------------------------------ 取消订阅
+
+        /// <inheritdoc/>
+        public void Unsubscribe(int eventId, Action handler)
         {
-            return _eventHandlerMap.TryGetValue(eventId, out var list) && list.Count > 0;
-        }
-
-        /// <inheritdoc/>
-        public bool HasEventHandler(int eventId, EventHandler<GameEventArgs> handler)
-        {
-            if (handler == null)
-            {
-                throw new Exception("[EventModule] HasEventHandler: handler is null.");
-            }
-
-            return _eventHandlerMap.TryGetValue(eventId, out var list) && list.Contains(handler);
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.RemoveHandler(handler);
+            else
+                Debugger.Warn($"[EventModule] Unsubscribe: eventId={eventId} has no subscribers.");
         }
 
         /// <inheritdoc/>
-        public void Subscribe(int eventId, EventHandler<GameEventArgs> handler)
+        public void Unsubscribe<T1>(int eventId, Action<T1> handler)
         {
-            if (handler == null)
-            {
-                throw new Exception("[EventModule] Subscribe: handler is null.");
-            }
-
-            if (!_eventHandlerMap.TryGetValue(eventId, out var list))
-            {
-                list = new LinkedList<EventHandler<GameEventArgs>>();
-                _eventHandlerMap[eventId] = list;
-            }
-
-            if (list.Contains(handler))
-            {
-                throw new Exception(
-                    $"[EventModule] Subscribe: handler already subscribed to event ID '{eventId}'. Duplicate subscription is not allowed.");
-            }
-
-            list.AddLast(handler);
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.RemoveHandler(handler);
+            else
+                Debugger.Warn($"[EventModule] Unsubscribe: eventId={eventId} has no subscribers.");
         }
 
         /// <inheritdoc/>
-        public void Unsubscribe(int eventId, EventHandler<GameEventArgs> handler)
+        public void Unsubscribe<T1, T2>(int eventId, Action<T1, T2> handler)
         {
-            if (handler == null)
-            {
-                throw new Exception("[EventModule] Unsubscribe: handler is null.");
-            }
-
-            if (!_eventHandlerMap.TryGetValue(eventId, out var list) || !list.Remove(handler))
-            {
-                throw new Exception(
-                    $"[EventModule] Unsubscribe: handler is not subscribed to event ID '{eventId}'.");
-            }
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.RemoveHandler(handler);
+            else
+                Debugger.Warn($"[EventModule] Unsubscribe: eventId={eventId} has no subscribers.");
         }
 
         /// <inheritdoc/>
-        public void Fire(object sender, GameEventArgs e)
+        public void Unsubscribe<T1, T2, T3>(int eventId, Action<T1, T2, T3> handler)
         {
-            if (e == null)
-            {
-                throw new Exception("[EventModule] Fire: GameEventArgs is null.");
-            }
-
-            _eventQueue.Enqueue(new EventNode(sender, e));
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.RemoveHandler(handler);
+            else
+                Debugger.Warn($"[EventModule] Unsubscribe: eventId={eventId} has no subscribers.");
         }
 
         /// <inheritdoc/>
-        public void FireNow(object sender, GameEventArgs e)
+        public void Unsubscribe<T1, T2, T3, T4>(int eventId, Action<T1, T2, T3, T4> handler)
         {
-            if (e == null)
-            {
-                throw new Exception("[EventModule] FireNow: GameEventArgs is null.");
-            }
-
-            HandleEvent(sender, e);
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.RemoveHandler(handler);
+            else
+                Debugger.Warn($"[EventModule] Unsubscribe: eventId={eventId} has no subscribers.");
         }
 
-        // ---- 私有方法 ----
+        // ------------------------------------------------------------------ 发送
 
-        /// <summary>
-        /// 执行事件派发，将事件分发给所有已订阅的处理器。
-        /// </summary>
-        /// <param name="sender">事件发送者。</param>
-        /// <param name="e">事件参数。</param>
-        private void HandleEvent(object sender, GameEventArgs e)
+        /// <inheritdoc/>
+        public void Send(int eventId)
         {
-            int eventId = e.Id;
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.Invoke();
+        }
 
-            if (!_eventHandlerMap.TryGetValue(eventId, out var list) || list.Count == 0)
-            {
-                Debugger.Warn($"[EventModule] HandleEvent: No handler subscribed to event ID '{eventId}' ({e.GetType().Name}). Event dropped.");
-                return;
-            }
+        /// <inheritdoc/>
+        public void Send<T1>(int eventId, T1 arg1)
+        {
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.Invoke(arg1);
+            else 
+                Debugger.Warn($"[EventModule] Send: eventId={eventId} has no subscribers.");
+        }
 
-            // 遍历处理器链表逐一调用
-            // 使用 LinkedList 遍历，即使某个处理器内部 Unsubscribe 也不会影响当前遍历
-            // （LinkedList 的 Remove 不会使已获取的 Next 指针失效）
-            LinkedListNode<EventHandler<GameEventArgs>> current = list.First;
-            while (current != null)
-            {
-                // 提前取 Next，防止处理器内部 Unsubscribe 当前节点后指针丢失
-                LinkedListNode<EventHandler<GameEventArgs>> next = current.Next;
-                try
-                {
-                    current.Value?.Invoke(sender, e);
-                }
-                catch (Exception ex)
-                {
-                    Debugger.Error(
-                        $"[EventModule] HandleEvent: Exception in handler for event ID '{eventId}' ({e.GetType().Name}): {ex}");
-                }
+        /// <inheritdoc/>
+        public void Send<T1, T2>(int eventId, T1 arg1, T2 arg2)
+        {
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.Invoke(arg1, arg2);
+        }
 
-                current = next;
-            }
+        /// <inheritdoc/>
+        public void Send<T1, T2, T3>(int eventId, T1 arg1, T2 arg2, T3 arg3)
+        {
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.Invoke(arg1, arg2, arg3);
+        }
+
+        /// <inheritdoc/>
+        public void Send<T1, T2, T3, T4>(int eventId, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            if (_eventTable.TryGetValue(eventId, out var data))
+                data.Invoke(arg1, arg2, arg3, arg4);
         }
     }
 }

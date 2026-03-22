@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://740rko54cgn2"]
 
-[ext_resource type="PackedScene" uid="uid://cb2svtca8mpeh" path="res://assets/minigame/meshes/1.fbx" id="1_d2n54"]
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d2n54"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -26,5 +24,3 @@ shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1568138303]
 transform = Transform3D(1, 0, 0, 0, 0.8708023, 0.49163347, 0, -0.49163347, 0.8708023, 0, 1.6198238, 1.0724256)
-
-[node name="1" parent="." unique_id=1978140424 instance=ExtResource("1_d2n54")]

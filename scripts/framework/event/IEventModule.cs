@@ -5,89 +5,98 @@ namespace Framework
     /// <summary>
     /// 游戏事件模块接口。
     /// <para>
-    /// 提供基于事件 ID 的发布-订阅（Pub/Sub）机制。
+    /// 对齐 TEngine EventDispatcher 设计，提供基于事件 ID 的发布-订阅（Pub/Sub）机制。
     /// 通过 <see cref="ModuleSystem.GetModule{T}"/> 以本接口获取实例。
     /// </para>
     /// <para>
-    /// 事件派发分为两种模式：
+    /// 相比旧版（<c>EventHandler&lt;GameEventArgs&gt;</c>）的改进：
     /// <list type="bullet">
-    ///   <item><see cref="Fire"/> —— 将事件推入队列，在下一帧 <c>Process</c> 时统一派发（推荐），避免在事件回调中嵌套触发事件引发的问题。</item>
-    ///   <item><see cref="FireNow"/> —— 立即同步派发，适用于不需要延迟的场景。</item>
+    ///   <item>使用泛型 <see cref="Action{T}"/> 委托，直接传参，编译期类型安全，无需继承 GameEventArgs 或强转；</item>
+    ///   <item>支持 0~4 个参数的委托，覆盖绝大多数场景；</item>
+    ///   <item>所有 <c>Send</c> 均为同步立即派发，脏数据机制保证回调中 Subscribe / Unsubscribe 安全；</item>
+    ///   <item>事件 ID 推荐通过 <see cref="EventId.Get(string)"/> 或 <see cref="EventId.Get{T}"/> 生成。</item>
     /// </list>
     /// </para>
     /// <example>
     /// <code>
-    /// var eventModule = ModuleSystem.GetModule&lt;IEventModule&gt;();
+    /// var ev = ModuleSystem.GetModule&lt;IEventModule&gt;();
+    ///
+    /// // ① 字符串 ID 方式（推荐）
+    /// int id = EventId.Get("game.notice");
     ///
     /// // 订阅
-    /// eventModule.Subscribe(GameEventArgs.GetEventId&lt;PlayerHitEventArgs&gt;(), OnPlayerHit);
+    /// ev.Subscribe&lt;string&gt;(id, OnGameNotice);
+    /// void OnGameNotice(string msg) { GD.Print(msg); }
     ///
-    /// // 触发（延迟派发，推荐）
-    /// eventModule.Fire(this, PlayerHitEventArgs.Create(10));
+    /// // 发送
+    /// ev.Send&lt;string&gt;(id, "Hello!");
     ///
-    /// // 取消订阅
-    /// eventModule.Unsubscribe(GameEventArgs.GetEventId&lt;PlayerHitEventArgs&gt;(), OnPlayerHit);
-    ///
-    /// void OnPlayerHit(object sender, GameEventArgs e)
-    /// {
-    ///     var args = (PlayerHitEventArgs)e;
-    ///     GD.Print($"Hit! Damage: {args.Damage}");
-    /// }
+    /// // 取消订阅（一般在 OnDestroy / _ExitTree 中调用）
+    /// ev.Unsubscribe&lt;string&gt;(id, OnGameNotice);
     /// </code>
     /// </example>
     /// </summary>
     public interface IEventModule
     {
-        /// <summary>
-        /// 获取当前队列中待派发的事件数量。
-        /// </summary>
-        int EventCount { get; }
+        // ------------------------------------------------------------------ 订阅
+
+        /// <summary>订阅无参数事件。重复订阅同一处理器时打 Error 日志并返回 false，不抛异常。</summary>
+        bool Subscribe(int eventId, Action handler);
+
+        /// <summary>订阅 1 参数事件。</summary>
+        bool Subscribe<T1>(int eventId, Action<T1> handler);
+
+        /// <summary>订阅 2 参数事件。</summary>
+        bool Subscribe<T1, T2>(int eventId, Action<T1, T2> handler);
+
+        /// <summary>订阅 3 参数事件。</summary>
+        bool Subscribe<T1, T2, T3>(int eventId, Action<T1, T2, T3> handler);
+
+        /// <summary>订阅 4 参数事件。</summary>
+        bool Subscribe<T1, T2, T3, T4>(int eventId, Action<T1, T2, T3, T4> handler);
+
+        // ------------------------------------------------------------------ 取消订阅
+
+        /// <summary>取消订阅无参数事件。处理器未找到时打 Warn 日志，不抛异常。</summary>
+        void Unsubscribe(int eventId, Action handler);
+
+        /// <summary>取消订阅 1 参数事件。</summary>
+        void Unsubscribe<T1>(int eventId, Action<T1> handler);
+
+        /// <summary>取消订阅 2 参数事件。</summary>
+        void Unsubscribe<T1, T2>(int eventId, Action<T1, T2> handler);
+
+        /// <summary>取消订阅 3 参数事件。</summary>
+        void Unsubscribe<T1, T2, T3>(int eventId, Action<T1, T2, T3> handler);
+
+        /// <summary>取消订阅 4 参数事件。</summary>
+        void Unsubscribe<T1, T2, T3, T4>(int eventId, Action<T1, T2, T3, T4> handler);
+
+        // ------------------------------------------------------------------ 发送（同步立即派发）
 
         /// <summary>
-        /// 检查指定事件是否存在至少一个处理器。
+        /// 立即同步派发无参数事件。
         /// </summary>
-        /// <param name="eventId">事件 ID，通过 <see cref="GameEventArgs.GetEventId{T}"/> 获取。</param>
-        /// <returns>是否存在处理器。</returns>
-        bool HasEventHandler(int eventId);
+        void Send(int eventId);
 
         /// <summary>
-        /// 检查指定处理器是否已订阅某事件。
+        /// 立即同步派发 1 参数事件。
         /// </summary>
-        /// <param name="eventId">事件 ID。</param>
-        /// <param name="handler">要检查的处理器。</param>
-        /// <returns>是否已订阅。</returns>
-        bool HasEventHandler(int eventId, EventHandler<GameEventArgs> handler);
+        void Send<T1>(int eventId, T1 arg1);
 
         /// <summary>
-        /// 订阅事件。
+        /// 立即同步派发 2 参数事件。
         /// </summary>
-        /// <param name="eventId">事件 ID，通过 <see cref="GameEventArgs.GetEventId{T}"/> 获取。</param>
-        /// <param name="handler">事件处理器。</param>
-        /// <exception cref="Exception">重复订阅同一处理器时抛出异常。</exception>
-        void Subscribe(int eventId, EventHandler<GameEventArgs> handler);
+        void Send<T1, T2>(int eventId, T1 arg1, T2 arg2);
 
         /// <summary>
-        /// 取消订阅事件。
+        /// 立即同步派发 3 参数事件。
         /// </summary>
-        /// <param name="eventId">事件 ID。</param>
-        /// <param name="handler">要取消的事件处理器。</param>
-        /// <exception cref="Exception">处理器未订阅时抛出异常。</exception>
-        void Unsubscribe(int eventId, EventHandler<GameEventArgs> handler);
+        void Send<T1, T2, T3>(int eventId, T1 arg1, T2 arg2, T3 arg3);
 
         /// <summary>
-        /// 将事件推入队列，在下一帧 <c>Process</c> 时统一派发（线程安全）。
-        /// <para>这是推荐的事件触发方式，可避免在事件处理器中再次触发事件导致的递归问题。</para>
+        /// 立即同步派发 4 参数事件。
         /// </summary>
-        /// <param name="sender">事件发送者。</param>
-        /// <param name="e">事件参数，其 <see cref="GameEventArgs.Id"/> 决定派发目标。</param>
-        void Fire(object sender, GameEventArgs e);
-
-        /// <summary>
-        /// 立即同步派发事件，不经过队列。
-        /// <para>适用于需要在当前帧立即响应的场景，但请注意避免在处理器中再次调用 <see cref="FireNow"/> 导致无限递归。</para>
-        /// </summary>
-        /// <param name="sender">事件发送者。</param>
-        /// <param name="e">事件参数，其 <see cref="GameEventArgs.Id"/> 决定派发目标。</param>
-        void FireNow(object sender, GameEventArgs e);
+        void Send<T1, T2, T3, T4>(int eventId, T1 arg1, T2 arg2, T3 arg3, T4 arg4);
     }
 }

@@ -2,13 +2,8 @@ using Framework;
 using Godot;
 
 /// <summary>
-/// 预加载流程示例 —— 演示资源管理系统的常见用法。
-///
-/// 用法一：同步加载
-/// 用法二：异步加载（链式回调）
-/// 用法三：同路径并发请求自动合并
-/// 用法四：查询缓存状态
-/// 用法五：手动卸载资源
+/// 预加载流程 —— 异步预加载关卡场景，完成后切换到 MainMenuProcedure。
+/// MainMenuProcedure 负责通过 UIModule 打开主菜单 UI。
 /// </summary>
 public class PreloadProcedure : ProcedureBase
 {
@@ -16,36 +11,18 @@ public class PreloadProcedure : ProcedureBase
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
+        Debugger.Info("Enter PreloadProcedure");
+
         base.OnEnter(procedureOwner);
         _resource = ModuleSystem.GetModule<IResourceModule>();
 
-        //加载关卡场景
-        var levelHandle = _resource.LoadAssetAsync<PackedScene>("res://assets/minigame/scenes/level.tscn").OnCompleted(h => Debugger.Info($"[PreloadProcedure] Level场景加载完成, 进度={h.Progress}"));
+        // 预加载关卡场景（后台异步，供 MainMenuProcedure 使用）
+        var levelHandle = _resource.LoadAssetAsync<PackedScene>("res://assets/minigame/scenes/level.tscn")
+            .OnCompleted(h => Debugger.Info($"[PreloadProcedure] Level场景加载完成: {h.Asset?.ResourcePath}"));
         procedureOwner.SetData("LevelHandle", levelHandle);
 
-        //加载main menu场景，并切换到mainmenu场景
-        var mainMenuHandle = _resource.LoadAssetAsync<PackedScene>("res://assets/minigame/scenes/main_menu.tscn")
-            .OnCompleted(handle =>
-            {
-                if (handle.IsValid)
-                {
-                    Debugger.Info($"[PreloadProcedure] 异步加载成功: {handle.Asset.ResourcePath}");
-                    // 实例化场景示例（Procedure 不是 Node，需通过 SceneTree 访问）：
-                    var node = handle.Asset.Instantiate();
-                    if (Engine.GetMainLoop() is SceneTree tree)
-                    {
-                        tree.Root.GetNode("Root").AddChild(node);
-                        Debugger.Info($"[PreloadProcedure] 场景实例化成功: {handle.Asset.ResourcePath}");
-                    }
-
-                    ChangeState<MainMenuProcedure>(procedureOwner);
-                }
-                else
-                {
-                    Debugger.Error($"[PreloadProcedure] 异步加载失败: {handle.Error}");
-                }
-            });
-        procedureOwner.SetData("MainMenuHandle", mainMenuHandle);
+        // 切换到主菜单流程（由 MainMenuProcedure 负责打开 MainMenuWindow）
+        ChangeState<MainMenuProcedure>(procedureOwner);
     }
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)

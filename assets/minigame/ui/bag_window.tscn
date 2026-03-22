@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://ncpf4rnxe12s"]
+
+[node name="BagWindow" type="Control" unique_id=998509323]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=1498220188]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1654693535]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1296465763]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxTitle" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1739156894]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LabelTitle" type="Label" parent="Panel/VBoxContainer/HBoxTitle" unique_id=331537242]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "背包"
+
+[node name="BtnClose" type="Button" parent="Panel/VBoxContainer/HBoxTitle" unique_id=1412476782]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "✕"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer" unique_id=1958867722]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer" unique_id=1508824389]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Panel/VBoxContainer/ScrollContainer" unique_id=1164484894]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 5

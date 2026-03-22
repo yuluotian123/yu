@@ -1,217 +1,122 @@
-# EventModule 使用指南
+# EventModule — 事件模块
 
-## 概览
+## 设计理念
 
-`EventModule` 是基于 **发布-订阅（Pub/Sub）** 模式的事件系统，遵循框架的模块化与面向接口设计。
+对齐 [TEngine](https://github.com/Alex-Rachel/TEngine) 的 `EventDispatcher` 设计，采用 `Action<T>` 泛型委托风格，解决了旧版 `EventHandler<GameEventArgs>` 设计的三大问题：
 
-| 文件 | 说明 |
-|------|------|
-| `GameEventArgs.cs` | 事件参数基类，所有自定义事件参数继承此类 |
-| `IEventModule.cs` | 事件模块接口，业务层唯一依赖 |
-| `EventModule.cs` | 模块实现，由 `ModuleSystem` 自动管理 |
+| 旧版问题 | 新版方案 |
+|---|---|
+| 必须继承 `GameEventArgs`，每个事件都要新建子类 | 直接传参，无需额外类 |
+| 回调中强转 `(MyEventArgs)e`，编译期无检查 | 泛型委托，编译期类型安全 |
+| 回调中 Subscribe 新处理器会被当帧意外执行 | dirty 缓冲机制，执行完再合并 |
+| `GetHashCode()` 有 ID 碰撞风险 | `EventId.Get<T>()` 单调递增，天然无碰撞 |
 
 ---
 
-## 快速上手
+## 核心组件
 
-### 第一步：在 RootModule 中注册模块
-
-```csharp
-// scripts/gamelogic/RootModule.cs
-public override void _Ready()
-{
-    // ...其他模块...
-    ModuleSystem.GetModule<IEventModule>(); // 注册事件模块
-}
+```
+EventId.cs            — 事件 ID 生成器（单调递增，泛型类型绑定）
+EventDelegateData.cs  — 单个 eventId 的委托容器（dirty 机制）
+IEventModule.cs       — 模块接口
+EventModule.cs        — 模块实现
 ```
 
 ---
 
-### 第二步：定义事件参数
+## 定义事件 ID
+
+`EventId` 提供两种方式，可以混用：
+
+### ① 字符串方式（对齐 TEngine，推荐）
 
 ```csharp
-// 推荐放在 scripts/gamelogic/events/ 目录下
-
-/// <summary>玩家受击事件参数。</summary>
-public sealed class PlayerHitEventArgs : GameEventArgs
+public static class GameEvents
 {
-    // 使用 GetEventId<T>() 自动获取唯一 ID，无需手动分配
-    public override int Id => GameEventArgs.GetEventId<PlayerHitEventArgs>();
-
-    public int Damage     { get; private set; }
-    public string Source  { get; private set; }
-
-    /// <summary>创建事件参数（低频事件直接 new 即可）。</summary>
-    public static PlayerHitEventArgs Create(int damage, string source)
-    {
-        var e = new PlayerHitEventArgs();
-        e.Damage  = damage;
-        e.Source  = source;
-        return e;
-    }
-
-    public override void Clear()
-    {
-        Damage = 0;
-        Source = null;
-    }
-}
-
-/// <summary>玩家升级事件参数。</summary>
-public sealed class PlayerLevelUpEventArgs : GameEventArgs
-{
-    public override int Id => GameEventArgs.GetEventId<PlayerLevelUpEventArgs>();
-
-    public int OldLevel { get; private set; }
-    public int NewLevel { get; private set; }
-
-    public static PlayerLevelUpEventArgs Create(int oldLevel, int newLevel)
-    {
-        var e = new PlayerLevelUpEventArgs();
-        e.OldLevel = oldLevel;
-        e.NewLevel = newLevel;
-        return e;
-    }
-
-    public override void Clear()
-    {
-        OldLevel = 0;
-        NewLevel = 0;
-    }
+    // 同一字符串始终返回相同 ID，首次调用时自动分配
+    public static readonly int GameNotice = EventId.Get("game.notice");
+    public static readonly int PlayerHit  = EventId.Get("game.player.hit");
 }
 ```
 
----
+> 优点：可读性强，天然文档化；动态/配置驱动场景下也可直接传字符串。  
+> 注意：`EventId.Get(string)` 区分大小写；建议统一用小写点分格式，如 `"module.event"`。
 
-### 第三步：订阅事件
+### ② 泛型哑类型方式（零运行时查找）
 
 ```csharp
-public class PlayerUI : Node
+public static class GameEvents
 {
-    private IEventModule _eventModule;
+    // 用 private struct 作为哑类型，保证 ID 全局唯一
+    private struct NoticeTag    { }
+    private struct PlayerHitTag { }
 
-    public override void _Ready()
-    {
-        _eventModule = ModuleSystem.GetModule<IEventModule>();
-
-        // 订阅受击事件
-        _eventModule.Subscribe(
-            GameEventArgs.GetEventId<PlayerHitEventArgs>(),
-            OnPlayerHit
-        );
-
-        // 订阅升级事件
-        _eventModule.Subscribe(
-            GameEventArgs.GetEventId<PlayerLevelUpEventArgs>(),
-            OnPlayerLevelUp
-        );
-    }
-
-    public override void _ExitTree()
-    {
-        // ⚠️ 节点销毁时务必取消订阅，防止内存泄漏
-        _eventModule.Unsubscribe(
-            GameEventArgs.GetEventId<PlayerHitEventArgs>(),
-            OnPlayerHit
-        );
-        _eventModule.Unsubscribe(
-            GameEventArgs.GetEventId<PlayerLevelUpEventArgs>(),
-            OnPlayerLevelUp
-        );
-    }
-
-    private void OnPlayerHit(object sender, GameEventArgs e)
-    {
-        var args = (PlayerHitEventArgs)e;
-        GD.Print($"[UI] 受到 {args.Damage} 点来自 {args.Source} 的伤害！");
-        // 更新血条 UI...
-    }
-
-    private void OnPlayerLevelUp(object sender, GameEventArgs e)
-    {
-        var args = (PlayerLevelUpEventArgs)e;
-        GD.Print($"[UI] 升级！{args.OldLevel} → {args.NewLevel}");
-        // 播放升级动画...
-    }
+    public static readonly int GameNotice = EventId.Get<NoticeTag>();
+    public static readonly int PlayerHit  = EventId.Get<PlayerHitTag>();
 }
 ```
 
+> `EventId.Get<T>()` 利用 CLR 泛型静态字段唯一性 + `Interlocked.Increment`，
+> 同一类型全生命周期返回相同值，零字典查找开销，适合高频注册场景。
+
+两种方式共享同一个全局单调递增计数器，生成的 ID **不会互相碰撞**。
+
 ---
 
-### 第四步：触发事件
+## 订阅 / 取消订阅
 
 ```csharp
-public class PlayerController : Node
-{
-    private IEventModule _eventModule;
+// 获取模块
+var ev = ModuleSystem.GetModule<IEventModule>();
 
-    public override void _Ready()
-    {
-        _eventModule = ModuleSystem.GetModule<IEventModule>();
-    }
+// 订阅（无参）
+ev.Subscribe(GameEvents.GameNotice, OnGameNotice);
+void OnGameNotice() { GD.Print("收到通知"); }
 
-    /// <summary>受到伤害时调用。</summary>
-    public void TakeDamage(int damage, string source)
-    {
-        // HP 计算...
+// 订阅（1 参数）
+ev.Subscribe<string>(GameEvents.GameNotice, OnGameNoticeMsg);
+void OnGameNoticeMsg(string msg) { GD.Print(msg); }
 
-        // ✅ Fire：推入队列，下一帧派发（推荐）
-        // 安全：即使在事件处理器中再次调用 Fire 也不会引发递归问题
-        _eventModule.Fire(this, PlayerHitEventArgs.Create(damage, source));
-    }
+// 订阅（多参数）
+ev.Subscribe<string, int>(GameEvents.PlayerHit, OnPlayerHit);
+void OnPlayerHit(string name, int damage) { ... }
 
-    /// <summary>升级时调用。</summary>
-    public void LevelUp(int oldLevel, int newLevel)
-    {
-        // ✅ FireNow：立即派发（当帧响应）
-        // 适用于需要在同一帧内立即处理的场景
-        _eventModule.FireNow(this, PlayerLevelUpEventArgs.Create(oldLevel, newLevel));
-    }
-}
+// 取消订阅（在 _ExitTree / OnDestroy 等清理处调用）
+ev.Unsubscribe<string>(GameEvents.GameNotice, OnGameNoticeMsg);
 ```
 
----
-
-## Fire vs FireNow 的选择
-
-| | `Fire`（推荐） | `FireNow` |
-|-|--------------|-----------|
-| 派发时机 | 下一帧 `Process` 时 | 调用时立即 |
-| 嵌套安全 | ✅ 处理器中再次 `Fire` 会在下下帧处理 | ⚠️ 避免处理器中调用 `FireNow` |
-| 适用场景 | 绝大多数游戏事件 | 需要立即同帧响应的场景 |
-| 典型例子 | 受击、得分、道具拾取 | 流程控制、状态同步 |
+- 重复订阅：返回 `false` 并打 Error 日志，**不抛异常**。
+- 取消不存在的订阅：打 Warn 日志，**不抛异常**。
 
 ---
 
-## 高频事件：结合对象池减少 GC
-
-对于每帧可能触发多次的事件（如子弹命中、伤害数字），可结合 `IObjectPoolModule` 复用事件参数对象：
+## 发送事件
 
 ```csharp
-// 初始化：创建事件参数对象池
-var poolModule = ModuleSystem.GetModule<IObjectPoolModule>();
-var hitArgsPool = poolModule.CreateObjectPool<PlayerHitEventArgs>(capacity: 64);
+// 无参
+ev.Send(GameEvents.GameNotice);
 
-// 触发事件：从池中取出
-var e = hitArgsPool.Spawn();               // 取出（自动调用 Clear）
-// e.Damage = damage; // ⚠️ Spawn 后重新赋值（因为 Clear 已重置）
-// 由于 GameEventArgs 的字段是 private set，需改为 public set 或提供 Init 方法：
-// e.Init(damage, source);
-_eventModule.Fire(this, e);
+// 1 参数
+ev.Send<string>(GameEvents.GameNotice, "Hello!");
 
-// 处理器中用完后归还
-private void OnPlayerHit(object sender, GameEventArgs e)
-{
-    var args = (PlayerHitEventArgs)e;
-    // ...处理逻辑...
-    hitArgsPool.Recycle(args);             // 归还池中（自动调用 Clear）
-}
+// 多参数
+ev.Send<string, int>(GameEvents.PlayerHit, "Player", 42);
 ```
+
+- 所有 `Send` 均为**同步立即**派发，无队列延迟。
+- 在回调执行期间调用 `Subscribe` / `Unsubscribe` 是安全的（通过 dirty 缓冲机制），
+  新增/删除的处理器会在当次派发完毕后才生效。
 
 ---
 
-## 注意事项
+## 支持的参数数量
 
-1. **务必在节点/对象销毁时 `Unsubscribe`**，否则会持有已销毁对象的引用，导致内存泄漏或空指针异常。
-2. **`Fire` 中的事件参数在派发前不要修改**，因为事件是下一帧才处理的，修改会影响派发时读取的数据。
-3. **不要在 `Subscribe` 回调中抛出未捕获异常**，`EventModule` 虽然会捕获异常并输出日志，但这表明处理器存在 bug，需及时修复。
+| 方法 | 参数数量 |
+|---|---|
+| `Subscribe(id, Action)` | 0 |
+| `Subscribe<T1>(id, Action<T1>)` | 1 |
+| `Subscribe<T1,T2>(id, ...)` | 2 |
+| `Subscribe<T1,T2,T3>(id, ...)` | 3 |
+| `Subscribe<T1,T2,T3,T4>(id, ...)` | 4 |
+
+`Send` / `Unsubscribe` 同上。如需 4 个以上参数，建议将相关参数封装为一个结构体再传递。

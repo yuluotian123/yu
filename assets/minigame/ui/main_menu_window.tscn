@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://d1faunvxiqupo"]
+
+[node name="MainMenuWindow" type="Control" unique_id=519138057]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=746240308]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=111638938]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="LabelTitle" type="Label" parent="VBoxContainer" unique_id=51745983]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "游戏标题"
+horizontal_alignment = 1
+
+[node name="LabelVersion" type="Label" parent="VBoxContainer" unique_id=1575689445]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "v1.0.0"
+horizontal_alignment = 1
+
+[node name="BtnStart" type="Button" parent="VBoxContainer" unique_id=936800256]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "开始游戏"
+
+[node name="BtnBag" type="Button" parent="VBoxContainer" unique_id=253666105]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "背包"
+
+[node name="BtnQuit" type="Button" parent="VBoxContainer" unique_id=791819802]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "退出游戏"
+
+[node name="PanelNotice" type="Control" parent="." unique_id=1652390872]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -120.0
+offset_right = 500.0
+offset_bottom = -20.0
+grow_vertical = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelNotice" unique_id=21194955]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="PanelNotice/PanelContainer" unique_id=1744560108]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LabelMessage" type="Label" parent="PanelNotice/PanelContainer/VBox" unique_id=404577306]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "通知内容"
+autowrap_mode = 3
+
+[node name="BtnClose" type="Button" parent="PanelNotice/PanelContainer/VBox" unique_id=549355847]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"

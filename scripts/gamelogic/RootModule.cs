@@ -1,5 +1,6 @@
 using System;
 using Framework;
+using Framework.UI;
 using Godot;
 
 
@@ -41,7 +42,7 @@ public sealed partial class RootModule : Node
     public float GameSpeed
     {
         get => gameSpeed;
-        set => Engine.TimeScale = gameSpeed = value >= 0f ? value : 0f;
+        set => GameTime.TimeScale = gameSpeed = value >= 0f ? value : 0f;
     }
 
     /// <summary>
@@ -68,6 +69,7 @@ public sealed partial class RootModule : Node
 
         GameTime = new GameTime();
         ModuleSystem.GetModule<IFsmModule>();
+        ModuleSystem.GetModule<IUIModule>();   // 初始化 UIModule，创建各层 CanvasLayer
         var procedureModule = ModuleSystem.GetModule<IProcedureModule>();
 
         Debugger.Info("======= Entrance GameEntry =======");

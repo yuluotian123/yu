@@ -41,6 +41,9 @@ namespace Framework
         /// <summary>获取原始 Godot Resource 对象（不带泛型类型）。</summary>
         public abstract Resource GetRawAsset();
 
+        /// <summary>释放句柄（减引用计数），由子类实现。</summary>
+        public abstract void Release();
+
         // ---- 仅供 loader 内部调用 ----
         internal void UpdateProgressInternal(float progress) => Progress = progress;
         internal abstract void SetSucceedInternal(Resource resource);
@@ -48,11 +51,11 @@ namespace Framework
     }
 
     /// <summary>
-    /// 泛型资源句柄，持有具体类型的资源引用。
+    /// 泛型资源句柄，持有具体类型的资源引用和一个框架引用计数。
     /// <remarks>
-    /// 句柄内部持有资源的强引用，确保"句柄在手，资源不释"。
-    /// 调用 <see cref="Release"/> 可同时清空句柄内引用并从缓存中移除，
-    /// 之后若无其他引用，Godot 自动释放该资源内存。
+    /// 每个通过 <see cref="IResourceModule.LoadAsset{T}"/> 或 <see cref="IResourceModule.LoadAssetAsync{T}"/>
+    /// 获得的有效句柄都持有一个引用计数。调用 <see cref="Release"/> 会将引用计数 -1，
+    /// 引用计数归零后资源可被 LRU 缓存淘汰，之后若无其他引用，Godot 自动释放资源内存。
     /// </remarks>
     /// </summary>
     public sealed class ResourceHandle<T> : ResourceHandleBase where T : Resource
@@ -83,17 +86,21 @@ namespace Framework
         }
 
         /// <summary>
-        /// 释放句柄：清空句柄内持有的资源引用，并从资源模块缓存中移除该资源。
+        /// 释放句柄：减少框架引用计数（-1），并清空句柄内持有的资源引用。
         /// <remarks>
         /// 调用后 <see cref="Asset"/> 将变为 null，<see cref="IsValid"/> 变为 false。
-        /// 若此时缓存和其他代码也不再持有引用，Godot 引用计数归零，资源内存自动释放。
+        /// 重复调用 Release 是安全的（幂等），不会多次减少引用计数。
+        /// 引用计数归零后，资源变为"可淘汰"状态，在缓存满时被 LRU 淘汰。
         /// </remarks>
         /// </summary>
-        public void Release()
+        public override void Release()
         {
-            _resourceModule?.UnloadAsset(Path);
+            if (_resourceModule == null) return; // 已释放，幂等
+
+            _resourceModule.ReleaseAsset(Path);
             _asset = null;
             _resourceModule = null;
+            _onCompleted = null;
             Status = ResourceHandleStatus.None;
         }
 

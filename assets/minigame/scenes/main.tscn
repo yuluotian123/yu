@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cxmq653vygak8"]
 
 [ext_resource type="Script" uid="uid://dlhiiwvpog4c" path="res://scripts/gamelogic/RootModule.cs" id="1_m1qdt"]
-[ext_resource type="Resource" uid="uid://j6jir380ooyu" path="res://assets/config/settings/globalsettings.tres" id="2_0sllv"]
+[ext_resource type="Resource" uid="uid://j6jir380ooyu" path="res://assets/config/settings/global_settings.tres" id="2_0sllv"]
 
 [node name="Root" type="Node" unique_id=1907522443]
 script = ExtResource("1_m1qdt")

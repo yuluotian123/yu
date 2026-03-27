@@ -42,12 +42,12 @@ namespace Framework
         /// <param name="error">错误信息。</param>
         internal void MarkFailed(string error)
         {
-            Complete(null, error);
+            Complete(null, error, null);
         }
 
         /// <summary>
         /// 每帧轮询一次 Godot 后台加载状态。
-        /// 加载成功时先写入 <paramref name="cache"/>，再通知所有句柄，确保缓存与句柄持有同一份资源引用。
+        /// 加载成功时先写入 <paramref name="cache"/>，再通知所有句柄并为每个成功句柄 Acquire 引用计数。
         /// </summary>
         /// <param name="cache">资源缓存，用于在加载完成时写入资源。</param>
         /// <param name="enableLog">是否打印日志。</param>
@@ -78,15 +78,15 @@ namespace Framework
                         if (enableLog)
                             Debugger.Info($"[ResourceLoadTask] Cached after async load: '{Path}'");
                     }
-                    Complete(resource, null);
+                    Complete(resource, null, cache);
                     return true;
 
                 case ResourceLoader.ThreadLoadStatus.Failed:
-                    Complete(null, $"Godot ThreadLoad failed for '{Path}'.");
+                    Complete(null, $"Godot ThreadLoad failed for '{Path}'.", cache);
                     return true;
 
                 case ResourceLoader.ThreadLoadStatus.InvalidResource:
-                    Complete(null, $"Invalid resource path '{Path}'.");
+                    Complete(null, $"Invalid resource path '{Path}'.", cache);
                     return true;
 
                 default:
@@ -96,17 +96,23 @@ namespace Framework
         }
 
         /// <summary>
-        /// 完成任务，通知所有挂载的句柄。
+        /// 完成任务，通知所有挂载的句柄，并为每个成功句柄增加框架引用计数。
         /// </summary>
-        private void Complete(Resource resource, string error)
+        private void Complete(Resource resource, string error, IResourceCache cache)
         {
             IsDone = true;
             foreach (var handle in Handles)
             {
                 if (resource != null && string.IsNullOrEmpty(error))
+                {
                     handle.SetSucceedInternal(resource);
+                    // 每个成功的 handle 对应一个框架引用计数
+                    cache?.Acquire(Path);
+                }
                 else
+                {
                     handle.SetFailedInternal(error ?? "Load failed.");
+                }
             }
             Handles.Clear();
         }

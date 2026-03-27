@@ -86,6 +86,12 @@ namespace Framework.UI
         public bool IsLoadDone { get; internal set; }
 
         /// <summary>
+        /// 资源句柄引用（由 UIModule 在加载时赋值，关闭时 Release）。
+        /// 用于在窗口关闭时正确释放 PackedScene 的框架引用计数。
+        /// </summary>
+        internal ResourceHandleBase ResourceHandle { get; set; }
+
+        /// <summary>
         /// 渲染深度（ZIndex）。值越大渲染越靠前。
         /// 由 UIModule 在每次 Push/Pop 时重新计算并写入 Owner.ZIndex。
         /// </summary>

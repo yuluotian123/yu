@@ -18,9 +18,9 @@ ResourceModule 是基于 **yu 框架**（仿 TEngine 风格）为 **Godot 4.6 C#
 
 核心特性：
 - **面向接口**：通过 `IResourceModule` 对外暴露，与具体实现解耦
-- **同步 / 异步加载**：同步阻塞加载与 Godot 后台线程异步加载并存
-- **LRU 缓存**：O(1) 存取，依赖 Godot 原生引用计数判断淘汰时机
-- **请求合并**：同路径并发异步请求自动合并为一个后台任务
+- **统一句柄管理**：同步/异步加载均返回 `ResourceHandle<T>`，每个句柄持有一个框架引用计数
+- **框架引用计数 + LRU 缓存**：引用计数归零的资源才可被 LRU 淘汰，避免正在使用的资源被误淘汰
+- **请求合并**：同路径并发异步请求自动合并为一个后台任务，每个句柄各持有一个引用计数
 - **可替换策略**：加载器（`IResourceLoader`）与缓存（`IResourceCache`）均可注入自定义实现
 - **零侵入集成**：注册到 `ModuleSystem`，与框架其他模块（FSM、Procedure）保持一致的生命周期
 
@@ -40,8 +40,8 @@ scripts/framework/resource/
 │   ├── GodotResourceLoader.cs  # 默认实现（Godot 原生 ResourceLoader）
 │   └── ResourceLoadTask.cs     # 单次异步加载任务（轮询 LoadThreadedGetStatus）
 └── cache/
-    ├── IResourceCache.cs       # 缓存策略接口
-    └── ResourceCache.cs        # LRU 缓存实现
+    ├── IResourceCache.cs       # 缓存策略接口（含 Acquire/Release/GetRefCount）
+    └── ResourceCache.cs        # LRU 缓存实现（引用计数 + LRU 淘汰）
 ```
 
 ---
@@ -68,13 +68,21 @@ ModuleSystem.GetModule<IResourceModule>();
 ```csharp
 var res = ModuleSystem.GetModule<IResourceModule>();
 
-// 同步
-var tex = res.LoadAsset<Texture2D>("res://assets/icon.png");
+// 同步加载（返回句柄，引用计数 +1）
+var handle = res.LoadAsset<Texture2D>("res://assets/icon.png");
+if (handle.IsValid)
+{
+    sprite.Texture = handle.Asset;
+}
+// 使用完毕后释放（引用计数 -1）
+handle.Release();
 
-// 异步
-res.LoadAssetAsync<PackedScene>("res://scenes/level.tscn")
+// 异步加载（返回句柄，加载成功后引用计数 +1）
+var asyncHandle = res.LoadAssetAsync<PackedScene>("res://scenes/level.tscn")
    .OnCompleted(h => {
        if (h.IsValid) AddChild(h.Asset.Instantiate());
+       // 不再需要时释放
+       // h.Release();
    });
 ```
 
@@ -82,9 +90,9 @@ res.LoadAssetAsync<PackedScene>("res://scenes/level.tscn")
 
 ## 核心概念
 
-### ResourceHandle\<T\>
+### ResourceHandle\<T\> — 统一资源句柄
 
-异步加载的返回值，承载资源及加载状态：
+**所有加载接口（同步和异步）均返回 `ResourceHandle<T>`**，每个有效句柄持有一个框架引用计数。
 
 | 属性 / 方法 | 说明 |
 |---|---|
@@ -95,31 +103,50 @@ res.LoadAssetAsync<PackedScene>("res://scenes/level.tscn")
 | `Progress` | 加载进度 0~1 |
 | `Error` | 失败原因描述 |
 | `OnCompleted(cb)` | 注册完成回调，已完成时立即触发，支持链式调用 |
+| **`Release()`** | **释放句柄：框架引用计数 -1，清空 Asset 引用。幂等，可安全多次调用** |
 
-### LRU 缓存与 Godot 引用计数
+### 双层引用计数机制
 
-加载完成后资源的引用持有关系：
+资源的生命周期由**框架引用计数**和 **Godot 引用计数**两层共同管理：
 
-| 持有者 | 如何消除引用 |
-|---|---|
-| `ResourceCache`（缓存字典） | `res.UnloadAsset(path)` 或 `res.UnloadAllAssets()` |
-| `ResourceHandle<T>._asset`（句柄） | 调用 `handle.Release()` 或让句柄变量被 GC 回收 |
-| 用户代码变量（如 `var tex = handle.Asset`） | 置为 `null` 或超出作用域 |
-| 场景节点属性（如 `Sprite2D.Texture`） | 从场景树移除节点或将属性置 `null` |
+| 层级 | 作用 | 控制方式 |
+|---|---|---|
+| **框架引用计数** | 决定资源是否可被缓存淘汰 | `Handle.Release()` 减 1，归零后可被 LRU 淘汰 |
+| **Godot 引用计数** | 决定资源内存是否释放 | 当无任何 C# 变量/节点引用时自动归零释放 |
 
-**彻底销毁一份资源**，需消除所有持有者的引用：
+**引用计数流转：**
 
-```csharp
-// 推荐方式：调用 Release()，一次性清空句柄引用 + 从缓存移除
-handle.Release();
-// 之后确保用户变量和节点属性也不再持有
-myTexture = null;
-sprite.Texture = null;
-// → Godot 引用计数归零 → 自动释放内存
+```
+LoadAsset / LoadAssetAsync（成功）→ 框架 RefCount +1
+     ↓
+handle.Release()                  → 框架 RefCount -1
+     ↓
+RefCount == 0                     → 资源变为"可淘汰"
+     ↓
+缓存满，LRU 淘汰                  → 从缓存移除（Godot 引用 -1）
+     ↓
+无其他 C# 引用                    → Godot 引用计数归零 → 内存释放
 ```
 
-- `ResourceCache.Evict()` 中的 `GetReferenceCount() <= 1` 判断：计数为 1 说明只有缓存持有（无句柄在用），可安全淘汰
-- **无需也不应该**在框架层再建一套引用计数，完全依赖 Godot 原生机制
+### LRU 缓存淘汰策略
+
+- 缓存容量由 `ResourceSetting.MaxCacheSize` 控制（默认 128）
+- 当缓存满时，**只淘汰 `RefCount == 0` 的资源**（从最近最少使用的开始）
+- 若所有资源的 `RefCount > 0`，则新资源仍会强制加入缓存（超容量运行），并发出警告日志
+- `ForceUnloadAsset(path)` 可无视引用计数强制移除
+
+### 多句柄共享
+
+对同一路径的多次加载会命中缓存，但每次调用都返回一个新句柄、各自持有一个引用计数：
+
+```csharp
+var h1 = res.LoadAsset<Texture2D>("res://icon.png");  // RefCount = 1
+var h2 = res.LoadAsset<Texture2D>("res://icon.png");  // RefCount = 2（同一资源）
+h1.Release();  // RefCount = 1
+h2.Release();  // RefCount = 0 → 可被 LRU 淘汰
+```
+
+异步加载合并请求时同理，每个成功的句柄各持有一个引用。
 
 ---
 
@@ -128,16 +155,19 @@ sprite.Texture = null;
 ### IResourceModule
 
 ```csharp
-// 同步加载（缓存优先）
-T LoadAsset<T>(string path) where T : Resource;
+// 同步加载（返回句柄，成功时 RefCount +1）
+ResourceHandle<T> LoadAsset<T>(string path) where T : Resource;
 
-// 异步加载（立即返回句柄，Godot 后台线程加载）
+// 异步加载（返回句柄，成功时 RefCount +1）
 ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource;
 
-// 从缓存移除（不强制卸载，交由 Godot 引用计数决定）
-void UnloadAsset(string path);
+// 释放引用计数（由 Handle.Release() 内部调用，不建议外部直接使用）
+void ReleaseAsset(string path);
 
-// 清空全部缓存
+// 强制从缓存移除（无视引用计数，适用于场景切换）
+void ForceUnloadAsset(string path);
+
+// 清空全部缓存（强制）
 void UnloadAllAssets();
 
 // 查询是否已缓存
@@ -146,11 +176,30 @@ bool HasAsset(string path);
 // 当前缓存数量
 int CacheCount { get; }
 
+// 获取指定资源的框架引用计数
+int GetRefCount(string path);
+
 // 替换加载器（须在首次加载前调用）
 void SetLoader(IResourceLoader loader);
 
 // 替换缓存（须在首次加载前调用）
 void SetCache(IResourceCache cache);
+```
+
+### IResourceCache
+
+```csharp
+int Count { get; }
+bool TryGet(string path, out Resource resource);
+void Set(string path, Resource resource);
+bool Remove(string path);
+bool Contains(string path);
+void Clear();
+
+// 引用计数管理
+void Acquire(string path);       // RefCount +1
+void Release(string path);       // RefCount -1（不低于 0）
+int GetRefCount(string path);    // 查询当前 RefCount
 ```
 
 ---
@@ -182,10 +231,21 @@ public class NoCacheImpl : IResourceCache
     public bool Remove(string path) => false;
     public bool Contains(string path) => false;
     public void Clear() { }
+    public void Acquire(string path) { }
+    public void Release(string path) { }
+    public int GetRefCount(string path) => 0;
 }
 
 ModuleSystem.GetModule<IResourceModule>().SetCache(new NoCacheImpl());
 ```
+
+### 框架模块中的使用模式
+
+**UIModule**：打开窗口时保存 Handle 到 `UIWindow.ResourceHandle`，关闭时自动 `Release()`。
+
+**ObjectPoolModule**：创建 NodePool 时通过 Handle 加载 PackedScene，销毁池时 `ForceUnloadAsset()`。
+
+**Procedure**：在 `OnLeave` 中释放 Handle，确保场景切换时正确减引用。
 
 ---
 
@@ -198,7 +258,8 @@ ModuleSystem.GetModule<IResourceModule>()
      每帧  └─ ResourceModule.Process()   // 轮询所有 pending ResourceLoadTask
                   └─ task.Poll()          // 调用 LoadThreadedGetStatus
                         ├─ InProgress → 继续等待
-                        └─ Loaded/Failed → 通知 Handles，写入缓存
+                        └─ Loaded → 写入缓存 + 为每个成功 Handle Acquire
+                        └─ Failed → 通知 Handle 失败
            │
     关闭   └─ ResourceModule.Shutdown()  // 清空缓存和任务表
 ```
@@ -206,10 +267,27 @@ ModuleSystem.GetModule<IResourceModule>()
 **资源释放路径：**
 
 ```
-UnloadAsset(path)
-    └─ cache.Remove(path)   // 缓存不再持有强引用
+handle.Release()
+    └─ ResourceModule.ReleaseAsset(path)
+        └─ cache.Release(path)        // 框架 RefCount -1
+              │
+              ├─ RefCount > 0 → 资源仍受保护，不可被淘汰
+              │
+              └─ RefCount == 0 → 资源变为"可淘汰"
+                    └─ 下次缓存满时 LRU 淘汰
+                          └─ cache.Remove(path)   // 缓存不再持有
+                                └─ 若外部也无引用 → Godot 引用计数 = 0 → 自动释放内存
+```
+
+**强制释放路径（场景切换等场景）：**
+
+```
+ForceUnloadAsset(path)
+    └─ cache.Remove(path)            // 直接移除，无视 RefCount
            └─ 若外部也无引用 → Godot 引用计数 = 0 → 自动释放
 ```
+
+> ⚠️ 注意：`ForceUnloadAsset` 不会使已发出的 Handle 失效，仍持有 `_asset` 引用的代码仍可继续使用该资源，但资源不再受缓存管理。
 
 ---
 
@@ -218,7 +296,7 @@ UnloadAsset(path)
 | 扩展点 | 接口 | 默认实现 |
 |---|---|---|
 | 加载策略 | `IResourceLoader` | `GodotResourceLoader` |
-| 缓存策略 | `IResourceCache` | `ResourceCache`（LRU） |
+| 缓存策略 | `IResourceCache` | `ResourceCache`（LRU + 引用计数） |
 | 模块整体 | `IResourceModule` | `ResourceModule` |
 
 所有替换操作通过 `IResourceModule.SetLoader()` / `SetCache()` 完成，无需修改框架源码。

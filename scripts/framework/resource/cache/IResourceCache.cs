@@ -4,7 +4,7 @@ namespace Framework
 {
     /// <summary>
     /// 资源缓存接口。
-    /// 实现类负责资源的存取与淘汰策略，不直接管理资源生命周期（由 Godot 引用计数决定释放时机）。
+    /// 实现类负责资源的存取、引用计数管理与淘汰策略。
     /// </summary>
     public interface IResourceCache
     {
@@ -23,14 +23,14 @@ namespace Framework
 
         /// <summary>
         /// 将资源写入缓存。若路径已存在则覆盖。
+        /// 写入时引用计数不变（需由调用方显式 Acquire）。
         /// </summary>
         /// <param name="path">资源路径。</param>
         /// <param name="resource">要缓存的资源。</param>
         void Set(string path, Resource resource);
 
         /// <summary>
-        /// 从缓存中移除指定路径的资源。
-        /// 移除后若无其他引用，Godot 自身引用计数归零时会自动释放。
+        /// 从缓存中强制移除指定路径的资源，无视引用计数。
         /// </summary>
         /// <param name="path">资源路径。</param>
         /// <returns>是否成功移除。</returns>
@@ -47,5 +47,26 @@ namespace Framework
         /// 清空缓存中所有资源引用。
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// 增加指定资源的框架层引用计数（+1）。
+        /// 在 LoadAsset / LoadAssetAsync 成功后由 ResourceModule 调用。
+        /// </summary>
+        /// <param name="path">资源路径。</param>
+        void Acquire(string path);
+
+        /// <summary>
+        /// 减少指定资源的框架层引用计数（-1），最低为 0。
+        /// 引用计数归零后资源变为"可淘汰"状态（LRU 淘汰时优先移除）。
+        /// </summary>
+        /// <param name="path">资源路径。</param>
+        void Release(string path);
+
+        /// <summary>
+        /// 获取指定资源的框架层引用计数。不存在则返回 0。
+        /// </summary>
+        /// <param name="path">资源路径。</param>
+        /// <returns>引用计数。</returns>
+        int GetRefCount(string path);
     }
 }

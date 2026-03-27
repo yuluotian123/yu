@@ -175,17 +175,17 @@ namespace Framework
                     $"[ObjectPoolModule] NodePool(scenePath='{scenePath}', name='{name}') already exists.");
             }
 
-            // 通过 ResourceModule 同步加载 PackedScene
+            // 通过 ResourceModule 同步加载 PackedScene（返回 Handle）
             _resourceModule ??= ModuleSystem.GetModule<IResourceModule>();
-            var packedScene = _resourceModule?.LoadAsset<PackedScene>(scenePath);
+            var handle = _resourceModule?.LoadAsset<PackedScene>(scenePath);
 
-            if (packedScene == null)
+            if (handle == null || !handle.IsValid)
             {
                 throw new Exception(
                     $"[ObjectPoolModule] CreateNodePool: Failed to load PackedScene at '{scenePath}'.");
             }
 
-            var pool = new NodePool(scenePath, packedScene, parent, name, capacity, autoReleaseInterval, _resourceModule);
+            var pool = new NodePool(scenePath, handle.Asset, parent, name, capacity, autoReleaseInterval, _resourceModule);
             _nodePoolMap[key] = pool;
 
             Debugger.Info(

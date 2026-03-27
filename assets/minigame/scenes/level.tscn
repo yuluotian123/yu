@@ -1,26 +1,35 @@
 [gd_scene format=3 uid="uid://740rko54cgn2"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d2n54"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[ext_resource type="Environment" uid="uid://ls5o12toybif" path="res://assets/config/settings/level_environment/level_environment.tres" id="1_xjxdj"]
+[ext_resource type="Compositor" uid="uid://beuvdoy18mw34" path="res://assets/config/settings/level_environment/rendering_compositor.tres" id="2_ifgbr"]
+[ext_resource type="CameraAttributesPhysical" uid="uid://bxcxme3h5iaay" path="res://assets/config/settings/level_environment/camera_attributes_physical.tres" id="2_vy3ne"]
 
-[sub_resource type="Sky" id="Sky_xjxdj"]
-sky_material = SubResource("ProceduralSkyMaterial_d2n54")
-
-[sub_resource type="Environment" id="Environment_ifgbr"]
-background_mode = 2
-sky = SubResource("Sky_xjxdj")
-tonemap_mode = 2
-glow_enabled = true
+[sub_resource type="PlaneMesh" id="PlaneMesh_ifgbr"]
 
 [node name="Level" type="Node3D" unique_id=1372880718]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1797011301]
-environment = SubResource("Environment_ifgbr")
+[node name="Player" type="Node3D" parent="." unique_id=677867620]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2066753767]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1054642999]
+gi_mode = 2
+shaded = true
+
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=1568138303]
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 1, 2.9059432)
+keep_aspect = 0
+
+[node name="Environment" type="Node3D" parent="." unique_id=2100730266]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=1797011301]
+environment = ExtResource("1_xjxdj")
+camera_attributes = ExtResource("2_vy3ne")
+compositor = ExtResource("2_ifgbr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=2066753767]
+transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 0, 10, 0)
+light_intensity_lux = 60000.0
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1568138303]
-transform = Transform3D(1, 0, 0, 0, 0.8708023, 0.49163347, 0, -0.49163347, 0.8708023, 0, 1.6198238, 1.0724256)
+[node name="Ground" type="MeshInstance3D" parent="Environment" unique_id=1317280103]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_ifgbr")

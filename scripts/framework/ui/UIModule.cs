@@ -116,10 +116,11 @@ namespace Framework.UI
             _windows.Add(win);
             _windowMap[name] = win;
 
-            // 异步加载 PackedScene
+            // 异步加载 PackedScene（保存 handle 到窗口，用于后续释放）
             if (!string.IsNullOrEmpty(win.AssetPath))
             {
                 var handle = _resource.LoadAssetAsync<PackedScene>(win.AssetPath);
+                win.ResourceHandle = handle;
                 handle.OnCompleted(h => OnWindowLoaded(win, h.Asset, onComplete));
             }
             else
@@ -243,6 +244,11 @@ namespace Framework.UI
         {
             _windows.Remove(win);
             _windowMap.Remove(win.WindowName);
+            
+            // 释放 PackedScene 的框架引用计数
+            win.ResourceHandle?.Release();
+            win.ResourceHandle = null;
+            
             win.InternalDestroy();
             RecalcDepthAndVisibility();
         }

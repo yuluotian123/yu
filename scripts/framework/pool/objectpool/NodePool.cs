@@ -242,7 +242,7 @@ namespace Framework
             }
 
             // 释放 PackedScene 的缓存引用，让 Godot 引用计数归零后自动回收
-            _resourceModule?.UnloadAsset(_scenePath);
+            _resourceModule?.ForceUnloadAsset(_scenePath);
 
             _parent = null;
         }

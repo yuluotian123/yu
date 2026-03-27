@@ -12,9 +12,10 @@ namespace Framework
     /// <para>
     /// 功能概览：
     /// <list type="bullet">
-    ///   <item>同步加载：优先命中缓存，缓存未命中时使用 <see cref="IResourceLoader"/> 同步读取。</item>
-    ///   <item>异步加载：利用 Godot 后台线程（<c>LoadThreadedRequest</c>），每帧在 <see cref="Process"/> 中轮询，支持同路径合并请求。</item>
-    ///   <item>LRU 缓存：默认使用 <see cref="ResourceCache"/>，淘汰时依赖 Godot 原生引用计数判断资源是否可释放。</item>
+    ///   <item>同步/异步加载均返回 <see cref="ResourceHandle{T}"/>，统一引用计数管理。</item>
+    ///   <item>每个有效 Handle 持有一个框架引用计数，Release 时 -1，归零后可被 LRU 淘汰。</item>
+    ///   <item>异步加载利用 Godot 后台线程（<c>LoadThreadedRequest</c>），每帧在 <see cref="Process"/> 中轮询，支持同路径合并请求。</item>
+    ///   <item>LRU 缓存：默认使用 <see cref="ResourceCache"/>，淘汰时依赖框架引用计数判断资源是否可释放。</item>
     ///   <item>可替换策略：通过 <see cref="SetLoader"/> / <see cref="SetCache"/> 注入自定义实现。</item>
     /// </list>
     /// </para>
@@ -101,19 +102,24 @@ namespace Framework
         // ---- IResourceModule ----
 
         /// <inheritdoc/>
-        public T LoadAsset<T>(string path) where T : Resource
+        public ResourceHandle<T> LoadAsset<T>(string path) where T : Resource
         {
+            var handle = new ResourceHandle<T>(path, this);
+
             if (string.IsNullOrEmpty(path))
             {
+                handle.SetFailedInternal("Path is null or empty.");
                 Debugger.Error("[ResourceModule] LoadAsset: path is null or empty.");
-                return null;
+                return handle;
             }
 
             // 命中缓存
             if (_cache.TryGet(path, out var cached))
             {
-                if (_enableLog) Debugger.Info($"[ResourceModule] Cache hit: '{path}'");
-                return cached as T;
+                _cache.Acquire(path);
+                handle.SetSucceedInternal(cached);
+                if (_enableLog) Debugger.Info($"[ResourceModule] Cache hit (sync): '{path}' [RefCount={_cache.GetRefCount(path)}]");
+                return handle;
             }
 
             // 同步加载
@@ -121,12 +127,15 @@ namespace Framework
             if (resource != null)
             {
                 _cache.Set(path, resource);
-                if (_enableLog) Debugger.Info($"[ResourceModule] Loaded sync: '{path}'");
-                return resource as T;
+                _cache.Acquire(path);
+                handle.SetSucceedInternal(resource);
+                if (_enableLog) Debugger.Info($"[ResourceModule] Loaded sync: '{path}' [RefCount={_cache.GetRefCount(path)}]");
+                return handle;
             }
 
+            handle.SetFailedInternal($"Failed to load resource: '{path}'");
             Debugger.Error($"[ResourceModule] LoadAsset failed: '{path}'");
-            return null;
+            return handle;
         }
 
         /// <inheritdoc/>
@@ -143,8 +152,9 @@ namespace Framework
             // 命中缓存，立即完成
             if (_cache.TryGet(path, out var cached))
             {
-                if (_enableLog) Debugger.Info($"[ResourceModule] Async cache hit: '{path}'");
+                _cache.Acquire(path);
                 handle.SetSucceedInternal(cached);
+                if (_enableLog) Debugger.Info($"[ResourceModule] Async cache hit: '{path}' [RefCount={_cache.GetRefCount(path)}]");
                 return handle;
             }
 
@@ -166,12 +176,24 @@ namespace Framework
         }
 
         /// <inheritdoc/>
-        public void UnloadAsset(string path)
+        public void ReleaseAsset(string path)
         {
             if (string.IsNullOrEmpty(path)) return;
+
+            _cache.Release(path);
+
+            if (_enableLog)
+                Debugger.Info($"[ResourceModule] ReleaseAsset: '{path}' [RefCount={_cache.GetRefCount(path)}]");
+        }
+
+        /// <inheritdoc/>
+        public void ForceUnloadAsset(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return;
+
             if (_cache.Remove(path))
             {
-                if (_enableLog) Debugger.Info($"[ResourceModule] Unloaded: '{path}'");
+                if (_enableLog) Debugger.Info($"[ResourceModule] Force unloaded: '{path}'");
             }
         }
 
@@ -186,6 +208,12 @@ namespace Framework
         public bool HasAsset(string path)
         {
             return !string.IsNullOrEmpty(path) && _cache.Contains(path);
+        }
+
+        /// <inheritdoc/>
+        public int GetRefCount(string path)
+        {
+            return _cache.GetRefCount(path);
         }
 
         /// <inheritdoc/>
@@ -209,6 +237,5 @@ namespace Framework
             }
             _cache = cache;
         }
-
     }
 }

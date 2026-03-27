@@ -1,0 +1,4 @@
+[gd_resource type="CameraAttributesPhysical" format=3 uid="uid://bxcxme3h5iaay"]
+
+[resource]
+frustum_focus_distance = 23.5

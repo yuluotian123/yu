@@ -1,6 +1,6 @@
 using Framework;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// 游戏通知相关事件 ID。
@@ -23,5 +23,12 @@ namespace GameLogic.UI
         public static readonly int GameNotice = EventId.Get("game.notice");
 
         public static readonly int GameStart = EventId.Get("game.start");
+    }
+
+    public static class GameInputEvents
+    {
+        public static readonly int CharacterMove = EventId.Get("game.character_move");
+        public static readonly int CharacterAttack = EventId.Get("game.character_attack");
+        public static readonly int CharacterJump = EventId.Get("game.character_jump");
     }
 }

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://c3ua2mlj5r4h5"]
+
+[ext_resource type="Environment" uid="uid://ls5o12toybif" path="res://assets/config/settings/level_environment/level_environment.tres" id="1_dwdy1"]
+[ext_resource type="CameraAttributesPhysical" uid="uid://bxcxme3h5iaay" path="res://assets/config/settings/level_environment/camera_attributes_physical.tres" id="2_ntfee"]
+[ext_resource type="Compositor" uid="uid://beuvdoy18mw34" path="res://assets/config/settings/level_environment/rendering_compositor.tres" id="3_ri3e2"]
+[ext_resource type="PackedScene" uid="uid://30v2v0gn3y5u" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_A.FBX" id="4_ri3e2"]
+[ext_resource type="PackedScene" uid="uid://xfsu1y8i465q" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_C.FBX" id="5_sheva"]
+[ext_resource type="PackedScene" uid="uid://bkl8bwjofqoii" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_B.FBX" id="6_sheva"]
+[ext_resource type="PackedScene" uid="uid://pidfety0ovrd" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_D.FBX" id="6_vdndu"]
+[ext_resource type="PackedScene" uid="uid://b4843lxto372e" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_E.FBX" id="8_j4pbp"]
+[ext_resource type="PackedScene" uid="uid://bmehh8yajkevo" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_F.FBX" id="9_57yo2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dwdy1"]
+size = Vector3(60, 2, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ntfee"]
+size = Vector3(60, 2, 60)
+
+[node name="Environment" type="Node3D" unique_id=135065150]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1507070748]
+environment = ExtResource("1_dwdy1")
+camera_attributes = ExtResource("2_ntfee")
+compositor = ExtResource("3_ri3e2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=497694889]
+transform = Transform3D(1, 0, 0, 0, -0.11980769, 0.99279714, 0, -0.99279714, -0.11980769, 0, 10, 0)
+light_color = Color(0.93333334, 0.9764706, 0.8117647, 1)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1266865333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=615182856]
+mesh = SubResource("BoxMesh_dwdy1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=67157246]
+shape = SubResource("BoxShape3D_ntfee")
+
+[node name="BackGround" type="StaticBody3D" parent="." unique_id=665306070]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BackGround" unique_id=2075897703]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -8, 0, -3.496911e-07)
+
+[node name="EnvBdgMD_City_B_Outdoor_L_A" parent="BackGround/MeshInstance3D" unique_id=948734210 instance=ExtResource("4_ri3e2")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -1.9814634, 0, -4)
+visibility_parent = NodePath("..")
+
+[node name="EnvBdgMD_City_B_Outdoor_L_C" parent="BackGround/MeshInstance3D" unique_id=262739431 instance=ExtResource("5_sheva")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 1.8668954, 0, -4)
+visibility_parent = NodePath("..")
+
+[node name="EnvBdgMD_City_B_Outdoor_L_D" parent="BackGround/MeshInstance3D" unique_id=1392724677 instance=ExtResource("6_vdndu")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -3.6439662, 0, -3.9999998)
+visibility_parent = NodePath("..")
+
+[node name="EnvBdgMD_City_B_Outdoor_L_B" parent="BackGround/MeshInstance3D" unique_id=1661493267 instance=ExtResource("6_sheva")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 5.365675, 0, -4)
+visibility_parent = NodePath("..")
+
+[node name="EnvBdgMD_City_B_Outdoor_L_E" parent="BackGround/MeshInstance3D" unique_id=1137327660 instance=ExtResource("8_j4pbp")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -6.7898593, 0, -4)
+visibility_parent = NodePath("..")
+
+[node name="EnvBdgMD_City_B_Outdoor_L_F" parent="BackGround/MeshInstance3D" unique_id=276347869 instance=ExtResource("9_57yo2")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 8.990468, 0, -4)
+visibility_parent = NodePath("..")

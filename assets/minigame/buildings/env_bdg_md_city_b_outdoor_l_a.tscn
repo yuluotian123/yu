@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ds2illkc2dpor"]
+
+[ext_resource type="PackedScene" uid="uid://30v2v0gn3y5u" path="res://assets/minigame/meshes/建筑/EnvBdgMD_City_B_Outdoor_Awning_A/EnvBdgMD_City_B_Outdoor_L_A.FBX" id="1_8jnh4"]
+
+[node name="EnvBdgMD_City_B_Outdoor_L_A" unique_id=948734210 instance=ExtResource("1_8jnh4")]
+
+[node name="EnvBdgMD_City_B_Outdoor_L_A" parent="." index="0" unique_id=309359766]
+cast_shadow = 2
+gi_mode = 2

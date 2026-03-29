@@ -4,6 +4,7 @@
 [ext_resource type="Resource" uid="uid://j6jir380ooyu" path="res://assets/config/settings/global_settings.tres" id="2_0sllv"]
 
 [node name="Root" type="Node" unique_id=1907522443]
+process_mode = 3
 script = ExtResource("1_m1qdt")
 settings = ExtResource("2_0sllv")
 

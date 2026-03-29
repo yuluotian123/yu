@@ -13,15 +13,16 @@ namespace GameLogic.Input
     /// 
     /// 注意：Godot 的输入消费机制通过 _Input() / _UnhandledInput() 和 Viewport.SetInputAsHandled() 实现，
     /// 本模块不重复实现消费机制，而是专注于缓冲和层管理。
+    /// 
+    /// 改进：使用统一的 InputTracker 替代分离的 InputBuffer 和 HoldTime，解决时序问题。
     /// </summary>
     public class InputModule : Module, IInputModule, IProcessModule
     {
-        private readonly InputBuffer _buffer = new InputBuffer();
+        private readonly InputTracker _tracker = new InputTracker();
         private readonly InputLayerManager _layerManager = new InputLayerManager();
-        private readonly Dictionary<string, double> _holdTimes = new Dictionary<string, double>();
+        private List<string> _cachedActions; // 缓存动作列表，避免每帧重新获取
 
         private double _currentTime;
-        private const float MaxBufferTime = 1f; // 最大缓冲时间
 
         public override int Priority => 10; // 输入模块优先级较高
 
@@ -33,84 +34,57 @@ namespace GameLogic.Input
             _layerManager.AddLayer("UI", InputLayerManager.LayerPriority.UI);
             _layerManager.AddLayer("Camera", InputLayerManager.LayerPriority.Camera);
 
-            Debugger.Info("[InputModule] Initialized with default layers.");
+            // 缓存动作列表，避免每帧重新获取
+            CacheActions();
+
+            Debugger.Info("[InputModule] Initialized with unified InputTracker.");
         }
 
         public override void Shutdown()
         {
-            _buffer.Clear();
-            _holdTimes.Clear();
+            _tracker.Clear();
+            _cachedActions?.Clear();
         }
 
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
             _currentTime += realElapseSeconds;
 
-            // 清理过期的缓冲记录
-            _buffer.CleanExpired(_currentTime, MaxBufferTime);
+            // 1. 更新追踪器（包含持续时间更新和过期清理）
+            _tracker.Update(_currentTime, realElapseSeconds);
 
-            // 清除层消费状态
+            // 2. 清除层消费状态
             _layerManager.ClearAllConsumed();
 
-            // 更新持续按下时间
-            UpdateHoldTimes(realElapseSeconds);
-
-            // 记录本帧按下的动作到缓冲
-            RecordJustPressedActions();
+            // 3. 记录本帧的输入事件
+            RecordInputEvents();
         }
 
-        private void UpdateHoldTimes(double deltaTime)
+        private void CacheActions()
         {
-            var toRemove = new List<string>();
-
-            foreach (var kvp in _holdTimes)
-            {
-                string action = kvp.Key;
-                if (Godot.Input.IsActionPressed(action))
-                {
-                    _holdTimes[action] += deltaTime;
-                }
-                else
-                {
-                    toRemove.Add(action);
-                }
-            }
-
-            foreach (var action in toRemove)
-            {
-                _holdTimes.Remove(action);
-            }
-        }
-
-        private void RecordJustPressedActions()
-        {
-            // 从 Godot InputMap 获取所有动作并记录按下事件
-            var actions = GetAllActions();
-            foreach (var action in actions)
-            {
-                if (Godot.Input.IsActionJustPressed(action))
-                {
-                    _buffer.RecordPress(action, _currentTime);
-                    
-                    if (!_holdTimes.ContainsKey(action))
-                    {
-                        _holdTimes[action] = 0;
-                    }
-                }
-            }
-        }
-
-        private List<string> GetAllActions()
-        {
-            var actions = new List<string>();
+            _cachedActions = new List<string>();
             var actionList = Godot.InputMap.GetActions();
             
             foreach (var action in actionList)
             {
-                actions.Add(action.ToString());
+                _cachedActions.Add(action.ToString());
             }
-            
-            return actions;
+        }
+
+        private void RecordInputEvents()
+        {
+            // 使用缓存的动作列表，避免每帧重新获取
+            foreach (var action in _cachedActions)
+            {
+                if (Godot.Input.IsActionJustPressed(action))
+                {
+                    _tracker.RecordPress(action, _currentTime);
+                }
+                else if (Godot.Input.IsActionJustReleased(action))
+                {
+                    _tracker.RecordRelease(action, _currentTime);
+                }
+            }
         }
 
         // ==================== IInputModule 接口实现 ====================
@@ -162,12 +136,12 @@ namespace GameLogic.Input
 
         public bool IsBuffered(string action, float bufferTime)
         {
-            return _buffer.IsBuffered(action, bufferTime, _currentTime);
+            return _tracker.IsBuffered(action, bufferTime, _currentTime);
         }
 
         public float GetHoldTime(string action)
         {
-            return _holdTimes.TryGetValue(action, out var time) ? (float)time : 0f;
+            return _tracker.GetHoldTime(action);
         }
 
         public void EnableLayer(string layerName)
@@ -187,12 +161,12 @@ namespace GameLogic.Input
 
         public void ClearBuffer()
         {
-            _buffer.Clear();
+            _tracker.Clear();
         }
 
         public void ConsumeBufferedAction(string action)
         {
-            _buffer.Consume(action);
+            _tracker.Consume(action);
         }
 
         public void SimulateInputEvent(InputEvent @event)

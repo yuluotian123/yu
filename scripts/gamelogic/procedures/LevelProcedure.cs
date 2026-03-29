@@ -20,7 +20,6 @@ public class LevelProcedure : ProcedureBase
         //进入主菜单(临时)
         if (Input.IsActionJustPressed("ui_cancel"))
         {
-            ChangeState<MainMenuProcedure>(procedureOwner);
             if (Engine.GetMainLoop() is SceneTree tree)
             {
                 var levelNode = tree.Root.GetNode("Root/Level");
@@ -29,8 +28,12 @@ public class LevelProcedure : ProcedureBase
                     levelNode.QueueFree();
 
                     //卸载资源，避免内存泄漏
-                    ModuleSystem.GetModule<IResourceModule>().ReleaseAsset("res://assets/minigame/scenes/level.tscn");
+                    //ModuleSystem.GetModule<IResourceModule>().ReleaseAsset("res://assets/minigame/scenes/level.tscn");
+                    ModuleSystem.GetModule<IResourceModule>().ForceUnloadAsset("res://assets/minigame/scenes/level.tscn");
+                    GC.Collect();
                 }
+
+                ChangeState<MainMenuProcedure>(procedureOwner);
             }
 
         }

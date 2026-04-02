@@ -27,8 +27,8 @@ public partial class InputComponent : Component
     {
         if(_movement == null)
         {
-            Debugger.Warn("Player is missing MovementComponent,将会自动添加一个新的MovementComponent");
-            _movement = Owner.AddComponent<MovementComponent>();
+            Debugger.Error("Player is missing MovementComponent。");
+            return;
         }
 
         // 轮询式输入（持续输入）

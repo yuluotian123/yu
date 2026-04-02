@@ -67,6 +67,10 @@ public partial class MovementComponent : Component
                         else if (dir.X < 0)
                             sprite3D.FlipH = true;  // 朝左
                     }
+                    else
+                    {
+                        Debugger.Error("can not find a sprite3D on Player.");
+                    }
                 }
 
                 if (IsSprint)
@@ -78,6 +82,10 @@ public partial class MovementComponent : Component
             {
                 animationComponent.PlayAnimation("idle");
             }
+        }
+        else
+        {
+            Debugger.Error("can not find a animation component on Player.");
         }
 
         _inputDirection = Vector2.Zero; // 重置输入方向，等待下一帧更新

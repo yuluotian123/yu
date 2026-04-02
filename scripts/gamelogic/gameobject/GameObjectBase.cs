@@ -33,11 +33,18 @@ namespace GameLogic
 
         private void InitializeComponents()
         {
-            if (Components == null) return;
+            if (Components == null) 
+            {
+                Debugger.Warn("there is no component in this gameobject.");
+                return;
+            }
+
+            Debugger.Info("GameObject" + Components.Count());
 
             foreach (var component in Components)
             {
-                if (component == null) continue;
+                if (component == null)
+                continue;
 
                 Component instance = null;
 
@@ -126,6 +133,7 @@ namespace GameLogic
 
         public bool HasComponent<T>() where T : Component
         {
+            Debugger.Info(_runtimeComponents.Count().ToString());
             return _runtimeComponents.ContainsKey(typeof(T));
         }
 

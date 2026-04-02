@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MissionGraph" format=3 uid="uid://bldapu1mnaw1d"]
+
+[ext_resource type="Script" uid="uid://cygmqliihxadu" path="res://scripts/gamelogic/missions/mission_chains/graphs/MissionGraph.cs" id="1_exels"]
+
+[resource]
+script = ExtResource("1_exels")
+NodesJson = "[{\"$type\":\"ActionNode\",\"NodeType\":\"Action\",\"Actions\":[{\"$type\":\"DebugLog\",\"logType\":\"Log\",\"Description\":\"Log1\",\"message\":\"1\"}],\"Id\":\"124fb0a1_6b0e4ecb_8e21c1d5\",\"Position\":{\"x\":680,\"y\":200}},{\"$type\":\"EntryNode\",\"Id\":\"12e71697_1cdd4f36_5da67c28\",\"Position\":{\"x\":258,\"y\":321},\"NodeType\":\"Entry\"}]"
+ConnectionsJson = "[{\"$type\":\"ConnectionWithConditon\",\"HasCondition\":false,\"ExecuteMode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[{\"$type\":\"TimerCondition\",\"RequiredSeconds\":4.1,\"IsConditionMet\":false,\"Description\":\"\\u7B49\\u5F85 4.1 \\u79D2\"},{\"$type\":\"TimerCondition\",\"RequiredSeconds\":3.1,\"IsConditionMet\":false,\"Description\":\"\\u7B49\\u5F85 3.1 \\u79D2\"}],\"IsAvailable\":true,\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"12e71697_1cdd4f36_5da67c28\",\"FromPort\":0,\"ToNode\":\"124fb0a1_6b0e4ecb_8e21c1d5\",\"ToPort\":0}]"
+metadata/_custom_type_script = "uid://cygmqliihxadu"

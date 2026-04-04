@@ -8,7 +8,7 @@ public partial class GraphCanvasEditorWindow
 {
     private void CreateNodeFromData(GraphNodeData data)
     {
-        var node = GraphNodeFactory.CreateNodeUi(data);
+        var node = GraphNodeFactory.CreateNodeUI(data);
         _graphEdit.AddChild(node);
 
         // 如果是子图节点，在其 UI 上注入"进入子图"按钮
@@ -65,7 +65,7 @@ public partial class GraphCanvasEditorWindow
     private void CreateNewNode(string nodeType, Vector2 position)
     {
         // 先生成 id，以便 undo/redo 时用相同 id 重建
-        var data = GraphNodeFactory.CreateNodeData(nodeType);
+        var data = GraphNodeFactory.CreateNodeData(nodeType,_currentGraph.graphName);
         data.Position = position;
 
         if (_undoRedo != null)
@@ -83,7 +83,7 @@ public partial class GraphCanvasEditorWindow
     }
     private void DoAddNode(string nodeType, string nodeId, Vector2 position)
     {
-        var data = GraphNodeFactory.CreateNodeData(nodeType);
+        var data = GraphNodeFactory.CreateNodeData(nodeType,_currentGraph.graphName);
         data.Id = nodeId;
         data.Position = position;
         _currentGraph.Nodes.Add(data);

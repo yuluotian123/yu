@@ -4,14 +4,8 @@ using Godot;
 /// <summary>
 /// 入口节点 - 状态机的起始点
 /// </summary>
-[Tool]
 public partial class EntryNode : GraphNodeData
-{
-    public EntryNode()
-    {
-        NodeType = "Entry";
-    }
-    
+{ 
     public override string GetDisplayName() => "入口";
     public override Color GetNodeColor() => Colors.LimeGreen;
     public override int GetInputCount() => 0;

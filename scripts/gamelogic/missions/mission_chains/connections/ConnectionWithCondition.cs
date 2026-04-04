@@ -16,7 +16,7 @@ public class ConnectionWithConditon : GraphConnection
 
     // ── 运行时属性 ────────────────────────────────────────────────────────────
 
-    public bool IsAvailable
+    public override bool IsAvailable
     {
         get
         {

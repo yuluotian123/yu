@@ -44,7 +44,7 @@ public partial class GraphCanvasEditorWindow
             {
                 var nodeType = nodeInfo["type"].AsString();
                 var newPosition = nodeInfo["position"].AsVector2() + offset;
-                var tempData = GraphNodeFactory.CreateNodeData(nodeType);
+                var tempData = GraphNodeFactory.CreateNodeData(_currentGraph.graphName,nodeType);
                 _undoRedo.AddDoMethod(this, MethodName.DoAddNode, nodeType, tempData.Id, newPosition);
                 _undoRedo.AddUndoMethod(this, MethodName.DoRemoveNode, new StringName(tempData.Id));
             }
@@ -56,7 +56,7 @@ public partial class GraphCanvasEditorWindow
             {
                 var nodeType = nodeInfo["type"].AsString();
                 var newPosition = nodeInfo["position"].AsVector2() + offset;
-                var tempData = GraphNodeFactory.CreateNodeData(nodeType);
+                var tempData = GraphNodeFactory.CreateNodeData(_currentGraph.graphName,nodeType);
                 DoAddNode(nodeType, tempData.Id, newPosition);
             }
         }

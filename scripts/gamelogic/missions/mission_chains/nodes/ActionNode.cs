@@ -3,10 +3,10 @@ using Godot;
 
 public class ActionNode : GraphNodeData
 {
-    public override string NodeType { get; set ; } = "Action";
     public override int GetInputCount() => 1;
+    public override bool CanBePrime() => false;
 
-    public List<ActionBase> Actions {get;set;} = new List<ActionBase>();
+    public List<ActionBase> Actions { get; set; } = new List<ActionBase>();
 
     public override void CreateUI(GraphNode node)
     {
@@ -21,7 +21,9 @@ public class ActionNode : GraphNodeData
         node.AddChild(listControl.Build());
     }
 
+    public override void Execute()
+    {
+        foreach (var a in Actions) a?.Execute();
+    }
 
-
-    
 }

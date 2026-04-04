@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MissionGraph" format=3 uid="uid://c2ksojafcc4uh"]
+
+[ext_resource type="Script" uid="uid://cygmqliihxadu" path="res://scripts/gamelogic/missions/mission_chains/graphs/MissionGraph.cs" id="1_0c1sm"]
+
+[resource]
+script = ExtResource("1_0c1sm")
+NodesJson = "[{\"$type\":\"CalculatorNode\",\"CurrentOperation\":\"Add\",\"Value\":1,\"Value2\":1,\"Id\":\"37b1311b5_9a6ff7ec_488ecf03\",\"Position\":{\"x\":400,\"y\":160},\"GraphName\":\"2.tres\",\"NodeType\":\"CalculatorNode\"}]"
+metadata/_custom_type_script = "uid://cygmqliihxadu"

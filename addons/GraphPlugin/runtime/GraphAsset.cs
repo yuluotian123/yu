@@ -10,6 +10,8 @@ public partial class GraphAsset : Resource
     [Export] public string NodesJson { get; set; } = "[]";
     [Export] public string ConnectionsJson { get; set; } = "[]";
 
+    public string graphName => ResourcePath.GetFile();
+
     // ── 运行时数据（从 JSON 加载后填充）──────────────────────────────────────
     private List<GraphNodeData> _nodes;
     private List<GraphConnection> _connections;
@@ -41,7 +43,30 @@ public partial class GraphAsset : Resource
         }
     }
 
-    public virtual string GraphType { get; set; } = "Generic";
+    public GraphNodeData primeNode
+    {
+        get
+        {
+            var entryNode = Nodes.Find(t => t.NodeType == "Entry");
+            if (entryNode != null)
+                return entryNode;
+
+            foreach (var node in Nodes)
+            {
+                if (node.CanBePrime())
+                    return node;
+            }
+
+
+            return null;
+        }
+    }
+    private string? _graphType;
+    public virtual string GraphType
+    {
+        get => _graphType ?? this.GetType().Name;
+        set => _graphType = value;
+    }
 
     public virtual List<string> GetAllowedNodeTypes() => GraphNodeFactory.GetNodesForGraphType(GraphType);
     public virtual GraphConnection CreateConnection() => new GraphConnection();
@@ -152,6 +177,17 @@ public partial class GraphAsset : Resource
                 Connections.RemoveAt(i);
         }
         SaveToJson();
+    }
+
+    public List<GraphConnection> GetIngoingConnections(string nodeId)
+    {
+        var result = new List<GraphConnection>();
+        foreach (var conn in Connections)
+        {
+            if (conn.FromNode == nodeId)
+                result.Add(conn);
+        }
+        return result;
     }
 
     public List<GraphConnection> GetOutgoingConnections(string nodeId)

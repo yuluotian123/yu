@@ -10,7 +10,7 @@ public class GraphNodeData
 {
     public string Id { get; set; } = "";
     public Vector2 Position { get; set; } = Vector2.Zero;
-
+    public string GraphName { get; set; } = "";
 
     public GraphNodeData()
     {
@@ -26,7 +26,14 @@ public class GraphNodeData
         return $"{time:x}_{rand1:x}_{rand2:x}";
     }
 
-    public virtual string NodeType { get; set; } = "";
+
+    private string? _nodeType;
+
+    public virtual string NodeType
+    {
+        get => _nodeType ?? GetType().Name;
+        set => _nodeType = value;
+    }
     public virtual List<string> GetGraphTypes()
         => new List<string> { "All" };
 
@@ -34,6 +41,7 @@ public class GraphNodeData
     public virtual Color GetNodeColor() => Colors.White;
     public virtual int GetInputCount() => 0;
     public virtual int GetOutputCount() => 0;
+    public virtual bool CanBePrime()=> true;
     /// <summary>
     /// 返回指定输出端口允许的最大连线数量。-1 表示不限制（默认）。
     /// </summary>
@@ -48,7 +56,10 @@ public class GraphNodeData
         var label = new Label { Text = GetDisplayName() };
         node.AddChild(label);
     }
-
+    
+    /// <summary>
+    /// 处理瞬时逻辑，在到达节点时调用；并不代表会退出此节点
+    /// </summary>
     public virtual void Execute() { }
-    public virtual bool Validate() => true;
+
 }

@@ -15,19 +15,8 @@ public partial class SubGraphNodeData : GraphNodeData
     /// <summary>子图资源的文件路径（.tres）</summary>
     public string SubGraphPath { get; set; } = "";
 
-    /// <summary>该子图节点对外暴露的输入端口数量</summary>
-    public int InputPortCount { get; set; } = 1;
-
-    /// <summary>该子图节点对外暴露的输出端口数量</summary>
-    public int OutputPortCount { get; set; } = 1;
-
     // ── 运行时缓存（不序列化）────────────────────────────────────────────────
     private GraphAsset _cachedSubGraph = null;
-
-    public SubGraphNodeData()
-    {
-        NodeType = "SubGraph";
-    }
 
     public override List<string> GetGraphTypes()
         => new List<string> { "All" };
@@ -44,8 +33,8 @@ public partial class SubGraphNodeData : GraphNodeData
 
     public override Color GetNodeColor() => new Color(0.4f, 0.6f, 1.0f);
 
-    public override int GetInputCount() => InputPortCount;
-    public override int GetOutputCount() => OutputPortCount;
+    public override int GetInputCount() => 1;
+    public override int GetOutputCount() => 1;
 
     public override int GetInputMaxConnections(int port) => 1;
     public override int GetOutputMaxConnections(int port) => -1;
@@ -80,40 +69,6 @@ public partial class SubGraphNodeData : GraphNodeData
     public void InvalidateCache()
     {
         _cachedSubGraph = null;
-    }
-
-    // ── 执行 ─────────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// 默认执行实现：依次执行子图中的所有节点。
-    /// 子类可覆盖此方法实现更复杂的执行顺序（如拓扑排序）。
-    /// </summary>
-    public override void Execute()
-    {
-        var subGraph = GetSubGraph();
-        if (subGraph == null)
-        {
-            GD.PushWarning($"[SubGraph] 节点 {Id} 无法执行：子图未绑定或加载失败");
-            return;
-        }
-
-        GD.Print($"[SubGraph] 开始执行子图: {GetDisplayName()}");
-        foreach (var nodeData in subGraph.Nodes)
-            nodeData.Execute();
-        GD.Print($"[SubGraph] 子图执行完毕: {GetDisplayName()}");
-    }
-
-    /// <summary>
-    /// 验证子图是否可用。
-    /// </summary>
-    public override bool Validate()
-    {
-        if (string.IsNullOrEmpty(SubGraphPath))
-        {
-            GD.PushWarning($"[SubGraph] 节点 {Id} 验证失败：未绑定子图路径");
-            return false;
-        }
-        return GetSubGraph() != null;
     }
 
     // ── UI ──────────────────────────────────────────────────────────────────

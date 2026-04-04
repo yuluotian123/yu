@@ -14,6 +14,8 @@ public class GraphConnection
     public virtual string GetDisplayName() => " 连接";
     public virtual bool IsEditable() => true;
 
+    public virtual bool IsAvailable{get;} = true;
+
     public virtual Control CreateEditUI()
     {
         var container = new VBoxContainer();

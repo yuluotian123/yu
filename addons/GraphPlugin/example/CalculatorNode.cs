@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Godot;
 
-[Tool]
 public partial class CalculatorNode : GraphNodeData
 {
     public enum Operation { Add, Subtract, Multiply, Divide }
@@ -9,8 +8,6 @@ public partial class CalculatorNode : GraphNodeData
     public Operation CurrentOperation { get; set; } = Operation.Add;
     public float Value { get; set; } = 1.0f;
     public float Value2 { get; set; } = 1.0f;
-
-    public override string NodeType { get; set; } = "Calculator";
 
     public override List<string> GetGraphTypes()
     {

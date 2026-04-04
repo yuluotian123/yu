@@ -41,6 +41,8 @@ public class ReorderableListControl<T> where T : class
     // ── 内部 UI ──────────────────────────────────────────────────────────────
     private VBoxContainer _root;
     private VBoxContainer _itemsContainer;
+    private readonly Dictionary<int, bool> _itemExpandedStates = new();
+    private bool _listExpanded = true;
 
     // ── 构造 ────────────────────────────────────────────────────────────────
 
@@ -49,18 +51,25 @@ public class ReorderableListControl<T> where T : class
     /// <param name="getItemLabel">生成每行标题文字的委托，可为 null（默认用类型名）</param>
     /// <param name="availableTypes">下拉添加时的候选类型，为 null 或空则不显示「添加」行</param>
     /// <param name="factory">根据类型创建新元素，为 null 时使用 Activator.CreateInstance</param>
+    /// <param name="defaultItemExpanded">单项默认是否展开</param>
+    /// <param name="defaultListExpanded">整个列表默认是否展开</param>
     public ReorderableListControl(
         IList<T> items,
         Func<T, Control> buildItemUi = null,
         Func<T, string> getItemLabel = null,
         IReadOnlyList<Type> availableTypes = null,
-        Func<Type, T> factory = null)
+        Func<Type, T> factory = null,
+        bool defaultItemExpanded = true,
+        bool defaultListExpanded = true)
     {
         _items = items;
         _buildItemUi = buildItemUi;
         _getItemLabel = getItemLabel ?? (item => item.GetType().Name);
         _availableTypes = availableTypes;
         _factory = factory ?? (type => (T)Activator.CreateInstance(type));
+        _listExpanded = defaultListExpanded;
+        for (int i = 0; i < items.Count; i++)
+            _itemExpandedStates[i] = defaultItemExpanded;
     }
 
     // ── 公开方法 ───────────────────────────────────────────────────────────
@@ -71,9 +80,26 @@ public class ReorderableListControl<T> where T : class
         _root = new VBoxContainer();
         _root.AddThemeConstantOverride("separation", 4);
 
+        // 全局折叠按钮
+        var globalHeader = new HBoxContainer();
+        var collapseAllBtn = new Button
+        {
+            Text = _listExpanded ? "▼ 折叠列表" : "▶ 展开列表",
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        };
+        collapseAllBtn.Pressed += () =>
+        {
+            _listExpanded = !_listExpanded;
+            collapseAllBtn.Text = _listExpanded ? "▼ 折叠列表" : "▶ 展开列表";
+            _itemsContainer.Visible = _listExpanded;
+        };
+        globalHeader.AddChild(collapseAllBtn);
+        _root.AddChild(globalHeader);
+
         // 列表容器
         _itemsContainer = new VBoxContainer();
         _itemsContainer.AddThemeConstantOverride("separation", 2);
+        _itemsContainer.Visible = _listExpanded;
         _root.AddChild(_itemsContainer);
 
         RefreshItemsContainer();
@@ -132,6 +158,18 @@ public class ReorderableListControl<T> where T : class
         // ── 标题行 ──────────────────────────────────────────────────────
         var header = new HBoxContainer();
         row.AddChild(header);
+
+        // 折叠按钮
+        if (!_itemExpandedStates.ContainsKey(index))
+            _itemExpandedStates[index] = true;
+        
+        var collapseBtn = new Button
+        {
+            Text = _itemExpandedStates[index] ? "▼" : "▶",
+            CustomMinimumSize = new Vector2(28, 0),
+            TooltipText = "折叠/展开"
+        };
+        header.AddChild(collapseBtn);
 
         var label = new Label
         {
@@ -196,7 +234,20 @@ public class ReorderableListControl<T> where T : class
             var margin = new MarginContainer();
             margin.AddThemeConstantOverride("margin_left", 14);
             margin.AddChild(paramUi);
+            margin.Visible = _itemExpandedStates[index];
             row.AddChild(margin);
+
+            // 绑定折叠按钮事件
+            collapseBtn.Pressed += () =>
+            {
+                _itemExpandedStates[index] = !_itemExpandedStates[index];
+                collapseBtn.Text = _itemExpandedStates[index] ? "▼" : "▶";
+                margin.Visible = _itemExpandedStates[index];
+            };
+        }
+        else
+        {
+            collapseBtn.Visible = false; // 无参数 UI 时隐藏折叠按钮
         }
 
         row.AddChild(new HSeparator());

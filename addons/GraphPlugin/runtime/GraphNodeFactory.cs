@@ -71,25 +71,32 @@ public static class GraphNodeFactory
     public static List<string> GetNodesForGraphType(string graphType)
     {
         EnsureInitialized();
-        
+
         var listNode = new List<string>();
 
-        if(_nodesByGraphType.TryGetValue(graphType, out var list)) listNode.AddRange(list);
-        if(_nodesByGraphType.TryGetValue("All",out var listAll)) listNode.AddRange(listAll);
+        if (_nodesByGraphType.TryGetValue(graphType, out var list)) listNode.AddRange(list);
+        if (_nodesByGraphType.TryGetValue("All", out var listAll)) listNode.AddRange(listAll);
 
         return listNode;
     }
 
-    public static GraphNodeData CreateNodeData(string typeName)
+    public static GraphNodeData CreateNodeData(string typeName,string graphName)
     {
         EnsureInitialized();
-        
+
+        GraphNodeData node = null;
+
         if (_nodeTypes.TryGetValue(typeName, out var type))
-            return (GraphNodeData)Activator.CreateInstance(type);
-        return new GraphNodeData { NodeType = typeName };
+            node = (GraphNodeData)Activator.CreateInstance(type);
+        else
+            node = new GraphNodeData() { NodeType = typeName };
+
+        node.GraphName = graphName;
+
+        return node;
     }
 
-    public static GraphNode CreateNodeUi(GraphNodeData data)
+    public static GraphNode CreateNodeUI(GraphNodeData data)
     {
         var node = new GraphNode
         {

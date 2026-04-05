@@ -10,7 +10,7 @@ public partial class GraphAsset : Resource
     [Export] public string NodesJson { get; set; } = "[]";
     [Export] public string ConnectionsJson { get; set; } = "[]";
 
-    public string graphName => ResourcePath.GetFile();
+    public string graphName => ResourcePath.GetFile().Split('.')[0];
 
     // ── 运行时数据（从 JSON 加载后填充）──────────────────────────────────────
     private List<GraphNodeData> _nodes;
@@ -47,7 +47,7 @@ public partial class GraphAsset : Resource
     {
         get
         {
-            var entryNode = Nodes.Find(t => t.NodeType == "Entry");
+            var entryNode = Nodes.Find(t => t.NodeType == "EntryNode");
             if (entryNode != null)
                 return entryNode;
 
@@ -86,6 +86,74 @@ public partial class GraphAsset : Resource
     {
         _nodes = GraphJsonHelper.DeserializeList<GraphNodeData>(NodesJson);
         _connections = GraphJsonHelper.DeserializeList<GraphConnection>(ConnectionsJson);
+        TopologicalSortNodes();
+    }
+
+    /// <summary>
+    /// 根据 connections 对 nodes 进行拓扑排序，使入度为 0 的节点排在前面。
+    /// </summary>
+    private void TopologicalSortNodes()
+    {
+        if (_nodes == null || _nodes.Count == 0) return;
+
+        var nodeIndex = new Dictionary<string, int>();
+        for (int i = 0; i < _nodes.Count; i++)
+            nodeIndex[_nodes[i].Id] = i;
+
+        // 构建邻接表和入度表
+        var adj = new Dictionary<string, List<string>>();
+        var inDegree = new Dictionary<string, int>();
+        foreach (var node in _nodes)
+        {
+            adj[node.Id] = new List<string>();
+            inDegree[node.Id] = 0;
+        }
+
+        if (_connections != null)
+        {
+            foreach (var conn in _connections)
+            {
+                if (adj.ContainsKey(conn.FromNode) && inDegree.ContainsKey(conn.ToNode))
+                {
+                    adj[conn.FromNode].Add(conn.ToNode);
+                    inDegree[conn.ToNode]++;
+                }
+            }
+        }
+
+        // Kahn 算法 BFS 拓扑排序
+        var queue = new Queue<string>();
+        foreach (var kv in inDegree)
+        {
+            if (kv.Value == 0)
+                queue.Enqueue(kv.Key);
+        }
+
+        var sorted = new List<GraphNodeData>();
+        var visited = new HashSet<string>();
+        while (queue.Count > 0)
+        {
+            var id = queue.Dequeue();
+            if (!visited.Add(id)) continue;
+            if (nodeIndex.TryGetValue(id, out var idx))
+                sorted.Add(_nodes[idx]);
+
+            foreach (var next in adj[id])
+            {
+                inDegree[next]--;
+                if (inDegree[next] == 0)
+                    queue.Enqueue(next);
+            }
+        }
+
+        // 未被排序到的节点（环或孤立）追加到末尾
+        foreach (var node in _nodes)
+        {
+            if (!visited.Contains(node.Id))
+                sorted.Add(node);
+        }
+
+        _nodes = sorted;
     }
 
     // ── 图操作方法 ────────────────────────────────────────────────────────────

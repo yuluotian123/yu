@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://60lj7kwortbk"]
 
-[ext_resource type="Script" uid="uid://bj8fu24auwnie" path="res://scripts/tests/Testload.cs" id="1_8o7ya"]
+[ext_resource type="Script" uid="uid://c1qi4noxqwi28" path="res://scripts/gamelogic/missions/examples/Example.cs" id="2_fq0a0"]
+[ext_resource type="Resource" uid="uid://bldapu1mnaw1d" path="res://assets/config/graphs/mission_graphs/1.tres" id="3_4avrj"]
 
 [node name="Testscene" type="Node3D" unique_id=518717201]
-script = ExtResource("1_8o7ya")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1052239048]
+script = ExtResource("2_fq0a0")
+chain = ExtResource("3_4avrj")

@@ -31,8 +31,7 @@ public class LevelProcedure : ProcedureBase
                     levelNode.QueueFree();
 
                     //卸载资源，避免内存泄漏
-                    //ModuleSystem.GetModule<IResourceModule>().ReleaseAsset("res://assets/minigame/scenes/level.tscn");
-                    ModuleSystem.GetModule<IResourceModule>().ForceUnloadAsset("res://assets/minigame/scenes/level.tscn");
+                    ModuleSystem.GetModule<IResourceModule>().ForceUnloadAsset("res://assets/scenes/level.tscn");
                     GC.Collect();
                 }
 

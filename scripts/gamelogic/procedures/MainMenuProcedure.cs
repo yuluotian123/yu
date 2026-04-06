@@ -40,7 +40,7 @@ public class MainMenuProcedure : ProcedureBase
     private void LoadLevelScene()
     {
         var _resource = ModuleSystem.GetModule<IResourceModule>();
-     _resource.LoadAssetAsync<PackedScene>("res://assets/minigame/scenes/level.tscn")
+     _resource.LoadAssetAsync<PackedScene>("res://assets/scenes/level.tscn")
             .OnCompleted(
                 h =>
                 {

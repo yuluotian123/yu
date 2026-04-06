@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[Tool]
 public static class GraphNodeFactory
 {
     private static Dictionary<string, List<string>> _nodesByGraphType = new();

@@ -9,7 +9,6 @@ using Godot;
 ///
 /// 运行时通过 GetSubGraph() 加载子图资源，Execute() 可遍历子图节点执行逻辑。
 /// </summary>
-[Tool]
 public partial class SubGraphNodeData : GraphNodeData
 {
     /// <summary>子图资源的文件路径（.tres）</summary>

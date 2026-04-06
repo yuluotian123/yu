@@ -80,7 +80,7 @@ public static class GraphNodeFactory
         return listNode;
     }
 
-    public static GraphNodeData CreateNodeData(string typeName,string graphName)
+    public static GraphNodeData CreateNodeData(string typeName)
     {
         EnsureInitialized();
 
@@ -90,8 +90,6 @@ public static class GraphNodeFactory
             node = (GraphNodeData)Activator.CreateInstance(type);
         else
             node = new GraphNodeData() { NodeType = typeName };
-
-        node.GraphName = graphName;
 
         return node;
     }

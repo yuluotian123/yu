@@ -65,7 +65,7 @@ public partial class GraphCanvasEditorWindow
     private void CreateNewNode(string nodeType, Vector2 position)
     {
         // 先生成 id，以便 undo/redo 时用相同 id 重建
-        var data = GraphNodeFactory.CreateNodeData(nodeType,_currentGraph.graphName);
+        var data = GraphNodeFactory.CreateNodeData(nodeType);
         data.Position = position;
 
         if (_undoRedo != null)
@@ -83,7 +83,7 @@ public partial class GraphCanvasEditorWindow
     }
     private void DoAddNode(string nodeType, string nodeId, Vector2 position)
     {
-        var data = GraphNodeFactory.CreateNodeData(nodeType,_currentGraph.graphName);
+        var data = GraphNodeFactory.CreateNodeData(nodeType);
         data.Id = nodeId;
         data.Position = position;
         _currentGraph.Nodes.Add(data);

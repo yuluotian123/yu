@@ -35,6 +35,16 @@ public partial class Example : Node3D
             GameAPI.Broadcast(new GameMessage(GameEventType.D));
         }
 
+        if (Input.IsKeyPressed(Key.S))
+        {
+            GameAPI.Save();
+        }
+
+        if (Input.IsKeyPressed(Key.L))
+        {
+            GameAPI.Load();
+        }
+
 
 
     }

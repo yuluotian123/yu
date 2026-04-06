@@ -10,7 +10,6 @@ public class GraphNodeData
 {
     public string Id { get; set; } = "";
     public Vector2 Position { get; set; } = Vector2.Zero;
-    public string GraphName { get; set; } = "";
 
     public GraphNodeData()
     {
@@ -53,7 +52,7 @@ public class GraphNodeData
 
     public virtual void CreateUI(GraphNode node)
     {
-        var label = new Label { Text = GetDisplayName() };
+        var label = new Label { Text = GetDisplayName()+"."+Id };
         node.AddChild(label);
     }
     

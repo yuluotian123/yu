@@ -123,13 +123,13 @@ namespace Framework
 
             var type = value.GetType();
 
-            if (type == typeof(bool))   return JsonValue.Create((bool)value);
-            if (type == typeof(int))    return JsonValue.Create((int)value);
-            if (type == typeof(long))   return JsonValue.Create((long)value);
-            if (type == typeof(float))  return JsonValue.Create((float)value);
+            if (type == typeof(bool)) return JsonValue.Create((bool)value);
+            if (type == typeof(int)) return JsonValue.Create((int)value);
+            if (type == typeof(long)) return JsonValue.Create((long)value);
+            if (type == typeof(float)) return JsonValue.Create((float)value);
             if (type == typeof(double)) return JsonValue.Create((double)value);
             if (type == typeof(string)) return JsonValue.Create((string)value);
-            if (type.IsEnum)            return JsonValue.Create(value.ToString());
+            if (type.IsEnum) return JsonValue.Create(value.ToString());
 
             // Godot Resource → 只保存路径引用
             if (value is Resource res)
@@ -170,13 +170,22 @@ namespace Framework
         {
             var resModule = ModuleSystem.GetModule<IResourceModule>();
             if (resModule != null)
-                return resModule.LoadAsset<Resource>(path).Asset;
+            {
+                var handle = resModule.LoadAsset<Resource>(path);
+                var asset = handle.Asset;
+                handle.Release();   // 立即释放框架引用，Godot 引擎引用由调用方持有
+                return asset;
+            }
             return ResourceLoader.Load(path);
         }
 
         private static object JsonNodeToObject(JsonNode node, Type targetType)
         {
             if (node == null) return null;
+
+            // ← 新增：JsonArray → List<T>
+            if (node is JsonArray jArr)
+                return JsonNodeToValue(node, targetType);
 
             if (node is JsonObject jObj)
             {
@@ -263,10 +272,10 @@ namespace Framework
         {
             if (node == null) return null;
 
-            if (targetType == typeof(bool))   return node.GetValue<bool>();
-            if (targetType == typeof(int))    return node.GetValue<int>();
-            if (targetType == typeof(long))   return node.GetValue<long>();
-            if (targetType == typeof(float))  return (float)node.GetValue<double>();
+            if (targetType == typeof(bool)) return node.GetValue<bool>();
+            if (targetType == typeof(int)) return node.GetValue<int>();
+            if (targetType == typeof(long)) return node.GetValue<long>();
+            if (targetType == typeof(float)) return (float)node.GetValue<double>();
             if (targetType == typeof(double)) return node.GetValue<double>();
             if (targetType == typeof(string)) return node.GetValue<string>();
 
@@ -309,13 +318,13 @@ namespace Framework
         {
             try
             {
-                if (targetType == typeof(bool))   return jVal.GetValue<bool>();
-                if (targetType == typeof(int))    return jVal.GetValue<int>();
-                if (targetType == typeof(long))   return jVal.GetValue<long>();
-                if (targetType == typeof(float))  return (float)jVal.GetValue<double>();
+                if (targetType == typeof(bool)) return jVal.GetValue<bool>();
+                if (targetType == typeof(int)) return jVal.GetValue<int>();
+                if (targetType == typeof(long)) return jVal.GetValue<long>();
+                if (targetType == typeof(float)) return (float)jVal.GetValue<double>();
                 if (targetType == typeof(double)) return jVal.GetValue<double>();
                 if (targetType == typeof(string)) return jVal.GetValue<string>();
-                if (targetType.IsEnum)            return Enum.Parse(targetType, jVal.GetValue<string>());
+                if (targetType.IsEnum) return Enum.Parse(targetType, jVal.GetValue<string>());
             }
             catch { }
             return null;

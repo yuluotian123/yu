@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using GameLogic.Save;
+using Framework;
 using Godot;
 
-namespace Framework
+namespace GameLogic.Save
 {
     /// <summary>
     /// 存档管理模块实现。
@@ -15,7 +15,7 @@ namespace Framework
     /// 
     /// 存档文件路径：res://saves/{slot}.json
     /// </summary>
-    internal sealed class SaveModule : Module, ISaveModule
+    internal sealed class SaveModule : Framework.Module, ISaveModule
     {
         private const string SaveDir = "res://saves";
 
@@ -56,7 +56,10 @@ namespace Framework
 
             var root = new JsonObject();
             foreach (var kv in _registry)
-                root[kv.Key] = SerializeObject(kv.Value);
+            {
+                kv.Value.Save();
+                root[kv.Key] = SerializeObject(kv.Value);   
+            }
 
             var path = GetPath(slot);
             using var file = FileAccess.Open(path, FileAccess.ModeFlags.Write);
@@ -90,7 +93,11 @@ namespace Framework
             foreach (var kv in _registry)
             {
                 if (root.TryGetPropertyValue(kv.Key, out var node) && node is JsonObject jObj)
+                {
                     DeserializeInto(kv.Value, jObj);
+                    Debugger.Info(kv.Key);
+                    kv.Value.Load(); 
+                }
             }
 
             Debugger.Info($"[SaveModule] Loaded slot '{slot}' ← {path}");

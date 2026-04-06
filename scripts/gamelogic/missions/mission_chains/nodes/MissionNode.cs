@@ -15,11 +15,11 @@ public class MissionNode : GraphNodeData
     public override List<string> GetGraphTypes()
         => new List<string> { "MissionGraph" };
     public override int GetInputCount() => 1;
-    public override int GetOutputCount()=> 1;
+    public override int GetOutputCount() => 1;
 
 
 
-    public MissionPrototype<object> GetMissionProto()
+    public MissionPrototype<object> CreateMissionProto(string GraphName = "")
     {
         var proto = new MissionPrototype<object>(GraphName + "." + Id, _requires.ToArray(), _mode);
         return proto;
@@ -38,7 +38,7 @@ public class MissionNode : GraphNodeData
         );
 
         node.AddChild(listControl.Build());
-        
+
     }
 
 }

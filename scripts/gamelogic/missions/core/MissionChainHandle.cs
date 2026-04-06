@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Framework;
 using Godot;
 
 namespace GameLogic.Mission
@@ -9,6 +10,7 @@ namespace GameLogic.Mission
     {
         private readonly MissionGraph chain;
         private readonly MissionChainManager manager;
+        private readonly string graphPath; // 完整路径，如 "root/sub1/sub2"
 
         private readonly Dictionary<string, MissionNode> activeNodes = new Dictionary<string, MissionNode>();
         private readonly Queue<MissionNode> buffer = new Queue<MissionNode>();
@@ -18,21 +20,47 @@ namespace GameLogic.Mission
 
         public bool IsCompleted => activeNodes.Count == 0 && pendingSubGraphs.Count == 0;
 
-        public MissionChainHandle(MissionGraph chain, MissionChainManager manager)
+        public MissionChainHandle(MissionGraph chain, MissionChainManager manager, string graphPath)
         {
             this.chain = chain;
             this.manager = manager;
+            this.graphPath = graphPath;
         }
 
-         /// <summary>
+        /// <summary>
         /// 从 primeNode 开始执行节点遍历。
         /// 必须在 handle 已注册到 MissionChainManager.handles 之后再调用，
         /// 以确保子图立即完成时回调能正确找到父图。
         /// </summary>
-        public void Initialize()
+        public void Start()
         {
             if (chain.primeNode != null)
                 ExecuteNode(chain.primeNode);
+        }
+        public void Load(IEnumerable<string> missionIds, IEnumerable<string> subGraphPaths)
+        {
+            // 恢复 activeNodes
+            activeNodes.Clear();
+            foreach (var id in missionIds)
+            {
+                var dot = id.LastIndexOf('.');
+                var nodeId = dot >= 0 ? id.Substring(dot + 1) : id;
+                if (chain.FindNodeById(nodeId) is MissionNode node)
+                    activeNodes[id] = node;
+            }
+
+            // 恢复 pendingSubGraphs
+            pendingSubGraphs.Clear();
+            var pathSet = new HashSet<string>(subGraphPaths);
+            foreach (var node in chain.Nodes)
+            {
+                if (node is not SubGraphNodeData subNode) continue;
+                var subGraph = subNode.GetSubGraph() as MissionGraph;
+                if (subGraph == null) continue;
+                var subPath = graphPath + "/" + subGraph.graphName;
+                if (pathSet.Contains(subPath))
+                    pendingSubGraphs[subPath] = subNode;
+            }
         }
 
         public void FlushBuffer(Action<MissionPrototype<object>> deployer)
@@ -41,7 +69,7 @@ namespace GameLogic.Mission
             while (buffer.Count > 0)
             {
                 var node = buffer.Dequeue();
-                var missionProto = node.GetMissionProto();
+                var missionProto = node.CreateMissionProto(graphPath);
                 activeNodes.Add(missionProto.id, node);
                 deployer(missionProto);
             }
@@ -83,7 +111,8 @@ namespace GameLogic.Mission
             {
                 /* execute mission node, add output prototype to buffer queue */
                 case MissionNode missionNode:
-                    if (activeNodes.ContainsKey(missionNode.GraphName + "." + missionNode.Id)) return;
+                    var missionid = graphPath + "." + missionNode.Id;
+                    if (activeNodes.ContainsKey(missionid)) return;
                     buffer.Enqueue(missionNode);
                     break;
 
@@ -92,13 +121,13 @@ namespace GameLogic.Mission
                     var subGraph = subGraphNode.GetSubGraph() as MissionGraph;
                     if (subGraph == null)
                     {
-                        GD.PushWarning($"[MissionChain] 子图未绑定或不是 MissionGraph: {subGraphNode.SubGraphPath}");
+                        Debugger.Warn($"[MissionChain] 子图未绑定或不是 MissionGraph: {subGraphNode.SubGraphPath}");
                         break;
                     }
-                    if (pendingSubGraphs.ContainsKey(subGraph.graphName)) break;
-                    pendingSubGraphs.Add(subGraph.graphName, subGraphNode);
-                    manager.RegisterSubGraph(subGraph.graphName, chain.graphName);
-                    manager.StartChain(subGraph);
+                    var subGraphPath = graphPath + "/" + subGraph.graphName;
+                    if (pendingSubGraphs.ContainsKey(subGraphPath)) break;
+                    pendingSubGraphs.Add(subGraphPath, subGraphNode);
+                    manager.StartChain(subGraph, subGraphPath);
                     break;
 
                 default:

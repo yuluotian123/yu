@@ -1,0 +1,8 @@
+{
+  "mission_system": {
+	"$type": "MissionChainSaver",
+	"SaveKey": "mission_system",
+	"Missions": [],
+	"Chains": []
+  }
+}

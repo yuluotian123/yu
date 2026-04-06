@@ -39,5 +39,14 @@ namespace GameLogic.Save
         /// 在存档文件中作为字典的 key 使用，不可重复。
         /// </summary>
         string SaveKey { get; }
+        
+
+        /// <summary>
+        /// 自定义在序列化时的行为
+        /// </summary>
+        void Save(){}
+
+        /// <summary>SaveModule 完成数据回写后自动调用，用于执行运行时状态恢复。</summary>
+         void Load(){}
     }
 }

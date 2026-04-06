@@ -1,4 +1,4 @@
-namespace Framework
+namespace GameLogic.Save
 {
     /// <summary>
     /// 存档管理模块接口。

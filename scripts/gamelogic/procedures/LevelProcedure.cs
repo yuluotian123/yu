@@ -1,13 +1,16 @@
 using System;
 using Framework;
+using GameLogic.Mission;
 using Godot;
 
 public class LevelProcedure : ProcedureBase
 {
+    private IMissionModule mission;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
         Debugger.Info("Enter LevelProcedure");
+        mission = ModuleSystem.GetModule<IMissionModule>();
     }
 
     protected internal override void OnLeave(IFsm<IProcedureModule> procedureOwner, bool isShutdown)

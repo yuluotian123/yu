@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Framework;
 using Godot;
 
 namespace GameLogic.Mission
@@ -10,11 +11,11 @@ namespace GameLogic.Mission
     public class MissionPrototype<T>
     {
         public readonly string id;
-        public readonly MissionProperty property; 
+        public readonly MissionProperty property;
         public readonly MissionRequire<T>[] requires;
         public readonly MissionRequireMode requireMode;
         public readonly bool isSingleRequire;
-        
+
         /// <summary>
         /// 初始化任务原型
         /// </summary>
@@ -23,13 +24,13 @@ namespace GameLogic.Mission
         /// <param name="requireMode"></param>
         /// <param name="property"></param>
         /// <exception cref="Exception"></exception>
-        public MissionPrototype(string id, [DisallowNull] MissionRequire<T>[] requires,  MissionRequireMode requireMode = default, MissionProperty property = null)
+        public MissionPrototype(string id, [DisallowNull] MissionRequire<T>[] requires, MissionRequireMode requireMode = default, MissionProperty property = null)
         {
             /* check if mission id is valid */
-            if (string.IsNullOrEmpty(id)) 
+            if (string.IsNullOrEmpty(id))
                 throw new Exception("mission id cannot be null or empty");
             this.id = id;
-            
+
             /* check if require array is valid */
             if (requires == null || requires.Length == 0)
                 throw new Exception("mission requires cannot be null or empty");
@@ -38,7 +39,7 @@ namespace GameLogic.Mission
 
             this.requireMode = requireMode;
             this.property = property;
-            
+
             this.isSingleRequire = requires.Length == 1;
         }
 
@@ -53,7 +54,7 @@ namespace GameLogic.Mission
 
     /// <summary>任务附加属性描述</summary>
     public abstract class MissionProperty { }
-    
+
     /// <summary>决定玩家具体要执行的行为</summary>
     /// <typeparam name="T">消息类型</typeparam>
     [System.Serializable]
@@ -80,12 +81,12 @@ namespace GameLogic.Mission
     public abstract class MissionRequireHandle<T>
     {
         private readonly MissionRequire<T> _require;
-        
+
         protected MissionRequireHandle(MissionRequire<T> require)
         {
             _require = require;
         }
-        
+
         /// <summary>发送一条消息给玩家</summary>
         /// <param name="message"></param>
         /// <param name="hasStatusChanged"></param>
@@ -102,6 +103,10 @@ namespace GameLogic.Mission
         /// <param name="message">目标消息</param>
         /// <returns></returns>
         protected abstract bool UseMessage(T message);
+
+        public virtual string SaveProgress() => this.ToString();
+
+        public virtual void LoadProgress(string status) { }
     }
 
     /// <summary>任务</summary>
@@ -124,11 +129,11 @@ namespace GameLogic.Mission
             {
                 var status = new string[handles.Length];
                 for (var i = 0; i < handles.Length; i++)
-                    status[i] = handles[i].ToString();
+                    status[i] = handles[i].SaveProgress();
                 return status;
             }
         }
-        
+
         public Mission(MissionPrototype<T> proto)
         {
             this.proto = proto;
@@ -161,7 +166,7 @@ namespace GameLogic.Mission
         {
             hasStatusChanged = false;
             var queueToRemove = new Queue<MissionRequireHandle<T>>();
-            
+
             /* update all require handles */
             foreach (var requireHandle in _unfinishedHandles)
             {
@@ -174,7 +179,7 @@ namespace GameLogic.Mission
                 if (proto.requireMode == MissionRequireMode.Any) return true;
                 queueToRemove.Enqueue(requireHandle);
             }
-            
+
             /* remove completed requries */
             while (queueToRemove.Count > 0)
             {
@@ -184,6 +189,13 @@ namespace GameLogic.Mission
 
             /* check if all requires have been completed */
             return _unfinishedHandles.Count == 0;
+        }
+
+        public void LoadHandleProgresses(string[] statuses)
+        {
+            if (statuses == null) return;
+            for (int i = 0; i < handles.Length && i < statuses.Length; i++)
+                handles[i].LoadProgress(statuses[i]);
         }
     }
 
@@ -202,10 +214,23 @@ namespace GameLogic.Mission
             if (proto is null || allMissions.ContainsKey(proto.id)) return false;
             var mission = new Mission<T>(proto);
             allMissions.Add(proto.id, mission);
-            
+
             /* 通知所有的组件任务启动了 */
             foreach (var component in components)
                 component.OnMissionStarted(mission);
+            return true;
+        }
+
+        public bool LoadMission(MissionPrototype<T> proto, string[] handleStatuses = null)
+        {
+            if (proto == null || allMissions.ContainsKey(proto.id)) return false;
+            var mission = new Mission<T>(proto);
+            mission.LoadHandleProgresses(handleStatuses);
+            allMissions[proto.id] = mission;
+
+            foreach (var component in components)
+                component.OnMissionStarted(mission);
+
             return true;
         }
 
@@ -237,13 +262,13 @@ namespace GameLogic.Mission
                 component.OnMissionRemoved(mission, false);
             return true;
         }
-        
+
         /// <summary>向任务系统发送消息以驱动任务系统</summary>
         /// <param name="message"></param>
         public void SendMessage(T message)
         {
             if (allMissions.Count == 0) return;
-            var queueToRemove = new Queue<Mission<T>>(); 
+            var queueToRemove = new Queue<Mission<T>>();
             foreach (var mission in allMissions.Values)
             {
                 if (!mission.SendMessage(message, out var hasStatusChanged))
@@ -255,19 +280,19 @@ namespace GameLogic.Mission
                 _OnMissionStatusChanged(mission, true);
                 queueToRemove.Enqueue(mission);
             }
-            
+
             /* remove completed missions */
             while (queueToRemove.Count > 0)
             {
                 var mission = queueToRemove.Dequeue();
                 allMissions.Remove(mission.id);
-                
+
                 /* inform all componetns that target mission has been removed */
                 foreach (var component in components)
                     component.OnMissionRemoved(mission, true);
             }
         }
-        
+
         /// <summary>添加任务系统组件</summary>
         /// <param name="component"></param>
         public bool AddComponent(IMissionSystemComponent<T> component)
@@ -282,6 +307,20 @@ namespace GameLogic.Mission
         public bool RemoveComponent(IMissionSystemComponent<T> component)
         {
             return component is not null && components.Remove(component);
+        }
+
+        public ComponentType GetMissionSystemComponent<ComponentType>()
+        {
+            foreach (var component in components)
+            {
+                if (component.GetType() == typeof(ComponentType))
+                {
+                    return (ComponentType)component;
+                }
+            }
+
+            return default;
+
         }
 
         private void _OnMissionStatusChanged(Mission<T> mission, bool isFinished)

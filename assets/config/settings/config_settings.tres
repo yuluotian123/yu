@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ConfigSetting" format=3 uid="uid://dgo5t183tjseo"]
+
+[ext_resource type="Script" uid="uid://beexmfdadpryq" path="res://scripts/framework/config/ConfigSetting.cs" id="1_dg5aa"]
+
+[resource]
+script = ExtResource("1_dg5aa")
+metadata/_custom_type_script = "uid://beexmfdadpryq"

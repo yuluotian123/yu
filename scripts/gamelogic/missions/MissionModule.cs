@@ -23,41 +23,8 @@ namespace GameLogic.Mission
 
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
-            if (Godot.Input.IsActionJustPressed("combat_up"))
-            {
-                Debugger.Info("Start Chain");
-                StartChain("res://assets/config/graphs/mission_graphs/1.tres");
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.A))
-            {
-                _missionManager.SendMessage(new GameMessage(GameEventType.A));
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.B))
-            {
-                _missionManager.SendMessage(new GameMessage(GameEventType.B));
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.C))
-            {
-                _missionManager.SendMessage(new GameMessage(GameEventType.C));
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.D))
-            {
-                _missionManager.SendMessage(new GameMessage(GameEventType.D));
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.S))
-            {
-                ModuleSystem.GetModule<ISaveModule>().Save();
-            }
-
-            if (Godot.Input.IsKeyPressed(Key.L))
-            {
-                ModuleSystem.GetModule<ISaveModule>().Load();
-            }
+            return;
+        
         }
 
         public override void Shutdown()

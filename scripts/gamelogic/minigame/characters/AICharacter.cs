@@ -10,6 +10,7 @@ public partial class AICharacter : Character
     {
         base._Ready();
         _aiComponent = AddComponent<AIComponent>();
+        Debugger.Info("Fuck");
     }
 
 

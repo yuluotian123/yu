@@ -1,4 +1,5 @@
 using Framework;
+using Generated.Config;
 using Godot;
 
 /// <summary>
@@ -8,6 +9,7 @@ using Godot;
 public class PreloadProcedure : ProcedureBase
 {
     private IResourceModule _resource;
+    private IConfigModule _config;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
@@ -15,6 +17,13 @@ public class PreloadProcedure : ProcedureBase
 
         base.OnEnter(procedureOwner);
         _resource = ModuleSystem.GetModule<IResourceModule>();
+        _config = ModuleSystem.GetModule<IConfigModule>();
+
+        _config.LoadTable<TestexcelConfig>();
+        var test = _config.GetById<TestexcelConfig>(1);
+        Debugger.Info("testId:" + test.Id + " testName:" + test.Name + " testPara:" + test.Para + " testPara2" + test.Para2);
+
+        
 
 
         // 切换到主菜单流程（由 MainMenuProcedure 负责打开 MainMenuWindow）

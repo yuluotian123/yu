@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="Settings" format=3 uid="uid://j6jir380ooyu"]
 
 [ext_resource type="Resource" uid="uid://dq82o5ka175sx" path="res://assets/config/settings/resource_module.tres" id="1_7gmjk"]
-[ext_resource type="Script" uid="uid://c2f06l628qvwr" path="res://scripts/framework/Settings/Settings.cs" id="1_ciq7k"]
+[ext_resource type="Script" uid="uid://c2f06l628qvwr" path="res://scripts/framework/settings/Settings.cs" id="1_ciq7k"]
+[ext_resource type="Resource" uid="uid://dgo5t183tjseo" path="res://assets/config/settings/config_settings.tres" id="1_ub78l"]
 
 [resource]
 script = ExtResource("1_ciq7k")
 resourceSetting = ExtResource("1_7gmjk")
+configSetting = ExtResource("1_ub78l")
 metadata/_custom_type_script = "uid://c2f06l628qvwr"

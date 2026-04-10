@@ -21,7 +21,7 @@ project/assembly_name="yu"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GraphPlugin/plugin.cfg")
+enabled=PackedStringArray("res://addons/ConfigPlugin/plugin.cfg", "res://addons/GraphPlugin/plugin.cfg")
 
 [input]
 

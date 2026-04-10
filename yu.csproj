@@ -8,4 +8,7 @@
   <ItemGroup>
     <Folder Include="scripts\framework\time\" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+  </ItemGroup>
 </Project>

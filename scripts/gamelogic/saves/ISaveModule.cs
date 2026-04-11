@@ -2,7 +2,7 @@ namespace GameLogic.Save
 {
     /// <summary>
     /// 存档管理模块接口。
-    /// 负责将所有注册的 <see cref="GameLogic.Save.ISaveable"/> 对象序列化到文件，
+    /// 负责将所有注册的 <see cref="ISaveable"/> 对象序列化到文件，
     /// 以及从文件反序列化并回写到对应对象。
     /// 
     /// 存档文件格式为 JSON，路径为 res://saves/{slot}.json。
@@ -11,10 +11,10 @@ namespace GameLogic.Save
     public interface ISaveModule
     {
         /// <summary>注册一个可存档对象。同一 SaveKey 只能注册一次。</summary>
-        void Register(GameLogic.Save.ISaveable saveable);
+        void Register(ISaveable saveable);
 
         /// <summary>取消注册。</summary>
-        void Unregister(GameLogic.Save.ISaveable saveable);
+        void Unregister(ISaveable saveable);
 
         /// <summary>将所有已注册对象保存到指定存档槽。</summary>
         void Save(string slot = "default");

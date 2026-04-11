@@ -15,6 +15,7 @@ public sealed partial class RootModule : Node
     public static RootModule Instance { get; private set; }
 
     public GameTime GameTime { get; private set; }
+    public GameState State{ get; set; }
 
 
     private const int DEFAULT_DPI = 96; // default windows dpi

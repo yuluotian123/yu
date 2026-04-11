@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Framework
 {
@@ -23,5 +24,8 @@ namespace Framework
         /// <param name="tableName">表名（不含扩展名），对应数据文件名。</param>
         /// <returns>数据行列表；读取或解析失败时返回空列表。</returns>
         List<T> Load<T>(string tableName) where T : ConfigRow;
+
+        Task<List<T>> LoadAsync<T>(string tableName) where T : ConfigRow
+            => Task.FromResult(Load<T>(tableName));
     }
 }

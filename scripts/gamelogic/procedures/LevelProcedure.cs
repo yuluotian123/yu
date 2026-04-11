@@ -1,7 +1,5 @@
-using System;
 using Framework;
 using Framework.UI;
-using GameLogic.Mission;
 using GameLogic.UI;
 using Godot;
 
@@ -33,7 +31,7 @@ public class LevelProcedure : ProcedureBase
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {
-                var levelNode = tree.Root.GetNode("Root/SpaceLevel");
+                var levelNode = tree.Root.GetNode("Root/Spacelevel");
                 if (levelNode != null)
                 {
                     levelNode.QueueFree();

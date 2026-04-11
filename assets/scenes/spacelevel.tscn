@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
 [ext_resource type="Texture2D" uid="uid://bvx6c3tdqbd25" path="res://assets/textures/background.png" id="1_g8f0a"]
-[ext_resource type="Script" uid="uid://cvphu3spxsqrw" path="res://scripts/gamelogic/BackGroundLayer.cs" id="2_qbpkg"]
+[ext_resource type="Script" uid="uid://g7gpu0fibyp7" path="res://scripts/gamelogic/minigame/BackGroundLayer.cs" id="2_qbpkg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qbpkg"]
 texture = ExtResource("1_g8f0a")

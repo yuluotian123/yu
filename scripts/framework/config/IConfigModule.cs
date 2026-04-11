@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Framework
 {
@@ -37,11 +38,16 @@ namespace Framework
         /// <typeparam name="T">配置行类型，必须标记 <see cref="ConfigTableAttribute"/>。</typeparam>
         void LoadTable<T>() where T : ConfigRow;
 
+        Task LoadTableAsync<T>() where T : ConfigRow;
+
         /// <summary>
         /// 按类型数组批量预加载多张配置表。
         /// </summary>
         /// <param name="tableTypes">要预加载的配置行类型列表。</param>
         void PreloadTables(params Type[] tableTypes);
+
+        Task PreloadTablesAsync(params Type[] tableTypes);
+        Task PreloadTablesAsync(int maxConcurrency, params Type[] tableTypes);
 
         /// <summary>
         /// 按主键 ID 查询指定表中的数据行。
@@ -72,10 +78,14 @@ namespace Framework
         /// <typeparam name="T">配置行类型。</typeparam>
         void ReloadTable<T>() where T : ConfigRow;
 
+        Task ReloadTableAsync<T>() where T : ConfigRow;
+
         /// <summary>
         /// 热重载所有已加载的配置表。
         /// </summary>
         void ReloadAll();
+
+        Task ReloadAllAsync();
 
         /// <summary>
         /// 卸载指定类型对应的配置表，释放内存。

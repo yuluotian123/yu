@@ -78,7 +78,9 @@ namespace GameLogic.Save
         {
             var path = GetPath(slot);
             if (!FileAccess.FileExists(path))
-                return false;
+            {
+                                return false;
+            }
 
             using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
             if (file == null)

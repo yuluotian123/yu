@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 
 namespace Framework
@@ -63,6 +64,11 @@ namespace Framework
             var result = JsonHelper.DeserializeList<T>(json);
             Debugger.Info($"[JsonConfigLoader] 加载 '{tableName}' 完成，共 {result.Count} 条。");
             return result;
+        }
+        /// <inheritdoc/>
+        public Task<List<T>> LoadAsync<T>(string tableName) where T : ConfigRow
+        {
+            return Task.Run(() => Load<T>(tableName));
         }
     }
 }

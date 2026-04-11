@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="ResourceSetting" format=3 uid="uid://dq82o5ka175sx"]
-
-[ext_resource type="Script" uid="uid://cf1udippv1uxu" path="res://scripts/framework/resource/ResourceSetting.cs" id="1_w75gm"]
-
-[resource]
-script = ExtResource("1_w75gm")
-metadata/_custom_type_script = "uid://cf1udippv1uxu"

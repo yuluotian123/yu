@@ -31,8 +31,8 @@ public class LevelProcedure : ProcedureBase
                     levelNode.QueueFree();
 
                     //卸载资源，避免内存泄漏
-                    ModuleSystem.GetModule<IResourceModule>().ForceUnloadAsset("res://assets/scenes/level.tscn");
-                    GC.Collect();
+                    //ModuleSystem.GetModule<IResourceModule>().ForceUnloadAsset("res://assets/scenes/level.tscn");
+
                 }
 
                 ChangeState<MainMenuProcedure>(procedureOwner);

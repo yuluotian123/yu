@@ -1,3 +1,4 @@
+using System;
 using Framework;
 using Framework.UI;
 using GameLogic;
@@ -12,6 +13,7 @@ public class MainMenuProcedure : ProcedureBase
     {
         Debugger.Info("Enter MainMenuProcedure");
 
+
         base.OnInit(procedureOwner);
         _procedureOwner = procedureOwner;
 
@@ -24,6 +26,8 @@ public class MainMenuProcedure : ProcedureBase
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
         base.OnProcess(procedureOwner, elapseSeconds, realElapseSeconds);
+
+        //GC.Collect();
 
         if (Input.IsActionJustPressed("ui_cancel"))
         {

@@ -21,6 +21,7 @@ namespace Framework
         private readonly int _maxRows;
 
         private PanelContainer _panel;
+        private Button _gcCollectButton;
         private RichTextLabel _content;
         private double _elapsedSinceRefresh;
         private bool _prevTogglePressed;
@@ -112,7 +113,6 @@ namespace Framework
         {
             _panel = new PanelContainer();
             _panel.Name = "Panel";
-            _panel.MouseFilter = Control.MouseFilterEnum.Ignore;
             _panel.OffsetLeft = 16f;
             _panel.OffsetTop = 16f;
             _panel.CustomMinimumSize = new Vector2(640f, 560f);
@@ -136,17 +136,37 @@ namespace Framework
             margin.AddThemeConstantOverride("margin_right", 12);
             margin.AddThemeConstantOverride("margin_bottom", 10);
 
+            var layout = new VBoxContainer();
+            layout.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+            layout.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+            layout.AddThemeConstantOverride("separation", 8);
+
+            var toolbar = new HBoxContainer();
+            toolbar.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+            toolbar.AddThemeConstantOverride("separation", 8);
+
+            _gcCollectButton = new Button();
+            _gcCollectButton.Name = "GcCollectButton";
+            _gcCollectButton.Text = "GC Collect";
+            _gcCollectButton.TooltipText = "Trigger GC.Collect() and refresh the resource profiler snapshot.";
+            _gcCollectButton.Pressed += OnGcCollectPressed;
+            toolbar.AddChild(_gcCollectButton);
+
             _content = new RichTextLabel();
             _content.Name = "Content";
             _content.BbcodeEnabled = false;
             _content.FitContent = false;
             _content.ScrollActive = true;
             _content.SelectionEnabled = true;
-            _content.MouseFilter = Control.MouseFilterEnum.Ignore;
+            _content.MouseFilter = Control.MouseFilterEnum.Pass;
+            _content.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+            _content.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
             _content.CustomMinimumSize = new Vector2(616f, 540f);
             _content.AddThemeColorOverride("default_color", new Color(0.94f, 0.96f, 0.98f));
 
-            margin.AddChild(_content);
+            layout.AddChild(toolbar);
+            layout.AddChild(_content);
+            margin.AddChild(layout);
             _panel.AddChild(margin);
             AddChild(_panel);
         }
@@ -248,6 +268,14 @@ namespace Framework
 
             if (snapshot.Handles.Count > count)
                 builder.AppendLine($"  ... {snapshot.Handles.Count - count} more");
+        }
+
+        private void OnGcCollectPressed()
+        {
+            GC.Collect();
+            Debugger.Info("[ResourceProfiler] GC.Collect() triggered from overlay.");
+            _elapsedSinceRefresh = 0.0;
+            UpdateText();
         }
 
         private static string TrimPath(string path)

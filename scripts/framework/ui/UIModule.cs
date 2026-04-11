@@ -164,11 +164,6 @@ namespace Framework.UI
             return false;
         }
 
-        internal void CloseWindowByName(string name)
-        {
-            if (!string.IsNullOrEmpty(name) && _windowMap.TryGetValue(name, out var win))
-                CloseWindowInternal(win);
-        }
 
         private void BeginWindowLoad(UIWindow win)
         {

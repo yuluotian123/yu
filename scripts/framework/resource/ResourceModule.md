@@ -1,302 +1,325 @@
-# ResourceModule 资源管理系统文档
+# ResourceModule 资源管理说明
 
-## 目录
-1. [概述](#概述)
-2. [文件结构](#文件结构)
-3. [快速开始](#快速开始)
-4. [核心概念](#核心概念)
-5. [API 参考](#api-参考)
-6. [高级用法](#高级用法)
-7. [生命周期与内存管理](#生命周期与内存管理)
-8. [扩展与自定义](#扩展与自定义)
+## 设计目标
 
----
+资源模块仍然保持原来的主结构：
 
-## 概述
+- `Handle + Loader + Cache + Module.Tick()`
 
-ResourceModule 是基于 **yu 框架**（仿 TEngine 风格）为 **Godot 4.6 C#** 设计的模块化资源管理系统。
+这轮调整主要做了两件事：
 
-核心特性：
-- **面向接口**：通过 `IResourceModule` 对外暴露，与具体实现解耦
-- **统一句柄管理**：同步/异步加载均返回 `ResourceHandle<T>`，每个句柄持有一个框架引用计数
-- **框架引用计数 + LRU 缓存**：引用计数归零的资源才可被 LRU 淘汰，避免正在使用的资源被误淘汰
-- **请求合并**：同路径并发异步请求自动合并为一个后台任务，每个句柄各持有一个引用计数
-- **可替换策略**：加载器（`IResourceLoader`）与缓存（`IResourceCache`）均可注入自定义实现
-- **零侵入集成**：注册到 `ModuleSystem`，与框架其他模块（FSM、Procedure）保持一致的生命周期
+- 把通用资源与场景资源的职责继续拆清楚
+- 加入 profiler，方便直接追踪资源状态
 
----
+当前边界如下：
+
+- `ResourceHandle<T>` 只负责通用资源加载语义
+- `SceneHandle` 只负责 `PackedScene` 的实例化和节点绑定语义
+- `ResourceModule` 负责入口、缓存命中、主线程取消和 profiler 汇总
+- `IResourceLoader` / `GodotResourceLoader` 负责异步任务推进
+- `IResourceCache` / `ResourceCache` 负责缓存和框架层引用计数
 
 ## 文件结构
 
-```
+```text
 scripts/framework/resource/
-├── IResourceModule.cs          # 门面接口（对外使用此接口）
-├── ResourceModule.cs           # 模块实现（internal，框架自动发现）
-├── ResourceSetting.cs          # 配置（GlobalClass，可在 Godot 编辑器中设置）
+├── IResourceModule.cs
+├── ResourceModule.cs
+├── ResourceProfiler.cs
+├── ResourceSetting.cs
 ├── handle/
-│   └── ResourceHandle.cs       # ResourceHandleBase / ResourceHandle<T> / ResourceHandleStatus
+│   ├── ResourceHandle.cs
+│   └── SceneHandle.cs
 ├── loader/
-│   ├── IResourceLoader.cs      # 加载器策略接口
-│   ├── GodotResourceLoader.cs  # 默认实现（Godot 原生 ResourceLoader）
-│   └── ResourceLoadTask.cs     # 单次异步加载任务（轮询 LoadThreadedGetStatus）
+│   ├── IResourceLoader.cs
+│   ├── GodotResourceLoader.cs
+│   └── ResourceLoadTask.cs
 └── cache/
-    ├── IResourceCache.cs       # 缓存策略接口（含 Acquire/Release/GetRefCount）
-    └── ResourceCache.cs        # LRU 缓存实现（引用计数 + LRU 淘汰）
+    ├── IResourceCache.cs
+    └── ResourceCache.cs
 ```
 
----
+## 核心职责
 
-## 快速开始
+### ResourceHandle<T>
 
-### 1. 注册模块
+`ResourceHandle<T>` 是通用资源句柄，适用于纹理、音频、材质、配置和 `PackedScene` 资源本身。
 
-在 `RootModule._Ready()` 中添加一行：
+它负责：
+
+- 保存状态、进度、错误
+- 提供 `Task`、`OnCompleted()`、`WithCancellation()`
+- 持有并归还框架层引用
+- 实现 `IDisposable`
+
+它不负责：
+
+- 场景实例化
+- 节点生命周期绑定
+- UI 场景树逻辑
+
+推荐写法：
 
 ```csharp
-ModuleSystem.GetModule<IResourceModule>();
-```
+using var handle = ModuleSystem.GetModule<IResourceModule>()
+    .LoadAsset<Texture2D>("res://assets/icon.png");
 
-### 2. 配置（可选）
-
-在 Godot 编辑器中：
-1. 创建 `ResourceSetting` 资源（`assets/config/settings/resourcesettings.tres` 已预建）
-2. 将其赋给 `Settings.resourceSetting` 字段
-3. 调整 `MaxCacheSize`、`MaxConcurrentLoadCount`、`EnableLog`
-
-### 3. 获取模块并加载资源
-
-```csharp
-var res = ModuleSystem.GetModule<IResourceModule>();
-
-// 同步加载（返回句柄，引用计数 +1）
-var handle = res.LoadAsset<Texture2D>("res://assets/icon.png");
 if (handle.IsValid)
-{
     sprite.Texture = handle.Asset;
-}
-// 使用完毕后释放（引用计数 -1）
-handle.Release();
-
-// 异步加载（返回句柄，加载成功后引用计数 +1）
-var asyncHandle = res.LoadAssetAsync<PackedScene>("res://scenes/level.tscn")
-   .OnCompleted(h => {
-       if (h.IsValid) AddChild(h.Asset.Instantiate());
-       // 不再需要时释放
-       // h.Release();
-   });
 ```
 
----
+### SceneHandle
 
-## 核心概念
+`SceneHandle` 是 `PackedScene` 的专用包装句柄，内部持有 `ResourceHandle<PackedScene>`。
 
-### ResourceHandle\<T\> — 统一资源句柄
+它负责：
 
-**所有加载接口（同步和异步）均返回 `ResourceHandle<T>`**，每个有效句柄持有一个框架引用计数。
+- 暴露场景加载状态
+- 提供 `Instantiate()` / `Instantiate<TNode>()`
+- 提供 `InstantiateAndBind<TNode>(Node parent)`
+- 提供 `InstantiateAndBind<TNode>(Action<TNode> attachInstance)`
+- 提供 `BindTo(node)`，让句柄随节点离树自动释放
 
-| 属性 / 方法 | 说明 |
-|---|---|
-| `Asset` | 加载完成的资源实例（`T`），未完成时为 `null` |
-| `Status` | `None / Loading / Succeed / Failed` |
-| `IsDone` | 是否已完成（成功或失败） |
-| `IsValid` | 是否加载成功且资源有效 |
-| `Progress` | 加载进度 0~1 |
-| `Error` | 失败原因描述 |
-| `OnCompleted(cb)` | 注册完成回调，已完成时立即触发，支持链式调用 |
-| **`Release()`** | **释放句柄：框架引用计数 -1，清空 Asset 引用。幂等，可安全多次调用** |
+这样做的好处是：
 
-### 双层引用计数机制
+- 场景相关 API 全部集中在 `SceneHandle`
+- 泛型资源句柄不再背负 UI/场景生命周期语义
+- 调用方一眼能看出自己拿到的是“资源句柄”还是“场景句柄”
 
-资源的生命周期由**框架引用计数**和 **Godot 引用计数**两层共同管理：
-
-| 层级 | 作用 | 控制方式 |
-|---|---|---|
-| **框架引用计数** | 决定资源是否可被缓存淘汰 | `Handle.Release()` 减 1，归零后可被 LRU 淘汰 |
-| **Godot 引用计数** | 决定资源内存是否释放 | 当无任何 C# 变量/节点引用时自动归零释放 |
-
-**引用计数流转：**
-
-```
-LoadAsset / LoadAssetAsync（成功）→ 框架 RefCount +1
-     ↓
-handle.Release()                  → 框架 RefCount -1
-     ↓
-RefCount == 0                     → 资源变为"可淘汰"
-     ↓
-缓存满，LRU 淘汰                  → 从缓存移除（Godot 引用 -1）
-     ↓
-无其他 C# 引用                    → Godot 引用计数归零 → 内存释放
-```
-
-### LRU 缓存淘汰策略
-
-- 缓存容量由 `ResourceSetting.MaxCacheSize` 控制（默认 128）
-- 当缓存满时，**只淘汰 `RefCount == 0` 的资源**（从最近最少使用的开始）
-- 若所有资源的 `RefCount > 0`，则新资源仍会强制加入缓存（超容量运行），并发出警告日志
-- `ForceUnloadAsset(path)` 可无视引用计数强制移除
-
-### 多句柄共享
-
-对同一路径的多次加载会命中缓存，但每次调用都返回一个新句柄、各自持有一个引用计数：
+常见用法：
 
 ```csharp
-var h1 = res.LoadAsset<Texture2D>("res://icon.png");  // RefCount = 1
-var h2 = res.LoadAsset<Texture2D>("res://icon.png");  // RefCount = 2（同一资源）
-h1.Release();  // RefCount = 1
-h2.Release();  // RefCount = 0 → 可被 LRU 淘汰
+var sceneHandle = ModuleSystem.GetModule<IResourceModule>()
+    .LoadSceneAsync("res://assets/scenes/level.tscn");
+
+await sceneHandle.Task;
+
+if (sceneHandle.IsValid)
+{
+    var level = sceneHandle.InstantiateAndBind<Node>(root);
+}
 ```
 
-异步加载合并请求时同理，每个成功的句柄各持有一个引用。
+### UIModule 与 SceneHandle 的协作
 
----
+现在 UI 这一层不再把场景句柄当成模糊的 `IDisposable` 使用，而是明确由窗口持有 `SceneHandle`。
 
-## API 参考
+窗口加载流程现在是：
+
+1. `UIModule.ShowUIAsync()` 请求 `LoadSceneAsync()`
+2. `UIWindow` 记录当前 `SceneHandle` 和加载版本号
+3. 加载完成后，`UIModule` 通过 `SceneHandle.InstantiateAndBind<TNode>(Action<TNode>)` 创建控件并挂到对应 `CanvasLayer`
+4. `UIWindow.InternalDestroy()` 统一释放自己的 `SceneHandle`
+
+这样解决了几个之前容易混乱的点：
+
+- 窗口真正拥有的是“场景句柄”，语义更明确
+- 重复 `ShowUIAsync()` 时，回调会排队，不会丢
+- 窗口在加载中被关闭时，旧回调不会再把已经关闭的窗口“复活”
+- `UIModule` 不需要自己手动处理 `BindTo(control)` 和泛用 `Dispose()` 的混搭逻辑
+
+## 生命周期语义
+
+### ResourceHandleStatus
+
+句柄状态包括：
+
+- `Loading`
+- `Succeed`
+- `Failed`
+- `Cancelled`
+- `Released`
+
+`Released` 是终态。句柄一旦释放，不会再回到 `None`，也不会再被异步完成结果覆盖。
+
+### Release / Dispose
+
+通用资源：
+
+- 推荐 `using var handle = ...`
+- 或在 `await` / `OnCompleted()` 后显式 `Dispose()`
+
+场景资源：
+
+- 推荐使用 `InstantiateAndBind()`
+- 或手动 `BindTo(node)`
+
+这样可以尽量减少手动 `Release()` 遗漏。
+
+## Profiler
+
+资源 profiler 现在覆盖三类信息：
+
+- 句柄状态：路径、请求类型、状态、进度、是否持有引用、错误
+- 缓存状态：缓存路径、资源类型、引用计数、LRU 顺序
+- Loader 状态：并发槽、等待队列、在途任务、任务进度、合并请求数
+
+### 获取快照
+
+```csharp
+var resource = ModuleSystem.GetModule<IResourceModule>();
+var snapshot = resource.GetProfilerSnapshot();
+
+Debugger.Info($"LiveHandles={snapshot.LiveHandleCount}");
+Debugger.Info($"CacheCount={snapshot.CacheCount}");
+Debugger.Info($"LoaderActive={snapshot.Loader.ActiveCount}");
+```
+
+### 直接打日志
+
+```csharp
+ModuleSystem.GetModule<IResourceModule>()
+    .DumpProfilerToLog(includeHandles: true, includeCacheEntries: true);
+```
+
+### 可视化浮层
+
+资源模块现在内置了一个运行时 profiler 浮层。
+
+- `` ` ``：显示 / 隐藏资源 profiler 面板
+- `F10`：把当前 profiler 快照直接打印到日志
+
+之所以不再使用 `F8`，是因为在 Godot 编辑器里运行项目时，`F8` 会被编辑器当成“停止运行”快捷键，游戏窗口会直接退出。
+
+浮层内容包括：
+
+- 汇总统计
+- loader 在途任务
+- cache 条目
+- handle 条目
+
+如果你想从代码里控制它，也可以直接调用：
+
+```csharp
+var resource = ModuleSystem.GetModule<IResourceModule>();
+
+resource.SetProfilerOverlayVisible(true);
+resource.ToggleProfilerOverlay();
+var visible = resource.IsProfilerOverlayVisible;
+```
+
+相关配置在 `ResourceSetting`：
+
+- `EnableProfilerOverlay`
+- `ShowProfilerOverlayOnStart`
+- `ProfilerOverlayRefreshInterval`
+- `ProfilerOverlayMaxRows`
+
+日志会输出：
+
+- 汇总统计
+- 当前 loader 任务列表
+- 缓存条目列表
+- 句柄列表
+
+这很适合先快速定位：
+
+- 为什么某个资源一直 `Loading`
+- 为什么缓存里一直有某个路径
+- 为什么引用计数没回到 0
+- 为什么等待队列堆积
+
+## 模块关闭顺序
+
+模块 `Shutdown()` 的顺序是：
+
+1. 先冲刷主线程取消队列
+2. 调用 `_loader.Shutdown(...)`
+3. 再清空缓存
+
+这样可以保证：
+
+- 不留下永久 `Loading` 的句柄
+- 异步等待中的 `Task` 能正常结束
+- 关闭时 profiler 也能看到一致的收口结果
+
+## 对外 API
 
 ### IResourceModule
 
 ```csharp
-// 同步加载（返回句柄，成功时 RefCount +1）
 ResourceHandle<T> LoadAsset<T>(string path) where T : Resource;
-
-// 异步加载（返回句柄，成功时 RefCount +1）
 ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource;
+SceneHandle LoadSceneAsync(string path);
 
-// 释放引用计数（由 Handle.Release() 内部调用，不建议外部直接使用）
-void ReleaseAsset(string path);
-
-// 强制从缓存移除（无视引用计数，适用于场景切换）
 void ForceUnloadAsset(string path);
-
-// 清空全部缓存（强制）
 void UnloadAllAssets();
-
-// 查询是否已缓存
 bool HasAsset(string path);
-
-// 当前缓存数量
 int CacheCount { get; }
-
-// 获取指定资源的框架引用计数
 int GetRefCount(string path);
-
-// 替换加载器（须在首次加载前调用）
+ResourceProfilerSnapshot GetProfilerSnapshot();
+void DumpProfilerToLog(bool includeHandles = true, bool includeCacheEntries = true);
+bool IsProfilerOverlayVisible { get; }
+void SetProfilerOverlayVisible(bool visible);
+void ToggleProfilerOverlay();
 void SetLoader(IResourceLoader loader);
-
-// 替换缓存（须在首次加载前调用）
 void SetCache(IResourceCache cache);
+void ReleaseAsset(string path);
 ```
 
-### IResourceCache
+### ResourceHandle<T>
 
 ```csharp
-int Count { get; }
-bool TryGet(string path, out Resource resource);
-void Set(string path, Resource resource);
-bool Remove(string path);
-bool Contains(string path);
-void Clear();
+T Asset { get; }
+ResourceHandleStatus Status { get; }
+bool IsDone { get; }
+bool IsValid { get; }
+float Progress { get; }
+string Error { get; }
+Task<ResourceHandle<T>> Task { get; }
 
-// 引用计数管理
-void Acquire(string path);       // RefCount +1
-void Release(string path);       // RefCount -1（不低于 0）
-int GetRefCount(string path);    // 查询当前 RefCount
+ResourceHandle<T> OnCompleted(Action<ResourceHandle<T>> callback);
+ResourceHandle<T> WithCancellation(CancellationToken ct);
+void Release();
+void Dispose();
 ```
 
----
-
-## 高级用法
-
-### 自定义加载器
+### SceneHandle
 
 ```csharp
-public class MyHotfixLoader : IResourceLoader
-{
-    public Resource LoadSync(string path) { /* 热更逻辑 */ }
-    public ResourceLoadTask RequestAsync(string path, string typeHint = "") { /* ... */ }
-    public bool Exists(string path) { /* ... */ }
-}
+PackedScene Scene { get; }
+ResourceHandleStatus Status { get; }
+bool IsDone { get; }
+bool IsValid { get; }
+float Progress { get; }
+string Error { get; }
+Task<SceneHandle> Task { get; }
 
-// 在 OnInit 之后、首次加载前替换
-ModuleSystem.GetModule<IResourceModule>().SetLoader(new MyHotfixLoader());
+SceneHandle OnCompleted(Action<SceneHandle> callback);
+SceneHandle WithCancellation(CancellationToken ct);
+Node Instantiate();
+TNode Instantiate<TNode>() where TNode : Node;
+TNode InstantiateAndBind<TNode>(Node parent) where TNode : Node;
+TNode InstantiateAndBind<TNode>(Action<TNode> attachInstance) where TNode : Node;
+SceneHandle BindTo(Node node);
+void Release();
+void Dispose();
 ```
 
-### 自定义缓存
+### Profiler Snapshot Types
 
 ```csharp
-public class NoCacheImpl : IResourceCache
-{
-    public int Count => 0;
-    public bool TryGet(string path, out Resource r) { r = null; return false; }
-    public void Set(string path, Resource r) { }
-    public bool Remove(string path) => false;
-    public bool Contains(string path) => false;
-    public void Clear() { }
-    public void Acquire(string path) { }
-    public void Release(string path) { }
-    public int GetRefCount(string path) => 0;
-}
-
-ModuleSystem.GetModule<IResourceModule>().SetCache(new NoCacheImpl());
+ResourceProfilerSnapshot
+ResourceHandleProfilerEntry
+ResourceCacheProfilerEntry
+ResourceLoaderProfilerSnapshot
+ResourceLoadTaskProfilerEntry
 ```
 
-### 框架模块中的使用模式
+## 推荐约定
 
-**UIModule**：打开窗口时保存 Handle 到 `UIWindow.ResourceHandle`，关闭时自动 `Release()`。
+- 普通资源优先用 `using var handle = ...`
+- 只拿 `PackedScene` 资源本身时用 `LoadAsset<PackedScene>()`
+- 需要实例化场景时优先用 `LoadSceneAsync()`
+- 需要自动释放时优先用 `InstantiateAndBind()` / `BindTo()`
+- 需要排查资源问题时优先用 `GetProfilerSnapshot()` 或 `DumpProfilerToLog()`
 
-**ObjectPoolModule**：创建 NodePool 时通过 Handle 加载 PackedScene，销毁池时 `ForceUnloadAsset()`。
+## 后续扩展边界
 
-**Procedure**：在 `OnLeave` 中释放 Handle，确保场景切换时正确减引用。
+后续如果继续扩展，建议保持这条边界不动：
 
----
-
-## 生命周期与内存管理
-
-```
-ModuleSystem.GetModule<IResourceModule>()
-    └─ ResourceModule.OnInit()      // 读取 ResourceSetting，创建 Loader + Cache
-           │
-     每帧  └─ ResourceModule.Process()   // 轮询所有 pending ResourceLoadTask
-                  └─ task.Poll()          // 调用 LoadThreadedGetStatus
-                        ├─ InProgress → 继续等待
-                        └─ Loaded → 写入缓存 + 为每个成功 Handle Acquire
-                        └─ Failed → 通知 Handle 失败
-           │
-    关闭   └─ ResourceModule.Shutdown()  // 清空缓存和任务表
-```
-
-**资源释放路径：**
-
-```
-handle.Release()
-    └─ ResourceModule.ReleaseAsset(path)
-        └─ cache.Release(path)        // 框架 RefCount -1
-              │
-              ├─ RefCount > 0 → 资源仍受保护，不可被淘汰
-              │
-              └─ RefCount == 0 → 资源变为"可淘汰"
-                    └─ 下次缓存满时 LRU 淘汰
-                          └─ cache.Remove(path)   // 缓存不再持有
-                                └─ 若外部也无引用 → Godot 引用计数 = 0 → 自动释放内存
-```
-
-**强制释放路径（场景切换等场景）：**
-
-```
-ForceUnloadAsset(path)
-    └─ cache.Remove(path)            // 直接移除，无视 RefCount
-           └─ 若外部也无引用 → Godot 引用计数 = 0 → 自动释放
-```
-
-> ⚠️ 注意：`ForceUnloadAsset` 不会使已发出的 Handle 失效，仍持有 `_asset` 引用的代码仍可继续使用该资源，但资源不再受缓存管理。
-
----
-
-## 扩展与自定义
-
-| 扩展点 | 接口 | 默认实现 |
-|---|---|---|
-| 加载策略 | `IResourceLoader` | `GodotResourceLoader` |
-| 缓存策略 | `IResourceCache` | `ResourceCache`（LRU + 引用计数） |
-| 模块整体 | `IResourceModule` | `ResourceModule` |
-
-所有替换操作通过 `IResourceModule.SetLoader()` / `SetCache()` 完成，无需修改框架源码。
+- 通用资源能力继续放 `ResourceHandle<T>`
+- 场景与实例节点能力继续放 `SceneHandle`
+- 缓存观测能力继续放 `IResourceCache`
+- 加载观测能力继续放 `IResourceLoader`
+- 模块层继续只做编排、收口和 profiler 汇总

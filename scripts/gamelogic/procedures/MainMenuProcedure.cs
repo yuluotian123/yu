@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Framework;
 using Framework.UI;
 using GameLogic;
@@ -8,7 +6,7 @@ using Godot;
 
 public class MainMenuProcedure : ProcedureBase
 {
-    private IFsm<IProcedureModule> _procedureOwner = null;
+    private IFsm<IProcedureModule> _procedureOwner;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
@@ -17,10 +15,10 @@ public class MainMenuProcedure : ProcedureBase
         base.OnInit(procedureOwner);
         _procedureOwner = procedureOwner;
 
-        // 使用 UIModule 打开主菜单窗口，传入版本号作为 UserData
-        ModuleSystem.GetModule<IUIModule>().ShowUIAsync<MainMenuWindow>(t => { ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "这是一个游戏通知事件！"); }, "v1.0.0");
+        ModuleSystem.GetModule<IUIModule>().ShowUIAsync<MainMenuWindow>(
+            t => { ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "这是一个游戏通知事件"); },
+            "v1.0.0");
         ModuleSystem.GetModule<IEventModule>().Subscribe(GameUIEvents.GameStart, LoadLevelScene);
-
     }
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
@@ -33,47 +31,36 @@ public class MainMenuProcedure : ProcedureBase
             if (Engine.GetMainLoop() is SceneTree tree)
                 tree.Quit();
         }
-
-
     }
 
     private void LoadLevelScene()
     {
-        var _resource = ModuleSystem.GetModule<IResourceModule>();
-     _resource.LoadAssetAsync<PackedScene>("res://assets/scenes/level.tscn")
-            .OnCompleted(
-                h =>
+        var resource = ModuleSystem.GetModule<IResourceModule>();
+        resource.LoadSceneAsync("res://assets/scenes/level.tscn")
+            .OnCompleted(handle =>
+            {
+                Debugger.Info($"[LevelProcedure] Level场景加载完成: {handle.Scene?.ResourcePath}");
+
+                if (handle.IsValid)
                 {
-                    Debugger.Info($"[LevelProcedure] Level场景加载完成: {h.Asset?.ResourcePath}");
+                    Debugger.Info("[MainMenuProcedure] Level场景已加载，切换关卡");
+                    ModuleSystem.GetModule<IUIModule>().CloseAll();
 
-                    if (h != null && h.IsValid)
-                    {
-                        Debugger.Info($"[MainMenuProcedure] Level场景已加载，切换关卡");
+                    if (Engine.GetMainLoop() is SceneTree tree)
+                        handle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
 
-                        // 关闭主菜单 UI，自动释放资源
-                        ModuleSystem.GetModule<IUIModule>().CloseAll();
-
-                        // 实例化关卡场景
-                        var node = h.Asset.Instantiate();
-                        if (Engine.GetMainLoop() is SceneTree tree)
-                        {
-                            tree.Root.GetNode("Root").AddChild(node);
-                        }
-                        ChangeState<LevelProcedure>(_procedureOwner);
-                    }
-                    else
-                    {
-                        Debugger.Warn("[MainMenuProcedure] Level场景未加载或加载失败");
-                    }
-
+                    ChangeState<LevelProcedure>(_procedureOwner);
                 }
-            );
+                else
+                {
+                    Debugger.Warn("[MainMenuProcedure] Level场景未加载或加载失败");
+                }
+            });
     }
 
     protected internal override void OnLeave(IFsm<IProcedureModule> procedureOwner, bool isShutdown)
     {
         base.OnLeave(procedureOwner, isShutdown);
-
         ModuleSystem.GetModule<IEventModule>().Unsubscribe(GameUIEvents.GameStart, LoadLevelScene);
     }
 }

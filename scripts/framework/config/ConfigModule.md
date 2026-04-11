@@ -29,12 +29,12 @@ XlsxReader          ← 读取表格结构和数据
    ├──▶ CSharpCodeGenerator  → 生成 MonsterConfig.cs（编辑期）
    │
    └──▶ JsonDataWriter        → 生成 monster.json（编辑期）
-                                       │
-                                       ▼
-                              JsonConfigLoader      ← 运行时加载 JSON
-                                       │
-                                       ▼
-                              ConfigModule<T>       ← 缓存 / 查询 / 热重载
+									   │
+									   ▼
+							  JsonConfigLoader      ← 运行时加载 JSON
+									   │
+									   ▼
+							  ConfigModule<T>       ← 缓存 / 查询 / 热重载
 ```
 
 ---
@@ -135,7 +135,7 @@ GD.Print(monster.Name);   // 输出：史莱姆
 ```csharp
 var allMonsters = cfg.GetAll<MonsterConfig>();
 foreach (var m in allMonsters)
-    GD.Print($"{m.Id} - {m.Name} HP:{m.Hp}");
+	GD.Print($"{m.Id} - {m.Name} HP:{m.Hp}");
 ```
 
 ### 获取表对象
@@ -175,10 +175,10 @@ scripts/framework/config/
 │   ├── IConfigLoader.cs              # 加载器接口
 │   └── JsonConfigLoader.cs           # JSON 文件加载器
 └── converter/                        # 编辑期工具（不参与运行时）
-    ├── XlsxReader.cs                 # xlsx 读取/解析
-    ├── CSharpCodeGenerator.cs        # C# 代码生成
-    ├── JsonDataWriter.cs             # JSON 数据生成
-    └── XlsxConverter.cs             # 转换入口（单文件/批量目录）
+	├── XlsxReader.cs                 # xlsx 读取/解析
+	├── CSharpCodeGenerator.cs        # C# 代码生成
+	├── JsonDataWriter.cs             # JSON 数据生成
+	└── XlsxConverter.cs             # 转换入口（单文件/批量目录）
 
 addons/ConfigPlugin/
 ├── plugin.cfg                        # Godot 插件声明
@@ -198,18 +198,18 @@ addons/ConfigPlugin/
 // 文件：MonsterConfig.Extension.cs（手动创建，不受生成影响）
 namespace Generated.Config
 {
-    public partial class MonsterConfig
-    {
-        /// <summary>是否为精英怪（血量 > 500）</summary>
-        public bool IsElite => Hp > 500;
+	public partial class MonsterConfig
+	{
+		/// <summary>是否为精英怪（血量 > 500）</summary>
+		public bool IsElite => Hp > 500;
 
-        /// <summary>获取该怪物所有掉落物配置。</summary>
-        public IEnumerable<ItemConfig> GetDropItems(IConfigModule cfg)
-        {
-            foreach (var id in DropItems)
-                yield return cfg.GetById<ItemConfig>(id);
-        }
-    }
+		/// <summary>获取该怪物所有掉落物配置。</summary>
+		public IEnumerable<ItemConfig> GetDropItems(IConfigModule cfg)
+		{
+			foreach (var id in DropItems)
+				yield return cfg.GetById<ItemConfig>(id);
+		}
+	}
 }
 ```
 

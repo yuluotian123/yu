@@ -1,60 +1,104 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
 namespace Framework
 {
     /// <summary>
-    /// 封装 Godot 原生 <see cref="ResourceLoader.LoadThreadedRequest"/> 的单次异步加载任务。
-    /// 在每帧 Process 中调用 <see cref="Poll"/> 轮询加载状态。
+    /// Request wrapper that allows per-handle deactivation.
+    /// </summary>
+    internal sealed class LoadRequest
+    {
+        public ResourceHandleBase Handle { get; }
+        public bool IsActive { get; private set; } = true;
+
+        public LoadRequest(ResourceHandleBase handle)
+        {
+            Handle = handle;
+        }
+
+        public void Deactivate() => IsActive = false;
+    }
+
+    /// <summary>
+    /// Single threaded-load task for a resource path.
     /// </summary>
     public sealed class ResourceLoadTask
     {
-        private readonly Godot.Collections.Array _progressBuffer = new Godot.Collections.Array();
+        private readonly Godot.Collections.Array _progressBuffer = new();
+        private readonly Action _onStartedCompleted;
+        private readonly List<LoadRequest> _requests = new();
 
-        /// <summary>
-        /// 资源路径。
-        /// </summary>
         public string Path { get; }
-
-        /// <summary>
-        /// 挂载在此任务上的所有待完成句柄（同一路径可能被多处同时请求）。
-        /// </summary>
-        public List<ResourceHandleBase> Handles { get; } = new List<ResourceHandleBase>();
-
-        /// <summary>
-        /// 任务是否已结束（成功或失败）。
-        /// </summary>
         public bool IsDone { get; private set; }
-
-        /// <summary>
-        /// 当前进度（0~1）。
-        /// </summary>
+        public bool IsStarted { get; private set; }
         public float Progress { get; private set; }
 
-        public ResourceLoadTask(string path)
+        public ResourceLoadTask(string path, Action onStartedCompleted = null)
         {
             Path = path;
+            _onStartedCompleted = onStartedCompleted;
         }
 
-        /// <summary>
-        /// 立即将任务标记为失败（在发起请求时就已知失败，无需轮询）。
-        /// </summary>
-        /// <param name="error">错误信息。</param>
-        internal void MarkFailed(string error)
+        internal void AddHandle(ResourceHandleBase handle)
         {
-            Complete(null, error, null);
+            var request = new LoadRequest(handle);
+            _requests.Add(request);
+            handle.ActiveRequest = request;
         }
 
-        /// <summary>
-        /// 每帧轮询一次 Godot 后台加载状态。
-        /// 加载成功时先写入 <paramref name="cache"/>，再通知所有句柄并为每个成功句柄 Acquire 引用计数。
-        /// </summary>
-        /// <param name="cache">资源缓存，用于在加载完成时写入资源。</param>
-        /// <param name="enableLog">是否打印日志。</param>
-        /// <returns>如果任务已结束（成功或失败）则返回 true。</returns>
+        internal void MarkStarted() => IsStarted = true;
+
+        internal void MarkFailed(string error) => Complete(null, error, null);
+
+        internal ResourceLoadTaskProfilerEntry GetProfilerEntry()
+        {
+            var activeRequestCount = 0;
+            foreach (var request in _requests)
+            {
+                if (request.IsActive)
+                    activeRequestCount++;
+            }
+
+            return new ResourceLoadTaskProfilerEntry
+            {
+                Path = Path,
+                IsStarted = IsStarted,
+                IsDone = IsDone,
+                Progress = Progress,
+                RequestCount = _requests.Count,
+                ActiveRequestCount = activeRequestCount,
+            };
+        }
+
+        internal void CancelAll(string reason = null)
+        {
+            if (IsDone)
+                return;
+
+            IsDone = true;
+
+            if (IsStarted)
+                _onStartedCompleted?.Invoke();
+
+            foreach (var request in _requests)
+            {
+                request.Handle.ActiveRequest = null;
+                if (!request.IsActive)
+                    continue;
+
+                request.Handle.SetCancelledInternal();
+            }
+
+            _requests.Clear();
+        }
+
         public bool Poll(IResourceCache cache, bool enableLog = false)
         {
-            if (IsDone) return true;
+            if (IsDone)
+                return true;
+            if (!IsStarted)
+                return false;
 
             _progressBuffer.Clear();
             var status = ResourceLoader.LoadThreadedGetStatus(Path, _progressBuffer);
@@ -62,15 +106,16 @@ namespace Framework
             if (_progressBuffer.Count > 0)
             {
                 Progress = (float)_progressBuffer[0];
-                // 同步进度到所有句柄
-                foreach (var handle in Handles)
-                    handle.UpdateProgressInternal(Progress);
+                foreach (var request in _requests)
+                {
+                    if (request.IsActive)
+                        request.Handle.UpdateProgressInternal(Progress);
+                }
             }
 
             switch (status)
             {
                 case ResourceLoader.ThreadLoadStatus.Loaded:
-                    // 唯一一次 LoadThreadedGet，先写缓存再派发
                     var resource = ResourceLoader.LoadThreadedGet(Path);
                     if (resource != null && cache != null && !cache.Contains(Path))
                     {
@@ -78,6 +123,7 @@ namespace Framework
                         if (enableLog)
                             Debugger.Info($"[ResourceLoadTask] Cached after async load: '{Path}'");
                     }
+
                     Complete(resource, null, cache);
                     return true;
 
@@ -90,31 +136,42 @@ namespace Framework
                     return true;
 
                 default:
-                    // InProgress — 继续等待
                     return false;
             }
         }
 
-        /// <summary>
-        /// 完成任务，通知所有挂载的句柄，并为每个成功句柄增加框架引用计数。
-        /// </summary>
         private void Complete(Resource resource, string error, IResourceCache cache)
         {
+            if (IsDone)
+                return;
+
             IsDone = true;
-            foreach (var handle in Handles)
+
+            if (IsStarted)
+                _onStartedCompleted?.Invoke();
+
+            foreach (var request in _requests)
             {
+                request.Handle.ActiveRequest = null;
+                if (!request.IsActive)
+                    continue;
+
                 if (resource != null && string.IsNullOrEmpty(error))
                 {
-                    handle.SetSucceedInternal(resource);
-                    // 每个成功的 handle 对应一个框架引用计数
-                    cache?.Acquire(Path);
+                    request.Handle.SetSucceedInternal(resource);
+                    if (request.Handle.IsValid)
+                    {
+                        cache?.Acquire(Path);
+                        request.Handle.MarkReferenceAcquiredInternal();
+                    }
                 }
                 else
                 {
-                    handle.SetFailedInternal(error ?? "Load failed.");
+                    request.Handle.SetFailedInternal(error ?? "Load failed.");
                 }
             }
-            Handles.Clear();
+
+            _requests.Clear();
         }
     }
 }

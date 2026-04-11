@@ -1,15 +1,27 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace Framework
 {
     /// <summary>
-    /// 基于 Godot 原生 <see cref="ResourceLoader"/> 的加载器实现。
-    /// 同步加载使用 <see cref="ResourceLoader.Load"/>，
-    /// 异步加载使用 <see cref="ResourceLoader.LoadThreadedRequest"/> + <see cref="ResourceLoadTask.Poll"/>。
+    /// Default loader built on top of Godot's ResourceLoader.
     /// </summary>
     public sealed class GodotResourceLoader : IResourceLoader
     {
-        /// <inheritdoc/>
+        private readonly int _maxConcurrent;
+        private int _activeCount;
+        private readonly Dictionary<string, ResourceLoadTask> _allTasks;
+        private readonly Queue<string> _waitingQueue;
+        private readonly List<string> _completedPaths;
+
+        public GodotResourceLoader(int maxConcurrent = 8)
+        {
+            _maxConcurrent = maxConcurrent > 0 ? maxConcurrent : 1;
+            _allTasks = new Dictionary<string, ResourceLoadTask>();
+            _waitingQueue = new Queue<string>();
+            _completedPaths = new List<string>();
+        }
+
         public Resource LoadSync(string path)
         {
             if (!ResourceLoader.Exists(path))
@@ -20,33 +32,102 @@ namespace Framework
 
             var resource = ResourceLoader.Load(path);
             if (resource == null)
-            {
                 Debugger.Error($"[ResourceLoader] Failed to load resource: '{path}'");
-            }
             return resource;
         }
 
-        /// <inheritdoc/>
-        public ResourceLoadTask RequestAsync(string path, string typeHint = "")
+        public void RequestAsync(string path, ResourceHandleBase handle, string typeHint = "")
         {
-            var task = new ResourceLoadTask(path);
-
-            var err = ResourceLoader.LoadThreadedRequest(path, typeHint, useSubThreads: true);
-            if (err != Error.Ok)
+            if (_allTasks.TryGetValue(path, out var existingTask))
             {
-                Debugger.Error($"[ResourceLoader] LoadThreadedRequest failed for '{path}': {err}");
-                // 标记为立即失败：在第一次 Poll 时会返回 InvalidResource/Failed 状态
-                // 此处直接让任务处于就绪但失败状态
-                task.MarkFailed($"LoadThreadedRequest error: {err}");
+                if (!existingTask.IsDone)
+                {
+                    existingTask.AddHandle(handle);
+                    return;
+                }
+
+                _allTasks.Remove(path);
             }
 
-            return task;
+            var task = new ResourceLoadTask(path, OnTaskCompleted);
+            task.AddHandle(handle);
+            _allTasks[path] = task;
+
+            if (_activeCount < _maxConcurrent)
+                StartTask(task, typeHint);
+            else
+                _waitingQueue.Enqueue(path);
         }
 
-        /// <inheritdoc/>
-        public bool Exists(string path)
+        public void Tick(IResourceCache cache, bool enableLog = false)
         {
-            return ResourceLoader.Exists(path);
+            _completedPaths.Clear();
+            foreach (var pair in _allTasks)
+            {
+                if (!pair.Value.IsStarted)
+                    continue;
+
+                if (pair.Value.Poll(cache, enableLog))
+                    _completedPaths.Add(pair.Key);
+            }
+
+            foreach (var path in _completedPaths)
+                _allTasks.Remove(path);
+
+            while (_waitingQueue.Count > 0 && _activeCount < _maxConcurrent)
+            {
+                var path = _waitingQueue.Dequeue();
+                if (_allTasks.TryGetValue(path, out var task))
+                    StartTask(task);
+            }
+        }
+
+        public ResourceLoaderProfilerSnapshot GetProfilerSnapshot()
+        {
+            var tasks = new List<ResourceLoadTaskProfilerEntry>(_allTasks.Count);
+            foreach (var task in _allTasks.Values)
+                tasks.Add(task.GetProfilerEntry());
+
+            return new ResourceLoaderProfilerSnapshot
+            {
+                MaxConcurrent = _maxConcurrent,
+                ActiveCount = _activeCount,
+                WaitingCount = _waitingQueue.Count,
+                TaskCount = _allTasks.Count,
+                Tasks = tasks,
+            };
+        }
+
+        public void Shutdown(string reason = null)
+        {
+            foreach (var task in _allTasks.Values)
+                task.CancelAll(reason);
+
+            _allTasks.Clear();
+            _waitingQueue.Clear();
+            _completedPaths.Clear();
+            _activeCount = 0;
+        }
+
+        private void StartTask(ResourceLoadTask task, string typeHint = "")
+        {
+            var err = ResourceLoader.LoadThreadedRequest(task.Path, typeHint, useSubThreads: true);
+            if (err != Error.Ok)
+            {
+                Debugger.Error($"[ResourceLoader] LoadThreadedRequest failed for '{task.Path}': {err}");
+                _allTasks.Remove(task.Path);
+                task.MarkFailed($"LoadThreadedRequest error: {err}");
+                return;
+            }
+
+            task.MarkStarted();
+            _activeCount++;
+        }
+
+        private void OnTaskCompleted()
+        {
+            if (_activeCount > 0)
+                _activeCount--;
         }
     }
 }

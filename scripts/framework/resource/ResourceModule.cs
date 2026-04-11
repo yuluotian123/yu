@@ -1,65 +1,46 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Text;
 using Godot;
 
 namespace Framework
 {
     /// <summary>
-    /// 资源管理模块实现。
-    /// <para>
-    /// 通过 <see cref="ModuleSystem.GetModule{T}"/> 以 <see cref="IResourceModule"/> 接口获取实例。
-    /// 命名遵循框架约定：接口名去掉 'I' 前缀即为实现类名（<c>IResourceModule</c> → <c>ResourceModule</c>）。
-    /// </para>
-    /// <para>
-    /// 功能概览：
-    /// <list type="bullet">
-    ///   <item>同步/异步加载均返回 <see cref="ResourceHandle{T}"/>，统一引用计数管理。</item>
-    ///   <item>每个有效 Handle 持有一个框架引用计数，Release 时 -1，归零后可被 LRU 淘汰。</item>
-    ///   <item>异步加载利用 Godot 后台线程（<c>LoadThreadedRequest</c>），每帧在 <see cref="Process"/> 中轮询，支持同路径合并请求。</item>
-    ///   <item>LRU 缓存：默认使用 <see cref="ResourceCache"/>，淘汰时依赖框架引用计数判断资源是否可释放。</item>
-    ///   <item>可替换策略：通过 <see cref="SetLoader"/> / <see cref="SetCache"/> 注入自定义实现。</item>
-    /// </list>
-    /// </para>
+    /// Resource management module implementation.
     /// </summary>
     internal sealed class ResourceModule : Module, IResourceModule, IProcessModule
     {
-        // 进行中的异步任务表：path → task
-        private readonly Dictionary<string, ResourceLoadTask> _pendingTasks;
-        // 本帧需要移除的已完成任务（避免遍历时修改字典）
-        private readonly List<string> _completedPaths;
+        private readonly ConcurrentQueue<ResourceHandleBase> _pendingCancels = new();
+        private readonly List<WeakReference<ResourceHandleBase>> _trackedHandles = new();
+        private readonly object _trackedHandlesLock = new();
 
         private IResourceLoader _loader;
         private IResourceCache _cache;
         private ResourceSetting _setting;
+        private ResourceProfilerOverlay _profilerOverlay;
         private bool _enableLog;
+        private int _nextProfilerHandleId;
 
-        public ResourceModule()
-        {
-            _pendingTasks = new Dictionary<string, ResourceLoadTask>();
-            _completedPaths = new List<string>();
-        }
-
-        /// <inheritdoc/>
         public override int Priority => 0;
-
-        /// <inheritdoc/>
         public int CacheCount => _cache.Count;
-
-        // ---- Module 生命周期 ----
 
         public override void OnInit()
         {
-            // 尝试从 RootModule 读取配置，若无则使用默认值
             ResourceSetting setting = null;
             if (RootModule.Instance?.settings?.resourceSetting != null)
-            {
                 setting = RootModule.Instance.settings.resourceSetting;
-            }
 
             _setting = setting ?? new ResourceSetting();
             _enableLog = _setting.EnableLog;
 
-            _loader ??= new GodotResourceLoader();
+            _loader ??= new GodotResourceLoader(_setting.MaxConcurrentLoadCount);
             _cache ??= new ResourceCache(_setting.MaxCacheSize);
+            
+            EnsureProfilerOverlay();
+
+            if (_profilerOverlay != null)
+                _profilerOverlay.SetOverlayVisible(_setting.ShowProfilerOverlayOnStart);
 
             if (_enableLog)
                 Debugger.Info($"[ResourceModule] Initialized. MaxCacheSize={_setting.MaxCacheSize}, MaxConcurrent={_setting.MaxConcurrentLoadCount}");
@@ -67,69 +48,45 @@ namespace Framework
 
         public override void Shutdown()
         {
+            FlushPendingCancels();
+            _loader?.Shutdown("ResourceModule shutdown");
             _cache.Clear();
-            _pendingTasks.Clear();
-            _completedPaths.Clear();
+            ReleaseProfilerOverlay();
+
+            while (_pendingCancels.TryDequeue(out _))
+            {
+            }
+
+            lock (_trackedHandlesLock)
+            {
+                _trackedHandles.Clear();
+            }
 
             if (_enableLog)
                 Debugger.Info("[ResourceModule] Shutdown.");
         }
 
-        // ---- IProcessModule ----
-
-        /// <summary>
-        /// 每帧轮询所有进行中的异步加载任务。
-        /// </summary>
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
-            if (_pendingTasks.Count == 0) return;
-
-            _completedPaths.Clear();
-
-            foreach (var kv in _pendingTasks)
-            {
-                var task = kv.Value;
-                if (task.Poll(_cache, _enableLog))
-                {
-                    _completedPaths.Add(kv.Key);
-                }
-            }
-
-            foreach (var path in _completedPaths)
-                _pendingTasks.Remove(path);
+            FlushPendingCancels();
+            _loader.Tick(_cache, _enableLog);
         }
 
-        // ---- IResourceModule ----
-
-        /// <inheritdoc/>
         public ResourceHandle<T> LoadAsset<T>(string path) where T : Resource
         {
-            var handle = new ResourceHandle<T>(path, this);
+            var handle = CreateHandle<T>(path);
 
-            if (string.IsNullOrEmpty(path))
-            {
-                handle.SetFailedInternal("Path is null or empty.");
-                Debugger.Error("[ResourceModule] LoadAsset: path is null or empty.");
+            if (TryFailInvalidPath(path, handle, "LoadAsset"))
                 return handle;
-            }
 
-            // 命中缓存
-            if (_cache.TryGet(path, out var cached))
-            {
-                _cache.Acquire(path);
-                handle.SetSucceedInternal(cached);
-                if (_enableLog) Debugger.Info($"[ResourceModule] Cache hit (sync): '{path}' [RefCount={_cache.GetRefCount(path)}]");
+            if (TryCompleteFromCache(path, handle, "Cache hit (sync)"))
                 return handle;
-            }
 
-            // 同步加载
             var resource = _loader.LoadSync(path);
             if (resource != null)
             {
                 _cache.Set(path, resource);
-                _cache.Acquire(path);
-                handle.SetSucceedInternal(resource);
-                if (_enableLog) Debugger.Info($"[ResourceModule] Loaded sync: '{path}' [RefCount={_cache.GetRefCount(path)}]");
+                CompleteSuccess(path, resource, handle, "Loaded sync");
                 return handle;
             }
 
@@ -138,47 +95,32 @@ namespace Framework
             return handle;
         }
 
-        /// <inheritdoc/>
         public ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource
         {
-            var handle = new ResourceHandle<T>(path, this);
+            var handle = CreateHandle<T>(path);
 
-            if (string.IsNullOrEmpty(path))
-            {
-                handle.SetFailedInternal("Path is null or empty.");
+            if (TryFailInvalidPath(path, handle, "LoadAssetAsync"))
                 return handle;
-            }
 
-            // 命中缓存，立即完成
-            if (_cache.TryGet(path, out var cached))
-            {
-                _cache.Acquire(path);
-                handle.SetSucceedInternal(cached);
-                if (_enableLog) Debugger.Info($"[ResourceModule] Async cache hit: '{path}' [RefCount={_cache.GetRefCount(path)}]");
+            if (TryCompleteFromCache(path, handle, "Async cache hit"))
                 return handle;
-            }
 
-            // 已有相同路径的进行中任务，直接挂载句柄
-            if (_pendingTasks.TryGetValue(path, out var existingTask))
-            {
-                existingTask.Handles.Add(handle);
-                if (_enableLog) Debugger.Info($"[ResourceModule] Merged async request: '{path}'");
-                return handle;
-            }
+            _loader.RequestAsync(path, handle);
 
-            // 发起新的异步加载任务
-            var task = _loader.RequestAsync(path);
-            task.Handles.Add(handle);
-            _pendingTasks[path] = task;
-
-            if (_enableLog) Debugger.Info($"[ResourceModule] Async load requested: '{path}'");
+            if (_enableLog)
+                Debugger.Info($"[ResourceModule] Async load requested: '{path}'");
             return handle;
         }
 
-        /// <inheritdoc/>
+        public SceneHandle LoadSceneAsync(string path)
+        {
+            return new SceneHandle(LoadAssetAsync<PackedScene>(path));
+        }
+
         public void ReleaseAsset(string path)
         {
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path))
+                return;
 
             _cache.Release(path);
 
@@ -186,37 +128,119 @@ namespace Framework
                 Debugger.Info($"[ResourceModule] ReleaseAsset: '{path}' [RefCount={_cache.GetRefCount(path)}]");
         }
 
-        /// <inheritdoc/>
         public void ForceUnloadAsset(string path)
         {
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path))
+                return;
 
-            if (_cache.Remove(path))
-            {
-                if (_enableLog) Debugger.Info($"[ResourceModule] Force unloaded: '{path}'");
-            }
+            if (_cache.Remove(path) && _enableLog)
+                Debugger.Info($"[ResourceModule] Force unloaded: '{path}'");
         }
 
-        /// <inheritdoc/>
         public void UnloadAllAssets()
         {
             _cache.Clear();
-            if (_enableLog) Debugger.Info("[ResourceModule] All assets unloaded from cache.");
+            if (_enableLog)
+                Debugger.Info("[ResourceModule] All assets unloaded from cache.");
         }
 
-        /// <inheritdoc/>
         public bool HasAsset(string path)
         {
             return !string.IsNullOrEmpty(path) && _cache.Contains(path);
         }
 
-        /// <inheritdoc/>
         public int GetRefCount(string path)
         {
             return _cache.GetRefCount(path);
         }
 
-        /// <inheritdoc/>
+        public ResourceProfilerSnapshot GetProfilerSnapshot()
+        {
+            var handles = CollectHandleProfilerEntries();
+            var snapshot = new ResourceProfilerSnapshot
+            {
+                CreatedAtUtc = DateTime.UtcNow,
+                CacheCount = _cache.Count,
+                PendingCancelCount = _pendingCancels.Count,
+                LiveHandleCount = handles.Count,
+                LoadingHandleCount = CountHandles(handles, ResourceHandleStatus.Loading),
+                SucceedHandleCount = CountHandles(handles, ResourceHandleStatus.Succeed),
+                FailedHandleCount = CountHandles(handles, ResourceHandleStatus.Failed),
+                CancelledHandleCount = CountHandles(handles, ResourceHandleStatus.Cancelled),
+                ReleasedHandleCount = CountHandles(handles, ResourceHandleStatus.Released),
+                InvalidHandleCount = CountInvalidHandles(handles),
+                Loader = _loader.GetProfilerSnapshot(),
+                Handles = handles,
+                CacheEntries = _cache.GetProfilerEntries(),
+            };
+
+            return snapshot;
+        }
+
+        public bool IsProfilerOverlayVisible => _profilerOverlay != null && _profilerOverlay.Visible;
+
+        public void DumpProfilerToLog(bool includeHandles = true, bool includeCacheEntries = true)
+        {
+            var snapshot = GetProfilerSnapshot();
+            var summary = new StringBuilder();
+            summary.Append("[ResourceProfiler] ");
+            summary.Append($"handles={snapshot.LiveHandleCount} ");
+            summary.Append($"loading={snapshot.LoadingHandleCount} ");
+            summary.Append($"succeed={snapshot.SucceedHandleCount} ");
+            summary.Append($"failed={snapshot.FailedHandleCount} ");
+            summary.Append($"cancelled={snapshot.CancelledHandleCount} ");
+            summary.Append($"released={snapshot.ReleasedHandleCount} ");
+            summary.Append($"cache={snapshot.CacheCount} ");
+            summary.Append($"pendingCancels={snapshot.PendingCancelCount} ");
+            summary.Append($"loaderActive={snapshot.Loader.ActiveCount}/{snapshot.Loader.MaxConcurrent} ");
+            summary.Append($"loaderWaiting={snapshot.Loader.WaitingCount}");
+            Debugger.Info(summary.ToString());
+
+            foreach (var task in snapshot.Loader.Tasks)
+            {
+                Debugger.Info(
+                    $"[ResourceProfiler][Task] path='{task.Path}' started={task.IsStarted} done={task.IsDone} progress={task.Progress:0.00} requests={task.RequestCount} activeRequests={task.ActiveRequestCount}");
+            }
+
+            if (includeCacheEntries)
+            {
+                foreach (var entry in snapshot.CacheEntries)
+                {
+                    Debugger.Info(
+                        $"[ResourceProfiler][Cache] lru={entry.LruIndex} path='{entry.Path}' type={entry.ResourceTypeName} refCount={entry.RefCount}");
+                }
+            }
+
+            if (includeHandles)
+            {
+                foreach (var handle in snapshot.Handles)
+                {
+                    Debugger.Info(
+                        $"[ResourceProfiler][Handle] id={handle.HandleId} path='{handle.Path}' type={handle.RequestedTypeName} status={handle.Status} progress={handle.Progress:0.00} ownsRef={handle.OwnsReference} valid={handle.IsValid} error='{handle.Error}'");
+                }
+            }
+        }
+
+        public void SetProfilerOverlayVisible(bool visible)
+        {
+            if (visible)
+                EnsureProfilerOverlay(forceCreate: true);
+
+            _profilerOverlay?.SetOverlayVisible(visible);
+        }
+
+        public void ToggleProfilerOverlay()
+        {
+            if (_profilerOverlay == null)
+            {
+                EnsureProfilerOverlay(forceCreate: true);
+                _profilerOverlay?.SetOverlayVisible(true);
+                return;
+            }
+
+            _profilerOverlay.SetOverlayVisible(!_profilerOverlay.Visible);
+        }
+
         public void SetLoader(IResourceLoader loader)
         {
             if (loader == null)
@@ -224,10 +248,10 @@ namespace Framework
                 Debugger.Error("[ResourceModule] SetLoader: loader is null.");
                 return;
             }
+
             _loader = loader;
         }
 
-        /// <inheritdoc/>
         public void SetCache(IResourceCache cache)
         {
             if (cache == null)
@@ -235,7 +259,168 @@ namespace Framework
                 Debugger.Error("[ResourceModule] SetCache: cache is null.");
                 return;
             }
+
             _cache = cache;
+        }
+
+        internal void RequestCancel(ResourceHandleBase handle)
+        {
+            if (handle == null)
+                return;
+
+            _pendingCancels.Enqueue(handle);
+        }
+
+        private ResourceHandle<T> CreateHandle<T>(string path) where T : Resource
+        {
+            var handle = new ResourceHandle<T>(path, this);
+            TrackHandle(handle);
+            return handle;
+        }
+
+        private void EnsureProfilerOverlay(bool forceCreate = false)
+        {
+            if (_profilerOverlay != null || _setting == null || (!forceCreate && !_setting.EnableProfilerOverlay))
+                return;
+
+            if (Engine.GetMainLoop() is not SceneTree tree || tree.Root == null)
+                return;
+
+            _profilerOverlay = new ResourceProfilerOverlay(
+                GetProfilerSnapshot,
+                () => DumpProfilerToLog(includeHandles: true, includeCacheEntries: true),
+                _setting.ProfilerOverlayRefreshInterval,
+                _setting.ProfilerOverlayMaxRows);
+
+            tree.Root.CallDeferred(Node.MethodName.AddChild, _profilerOverlay);
+        }
+
+        private void ReleaseProfilerOverlay()
+        {
+            if (_profilerOverlay == null)
+                return;
+
+            if (GodotObject.IsInstanceValid(_profilerOverlay))
+                _profilerOverlay.QueueFree();
+
+            _profilerOverlay = null;
+        }
+
+        private void TrackHandle(ResourceHandleBase handle)
+        {
+            lock (_trackedHandlesLock)
+            {
+                handle.ProfilerId = ++_nextProfilerHandleId;
+                _trackedHandles.Add(new WeakReference<ResourceHandleBase>(handle));
+            }
+        }
+
+        private List<ResourceHandleProfilerEntry> CollectHandleProfilerEntries()
+        {
+            var entries = new List<ResourceHandleProfilerEntry>();
+
+            lock (_trackedHandlesLock)
+            {
+                for (int i = _trackedHandles.Count - 1; i >= 0; i--)
+                {
+                    if (!_trackedHandles[i].TryGetTarget(out var handle))
+                    {
+                        _trackedHandles.RemoveAt(i);
+                        continue;
+                    }
+
+                    entries.Add(new ResourceHandleProfilerEntry
+                    {
+                        HandleId = handle.ProfilerId,
+                        Path = handle.Path,
+                        RequestedTypeName = handle.RequestedTypeName,
+                        Status = handle.Status,
+                        Progress = handle.Progress,
+                        OwnsReference = handle.OwnsReference,
+                        IsValid = handle.IsValid,
+                        Error = handle.Error,
+                    });
+                }
+            }
+
+            entries.Sort((left, right) =>
+            {
+                var pathCompare = string.CompareOrdinal(left.Path, right.Path);
+                return pathCompare != 0 ? pathCompare : left.HandleId.CompareTo(right.HandleId);
+            });
+
+            return entries;
+        }
+
+        private void FlushPendingCancels()
+        {
+            while (_pendingCancels.TryDequeue(out var handle))
+            {
+                if (handle == null || handle.IsDone)
+                    continue;
+
+                handle.SetCancelledInternal();
+
+                if (_enableLog)
+                    Debugger.Info($"[ResourceModule] Cancelled: '{handle.Path}'");
+            }
+        }
+
+        private bool TryFailInvalidPath<T>(string path, ResourceHandle<T> handle, string caller) where T : Resource
+        {
+            if (!string.IsNullOrEmpty(path))
+                return false;
+
+            handle.SetFailedInternal("Path is null or empty.");
+            Debugger.Error($"[ResourceModule] {caller}: path is null or empty.");
+            return true;
+        }
+
+        private bool TryCompleteFromCache<T>(string path, ResourceHandle<T> handle, string logLabel) where T : Resource
+        {
+            if (!_cache.TryGet(path, out var cached))
+                return false;
+
+            CompleteSuccess(path, cached, handle, logLabel);
+            return true;
+        }
+
+        private void CompleteSuccess<T>(string path, Resource resource, ResourceHandle<T> handle, string logLabel) where T : Resource
+        {
+            handle.SetSucceedInternal(resource);
+
+            if (handle.IsValid)
+            {
+                _cache.Acquire(path);
+                handle.MarkReferenceAcquiredInternal();
+            }
+
+            if (_enableLog)
+                Debugger.Info($"[ResourceModule] {logLabel}: '{path}' [RefCount={_cache.GetRefCount(path)}]");
+        }
+
+        private static int CountHandles(IReadOnlyList<ResourceHandleProfilerEntry> handles, ResourceHandleStatus status)
+        {
+            var count = 0;
+            for (int i = 0; i < handles.Count; i++)
+            {
+                if (handles[i].Status == status)
+                    count++;
+            }
+
+            return count;
+        }
+
+        private static int CountInvalidHandles(IReadOnlyList<ResourceHandleProfilerEntry> handles)
+        {
+            var count = 0;
+            for (int i = 0; i < handles.Count; i++)
+            {
+                if (!handles[i].IsValid)
+                    count++;
+            }
+
+            return count;
         }
     }
 }

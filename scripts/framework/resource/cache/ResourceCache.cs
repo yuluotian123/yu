@@ -119,6 +119,28 @@ namespace Framework
             return 0;
         }
 
+        public IReadOnlyList<ResourceCacheProfilerEntry> GetProfilerEntries()
+        {
+            var entries = new List<ResourceCacheProfilerEntry>(_map.Count);
+            var node = _lruList.First;
+            var lruIndex = 0;
+
+            while (node != null)
+            {
+                entries.Add(new ResourceCacheProfilerEntry
+                {
+                    Path = node.Value.Path,
+                    ResourceTypeName = node.Value.Resource?.GetType().Name ?? "null",
+                    RefCount = node.Value.RefCount,
+                    LruIndex = lruIndex++,
+                });
+
+                node = node.Next;
+            }
+
+            return entries;
+        }
+
         /// <summary>
         /// 从尾部（最久未使用）开始淘汰一个框架引用计数为 0 的资源。
         /// 若所有资源均被引用则打印警告并跳过淘汰。

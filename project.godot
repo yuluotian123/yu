@@ -15,6 +15,11 @@ run/main_scene="uid://cxmq653vygak8"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [dotnet]
 
 project/assembly_name="yu"
@@ -64,3 +69,4 @@ combat_sprint={
 
 rendering_device/driver.windows="d3d12"
 lights_and_shadows/use_physical_light_units=true
+2d/snap/snap_2d_transforms_to_pixel=true

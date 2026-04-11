@@ -61,8 +61,9 @@ namespace Framework
 
         public void Tick(IResourceCache cache, bool enableLog = false)
         {
+            var taskSnapshot = new List<KeyValuePair<string, ResourceLoadTask>>(_allTasks);
             _completedPaths.Clear();
-            foreach (var pair in _allTasks)
+            foreach (var pair in taskSnapshot)
             {
                 if (!pair.Value.IsStarted)
                     continue;
@@ -84,8 +85,9 @@ namespace Framework
 
         public ResourceLoaderProfilerSnapshot GetProfilerSnapshot()
         {
-            var tasks = new List<ResourceLoadTaskProfilerEntry>(_allTasks.Count);
-            foreach (var task in _allTasks.Values)
+            var taskSnapshot = new List<ResourceLoadTask>(_allTasks.Values);
+            var tasks = new List<ResourceLoadTaskProfilerEntry>(taskSnapshot.Count);
+            foreach (var task in taskSnapshot)
                 tasks.Add(task.GetProfilerEntry());
 
             return new ResourceLoaderProfilerSnapshot
@@ -100,7 +102,8 @@ namespace Framework
 
         public void Shutdown(string reason = null)
         {
-            foreach (var task in _allTasks.Values)
+            var taskSnapshot = new List<ResourceLoadTask>(_allTasks.Values);
+            foreach (var task in taskSnapshot)
                 task.CancelAll(reason);
 
             _allTasks.Clear();

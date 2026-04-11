@@ -27,12 +27,11 @@ namespace GameLogic.UI
     /// </code>
     /// </para>
     /// </summary>
-    [Window(UILayer.Normal, "res://assets/minigame/ui/main_menu_window.tscn", fullScreen: true)]
+    [Window(UILayer.Normal, "res://assets/scenes/ui/main_menu_window.tscn", fullScreen: true)]
     public class MainMenuWindow : UIWindow
     {
         // ── [UIBind] 自动绑定 ──────────────────────
         [UIBind("%")] private Button _btnStart;
-        [UIBind("%")] private Button _btnBag;
         [UIBind("%")] private Button _btnQuit;
         [UIBind("%")] private Label  _labelVersion;
         [UIBind("%")] private Control _panelNotice;
@@ -69,7 +68,6 @@ namespace GameLogic.UI
             Debugger.Info("[MainMenuWindow] OnCreate");
 
             _btnStart.Pressed += OnStartClicked;
-            _btnBag.Pressed   += OnBagClicked;
             _btnQuit.Pressed  += OnQuitClicked;
         }
 
@@ -106,13 +104,6 @@ namespace GameLogic.UI
             ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameStart);
             
             //ModuleSystem.GetModule<IProcedureModule>();
-        }
-
-        private void OnBagClicked()
-        {
-            Debugger.Info("[MainMenuWindow] 打开背包");
-            //ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "打开背包界面！");
-            ModuleSystem.GetModule<IUIModule>().ShowUI<BagWindow>();
         }
 
         private void OnQuitClicked()

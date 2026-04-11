@@ -7,6 +7,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 1
+focus_behavior_recursive = 1
 
 [node name="Background" type="ColorRect" parent="." unique_id=746240308]
 unique_name_in_owner = true
@@ -54,13 +56,6 @@ custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "开始游戏"
-
-[node name="BtnBag" type="Button" parent="VBoxContainer" unique_id=253666105]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "背包"
 
 [node name="BtnQuit" type="Button" parent="VBoxContainer" unique_id=791819802]
 unique_name_in_owner = true

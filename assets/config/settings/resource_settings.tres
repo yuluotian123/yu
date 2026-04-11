@@ -4,6 +4,5 @@
 
 [resource]
 script = ExtResource("1_xy1vs")
-MaxCacheSize = 2
-ShowProfilerOverlayOnStart = true
+ProfilerOverlayMaxRows = 24
 metadata/_custom_type_script = "uid://cf1udippv1uxu"

@@ -64,7 +64,7 @@ public partial class ConfigPlugin : EditorPlugin
     {
         _toolbarBtn = new Button
         {
-            Text        = GetXlsxDirLabel(ConfigConverterWindow.DefaultXlsxDir),
+            Text        = GetXlsxDirLabel(ConfigConverterWindow.GetXlsxPath()),
             TooltipText = "打开配置表转换工具",
             FocusMode   = Control.FocusModeEnum.None,
         };

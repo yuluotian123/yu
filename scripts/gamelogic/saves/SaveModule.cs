@@ -23,7 +23,7 @@ namespace GameLogic.Save
 
         private static readonly JsonSerializerOptions _writeOpts = new() { WriteIndented = true };
 
-        public override int Priority => 0;
+        public override int Priority => -100;
 
         public override void OnInit() { }
 

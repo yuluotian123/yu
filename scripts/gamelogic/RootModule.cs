@@ -1,6 +1,9 @@
 using System;
 using Framework;
 using Framework.UI;
+using GameLogic.Input;
+using GameLogic.Mission;
+using GameLogic.Save;
 using Godot;
 
 
@@ -24,8 +27,8 @@ public sealed partial class RootModule : Node
     [Export]
     private float gameSpeed = 1f;
 
-     [Export]
-     public Settings settings;
+    [Export]
+    public Settings settings;
 
     /// <summary>
     /// 获取或设置游戏帧率。
@@ -68,14 +71,24 @@ public sealed partial class RootModule : Node
         Debugger.Info("======= Init Module =======");
 
         GameTime = new GameTime();
+
+        //初始化各个模块，现在没有先后次序区别
         ModuleSystem.GetModule<IFsmModule>();
-        ModuleSystem.GetModule<IUIModule>();   // 初始化 UIModule，创建各层 CanvasLayer
+        ModuleSystem.GetModule<IUIModule>();
+        ModuleSystem.GetModule<ISaveModule>();
+        ModuleSystem.GetModule<IMissionModule>();
+        ModuleSystem.GetModule<IEventModule>();
+        ModuleSystem.GetModule<IResourceModule>();
+        ModuleSystem.GetModule<IConfigModule>();
+        ModuleSystem.GetModule<IInputModule>();
+        ModuleSystem.GetModule<IObjectPoolModule>();
+
         var procedureModule = ModuleSystem.GetModule<IProcedureModule>();
 
         Debugger.Info("======= Entrance GameEntry =======");
-        ProcedureBase[] gameProcedures = new ProcedureBase[] {new PreloadProcedure(), new MainMenuProcedure(), new LevelProcedure() };
+        ProcedureBase[] gameProcedures = [new PreloadProcedure(), new MainMenuProcedure(), new LevelProcedure()];
         procedureModule.Initialize(ModuleSystem.GetModule<IFsmModule>(), gameProcedures);
-        procedureModule.StartProcedure<PreloadProcedure>();
+        procedureModule.StartProcedure<MainMenuProcedure>();
     }
 
     public override void _Process(double delta)

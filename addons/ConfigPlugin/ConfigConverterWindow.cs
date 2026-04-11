@@ -64,6 +64,12 @@ public partial class ConfigConverterWindow : Window
         SizeChanged += SyncRootSize;
     }
 
+    public static string GetXlsxPath()
+    {
+         var es = EditorInterface.Singleton.GetEditorSettings();
+        return ReadSetting(es,KeyXlsx,      DefaultXlsxDir);
+    }
+
     // ── 构建 UI ───────────────────────────────────────────────────────────────
 
     private void BuildUI()

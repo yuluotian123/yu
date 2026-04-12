@@ -2,26 +2,29 @@ using System;
 using Framework;
 using Framework.UI;
 using GameLogic;
+using GameLogic.Input;
 using GameLogic.UI;
 using Godot;
 
 /// <summary>
-/// 主菜单界面，需要的功能为：设置，读档，开启游戏...
+/// 主菜单流程。
 /// </summary>
 public class MainMenuProcedure : ProcedureBase
 {
     private IFsm<IProcedureModule> _procedureOwner;
+    private IInputModule _inputModule;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
         Debugger.Info("Enter MainMenuProcedure");
 
         base.OnInit(procedureOwner);
-        
+
         _procedureOwner = procedureOwner;
+        _inputModule = ModuleSystem.GetModule<IInputModule>();
 
         ModuleSystem.GetModule<IUIModule>().ShowUIAsync<MainMenuWindow>(
-            t => { ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "这是一个游戏通知事件"); },
+            _ => { ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "这是一个游戏通知事件"); },
             "v1.0.0");
         ModuleSystem.GetModule<IEventModule>().Subscribe(GameUIEvents.GameStart, LoadIntoPreload);
     }
@@ -30,9 +33,9 @@ public class MainMenuProcedure : ProcedureBase
     {
         base.OnProcess(procedureOwner, elapseSeconds, realElapseSeconds);
 
-        if (Input.IsActionJustPressed("ui_cancel"))
+        if (_inputModule != null && _inputModule.TryHandleJustPressed("ui_cancel"))
         {
-            Debugger.Info("[MainMenuProcedure] 按下取消键，退出游戏");
+            Debugger.Info("[MainMenuProcedure] 按下取消键，退出游戏。");
             if (Engine.GetMainLoop() is SceneTree tree)
                 tree.Quit();
         }

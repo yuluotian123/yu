@@ -1,20 +1,24 @@
 using Framework;
 using Framework.UI;
+using GameLogic;
+using GameLogic.Input;
 using GameLogic.Save;
 using GameLogic.UI;
 using Godot;
 
 /// <summary>
-/// 进入正式的关卡界面，理论上还需要有个读条procedure，用于加载存档数据和世界初始化数据并处理，目前不晓得有什么数据结构，所以无所吊慰
+/// 关卡流程。
 /// </summary>
 public class LevelProcedure : ProcedureBase
 {
+    private IInputModule _inputModule;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
     {
         Debugger.Info("Enter LevelProcedure");
         RootModule.Instance?.ResetNormalGameSpeed();
         ModuleSystem.GetModule<IUIModule>().ShowUI<LevelWindow>();
+        _inputModule = ModuleSystem.GetModule<IInputModule>();
     }
 
     protected internal override void OnLeave(IFsm<IProcedureModule> procedureOwner, bool isShutdown)
@@ -27,13 +31,13 @@ public class LevelProcedure : ProcedureBase
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
-        //if(Input.IsActionJustPressed("camera_down"))
+        //if(_inputModule != null && _inputModule.TryHandleJustPressed("camera_down"))
         //{
         //    ModuleSystem.GetModule<ISaveModule>().Save();
         //}
-        
-        //进入主菜单(临时)
-        if (Input.IsActionJustPressed("ui_cancel"))
+
+        // 进入主菜单（临时）
+        if (_inputModule != null && _inputModule.TryHandleJustPressed("ui_cancel"))
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {
@@ -41,13 +45,10 @@ public class LevelProcedure : ProcedureBase
                 if (levelNode != null)
                 {
                     levelNode.QueueFree();
-
                 }
 
                 ChangeState<MainMenuProcedure>(procedureOwner);
             }
-
         }
-
     }
 }

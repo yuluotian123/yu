@@ -3,50 +3,94 @@ using Godot;
 namespace GameLogic.Input
 {
     /// <summary>
-    /// 输入模块接口。
-    /// 基于 Godot 原生 Input 系统和 InputEvent 机制，提供动作游戏所需的增强功能。
+    /// 统一的 action 输入访问入口。
     /// </summary>
     public interface IInputModule
     {
         /// <summary>
-        /// 检查动作是否按下（持续）。
+        /// 查询 action 是否处于按住状态。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         bool IsPressed(string action);
 
         /// <summary>
-        /// 检查动作是否刚按下（本帧）。
+        /// 查询 action 是否在当前帧刚刚按下。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         bool IsJustPressed(string action);
 
         /// <summary>
-        /// 检查动作是否刚释放（本帧）。
+        /// 查询 action 是否在当前帧刚刚松开。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         bool IsJustReleased(string action);
 
         /// <summary>
-        /// 显式处理并消费本帧刚按下的动作。
+        /// 尝试接管一个持续按住中的 action。
+        /// 接管成功后，会在当前层建立 held consume，直到输入失效。
+        /// </summary>
+        bool TryHandlePressed(string action, string handlerLayer = null);
+
+        /// <summary>
+        /// 尝试接管当前帧刚按下的 action。
+        /// 这是逐帧 consume，只影响当前帧。
         /// </summary>
         bool TryHandleJustPressed(string action, string handlerLayer = null);
 
         /// <summary>
-        /// 显式处理并消费本帧刚释放的动作。
+        /// 尝试接管当前帧刚松开的 action。
+        /// 这是逐帧 consume，只影响当前帧。
         /// </summary>
         bool TryHandleJustReleased(string action, string handlerLayer = null);
 
         /// <summary>
-        /// 获取动作的强度（0-1，用于扳机等模拟输入）。
+        /// 查询 action 当前强度。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         float GetActionStrength(string action);
 
         /// <summary>
-        /// 获取轴向输入（如 WASD 或摇杆）。
+        /// 尝试读取并接管 action 当前强度。
+        /// 只有强度大于 0 时才会接管成功。
+        /// </summary>
+        bool TryHandleActionStrength(string action, out float strength, string handlerLayer = null);
+
+        /// <summary>
+        /// 查询四个方向 action 组成的轴向输入。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         Vector2 GetAxis(string negativeX, string positiveX, string negativeY, string positiveY);
 
         /// <summary>
-        /// 获取向量输入（Godot 4.x 新 API）。
+        /// 尝试读取并接管四个方向 action 组成的轴向输入。
+        /// 只有结果非零时才会接管成功。
+        /// </summary>
+        bool TryHandleAxis(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            out Vector2 axis,
+            string handlerLayer = null);
+
+        /// <summary>
+        /// 查询四个方向 action 组成的向量输入。
+        /// 这是纯查询接口，不会建立 consume 或 held lock。
         /// </summary>
         Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1f);
+
+        /// <summary>
+        /// 尝试读取并接管四个方向 action 组成的向量输入。
+        /// 只有结果非零时才会接管成功。
+        /// </summary>
+        bool TryHandleVector(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            out Vector2 vector,
+            string handlerLayer = null,
+            float deadzone = -1f);
 
         /// <summary>
         /// 获取当前帧鼠标位移。
@@ -54,62 +98,70 @@ namespace GameLogic.Input
         Vector2 GetMouseDelta();
 
         /// <summary>
-        /// 检查动作是否在缓冲时间内被按下（输入缓冲，动作游戏核心）。
+        /// 查询 action 是否仍在输入缓冲窗口内。
         /// </summary>
         bool IsBuffered(string action, float bufferTime);
 
         /// <summary>
-        /// 获取动作持续按下的时间。
+        /// 获取 action 按住持续时间。
         /// </summary>
         float GetHoldTime(string action);
 
         /// <summary>
-        /// 启用输入层。
+        /// 启用指定输入层。
         /// </summary>
         void EnableLayer(string layerName);
 
         /// <summary>
-        /// 禁用输入层。
+        /// 禁用指定输入层。
         /// </summary>
         void DisableLayer(string layerName);
 
         /// <summary>
-        /// 检查输入层是否启用。
+        /// 查询指定输入层是否启用。
         /// </summary>
         bool IsLayerEnabled(string layerName);
 
         /// <summary>
-        /// 消费动作，使更低优先级层在本帧内无法再次处理。
+        /// 按当前 InputMap 配置重新构建 action 缓存和 action group。
+        /// 当运行时修改了 InputMap 后，可手动调用这个接口同步缓存。
+        /// </summary>
+        void RefreshActionCache();
+
+        /// <summary>
+        /// 手动消费一个 action。
+        /// 会按 action group 规则一起扩展消费。
         /// </summary>
         void ConsumeAction(string action, string handlerLayer = null);
 
         /// <summary>
-        /// 检查动作是否已被更高优先级层消费。
+        /// 查询一个 action 是否已被更高层消费。
+        /// 会按 action group 规则一起判断。
         /// </summary>
         bool IsActionConsumed(string action, string handlerLayer = null);
 
         /// <summary>
-        /// 清除所有输入缓冲。
+        /// 清空输入缓冲。
         /// </summary>
         void ClearBuffer();
 
         /// <summary>
-        /// 消费缓冲的动作（使其失效）。
+        /// 手动消费一个缓冲中的 action。
         /// </summary>
         void ConsumeBufferedAction(string action);
 
         /// <summary>
-        /// 模拟输入事件（运行时注入）。
+        /// 注入一个原始输入事件。
         /// </summary>
         void SimulateInputEvent(InputEvent @event);
 
         /// <summary>
-        /// 模拟动作按下。
+        /// 模拟按下一个 action。
         /// </summary>
         void SimulateActionPress(string action, float strength = 1.0f);
 
         /// <summary>
-        /// 模拟动作释放。
+        /// 模拟松开一个 action。
         /// </summary>
         void SimulateActionRelease(string action);
     }

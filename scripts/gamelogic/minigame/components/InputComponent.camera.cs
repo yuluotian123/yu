@@ -17,13 +17,16 @@ public partial class InputComponent : Component
 
     public void OnCameraInputUpdate(double delta)
     {     
-        //camera movement
-        CameraMoveAxis = _inputModule.GetVector("camera_left", "camera_right", "camera_up", "camera_down");
-        IsSpeedupPressed = _inputModule.IsPressed("camera_speedup");
+        // camera movement uses held-input handling so higher layers can capture it.
+        if (!_inputModule.TryHandleVector("camera_left", "camera_right", "camera_up", "camera_down", out var cameraMoveAxis))
+            cameraMoveAxis = Vector2.Zero;
+
+        CameraMoveAxis = cameraMoveAxis;
+        IsSpeedupPressed = _inputModule.TryHandlePressed("camera_speedup");
         CameraDragDelta = _inputModule.GetMouseDelta();
-        IsDraggingCamera = _inputModule.IsPressed("camera_drag");
-        ZoomInRequested = _inputModule.IsJustPressed("camera_zoom_in");
-        ZoomOutRequested = _inputModule.IsJustPressed("camera_zoom_out");
+        IsDraggingCamera = _inputModule.TryHandlePressed("camera_drag");
+        ZoomInRequested = _inputModule.TryHandleJustPressed("camera_zoom_in");
+        ZoomOutRequested = _inputModule.TryHandleJustPressed("camera_zoom_out");
     }
 
     public void OnCameraInputDestroy()

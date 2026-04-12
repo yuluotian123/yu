@@ -1,15 +1,22 @@
-﻿
 using Framework;
+using GameLogic;
+using GameLogic.Input;
 using Godot;
 
 public partial class Example : Node3D
 {
     [Export] private MissionGraph chain;
 
+    private IInputModule _inputModule;
+
+    public override void _Ready()
+    {
+        _inputModule = ModuleSystem.GetModule<IInputModule>();
+    }
+
     public override void _Process(double delta)
     {
-       
-        if (Input.IsActionJustPressed("combat_up"))
+        if (_inputModule != null && _inputModule.TryHandleJustPressed("combat_up"))
         {
             Debugger.Info("Start Chain");
             GameAPI.MissionChainManager.StartChain(chain);
@@ -44,8 +51,5 @@ public partial class Example : Node3D
         {
             GameAPI.Load();
         }
-
-
-
     }
 }

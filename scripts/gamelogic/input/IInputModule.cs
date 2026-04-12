@@ -24,6 +24,16 @@ namespace GameLogic.Input
         bool IsJustReleased(string action);
 
         /// <summary>
+        /// 显式处理并消费本帧刚按下的动作。
+        /// </summary>
+        bool TryHandleJustPressed(string action, string handlerLayer = null);
+
+        /// <summary>
+        /// 显式处理并消费本帧刚释放的动作。
+        /// </summary>
+        bool TryHandleJustReleased(string action, string handlerLayer = null);
+
+        /// <summary>
         /// 获取动作的强度（0-1，用于扳机等模拟输入）。
         /// </summary>
         float GetActionStrength(string action);
@@ -37,6 +47,11 @@ namespace GameLogic.Input
         /// 获取向量输入（Godot 4.x 新 API）。
         /// </summary>
         Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1f);
+
+        /// <summary>
+        /// 获取当前帧鼠标位移。
+        /// </summary>
+        Vector2 GetMouseDelta();
 
         /// <summary>
         /// 检查动作是否在缓冲时间内被按下（输入缓冲，动作游戏核心）。
@@ -62,6 +77,16 @@ namespace GameLogic.Input
         /// 检查输入层是否启用。
         /// </summary>
         bool IsLayerEnabled(string layerName);
+
+        /// <summary>
+        /// 消费动作，使更低优先级层在本帧内无法再次处理。
+        /// </summary>
+        void ConsumeAction(string action, string handlerLayer = null);
+
+        /// <summary>
+        /// 检查动作是否已被更高优先级层消费。
+        /// </summary>
+        bool IsActionConsumed(string action, string handlerLayer = null);
 
         /// <summary>
         /// 清除所有输入缓冲。

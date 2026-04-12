@@ -20,23 +20,23 @@ namespace GameLogic.Input
     {
         private readonly InputTracker _tracker = new InputTracker();
         private readonly InputLayerManager _layerManager = new InputLayerManager();
-        private List<string> _cachedActions; // 缓存动作列表，避免每帧重新获取
+        private List<string> _cachedActions;
 
         private double _currentTime;
+        private Vector2 _mousePositionLastFrame = Vector2.Zero;
+        private Vector2 _mouseDeltaFrame = Vector2.Zero;
+        private bool _hasMousePositionLastFrame;
 
-        public override int Priority => 10; // 输入模块优先级较高
+        public override int Priority => 10;
 
         public override void OnInit()
         {
-            // 初始化默认输入层
             _layerManager.AddLayer("Global", InputLayerManager.LayerPriority.Global);
             _layerManager.AddLayer("Combat", InputLayerManager.LayerPriority.Combat);
             _layerManager.AddLayer("UI", InputLayerManager.LayerPriority.UI);
             _layerManager.AddLayer("Camera", InputLayerManager.LayerPriority.Camera);
 
-            // 缓存动作列表，避免每帧重新获取
             CacheActions();
-
             Debugger.Info("[InputModule] Initialized with unified InputTracker.");
         }
 
@@ -44,19 +44,18 @@ namespace GameLogic.Input
         {
             _tracker.Clear();
             _cachedActions?.Clear();
+            _mousePositionLastFrame = Vector2.Zero;
+            _mouseDeltaFrame = Vector2.Zero;
+            _hasMousePositionLastFrame = false;
         }
 
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
             _currentTime += realElapseSeconds;
+            UpdateMouseDelta();
 
-            // 1. 更新追踪器（包含持续时间更新和过期清理）
             _tracker.Update(_currentTime, realElapseSeconds);
-
-            // 2. 清除层消费状态
             _layerManager.ClearAllConsumed();
-
-            // 3. 记录本帧的输入事件
             RecordInputEvents();
         }
 
@@ -64,16 +63,38 @@ namespace GameLogic.Input
         {
             _cachedActions = new List<string>();
             var actionList = Godot.InputMap.GetActions();
-            
+
             foreach (var action in actionList)
             {
                 _cachedActions.Add(action.ToString());
             }
         }
 
+        private void UpdateMouseDelta()
+        {
+            if (Engine.GetMainLoop() is not SceneTree tree || tree.Root == null)
+            {
+                _mouseDeltaFrame = Vector2.Zero;
+                _hasMousePositionLastFrame = false;
+                return;
+            }
+
+            Vector2 currentMousePosition = tree.Root.GetMousePosition();
+
+            if (!_hasMousePositionLastFrame)
+            {
+                _mouseDeltaFrame = Vector2.Zero;
+                _mousePositionLastFrame = currentMousePosition;
+                _hasMousePositionLastFrame = true;
+                return;
+            }
+
+            _mouseDeltaFrame = currentMousePosition - _mousePositionLastFrame;
+            _mousePositionLastFrame = currentMousePosition;
+        }
+
         private void RecordInputEvents()
         {
-            // 使用缓存的动作列表，避免每帧重新获取
             foreach (var action in _cachedActions)
             {
                 if (Godot.Input.IsActionJustPressed(action))
@@ -87,11 +108,8 @@ namespace GameLogic.Input
             }
         }
 
-        // ==================== IInputModule 接口实现 ====================
-
         public bool IsPressed(string action)
         {
-            // 检查 action 所属的层是否启用
             if (!_layerManager.IsActionLayerEnabled(action))
                 return false;
 
@@ -114,6 +132,36 @@ namespace GameLogic.Input
             return Godot.Input.IsActionJustReleased(action);
         }
 
+        public bool TryHandleJustPressed(string action, string handlerLayer = null)
+        {
+            if (!TryGetEnabledHandlerLayer(action, handlerLayer, out var layer))
+                return false;
+
+            if (_layerManager.IsActionConsumed(action, layer.Priority))
+                return false;
+
+            if (!Godot.Input.IsActionJustPressed(action))
+                return false;
+
+            layer.ConsumeAction(action);
+            return true;
+        }
+
+        public bool TryHandleJustReleased(string action, string handlerLayer = null)
+        {
+            if (!TryGetEnabledHandlerLayer(action, handlerLayer, out var layer))
+                return false;
+
+            if (_layerManager.IsActionConsumed(action, layer.Priority))
+                return false;
+
+            if (!Godot.Input.IsActionJustReleased(action))
+                return false;
+
+            layer.ConsumeAction(action);
+            return true;
+        }
+
         public float GetActionStrength(string action)
         {
             if (!_layerManager.IsActionLayerEnabled(action))
@@ -132,6 +180,11 @@ namespace GameLogic.Input
         public Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1f)
         {
             return Godot.Input.GetVector(negativeX, positiveX, negativeY, positiveY, deadzone);
+        }
+
+        public Vector2 GetMouseDelta()
+        {
+            return _mouseDeltaFrame;
         }
 
         public bool IsBuffered(string action, float bufferTime)
@@ -157,6 +210,22 @@ namespace GameLogic.Input
         public bool IsLayerEnabled(string layerName)
         {
             return _layerManager.IsLayerEnabled(layerName);
+        }
+
+        public void ConsumeAction(string action, string handlerLayer = null)
+        {
+            if (!TryGetEnabledHandlerLayer(action, handlerLayer, out var layer))
+                return;
+
+            layer.ConsumeAction(action);
+        }
+
+        public bool IsActionConsumed(string action, string handlerLayer = null)
+        {
+            if (!TryGetEnabledHandlerLayer(action, handlerLayer, out var layer))
+                return false;
+
+            return _layerManager.IsActionConsumed(action, layer.Priority);
         }
 
         public void ClearBuffer()
@@ -194,6 +263,25 @@ namespace GameLogic.Input
                 Strength = 0f
             };
             Godot.Input.ParseInputEvent(actionEvent);
+        }
+
+        private bool TryGetEnabledHandlerLayer(string action, string handlerLayer, out InputLayer layer)
+        {
+            string layerName = ResolveHandlerLayerName(action, handlerLayer);
+            layer = _layerManager.GetLayer(layerName);
+
+            if (layer == null || !layer.IsEnabled)
+                return false;
+
+            return true;
+        }
+
+        private string ResolveHandlerLayerName(string action, string handlerLayer)
+        {
+            if (!string.IsNullOrWhiteSpace(handlerLayer))
+                return handlerLayer;
+
+            return _layerManager.GetActionLayer(action);
         }
     }
 }

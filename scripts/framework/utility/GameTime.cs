@@ -135,6 +135,11 @@ namespace Framework
             InFixedTimeStep = false;
         }
 
+        public void SyncRealtimeClock()
+        {
+            _lastRealtime = GetRealtimeSeconds();
+        }
+
         /// <summary>
         /// 获取真实运行时间（秒）
         /// 等价于 Godot Time.GetTicksUsec() / 1_000_000.0

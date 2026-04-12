@@ -26,14 +26,16 @@ namespace GameLogic.UI
             {
                 RootModule.Instance.ResumeGame();
                 RootModule.Instance.GameSpeed = 1f;
-
             }
         }
 
         private static void OnSpeedX2Clicked()
         {
             if (RootModule.Instance != null)
+            {
+                RootModule.Instance.ResumeGame();
                 RootModule.Instance.GameSpeed = 2f;
+            }
         }
     }
 }

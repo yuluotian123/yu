@@ -20,8 +20,6 @@ public sealed partial class RootModule : Node
 
     private const int DEFAULT_DPI = 96; // default windows dpi
 
-    private float _gameSpeedBeforePause = 1f;
-
     [Export]
     private int frameRate = 120;
 
@@ -52,7 +50,7 @@ public sealed partial class RootModule : Node
     /// <summary>
     /// 获取游戏是否暂停。
     /// </summary>
-    public bool IsGamePaused => gameSpeed <= 0f;
+    public bool IsGamePaused => GetTree()?.Paused ?? false;
 
     /// <summary>
     /// 获取是否正常游戏速度。
@@ -126,13 +124,11 @@ public sealed partial class RootModule : Node
     /// </summary>
     public void PauseGame()
     {
-        if (IsGamePaused)
-        {
+         var tree = GetTree();
+        if (tree == null || tree.Paused)
             return;
-        }
 
-        _gameSpeedBeforePause = GameSpeed;
-        GameSpeed = 0f;
+        tree.Paused = true;
     }
 
     /// <summary>
@@ -140,12 +136,14 @@ public sealed partial class RootModule : Node
     /// </summary>
     public void ResumeGame()
     {
-        if (!IsGamePaused)
-        {
+        var tree = GetTree();
+        if (tree == null || !tree.Paused)
             return;
-        }
 
-        GameSpeed = _gameSpeedBeforePause;
+
+        GameTime?.SyncRealtimeClock();
+   
+        tree.Paused = false;
     }
 
     /// <summary>

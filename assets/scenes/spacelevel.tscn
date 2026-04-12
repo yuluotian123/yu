@@ -13,6 +13,7 @@ tile_size = Vector2i(1376, 768)
 sources/0 = SubResource("TileSetAtlasSource_qbpkg")
 
 [node name="Spacelevel" type="Node2D" unique_id=2082760717]
+process_mode = 1
 
 [node name="BackGround" type="Node2D" parent="." unique_id=2039008415]
 
@@ -22,5 +23,3 @@ tile_set = SubResource("TileSet_sodt5")
 script = ExtResource("2_qbpkg")
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=739234607]
-drag_horizontal_enabled = true
-drag_vertical_enabled = true

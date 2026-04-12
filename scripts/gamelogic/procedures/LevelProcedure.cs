@@ -27,10 +27,11 @@ public class LevelProcedure : ProcedureBase
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
-        if(Input.IsActionJustPressed("combat_down"))
-        {
-            ModuleSystem.GetModule<ISaveModule>().Save();
-        }
+        //if(Input.IsActionJustPressed("camera_down"))
+        //{
+        //    ModuleSystem.GetModule<ISaveModule>().Save();
+        //}
+        
         //进入主菜单(临时)
         if (Input.IsActionJustPressed("ui_cancel"))
         {

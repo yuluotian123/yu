@@ -1,21 +1,16 @@
-
-
 using GameLogic;
 
 public partial class PlayerController : GameObjectBase
 {
     private InputComponent _inputComponent;
-    //储存玩家数据，在运行时会从玩家数据中读取并生成PlayerController中的内容
+    //private CameraComponent _cameraComponent;
     private PlayerState _playerState;
 
     public override void _Ready()
     {
         base._Ready();
-        _inputComponent = AddComponent<InputComponent>();   
+        _inputComponent = AddComponent<InputComponent>();
+        //_cameraComponent = AddComponent<CameraComponent>();
         _playerState = RootModule.Instance.GameState._PlayerState;
-
-        _playerState.Hp = 1;
     }
-
-
 }

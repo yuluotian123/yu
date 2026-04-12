@@ -5,6 +5,7 @@ namespace GameLogic
     /// <summary>
     /// 组件基类 - 既是配置也是运行时实例,可能会面临一些gc问题
     /// </summary>
+    [GlobalClass]
     public abstract partial class Component : Resource, IComponent
     {
         public GameObjectBase Owner { get; set; }

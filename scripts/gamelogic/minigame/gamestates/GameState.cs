@@ -10,22 +10,24 @@ public class GameState : ISaveable
     private ISaveModule _save;
 
     [JsonInclude]
-    public PlayerState MPlayerState{get;set;}
+    public PlayerState _PlayerState { get; set; }
 
     public GameState()
     {
-        MPlayerState = new PlayerState();
+        _PlayerState = new PlayerState();
 
         _save = ModuleSystem.GetModule<ISaveModule>();
     }
 
     public void Init()
     {
+        Debugger.Info("Init GameState");
         _save.Register(this);
     }
 
     public void Clear()
-    {        
+    {
+        Debugger.Info("Clear GameState");
         _save.Unregister(this);
     }
 

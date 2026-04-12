@@ -21,7 +21,6 @@ tile_map_data = PackedByteArray(0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0
 tile_set = SubResource("TileSet_sodt5")
 script = ExtResource("2_qbpkg")
 
-[node name="Node2D" type="Node2D" parent="." unique_id=458324852]
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=813873844]
-position = Vector2(-13, 0)
+[node name="MainCamera" type="Camera2D" parent="." unique_id=739234607]
+drag_horizontal_enabled = true
+drag_vertical_enabled = true

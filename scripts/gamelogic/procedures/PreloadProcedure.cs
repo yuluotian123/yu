@@ -48,13 +48,6 @@ public class PreloadProcedure : ProcedureBase
             Debugger.Info("testId:" + test.Id + " testName:" + test.Name + " testPara:" + test.Para + " testPara2" + test.Para2);
         }
 
-        var gameState = RootModule.Instance.State;
-        if (gameState != null)
-            gameState.Clear();
-
-        gameState = new GameState();
-        gameState.Init();
-
 
         //读取指定插槽的存档数据(所有需要写回的ISaveable此刻都需要完成register)
         if (_save.Load())
@@ -66,18 +59,23 @@ public class PreloadProcedure : ProcedureBase
 
         //加载关卡
         var levelhandle = _resource.LoadSceneAsync("res://assets/scenes/spacelevel.tscn");
+        var characterhandle = _resource.LoadSceneAsync("res://assets/scenes/playercontroller.tscn");
 
-        await Task.WhenAll(levelhandle.Task);
+        await Task.WhenAll(levelhandle.Task, characterhandle.Task);
 
-        Debugger.Info($"[LevelProcedure] Level场景加载完成: {levelhandle.Scene?.ResourcePath}");
+        Debugger.Info($"[PreloadProcedure] Level场景加载完成: {levelhandle.Scene?.ResourcePath}");
+        Debugger.Info($"[PreloadProcedure] Character场景加载完成: {characterhandle.Scene?.ResourcePath}");
 
-        if (levelhandle.IsValid)
+        if (levelhandle.IsValid && characterhandle.IsValid)
         {
-            Debugger.Info("[PreloadProcedure] Level场景已加载，切换关卡");
+            Debugger.Info("[PreloadProcedure] Level场景和关卡场景均已加载，切换关卡");
             ModuleSystem.GetModule<IUIModule>().CloseAll();
 
             if (Engine.GetMainLoop() is SceneTree tree)
-                levelhandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
+            {
+                var levelNode =levelhandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
+                characterhandle.InstantiateAndBind<Node>(levelNode);
+            }
 
             ChangeState<LevelProcedure>(procedureOwner);
         }

@@ -1,0 +1,16 @@
+{
+  "GameState": {
+	"$type": "GameState",
+	"SaveKey": "GameState",
+	"_PlayerState": {
+	  "$type": "PlayerState",
+	  "Hp": 1
+	}
+  },
+  "mission_system": {
+	"$type": "MissionChainSaver",
+	"SaveKey": "mission_system",
+	"Missions": [],
+	"Chains": []
+  }
+}

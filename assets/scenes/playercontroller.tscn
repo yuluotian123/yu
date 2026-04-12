@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d2wflqbnog5e1"]
+
+[ext_resource type="Script" uid="uid://dwm1o3onbybs2" path="res://scripts/gamelogic/minigame/characters/players/PlayerController.cs" id="1_qx1xt"]
+
+[node name="PlayerController" type="Node2D" unique_id=1891325619]
+script = ExtResource("1_qx1xt")

@@ -12,6 +12,9 @@ public partial class PlayerController : GameObjectBase
     {
         base._Ready();
         _inputComponent = AddComponent<InputComponent>();   
+        _playerState = RootModule.Instance.GameState._PlayerState;
+
+        _playerState.Hp = 1;
     }
 
 

@@ -49,7 +49,7 @@ namespace GameLogic
                 Component instance = null;
 
                 // 检查是否内联，如果内联则直接使用，不然则克隆组件（避免多个实例共享同一配置）
-                if (component.ResourcePath.Contains("::"))
+                if (component.ResourcePath.Contains("::")&& component.ResourceLocalToScene)
                     instance = component;
                 else
                     instance = component.Clone();

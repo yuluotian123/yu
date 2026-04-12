@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://ccdw07roav8o7"]
+
+[ext_resource type="Script" uid="uid://d1y8ye1vtcwq7" path="res://scripts/gamelogic/minigame/characters/players/PlayerUnit.cs" id="1"]
+[ext_resource type="Script" uid="uid://dlymcmhotnye6" path="res://scripts/gamelogic/gameobject/Component.cs" id="2_bl4ky"]
+[ext_resource type="Script" uid="uid://cudn8b7c8sxsn" path="res://scripts/gamelogic/minigame/components/MovementComponent.cs" id="3_a5ldh"]
+[ext_resource type="Texture2D" uid="uid://dryij6v3strbj" path="res://assets/textures/rocket.png" id="4_8hmo5"]
+
+[sub_resource type="Resource" id="Resource_00ome"]
+script = ExtResource("3_a5ldh")
+MoveSpeed = 50.0
+DrawMovePathOnlyWhenSelected = false
+metadata/_custom_type_script = "uid://cudn8b7c8sxsn"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y5n6h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_8hmo5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PlayerUnit" type="Node2D" unique_id=2090676282]
+process_mode = 1
+script = ExtResource("1")
+SelectionIndicatorPath = NodePath("WorldAnchor/SelectionIndicator")
+Components = Array[ExtResource("2_bl4ky")]([SubResource("Resource_00ome")])
+
+[node name="WorldAnchor" type="Node2D" parent="." unique_id=62015959]
+
+[node name="Body" type="AnimatedSprite2D" parent="WorldAnchor" unique_id=1897046148]
+scale = Vector2(0.125, 0.125)
+sprite_frames = SubResource("SpriteFrames_y5n6h")
+
+[node name="SelectionIndicator" type="Line2D" parent="WorldAnchor" unique_id=1900328457]
+visible = false
+points = PackedVector2Array(-36, -36, 36, -36, 36, 36, -36, 36)
+closed = true
+width = 3.0
+default_color = Color(0.3, 1, 0.45, 1)

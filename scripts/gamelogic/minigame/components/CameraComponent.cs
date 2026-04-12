@@ -45,9 +45,13 @@ public partial class CameraComponent : Component
             nextPosition += keyboardMove * moveSpeed;
         }
 
-        if (_inputComponent.IsDraggingCamera && _inputComponent.CameraDragDelta != Vector2.Zero)
+        if (!_inputComponent.IsPointerBlockedByUI)
         {
-            nextPosition -= _inputComponent.CameraDragDelta * DragSpeed * _camera.Zoom;
+
+            if (_inputComponent.IsDraggingCamera && _inputComponent.CameraDragDelta != Vector2.Zero)
+            {
+                nextPosition -= _inputComponent.CameraDragDelta * DragSpeed * _camera.Zoom;
+            }
         }
 
         _camera.Position = nextPosition;
@@ -62,6 +66,17 @@ public partial class CameraComponent : Component
     {
         _camera = null;
         _inputComponent = null;
+    }
+
+    /// <summary>
+    /// 立即将摄像机聚焦到指定世界坐标。
+    /// </summary>
+    public void FocusOn(Vector2 worldPosition)
+    {
+        if (!TryResolveDependencies())
+            return;
+
+        _camera.GlobalPosition = worldPosition;
     }
 
     private bool TryResolveDependencies()

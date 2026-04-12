@@ -129,6 +129,7 @@ namespace Framework
             if (type == typeof(float)) return JsonValue.Create((float)value);
             if (type == typeof(double)) return JsonValue.Create((double)value);
             if (type == typeof(string)) return JsonValue.Create((string)value);
+            if (type == typeof(Vector2)) return Vector2ToJsonNode((Vector2)value);
             if (type.IsEnum) return JsonValue.Create(value.ToString());
 
             // Godot Resource → 只保存路径引用
@@ -182,6 +183,8 @@ namespace Framework
         private static object JsonNodeToObject(JsonNode node, Type targetType)
         {
             if (node == null) return null;
+            if (targetType == typeof(Vector2))
+                return JsonNodeToValue(node, targetType);
 
             // ← 新增：JsonArray → List<T>
             if (node is JsonArray jArr)
@@ -278,6 +281,7 @@ namespace Framework
             if (targetType == typeof(float)) return (float)node.GetValue<double>();
             if (targetType == typeof(double)) return node.GetValue<double>();
             if (targetType == typeof(string)) return node.GetValue<string>();
+            if (targetType == typeof(Vector2)) return JsonNodeToVector2(node);
 
             if (targetType.IsEnum)
             {
@@ -328,6 +332,48 @@ namespace Framework
             }
             catch { }
             return null;
+        }
+
+        private static JsonObject Vector2ToJsonNode(Vector2 value)
+        {
+            return new JsonObject
+            {
+                ["$type"] = nameof(Vector2),
+                ["X"] = JsonValue.Create(value.X),
+                ["Y"] = JsonValue.Create(value.Y),
+            };
+        }
+
+        private static Vector2 JsonNodeToVector2(JsonNode node)
+        {
+            if (node is not JsonObject jObj)
+                return Vector2.Zero;
+
+            return new Vector2(
+                ReadSingle(jObj, "X", "x"),
+                ReadSingle(jObj, "Y", "y"));
+        }
+
+        private static float ReadSingle(JsonObject jObj, params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+            {
+                if (!jObj.TryGetPropertyValue(propertyName, out var valueNode) || valueNode == null)
+                    continue;
+
+                if (valueNode is not JsonValue jsonValue)
+                    continue;
+
+                try
+                {
+                    return (float)jsonValue.GetValue<double>();
+                }
+                catch
+                {
+                }
+            }
+
+            return 0f;
         }
 
         // ── 类型查找缓存 ──────────────────────────────────────────────────────

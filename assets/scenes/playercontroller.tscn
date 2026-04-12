@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://dwm1o3onbybs2" path="res://scripts/gamelogic/minigame/characters/players/PlayerController.cs" id="1_qx1xt"]
 [ext_resource type="Script" uid="uid://dlymcmhotnye6" path="res://scripts/gamelogic/gameobject/Component.cs" id="2_crkuy"]
 [ext_resource type="Script" uid="uid://cnu4thbuqbjjh" path="res://scripts/gamelogic/minigame/components/CameraComponent.cs" id="3_p4373"]
-[ext_resource type="Texture2D" uid="uid://dryij6v3strbj" path="res://assets/textures/rocket.png" id="4_vn7vb"]
+[ext_resource type="PackedScene" uid="uid://ccdw07roav8o7" path="res://assets/scenes/playerunit.tscn" id="4_ekfih"]
+[ext_resource type="Script" uid="uid://kpc4dk5c0a2i" path="res://scripts/gamelogic/minigame/components/PlayerArmyComponent.cs" id="4_vn7vb"]
 
 [sub_resource type="Resource" id="Resource_vn7vb"]
 script = ExtResource("3_p4373")
@@ -13,28 +14,17 @@ MinZoom = 1.0
 MaxZoom = 2.0
 metadata/_custom_type_script = "uid://cnu4thbuqbjjh"
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_p4373"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_vn7vb")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}]
+[sub_resource type="Resource" id="Resource_ekfih"]
+script = ExtResource("4_vn7vb")
+DefaultUnitScene = ExtResource("4_ekfih")
+DefaultSpawnSpacing = 100.0
+metadata/_custom_type_script = "uid://kpc4dk5c0a2i"
 
 [node name="PlayerController" type="Node2D" unique_id=1891325619]
+unique_name_in_owner = true
 script = ExtResource("1_qx1xt")
-Components = Array[ExtResource("2_crkuy")]([SubResource("Resource_vn7vb")])
+Components = Array[ExtResource("2_crkuy")]([SubResource("Resource_vn7vb"), SubResource("Resource_ekfih")])
 
 [node name="Player" type="Node2D" parent="." unique_id=90855055]
 
 [node name="Units" type="Node2D" parent="Player" unique_id=5046003]
-scale = Vector2(0.1, 0.1)
-
-[node name="Unit1" type="Node2D" parent="Player/Units" unique_id=1175536718]
-
-[node name="unitIcon" type="AnimatedSprite2D" parent="Player/Units/Unit1" unique_id=1023930713]
-sprite_frames = SubResource("SpriteFrames_p4373")
-animation = &"idle"

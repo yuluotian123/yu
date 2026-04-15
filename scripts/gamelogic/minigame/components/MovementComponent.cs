@@ -1,9 +1,10 @@
 using Framework;
 using GameLogic;
 using Godot;
+using System.Text.Json.Serialization;
 
 [GlobalClass]
-public partial class MovementComponent : Component
+public partial class MovementComponent : Component2D
 {
     [Export] public float MoveSpeed { get; set; } = 240f;
     [Export] public float StopDistance { get; set; } = 4f;
@@ -11,91 +12,69 @@ public partial class MovementComponent : Component
     [Export] public Color MovePathColor { get; set; } = new Color(0.35f, 0.95f, 0.55f, 0.95f);
     [Export] public float MovePathWidth { get; set; } = 3f;
 
-    private PlayerUnit _unit;
-    private Node2D _worldAnchor;
+    private SelectionComponent _selectionComponent;
+    private Node2D _transformNode2D;
     private Line2D _movePathIndicator;
-    private Vector2? _moveTarget;
+    [JsonInclude] private Vector2? _moveTarget;
 
-    /// <summary>
-    /// 获取组件执行优先级。
-    /// </summary>
     public override int Priority => ComponentPriority.Movement;
 
-    /// <summary>
-    /// 获取当前是否存在有效移动目标。
-    /// </summary>
     public bool HasMoveTarget => _moveTarget.HasValue;
 
-    /// <summary>
-    /// 获取当前移动目标点。
-    /// </summary>
     public Vector2? CurrentMoveTarget => _moveTarget;
 
-    /// <summary>
-    /// 初始化移动组件，并准备移动路径显示节点。
-    /// </summary>
     public override void OnInit()
     {
-        _unit = Owner as PlayerUnit;
-        _worldAnchor = _unit?.GetWorldAnchor();
+        _selectionComponent = Owner?.GetComponent<SelectionComponent>();
+        _transformNode2D = Owner;
         _movePathIndicator = SetupMovePathIndicator();
         RefreshMovePathVisual();
     }
 
-    /// <summary>
-    /// 在物理帧中推动单位朝目标点移动。
-    /// </summary>
     public override void OnPhysicsUpdate(double delta)
     {
-
         if ((_movePathIndicator?.Visible ?? false) || _moveTarget.HasValue)
             RefreshMovePathVisual();
 
-        if (!_moveTarget.HasValue || _worldAnchor == null)
+        if (!_moveTarget.HasValue || _transformNode2D == null)
             return;
 
-        Vector2 currentPosition = _worldAnchor.GlobalPosition;
+        Vector2 currentPosition = _transformNode2D.GlobalPosition;
         Vector2 targetPosition = _moveTarget.Value;
         float distance = currentPosition.DistanceTo(targetPosition);
 
         if (distance <= StopDistance)
         {
-            _worldAnchor.GlobalPosition = targetPosition;
+            _transformNode2D.GlobalPosition = targetPosition;
             ClearMoveTarget();
             return;
         }
 
         Vector2 direction = (targetPosition - currentPosition).Normalized();
         float step = MoveSpeed * (float)delta;
-        _worldAnchor.GlobalPosition = currentPosition + direction * Mathf.Min(step, distance);
+        _transformNode2D.GlobalPosition = currentPosition + direction * Mathf.Min(step, distance);
         RefreshMovePathVisual();
     }
 
-    /// <summary>
-    /// 设置新的移动目标点。
-    /// </summary>
     public void SetMoveTarget(Vector2 target)
     {
         _moveTarget = target;
         RefreshMovePathVisual();
     }
 
-    /// <summary>
-    /// 清空当前移动目标。
-    /// </summary>
     public void ClearMoveTarget()
     {
         _moveTarget = null;
         RefreshMovePathVisual();
     }
 
-    /// <summary>
-    /// 刷新移动路径线的显示状态和终点位置。
-    /// </summary>
     public void RefreshMovePathVisual()
     {
         if (_movePathIndicator == null)
             _movePathIndicator = SetupMovePathIndicator();
+
+        if (_movePathIndicator == null || _transformNode2D == null)
+            return;
 
         _movePathIndicator.Width = MovePathWidth;
         _movePathIndicator.DefaultColor = MovePathColor;
@@ -115,7 +94,7 @@ public partial class MovementComponent : Component
 
         _movePathIndicator.Visible = true;
         _movePathIndicator.SetPointPosition(0, Vector2.Zero);
-        _movePathIndicator.SetPointPosition(1, _worldAnchor.ToLocal(moveTarget.Value));
+        _movePathIndicator.SetPointPosition(1, _transformNode2D.ToLocal(moveTarget.Value));
     }
 
     private bool ShouldDrawMovePath()
@@ -123,15 +102,16 @@ public partial class MovementComponent : Component
         if (!_moveTarget.HasValue)
             return false;
 
-        return !DrawMovePathOnlyWhenSelected || (_unit?.IsSelected ?? false);
+        _selectionComponent ??= Owner?.GetComponent<SelectionComponent>();
+        return !DrawMovePathOnlyWhenSelected || (_selectionComponent?.IsSelected ?? false);
     }
 
     private Line2D SetupMovePathIndicator()
     {
-        if (_worldAnchor == null)
+        if (_transformNode2D == null)
             return null;
 
-        var existingIndicator = _worldAnchor.GetNodeOrNull<Line2D>("MovePathIndicator");
+        var existingIndicator = _transformNode2D.GetNodeOrNull<Line2D>("MovePathIndicator");
         if (existingIndicator != null)
             return existingIndicator;
 
@@ -145,7 +125,7 @@ public partial class MovementComponent : Component
             ZIndex = 1,
         };
 
-        _worldAnchor.AddChild(indicator);
+        _transformNode2D.AddChild(indicator);
         indicator.AddPoint(Vector2.Zero);
         indicator.AddPoint(Vector2.Zero);
         return indicator;

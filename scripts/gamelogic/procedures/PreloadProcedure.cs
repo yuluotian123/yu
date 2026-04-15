@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Framework;
 using Framework.UI;
+using GameLogic;
 using GameLogic.Save;
 using Generated.Config;
 using Godot;
@@ -13,7 +14,6 @@ public class PreloadProcedure : ProcedureBase
     private bool isPreload = false;
     private IResourceModule _resource;
     private IConfigModule _config;
-
     private ISaveModule _save;
 
     protected internal override void OnEnter(IFsm<IProcedureModule> procedureOwner)
@@ -30,58 +30,54 @@ public class PreloadProcedure : ProcedureBase
 
     private async Task Load(IFsm<IProcedureModule> procedureOwner)
     {
-        //是否是第一次进入游戏场景
+        //第一次进入时加载配置表和资源分包，后续进入不重复加载
         if (!isPreload)
         {
-            //异步加载所有表格
             var configTask = _config.LoadTableAsync<TestexcelConfig>();
-
-            //异步加载资源分包...
-
-
-
-            //等待全部执行完毕
             await Task.WhenAll(configTask);
 
-            //测试
             var test = _config.GetById<TestexcelConfig>(1);
             Debugger.Info("testId:" + test.Id + " testName:" + test.Name + " testPara:" + test.Para + " testPara2" + test.Para2);
         }
 
+        //预加载关卡和控制器场景，进入关卡后会实例化它们
+        var levelHandle = _resource.LoadSceneAsync("res://assets/scenes/spacelevel.tscn");
+        var controllerHandle = _resource.LoadSceneAsync("res://assets/scenes/minigamecontroller.tscn");
+        var gameState = RootModule.Instance.GameState;
 
-        //读取指定插槽的存档数据(所有需要写回的ISaveable此刻都需要完成register)
+        //尝试加载存档数据，如果存在则可以在后续流程中使用
         if (_save.Load())
         {
-
-
+            
         }
 
+        await Task.WhenAll(levelHandle.Task, controllerHandle.Task);
 
-        //加载关卡
-        var levelhandle = _resource.LoadSceneAsync("res://assets/scenes/spacelevel.tscn");
-        var characterhandle = _resource.LoadSceneAsync("res://assets/scenes/playercontroller.tscn");
-
-        await Task.WhenAll(levelhandle.Task, characterhandle.Task);
-
-        Debugger.Info($"[PreloadProcedure] Level场景加载完成: {levelhandle.Scene?.ResourcePath}");
-        Debugger.Info($"[PreloadProcedure] Character场景加载完成: {characterhandle.Scene?.ResourcePath}");
-
-        if (levelhandle.IsValid && characterhandle.IsValid)
+        Debugger.Info($"[PreloadProcedure] Level scene loaded: {levelHandle.Scene?.ResourcePath}");
+        Debugger.Info($"[PreloadProcedure] Controller scene loaded: {controllerHandle.Scene?.ResourcePath}");
+        
+        //只有当关卡和控制器场景都成功加载后才进入关卡流程
+        if (levelHandle.IsValid && controllerHandle.IsValid)
         {
-            Debugger.Info("[PreloadProcedure] Level场景和关卡场景均已加载，切换关卡");
+            Debugger.Info("[PreloadProcedure] Level and controller scenes are ready, entering level.");
             ModuleSystem.GetModule<IUIModule>().CloseAll();
 
             if (Engine.GetMainLoop() is SceneTree tree)
             {
-                var levelNode =levelhandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
-                characterhandle.InstantiateAndBind<Node>(levelNode);
+                var levelNode = levelHandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
+
+                var controllerNode = controllerHandle.Instantiate<Node>();
+                gameState.SetPlayerController(controllerNode as GameObject2D);
+                
+                levelNode.AddChild(controllerNode);
+                controllerHandle.BindTo(levelNode);
             }
 
             ChangeState<LevelProcedure>(procedureOwner);
         }
         else
         {
-            Debugger.Warn("[PreloadProcedure] Level场景未加载或加载失败");
+            Debugger.Warn("[PreloadProcedure] Failed to load level or controller scene.");
         }
 
         isPreload = true;

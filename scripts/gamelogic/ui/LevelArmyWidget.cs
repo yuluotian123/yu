@@ -1,62 +1,45 @@
-using Godot;
-using Framework.UI;
 using Framework;
+using Framework.UI;
+using Godot;
 
 namespace GameLogic.UI
 {
     /// <summary>
-    /// 关卡底部单位栏 Widget，负责展示玩家当前队列。
+    /// Bottom army widget that mirrors the current controllable roster.
     /// </summary>
     public class LevelArmyWidget : UIWidget
     {
         [UIBind("%")] private HBoxContainer _itemContainer;
 
         private PlayerArmyComponent _armyComponent;
+        private SelectableManagerComponent _selectableManager;
 
-        /// <summary>
-        /// 创建底部单位栏并完成首次刷新。
-        /// </summary>
         protected override void OnCreate()
         {
             RefreshArmyList();
         }
 
-        /// <summary>
-        /// 窗口刷新时同步底部单位栏内容。
-        /// </summary>
         protected override void OnRefresh()
         {
             RefreshArmyList();
         }
 
-        /// <summary>
-        /// 注册单位列表与选中状态变化事件。
-        /// </summary>
         public override void RegisterEvent()
         {
             AddUIEvent(GameRtsEvents.ArmyRosterChanged, OnArmyRosterChanged);
             AddUIEvent(GameRtsEvents.ArmySelectionChanged, OnArmySelectionChanged);
         }
 
-        /// <summary>
-        /// 当玩家单位列表变化时刷新底部列表。
-        /// </summary>
         private void OnArmyRosterChanged()
         {
             RefreshArmyList();
         }
 
-        /// <summary>
-        /// 当选中单位变化时刷新底部高亮。
-        /// </summary>
         private void OnArmySelectionChanged()
         {
             RefreshArmyList();
         }
 
-        /// <summary>
-        /// 根据当前玩家状态重建底部单位按钮列表。
-        /// </summary>
         private void RefreshArmyList()
         {
             if (_itemContainer == null)
@@ -65,37 +48,36 @@ namespace GameLogic.UI
             for (int i = _itemContainer.GetChildCount() - 1; i >= 0; i--)
                 _itemContainer.GetChild(i).QueueFree();
 
-            var playerState = ResolvePlayerState();
-            if (playerState == null)
+            _armyComponent = ResolveArmyComponent();
+            _selectableManager = ResolveSelectableManager();
+            if (_armyComponent == null)
                 return;
 
-            for (int i = 0; i < playerState.OwnedUnits.Count; i++)
+            for (int i = 0; i < _armyComponent.Units.Count; i++)
             {
-                var snapshot = playerState.OwnedUnits[i];
-                if (snapshot == null)
+                var unit = _armyComponent.Units[i];
+                var selectable = unit?.GetComponent<SelectionComponent>();
+                if (unit == null || selectable == null)
                     continue;
 
                 var itemRoot = CreateItemNode();
                 _itemContainer.AddChild(itemRoot);
 
                 var itemWidget = CreateWidget<LevelArmyItemWidget>(itemRoot);
-                itemWidget.SetData(snapshot, OnItemClicked);
-                itemWidget.SetSelected(snapshot.UnitId == playerState.SelectedUnitId);
+                itemWidget.SetData(unit, OnItemClicked);
+                itemWidget.SetSelected(ReferenceEquals(unit, _selectableManager?.SelectedUnit));
             }
         }
 
-        /// <summary>
-        /// 处理底部单位按钮点击事件。
-        /// </summary>
-        private void OnItemClicked(string unitId)
+        private void OnItemClicked(GameObject2D unit)
         {
-            _armyComponent = ResolveArmyComponent();
-            _armyComponent?.SelectUnitById(unitId, focusCamera: true);
+            if (unit == null)
+                return;
+
+            _selectableManager = ResolveSelectableManager();
+            _selectableManager?.Select(unit.GetComponent<SelectionComponent>());
         }
 
-        /// <summary>
-        /// 获取当前场景中的玩家军队组件。
-        /// </summary>
         private PlayerArmyComponent ResolveArmyComponent()
         {
             var tree = Engine.GetMainLoop() as SceneTree;
@@ -106,22 +88,60 @@ namespace GameLogic.UI
             if (levelRoot == null)
                 return null;
 
-            var playerController = levelRoot.GetNodeOrNull<PlayerController>("PlayerController");
-            Debugger.Info($"LevelArmyWidget resolved PlayerController: {playerController}");
-            return playerController?.GetComponent<PlayerArmyComponent>();
+            var levelArmy = ResolveArmyComponent(levelRoot);
+            if (levelArmy != null)
+                return levelArmy;
+
+            foreach (Node candidate in levelRoot.FindChildren("*", "", true, false))
+            {
+                var army = ResolveArmyComponent(candidate);
+                if (army != null)
+                    return army;
+            }
+
+            return null;
         }
 
-        /// <summary>
-        /// 获取当前玩家状态，用作底部单位栏的显示数据源。
-        /// </summary>
-        private static PlayerState ResolvePlayerState()
+        private static PlayerArmyComponent ResolveArmyComponent(Node node)
         {
-            return RootModule.Instance?.GameState?._PlayerState;
+            if (node is GameObject2D gameObject2D)
+                return gameObject2D.GetComponent<PlayerArmyComponent>();
+
+            return null;
         }
 
-        /// <summary>
-        /// 动态创建一个单位栏条目根节点。
-        /// </summary>
+        private SelectableManagerComponent ResolveSelectableManager()
+        {
+            var tree = Engine.GetMainLoop() as SceneTree;
+            if (tree == null)
+                return null;
+
+            var levelRoot = tree.Root.GetNodeOrNull<Node>("Root/Spacelevel");
+            if (levelRoot == null)
+                return null;
+
+            var manager = ResolveSelectableManager(levelRoot);
+            if (manager != null)
+                return manager;
+
+            foreach (Node candidate in levelRoot.FindChildren("*", "", true, false))
+            {
+                manager = ResolveSelectableManager(candidate);
+                if (manager != null)
+                    return manager;
+            }
+
+            return null;
+        }
+
+        private static SelectableManagerComponent ResolveSelectableManager(Node node)
+        {
+            if (node is GameObject2D gameObject2D)
+                return gameObject2D.GetComponent<SelectableManagerComponent>();
+
+            return null;
+        }
+
         private static Control CreateItemNode()
         {
             var root = new MarginContainer

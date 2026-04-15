@@ -120,13 +120,13 @@ namespace GameLogic.Input
         /// <inheritdoc />
         public bool TryHandlePressed(string action, string handlerLayer = null)
         {
-            if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
-                return false;
+            return TryConsumePressedInternal(action, handlerLayer);
+        }
 
-            if (!Godot.Input.IsActionPressed(actionInfo.RawActionName))
-                return false;
-
-            return TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName });
+        /// <inheritdoc />
+        public bool TryConsumePressed(string action, string handlerLayer = null)
+        {
+            return TryConsumePressedInternal(action, handlerLayer);
         }
 
         /// <inheritdoc />
@@ -249,22 +249,33 @@ namespace GameLogic.Input
             string handlerLayer = null,
             float deadzone = -1f)
         {
-            vector = Vector2.Zero;
-            if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
-                return false;
+            return TryConsumeVectorInternal(
+                negativeX,
+                positiveX,
+                negativeY,
+                positiveY,
+                out vector,
+                handlerLayer,
+                deadzone);
+        }
 
-            if (!TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out var layer))
-                return false;
-
-            Vector2 currentVector = ReadVector(actionInfos, deadzone);
-            if (currentVector == Vector2.Zero)
-                return false;
-
-            if (!TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos)))
-                return false;
-
-            vector = currentVector;
-            return true;
+        /// <inheritdoc />
+        public bool TryConsumeVector(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            string handlerLayer = null,
+            float deadzone = -1f)
+        {
+            return TryConsumeVectorInternal(
+                negativeX,
+                positiveX,
+                negativeY,
+                positiveY,
+                out _,
+                handlerLayer,
+                deadzone);
         }
 
         /// <inheritdoc />
@@ -582,6 +593,44 @@ namespace GameLogic.Input
             // action group 的展开统一放在 LayerManager 里，
             // 分组来源则由 InputMap action 名里的 groupId 解析结果驱动。
             return _layerManager.TryAcquireHeldLock(layer, baseActions);
+        }
+
+        private bool TryConsumePressedInternal(string action, string handlerLayer)
+        {
+            if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
+                return false;
+
+            if (!Godot.Input.IsActionPressed(actionInfo.RawActionName))
+                return false;
+
+            return TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName });
+        }
+
+        private bool TryConsumeVectorInternal(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            out Vector2 vector,
+            string handlerLayer,
+            float deadzone)
+        {
+            vector = Vector2.Zero;
+            if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
+                return false;
+
+            if (!TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out var layer))
+                return false;
+
+            Vector2 currentVector = ReadVector(actionInfos, deadzone);
+            if (currentVector == Vector2.Zero)
+                return false;
+
+            if (!TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos)))
+                return false;
+
+            vector = currentVector;
+            return true;
         }
 
         private bool IsActionStillActive(string action)

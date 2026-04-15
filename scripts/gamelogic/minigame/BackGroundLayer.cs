@@ -1,15 +1,13 @@
-using System.Diagnostics;
+using Framework;
 using Godot;
 
 /// <summary>
-/// 无限平铺背景组件 Godot 4.6 优化版
-/// 根据玩家/相机位置自动填充可见区域，永远不会出现空白边界
-/// 支持视差滚动，性能友好
+/// 鏃犻檺骞抽摵鑳屾櫙缁勪欢 Godot 4.6 浼樺寲鐗?/// 鏍规嵁鐜╁/鐩告満浣嶇疆鑷姩濉厖鍙鍖哄煙锛屾案杩滀笉浼氬嚭鐜扮┖鐧借竟鐣?/// 鏀寔瑙嗗樊婊氬姩锛屾€ц兘鍙嬪ソ
 /// </summary>
 public partial class BackGroundLayer : TileMapLayer
 {
 
-    [ExportGroup("瓦片设置")]
+    [ExportGroup("鐡︾墖璁剧疆")]
     [Export] public int TileSourceId = 0;
     [Export] public Vector2I AtlasCoordinate = Vector2I.Zero;
     [Export] public int ExtraMarginTiles = 1;
@@ -24,7 +22,7 @@ public partial class BackGroundLayer : TileMapLayer
         _tileSize = TileSet.TileSize;
         ZIndex = -100;
 
-        // 初始化时立即填充
+        // 鍒濆鍖栨椂绔嬪嵆濉厖
         UpdateVisibleTiles();
     }
 
@@ -37,26 +35,26 @@ public partial class BackGroundLayer : TileMapLayer
     {
         if (!IsInstanceValid(_camera))
         {
-            return; 
+            return;
         }
 
-        // Godot 4.6 正确API: 屏幕坐标转世界坐标
+        // Godot 4.6 姝ｇ‘API: 灞忓箷鍧愭爣杞笘鐣屽潗鏍?
         Rect2 viewRect = _camera.GetViewportRect();
-        Transform2D canvasXform = _camera.GetCanvasTransform().AffineInverse();
-        Vector2 viewTopLeft = canvasXform * viewRect.Position;
-        Vector2 viewBottomRight = canvasXform * viewRect.End;
+        Rect2 worldRect = ViewportInputUtility.ScreenRectToWorld(_camera.GetViewport(), viewRect);
+        Vector2 viewTopLeft = worldRect.Position;
+        Vector2 viewBottomRight = worldRect.End;
 
-        // 转换为瓦片网格坐标
+        // 杞崲涓虹摝鐗囩綉鏍煎潗鏍?
         Vector2I tileStart = (Vector2I)(viewTopLeft / _tileSize).Floor();
         Vector2I tileEnd = (Vector2I)(viewBottomRight / _tileSize).Ceil();
 
-        // 边缘扩展防止相机移动时边界闪烁
+        // 杈圭紭鎵╁睍闃叉鐩告満绉诲姩鏃惰竟鐣岄棯鐑?
         tileStart -= new Vector2I(ExtraMarginTiles, ExtraMarginTiles);
         tileEnd += new Vector2I(ExtraMarginTiles, ExtraMarginTiles);
 
         Rect2I newBounds = new Rect2I(tileStart, tileEnd - tileStart);
 
-        // 只有可见区域跨越瓦片边界时才更新 绝大多数帧直接跳过
+        // 鍙湁鍙鍖哄煙璺ㄨ秺鐡︾墖杈圭晫鏃舵墠鏇存柊 缁濆ぇ澶氭暟甯х洿鎺ヨ烦杩?
         if (newBounds == _lastViewportBounds)
             return;
 
@@ -64,7 +62,7 @@ public partial class BackGroundLayer : TileMapLayer
 
         Clear();
 
-        // 批量填充可见区域
+        // 鎵归噺濉厖鍙鍖哄煙
         int startX = newBounds.Position.X;
         int endX = newBounds.End.X;
         int startY = newBounds.Position.Y;
@@ -74,7 +72,7 @@ public partial class BackGroundLayer : TileMapLayer
         {
             for (int y = startY; y < endY; y++)
             {
-                // Godot 4.6 正确API
+                // Godot 4.6 姝ｇ‘API
                 SetCell(new Vector2I(x, y), TileSourceId, AtlasCoordinate);
             }
         }

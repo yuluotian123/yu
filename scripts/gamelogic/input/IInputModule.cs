@@ -32,6 +32,12 @@ namespace GameLogic.Input
         bool TryHandlePressed(string action, string handlerLayer = null);
 
         /// <summary>
+        /// 显式接管一个持续按住中的 action。
+        /// 适用于先用 IsPressed 或 IsJustPressed 做判断，再手动建立 held consume 的场景。
+        /// </summary>
+        bool TryConsumePressed(string action, string handlerLayer = null);
+
+        /// <summary>
         /// 尝试接管当前帧刚按下的 action。
         /// 这是逐帧 consume，只影响当前帧。
         /// </summary>
@@ -89,6 +95,18 @@ namespace GameLogic.Input
             string negativeY,
             string positiveY,
             out Vector2 vector,
+            string handlerLayer = null,
+            float deadzone = -1f);
+
+        /// <summary>
+        /// 显式接管四个方向 action 组成的向量输入。
+        /// 适用于先用 GetVector 做判断，再手动建立 held consume 的场景。
+        /// </summary>
+        bool TryConsumeVector(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
             string handlerLayer = null,
             float deadzone = -1f);
 

@@ -1,4 +1,5 @@
 using System;
+using GameLogic;
 using Godot;
 using Framework.UI;
 using Framework;
@@ -15,8 +16,8 @@ namespace GameLogic.UI
         [UIBind("Panel/Content/BtnSelect/VBox/LabelName")] private Label _labelName;
         [UIBind("Panel/Content/BtnSelect/VBox/LabelId")] private Label _labelId;
 
-        private string _unitId = string.Empty;
-        private Action<string> _onClick;
+        private GameObject2D _unit;
+        private Action<GameObject2D> _onClick;
 
         /// <summary>
         /// 创建条目并绑定点击事件。
@@ -39,32 +40,28 @@ namespace GameLogic.UI
         /// <summary>
         /// 设置条目显示的数据与点击回调。
         /// </summary>
-        public void SetData(PlayerUnitSnapshot snapshot, Action<string> onClick)
+        public void SetData(GameObject2D unit, Action<GameObject2D> onClick)
         {
-            if (snapshot == null)
+            var gameObject = unit as SerializableGameObject2D;
+            var selectable = gameObject?.GetComponent<SelectionComponent>();
+            if (unit == null || gameObject == null || selectable == null)
                 return;
 
-            _unitId = snapshot.UnitId;
+            _unit = unit;
             _onClick = onClick;
 
             if (_labelName != null)
-                _labelName.Text = ResolveDisplayName(snapshot);
+                _labelName.Text = ResolveDisplayName(gameObject);
 
             if (_labelId != null)
-                _labelId.Text = _unitId.Length > 8 ? _unitId[..8] : _unitId;
+                _labelId.Text = gameObject.Name;
         }
 
         /// <summary>
         /// 解析条目上显示的单位名称。
         /// </summary>
-        private static string ResolveDisplayName(PlayerUnitSnapshot snapshot)
+        private static string ResolveDisplayName(SerializableGameObject2D gameObject)
         {
-            if (!string.IsNullOrEmpty(snapshot.DisplayName))
-                return snapshot.DisplayName;
-
-            if (!string.IsNullOrEmpty(snapshot.UnitConfigId))
-                return snapshot.UnitConfigId;
-
             return "Unit";
         }
 
@@ -86,8 +83,8 @@ namespace GameLogic.UI
         /// </summary>
         private void OnPressed()
         {
-            Debugger.Info($"LevelArmyItemWidget pressed: {_unitId}");
-            _onClick?.Invoke(_unitId);
+            Debugger.Info($"LevelArmyItemWidget pressed: {_unit?.Name}");
+            _onClick?.Invoke(_unit);
         }
     }
 }

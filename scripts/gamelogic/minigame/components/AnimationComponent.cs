@@ -3,7 +3,7 @@ using GameLogic;
 using Godot;
 
 [GlobalClass]
-public partial class AnimationComponent : Component
+public partial class AnimationComponent : Component2D
 {
     public override int Priority => ComponentPriority.Animation;
 

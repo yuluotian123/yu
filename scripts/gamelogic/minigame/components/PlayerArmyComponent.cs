@@ -32,7 +32,7 @@ public partial class PlayerArmyComponent : Component2D
         _resourceModule = ModuleSystem.GetModule<IResourceModule>();
         _unitsRoot = Owner.GetNodeOrNull<Node>(UnitsRootPath) ?? Owner;
 
-        CallDeferred(MethodName.InitializeRoster);
+        InitializeRoster();
     }
 
     public override void OnUpdate(double delta)

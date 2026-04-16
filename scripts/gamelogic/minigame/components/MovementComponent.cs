@@ -3,6 +3,12 @@ using GameLogic;
 using Godot;
 using System.Text.Json.Serialization;
 
+public enum MovementMode
+{
+    None,
+    RaceOnce,
+    Follow
+}
 [GlobalClass]
 public partial class MovementComponent : Component2D
 {
@@ -15,11 +21,15 @@ public partial class MovementComponent : Component2D
     private SelectionComponent _selectionComponent;
     private Node2D _transformNode2D;
     private Line2D _movePathIndicator;
-    [JsonInclude] private Vector2? _moveTarget;
+    [JsonInclude] private Vector2 _moveTarget;
+    [JsonInclude] private string _followId;
+    [JsonInclude] private MovementMode movementMode = MovementMode.None;
+
+    private GameObject2D _followTargetObject = null;
 
     public override int Priority => ComponentPriority.Movement;
 
-    public bool HasMoveTarget => _moveTarget.HasValue;
+    public bool HasMoveTarget => movementMode != MovementMode.None;
 
     public Vector2? CurrentMoveTarget => _moveTarget;
 
@@ -33,14 +43,43 @@ public partial class MovementComponent : Component2D
 
     public override void OnPhysicsUpdate(double delta)
     {
-        if ((_movePathIndicator?.Visible ?? false) || _moveTarget.HasValue)
-            RefreshMovePathVisual();
+        switch (movementMode)
+        {
+            case MovementMode.None:
+                return;
+            case MovementMode.RaceOnce:
+                MoveTo(_moveTarget, delta);
+                break;
+            case MovementMode.Follow:
+                UpdateFollowMovement(delta);
+                break;
+        }
+        
+        RefreshMovePathVisual();
+    }
 
-        if (!_moveTarget.HasValue || _transformNode2D == null)
+    private void UpdateFollowMovement(double delta)
+    {
+        if (string.IsNullOrEmpty(_followId) || _transformNode2D == null)
+            return;
+
+        if (_followTargetObject == null)
+        {
+            ClearMoveTarget();
+            return;
+        }
+
+        Vector2 targetPosition = _followTargetObject.GlobalPosition;
+        MoveTo(targetPosition, delta);
+    }
+
+    private void MoveTo(Vector2 targetPosition, double delta)
+    {
+        if (_transformNode2D == null)
             return;
 
         Vector2 currentPosition = _transformNode2D.GlobalPosition;
-        Vector2 targetPosition = _moveTarget.Value;
+
         float distance = currentPosition.DistanceTo(targetPosition);
 
         if (distance <= StopDistance)
@@ -53,20 +92,34 @@ public partial class MovementComponent : Component2D
         Vector2 direction = (targetPosition - currentPosition).Normalized();
         float step = MoveSpeed * (float)delta;
         _transformNode2D.GlobalPosition = currentPosition + direction * Mathf.Min(step, distance);
-        RefreshMovePathVisual();
+
     }
 
     public void SetMoveTarget(Vector2 target)
     {
+        movementMode = MovementMode.RaceOnce;
         _moveTarget = target;
+        RefreshMovePathVisual();
+    }
+
+    public void SetFollowTarget(string targetPersistentId)
+    {
+        movementMode = MovementMode.Follow;
+        _followId = targetPersistentId;
         RefreshMovePathVisual();
     }
 
     public void ClearMoveTarget()
     {
-        _moveTarget = null;
+        _moveTarget = Vector2.Zero;
+        _followId = null;
+        movementMode = MovementMode.None;
         RefreshMovePathVisual();
     }
+
+
+
+    #region DrawMovePath
 
     public void RefreshMovePathVisual()
     {
@@ -85,12 +138,8 @@ public partial class MovementComponent : Component2D
             return;
         }
 
-        var moveTarget = CurrentMoveTarget;
-        if (!moveTarget.HasValue)
-        {
-            _movePathIndicator.Visible = false;
-            return;
-        }
+        var moveTarget = movementMode == MovementMode.Follow ? _followTargetObject?.GlobalPosition : (Vector2?)_moveTarget;
+
 
         _movePathIndicator.Visible = true;
         _movePathIndicator.SetPointPosition(0, Vector2.Zero);
@@ -99,7 +148,7 @@ public partial class MovementComponent : Component2D
 
     private bool ShouldDrawMovePath()
     {
-        if (!_moveTarget.HasValue)
+        if (movementMode == MovementMode.None)
             return false;
 
         _selectionComponent ??= Owner?.GetComponent<SelectionComponent>();
@@ -130,4 +179,6 @@ public partial class MovementComponent : Component2D
         indicator.AddPoint(Vector2.Zero);
         return indicator;
     }
+
+    #endregion
 }

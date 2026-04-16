@@ -6,6 +6,7 @@ namespace GameLogic
     [GlobalClass]
     public abstract partial class Component3D : Resource, IComponent
     {
+
         [JsonIgnore]
         public GameObject3D Owner { get; set; }
 

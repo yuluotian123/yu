@@ -4,6 +4,9 @@ using GameLogic;
 using GameLogic.Input;
 using Godot;
 
+/// <summary>
+/// 赋予玩家军队管理能力的组件，负责处理玩家单位的注册、输入响应以及初始生成。
+/// </summary>
 [GlobalClass]
 public partial class PlayerArmyComponent : Component2D
 {
@@ -44,10 +47,10 @@ public partial class PlayerArmyComponent : Component2D
         var mouseScreenPosition = viewport?.GetMousePosition() ?? Vector2.Zero;
         var mouseWorldPosition = ViewportInputUtility.ScreenToWorld(viewport, mouseScreenPosition);
 
-        HandleMoveInput(mouseWorldPosition);
+        HandleMovement(mouseWorldPosition);
     }
 
-    private void HandleMoveInput(Vector2 mouseWorldPosition)
+    private void HandleMovement(Vector2 mouseWorldPosition)
     {
         if (!_inputModule.TryHandleJustPressed("combat_command_move"))
             return;

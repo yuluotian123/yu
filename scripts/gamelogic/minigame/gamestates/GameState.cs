@@ -82,9 +82,7 @@ public class GameState
 
     public void SetPlayerController(SerializableGameObject2D playerController)
     {
-        Debugger.Info("Set Player Controller in GameState");
+        Debugger.Info("[GameState] Set Player Controller in GameState");
         PlayerState.PlayerController = playerController;
-
-        Debugger.Info(SaveData.HasData() ? "Player controller data is available for saving." : "No player controller data to save.");
     }
 }

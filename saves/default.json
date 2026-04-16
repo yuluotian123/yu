@@ -3,7 +3,7 @@
 	"SaveKey": "GameState",
 	"playerControllerData": {
 	  "$type": "SerializableGameObjectData",
-	  "OwnerStateJson": "",
+	  "OwnerStateJson": "{\u0022PersistentId\u0022:\u002285d30f5ececd49bfb2fe624e3c1f3f4c\u0022}",
 	  "Position2D": {
 		"$type": "Vector2",
 		"X": 0,
@@ -15,52 +15,52 @@
 	"playerUnitData": [
 	  {
 		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "",
+		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022c559b5d113e04f0da11c8d9581ff0473\u0022}",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": -217.98317,
-		  "Y": 67.51294
+		  "X": 0,
+		  "Y": 0
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
+			"StateJson": "{\u0022_moveTarget\u0022:null}"
 		  }
 		]
 	  },
 	  {
 		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "",
+		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022eae1954f064748b69427968b5ac32e86\u0022}",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": -134.94644,
-		  "Y": -188.82715
+		  "X": 72,
+		  "Y": 0
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
+			"StateJson": "{\u0022_moveTarget\u0022:null}"
 		  }
 		]
 	  },
 	  {
 		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "",
+		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022869f67f602744ed9aca0cc050c16c250\u0022}",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": -240.25694,
-		  "Y": -109.320465
+		  "X": 144,
+		  "Y": 0
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
+			"StateJson": "{\u0022_moveTarget\u0022:null}"
 		  }
 		]
 	  }

@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Framework;
 using Godot;
 using Godot.Collections;
 
 namespace GameLogic
 {
-    public partial class GameObject2D : Node2D, IObjectPoolItem
+    public partial class GameObject2D : Node2D, IObjectPoolItem, IGameObject
     {
+        [JsonInclude] public string PersistentId { get; set; } = string.Empty;
         [Export] public Array<Component2D> Components { get; set; } = new();
 
         private readonly System.Collections.Generic.Dictionary<Type, Component2D> _runtimeComponents = new();
@@ -60,6 +62,21 @@ namespace GameLogic
 
         public IReadOnlyList<Component2D> GetAllComponents() => _sortedComponents;
 
+        IReadOnlyList<IComponent> IGameObject.GetAllComponents() => _sortedComponents;
+
+        public bool HasComponent(Type componentType)
+        {
+            return componentType != null && _runtimeComponents.ContainsKey(componentType);
+        }
+
+        public IComponent GetComponent(Type componentType)
+        {
+            if (componentType == null)
+                return null;
+
+            return _runtimeComponents.TryGetValue(componentType, out var component) ? component : null;
+        }
+
         public void RemoveComponent<T>() where T : Component2D
         {
             if (!_runtimeComponents.TryGetValue(typeof(T), out var component))
@@ -70,8 +87,19 @@ namespace GameLogic
             _sortedComponents.Remove(component);
         }
 
+        public void RemoveComponent(Type componentType)
+        {
+            if (componentType == null || !_runtimeComponents.TryGetValue(componentType, out var component))
+                return;
+
+            component.OnDestroy();
+            _runtimeComponents.Remove(componentType);
+            _sortedComponents.Remove(component);
+        }
+
         public override void _Ready()
         {
+            PersistentIdUtility.EnsurePersistentId(this);
             InitializeComponents();
 
             for (int i = 0; i < _sortedComponents.Count; i++)
@@ -104,6 +132,8 @@ namespace GameLogic
 
         public virtual void OnSpawn()
         {
+            PersistentIdUtility.EnsurePersistentId(this);
+
             if (_runtimeComponents.Count == 0)
             {
                 InitializeComponents();

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Godot;
+using GodotArray = Godot.Collections.Array;
 
 namespace Framework
 {
@@ -151,12 +152,12 @@ namespace Framework
                 return obj;
             }
 
+            if (IsGodotArrayType(type) && value is System.Collections.IEnumerable enumerable)
+                return EnumerableToJsonArray(enumerable);
+
             if (value is System.Collections.IList list)
             {
-                var array = new JsonArray();
-                foreach (var item in list)
-                    array.Add(item == null ? null : ValueToJsonNode(item));
-                return array;
+                return EnumerableToJsonArray(list);
             }
 
             return ObjectToJsonNode(value);
@@ -187,7 +188,8 @@ namespace Framework
             if (node is JsonArray)
             {
                 bool canReadArray = targetType.IsArray
-                    || (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>));
+                    || (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
+                    || IsGodotArrayType(targetType);
                 return canReadArray ? JsonNodeToValue(node, targetType) : null;
             }
 
@@ -292,6 +294,9 @@ namespace Framework
             if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
                 return JsonArrayToList(node as JsonArray, targetType);
 
+            if (IsGodotArrayType(targetType))
+                return JsonArrayToGodotArray(node as JsonArray, targetType);
+
             if (targetType == typeof(Dictionary<string, string>) && node is JsonObject dictObject)
             {
                 var dict = new Dictionary<string, string>();
@@ -347,12 +352,58 @@ namespace Framework
             return list;
         }
 
-        private static Array JsonArrayToArray(JsonArray array, Type elementType)
+        private static JsonArray EnumerableToJsonArray(System.Collections.IEnumerable enumerable)
+        {
+            var array = new JsonArray();
+            if (enumerable == null)
+                return array;
+
+            foreach (var item in enumerable)
+                array.Add(item == null ? null : ValueToJsonNode(item));
+
+            return array;
+        }
+
+        private static object JsonArrayToGodotArray(JsonArray array, Type arrayType)
+        {
+            var instance = Activator.CreateInstance(arrayType);
+            if (instance == null)
+                return null;
+
+            if (array == null)
+                return instance;
+
+            var elementType = GetGodotArrayElementType(arrayType);
+            var addMethod = GetGodotArrayAddMethod(arrayType, elementType);
+            if (addMethod == null)
+                return instance;
+
+            foreach (var item in array)
+            {
+                object converted;
+                if (elementType == null)
+                {
+                    converted = JsonNodeToVariantValue(item);
+                }
+                else
+                {
+                    converted = JsonNodeToValue(item, elementType);
+                    if (converted == null && !CanAssignNull(elementType))
+                        converted = GetDefaultValue(elementType);
+                }
+
+                addMethod.Invoke(instance, new[] { converted });
+            }
+
+            return instance;
+        }
+
+        private static System.Array JsonArrayToArray(JsonArray array, Type elementType)
         {
             if (array == null)
-                return Array.CreateInstance(elementType, 0);
+                return System.Array.CreateInstance(elementType, 0);
 
-            var result = Array.CreateInstance(elementType, array.Count);
+            var result = System.Array.CreateInstance(elementType, array.Count);
             for (int i = 0; i < array.Count; i++)
             {
                 var converted = JsonNodeToValue(array[i], elementType);
@@ -360,6 +411,73 @@ namespace Framework
             }
 
             return result;
+        }
+
+        private static bool IsGodotArrayType(Type type)
+        {
+            if (type == typeof(GodotArray))
+                return true;
+
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Godot.Collections.Array<>);
+        }
+
+        private static Type GetGodotArrayElementType(Type arrayType)
+        {
+            return arrayType.IsGenericType ? arrayType.GetGenericArguments()[0] : null;
+        }
+
+        private static MethodInfo GetGodotArrayAddMethod(Type arrayType, Type elementType)
+        {
+            if (elementType != null)
+                return arrayType.GetMethod("Add", new[] { elementType });
+
+            return arrayType.GetMethod("Add", new[] { typeof(Variant) })
+                ?? arrayType.GetMethod("Add", new[] { typeof(object) });
+        }
+
+        private static object JsonNodeToVariantValue(JsonNode node)
+        {
+            if (node == null)
+                return null;
+
+            if (node is JsonValue jsonValue)
+            {
+                try { return jsonValue.GetValue<string>(); } catch { }
+                try { return jsonValue.GetValue<bool>(); } catch { }
+                try { return jsonValue.GetValue<long>(); } catch { }
+                try { return jsonValue.GetValue<double>(); } catch { }
+                return null;
+            }
+
+            if (node is JsonArray jsonArray)
+                return JsonArrayToGodotArray(jsonArray, typeof(GodotArray));
+
+            if (node is JsonObject jsonObject)
+            {
+                if (jsonObject.TryGetPropertyValue("$type", out var typeNode))
+                {
+                    var typeName = typeNode?.GetValue<string>();
+                    var targetType = string.IsNullOrEmpty(typeName) ? null : FindType(typeName);
+                    if (targetType != null)
+                        return JsonNodeToValue(jsonObject, targetType);
+                }
+
+                if (jsonObject.ContainsKey("$res"))
+                    return JsonNodeToObject(jsonObject, typeof(Resource));
+
+                var dict = new Dictionary<string, object>();
+                foreach (var kvp in jsonObject)
+                {
+                    if (kvp.Key == "$type")
+                        continue;
+
+                    dict[kvp.Key] = JsonNodeToVariantValue(kvp.Value);
+                }
+
+                return dict;
+            }
+
+            return null;
         }
 
         private static Type ResolveConcreteType(Type targetType, JsonObject jsonObject)

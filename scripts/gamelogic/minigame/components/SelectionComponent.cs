@@ -26,7 +26,6 @@ public partial class SelectionComponent : Component2D
     {
         _selectionIndicator = Owner?.GetNodeOrNull<CanvasItem>(SelectionIndicatorPath);
         _factionComponent = Owner?.GetComponent<FactionComponent>();
-        Debugger.Info(_selectableManager == null ? "SelectableManager not found in GameState" : "SelectableManager found in GameState");
         _selectableManager?.RegisterSelectable(this);
 
         ApplySelectionVisual();

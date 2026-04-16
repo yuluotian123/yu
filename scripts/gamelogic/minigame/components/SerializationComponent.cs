@@ -18,7 +18,6 @@ namespace GameLogic
 
             if (Owner != null)
             {
-                snapshot.HasTransform2D = true;
                 snapshot.Position2D = Owner.GlobalPosition;
                 snapshot.Rotation2D = Owner.GlobalRotation;
             }
@@ -56,11 +55,8 @@ namespace GameLogic
             if (ownerState != null && OwnerNode != null)
                 AutoStateSerializer.DeserializeInto(OwnerNode, ownerState, includePublicProperties: false);
 
-            if (snapshot.HasTransform2D && Owner != null)
-            {
-                Owner.GlobalPosition = snapshot.Position2D;
-                Owner.GlobalRotation = snapshot.Rotation2D;
-            }
+            Owner.GlobalPosition = snapshot.Position2D;
+            Owner.GlobalRotation = snapshot.Rotation2D;
 
             var snapshotLookup = new Dictionary<string, SerializableComponentData>(StringComparer.Ordinal);
             if (snapshot.ComponentDatas != null)
@@ -90,7 +86,7 @@ namespace GameLogic
 
                     var componentState = ParseState(componentSnapshot.StateJson);
                     if (componentState != null)
-                        AutoStateSerializer.DeserializeInto(component, componentState, includePublicProperties: false);
+                        AutoStateSerializer.DeserializeInto(component, componentState);
                 }
             }
         }

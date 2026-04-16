@@ -8,8 +8,6 @@ public class SerializableGameObjectData
 {
     public string OwnerStateJson { get; set; } = string.Empty;
 
-    public bool HasTransform2D { get; set; }
-
     public Vector2 Position2D { get; set; } = Vector2.Zero;
 
     public float Rotation2D { get; set; }

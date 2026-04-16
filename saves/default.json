@@ -1,10 +1,74 @@
 {
   "GameState": {
-    "SaveKey": "GameState"
+	"SaveKey": "GameState",
+	"playerControllerData": {
+	  "$type": "SerializableGameObjectData",
+	  "OwnerStateJson": "",
+	  "Position2D": {
+		"$type": "Vector2",
+		"X": 0,
+		"Y": 0
+	  },
+	  "Rotation2D": 0,
+	  "ComponentDatas": []
+	},
+	"playerUnitData": [
+	  {
+		"$type": "SerializableGameObjectData",
+		"OwnerStateJson": "",
+		"Position2D": {
+		  "$type": "Vector2",
+		  "X": 69.67452,
+		  "Y": 131.45215
+		},
+		"Rotation2D": 0,
+		"ComponentDatas": [
+		  {
+			"$type": "SerializableComponentData",
+			"Key": "MovementComponent",
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:616,\u0022Y\u0022:75}}"
+		  }
+		]
+	  },
+	  {
+		"$type": "SerializableGameObjectData",
+		"OwnerStateJson": "",
+		"Position2D": {
+		  "$type": "Vector2",
+		  "X": 152.52002,
+		  "Y": -219.51515
+		},
+		"Rotation2D": 0,
+		"ComponentDatas": [
+		  {
+			"$type": "SerializableComponentData",
+			"Key": "MovementComponent",
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-725,\u0022Y\u0022:-192}}"
+		  }
+		]
+	  },
+	  {
+		"$type": "SerializableGameObjectData",
+		"OwnerStateJson": "",
+		"Position2D": {
+		  "$type": "Vector2",
+		  "X": -172.97986,
+		  "Y": 359.03333
+		},
+		"Rotation2D": 0,
+		"ComponentDatas": [
+		  {
+			"$type": "SerializableComponentData",
+			"Key": "MovementComponent",
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:714,\u0022Y\u0022:190}}"
+		  }
+		]
+	  }
+	]
   },
   "mission_system": {
-    "SaveKey": "mission_system",
-    "Missions": [],
-    "Chains": []
+	"SaveKey": "mission_system",
+	"Missions": [],
+	"Chains": []
   }
 }

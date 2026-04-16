@@ -84,6 +84,7 @@ namespace GameLogic.Save
 
             foreach (var kv in _registry)
             {
+                Debugger.Info($"[SaveModule] Loading '{kv.Key}' from slot '{slot}'");
                 if (root.TryGetPropertyValue(kv.Key, out var node) && node is JsonObject state)
                 {
                     AutoStateSerializer.DeserializeInto(kv.Value, state);

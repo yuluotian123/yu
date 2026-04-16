@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Framework;
 using Godot;
@@ -6,9 +6,7 @@ using Godot;
 namespace GameLogic.Input
 {
     /// <summary>
-    /// 基于 Godot Input 和 InputMap 的输入模块。
-    /// 业务侧始终使用基础 action 名，模块内部负责映射到真实的 InputMap action 名。
-    /// </summary>
+    /// 鍩轰簬 Godot Input 鍜?InputMap 鐨勮緭鍏ユā鍧椼€?    /// 涓氬姟渚у缁堜娇鐢ㄥ熀纭€ action 鍚嶏紝妯″潡鍐呴儴璐熻矗鏄犲皠鍒扮湡瀹炵殑 InputMap action 鍚嶃€?    /// </summary>
     public class InputModule : Module, IInputModule, IProcessModule
     {
         private sealed class ParsedActionInfo
@@ -29,9 +27,9 @@ namespace GameLogic.Input
         private readonly InputLayerManager _layerManager = new InputLayerManager();
         
         // 有效 action 缓存只保留可正常参与运行时查询的解析结果：
-        // 1. RawActionName 是 Godot InputMap 里的真实 action 名
-        // 2. BaseActionName 是业务侧使用的基础名
-        // 3. 两套索引都指向同一个 ParsedActionInfo，避免重复存储
+        // 1. RawActionName 是 Godot InputMap 里的真实 action 名。
+        // 2. BaseActionName 是业务侧使用的基础名。
+        // 3. 两套索引都指向同一个 ParsedActionInfo，避免重复存储。
         private readonly Dictionary<string, ParsedActionInfo> _baseActionInfos = new Dictionary<string, ParsedActionInfo>(StringComparer.Ordinal);
         private readonly Dictionary<string, ParsedActionInfo> _rawActionInfos = new Dictionary<string, ParsedActionInfo>(StringComparer.Ordinal);
         private readonly List<ParsedActionInfo> _parsedActions = new List<ParsedActionInfo>();
@@ -42,13 +40,11 @@ namespace GameLogic.Input
         private bool _hasMousePositionLastFrame;
 
         /// <summary>
-        /// 模块优先级。
-        /// </summary>
+        /// 妯″潡浼樺厛绾с€?        /// </summary>
         public override int Priority => 10;
 
         /// <summary>
-        /// 初始化输入层和 InputMap 缓存。
-        /// </summary>
+        /// 鍒濆鍖栬緭鍏ュ眰鍜?InputMap 缂撳瓨銆?        /// </summary>
         public override void OnInit()
         {
             _layerManager.AddLayer(InputLayerManager.LayerName.Global, InputLayerManager.LayerPriority.Global);
@@ -61,8 +57,7 @@ namespace GameLogic.Input
         }
 
         /// <summary>
-        /// 清理输入缓存和运行时状态。
-        /// </summary>
+        /// 娓呯悊杈撳叆缂撳瓨鍜岃繍琛屾椂鐘舵€併€?        /// </summary>
         public override void Shutdown()
         {
             _tracker.Clear();
@@ -77,8 +72,7 @@ namespace GameLogic.Input
         }
 
         /// <summary>
-        /// 每帧刷新输入状态、清理 consume，并记录输入事件。
-        /// </summary>
+        /// 姣忓抚鍒锋柊杈撳叆鐘舵€併€佹竻鐞?consume锛屽苟璁板綍杈撳叆浜嬩欢銆?        /// </summary>
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
             _currentTime += realElapseSeconds;
@@ -734,3 +728,4 @@ namespace GameLogic.Input
         }
     }
 }
+

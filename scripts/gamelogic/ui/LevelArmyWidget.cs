@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Framework;
 using Framework.UI;
 using Godot;
@@ -11,6 +12,7 @@ namespace GameLogic.UI
     {
         [UIBind("%")] private HBoxContainer _itemContainer;
 
+        private readonly List<LevelArmyItemWidget> _itemWidgets = new();
         private PlayerArmyComponent _armyComponent;
         private SelectableManagerComponent _selectableManager;
 
@@ -22,6 +24,11 @@ namespace GameLogic.UI
         protected override void OnRefresh()
         {
             RefreshArmyList();
+        }
+
+        protected override void OnDestroy()
+        {
+            _itemWidgets.Clear();
         }
 
         public override void RegisterEvent()
@@ -42,11 +49,7 @@ namespace GameLogic.UI
 
         private void RefreshArmyList()
         {
-            if (_itemContainer == null)
-                return;
-
-            for (int i = _itemContainer.GetChildCount() - 1; i >= 0; i--)
-                _itemContainer.GetChild(i).QueueFree();
+            ClearItemWidgets();
 
             _armyComponent = ResolveArmyComponent();
             _selectableManager = ResolveSelectableManager();
@@ -64,9 +67,24 @@ namespace GameLogic.UI
                 _itemContainer.AddChild(itemRoot);
 
                 var itemWidget = CreateWidget<LevelArmyItemWidget>(itemRoot);
+                _itemWidgets.Add(itemWidget);
                 itemWidget.SetData(unit, OnItemClicked);
                 itemWidget.SetSelected(ReferenceEquals(unit, _selectableManager?.SelectedUnit));
             }
+        }
+
+        private void ClearItemWidgets()
+        {
+            for (int i = _itemWidgets.Count - 1; i >= 0; i--)
+                DestroyWidget(_itemWidgets[i]);
+
+            _itemWidgets.Clear();
+
+            if (_itemContainer == null)
+                return;
+
+            for (int i = _itemContainer.GetChildCount() - 1; i >= 0; i--)
+                _itemContainer.GetChild(i).QueueFree();
         }
 
         private void OnItemClicked(GameObject2D unit)

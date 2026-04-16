@@ -18,6 +18,7 @@ namespace GameLogic.UI
 
         private GameObject2D _unit;
         private Action<GameObject2D> _onClick;
+        private bool _isPressedBound;
 
         /// <summary>
         /// 创建条目并绑定点击事件。
@@ -25,7 +26,10 @@ namespace GameLogic.UI
         protected override void OnCreate()
         {
             if (_btnSelect != null)
+            {
                 _btnSelect.Pressed += OnPressed;
+                _isPressedBound = true;
+            }
         }
 
         /// <summary>
@@ -33,8 +37,12 @@ namespace GameLogic.UI
         /// </summary>
         protected override void OnDestroy()
         {
-            if (_btnSelect != null)
+            if (_isPressedBound && _btnSelect != null && GodotObject.IsInstanceValid(_btnSelect))
                 _btnSelect.Pressed -= OnPressed;
+
+            _isPressedBound = false;
+            _unit = null;
+            _onClick = null;
         }
 
         /// <summary>

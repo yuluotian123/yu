@@ -32,7 +32,7 @@ public partial class PlayerArmyComponent : Component2D
         _resourceModule = ModuleSystem.GetModule<IResourceModule>();
         _unitsRoot = Owner.GetNodeOrNull<Node>(UnitsRootPath) ?? Owner;
 
-        InitializeRoster();
+        CallDeferred(MethodName.InitializeRoster);
     }
 
     public override void OnUpdate(double delta)
@@ -94,11 +94,41 @@ public partial class PlayerArmyComponent : Component2D
 
     public void InitializeRoster()
     {
-        BootstrapDefaultUnits();
-    }
+        var saveData = RootModule.Instance.GameState.SaveData;
+        if (saveData.HasData())
+        {
+            Debugger.Info("Initializing player army from saved data.");
+            for (int i = 0; i < saveData.GetUnitCount(); i++)
+            {
+                var unitData = saveData.GetPlayerUnitData(i);
+                if (unitData != null)
+                {
+                    var unit = CreateUnitFromScene();
+                    if (unit == null)
+                        continue;
 
-    private void BootstrapDefaultUnits()
-    {
+                    _unitsRoot.AddChild(unit);
+                        RegisterUnit(unit);
+
+                    var serializationComponent = unit.GetComponent<SerializationComponent>();
+                    if (serializationComponent != null)
+                    {
+                        serializationComponent.Load(unitData);
+                    }
+                    else
+                    {
+                        Debugger.Warn($"Unit '{unit.Name}' does not have a SerializationComponent to load its state.");
+                    }
+                }
+            }
+
+
+
+            return;
+        }
+
+        Debugger.Info("No saved data found for player army. Initializing default roster.");
+
         for (int i = 0; i < DefaultSpawnCount; i++)
         {
             var unit = CreateUnitFromScene();
@@ -111,6 +141,7 @@ public partial class PlayerArmyComponent : Component2D
             unit.SetWorldPosition2D(DefaultSpawnOrigin + new Vector2(i * DefaultSpawnSpacing, 0f));
         }
     }
+
 
     private GameObject2D CreateUnitFromScene()
     {

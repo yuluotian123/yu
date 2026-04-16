@@ -65,12 +65,10 @@ public class PreloadProcedure : ProcedureBase
             if (Engine.GetMainLoop() is SceneTree tree)
             {
                 var levelNode = levelHandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
+                var controllerNode = controllerHandle.InstantiateAndBind<Node>(levelNode);
 
-                var controllerNode = controllerHandle.Instantiate<Node>();
-                gameState.SetPlayerController(controllerNode as GameObject2D);
+                gameState.SetPlayerController(controllerNode as SerializableGameObject2D);
                 
-                levelNode.AddChild(controllerNode);
-                controllerHandle.BindTo(levelNode);
             }
 
             ChangeState<LevelProcedure>(procedureOwner);

@@ -69,7 +69,7 @@ namespace GameLogic.UI
                 var itemWidget = CreateWidget<LevelArmyItemWidget>(itemRoot);
                 _itemWidgets.Add(itemWidget);
                 itemWidget.SetData(unit, OnItemClicked);
-                itemWidget.SetSelected(ReferenceEquals(unit, _selectableManager?.SelectedUnit));
+                itemWidget.SetSelected(IsUnitSelected(unit));
             }
         }
 
@@ -93,7 +93,22 @@ namespace GameLogic.UI
                 return;
 
             _selectableManager = ResolveSelectableManager();
-            _selectableManager?.Select(unit.GetComponent<SelectionComponent>());
+            _selectableManager?.SetSingleSelection(unit.GetComponent<SelectionComponent>());
+        }
+
+        private bool IsUnitSelected(GameObject2D unit)
+        {
+            var selectedUnits = _selectableManager?.SelectedUnits;
+            if (unit == null || selectedUnits == null)
+                return false;
+
+            for (int i = 0; i < selectedUnits.Count; i++)
+            {
+                if (ReferenceEquals(unit, selectedUnits[i]))
+                    return true;
+            }
+
+            return false;
         }
 
         private PlayerArmyComponent ResolveArmyComponent()

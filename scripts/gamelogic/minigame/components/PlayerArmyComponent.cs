@@ -49,17 +49,20 @@ public partial class PlayerArmyComponent : Component2D
 
     private void HandleMoveInput(Vector2 mouseWorldPosition)
     {
-        if (_inputModule.IsActionConsumed("combat_command_move"))
+        if (!_inputModule.TryHandleJustPressed("combat_command_move"))
             return;
 
-        if (_inputModule.TryHandleJustPressed("combat_command_move"))
-        {
-            var selectedSelection = Owner.GetComponent<SelectableManagerComponent>().Selected;
-            var selectedUnit = selectedSelection?.Owner;
-            if (selectedUnit == null || !(selectedSelection?.CanReceivePlayerCommands ?? false))
-                return;
+        var selectableManager = Owner.GetComponent<SelectableManagerComponent>();
+        var selectedUnits = selectableManager?.SelectedUnits;
+        if (selectedUnits == null || selectedUnits.Count == 0)
+            return;
 
-            Debugger.Info($"Selected unit: {selectedUnit.Name}");
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            GameObject2D selectedUnit = selectedUnits[i];
+            if (selectedUnit == null)
+                continue;
+
             selectedUnit.GetComponent<MovementComponent>()?.SetMoveTarget(mouseWorldPosition);
         }
     }
@@ -108,7 +111,7 @@ public partial class PlayerArmyComponent : Component2D
                         continue;
 
                     _unitsRoot.AddChild(unit);
-                        RegisterUnit(unit);
+                    RegisterUnit(unit);
 
                     var serializationComponent = unit.GetComponent<SerializationComponent>();
                     if (serializationComponent != null)
@@ -121,8 +124,6 @@ public partial class PlayerArmyComponent : Component2D
                     }
                 }
             }
-
-
 
             return;
         }
@@ -141,7 +142,6 @@ public partial class PlayerArmyComponent : Component2D
             unit.SetWorldPosition2D(DefaultSpawnOrigin + new Vector2(i * DefaultSpawnSpacing, 0f));
         }
     }
-
 
     private GameObject2D CreateUnitFromScene()
     {
@@ -173,5 +173,4 @@ public partial class PlayerArmyComponent : Component2D
 
         return null;
     }
-
 }

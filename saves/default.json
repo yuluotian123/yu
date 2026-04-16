@@ -18,15 +18,15 @@
 		"OwnerStateJson": "",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": 69.67452,
-		  "Y": 131.45215
+		  "X": -217.98317,
+		  "Y": 67.51294
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:616,\u0022Y\u0022:75}}"
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
 		  }
 		]
 	  },
@@ -35,15 +35,15 @@
 		"OwnerStateJson": "",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": 152.52002,
-		  "Y": -219.51515
+		  "X": -134.94644,
+		  "Y": -188.82715
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-725,\u0022Y\u0022:-192}}"
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
 		  }
 		]
 	  },
@@ -52,15 +52,15 @@
 		"OwnerStateJson": "",
 		"Position2D": {
 		  "$type": "Vector2",
-		  "X": -172.97986,
-		  "Y": 359.03333
+		  "X": -240.25694,
+		  "Y": -109.320465
 		},
 		"Rotation2D": 0,
 		"ComponentDatas": [
 		  {
 			"$type": "SerializableComponentData",
 			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:714,\u0022Y\u0022:190}}"
+			"StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:-613,\u0022Y\u0022:-259}}"
 		  }
 		]
 	  }

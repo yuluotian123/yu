@@ -10,7 +10,7 @@ public partial class SelectionComponent : Component2D
     [Export] public float SelectionRadius { get; set; } = 36f;
 
     private CanvasItem _selectionIndicator;
-    private SelectableManagerComponent _selectableManager =>RootModule.Instance.GameState?.PlayerState.GetSelectableManager();
+    private SelectableManagerComponent _selectableManager => RootModule.Instance.GameState?.PlayerState.GetSelectableManager();
 
     private FactionComponent _factionComponent;
     public FactionComponent Faction => _factionComponent ??= Owner?.GetComponent<FactionComponent>();
@@ -50,6 +50,17 @@ public partial class SelectionComponent : Component2D
             return false;
 
         return Owner.WorldPosition2D.DistanceTo(worldPoint) <= SelectionRadius;
+    }
+
+    public bool IntersectsWorldRect(Rect2 worldRect)
+    {
+        if (Owner == null)
+            return false;
+
+        Rect2 normalizedRect = worldRect.Abs();
+        Vector2 worldPosition = Owner.WorldPosition2D;
+        Vector2 closestPoint = worldPosition.Clamp(normalizedRect.Position, normalizedRect.End);
+        return worldPosition.DistanceSquaredTo(closestPoint) <= SelectionRadius * SelectionRadius;
     }
 
     private void ApplySelectionVisual()

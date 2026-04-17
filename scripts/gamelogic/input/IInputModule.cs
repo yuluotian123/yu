@@ -41,13 +41,13 @@ namespace GameLogic.Input
         /// 尝试接管当前帧刚按下的 action。
         /// 这是逐帧 consume，只影响当前帧。
         /// </summary>
-        bool TryHandleJustPressed(string action, string handlerLayer = null);
+        bool TryHandleJustPressed(string action, string handlerLayer = null, bool includeSamePriority = false);
 
         /// <summary>
         /// 尝试接管当前帧刚松开的 action。
         /// 这是逐帧 consume，只影响当前帧。
         /// </summary>
-        bool TryHandleJustReleased(string action, string handlerLayer = null);
+        bool TryHandleJustReleased(string action, string handlerLayer = null, bool includeSamePriority = false);
 
         /// <summary>
         /// 查询 action 当前强度。
@@ -156,7 +156,7 @@ namespace GameLogic.Input
         /// 查询一个 action 是否已被更高层消费。
         /// 会按 action group 规则一起判断。
         /// </summary>
-        bool IsActionConsumed(string action, string handlerLayer = null);
+        bool IsActionConsumed(string action, string handlerLayer = null, bool includeSamePriority = false);
 
         /// <summary>
         /// 清空输入缓冲。

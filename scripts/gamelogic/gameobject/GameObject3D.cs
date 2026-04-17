@@ -10,7 +10,7 @@ namespace GameLogic
 {
     public partial class GameObject3D : Node3D, IObjectPoolItem, IGameObject
     {
-        [JsonInclude] public string PersistentId { get; set; } = string.Empty;
+        [JsonIgnore]  public string PersistentId { get; set; } = string.Empty;
 
         [Export] public Array<Component3D> Components { get; set; } = new();
 

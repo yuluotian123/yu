@@ -52,10 +52,13 @@ public partial class PlayerArmyComponent : Component2D
 
     private void HandleMovement(Vector2 mouseWorldPosition)
     {
+        if (_inputModule.IsActionConsumed("combat_command_move", includeSamePriority: true))
+            return;
+
         if (!_inputModule.TryHandleJustPressed("combat_command_move"))
             return;
 
-        var selectableManager = Owner.GetComponent<SelectableManagerComponent>();
+        SelectableManagerComponent selectableManager = Owner.GetComponent<SelectableManagerComponent>();
         var selectedUnits = selectableManager?.SelectedUnits;
         if (selectedUnits == null || selectedUnits.Count == 0)
             return;
@@ -67,6 +70,27 @@ public partial class PlayerArmyComponent : Component2D
                 continue;
 
             selectedUnit.GetComponent<MovementComponent>()?.SetMoveTarget(mouseWorldPosition);
+        }
+    }
+
+    public void CommandSelectedUnitsFollow(SelectionComponent targetSelection)
+    {
+        GameObject2D targetUnit = targetSelection?.Owner;
+        if (targetUnit == null || string.IsNullOrEmpty(targetUnit.PersistentId))
+            return;
+
+        SelectableManagerComponent selectableManager = Owner.GetComponent<SelectableManagerComponent>();
+        IReadOnlyList<GameObject2D> selectedUnits = selectableManager?.SelectedUnits;
+        if (selectedUnits == null || selectedUnits.Count == 0)
+            return;
+
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            GameObject2D selectedUnit = selectedUnits[i];
+            if (selectedUnit == null || ReferenceEquals(selectedUnit, targetUnit))
+                continue;
+
+            selectedUnit.GetComponent<MovementComponent>()?.SetFollowTarget(targetUnit.PersistentId);
         }
     }
 
@@ -109,21 +133,18 @@ public partial class PlayerArmyComponent : Component2D
                 var unitData = saveData.GetPlayerUnitData(i);
                 if (unitData != null)
                 {
-                    var unit = CreateUnitFromScene();
+                    var unit = InstantiateUnitFromScene();
                     if (unit == null)
                         continue;
-
-                    _unitsRoot.AddChild(unit);
-                    RegisterUnit(unit);
-
-                    var serializationComponent = unit.GetComponent<SerializationComponent>();
-                    if (serializationComponent != null)
+                    
+                    if(unit is SerializableGameObject2D serializableUnit)
                     {
-                        serializationComponent.Load(unitData);
+                        serializableUnit.CreateFromData(unitData, _unitsRoot);
+                        RegisterUnit(serializableUnit);
                     }
                     else
                     {
-                        Debugger.Warn($"Unit '{unit.Name}' does not have a SerializationComponent to load its state.");
+                        Debugger.Warn($"Failed to create unit from saved data: instantiated unit is not a SerializableGameObject2D.");
                     }
                 }
             }
@@ -135,7 +156,7 @@ public partial class PlayerArmyComponent : Component2D
 
         for (int i = 0; i < DefaultSpawnCount; i++)
         {
-            var unit = CreateUnitFromScene();
+            var unit = InstantiateUnitFromScene();
             if (unit == null)
                 continue;
 
@@ -146,7 +167,7 @@ public partial class PlayerArmyComponent : Component2D
         }
     }
 
-    private GameObject2D CreateUnitFromScene()
+    private GameObject2D InstantiateUnitFromScene()
     {
         var scenePath = !string.IsNullOrEmpty(DefaultUnitScene?.ResourcePath)
             ? DefaultUnitScene.ResourcePath

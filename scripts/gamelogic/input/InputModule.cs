@@ -124,12 +124,12 @@ namespace GameLogic.Input
         }
 
         /// <inheritdoc />
-        public bool TryHandleJustPressed(string action, string handlerLayer = null)
+        public bool TryHandleJustPressed(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
 
-            if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority))
+            if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority))
                 return false;
 
             if (!Godot.Input.IsActionJustPressed(actionInfo.RawActionName))
@@ -140,12 +140,12 @@ namespace GameLogic.Input
         }
 
         /// <inheritdoc />
-        public bool TryHandleJustReleased(string action, string handlerLayer = null)
+        public bool TryHandleJustReleased(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
 
-            if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority))
+            if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority))
                 return false;
 
             if (!Godot.Input.IsActionJustReleased(actionInfo.RawActionName))
@@ -352,13 +352,13 @@ namespace GameLogic.Input
         }
 
         /// <inheritdoc />
-        public bool IsActionConsumed(string action, string handlerLayer = null)
+        public bool IsActionConsumed(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             string baseAction = NormalizeBaseActionName(action);
             if (!TryGetEnabledHandlerLayer(baseAction, handlerLayer, out var layer))
                 return false;
 
-            return _layerManager.IsActionConsumed(baseAction, layer.Priority);
+            return _layerManager.IsActionConsumed(baseAction, layer.Priority, includeSamePriority);
         }
 
         /// <inheritdoc />

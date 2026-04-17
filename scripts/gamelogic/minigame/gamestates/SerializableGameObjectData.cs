@@ -6,6 +6,7 @@ using Godot;
 /// </summary>
 public class SerializableGameObjectData
 {
+    public string PersistentId { get; set; } = string.Empty;
     public string OwnerStateJson { get; set; } = string.Empty;
 
     public Vector2 Position2D { get; set; } = Vector2.Zero;

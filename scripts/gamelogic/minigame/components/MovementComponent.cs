@@ -21,6 +21,7 @@ public partial class MovementComponent : Component2D
     private SelectionComponent _selectionComponent;
     private Node2D _transformNode2D;
     private Line2D _movePathIndicator;
+
     [JsonInclude] private Vector2 _moveTarget;
     [JsonInclude] private string _followId;
     [JsonInclude] private MovementMode movementMode = MovementMode.None;
@@ -28,7 +29,6 @@ public partial class MovementComponent : Component2D
     private GameObject2D _followTargetObject = null;
 
     public override int Priority => ComponentPriority.Movement;
-
     public bool HasMoveTarget => movementMode != MovementMode.None;
 
     public override void OnInit()
@@ -36,6 +36,7 @@ public partial class MovementComponent : Component2D
         _selectionComponent = Owner?.GetComponent<SelectionComponent>();
         _transformNode2D = Owner;
         _movePathIndicator = SetupMovePathIndicator();
+        
         RefreshMovePathVisual();
     }
 
@@ -64,6 +65,12 @@ public partial class MovementComponent : Component2D
         if (_followTargetObject == null)
         {
             _followTargetObject = RootModule.Instance.GameState.GetRegisteredSeriableGameObject(_followId);
+        }
+
+        if (_followTargetObject == null || !GodotObject.IsInstanceValid(_followTargetObject))
+        {
+            ClearMoveTarget();
+            return;
         }
 
         Vector2 targetPosition = _followTargetObject.GlobalPosition;
@@ -96,14 +103,24 @@ public partial class MovementComponent : Component2D
     {
         movementMode = MovementMode.RaceOnce;
         _moveTarget = target;
+        _followId = null;
+        _followTargetObject = null;
         RefreshMovePathVisual();
     }
 
     public void SetFollowTarget(string targetPersistentId)
     {
+        if (string.IsNullOrEmpty(targetPersistentId))
+        {
+            ClearMoveTarget();
+            return;
+        }
+
         movementMode = MovementMode.Follow;
+        _moveTarget = Vector2.Zero;
         _followId = targetPersistentId;
         _followTargetObject = RootModule.Instance.GameState.GetRegisteredSeriableGameObject(_followId);
+
         RefreshMovePathVisual();
     }
 
@@ -138,6 +155,11 @@ public partial class MovementComponent : Component2D
         }
 
         var moveTarget = movementMode == MovementMode.Follow ? _followTargetObject?.GlobalPosition : (Vector2?)_moveTarget;
+        if (!moveTarget.HasValue)
+        {
+            _movePathIndicator.Visible = false;
+            return;
+        }
 
 
         _movePathIndicator.Visible = true;

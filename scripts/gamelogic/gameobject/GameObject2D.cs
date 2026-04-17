@@ -10,7 +10,7 @@ namespace GameLogic
 {
     public partial class GameObject2D : Node2D, IObjectPoolItem, IGameObject
     {
-        [JsonInclude] public string PersistentId { get; set; } = string.Empty;
+        [JsonIgnore] public string PersistentId { get; set; } = string.Empty;
         [Export] public Array<Component2D> Components { get; set; } = new();
 
         private readonly System.Collections.Generic.Dictionary<Type, Component2D> _runtimeComponents = new();
@@ -99,6 +99,7 @@ namespace GameLogic
 
         public override void _Ready()
         {
+                        Debugger.Info($"GameObject '{PersistentId}' is ready. Ensuring PersistentId and initializing components.");
             PersistentIdUtility.EnsurePersistentId(this);
             InitializeComponents();
 

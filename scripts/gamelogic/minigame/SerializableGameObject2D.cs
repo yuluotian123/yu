@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
+using Framework;
 using Godot;
 
 namespace GameLogic
@@ -12,9 +13,11 @@ namespace GameLogic
     {
         private SerializationComponent _serializationComponent;
 
+
         public override void _Ready()
         {
             base._Ready();
+             
             RootModule.Instance.GameState.RegisterSeriableGameObject(this);
 
             _serializationComponent = AddComponent<SerializationComponent>();
@@ -26,7 +29,36 @@ namespace GameLogic
             RootModule.Instance.GameState.UnregisterSeriableGameObject(PersistentId);
         }
 
+        public SerializableGameObjectData Save()
+        {
+            return _serializationComponent?.Save();
+        }
 
-        public SerializationComponent GetSerializationComponent() => _serializationComponent;
+
+        /// <summary>
+        /// 从数据中恢复Serializeablegameobject2D实例的标准方法，用其他方式恢复会导致未知风险
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        public SerializableGameObject2D CreateFromData(SerializableGameObjectData data,Node root = null)
+        {
+            if(data == null)
+                return null;
+
+            if(root == null)
+                root = RootModule.Instance;
+
+            this.PersistentId = data.PersistentId;
+
+            root.AddChild(this);            
+
+            if(IsInsideTree())
+            _serializationComponent?.Load(data);
+            else
+                Debugger.Warn($"Failed to create SerializableGameObject2D from data: not inside scene tree after adding to root.");
+
+            return this;
+        }
     }
 }

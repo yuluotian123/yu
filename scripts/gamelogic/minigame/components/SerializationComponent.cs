@@ -13,6 +13,7 @@ namespace GameLogic
         {
             var snapshot = new SerializableGameObjectData
             {
+                PersistentId = Owner?.PersistentId ?? string.Empty,
                 OwnerStateJson = SerializeOwnerState(),
             };
 

@@ -1,74 +1,78 @@
 {
   "GameState": {
-	"SaveKey": "GameState",
-	"playerControllerData": {
-	  "$type": "SerializableGameObjectData",
-	  "OwnerStateJson": "{\u0022PersistentId\u0022:\u002285d30f5ececd49bfb2fe624e3c1f3f4c\u0022}",
-	  "Position2D": {
-		"$type": "Vector2",
-		"X": 0,
-		"Y": 0
-	  },
-	  "Rotation2D": 0,
-	  "ComponentDatas": []
-	},
-	"playerUnitData": [
-	  {
-		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022c559b5d113e04f0da11c8d9581ff0473\u0022}",
-		"Position2D": {
-		  "$type": "Vector2",
-		  "X": 0,
-		  "Y": 0
-		},
-		"Rotation2D": 0,
-		"ComponentDatas": [
-		  {
-			"$type": "SerializableComponentData",
-			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:null}"
-		  }
-		]
-	  },
-	  {
-		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022eae1954f064748b69427968b5ac32e86\u0022}",
-		"Position2D": {
-		  "$type": "Vector2",
-		  "X": 72,
-		  "Y": 0
-		},
-		"Rotation2D": 0,
-		"ComponentDatas": [
-		  {
-			"$type": "SerializableComponentData",
-			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:null}"
-		  }
-		]
-	  },
-	  {
-		"$type": "SerializableGameObjectData",
-		"OwnerStateJson": "{\u0022PersistentId\u0022:\u0022869f67f602744ed9aca0cc050c16c250\u0022}",
-		"Position2D": {
-		  "$type": "Vector2",
-		  "X": 144,
-		  "Y": 0
-		},
-		"Rotation2D": 0,
-		"ComponentDatas": [
-		  {
-			"$type": "SerializableComponentData",
-			"Key": "MovementComponent",
-			"StateJson": "{\u0022_moveTarget\u0022:null}"
-		  }
-		]
-	  }
-	]
+    "SaveKey": "GameState",
+    "playerControllerData": {
+      "$type": "SerializableGameObjectData",
+      "PersistentId": "43d3bde9b70b4a32ace647d88b59cbd3",
+      "OwnerStateJson": "",
+      "Position2D": {
+        "$type": "Vector2",
+        "X": 0,
+        "Y": 0
+      },
+      "Rotation2D": 0,
+      "ComponentDatas": []
+    },
+    "playerUnitData": [
+      {
+        "$type": "SerializableGameObjectData",
+        "PersistentId": "a3efe8dc13134c84a2b69f8947614f7c",
+        "OwnerStateJson": "",
+        "Position2D": {
+          "$type": "Vector2",
+          "X": -407.53827,
+          "Y": -311.52945
+        },
+        "Rotation2D": 0,
+        "ComponentDatas": [
+          {
+            "$type": "SerializableComponentData",
+            "Key": "MovementComponent",
+            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:\u00224db506358d0a47af941d40109e8cbdf4\u0022,\u0022movementMode\u0022:\u0022Follow\u0022}"
+          }
+        ]
+      },
+      {
+        "$type": "SerializableGameObjectData",
+        "PersistentId": "bc2aac6efc864176a51a7f0f86316772",
+        "OwnerStateJson": "",
+        "Position2D": {
+          "$type": "Vector2",
+          "X": 357.49994,
+          "Y": 99.166626
+        },
+        "Rotation2D": 0,
+        "ComponentDatas": [
+          {
+            "$type": "SerializableComponentData",
+            "Key": "MovementComponent",
+            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:null,\u0022movementMode\u0022:\u0022None\u0022}"
+          }
+        ]
+      },
+      {
+        "$type": "SerializableGameObjectData",
+        "PersistentId": "4db506358d0a47af941d40109e8cbdf4",
+        "OwnerStateJson": "",
+        "Position2D": {
+          "$type": "Vector2",
+          "X": 299.16656,
+          "Y": -199.16667
+        },
+        "Rotation2D": 0,
+        "ComponentDatas": [
+          {
+            "$type": "SerializableComponentData",
+            "Key": "MovementComponent",
+            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:null,\u0022movementMode\u0022:\u0022None\u0022}"
+          }
+        ]
+      }
+    ]
   },
   "mission_system": {
-	"SaveKey": "mission_system",
-	"Missions": [],
-	"Chains": []
+    "SaveKey": "mission_system",
+    "Missions": [],
+    "Chains": []
   }
 }

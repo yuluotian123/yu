@@ -1,6 +1,5 @@
 using Framework;
 using GameLogic;
-using GameLogic.Input;
 using Godot;
 
 [GlobalClass]
@@ -8,6 +7,12 @@ public partial class SelectionComponent : Component2D
 {
     [Export] public NodePath SelectionIndicatorPath { get; set; } = new NodePath("SelectionIndicator");
     [Export] public float SelectionRadius { get; set; } = 36f;
+    [Export] public Color SelectedColor { get; set; } = new Color(0.3f, 1f, 0.45f, 1f);
+    [Export] public float SelectedWidth { get; set; } = 3f;
+    [Export] public Color ContextTargetColor { get; set; } = new Color(1f, 0.85f, 0.25f, 1f);
+    [Export] public float ContextTargetWidth { get; set; } = 4f;
+    [Export] public Color CombinedStateColor { get; set; } = new Color(1f, 0.75f, 0.2f, 1f);
+    [Export] public float CombinedStateWidth { get; set; } = 5f;
 
     private CanvasItem _selectionIndicator;
     private SelectableManagerComponent _selectableManager => RootModule.Instance.GameState?.PlayerState.GetSelectableManager();
@@ -17,11 +22,9 @@ public partial class SelectionComponent : Component2D
 
     public bool CanReceivePlayerCommands => Faction?.IsPlayerFaction ?? false;
 
-    //左键选中
     private bool _isSelected;
     public bool IsSelected => _isSelected;
 
-    //右键选中
     private bool _isContextTargeted;
     public bool IsContextTargeted => _isContextTargeted;
 
@@ -38,9 +41,9 @@ public partial class SelectionComponent : Component2D
 
     public override void OnDestroy()
     {
+        _selectableManager?.UnregisterSelectable(this);
         _factionComponent = null;
         _selectionIndicator = null;
-        _selectableManager?.UnregisterSelectable(this);
     }
 
     public void SetSelected(bool selected)
@@ -81,30 +84,30 @@ public partial class SelectionComponent : Component2D
     }
 
     private void RefreshIndicatorVisual()
-{
-    if (_selectionIndicator == null)
-        return;
-
-    bool visible = _isSelected || _isContextTargeted;
-    _selectionIndicator.Visible = visible;
-
-    if (!visible || _selectionIndicator is not Line2D line)
-        return;
-
-    if (_isSelected && _isContextTargeted)
     {
-        line.DefaultColor = new Color(1f, 0.75f, 0.2f, 1f);
-        line.Width = 5f;
+        if (_selectionIndicator == null)
+            return;
+
+        bool visible = _isSelected || _isContextTargeted;
+        _selectionIndicator.Visible = visible;
+
+        if (!visible || _selectionIndicator is not Line2D line)
+            return;
+
+        if (_isSelected && _isContextTargeted)
+        {
+            line.DefaultColor = CombinedStateColor;
+            line.Width = CombinedStateWidth;
+        }
+        else if (_isContextTargeted)
+        {
+            line.DefaultColor = ContextTargetColor;
+            line.Width = ContextTargetWidth;
+        }
+        else
+        {
+            line.DefaultColor = SelectedColor;
+            line.Width = SelectedWidth;
+        }
     }
-    else if (_isContextTargeted)
-    {
-        line.DefaultColor = new Color(1f, 0.85f, 0.25f, 1f);
-        line.Width = 4f;
-    }
-    else
-    {
-        line.DefaultColor = new Color(0.3f, 1f, 0.45f, 1f);
-        line.Width = 3f;
-    }
-}
 }

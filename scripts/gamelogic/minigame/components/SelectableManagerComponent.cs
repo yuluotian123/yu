@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Framework;
+using Framework.UI;
 using GameLogic;
 using GameLogic.Input;
+using GameLogic.UI;
 using Godot;
 
 [GlobalClass]
@@ -16,20 +18,25 @@ public partial class SelectableManagerComponent : Component2D
 
     private IEventModule _eventModule;
     private IInputModule _inputModule;
+    private IUIModule _uiModule;
     private SelectionBoxOverlay _selectionBoxOverlay;
     private bool _isSelectionGestureActive;
     private bool _isBoxSelecting;
     private Vector2 _selectionStartScreenPosition;
+    private SelectionComponent _contextTargetSelection;
 
     public override int Priority => ComponentPriority.Input + 1;
 
     public IReadOnlyList<SelectionComponent> SelectedSelections => _selectedSelections;
     public IReadOnlyList<GameObject2D> SelectedUnits => _selectedUnits;
+    public SelectionComponent ContextTargetSelection => _contextTargetSelection;
+    public GameObject2D ContextTargetUnit => _contextTargetSelection?.Owner;
 
     public override void OnInit()
     {
         _eventModule = ModuleSystem.GetModule<IEventModule>();
         _inputModule = ModuleSystem.GetModule<IInputModule>();
+        _uiModule = ModuleSystem.GetModule<IUIModule>();
         _selectionBoxOverlay = Owner?.GetNodeOrNull<SelectionBoxOverlay>(SelectionBoxOverlayPath);
         _selectionBoxOverlay?.HideRect();
     }
@@ -37,16 +44,20 @@ public partial class SelectableManagerComponent : Component2D
     public override void OnUpdate(double delta)
     {
         PruneInvalidSelections();
+
+        HandleContextTargetInput();
         HandleSelectionInput();
     }
 
     public override void OnDestroy()
     {
+        ClearContextTarget();
         ClearSelection();
         ResetSelectionGesture();
         _selectionBoxOverlay = null;
         _inputModule = null;
         _eventModule = null;
+        _uiModule = null;
     }
 
     public void RegisterSelectable(SelectionComponent selection)
@@ -62,8 +73,35 @@ public partial class SelectableManagerComponent : Component2D
             return;
 
         _selectables.Remove(selection);
+        if (ReferenceEquals(_contextTargetSelection, selection))
+            ClearContextTarget();
+
         if (RemoveSelectionInternal(selection, false))
             NotifySelectionChanged();
+    }
+
+    public void SetContextTarget(SelectionComponent selection)
+    {
+        if (!IsSelectableValid(selection))
+        {
+            ClearContextTarget();
+            return;
+        }
+
+        if (_contextTargetSelection != null && !ReferenceEquals(_contextTargetSelection, selection))
+            _contextTargetSelection.SetContextTargeted(false);
+
+        _contextTargetSelection = selection;
+        _contextTargetSelection.SetContextTargeted(true);
+        _uiModule?.ShowUI<ContextTargetMenuWindow>(_contextTargetSelection);
+    }
+    public void ClearContextTarget()
+    {
+        if (_contextTargetSelection != null)
+            _contextTargetSelection.SetContextTargeted(false);
+
+        _contextTargetSelection = null;
+        _uiModule?.CloseUI<ContextTargetMenuWindow>();
     }
 
     public void SetSelection(IEnumerable<SelectionComponent> selections)
@@ -108,7 +146,6 @@ public partial class SelectableManagerComponent : Component2D
 
         SetSelection(new[] { selection });
     }
-
     public void AddSelection(SelectionComponent selection)
     {
         if (!IsSelectableEligible(selection) || _selectedSelections.Contains(selection))
@@ -156,6 +193,30 @@ public partial class SelectableManagerComponent : Component2D
         if (_inputModule.IsJustReleased("combat_select"))
             EndSelectionGesture(viewport);
     }
+    private void HandleContextTargetInput()
+    {
+        Viewport viewport = Owner?.GetViewport();
+        if (viewport == null)
+            return;
+
+        if (!_inputModule.IsJustPressed("combat_context_select"))
+            return;
+
+        if (ViewportInputUtility.IsPointerBlockedByUI(viewport))
+            return;
+
+        Vector2 worldPosition = ViewportInputUtility.ScreenToWorld(viewport, viewport.GetMousePosition());
+        SelectionComponent targetSelection = FindTopSelectableAt(worldPosition, false);
+        if (targetSelection == null)
+        {
+            ClearContextTarget();
+            return;
+        }
+
+        _inputModule.ConsumeAction("combat_context_select");
+
+        SetContextTarget(targetSelection);
+    }
 
     private void BeginSelectionGesture(Viewport viewport)
     {
@@ -201,7 +262,7 @@ public partial class SelectableManagerComponent : Component2D
     private void ApplyPointSelection(Viewport viewport, Vector2 screenPosition)
     {
         Vector2 worldPosition = ViewportInputUtility.ScreenToWorld(viewport, screenPosition);
-        SetSingleSelection(FindTopSelectableAt(worldPosition));
+        SetSingleSelection(FindTopSelectableAt(worldPosition, true));
     }
     private void ApplyBoxSelection(Viewport viewport, Vector2 endScreenPosition)
     {
@@ -209,7 +270,6 @@ public partial class SelectableManagerComponent : Component2D
         Rect2 worldRect = ViewportInputUtility.ScreenRectToWorld(viewport, screenRect).Abs();
         SetSelection(FindSelectablesInWorldRect(worldRect));
     }
-
     private void ResetSelectionGesture()
     {
         _isSelectionGestureActive = false;
@@ -218,7 +278,7 @@ public partial class SelectableManagerComponent : Component2D
         _selectionBoxOverlay?.HideRect();
     }
 
-    private SelectionComponent FindTopSelectableAt(Vector2 worldPoint)
+    private SelectionComponent FindTopSelectableAt(Vector2 worldPoint, bool requirePlayerControllable)
     {
         SelectionComponent bestSelection = null;
         float bestDistanceSquared = float.MaxValue;
@@ -232,7 +292,10 @@ public partial class SelectableManagerComponent : Component2D
                 continue;
             }
 
-            if (!selection.CanReceivePlayerCommands || !selection.ContainsWorldPoint(worldPoint))
+            if (requirePlayerControllable && !selection.CanReceivePlayerCommands)
+                continue;
+
+            if (!selection.ContainsWorldPoint(worldPoint))
                 continue;
 
             float distanceSquared = selection.Owner.WorldPosition2D.DistanceSquaredTo(worldPoint);
@@ -288,10 +351,12 @@ public partial class SelectableManagerComponent : Component2D
             selectionChanged = true;
         }
 
+        if (!IsSelectableValid(_contextTargetSelection))
+            ClearContextTarget();
+
         if (selectionChanged)
             NotifySelectionChanged();
     }
-
     private List<SelectionComponent> CollectValidSelections(IEnumerable<SelectionComponent> selections)
     {
         List<SelectionComponent> result = new();
@@ -308,6 +373,7 @@ public partial class SelectableManagerComponent : Component2D
 
         return result;
     }
+
     private bool RemoveSelectionInternal(SelectionComponent selection, bool setDeselected)
     {
         int index = _selectedSelections.IndexOf(selection);
@@ -357,8 +423,12 @@ public partial class SelectableManagerComponent : Component2D
     {
         return IsSelectableValid(selection) && selection.CanReceivePlayerCommands;
     }
+
     private static bool IsSelectableValid(SelectionComponent selection)
     {
-        return selection != null && selection.Owner != null;
+        return selection != null
+            && selection.Owner != null
+            && GodotObject.IsInstanceValid(selection)
+            && GodotObject.IsInstanceValid(selection.Owner);
     }
 }

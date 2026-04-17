@@ -304,12 +304,12 @@ namespace GameLogic.Input
         /// 查询某个 action 是否已被更高优先级输入层消费。
         /// 同组 action 会一起参与判断。
         /// </summary>
-        public bool IsActionConsumed(string action, int currentPriority)
+        public bool IsActionConsumed(string action, int currentPriority, bool includeSamePriority = false)
         {
             var requestedActions = ExpandActionGroup(new[] { action });
             foreach (var layer in GetSortedLayers())
             {
-                if (layer.Priority <= currentPriority)
+                if (includeSamePriority ? layer.Priority < currentPriority : layer.Priority <= currentPriority)
                     break;
 
                 if (layer.OverlapsConsumedActions(requestedActions))

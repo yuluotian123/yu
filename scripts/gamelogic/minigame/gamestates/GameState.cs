@@ -20,12 +20,12 @@ public class GameStateSaveData : ISaveable
 
     public void Save()
     {
-        playerControllerData = gameState.PlayerState.PlayerController.GetSerializationComponent().Save();
+        playerControllerData = gameState.PlayerState.PlayerController.Save();
         playerUnitData.Clear();
         var units = gameState.PlayerState.GetArmyComponent()?.Units;
         foreach (var unit in units)
         {
-            playerUnitData.Add(((SerializableGameObject2D)unit).GetSerializationComponent().Save());
+            playerUnitData.Add(((SerializableGameObject2D)unit).Save());
         }
     }
 
@@ -56,7 +56,7 @@ public class GameState
     public PlayerState PlayerState;
     public GameStateSaveData SaveData;
 
-    private Dictionary<string, SerializableGameObject2D> registeredObjects = new Dictionary<string, SerializableGameObject2D>();
+    private readonly Dictionary<string, SerializableGameObject2D> registeredObjects = new Dictionary<string, SerializableGameObject2D>();
 
 
 
@@ -77,6 +77,7 @@ public class GameState
     public void Clear()
     {
         Debugger.Info("Clear GameState");
+        registeredObjects.Clear();
         PlayerState = null;
         _save.Unregister(SaveData);
     }
@@ -90,36 +91,55 @@ public class GameState
 
     public void RegisterSeriableGameObject(SerializableGameObject2D obj)
     {
+        if (obj == null || string.IsNullOrEmpty(obj.PersistentId))
+        {
+            Debugger.Warn("[GameState] Cannot register serializable object without a valid PersistentId.");
+            return;
+        }
+
         if (registeredObjects.ContainsKey(obj.PersistentId))
         {
-            Debugger.Warn($"[GameState] Object with name {obj.Name} is already registered. Overwriting.");
+            Debugger.Warn($"[GameState] Object with PersistentId '{obj.PersistentId}' is already registered. Overwriting.");
             registeredObjects[obj.PersistentId] = obj;
+            return;
         }
-        else
-        {
-            registeredObjects.Add(obj.PersistentId, obj);
-        }
+
+        registeredObjects.Add(obj.PersistentId, obj);
     }
 
     public void UnregisterSeriableGameObject(string id)
     {
+        if (string.IsNullOrEmpty(id))
+        {
+            Debugger.Warn("[GameState] Cannot unregister serializable object with an empty PersistentId.");
+            return;
+        }
+
         if (registeredObjects.ContainsKey(id))
         {
             registeredObjects.Remove(id);
+            return;
         }
-        else
-        {
-            Debugger.Warn($"[GameState] Object with name {id} is not registered. Cannot unregister.");
-        }
+
+        Debugger.Warn($"[GameState] Object with PersistentId '{id}' is not registered. Cannot unregister.");
     }
 
     public SerializableGameObject2D GetRegisteredSeriableGameObject(string id)
     {
+        if (string.IsNullOrEmpty(id))
+            return null;
+
+        foreach(var kvp in registeredObjects)
+        {
+            Debugger.Info(kvp.Key + " : " + id);
+        }
+
         if (registeredObjects.TryGetValue(id, out var obj))
         {
             return obj;
         }
-        Debugger.Warn($"[GameState] Object with name {id} is not registered.");
+
+
         return null;
     }
 }

@@ -56,6 +56,8 @@ public class GameState
     public PlayerState PlayerState;
     public GameStateSaveData SaveData;
 
+    private Dictionary<string, SerializableGameObject2D> registeredObjects = new Dictionary<string, SerializableGameObject2D>();
+
 
 
     public GameState()
@@ -84,5 +86,40 @@ public class GameState
     {
         Debugger.Info("[GameState] Set Player Controller in GameState");
         PlayerState.PlayerController = playerController;
+    }
+
+    public void RegisterSeriableGameObject(SerializableGameObject2D obj)
+    {
+        if (registeredObjects.ContainsKey(obj.PersistentId))
+        {
+            Debugger.Warn($"[GameState] Object with name {obj.Name} is already registered. Overwriting.");
+            registeredObjects[obj.PersistentId] = obj;
+        }
+        else
+        {
+            registeredObjects.Add(obj.PersistentId, obj);
+        }
+    }
+
+    public void UnregisterSeriableGameObject(string id)
+    {
+        if (registeredObjects.ContainsKey(id))
+        {
+            registeredObjects.Remove(id);
+        }
+        else
+        {
+            Debugger.Warn($"[GameState] Object with name {id} is not registered. Cannot unregister.");
+        }
+    }
+
+    public SerializableGameObject2D GetRegisteredSeriableGameObject(string id)
+    {
+        if (registeredObjects.TryGetValue(id, out var obj))
+        {
+            return obj;
+        }
+        Debugger.Warn($"[GameState] Object with name {id} is not registered.");
+        return null;
     }
 }

@@ -17,8 +17,13 @@ public partial class SelectionComponent : Component2D
 
     public bool CanReceivePlayerCommands => Faction?.IsPlayerFaction ?? false;
 
+    //左键选中
     private bool _isSelected;
     public bool IsSelected => _isSelected;
+
+    //右键选中
+    private bool _isContextTargeted;
+    public bool IsContextTargeted => _isContextTargeted;
 
     public override int Priority => ComponentPriority.Interaction;
 
@@ -28,7 +33,7 @@ public partial class SelectionComponent : Component2D
         _factionComponent = Owner?.GetComponent<FactionComponent>();
         _selectableManager?.RegisterSelectable(this);
 
-        ApplySelectionVisual();
+        RefreshIndicatorVisual();
     }
 
     public override void OnDestroy()
@@ -40,8 +45,20 @@ public partial class SelectionComponent : Component2D
 
     public void SetSelected(bool selected)
     {
+        if (_isSelected == selected)
+            return;
+
         _isSelected = selected;
-        ApplySelectionVisual();
+        RefreshIndicatorVisual();
+    }
+
+    public void SetContextTargeted(bool targeted)
+    {
+        if (_isContextTargeted == targeted)
+            return;
+
+        _isContextTargeted = targeted;
+        RefreshIndicatorVisual();
     }
 
     public bool ContainsWorldPoint(Vector2 worldPoint)
@@ -63,9 +80,31 @@ public partial class SelectionComponent : Component2D
         return worldPosition.DistanceSquaredTo(closestPoint) <= SelectionRadius * SelectionRadius;
     }
 
-    private void ApplySelectionVisual()
+    private void RefreshIndicatorVisual()
+{
+    if (_selectionIndicator == null)
+        return;
+
+    bool visible = _isSelected || _isContextTargeted;
+    _selectionIndicator.Visible = visible;
+
+    if (!visible || _selectionIndicator is not Line2D line)
+        return;
+
+    if (_isSelected && _isContextTargeted)
     {
-        if (_selectionIndicator != null)
-            _selectionIndicator.Visible = _isSelected;
+        line.DefaultColor = new Color(1f, 0.75f, 0.2f, 1f);
+        line.Width = 5f;
     }
+    else if (_isContextTargeted)
+    {
+        line.DefaultColor = new Color(1f, 0.85f, 0.25f, 1f);
+        line.Width = 4f;
+    }
+    else
+    {
+        line.DefaultColor = new Color(0.3f, 1f, 0.45f, 1f);
+        line.Width = 3f;
+    }
+}
 }

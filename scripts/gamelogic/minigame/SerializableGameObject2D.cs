@@ -15,8 +15,15 @@ namespace GameLogic
         public override void _Ready()
         {
             base._Ready();
+            RootModule.Instance.GameState.RegisterSeriableGameObject(this);
 
             _serializationComponent = AddComponent<SerializationComponent>();
+        }
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+            RootModule.Instance.GameState.UnregisterSeriableGameObject(PersistentId);
         }
 
 

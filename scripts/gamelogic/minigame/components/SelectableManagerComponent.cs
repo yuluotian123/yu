@@ -56,7 +56,6 @@ public partial class SelectableManagerComponent : Component2D
 
         _selectables.Add(selection);
     }
-
     public void UnregisterSelectable(SelectionComponent selection)
     {
         if (selection == null)
@@ -99,7 +98,6 @@ public partial class SelectableManagerComponent : Component2D
 
         NotifySelectionChanged();
     }
-
     public void SetSingleSelection(SelectionComponent selection)
     {
         if (selection == null)
@@ -121,7 +119,6 @@ public partial class SelectableManagerComponent : Component2D
         selection.SetSelected(true);
         NotifySelectionChanged();
     }
-
     public void RemoveSelection(SelectionComponent selection)
     {
         if (!RemoveSelectionInternal(selection, true))
@@ -129,7 +126,6 @@ public partial class SelectableManagerComponent : Component2D
 
         NotifySelectionChanged();
     }
-
     public void ClearSelection()
     {
         if (_selectedSelections.Count == 0)
@@ -174,7 +170,6 @@ public partial class SelectableManagerComponent : Component2D
         _selectionStartScreenPosition = viewport.GetMousePosition();
         _selectionBoxOverlay?.HideRect();
     }
-
     private void UpdateSelectionGesture(Viewport viewport)
     {
         if (!_isSelectionGestureActive || !_inputModule.IsPressed("combat_select"))
@@ -189,7 +184,6 @@ public partial class SelectableManagerComponent : Component2D
 
         _selectionBoxOverlay?.ShowRect(CreateScreenRect(_selectionStartScreenPosition, currentMousePosition));
     }
-
     private void EndSelectionGesture(Viewport viewport)
     {
         if (!_isSelectionGestureActive)
@@ -209,7 +203,6 @@ public partial class SelectableManagerComponent : Component2D
         Vector2 worldPosition = ViewportInputUtility.ScreenToWorld(viewport, screenPosition);
         SetSingleSelection(FindTopSelectableAt(worldPosition));
     }
-
     private void ApplyBoxSelection(Viewport viewport, Vector2 endScreenPosition)
     {
         Rect2 screenRect = CreateScreenRect(_selectionStartScreenPosition, endScreenPosition);
@@ -252,7 +245,6 @@ public partial class SelectableManagerComponent : Component2D
 
         return bestSelection;
     }
-
     private List<SelectionComponent> FindSelectablesInWorldRect(Rect2 worldRect)
     {
         List<SelectionComponent> result = new();
@@ -316,7 +308,6 @@ public partial class SelectableManagerComponent : Component2D
 
         return result;
     }
-
     private bool RemoveSelectionInternal(SelectionComponent selection, bool setDeselected)
     {
         int index = _selectedSelections.IndexOf(selection);
@@ -326,7 +317,6 @@ public partial class SelectableManagerComponent : Component2D
         RemoveSelectionAt(index, setDeselected);
         return true;
     }
-
     private void RemoveSelectionAt(int index, bool setDeselected)
     {
         SelectionComponent selection = _selectedSelections[index];
@@ -367,7 +357,6 @@ public partial class SelectableManagerComponent : Component2D
     {
         return IsSelectableValid(selection) && selection.CanReceivePlayerCommands;
     }
-
     private static bool IsSelectableValid(SelectionComponent selection)
     {
         return selection != null && selection.Owner != null;

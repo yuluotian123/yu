@@ -31,8 +31,6 @@ public partial class MovementComponent : Component2D
 
     public bool HasMoveTarget => movementMode != MovementMode.None;
 
-    public Vector2? CurrentMoveTarget => _moveTarget;
-
     public override void OnInit()
     {
         _selectionComponent = Owner?.GetComponent<SelectionComponent>();
@@ -54,7 +52,7 @@ public partial class MovementComponent : Component2D
                 UpdateFollowMovement(delta);
                 break;
         }
-        
+
         RefreshMovePathVisual();
     }
 
@@ -65,8 +63,7 @@ public partial class MovementComponent : Component2D
 
         if (_followTargetObject == null)
         {
-            ClearMoveTarget();
-            return;
+            _followTargetObject = RootModule.Instance.GameState.GetRegisteredSeriableGameObject(_followId);
         }
 
         Vector2 targetPosition = _followTargetObject.GlobalPosition;
@@ -106,6 +103,7 @@ public partial class MovementComponent : Component2D
     {
         movementMode = MovementMode.Follow;
         _followId = targetPersistentId;
+        _followTargetObject = RootModule.Instance.GameState.GetRegisteredSeriableGameObject(_followId);
         RefreshMovePathVisual();
     }
 
@@ -113,6 +111,7 @@ public partial class MovementComponent : Component2D
     {
         _moveTarget = Vector2.Zero;
         _followId = null;
+        _followTargetObject = null;
         movementMode = MovementMode.None;
         RefreshMovePathVisual();
     }

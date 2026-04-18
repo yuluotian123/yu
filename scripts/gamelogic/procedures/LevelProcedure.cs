@@ -13,14 +13,13 @@ public class LevelProcedure : ProcedureBase
     {
         Debugger.Info("Enter LevelProcedure");
         RootModule.Instance?.ResetNormalGameSpeed();
-        ModuleSystem.GetModule<IUIModule>().ShowUI<LevelWindow>();
+
         _inputModule = ModuleSystem.GetModule<IInputModule>();
     }
 
     protected internal override void OnLeave(IFsm<IProcedureModule> procedureOwner, bool isShutdown)
     {
         RootModule.Instance?.ResetNormalGameSpeed();
-        ModuleSystem.GetModule<IUIModule>().CloseUI<LevelWindow>();
 
         base.OnLeave(procedureOwner, isShutdown);
     }

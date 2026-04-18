@@ -32,28 +32,20 @@ public class PreloadProcedure : ProcedureBase
         //第一次进入时加载配置表和资源分包，后续进入不重复加载
         if (!isPreload)
         {
-            var configTask = _config.LoadTableAsync<TestexcelConfig>();
-            await Task.WhenAll(configTask);
-
-            var test = _config.GetById<TestexcelConfig>(1);
-            Debugger.Info("testId:" + test.Id + " testName:" + test.Name + " testPara:" + test.Para + " testPara2" + test.Para2);
         }
 
         //预加载关卡和控制器场景，进入关卡后会实例化它们
         var levelHandle = _resource.LoadSceneAsync("res://assets/scenes/spacelevel.tscn");
-        var controllerHandle = _resource.LoadSceneAsync("res://assets/scenes/minigamecontroller.tscn");
-        var gameState = RootModule.Instance.GameState;
 
         //尝试加载存档数据，如果存在则可以在后续流程中使用
         bool fromData = _save.Load();
 
-        await Task.WhenAll(levelHandle.Task, controllerHandle.Task);
+        await Task.WhenAll(levelHandle.Task);
 
         Debugger.Info($"[PreloadProcedure] Level scene loaded: {levelHandle.Scene?.ResourcePath}");
-        Debugger.Info($"[PreloadProcedure] Controller scene loaded: {controllerHandle.Scene?.ResourcePath}");
 
         //只有当关卡和控制器场景都成功加载后才进入关卡流程
-        if (levelHandle.IsValid && controllerHandle.IsValid)
+        if (levelHandle.IsValid)
         {
             Debugger.Info("[PreloadProcedure] Level and controller scenes are ready, entering level.");
             ModuleSystem.GetModule<IUIModule>().CloseAll();
@@ -61,22 +53,6 @@ public class PreloadProcedure : ProcedureBase
             if (Engine.GetMainLoop() is SceneTree tree)
             {
                 var levelNode = levelHandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
-
-                var controllerNode = controllerHandle.InstantiateAndBind<Node>(
-                    t =>
-                    {
-                        gameState.SetPlayerController(t as SerializableGameObject2D);
-
-                        var root = levelNode;
-                        if (fromData)
-                        {
-                            if (t is SerializableGameObject2D pc)
-                                pc.CreateFromData(gameState.SaveData.GetPlayerControllerData(), root);
-                        }
-                        else
-                            root.AddChild(t);
-                    }
-                );
 
             }
 

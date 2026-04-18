@@ -1,25 +1,3 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
-[ext_resource type="Texture2D" uid="uid://bvx6c3tdqbd25" path="res://assets/textures/background.png" id="1_g8f0a"]
-[ext_resource type="Script" uid="uid://g7gpu0fibyp7" path="res://scripts/gamelogic/minigame/BackGroundLayer.cs" id="2_qbpkg"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qbpkg"]
-texture = ExtResource("1_g8f0a")
-texture_region_size = Vector2i(1376, 768)
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_sodt5"]
-tile_size = Vector2i(1376, 768)
-sources/0 = SubResource("TileSetAtlasSource_qbpkg")
-
 [node name="Spacelevel" type="Node2D" unique_id=2082760717]
-
-[node name="BackGround" type="Node2D" parent="." unique_id=2039008415]
-
-[node name="TileMapLayer" type="TileMapLayer" parent="BackGround" unique_id=1428584102]
-tile_map_data = PackedByteArray(0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0)
-tile_set = SubResource("TileSet_sodt5")
-script = ExtResource("2_qbpkg")
-
-[node name="MainCamera" type="Camera2D" parent="." unique_id=739234607]
-zoom = Vector2(0.8, 0.8)

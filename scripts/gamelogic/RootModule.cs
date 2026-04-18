@@ -13,7 +13,6 @@ public sealed partial class RootModule : Node
     public static RootModule Instance { get; private set; }
 
     public GameTime GameTime { get; private set; }
-    public GameState GameState { get; private set; }
 
 
     private const int DEFAULT_DPI = 96; // default windows dpi
@@ -66,10 +65,6 @@ public sealed partial class RootModule : Node
         Engine.MaxFps = frameRate;
         Engine.TimeScale = gameSpeed;
 
-        //初始化游戏属性类（注册到存档）
-        GameState = new GameState();
-        GameState.Init();
-
         Debugger.Info("======= Init Module =======");
 
         //初始化各个模块，现在没有先后次序区别(其实可以懒加载，这边先全部初始化，方便查看）
@@ -104,7 +99,6 @@ public sealed partial class RootModule : Node
 
     public override void _ExitTree()
     {
-        GameState.Clear();
         ModuleSystem.Shutdown();
 
         Debugger.Info("======= Exit GameEntry =======");

@@ -3,7 +3,7 @@
     "SaveKey": "GameState",
     "playerControllerData": {
       "$type": "SerializableGameObjectData",
-      "PersistentId": "dcc416228a1a4eecb976856b432f6e6e",
+      "PersistentId": "c3a27cbd06c147e3b904faa074f27a0b",
       "OwnerStateJson": "",
       "Position2D": {
         "$type": "Vector2",
@@ -16,48 +16,48 @@
     "playerUnitData": [
       {
         "$type": "SerializableGameObjectData",
-        "PersistentId": "3a73706693024b9ab854804c1c582c40",
+        "PersistentId": "957186d8018447d48f894ae9ad2502ea",
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": -458.09003,
-          "Y": -109.123146
+          "X": 302.41907,
+          "Y": -71.02631
         },
         "Rotation2D": 0,
         "ComponentDatas": [
           {
             "$type": "SerializableComponentData",
             "Key": "MovementComponent",
-            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:\u00224c102f20487b478a8cfd1a842005e7c2\u0022,\u0022movementMode\u0022:\u0022Follow\u0022}"
+            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:null,\u0022movementMode\u0022:\u0022None\u0022}"
           }
         ]
       },
       {
         "$type": "SerializableGameObjectData",
-        "PersistentId": "f1e9da20ffa44c7fb869956ae21c64dd",
+        "PersistentId": "81232725acd44ce1a5e451e4f110b72d",
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": 76.33238,
-          "Y": -230.80177
+          "X": 98.142456,
+          "Y": -120.18004
         },
         "Rotation2D": 0,
         "ComponentDatas": [
           {
             "$type": "SerializableComponentData",
             "Key": "MovementComponent",
-            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:\u00224c102f20487b478a8cfd1a842005e7c2\u0022,\u0022movementMode\u0022:\u0022Follow\u0022}"
+            "StateJson": "{\u0022_moveTarget\u0022:{\u0022$type\u0022:\u0022Vector2\u0022,\u0022X\u0022:0,\u0022Y\u0022:0},\u0022_followId\u0022:null,\u0022movementMode\u0022:\u0022None\u0022}"
           }
         ]
       },
       {
         "$type": "SerializableGameObjectData",
-        "PersistentId": "4c102f20487b478a8cfd1a842005e7c2",
+        "PersistentId": "50aaf2b3556747a1b83dc0ae959acc36",
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": 144,
-          "Y": 0
+          "X": 144.68898,
+          "Y": 30.176071
         },
         "Rotation2D": 0,
         "ComponentDatas": [

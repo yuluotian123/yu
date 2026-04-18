@@ -44,7 +44,10 @@ namespace GameLogic
         public SerializableGameObject2D CreateFromData(SerializableGameObjectData data,Node root = null)
         {
             if(data == null)
-                return null;
+            { 
+                return null;   
+            }
+
 
             if(root == null)
                 root = RootModule.Instance;

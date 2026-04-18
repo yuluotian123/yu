@@ -88,7 +88,7 @@ public partial class MovementComponent : Component2D
 
         if (distance <= StopDistance)
         {
-            _transformNode2D.GlobalPosition = targetPosition;
+            //_transformNode2D.GlobalPosition = targetPosition;
             ClearMoveTarget();
             return;
         }

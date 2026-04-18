@@ -45,16 +45,13 @@ public class PreloadProcedure : ProcedureBase
         var gameState = RootModule.Instance.GameState;
 
         //尝试加载存档数据，如果存在则可以在后续流程中使用
-        if (_save.Load())
-        {
-            
-        }
+        bool fromData = _save.Load();
 
         await Task.WhenAll(levelHandle.Task, controllerHandle.Task);
 
         Debugger.Info($"[PreloadProcedure] Level scene loaded: {levelHandle.Scene?.ResourcePath}");
         Debugger.Info($"[PreloadProcedure] Controller scene loaded: {controllerHandle.Scene?.ResourcePath}");
-        
+
         //只有当关卡和控制器场景都成功加载后才进入关卡流程
         if (levelHandle.IsValid && controllerHandle.IsValid)
         {
@@ -65,12 +62,22 @@ public class PreloadProcedure : ProcedureBase
             {
                 var levelNode = levelHandle.InstantiateAndBind<Node>(tree.Root.GetNode("Root"));
 
-                var controllerNode = controllerHandle.Instantiate<Node>();
-                gameState.SetPlayerController(controllerNode as SerializableGameObject2D);
+                var controllerNode = controllerHandle.InstantiateAndBind<Node>(
+                    t =>
+                    {
+                        gameState.SetPlayerController(t as SerializableGameObject2D);
 
-                controllerHandle.BindTo(levelNode);  
-                levelNode.AddChild(controllerNode);
-                
+                        var root = levelNode;
+                        if (fromData)
+                        {
+                            if (t is SerializableGameObject2D pc)
+                                pc.CreateFromData(gameState.SaveData.GetPlayerControllerData(), root);
+                        }
+                        else
+                            root.AddChild(t);
+                    }
+                );
+
             }
 
             ChangeState<LevelProcedure>(procedureOwner);

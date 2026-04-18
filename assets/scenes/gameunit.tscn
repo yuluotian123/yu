@@ -3,23 +3,23 @@
 [ext_resource type="Script" uid="uid://cpckelxllfwg4" path="res://scripts/gamelogic/minigame/SerializableGameObject2D.cs" id="1_cecl2"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_component"]
 [ext_resource type="Script" uid="uid://cudn8b7c8sxsn" path="res://scripts/gamelogic/minigame/components/MovementComponent.cs" id="3_movement"]
+[ext_resource type="Script" uid="uid://bh1yo7u1g73yc" path="res://scripts/gamelogic/minigame/components/selection/SelectionComponent.cs" id="4_8rfto"]
 [ext_resource type="Texture2D" uid="uid://dryij6v3strbj" path="res://assets/textures/rocket.png" id="4_body"]
-[ext_resource type="Script" uid="uid://bh1yo7u1g73yc" path="res://scripts/gamelogic/minigame/components/SelectionComponent.cs" id="5_selection"]
 [ext_resource type="Script" uid="uid://bjgp2st6xyi1a" path="res://scripts/gamelogic/minigame/components/FactionComponent.cs" id="6_faction"]
 
-[sub_resource type="Resource" id="Resource_m51mg"]
-script = ExtResource("3_movement")
-StopDistance = 15.0
-DrawMovePathOnlyWhenSelected = false
-metadata/_custom_type_script = "uid://cudn8b7c8sxsn"
-
-[sub_resource type="Resource" id="Resource_l660j"]
+[sub_resource type="Resource" id="Resource_omfbt"]
 script = ExtResource("6_faction")
 metadata/_custom_type_script = "uid://bjgp2st6xyi1a"
 
-[sub_resource type="Resource" id="Resource_mlskq"]
-script = ExtResource("5_selection")
+[sub_resource type="Resource" id="Resource_bo38s"]
+script = ExtResource("4_8rfto")
 metadata/_custom_type_script = "uid://bh1yo7u1g73yc"
+
+[sub_resource type="Resource" id="Resource_4krk5"]
+script = ExtResource("3_movement")
+StopDistance = 20.0
+DrawMovePathOnlyWhenSelected = false
+metadata/_custom_type_script = "uid://cudn8b7c8sxsn"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y5n6h"]
 animations = [{
@@ -35,7 +35,7 @@ animations = [{
 [node name="PlayerUnit" type="Node2D" unique_id=2090676282]
 process_mode = 1
 script = ExtResource("1_cecl2")
-Components = Array[ExtResource("2_component")]([SubResource("Resource_m51mg"), SubResource("Resource_l660j"), SubResource("Resource_mlskq")])
+Components = Array[ExtResource("2_component")]([SubResource("Resource_omfbt"), SubResource("Resource_bo38s"), SubResource("Resource_4krk5")])
 
 [node name="Body" type="AnimatedSprite2D" parent="." unique_id=1897046148]
 scale = Vector2(0.125, 0.125)

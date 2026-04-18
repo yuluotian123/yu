@@ -30,31 +30,36 @@ public partial class CameraComponent : Component2D
     public override void OnUpdate(double delta)
     {
         Vector2 nextPosition = _camera.Position;
-        if (!_inputModule.TryHandleVector("camera_left", "camera_right", "camera_up", "camera_down", out var keyboardMove))
+        Vector2 keyboardMove = _inputModule.GetVector("camera_left", "camera_right", "camera_up", "camera_down");
+        if (keyboardMove != Vector2.Zero)
+        {
             keyboardMove = Vector2.Zero;
+        }
 
         float timeDelta = (float)RootModule.Instance.GameTime.UnscaledDeltaTime;
 
         if (keyboardMove != Vector2.Zero)
         {
             float moveSpeed = MoveSpeed * timeDelta;
-            if (_inputModule.TryHandlePressed("camera_speedup"))
+            if (_inputModule.IsPressed("camera_speedup"))
+            {
                 moveSpeed *= SpeedupMultiplier;
+            }
 
             nextPosition += keyboardMove * moveSpeed;
         }
 
         bool isPointerBlockedByUI = ViewportInputUtility.IsPointerBlockedByUI(Owner);
         Vector2 cameraDragDelta = _inputModule.GetMouseDelta();
-        bool isDraggingCamera = _inputModule.TryHandlePressed("camera_drag");
+        bool isDraggingCamera = _inputModule.IsPressed("camera_drag",filterConsumed:true);
 
         if (!isPointerBlockedByUI && isDraggingCamera && cameraDragDelta != Vector2.Zero)
             nextPosition -= cameraDragDelta * DragSpeed * _camera.Zoom;
 
         _camera.Position = nextPosition;
 
-        bool zoomInRequested = _inputModule.TryHandleJustPressed("camera_zoom_in");
-        bool zoomOutRequested = _inputModule.TryHandleJustPressed("camera_zoom_out");
+        bool zoomInRequested = _inputModule.IsJustPressed("camera_zoom_in");
+        bool zoomOutRequested = _inputModule.IsJustPressed("camera_zoom_out");
         if (zoomInRequested || zoomOutRequested)
             ApplyZoom(zoomInRequested, zoomOutRequested);
     }

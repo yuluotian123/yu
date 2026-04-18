@@ -83,7 +83,7 @@ namespace GameLogic.Input
         }
 
         /// <summary>
-        /// 判断持续 held consume 集合是否与目标 action 集合有交集。
+        /// 判断 held consume 集合是否与目标 action 集合有交集。
         /// </summary>
         public bool OverlapsHeldActions(HashSet<string> actions)
         {
@@ -286,13 +286,13 @@ namespace GameLogic.Input
         /// 尝试在指定层建立 held consume。
         /// 成功后，同组 action 也会一起被占用。
         /// </summary>
-        public bool TryAcquireHeldLock(InputLayer layer, IEnumerable<string> actions)
+        public bool TryAcquireHeldLock(InputLayer layer, IEnumerable<string> actions, bool includeSamePriority = true)
         {
             var requestedActions = ExpandActionGroup(actions);
             if (requestedActions.Count == 0)
                 return false;
 
-            if (!CanAcquireHeldLock(layer, requestedActions))
+            if (!CanAcquireHeldLock(layer, requestedActions, includeSamePriority))
                 return false;
 
             ClearLowerPriorityHeldLocks(layer, requestedActions);
@@ -301,7 +301,7 @@ namespace GameLogic.Input
         }
 
         /// <summary>
-        /// 查询某个 action 是否已被更高优先级输入层消费。
+        /// 查询某个 action 是否已被更高优先级输入层逐帧消费。
         /// 同组 action 会一起参与判断。
         /// </summary>
         public bool IsActionConsumed(string action, int currentPriority, bool includeSamePriority = false)
@@ -313,6 +313,25 @@ namespace GameLogic.Input
                     break;
 
                 if (layer.OverlapsConsumedActions(requestedActions))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 查询某个 action 是否已被更高优先级输入层 held consume。
+        /// 同组 action 会一起参与判断。
+        /// </summary>
+        public bool IsActionHeldConsumed(string action, int currentPriority, bool includeSamePriority = true)
+        {
+            var requestedActions = ExpandActionGroup(new[] { action });
+            foreach (var layer in GetSortedLayers())
+            {
+                if (includeSamePriority ? layer.Priority < currentPriority : layer.Priority <= currentPriority)
+                    break;
+
+                if (layer.OverlapsHeldActions(requestedActions))
                     return true;
             }
 
@@ -361,7 +380,7 @@ namespace GameLogic.Input
             return expandedActions;
         }
 
-        private bool CanAcquireHeldLock(InputLayer layer, HashSet<string> requestedActions)
+        private bool CanAcquireHeldLock(InputLayer layer, HashSet<string> requestedActions, bool includeSamePriority)
         {
             foreach (var otherLayer in GetSortedLayers())
             {
@@ -371,7 +390,7 @@ namespace GameLogic.Input
                 if (!otherLayer.OverlapsHeldActions(requestedActions))
                     continue;
 
-                if (otherLayer.Priority >= layer.Priority)
+                if (includeSamePriority ? otherLayer.Priority >= layer.Priority : otherLayer.Priority > layer.Priority)
                     return false;
             }
 

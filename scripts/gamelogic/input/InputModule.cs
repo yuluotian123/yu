@@ -39,12 +39,8 @@ namespace GameLogic.Input
         private Vector2 _mouseDeltaFrame = Vector2.Zero;
         private bool _hasMousePositionLastFrame;
 
-        /// <summary>
-        /// 妯″潡浼樺厛绾с€?        /// </summary>
         public override int Priority => 10;
 
-        /// <summary>
-        /// 鍒濆鍖栬緭鍏ュ眰鍜?InputMap 缂撳瓨銆?        /// </summary>
         public override void OnInit()
         {
             _layerManager.AddLayer(InputLayerManager.LayerName.Global, InputLayerManager.LayerPriority.Global);
@@ -56,8 +52,7 @@ namespace GameLogic.Input
             Debugger.Info("[InputModule] Initialized with action alias and group parsing.");
         }
 
-        /// <summary>
-        /// 娓呯悊杈撳叆缂撳瓨鍜岃繍琛屾椂鐘舵€併€?        /// </summary>
+
         public override void Shutdown()
         {
             _tracker.Clear();
@@ -71,8 +66,6 @@ namespace GameLogic.Input
             _hasMousePositionLastFrame = false;
         }
 
-        /// <summary>
-        /// 姣忓抚鍒锋柊杈撳叆鐘舵€併€佹竻鐞?consume锛屽苟璁板綍杈撳叆浜嬩欢銆?        /// </summary>
         public void Process(double elapseSeconds, double realElapseSeconds)
         {
             _currentTime += realElapseSeconds;
@@ -85,46 +78,70 @@ namespace GameLogic.Input
         }
 
         /// <inheritdoc />
-        public bool IsPressed(string action)
+        public bool IsPressed(
+            string action,
+            string handlerLayer = null,
+            bool filterConsumed = false,
+            bool includeSamePriority = true)
         {
-            if (!TryGetQueryableActionInfo(action, out var actionInfo))
+            if (!TryGetQueryableActionInfo(
+                    action,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: true,
+                    includeSamePriority,
+                    out var actionInfo))
                 return false;
 
             return Godot.Input.IsActionPressed(actionInfo.RawActionName);
         }
 
         /// <inheritdoc />
-        public bool IsJustPressed(string action)
+        public bool IsJustPressed(
+            string action,
+            string handlerLayer = null,
+            bool filterConsumed = false,
+            bool includeSamePriority = false)
         {
-            if (!TryGetQueryableActionInfo(action, out var actionInfo))
+            if (!TryGetQueryableActionInfo(
+                    action,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: false,
+                    includeSamePriority,
+                    out var actionInfo))
                 return false;
 
             return Godot.Input.IsActionJustPressed(actionInfo.RawActionName);
         }
 
         /// <inheritdoc />
-        public bool IsJustReleased(string action)
+        public bool IsJustReleased(
+            string action,
+            string handlerLayer = null,
+            bool filterConsumed = false,
+            bool includeSamePriority = false)
         {
-            if (!TryGetQueryableActionInfo(action, out var actionInfo))
+            if (!TryGetQueryableActionInfo(
+                    action,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: false,
+                    includeSamePriority,
+                    out var actionInfo))
                 return false;
 
             return Godot.Input.IsActionJustReleased(actionInfo.RawActionName);
         }
 
         /// <inheritdoc />
-        public bool TryHandlePressed(string action, string handlerLayer = null)
+        public bool TryConsumePressed(string action, string handlerLayer = null, bool includeSamePriority = true)
         {
-            return TryConsumePressedInternal(action, handlerLayer);
+            return TryConsumePressedInternal(action, handlerLayer, includeSamePriority);
         }
 
         /// <inheritdoc />
-        public bool TryConsumePressed(string action, string handlerLayer = null)
-        {
-            return TryConsumePressedInternal(action, handlerLayer);
-        }
-
-        /// <inheritdoc />
-        public bool TryHandleJustPressed(string action, string handlerLayer = null, bool includeSamePriority = false)
+        public bool TryConsumeJustPressed(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
@@ -132,15 +149,12 @@ namespace GameLogic.Input
             if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority))
                 return false;
 
-            if (!Godot.Input.IsActionJustPressed(actionInfo.RawActionName))
-                return false;
-
             _layerManager.ConsumeAction(layer, actionInfo.BaseActionName);
             return true;
         }
 
         /// <inheritdoc />
-        public bool TryHandleJustReleased(string action, string handlerLayer = null, bool includeSamePriority = false)
+        public bool TryConsumeJustReleased(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
@@ -148,109 +162,105 @@ namespace GameLogic.Input
             if (_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority))
                 return false;
 
-            if (!Godot.Input.IsActionJustReleased(actionInfo.RawActionName))
-                return false;
-
             _layerManager.ConsumeAction(layer, actionInfo.BaseActionName);
             return true;
         }
 
         /// <inheritdoc />
-        public float GetActionStrength(string action)
+        public float GetActionStrength(
+            string action,
+            string handlerLayer = null,
+            bool filterConsumed = false,
+            bool includeSamePriority = true)
         {
-            if (!TryGetQueryableActionInfo(action, out var actionInfo))
+            if (!TryGetQueryableActionInfo(
+                    action,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: true,
+                    includeSamePriority,
+                    out var actionInfo))
                 return 0f;
 
             return Godot.Input.GetActionStrength(actionInfo.RawActionName);
         }
 
         /// <inheritdoc />
-        public bool TryHandleActionStrength(string action, out float strength, string handlerLayer = null)
+        public bool TryConsumeActionStrength(string action, string handlerLayer = null, bool includeSamePriority = true)
         {
-            strength = 0f;
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
 
-            float currentStrength = Godot.Input.GetActionStrength(actionInfo.RawActionName);
-            if (currentStrength <= 0f)
-                return false;
-
-            if (!TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName }))
-                return false;
-
-            strength = currentStrength;
-            return true;
+            return TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName }, includeSamePriority);
         }
 
         /// <inheritdoc />
-        public Vector2 GetAxis(string negativeX, string positiveX, string negativeY, string positiveY)
+        public Vector2 GetAxis(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            string handlerLayer = null,
+            bool filterConsumed = false,
+            bool includeSamePriority = true)
         {
-            if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
-                return Vector2.Zero;
-
-            if (!AreActionLayersEnabled(actionInfos))
+            if (!TryGetQueryableDirectionalActions(
+                    negativeX,
+                    positiveX,
+                    negativeY,
+                    positiveY,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: true,
+                    includeSamePriority,
+                    out var actionInfos))
                 return Vector2.Zero;
 
             return ReadAxis(actionInfos);
         }
 
         /// <inheritdoc />
-        public bool TryHandleAxis(
+        public bool TryConsumeAxis(
             string negativeX,
             string positiveX,
             string negativeY,
             string positiveY,
-            out Vector2 axis,
-            string handlerLayer = null)
+            string handlerLayer = null,
+            bool includeSamePriority = true)
         {
-            axis = Vector2.Zero;
             if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
                 return false;
 
             if (!TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out var layer))
                 return false;
 
-            Vector2 currentAxis = ReadAxis(actionInfos);
-            if (currentAxis == Vector2.Zero)
-                return false;
-
-            if (!TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos)))
-                return false;
-
-            axis = currentAxis;
-            return true;
+            return TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos), includeSamePriority);
         }
 
         /// <inheritdoc />
-        public Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1f)
-        {
-            if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
-                return Vector2.Zero;
-
-            if (!AreActionLayersEnabled(actionInfos))
-                return Vector2.Zero;
-
-            return ReadVector(actionInfos, deadzone);
-        }
-
-        /// <inheritdoc />
-        public bool TryHandleVector(
+        public Vector2 GetVector(
             string negativeX,
             string positiveX,
             string negativeY,
             string positiveY,
-            out Vector2 vector,
+            float deadzone = -1f,
             string handlerLayer = null,
-            float deadzone = -1f)
+            bool filterConsumed = false,
+            bool includeSamePriority = true)
         {
-            return TryConsumeVectorInternal(
-                negativeX,
-                positiveX,
-                negativeY,
-                positiveY,
-                out vector,
-                handlerLayer,
-                deadzone);
+            if (!TryGetQueryableDirectionalActions(
+                    negativeX,
+                    positiveX,
+                    negativeY,
+                    positiveY,
+                    handlerLayer,
+                    filterConsumed,
+                    useHeldConsumeFilter: true,
+                    includeSamePriority,
+                    out var actionInfos))
+                return Vector2.Zero;
+
+            return ReadVector(actionInfos, deadzone);
         }
 
         /// <inheritdoc />
@@ -260,16 +270,15 @@ namespace GameLogic.Input
             string negativeY,
             string positiveY,
             string handlerLayer = null,
-            float deadzone = -1f)
+            bool includeSamePriority = true)
         {
             return TryConsumeVectorInternal(
                 negativeX,
                 positiveX,
                 negativeY,
                 positiveY,
-                out _,
                 handlerLayer,
-                deadzone);
+                includeSamePriority);
         }
 
         /// <inheritdoc />
@@ -342,16 +351,6 @@ namespace GameLogic.Input
         }
 
         /// <inheritdoc />
-        public void ConsumeAction(string action, string handlerLayer = null)
-        {
-            string baseAction = NormalizeBaseActionName(action);
-            if (!TryGetEnabledHandlerLayer(baseAction, handlerLayer, out var layer))
-                return;
-
-            _layerManager.ConsumeAction(layer, baseAction);
-        }
-
-        /// <inheritdoc />
         public bool IsActionConsumed(string action, string handlerLayer = null, bool includeSamePriority = false)
         {
             string baseAction = NormalizeBaseActionName(action);
@@ -359,6 +358,16 @@ namespace GameLogic.Input
                 return false;
 
             return _layerManager.IsActionConsumed(baseAction, layer.Priority, includeSamePriority);
+        }
+
+        /// <inheritdoc />
+        public bool IsActionHeldConsumed(string action, string handlerLayer = null, bool includeSamePriority = true)
+        {
+            string baseAction = NormalizeBaseActionName(action);
+            if (!TryGetEnabledHandlerLayer(baseAction, handlerLayer, out var layer))
+                return false;
+
+            return _layerManager.IsActionHeldConsumed(baseAction, layer.Priority, includeSamePriority);
         }
 
         /// <inheritdoc />
@@ -535,13 +544,32 @@ namespace GameLogic.Input
             }
         }
 
-        private bool TryGetQueryableActionInfo(string action, out ParsedActionInfo actionInfo)
+        private bool TryGetQueryableActionInfo(
+            string action,
+            string handlerLayer,
+            bool filterConsumed,
+            bool useHeldConsumeFilter,
+            bool includeSamePriority,
+            out ParsedActionInfo actionInfo)
         {
             actionInfo = null;
             if (!TryResolveActionInfo(action, out actionInfo))
                 return false;
 
-            return _layerManager.IsActionLayerEnabled(actionInfo.BaseActionName);
+            if (!filterConsumed)
+            {
+                if (string.IsNullOrWhiteSpace(handlerLayer))
+                    return _layerManager.IsActionLayerEnabled(actionInfo.BaseActionName);
+
+                return TryGetEnabledHandlerLayer(actionInfo.BaseActionName, handlerLayer, out _);
+            }
+
+            if (!TryGetEnabledHandlerLayer(actionInfo.BaseActionName, handlerLayer, out var layer))
+                return false;
+
+            return useHeldConsumeFilter
+                ? !_layerManager.IsActionHeldConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority)
+                : !_layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority);
         }
 
         private bool TryGetHandleableActionInfo(
@@ -582,22 +610,57 @@ namespace GameLogic.Input
             return true;
         }
 
-        private bool TryAcquireHeldActions(InputLayer layer, IEnumerable<string> baseActions)
+        private bool TryGetQueryableDirectionalActions(
+            string negativeX,
+            string positiveX,
+            string negativeY,
+            string positiveY,
+            string handlerLayer,
+            bool filterConsumed,
+            bool useHeldConsumeFilter,
+            bool includeSamePriority,
+            out ParsedActionInfo[] actionInfos)
+        {
+            if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out actionInfos))
+                return false;
+
+            if (!filterConsumed)
+            {
+                if (string.IsNullOrWhiteSpace(handlerLayer))
+                    return AreActionLayersEnabled(actionInfos);
+
+                return TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out _);
+            }
+
+            if (!TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out var layer))
+                return false;
+
+            foreach (var actionInfo in actionInfos)
+            {
+                bool isConsumed = useHeldConsumeFilter
+                    ? _layerManager.IsActionHeldConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority)
+                    : _layerManager.IsActionConsumed(actionInfo.BaseActionName, layer.Priority, includeSamePriority);
+
+                if (isConsumed)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool TryAcquireHeldActions(InputLayer layer, IEnumerable<string> baseActions, bool includeSamePriority = true)
         {
             // action group 的展开统一放在 LayerManager 里，
             // 分组来源则由 InputMap action 名里的 groupId 解析结果驱动。
-            return _layerManager.TryAcquireHeldLock(layer, baseActions);
+            return _layerManager.TryAcquireHeldLock(layer, baseActions, includeSamePriority);
         }
 
-        private bool TryConsumePressedInternal(string action, string handlerLayer)
+        private bool TryConsumePressedInternal(string action, string handlerLayer, bool includeSamePriority)
         {
             if (!TryGetHandleableActionInfo(action, handlerLayer, out var actionInfo, out var layer))
                 return false;
 
-            if (!Godot.Input.IsActionPressed(actionInfo.RawActionName))
-                return false;
-
-            return TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName });
+            return TryAcquireHeldActions(layer, new[] { actionInfo.BaseActionName }, includeSamePriority);
         }
 
         private bool TryConsumeVectorInternal(
@@ -605,26 +668,16 @@ namespace GameLogic.Input
             string positiveX,
             string negativeY,
             string positiveY,
-            out Vector2 vector,
             string handlerLayer,
-            float deadzone)
+            bool includeSamePriority)
         {
-            vector = Vector2.Zero;
             if (!TryResolveDirectionalActions(negativeX, positiveX, negativeY, positiveY, out var actionInfos))
                 return false;
 
             if (!TryGetEnabledHandlerLayer(actionInfos, handlerLayer, out var layer))
                 return false;
 
-            Vector2 currentVector = ReadVector(actionInfos, deadzone);
-            if (currentVector == Vector2.Zero)
-                return false;
-
-            if (!TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos)))
-                return false;
-
-            vector = currentVector;
-            return true;
+            return TryAcquireHeldActions(layer, CollectBaseActionNames(actionInfos), includeSamePriority);
         }
 
         private bool IsActionStillActive(string action)
@@ -728,4 +781,3 @@ namespace GameLogic.Input
         }
     }
 }
-

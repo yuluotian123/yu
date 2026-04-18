@@ -1,28 +1,24 @@
 # InputModule 使用说明
 
-## 概述
+## 概览
 
-`InputModule` 是项目里的统一 action 输入模块，负责：
+`InputModule` 提供统一的 action 输入访问接口，分成三类能力：
 
-- 查询输入状态：`IsPressed`、`IsJustPressed`、`IsJustReleased`
-- 事件型显式消费：`TryHandleJustPressed`、`TryHandleJustReleased`
-- 持续输入显式接管：`TryHandlePressed`、`TryHandleActionStrength`、`TryHandleAxis`、`TryHandleVector`
-- 方向输入辅助：`GetAxis`、`GetVector`、`GetMouseDelta`
-- 输入缓冲与长按时长：`IsBuffered`、`ConsumeBufferedAction`、`GetHoldTime`
-- 输入层管理：`EnableLayer`、`DisableLayer`、`IsLayerEnabled`
-- 运行时模拟输入：`SimulateInputEvent`、`SimulateActionPress`、`SimulateActionRelease`
+- 纯查询：`IsPressed`、`IsJustPressed`、`IsJustReleased`、`GetActionStrength`、`GetAxis`、`GetVector`
+- 显式消费：`TryConsumeJustPressed`、`TryConsumeJustReleased`
+- 显式占用：`TryConsumePressed`、`TryConsumeActionStrength`、`TryConsumeAxis`、`TryConsumeVector`
 
-模块底层仍然基于 Godot 的 `Input` 和 `InputMap`，但业务侧应尽量统一通过 `IInputModule` 访问 action。
+此外还提供两类消费状态查询：
 
-## InputMap 命名格式
+- `IsActionConsumed`：只查询当前帧 consume
+- `IsActionHeldConsumed`：只查询 held consume
 
-不做编辑器插件，也不扩展原生 InputMap UI。  
-`action group` 直接编码进 InputMap 的 action 名里。
+## InputMap 命名
 
-格式：
+支持把 action group 直接写在 InputMap action 名里：
 
 ```text
-基础Action名|GroupId|GroupId...
+BaseAction|GroupId|GroupId...
 ```
 
 示例：
@@ -34,183 +30,102 @@ ui_cancel|cancel
 camera_up|move_up|nav_up
 ```
 
-规则：
+业务代码始终使用基础 action 名，`InputModule` 会在运行时自动解析 group 并扩展消费判定。
 
-- 基础 action 名继续沿用现有风格：`camera_xxx`、`combat_xxx`、`ui_xxx`
-- `|` 后面跟一个或多个 `groupId`
-- `groupId` 建议统一用小写下划线，如 `move_up`、`confirm`、`cancel`
-- `|` 是保留分隔符，不应出现在普通 action 名或 groupId 里
+## 查询与消费的职责分离
 
-## 基础名与真实名
+当前版本的约定是：
 
-业务代码继续使用基础 action 名：
+1. `Is*` / `Get*` 只负责查询输入状态或输入值
+2. `TryConsume*` 只负责 consume / held consume
 
-```csharp
-_input.IsPressed("camera_up");
-_input.TryHandlePressed("combat_up");
-_input.TryHandleJustPressed("ui_cancel");
-```
-
-`InputModule` 会在运行时自动完成：
-
-- `baseActionName -> rawActionName`
-- `groupId -> baseActionName集合`
-- `baseActionName -> 同组baseActionName集合`
-
-也就是说，如果 InputMap 里配置的是：
-
-```text
-camera_up|move_up
-combat_up|move_up
-```
-
-那业务侧仍然只写：
+这意味着业务代码应当先查，再 consume：
 
 ```csharp
-_input.TryHandlePressed("camera_up");
-_input.TryHandlePressed("combat_up");
-```
-
-## Action Group 语义
-
-`InputLayerManager` 会根据 `InputModule` 解析出的 group 信息扩展 consume 范围。
-
-含义：
-
-- 如果某个 action 被 consume
-- 同组的其他 action 也会一并视为已 consume
-
-例如：
-
-```text
-camera_up|move_up
-combat_up|move_up
-```
-
-当高优先级层处理 `combat_up` 时：
-
-- `combat_up` 会被 consume
-- `camera_up` 也会因为同属 `move_up` 组而一起被 consume
-
-## 两种消费语义
-
-### 事件型：仅消费当前帧
-
-适用接口：
-
-- `TryHandleJustPressed`
-- `TryHandleJustReleased`
-
-行为说明：
-
-- 消费状态只持续当前帧
-- 同一帧内，更低优先级层再次调用同组 action 的 `TryHandle...` 会返回 `false`
-- `IsJustPressed` 等纯查询接口不带副作用
-
-### 持续型：接管直到释放
-
-适用接口：
-
-- `TryHandlePressed`
-- `TryHandleActionStrength`
-- `TryHandleAxis`
-- `TryHandleVector`
-
-行为说明：
-
-- 高层一旦成功接管持续输入，会一直持有到 release
-- 持有期间，更低优先级层无法再接管同组 action
-- 同一层重复查询同一组输入会继续成功，不会重复创建锁
-- `IsPressed`、`GetAxis`、`GetVector`、`GetActionStrength` 仍然只是纯查询
-
-## 非法配置校验
-
-`InputModule` 会检查“基础名冲突”。
-
-例如如果同时存在：
-
-```text
-camera_up|move_up
-camera_up|nav_up
-```
-
-那么它们的基础名都是 `camera_up`，这会造成运行时歧义。  
-当前策略是：
-
-- 启动或刷新时输出 warning
-- 跳过该基础名映射
-- 直到命名冲突被修复
-
-## 使用示例
-
-### 纯查询
-
-```csharp
-bool isPressed = _input.IsPressed("combat_attack");
-bool justPressed = _input.IsJustPressed("combat_jump");
-bool justReleased = _input.IsJustReleased("combat_dodge");
-float strength = _input.GetActionStrength("combat_aim");
-Vector2 move = _input.GetVector("combat_left", "combat_right", "combat_up", "combat_down");
-```
-
-### 事件型消费
-
-```csharp
-if (_input.TryHandleJustPressed("ui_cancel"))
+if (_input.IsJustPressed("ui_cancel") &&
+    _input.TryConsumeJustPressed("ui_cancel"))
 {
     CloseWindow();
 }
-
-if (_input.TryHandleJustReleased("combat_attack", "UI"))
-{
-    EndAttackBlock();
-}
 ```
-
-### 持续型接管
 
 ```csharp
-if (_input.TryHandlePressed("camera_drag", "UI"))
+Vector2 move = _input.GetVector("camera_left", "camera_right", "camera_up", "camera_down");
+if (move != Vector2.Zero &&
+    _input.TryConsumeVector("camera_left", "camera_right", "camera_up", "camera_down"))
 {
-    BeginUiDrag();
-}
-
-if (_input.TryHandleVector(
-        "camera_left",
-        "camera_right",
-        "camera_up",
-        "camera_down",
-        out var cameraMove))
-{
-    MoveCamera(cameraMove);
-}
-
-if (_input.TryHandleActionStrength("combat_aim", out var aimStrength))
-{
-    UpdateAim(aimStrength);
+    MoveCamera(move);
 }
 ```
 
-## 2D 相机示例
+## Query Filter Params
+
+为了让查询接口也能按“某个处理层的视角”过滤掉已经被占用的输入，以下查询接口都补了可选参数：
+
+- `IsPressed`
+- `IsJustPressed`
+- `IsJustReleased`
+- `GetActionStrength`
+- `GetAxis`
+- `GetVector`
+
+统一规则：
+
+- `handlerLayer`
+  含义：可选的查询视角层。省略时使用 action 默认层。
+- `filterConsumed = false`
+  含义：保持纯查询行为，不做消费过滤。
+- `filterConsumed = true` 对 `IsJustPressed` / `IsJustReleased`
+  含义：按 `IsActionConsumed` 过滤当前帧 consume。
+- `filterConsumed = true` 对 `IsPressed` / `GetActionStrength` / `GetAxis` / `GetVector`
+  含义：按 `IsActionHeldConsumed` 过滤 held consume。
+
+`includeSamePriority` 的默认值与对应的 consume API 保持一致：
+
+- `IsJustPressed` / `IsJustReleased`：默认 `false`
+- `IsPressed` / `GetActionStrength` / `GetAxis` / `GetVector`：默认 `true`
+
+示例：
 
 ```csharp
-_input.TryHandleVector("camera_left", "camera_right", "camera_up", "camera_down", out var moveAxis);
-CameraMoveAxis = moveAxis;
+bool canUseCancel = _input.IsJustPressed(
+    "ui_cancel",
+    handlerLayer: "UI",
+    filterConsumed: true);
 
-IsSpeedupPressed = _input.TryHandlePressed("camera_speedup");
-IsDraggingCamera = _input.TryHandlePressed("camera_drag");
-CameraDragDelta = _input.GetMouseDelta();
-
-ZoomInRequested = _input.TryHandleJustPressed("camera_zoom_in");
-ZoomOutRequested = _input.TryHandleJustPressed("camera_zoom_out");
+Vector2 move = _input.GetVector(
+    "camera_left",
+    "camera_right",
+    "camera_up",
+    "camera_down",
+    handlerLayer: "Camera",
+    filterConsumed: true);
 ```
+
+## 两类消费状态查询
+
+### `IsActionConsumed`
+
+只查询当前帧 consume：
+
+- 只看 `_consumedActions`
+- 不看 held lock
+- 适合回答“这帧是否已经被处理过”
+
+### `IsActionHeldConsumed`
+
+只查询 held consume：
+
+- 只看 `_heldConsumedActions`
+- 不混入当前帧 consume
+- 适合回答“当前是否被持续占用”
 
 ## 注意事项
 
-1. `GetMouseDelta()` 仍然只是基于帧差计算，不会单独被 consume。
-2. 持续输入接管和事件型消费都经过同一套 action group 扩展逻辑。
-3. `TryHandleJustPressed` 和 `TryHandleJustReleased` 仍然只是当前帧消费。
-4. 直接调用 Godot `Input.IsAction...("基础名")` 不再可靠，因为原生 Input 只认识完整 action 名；业务逻辑应统一走 `IInputModule`。
+1. `TryConsume*` 不会帮你判断输入是否成立，调用前应先用 `Is*` / `Get*` 判断。
+2. `IsActionConsumed` 和 `IsActionHeldConsumed` 语义刻意分离，不要混用。
+3. `GetMouseDelta()` 仍然只是基于帧差计算，不参与 consume。
+4. 业务逻辑不要直接调用 Godot 的 `Input.IsAction...("基础名")`，因为原生 `Input` 只认识真实 action 名。
 
 ## 相关文件
 

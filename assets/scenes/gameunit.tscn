@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ccdw07roav8o7"]
+[gd_scene format=3 uid="uid://3qbbrcvb8ab2"]
 
 [ext_resource type="Script" uid="uid://cpckelxllfwg4" path="res://scripts/gamelogic/minigame/SerializableGameObject2D.cs" id="1_cecl2"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_component"]
@@ -9,6 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_m51mg"]
 script = ExtResource("3_movement")
+StopDistance = 15.0
 DrawMovePathOnlyWhenSelected = false
 metadata/_custom_type_script = "uid://cudn8b7c8sxsn"
 
@@ -31,7 +32,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Character" type="Node2D" unique_id=2090676282]
+[node name="PlayerUnit" type="Node2D" unique_id=2090676282]
 process_mode = 1
 script = ExtResource("1_cecl2")
 Components = Array[ExtResource("2_component")]([SubResource("Resource_m51mg"), SubResource("Resource_l660j"), SubResource("Resource_mlskq")])

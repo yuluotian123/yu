@@ -33,7 +33,9 @@ public class MainMenuProcedure : ProcedureBase
     {
         base.OnProcess(procedureOwner, elapseSeconds, realElapseSeconds);
 
-        if (_inputModule != null && _inputModule.TryHandleJustPressed("ui_cancel"))
+        if (_inputModule != null &&
+            _inputModule.IsJustPressed("ui_cancel") &&
+            _inputModule.TryConsumeJustPressed("ui_cancel"))
         {
             Debugger.Info("[MainMenuProcedure] 按下取消键，退出游戏。");
             if (Engine.GetMainLoop() is SceneTree tree)

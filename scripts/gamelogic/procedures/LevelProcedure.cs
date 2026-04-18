@@ -7,8 +7,7 @@ using GameLogic.UI;
 using Godot;
 
 /// <summary>
-/// 关卡流程。
-/// </summary>
+/// 鍏冲崱娴佺▼銆?/// </summary>
 public class LevelProcedure : ProcedureBase
 {
     private IInputModule _inputModule;
@@ -31,13 +30,17 @@ public class LevelProcedure : ProcedureBase
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
-        if(_inputModule != null && _inputModule.TryHandleJustPressed("camera_down"))
+        if (_inputModule != null &&
+            _inputModule.IsJustPressed("camera_down") &&
+            _inputModule.TryConsumeJustPressed("camera_down"))
         {
             ModuleSystem.GetModule<ISaveModule>().Save();
         }
 
-        // 进入主菜单（临时）
-        if (_inputModule != null && _inputModule.TryHandleJustPressed("ui_cancel"))
+        // 杩涘叆涓昏彍鍗曪紙涓存椂锛?
+        if (_inputModule != null &&
+            _inputModule.IsJustPressed("ui_cancel") &&
+            _inputModule.TryConsumeJustPressed("ui_cancel"))
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {

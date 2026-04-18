@@ -3,16 +3,20 @@
 [ext_resource type="Script" uid="uid://cpckelxllfwg4" path="res://scripts/gamelogic/minigame/SerializableGameObject2D.cs" id="1_1gs10"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_component"]
 [ext_resource type="Script" uid="uid://cnu4thbuqbjjh" path="res://scripts/gamelogic/minigame/components/CameraComponent.cs" id="3_camera"]
+[ext_resource type="PackedScene" uid="uid://3qbbrcvb8ab2" path="res://assets/scenes/gameunit.tscn" id="4_x2wsm"]
 [ext_resource type="Script" uid="uid://kpc4dk5c0a2i" path="res://scripts/gamelogic/minigame/components/PlayerArmyComponent.cs" id="5_army"]
 [ext_resource type="Script" uid="uid://1marrs1p5hyr" path="res://scripts/gamelogic/minigame/components/SelectableManagerComponent.cs" id="5_selectable_manager"]
-[ext_resource type="Script" path="res://scripts/gamelogic/minigame/components/SelectionBoxOverlay.cs" id="6_selection_box"]
+[ext_resource type="Script" uid="uid://bg76h2rd8ghgl" path="res://scripts/gamelogic/minigame/components/SelectionBoxOverlay.cs" id="6_selection_box"]
 
 [sub_resource type="Resource" id="Resource_vb76m"]
 script = ExtResource("3_camera")
+MinZoom = 0.8
+MaxZoom = 1.5
 metadata/_custom_type_script = "uid://cnu4thbuqbjjh"
 
 [sub_resource type="Resource" id="Resource_x2wsm"]
 script = ExtResource("5_army")
+DefaultUnitScene = ExtResource("4_x2wsm")
 metadata/_custom_type_script = "uid://kpc4dk5c0a2i"
 
 [sub_resource type="Resource" id="Resource_klwin"]
@@ -28,8 +32,10 @@ Components = Array[ExtResource("2_component")]([SubResource("Resource_vb76m"), S
 
 [node name="Units" type="Node2D" parent="Player" unique_id=5046003]
 
-[node name="SelectionBoxLayer" type="CanvasLayer" parent="."]
+[node name="SelectionBoxLayer" type="CanvasLayer" parent="." unique_id=62104013]
 layer = 100
 
-[node name="SelectionBoxOverlay" type="Control" parent="SelectionBoxLayer"]
+[node name="SelectionBoxOverlay" type="Control" parent="SelectionBoxLayer" unique_id=1178779842]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("6_selection_box")

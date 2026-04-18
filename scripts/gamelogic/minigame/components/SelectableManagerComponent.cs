@@ -213,7 +213,8 @@ public partial class SelectableManagerComponent : Component2D
             return;
         }
 
-        _inputModule.ConsumeAction("combat_context_select");
+        if (!_inputModule.TryConsumeJustPressed("combat_context_select"))
+            return;
 
         SetContextTarget(targetSelection);
     }

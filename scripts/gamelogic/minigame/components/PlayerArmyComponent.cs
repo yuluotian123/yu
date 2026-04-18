@@ -10,7 +10,7 @@ using Godot;
 [GlobalClass]
 public partial class PlayerArmyComponent : Component2D
 {
-    private const string DefaultUnitScenePath = "res://assets/scenes/character.tscn";
+    private const string DefaultUnitScenePath = "res://assets/scenes/gameunit.tscn";
 
     [Export] public PackedScene DefaultUnitScene { get; set; }
     [Export] public NodePath UnitsRootPath { get; set; } = new NodePath("Player/Units");
@@ -55,7 +55,8 @@ public partial class PlayerArmyComponent : Component2D
         if (_inputModule.IsActionConsumed("combat_command_move", includeSamePriority: true))
             return;
 
-        if (!_inputModule.TryHandleJustPressed("combat_command_move"))
+        if (!_inputModule.IsJustPressed("combat_command_move") ||
+            !_inputModule.TryConsumeJustPressed("combat_command_move"))
             return;
 
         SelectableManagerComponent selectableManager = Owner.GetComponent<SelectableManagerComponent>();

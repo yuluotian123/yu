@@ -16,7 +16,9 @@ public partial class Example : Node3D
 
     public override void _Process(double delta)
     {
-        if (_inputModule != null && _inputModule.TryHandleJustPressed("combat_up"))
+        if (_inputModule != null &&
+            _inputModule.IsJustPressed("combat_up") &&
+            _inputModule.TryConsumeJustPressed("combat_up"))
         {
             Debugger.Info("Start Chain");
             GameAPI.MissionChainManager.StartChain(chain);

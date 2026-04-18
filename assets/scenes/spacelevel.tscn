@@ -22,3 +22,4 @@ tile_set = SubResource("TileSet_sodt5")
 script = ExtResource("2_qbpkg")
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=739234607]
+zoom = Vector2(0.8, 0.8)

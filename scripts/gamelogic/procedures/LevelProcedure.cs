@@ -16,14 +16,13 @@ public class LevelProcedure : ProcedureBase
     {
         Debugger.Info("Enter LevelProcedure");
         RootModule.Instance?.ResetNormalGameSpeed();
-        ModuleSystem.GetModule<IUIModule>().ShowUI<LevelWindow>();
+
         _inputModule = ModuleSystem.GetModule<IInputModule>();
     }
 
     protected internal override void OnLeave(IFsm<IProcedureModule> procedureOwner, bool isShutdown)
     {
         RootModule.Instance?.ResetNormalGameSpeed();
-        ModuleSystem.GetModule<IUIModule>().CloseUI<LevelWindow>();
 
         base.OnLeave(procedureOwner, isShutdown);
     }
@@ -37,14 +36,12 @@ public class LevelProcedure : ProcedureBase
             ModuleSystem.GetModule<ISaveModule>().Save();
         }
 
-        // 杩涘叆涓昏彍鍗曪紙涓存椂锛?
         if (_inputModule != null &&
-            _inputModule.IsJustPressed("ui_cancel") &&
-            _inputModule.TryConsumeJustPressed("ui_cancel"))
+            _inputModule.IsJustPressed("ui_cancel"))
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {
-                var levelNode = tree.Root.GetNode("Root/Spacelevel");
+                var levelNode = tree.Root.GetNode("Root/Level");
                 if (levelNode != null)
                 {
                     levelNode.QueueFree();

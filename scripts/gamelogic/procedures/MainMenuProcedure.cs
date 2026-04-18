@@ -23,9 +23,7 @@ public class MainMenuProcedure : ProcedureBase
         _procedureOwner = procedureOwner;
         _inputModule = ModuleSystem.GetModule<IInputModule>();
 
-        ModuleSystem.GetModule<IUIModule>().ShowUIAsync<MainMenuWindow>(
-            _ => { ModuleSystem.GetModule<IEventModule>().Send(GameUIEvents.GameNotice, "这是一个游戏通知事件"); },
-            "v1.0.0");
+        ModuleSystem.GetModule<IUIModule>().ShowUIAsync<MainMenuWindow>(userData: "v1.0.0");
         ModuleSystem.GetModule<IEventModule>().Subscribe(GameUIEvents.GameStart, LoadIntoPreload);
     }
 
@@ -34,8 +32,7 @@ public class MainMenuProcedure : ProcedureBase
         base.OnProcess(procedureOwner, elapseSeconds, realElapseSeconds);
 
         if (_inputModule != null &&
-            _inputModule.IsJustPressed("ui_cancel") &&
-            _inputModule.TryConsumeJustPressed("ui_cancel"))
+            _inputModule.IsJustPressed("ui_cancel"))
         {
             Debugger.Info("[MainMenuProcedure] 按下取消键，退出游戏。");
             if (Engine.GetMainLoop() is SceneTree tree)

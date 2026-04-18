@@ -36,29 +36,6 @@ namespace GameLogic.UI
         [UIBind("%")] private Label  _labelVersion;
         [UIBind("%")] private Control _panelNotice;
 
-        // ── 子 Widget ──────────────────────────────
-        private NoticeWidget _noticeWidget;
-
-        // ───────────────────────────────────────────
-        //  BindMemberProperty：创建子 Widget
-        // ───────────────────────────────────────────
-
-        public override void BindMemberProperty()
-        {
-            // 将 %PanelNotice 节点绑定为 NoticeWidget
-            _noticeWidget = CreateWidget<NoticeWidget>(_panelNotice);
-        }
-
-        // ───────────────────────────────────────────
-        //  RegisterEvent：注册事件（销毁时自动取消订阅）
-        // ───────────────────────────────────────────
-
-        public override void RegisterEvent()
-        {
-            // 监听游戏通知事件（参数：string message），销毁时自动取消订阅
-            AddUIEvent<string>(GameUIEvents.GameNotice, OnGameNotice);
-        }
-
         // ───────────────────────────────────────────
         //  OnCreate：节点绑定完成后执行一次
         // ───────────────────────────────────────────
@@ -112,15 +89,6 @@ namespace GameLogic.UI
             // Godot 退出
             if(Engine.GetMainLoop() is SceneTree tree)
                 tree.Quit();
-        }
-
-        // ───────────────────────────────────────────
-        //  事件回调
-        // ───────────────────────────────────────────
-
-        private void OnGameNotice(string message)
-        {
-            _noticeWidget?.ShowNotice(message);
         }
     }
 }

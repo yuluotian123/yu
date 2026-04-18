@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GameLogic.Input
+namespace GameLogic
 {
     /// <summary>
     /// 统一的 action 输入访问入口。

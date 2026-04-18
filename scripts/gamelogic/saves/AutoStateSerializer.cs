@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Framework;
 
-namespace GameLogic.Save
+namespace GameLogic
 {
     internal static class AutoStateSerializer
     {

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Framework;
-using GameLogic.Save;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     public class MissionRecord
     {

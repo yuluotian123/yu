@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using GameLogic.Mission;
+using GameLogic;
 using Godot;
 
 public class MissionNode : GraphNodeData

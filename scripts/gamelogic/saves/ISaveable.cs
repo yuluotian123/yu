@@ -1,4 +1,4 @@
-namespace GameLogic.Save
+namespace GameLogic
 {
     /// <summary>
     /// 可存档组件接口。
@@ -12,7 +12,7 @@ namespace GameLogic.Save
     /// 4. 调用 saveModule.Save("slot1") 即可自动保存
     /// 
     /// <code>
-    /// using GameLogic.Save;
+    /// using GameLogic;
     /// using System.Text.Json.Serialization;
     /// 
     /// public class PlayerManager : ISaveable

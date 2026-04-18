@@ -2,7 +2,7 @@ using Framework;
 using Framework.UI;
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// 通知提示 Widget——演示 UIWidget 的基本用法。

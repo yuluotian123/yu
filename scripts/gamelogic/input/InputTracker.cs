@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GameLogic.Input
+namespace GameLogic
 {
     /// <summary>
     /// 统一的输入记录，包含按下时间和释放时间

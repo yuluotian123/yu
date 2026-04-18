@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     public abstract class MissionRequireTemplate : MissionRequire<object>
     {

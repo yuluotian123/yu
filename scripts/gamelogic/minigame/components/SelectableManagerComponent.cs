@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Framework;
 using Framework.UI;
 using GameLogic;
-using GameLogic.Input;
-using GameLogic.UI;
 using Godot;
 
 [GlobalClass]

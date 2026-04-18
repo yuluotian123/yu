@@ -1,7 +1,7 @@
 using Framework.UI;
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     [Window(UILayer.Normal, "res://assets/scenes/ui/level_window.tscn", fullScreen: false)]
     public class LevelWindow : UIWindow

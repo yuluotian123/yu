@@ -3,7 +3,7 @@ using Framework;
 using Framework.UI;
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// Bottom army widget that mirrors the current controllable roster.

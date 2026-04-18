@@ -1,8 +1,7 @@
 ﻿
 
 using Framework;
-using GameLogic.Mission;
-using GameLogic.Save;
+using GameLogic;
 
 public static class GameAPI
 {
@@ -36,4 +35,3 @@ public static class GameAPI
 
     public static void Load() => ModuleSystem.GetModule<ISaveModule>().Load();
 }
-

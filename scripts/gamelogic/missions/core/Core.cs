@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Framework;
-using Godot;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     /// <summary>任务原型对象</summary>
     public class MissionPrototype<T>
@@ -349,4 +347,3 @@ namespace GameLogic.Mission
         public void OnMissionStatusChanged(Mission<T> mission, bool isFinished);
     }
 }
-

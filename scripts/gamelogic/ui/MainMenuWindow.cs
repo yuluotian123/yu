@@ -2,7 +2,7 @@ using Framework;
 using Framework.UI;
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// 主菜单窗口——UI框架测试案例（全屏窗口）。

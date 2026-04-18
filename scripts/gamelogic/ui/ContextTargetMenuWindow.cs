@@ -2,7 +2,7 @@ using Framework;
 using Framework.UI;
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     [Window(UILayer.Tips, "res://assets/scenes/ui/context_target_menu_window.tscn", fullScreen: false, hideTimeToClose: 0f)]
     public class ContextTargetMenuWindow : UIWindow

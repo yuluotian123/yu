@@ -1,5 +1,5 @@
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
 
     public interface IMissionModule

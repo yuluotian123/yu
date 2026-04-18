@@ -4,7 +4,7 @@ using Godot;
 using Framework.UI;
 using Framework;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// 单个底部单位栏条目 Widget。

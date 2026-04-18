@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 using Framework;
 using Godot;
 
-namespace GameLogic.Save
+namespace GameLogic
 {
     internal sealed class SaveModule : Framework.Module, ISaveModule
     {

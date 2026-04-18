@@ -4,7 +4,7 @@ using System.Linq;
 using Framework;
 using Godot;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     public class MissionChainHandle
     {

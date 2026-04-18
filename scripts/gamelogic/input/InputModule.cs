@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Framework;
 using Godot;
 
-namespace GameLogic.Input
+namespace GameLogic
 {
     /// <summary>
     /// 鍩轰簬 Godot Input 鍜?InputMap 鐨勮緭鍏ユā鍧椼€?    /// 涓氬姟渚у缁堜娇鐢ㄥ熀纭€ action 鍚嶏紝妯″潡鍐呴儴璐熻矗鏄犲皠鍒扮湡瀹炵殑 InputMap action 鍚嶃€?    /// </summary>

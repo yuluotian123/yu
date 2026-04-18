@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     public class LevelTopWidget : Framework.UI.UIWidget
     {

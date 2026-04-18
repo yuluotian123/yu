@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameLogic.Input
+namespace GameLogic
 {
     /// <summary>
     /// 单个输入层，负责维护当前帧 consume 状态和持续 held consume 状态。

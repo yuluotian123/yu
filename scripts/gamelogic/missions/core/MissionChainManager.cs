@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Framework;
 using Godot;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     public class MissionChainManager : IMissionSystemComponent<object>
     {

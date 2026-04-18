@@ -1,8 +1,6 @@
 using Framework;
-using GameLogic.Save;
-using Godot;
 
-namespace GameLogic.Mission
+namespace GameLogic
 {
     public class MissionModule : Module, IMissionModule, IProcessModule
     {

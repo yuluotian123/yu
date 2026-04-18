@@ -28,8 +28,7 @@ public class LevelProcedure : ProcedureBase
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
         if (_inputModule != null &&
-            _inputModule.IsJustPressed("camera_down") &&
-            _inputModule.TryConsumeJustPressed("camera_down"))
+            _inputModule.IsJustPressed("camera_down"))
         {
             ModuleSystem.GetModule<ISaveModule>().Save();
         }

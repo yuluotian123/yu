@@ -13,6 +13,7 @@ metadata/_custom_type_script = "uid://bjgp2st6xyi1a"
 
 [sub_resource type="Resource" id="Resource_bo38s"]
 script = ExtResource("4_8rfto")
+SelectionRadius = 72.0
 metadata/_custom_type_script = "uid://bh1yo7u1g73yc"
 
 [sub_resource type="Resource" id="Resource_4krk5"]

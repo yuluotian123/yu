@@ -20,8 +20,8 @@
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": 302.41907,
-          "Y": -71.02631
+          "X": 576.8546,
+          "Y": 5.7248535
         },
         "Rotation2D": 0,
         "ComponentDatas": [
@@ -38,8 +38,8 @@
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": 98.142456,
-          "Y": -120.18004
+          "X": 580.6089,
+          "Y": -195.39775
         },
         "Rotation2D": 0,
         "ComponentDatas": [
@@ -56,8 +56,8 @@
         "OwnerStateJson": "",
         "Position2D": {
           "$type": "Vector2",
-          "X": 144.68898,
-          "Y": 30.176071
+          "X": -318.66983,
+          "Y": 56.92445
         },
         "Rotation2D": 0,
         "ComponentDatas": [

@@ -30,10 +30,6 @@ public partial class CameraComponent : Component2D
     {
         Vector2 nextPosition = _camera.Position;
         Vector2 keyboardMove = _inputModule.GetVector("camera_left", "camera_right", "camera_up", "camera_down");
-        if (keyboardMove != Vector2.Zero)
-        {
-            keyboardMove = Vector2.Zero;
-        }
 
         float timeDelta = (float)RootModule.Instance.GameTime.UnscaledDeltaTime;
 

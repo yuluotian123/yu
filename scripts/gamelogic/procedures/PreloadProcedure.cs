@@ -47,7 +47,7 @@ public class PreloadProcedure : ProcedureBase
         //只有当关卡和控制器场景都成功加载后才进入关卡流程
         if (levelHandle.IsValid)
         {
-            Debugger.Info("[PreloadProcedure] Level and controller scenes are ready, entering level.");
+            Debugger.Info("[PreloadProcedure] Level are ready, entering level.");
             ModuleSystem.GetModule<IUIModule>().CloseAll();
 
             if (Engine.GetMainLoop() is SceneTree tree)
@@ -60,7 +60,7 @@ public class PreloadProcedure : ProcedureBase
         }
         else
         {
-            Debugger.Warn("[PreloadProcedure] Failed to load level or controller scene.");
+            Debugger.Warn("[PreloadProcedure] Failed to load level.");
         }
 
         isPreload = true;

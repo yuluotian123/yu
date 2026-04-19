@@ -13,6 +13,7 @@ public sealed partial class RootModule : Node
     public static RootModule Instance { get; private set; }
 
     public GameTime GameTime { get; private set; }
+    public GameState GameState{ get; private set; }
 
 
     private const int DEFAULT_DPI = 96; // default windows dpi
@@ -62,6 +63,10 @@ public sealed partial class RootModule : Node
         Debugger.Info("======= Init CommonVariables =======");
         //初始化游戏时间类
         GameTime = new GameTime();
+
+        GameState = new GameState();
+        GameState.Init();
+        
         Engine.MaxFps = frameRate;
         Engine.TimeScale = gameSpeed;
 

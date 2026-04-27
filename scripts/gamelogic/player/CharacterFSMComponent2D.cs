@@ -6,20 +6,25 @@ namespace GameLogic
     [GlobalClass]
     public partial class CharacterFSMComponent2D : Component2D
     {
-        private enum CharacterState2D
-        {
-            Grounded,
-            Airborne
-        }
+        public const string IsOnFloorKey = "IsOnFloor";
+        public const string JumpStartRequestedKey = "JumpStartRequested";
+        public const string JumpSustainRequestedKey = "JumpSustainRequested";
+        public const string MoveAxisXKey = "MoveAxisX";
+        public const string VelocityYKey = "VelocityY";
 
         public override int Priority => ComponentPriority.State;
 
-        public string CurrentStateName => _currentState.ToString();
+        [Export] public HfsmGraphAsset StateGraph { get; set; }
+        [Export] public string InitialStateName { get; set; } = string.Empty;
+
+        public HfsmRuntime Runtime { get; private set; }
+        public string CurrentStateName => Runtime?.CurrentStateName ?? string.Empty;
+        public string CurrentStatePath => Runtime?.CurrentStatePath ?? string.Empty;
+        public bool CurrentStateHasTag(string tag) => Runtime?.CurrentStateHasTag(tag) == true;
 
         private ICharacterIntentAbility2D<MoveIntent2D> _move;
         private ICharacterIntentAbility2D<JumpIntent2D> _jump;
         private CharacterBodyMotorComponent2D _motor;
-        private CharacterState2D _currentState = CharacterState2D.Airborne;
 
         public override void OnInit()
         {
@@ -36,29 +41,46 @@ namespace GameLogic
             if (_motor == null)
                 Debugger.Warn("[CharacterFSMComponent2D] Missing CharacterBodyMotorComponent2D; state defaults to Airborne.");
 
-            _currentState = _motor?.IsOnFloor == true
-                ? CharacterState2D.Grounded
-                : CharacterState2D.Airborne;
+            if (StateGraph == null)
+            {
+                Debugger.Warn("[CharacterFSMComponent2D] Missing HfsmGraphAsset; intents will still be approved, but state graph will not run.");
+                return;
+            }
+
+            Runtime = new HfsmRuntime(StateGraph);
+            WriteBlackboardInputs();
+
+            if (!Runtime.Start(InitialStateName))
+                Debugger.Warn($"[CharacterFSMComponent2D] Failed to start state graph: {StateGraph.ResourcePath}");
         }
 
         public override void OnPhysicsUpdate(double delta)
         {
-            RefreshStateFromBody();
+            WriteBlackboardInputs();
+            Runtime?.Update(delta);
             ApproveMoveIntent();
             ApproveJumpIntent();
         }
 
-        private void RefreshStateFromBody()
+        public override void OnDestroy()
         {
-            if (_motor == null)
-            {
-                _currentState = CharacterState2D.Airborne;
-                return;
-            }
+            Runtime?.Stop();
+            Runtime = null;
+        }
 
-            _currentState = _motor.IsOnFloor
-                ? CharacterState2D.Grounded
-                : CharacterState2D.Airborne;
+        private void WriteBlackboardInputs()
+        {
+            if (Runtime == null)
+                return;
+
+            MoveIntent2D moveIntent = _move?.RawIntent ?? MoveIntent2D.None;
+            JumpIntent2D jumpIntent = _jump?.RawIntent ?? JumpIntent2D.None;
+
+            Runtime.SetValue(IsOnFloorKey, _motor?.IsOnFloor == true);
+            Runtime.SetValue(JumpStartRequestedKey, jumpIntent.StartRequested);
+            Runtime.SetValue(JumpSustainRequestedKey, jumpIntent.SustainRequested);
+            Runtime.SetValue(MoveAxisXKey, moveIntent.AxisX);
+            Runtime.SetValue(VelocityYKey, _motor?.Velocity.Y ?? 0f);
         }
 
         private void ApproveMoveIntent()
@@ -76,9 +98,6 @@ namespace GameLogic
 
             JumpIntent2D rawIntent = _jump.RawIntent;
             _jump.ApproveIntent(rawIntent);
-
-            if (_currentState == CharacterState2D.Grounded && rawIntent.StartRequested)
-                _currentState = CharacterState2D.Airborne;
         }
     }
 }

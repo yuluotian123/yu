@@ -1,4 +1,4 @@
-#if TOOLS
+﻿#if TOOLS
 using System;
 using System.Collections.Generic;
 using Godot;
@@ -49,6 +49,17 @@ public partial class GraphCanvasEditorWindow
         _blackboardWindow.PopupCentered();
     }
 
+    private void CloseBlackboardWindow()
+    {
+        if (_blackboardWindow == null || !GodotObject.IsInstanceValid(_blackboardWindow))
+        {
+            _blackboardWindow = null;
+            return;
+        }
+
+        _blackboardWindow.QueueFree();
+        _blackboardWindow = null;
+    }
     private Control BuildGlobalBlackboardPage()
     {
         var root = new VBoxContainer();

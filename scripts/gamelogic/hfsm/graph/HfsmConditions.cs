@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 namespace GameLogic
 {
@@ -38,31 +39,33 @@ namespace GameLogic
 
     public class HfsmBoolCondition : HfsmConditionBase
     {
+        private static readonly Type[] BoolValueTypes = { typeof(bool) };
+
+        public GraphBlackboardKeyReference Parameter { get; set; } = new();
         public string ParameterName { get; set; } = string.Empty;
         public bool ExpectedValue { get; set; } = true;
 
-        public override string Description => string.IsNullOrWhiteSpace(ParameterName)
+        public override string Description => string.IsNullOrWhiteSpace(GetParameterKey())
             ? "Bool"
-            : $"{ParameterName} == {ExpectedValue}";
+            : $"{GetParameterKey()} == {ExpectedValue}";
 
         public override bool IsMet(HfsmRuntime runtime)
         {
+            string key = GetParameterKey();
             return runtime != null &&
-                   !string.IsNullOrWhiteSpace(ParameterName) &&
-                   runtime.Blackboard.GetValue(ParameterName, false) == ExpectedValue;
+                   !string.IsNullOrWhiteSpace(key) &&
+                   runtime.Blackboard.GetValue(key, false) == ExpectedValue;
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
 
-            var edit = new LineEdit
-            {
-                PlaceholderText = "Blackboard bool key",
-                Text = ParameterName
-            };
-            edit.TextChanged += value => ParameterName = value;
-            root.AddChild(edit);
+            Parameter ??= new GraphBlackboardKeyReference { Key = ParameterName };
+            if (string.IsNullOrWhiteSpace(Parameter.Key) && !string.IsNullOrWhiteSpace(ParameterName))
+                Parameter.Key = ParameterName;
+
+            root.AddChild(Parameter.CreateEditUI(context, "Blackboard bool", BoolValueTypes));
 
             var check = new CheckBox
             {
@@ -74,25 +77,37 @@ namespace GameLogic
 
             return root;
         }
+
+        private string GetParameterKey()
+        {
+            if (!string.IsNullOrWhiteSpace(Parameter?.Key))
+                return Parameter.Key;
+
+            return ParameterName;
+        }
     }
 
     public class HfsmFloatCondition : HfsmConditionBase
     {
+        private static readonly Type[] FloatValueTypes = { typeof(float), typeof(int) };
+
+        public GraphBlackboardKeyReference Parameter { get; set; } = new();
         public string ParameterName { get; set; } = string.Empty;
         public HfsmFloatComparison Comparison { get; set; } = HfsmFloatComparison.GreaterOrEqual;
         public float Value { get; set; }
         public float Tolerance { get; set; } = 0.0001f;
 
-        public override string Description => string.IsNullOrWhiteSpace(ParameterName)
+        public override string Description => string.IsNullOrWhiteSpace(GetParameterKey())
             ? "Float"
-            : $"{ParameterName} {GetComparisonText()} {Value:0.###}";
+            : $"{GetParameterKey()} {GetComparisonText()} {Value:0.###}";
 
         public override bool IsMet(HfsmRuntime runtime)
         {
-            if (runtime == null || string.IsNullOrWhiteSpace(ParameterName))
+            string key = GetParameterKey();
+            if (runtime == null || string.IsNullOrWhiteSpace(key))
                 return false;
 
-            float actual = runtime.Blackboard.GetValue(ParameterName, 0f);
+            float actual = runtime.Blackboard.GetValue(key, 0f);
             return Comparison switch
             {
                 HfsmFloatComparison.Less => actual < Value,
@@ -108,13 +123,11 @@ namespace GameLogic
         {
             var root = new VBoxContainer();
 
-            var keyEdit = new LineEdit
-            {
-                PlaceholderText = "Blackboard float key",
-                Text = ParameterName
-            };
-            keyEdit.TextChanged += value => ParameterName = value;
-            root.AddChild(keyEdit);
+            Parameter ??= new GraphBlackboardKeyReference { Key = ParameterName };
+            if (string.IsNullOrWhiteSpace(Parameter.Key) && !string.IsNullOrWhiteSpace(ParameterName))
+                Parameter.Key = ParameterName;
+
+            root.AddChild(Parameter.CreateEditUI(context, "Blackboard number", FloatValueTypes));
 
             var row = new HBoxContainer();
             var option = new OptionButton();
@@ -150,6 +163,14 @@ namespace GameLogic
                 HfsmFloatComparison.Greater => ">",
                 _ => "?"
             };
+        }
+
+        private string GetParameterKey()
+        {
+            if (!string.IsNullOrWhiteSpace(Parameter?.Key))
+                return Parameter.Key;
+
+            return ParameterName;
         }
     }
 

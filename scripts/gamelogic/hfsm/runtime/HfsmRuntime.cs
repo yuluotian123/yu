@@ -135,6 +135,16 @@ namespace GameLogic
             return state != null && ChangeState(state, null);
         }
 
+        public bool CurrentStateHasTag(string tag)
+        {
+            return CurrentState?.HasTag(tag) == true;
+        }
+
+        public IReadOnlyList<string> GetCurrentStateTags()
+        {
+            return CurrentState?.GetTags() ?? Array.Empty<string>();
+        }
+
         public bool TryGetValue<T>(string key, out T value)
         {
             return Blackboard.TryGetValue(key, out value);

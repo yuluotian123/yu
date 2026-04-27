@@ -1,4 +1,4 @@
-#if TOOLS
+﻿#if TOOLS
 using System;
 using System.Collections.Generic;
 using Godot;
@@ -15,10 +15,10 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphConnection _hoveredConnection = null;
     private System.Collections.Generic.Dictionary<string, Label> _connectionLabels = new();
 
-    // ── 子图导航栈 ────────────────────────────────────────────────────────────
+    // 鈹€鈹€ 瀛愬浘瀵艰埅鏍?鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     /// <summary>
-    /// 导航历史栈。每个元素为 (GraphAsset 图资源, 节点在父图中的 Id)。
-    /// 栈顶为当前正在编辑的图，栈底为根图。
+    /// 瀵艰埅鍘嗗彶鏍堛€傛瘡涓厓绱犱负 (GraphAsset 鍥捐祫婧? 鑺傜偣鍦ㄧ埗鍥句腑鐨?Id)銆?
+    /// 鏍堥《涓哄綋鍓嶆鍦ㄧ紪杈戠殑鍥撅紝鏍堝簳涓烘牴鍥俱€?
     /// </summary>
     private Stack<(GraphAsset graph, string label)> _graphStack = new();
     private HBoxContainer _breadcrumbBar;
@@ -28,12 +28,18 @@ public partial class GraphCanvasEditorWindow : Window
 
     public override void _Ready()
     {
-        Title = "GraphCanvas 编辑器";
-        CloseRequested += () => {OnSave(); Hide();};
+        Title = "GraphCanvas Editor";
+        CloseRequested += CloseGraphEditor;
         CreateToolbar();
         CreateGraphEdit();
     }
 
+    private void CloseGraphEditor()
+    {
+        OnSave();
+        CloseBlackboardWindow();
+        Hide();
+    }
     private void CreateToolbar()
     {
         _mainContainer = new VBoxContainer
@@ -43,24 +49,24 @@ public partial class GraphCanvasEditorWindow : Window
         };
         AddChild(_mainContainer);
 
-        // ── 面包屑导航栏 ──────────────────────────────────────────────────────
+        // 鈹€鈹€ 闈㈠寘灞戝鑸爮 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         _breadcrumbBar = new HBoxContainer();
         _breadcrumbBar.CustomMinimumSize = new Vector2(0, 28);
         _breadcrumbBar.AddThemeConstantOverride("separation", 4);
-        // 默认隐藏，进入子图时显示
+        // 榛樿闅愯棌锛岃繘鍏ュ瓙鍥炬椂鏄剧ず
         _breadcrumbBar.Visible = false;
         _mainContainer.AddChild(_breadcrumbBar);
 
-        // ── 主工具栏 ──────────────────────────────────────────────────────────
+        // 鈹€鈹€ 涓诲伐鍏锋爮 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         _toolbar = new HBoxContainer();
         _toolbar.CustomMinimumSize = new Vector2(0, 40);
         _mainContainer.AddChild(_toolbar);
 
-        var saveBtn = new Button { Text = "保存 (Ctrl+S)" };
+        var saveBtn = new Button { Text = "淇濆瓨 (Ctrl+S)" };
         saveBtn.Pressed += OnSave;
         _toolbar.AddChild(saveBtn);
 
-        var clearBtn = new Button { Text = "清空" };
+        var clearBtn = new Button { Text = "娓呯┖" };
         clearBtn.Pressed += OnClear;
         _toolbar.AddChild(clearBtn);
 
@@ -69,10 +75,10 @@ public partial class GraphCanvasEditorWindow : Window
         _toolbar.AddChild(blackboardBtn);
 
         _toolbar.AddChild(new VSeparator());
-        _toolbar.AddChild(new Label { Text = "右键添加节点" });
+        _toolbar.AddChild(new Label { Text = "鍙抽敭娣诲姞鑺傜偣" });
 
         _toolbar.AddChild(new VSeparator());
-        _toolbar.AddChild(new Label { Text = "撤回 (ctrl+Z)" });
+        _toolbar.AddChild(new Label { Text = "鎾ゅ洖 (ctrl+Z)" });
     }
 
     private void CreateGraphEdit()
@@ -96,7 +102,7 @@ public partial class GraphCanvasEditorWindow : Window
 
     public void LoadGraph(GraphAsset graph)
     {
-        // 清空连接标签缓存和引用
+        // 娓呯┖杩炴帴鏍囩缂撳瓨鍜屽紩鐢?
         foreach (var label in _connectionLabels.Values)
             label.QueueFree();
         _connectionLabels.Clear();
@@ -107,7 +113,7 @@ public partial class GraphCanvasEditorWindow : Window
         Title = graph.GetEditorTitle();
         AddCustomToolbarControls();
 
-        // 立即移除所有子节点
+        // 绔嬪嵆绉婚櫎鎵€鏈夊瓙鑺傜偣
         foreach (var child in _graphEdit.GetChildren())
         {
             if (child is GraphNode or Label)
@@ -117,11 +123,11 @@ public partial class GraphCanvasEditorWindow : Window
             }
         }
 
-        // 创建节点
+        // 鍒涘缓鑺傜偣
         foreach (var nodeData in graph.Nodes)
             CreateNodeFromData(nodeData);
 
-        // 延迟建立连接，等待节点端口初始化完成
+        // 寤惰繜寤虹珛杩炴帴锛岀瓑寰呰妭鐐圭鍙ｅ垵濮嬪寲瀹屾垚
         foreach (var conn in graph.Connections)
             CallDeferred(MethodName.DeferredConnectNode, conn.FromNode, conn.FromPort, conn.ToNode, conn.ToPort);
     }
@@ -134,8 +140,12 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphEditorContext CreateEditorContext()
     {
         GraphAsset rootGraph = _currentGraph;
+        var parentGraphs = new List<GraphAsset>();
         foreach (var item in _graphStack)
+        {
+            parentGraphs.Add(item.graph);
             rootGraph = item.graph;
+        }
 
         GraphBlackboardNode globalBlackboard = null;
         var blackboardNodes = FindBlackboardNodesInEditedScene();
@@ -146,6 +156,7 @@ public partial class GraphCanvasEditorWindow : Window
         {
             CurrentGraph = _currentGraph,
             RootGraph = rootGraph,
+            ParentGraphs = parentGraphs,
             GraphEdit = _graphEdit,
             GlobalBlackboard = globalBlackboard
         };
@@ -155,7 +166,7 @@ public partial class GraphCanvasEditorWindow : Window
     {
         if (_currentGraph == null || _toolbar == null) return;
 
-        // 先清理上一张图留下的自定义控件
+        // 鍏堟竻鐞嗕笂涓€寮犲浘鐣欎笅鐨勮嚜瀹氫箟鎺т欢
         for (int i = _toolbar.GetChildCount() - 1; i >= 0; i--)
         {
             var child = _toolbar.GetChild(i);
@@ -188,7 +199,7 @@ public partial class GraphCanvasEditorWindow : Window
             return;
         }
 
-        // 构建 Id -> NodeData 索引，避免 O(n²) 查找
+        // 鏋勫缓 Id -> NodeData 绱㈠紩锛岄伩鍏?O(n虏) 鏌ユ壘
         var nodeDict = new System.Collections.Generic.Dictionary<string, GraphNodeData>();
         foreach (var nodeData in _currentGraph.Nodes)
             nodeDict[nodeData.Id] = nodeData;
@@ -202,20 +213,20 @@ public partial class GraphCanvasEditorWindow : Window
             }
         }
 
-        // 序列化数据到 JSON 再保存
+        // 搴忓垪鍖栨暟鎹埌 JSON 鍐嶄繚瀛?
         _currentGraph.SaveToJson();
         ResourceSaver.Save(_currentGraph, _currentGraph.ResourcePath);
-        GD.Print($"图已保存: {_currentGraph.ResourcePath}");
+        GD.Print($"鍥惧凡淇濆瓨: {_currentGraph.ResourcePath}");
     }
     private void OnClear()
     {
-        // 快照序列化为 JSON 字符串，绕开 Godot Variant 限制
+        // 蹇収搴忓垪鍖栦负 JSON 瀛楃涓诧紝缁曞紑 Godot Variant 闄愬埗
         var snapshotNodesJson = GraphJsonHelper.SerializeList(_currentGraph.Nodes);
         var snapshotConnsJson = GraphJsonHelper.SerializeList(_currentGraph.Connections);
 
         if (_undoRedo != null)
         {
-            _undoRedo.CreateAction("清空图");
+            _undoRedo.CreateAction("Clear Graph");
             _undoRedo.AddDoMethod(this, MethodName.DoClear);
             _undoRedo.AddUndoMethod(this, MethodName.DoRestoreSnapshot, snapshotNodesJson, snapshotConnsJson);
             _undoRedo.CommitAction();

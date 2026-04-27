@@ -1,9 +1,11 @@
 using Godot;
+using System.Collections.Generic;
 
 public sealed class GraphEditorContext
 {
     public GraphAsset CurrentGraph { get; set; }
     public GraphAsset RootGraph { get; set; }
+    public List<GraphAsset> ParentGraphs { get; set; } = new();
     public GraphEdit GraphEdit { get; set; }
     public GraphNode GraphNode { get; set; }
     public GraphNodeData NodeData { get; set; }
@@ -40,6 +42,7 @@ public sealed class GraphEditorContext
     {
         target.CurrentGraph = CurrentGraph;
         target.RootGraph = RootGraph;
+        target.ParentGraphs = ParentGraphs;
         target.GraphEdit = GraphEdit;
         target.GlobalBlackboard = GlobalBlackboard;
         return target;

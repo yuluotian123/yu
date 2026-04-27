@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
 [ext_resource type="Script" path="res://scripts/gamelogic/player/states/CharacterMoveComponent2D.cs" id="7_move"]
 [ext_resource type="Script" path="res://scripts/gamelogic/player/states/CharacterJumpComponent2D.cs" id="8_jump"]
+[ext_resource type="Resource" uid="uid://b2tjh6v4charhfsm" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
 
 [sub_resource type="RectangleShape2D" id="shape_body"]
 size = Vector2(40, 72)
@@ -24,6 +25,7 @@ JumpSustainDuration = 0.14
 
 [sub_resource type="Resource" id="sub_fsm"]
 script = ExtResource("4_fsm")
+StateGraph = ExtResource("9_hfsm")
 
 [sub_resource type="Resource" id="sub_motor"]
 script = ExtResource("5_motor")

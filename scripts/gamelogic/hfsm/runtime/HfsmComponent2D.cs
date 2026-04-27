@@ -56,6 +56,11 @@ namespace GameLogic
             return Runtime?.ChangeState(stateNameOrId) == true;
         }
 
+        public bool CurrentStateHasTag(string tag)
+        {
+            return Runtime?.CurrentStateHasTag(tag) == true;
+        }
+
         public bool SetValue<T>(string key, T value)
         {
             return Runtime?.SetValue(key, value) == true;

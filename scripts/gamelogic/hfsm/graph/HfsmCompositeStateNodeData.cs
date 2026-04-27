@@ -72,16 +72,12 @@ namespace GameLogic
 
         public bool HasTag(string tag)
         {
-            if (string.IsNullOrWhiteSpace(tag) || string.IsNullOrWhiteSpace(Tags))
-                return false;
+            return HfsmTagUtility.ContainsTag(Tags, tag);
+        }
 
-            foreach (string rawTag in Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-            {
-                if (string.Equals(rawTag, tag, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-
-            return false;
+        public IReadOnlyList<string> GetTags()
+        {
+            return HfsmTagUtility.ParseTags(Tags);
         }
 
         public virtual void OnEnter(HfsmRuntime runtime)
@@ -106,7 +102,7 @@ namespace GameLogic
                 CustomMinimumSize = new Vector2(190f, 0f)
             };
 
-            HfsmStateNodeUi.AddStateFields(root, this);
+            HfsmStateNodeUi.AddStateFields(root, this, context);
             root.AddChild(new HSeparator());
 
             var pathLabel = new Label

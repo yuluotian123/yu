@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="HfsmTagRegistry" format=3 uid="uid://c1wga60c8dxmi"]
+
+[ext_resource type="Script" uid="uid://belunulvhrbhd" path="res://scripts/gamelogic/hfsm/graph/HfsmTagRegistry.cs" id="1_registry"]
+[ext_resource type="Script" uid="uid://2wxxp2mvpxcs" path="res://scripts/gamelogic/hfsm/graph/HfsmTagDefinition.cs" id="2_tag"]
+
+[sub_resource type="Resource" id="HfsmTagDefinition_movement"]
+script = ExtResource("2_tag")
+Key = "movement"
+DisplayName = "Movement"
+Description = "State belongs to movement or locomotion gameplay."
+
+[sub_resource type="Resource" id="HfsmTagDefinition_grounded"]
+script = ExtResource("2_tag")
+Key = "grounded"
+DisplayName = "Grounded"
+Layer = "Locomotion"
+Description = "Character is touching usable ground."
+DisplayOrder = 10
+
+[sub_resource type="Resource" id="HfsmTagDefinition_airborne"]
+script = ExtResource("2_tag")
+Key = "airborne"
+DisplayName = "Airborne"
+Layer = "Locomotion"
+Description = "Character is not grounded, including jump and fall states."
+DisplayOrder = 20
+
+[sub_resource type="Resource" id="HfsmTagDefinition_control_normal"]
+script = ExtResource("2_tag")
+Key = "control.normal"
+DisplayName = "Normal"
+Layer = "Control"
+Description = "Character accepts normal control."
+DisplayOrder = 10
+
+[sub_resource type="Resource" id="HfsmTagDefinition_control_stunned"]
+script = ExtResource("2_tag")
+Key = "control.stunned"
+DisplayName = "Stunned"
+Layer = "Control"
+Description = "Character is temporarily unable to act normally."
+DisplayOrder = 20
+
+[sub_resource type="Resource" id="HfsmTagDefinition_control_dead"]
+script = ExtResource("2_tag")
+Key = "control.dead"
+DisplayName = "Dead"
+Layer = "Control"
+Description = "Character is no longer active."
+DisplayOrder = 30
+
+[sub_resource type="Resource" id="HfsmTagDefinition_can_move"]
+script = ExtResource("2_tag")
+Key = "can_move"
+DisplayName = "Can Move"
+Description = "Movement input may be consumed by gameplay systems."
+DisplayOrder = 10
+
+[sub_resource type="Resource" id="HfsmTagDefinition_can_jump"]
+script = ExtResource("2_tag")
+Key = "can_jump"
+DisplayName = "Can Jump"
+Description = "Jump input may be consumed by gameplay systems."
+DisplayOrder = 20
+
+[sub_resource type="Resource" id="HfsmTagDefinition_can_attack"]
+script = ExtResource("2_tag")
+Key = "can_attack"
+DisplayName = "Can Attack"
+Description = "Attack actions may be started from this state."
+DisplayOrder = 30
+
+[resource]
+script = ExtResource("1_registry")
+Tags = Array[ExtResource("2_tag")]([SubResource("HfsmTagDefinition_movement"), SubResource("HfsmTagDefinition_grounded"), SubResource("HfsmTagDefinition_airborne"), SubResource("HfsmTagDefinition_control_normal"), SubResource("HfsmTagDefinition_control_stunned"), SubResource("HfsmTagDefinition_control_dead"), SubResource("HfsmTagDefinition_can_move"), SubResource("HfsmTagDefinition_can_jump"), SubResource("HfsmTagDefinition_can_attack")])

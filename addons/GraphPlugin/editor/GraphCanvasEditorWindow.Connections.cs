@@ -1,5 +1,6 @@
 #if TOOLS
 using Godot;
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -115,11 +116,46 @@ public partial class GraphCanvasEditorWindow
     private void EditConnection()
     {
         if (_selectedConnection == null || !_selectedConnection.IsEditable()) return;
-        var dialog = new AcceptDialog { Title = _selectedConnection.GetDisplayName(), DialogAutowrap = true };
+
+        Vector2I dialogSize = GetConnectionEditDialogSize();
+        var dialog = new AcceptDialog
+        {
+            Title = _selectedConnection.GetDisplayName(),
+            DialogAutowrap = true,
+            Unresizable = false,
+            MinSize = new Vector2I(420, 320),
+            Size = dialogSize
+        };
+
+        var scroll = new ScrollContainer
+        {
+            HorizontalScrollMode = ScrollContainer.ScrollMode.Auto,
+            VerticalScrollMode = ScrollContainer.ScrollMode.Auto,
+            CustomMinimumSize = new Vector2(dialogSize.X - 40, dialogSize.Y - 110),
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+        };
+
+        var margin = new MarginContainer
+        {
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+        };
+        margin.AddThemeConstantOverride("margin_left", 8);
+        margin.AddThemeConstantOverride("margin_top", 8);
+        margin.AddThemeConstantOverride("margin_right", 8);
+        margin.AddThemeConstantOverride("margin_bottom", 8);
+
         var ui = _selectedConnection.CreateEditUI(CreateEditorContext().WithConnection(_selectedConnection));
         ui.Name = "edit_ui";
-        ui.CustomMinimumSize = new Vector2(300, 100);
-        dialog.AddChild(ui);
+        ui.CustomMinimumSize = new Vector2(360, 0);
+        ui.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        ui.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+
+        margin.AddChild(ui);
+        scroll.AddChild(margin);
+        dialog.AddChild(scroll);
+
         var connRef = _selectedConnection;
         dialog.Confirmed += () =>
         {
@@ -130,7 +166,15 @@ public partial class GraphCanvasEditorWindow
             GD.Print("连接已更新");
         };
         AddChild(dialog);
-        dialog.PopupCentered();
+        dialog.PopupCentered(dialogSize);
+    }
+
+    private Vector2I GetConnectionEditDialogSize()
+    {
+        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+        int width = Math.Clamp((int)(viewportSize.X * 0.55f), 480, 760);
+        int height = Math.Clamp((int)(viewportSize.Y * 0.72f), 360, 680);
+        return new Vector2I(width, height);
     }
     private void DeleteConnection()
     {

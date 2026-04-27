@@ -93,7 +93,7 @@ public static class GraphNodeFactory
         return node;
     }
 
-    public static GraphNode CreateNodeUI(GraphNodeData data)
+    public static GraphNode CreateNodeUI(GraphNodeData data, GraphEditorContext context)
     {
         var node = new GraphNode
         {
@@ -112,7 +112,7 @@ public static class GraphNodeFactory
         for (int i = 0; i < maxSlots; i++)
             node.SetSlot(i, i < inputCount, 0, color, i < outputCount, 0, color);
 
-        data.CreateUI(node);
+        data.CreateUI(context.WithGraphNode(data, node));
 
         return node;
     }

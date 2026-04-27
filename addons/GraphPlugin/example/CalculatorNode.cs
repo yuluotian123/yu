@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Godot;
 
 public partial class CalculatorNode : GraphNodeData
@@ -14,12 +14,12 @@ public partial class CalculatorNode : GraphNodeData
         return new List<string> { "MissionGraph" };
     }
 
-    public override string GetDisplayName() => "计算器";
+    public override string GetDisplayName() => "Calculator";
     public override Color GetNodeColor() => Colors.Cyan;
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;
 
-    public override void CreateUI(GraphNode node)
+    public override void CreateUI(GraphEditorContext context)
     {
         var vbox = new VBoxContainer();
 
@@ -30,10 +30,10 @@ public partial class CalculatorNode : GraphNodeData
         vbox.AddChild(label);
 
         var option = new OptionButton();
-        option.AddItem("加法", (int)Operation.Add);
-        option.AddItem("减法", (int)Operation.Subtract);
-        option.AddItem("乘法", (int)Operation.Multiply);
-        option.AddItem("除法", (int)Operation.Divide);
+        option.AddItem("鍔犳硶", (int)Operation.Add);
+        option.AddItem("鍑忔硶", (int)Operation.Subtract);
+        option.AddItem("涔樻硶", (int)Operation.Multiply);
+        option.AddItem("闄ゆ硶", (int)Operation.Divide);
         option.Selected = (int)CurrentOperation;
         option.ItemSelected += (idx) => CurrentOperation = (Operation)idx;
         vbox.AddChild(option);
@@ -58,10 +58,10 @@ public partial class CalculatorNode : GraphNodeData
         spin2.ValueChanged += (v) => Value2 = (float)v;
         vbox.AddChild(spin2);
 
-        node.AddChild(vbox);
+        context.GraphNode.AddChild(vbox);
     }
 
-    public override void Execute()
+    public override void Execute(GraphExecutionContext context)
     {
         float result = CurrentOperation switch
         {

@@ -15,7 +15,7 @@ public class DebugLog : ActionBase
     public string message;
     public LogType logType {get;set;}= LogType.Log;
 
-    public override void Execute()
+    public override void Execute(GraphExecutionContext context)
     {
         switch (logType)
             {
@@ -33,7 +33,7 @@ public class DebugLog : ActionBase
 
     public override string Description => logType.ToString() + message;
 
-    public override Control CreateEditUI()
+    public override Control CreateEditUI(GraphEditorContext context)
     {
         var hbox = new HBoxContainer();
 

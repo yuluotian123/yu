@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HfsmGraphAsset" format=3 uid="uid://wt84t7fk20e3"]
+
+[ext_resource type="Script" uid="uid://b2tjh6v4hfs00" path="res://scripts/gamelogic/hfsm/graph/HfsmGraphAsset.cs" id="1_lw0bm"]
+
+[resource]
+script = ExtResource("1_lw0bm")
+NodesJson = "[{\"$type\":\"HfsmStateNodeData\",\"StateName\":\"State\",\"IsDefault\":false,\"Tags\":\"\",\"BehaviourKey\":\"\",\"MetadataJson\":\"{}\",\"Id\":\"b68cf2e7_627fcd70_1b61e8cd\",\"Position\":{\"x\":240,\"y\":260},\"NodeType\":\"HfsmStateNodeData\"},{\"$type\":\"HfsmStateNodeData\",\"StateName\":\"State\",\"IsDefault\":false,\"Tags\":\"\",\"BehaviourKey\":\"\",\"MetadataJson\":\"{}\",\"Id\":\"b83345d6_3011a470_e5c7d832\",\"Position\":{\"x\":686,\"y\":320},\"NodeType\":\"HfsmStateNodeData\"}]"
+ConnectionsJson = "[{\"$type\":\"HfsmTransitionConnection\",\"TransitionName\":\"\",\"Priority\":0,\"UseMode\":\"And\",\"Conditions\":[{\"$type\":\"HfsmBoolCondition\",\"ParameterName\":\"\",\"ExpectedValue\":true,\"Description\":\"Bool\"}],\"FromNode\":\"b68cf2e7_627fcd70_1b61e8cd\",\"FromPort\":0,\"ToNode\":\"b83345d6_3011a470_e5c7d832\",\"ToPort\":0,\"IsAvailable\":true}]"
+metadata/_custom_type_script = "uid://b2tjh6v4hfs00"

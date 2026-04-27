@@ -29,7 +29,7 @@ namespace Framework
             };
         }
 
-        public override Control CreateEditUI()
+        public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(320f, 0f) };
 

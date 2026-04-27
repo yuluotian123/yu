@@ -64,6 +64,10 @@ public partial class GraphCanvasEditorWindow : Window
         clearBtn.Pressed += OnClear;
         _toolbar.AddChild(clearBtn);
 
+        var blackboardBtn = new Button { Text = "Blackboard" };
+        blackboardBtn.Pressed += OpenBlackboardWindow;
+        _toolbar.AddChild(blackboardBtn);
+
         _toolbar.AddChild(new VSeparator());
         _toolbar.AddChild(new Label { Text = "右键添加节点" });
 
@@ -126,6 +130,27 @@ public partial class GraphCanvasEditorWindow : Window
     {
         _graphEdit.ConnectNode(fromNode, fromPort, toNode, toPort);
     }
+
+    private GraphEditorContext CreateEditorContext()
+    {
+        GraphAsset rootGraph = _currentGraph;
+        foreach (var item in _graphStack)
+            rootGraph = item.graph;
+
+        GraphBlackboardNode globalBlackboard = null;
+        var blackboardNodes = FindBlackboardNodesInEditedScene();
+        if (blackboardNodes.Count > 0)
+            globalBlackboard = blackboardNodes[0];
+
+        return new GraphEditorContext
+        {
+            CurrentGraph = _currentGraph,
+            RootGraph = rootGraph,
+            GraphEdit = _graphEdit,
+            GlobalBlackboard = globalBlackboard
+        };
+    }
+
     private void AddCustomToolbarControls()
     {
         if (_currentGraph == null || _toolbar == null) return;
@@ -150,6 +175,18 @@ public partial class GraphCanvasEditorWindow : Window
     private void OnSave()
     {
         if (_currentGraph == null) return;
+
+        if (!GraphBlackboardValidator.TryValidate(_currentGraph.BlackboardEntries, out string blackboardError))
+        {
+            var dialog = new AcceptDialog
+            {
+                Title = "Blackboard Error",
+                DialogText = blackboardError
+            };
+            AddChild(dialog);
+            dialog.PopupCentered();
+            return;
+        }
 
         // 构建 Id -> NodeData 索引，避免 O(n²) 查找
         var nodeDict = new System.Collections.Generic.Dictionary<string, GraphNodeData>();

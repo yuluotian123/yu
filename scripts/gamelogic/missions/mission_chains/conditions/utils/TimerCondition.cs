@@ -24,7 +24,7 @@ public class TimerCondition : ConditionBase
 
     public override string Description => $"等待 {RequiredSeconds} 秒";
 
-    public override Control CreateEditUI()
+    public override Control CreateEditUI(GraphEditorContext context)
     {
         var hbox = new HBoxContainer();
 

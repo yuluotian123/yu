@@ -20,8 +20,13 @@ namespace GameLogic
         /// <summary>启动图，指定完整路径（子图调用时传入）</summary>
         public void StartChain(MissionGraph chain, string graphPath)
         {
+            StartChain(chain, graphPath, null);
+        }
+
+        public void StartChain(MissionGraph chain, string graphPath, GraphBlackboardRuntime parentBlackboard)
+        {
             if (chain == null || handles.ContainsKey(graphPath)) return;
-            var handle = new MissionChainHandle(chain, this, graphPath);
+            var handle = new MissionChainHandle(chain, this, graphPath, parentBlackboard);
             handles.Add(graphPath, handle);
             handle.Start();
             handle.FlushBuffer(t => missionManager.StartMission(t));

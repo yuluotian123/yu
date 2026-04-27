@@ -10,5 +10,5 @@ public abstract class MissionObject
     /// 返回该条件的参数编辑 UI，子类可覆盖以提供自定义界面。
     /// 仅编辑器使用。
     /// </summary>
-    public virtual Control CreateEditUI() => new Control();
+    public virtual Control CreateEditUI(GraphEditorContext context) => new Control();
 }

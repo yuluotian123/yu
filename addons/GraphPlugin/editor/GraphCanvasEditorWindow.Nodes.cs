@@ -8,7 +8,7 @@ public partial class GraphCanvasEditorWindow
 {
     private void CreateNodeFromData(GraphNodeData data)
     {
-        var node = GraphNodeFactory.CreateNodeUI(data);
+        var node = GraphNodeFactory.CreateNodeUI(data, CreateEditorContext());
         _graphEdit.AddChild(node);
 
         // 如果是子图节点，在其 UI 上注入"进入子图"按钮

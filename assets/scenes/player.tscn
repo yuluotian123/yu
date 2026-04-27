@@ -4,13 +4,10 @@
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_0hrit"]
 [ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/PlayerCharacterControllerComponent2D.cs" id="3_controller"]
 [ext_resource type="Script" uid="uid://dycdc7sulhe5q" path="res://scripts/gamelogic/player/CharacterFSMComponent2D.cs" id="4_fsm"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterBodyMotorComponent2D.cs" id="5_motor"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
+[ext_resource type="Script" uid="uid://c26f38a0omv2f" path="res://scripts/gamelogic/player/CharacterBodyMotorComponent2D.cs" id="5_motor"]
+[ext_resource type="Script" uid="uid://d0xx8r62p5c42" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
 [ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/states/CharacterMoveComponent2D.cs" id="7_move"]
 [ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/states/CharacterJumpComponent2D.cs" id="8_jump"]
-
-[sub_resource type="RectangleShape2D" id="shape_body"]
-size = Vector2(40, 72)
 
 [sub_resource type="Resource" id="sub_controller"]
 script = ExtResource("3_controller")
@@ -18,36 +15,34 @@ script = ExtResource("3_controller")
 [sub_resource type="Resource" id="sub_fsm"]
 script = ExtResource("4_fsm")
 
-[sub_resource type="Resource" id="sub_motor"]
-script = ExtResource("5_motor")
-BodyPath = NodePath("PhysicsBody")
-FloorSnapLength = 12.0
-BodySize = Vector2(40, 72)
-FootInset = 6.0
-GroundProbeDistance = 24.0
+[sub_resource type="Resource" id="sub_jump"]
+script = ExtResource("8_jump")
+CoyoteTime = 0.3
+JumpCutMultiplier = 0.45
+
+[sub_resource type="Resource" id="sub_move"]
+script = ExtResource("7_move")
+MoveSpeed = 300.0
 
 [sub_resource type="Resource" id="sub_gravity"]
 script = ExtResource("6_gravity")
 Gravity = 1650.0
 MaxFallSpeed = 1000.0
 
-[sub_resource type="Resource" id="sub_move"]
-script = ExtResource("7_move")
-MoveSpeed = 300.0
-VisualRootPath = NodePath("VisualRoot")
+[sub_resource type="Resource" id="sub_motor"]
+script = ExtResource("5_motor")
+FootInset = 6.0
 
-[sub_resource type="Resource" id="sub_jump"]
-script = ExtResource("8_jump")
-CoyoteTime = 0.3
-JumpCutMultiplier = 0.45
+[sub_resource type="RectangleShape2D" id="shape_body"]
+size = Vector2(40, 72)
 
 [node name="Player" type="Node2D" unique_id=587364041]
 script = ExtResource("1_gobj")
 Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_jump"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_motor")])
 
-[node name="PhysicsBody" type="CharacterBody2D" parent="."]
+[node name="PhysicsBody" type="CharacterBody2D" parent="." unique_id=817041810]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicsBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicsBody" unique_id=1906787772]
 shape = SubResource("shape_body")
 
 [node name="VisualRoot" type="Node2D" parent="." unique_id=1568589281]

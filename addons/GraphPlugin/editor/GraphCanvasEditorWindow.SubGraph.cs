@@ -110,9 +110,9 @@ public partial class GraphCanvasEditorWindow
             if (ResourceLoader.Exists(path))
             {
                 var res = ResourceLoader.Load(path);
-                if (res is not GraphAsset)
+                if (res is not GraphAsset graphAsset || !subData.AcceptsSubGraph(graphAsset))
                 {
-                    var warn = new AcceptDialog { Title = "类型错误", DialogText = $"所选文件不是 GraphAsset 资源：\n{path}" };
+                    var warn = new AcceptDialog { Title = "类型错误", DialogText = $"所选文件不是 {subData.GetSubGraphTypeName()} 资源：\n{path}" };
                     AddChild(warn);
                     warn.PopupCentered();
                     return;
@@ -120,7 +120,7 @@ public partial class GraphCanvasEditorWindow
             }
             else
             {
-                var newAsset = new GraphAsset();
+                var newAsset = subData.CreateSubGraphAsset();
                 ResourceSaver.Save(newAsset, path);
                 GD.Print($"[SubGraph] 已创建新子图资源: {path}");
             }

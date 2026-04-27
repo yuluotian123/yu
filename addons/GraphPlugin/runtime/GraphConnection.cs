@@ -16,7 +16,7 @@ public class GraphConnection
 
     public virtual bool IsAvailable{get;} = true;
 
-    public virtual Control CreateEditUI()
+    public virtual Control CreateEditUI(GraphEditorContext context)
     {
         var container = new VBoxContainer();
         var info = new Label

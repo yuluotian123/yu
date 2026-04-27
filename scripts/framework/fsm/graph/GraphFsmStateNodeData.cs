@@ -33,7 +33,7 @@ namespace Framework
             return false;
         }
 
-        public override void CreateUI(GraphNode node)
+        public override void CreateUI(GraphEditorContext context)
         {
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(180f, 0f) };
 
@@ -61,7 +61,7 @@ namespace Framework
             tagsEdit.TextChanged += value => Tags = value;
             root.AddChild(tagsEdit);
 
-            node.AddChild(root);
+            context.GraphNode.AddChild(root);
         }
     }
 }

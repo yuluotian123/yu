@@ -11,6 +11,8 @@ namespace GameLogic
         private readonly MissionGraph chain;
         private readonly MissionChainManager manager;
         private readonly string graphPath; // 完整路径，如 "root/sub1/sub2"
+        private readonly GraphBlackboardRuntime blackboard;
+        private readonly GraphExecutionContext context;
 
         private readonly Dictionary<string, MissionNode> activeNodes = new Dictionary<string, MissionNode>();
         private readonly Queue<MissionNode> buffer = new Queue<MissionNode>();
@@ -20,11 +22,14 @@ namespace GameLogic
 
         public bool IsCompleted => activeNodes.Count == 0 && pendingSubGraphs.Count == 0;
 
-        public MissionChainHandle(MissionGraph chain, MissionChainManager manager, string graphPath)
+        public MissionChainHandle(MissionGraph chain, MissionChainManager manager, string graphPath, GraphBlackboardRuntime parentBlackboard = null)
         {
             this.chain = chain;
             this.manager = manager;
             this.graphPath = graphPath;
+            blackboard = parentBlackboard?.Fork() ?? new GraphBlackboardRuntime();
+            blackboard.PushLocal(chain);
+            context = new GraphExecutionContext(chain, blackboard);
         }
 
         /// <summary>
@@ -127,11 +132,11 @@ namespace GameLogic
                     var subGraphPath = graphPath + "/" + subGraph.graphName;
                     if (pendingSubGraphs.ContainsKey(subGraphPath)) break;
                     pendingSubGraphs.Add(subGraphPath, subGraphNode);
-                    manager.StartChain(subGraph, subGraphPath);
+                    manager.StartChain(subGraph, subGraphPath, blackboard);
                     break;
 
                 default:
-                    node.Execute();
+                    node.Execute(context);
                     foreach (var outConnection in chain.GetOutgoingConnections(node.Id).Where
                        (c => ((ConnectionWithConditon)c).IsAvailable
                           && ((ConnectionWithConditon)c).IsSequence))

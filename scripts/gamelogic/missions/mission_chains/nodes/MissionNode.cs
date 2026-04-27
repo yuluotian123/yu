@@ -25,19 +25,19 @@ public class MissionNode : GraphNodeData
         return proto;
     }
 
-    public override void CreateUI(GraphNode node)
+    public override void CreateUI(GraphEditorContext context)
     {
-        base.CreateUI(node);
+        base.CreateUI(context);
 
         var listControl = new ReorderableListControl<MissionRequireTemplate>(
             items: _requires,
-            buildItemUi: require => require.CreateEditUI(),
+            buildItemUi: require => require.CreateEditUI(context),
             getItemLabel: require => require.GetType().Name,
             availableTypes: SubTypeCache.GetSubTypes<MissionRequireTemplate>(),
             factory: type => (MissionRequireTemplate)System.Activator.CreateInstance(type)
         );
 
-        node.AddChild(listControl.Build());
+        context.GraphNode.AddChild(listControl.Build());
 
     }
 

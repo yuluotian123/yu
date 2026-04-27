@@ -19,11 +19,11 @@ public partial class ExitNode : GraphNodeData
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 0;
     public override bool CanBePrime() => false;
-    public override void CreateUI(GraphNode node)
+    public override void CreateUI(GraphEditorContext context)
     {
         var vbox = new VBoxContainer();
 
-        var label = new Label { Text = "■ 结束" };
+        var label = new Label { Text = "�?结束" };
         vbox.AddChild(label);
 
         var option = new OptionButton();
@@ -33,6 +33,6 @@ public partial class ExitNode : GraphNodeData
         option.ItemSelected += (idx) => exitMode = (ExitMode)idx;
         vbox.AddChild(option);
 
-        node.AddChild(vbox);
+        context.GraphNode.AddChild(vbox);
     }
 }

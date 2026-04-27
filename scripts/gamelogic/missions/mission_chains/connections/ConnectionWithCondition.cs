@@ -90,7 +90,7 @@ public class ConnectionWithConditon : GraphConnection
 
     // ── CreateEditUi（仅编辑器）──────────────────────────────────────────────
 #if TOOLS
-    public override Control CreateEditUI()
+    public override Control CreateEditUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
         root.CustomMinimumSize = new Vector2(380, 0);
@@ -126,7 +126,7 @@ public class ConnectionWithConditon : GraphConnection
         //   - 排序：每行 ↑ / ↓ 按钮
         var listControl = new ReorderableListControl<ConditionBase>(
             items: Conditions,
-            buildItemUi: condition => condition.CreateEditUI(),
+            buildItemUi: condition => condition.CreateEditUI(context),
             getItemLabel: condition => condition.GetType().Name,
             availableTypes: SubTypeCache.GetSubTypes<ConditionBase>(),
             factory: type => (ConditionBase)System.Activator.CreateInstance(type)

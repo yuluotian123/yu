@@ -8,22 +8,22 @@ public class ActionNode : GraphNodeData
 
     public List<ActionBase> Actions { get; set; } = new List<ActionBase>();
 
-    public override void CreateUI(GraphNode node)
+    public override void CreateUI(GraphEditorContext context)
     {
         var listControl = new ReorderableListControl<ActionBase>(
             items: Actions,
-            buildItemUi: action => action.CreateEditUI(),
+            buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.GetType().Name,
             availableTypes: SubTypeCache.GetSubTypes<ActionBase>(),
             factory: type => (ActionBase)System.Activator.CreateInstance(type)
         );
 
-        node.AddChild(listControl.Build());
+        context.GraphNode.AddChild(listControl.Build());
     }
 
-    public override void Execute()
+    public override void Execute(GraphExecutionContext context)
     {
-        foreach (var a in Actions) a?.Execute();
+        foreach (var a in Actions) a?.Execute(context);
     }
 
 }

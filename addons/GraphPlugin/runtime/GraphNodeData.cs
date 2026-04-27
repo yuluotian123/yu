@@ -50,15 +50,15 @@ public class GraphNodeData
     /// </summary>
     public virtual int GetInputMaxConnections(int port) => 1;
 
-    public virtual void CreateUI(GraphNode node)
+    public virtual void CreateUI(GraphEditorContext context)
     {
         var label = new Label { Text = GetDisplayName()+"."+Id };
-        node.AddChild(label);
+        context.GraphNode.AddChild(label);
     }
     
     /// <summary>
     /// 处理瞬时逻辑，在到达节点时调用；并不代表会退出此节点
     /// </summary>
-    public virtual void Execute() { }
+    public virtual void Execute(GraphExecutionContext context) { }
 
 }

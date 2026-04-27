@@ -9,12 +9,14 @@ public partial class GraphAsset : Resource
     // ── Godot 序列化字段（唯一需要 Export 的字段）────────────────────────────
     [Export] public string NodesJson { get; set; } = "[]";
     [Export] public string ConnectionsJson { get; set; } = "[]";
+    [Export] public string BlackboardJson { get; set; } = "[]";
 
     public string graphName => ResourcePath.GetFile().Split('.')[0];
 
     // ── 运行时数据（从 JSON 加载后填充）──────────────────────────────────────
     private List<GraphNodeData> _nodes;
     private List<GraphConnection> _connections;
+    private List<GraphBlackboardEntry> _blackboardEntries;
 
     public List<GraphNodeData> Nodes
     {
@@ -39,6 +41,20 @@ public partial class GraphAsset : Resource
         set
         {
             _connections = value;
+            SaveToJson();
+        }
+    }
+
+    public List<GraphBlackboardEntry> BlackboardEntries
+    {
+        get
+        {
+            if (_blackboardEntries == null) LoadFromJson();
+            return _blackboardEntries;
+        }
+        set
+        {
+            _blackboardEntries = value;
             SaveToJson();
         }
     }
@@ -77,15 +93,20 @@ public partial class GraphAsset : Resource
 
     public void SaveToJson()
     {
+        if (_blackboardEntries == null)
+            _blackboardEntries = GraphJsonHelper.DeserializeList<GraphBlackboardEntry>(BlackboardJson);
+
         GD.Print("当前节点数量：" + Nodes.Count());
         NodesJson = GraphJsonHelper.SerializeList(_nodes ?? new List<GraphNodeData>());
         ConnectionsJson = GraphJsonHelper.SerializeList(_connections ?? new List<GraphConnection>());
+        BlackboardJson = GraphJsonHelper.SerializeList(_blackboardEntries ?? new List<GraphBlackboardEntry>());
     }
 
     public void LoadFromJson()
     {
         _nodes = GraphJsonHelper.DeserializeList<GraphNodeData>(NodesJson);
         _connections = GraphJsonHelper.DeserializeList<GraphConnection>(ConnectionsJson);
+        _blackboardEntries = GraphJsonHelper.DeserializeList<GraphBlackboardEntry>(BlackboardJson);
         TopologicalSortNodes();
     }
 

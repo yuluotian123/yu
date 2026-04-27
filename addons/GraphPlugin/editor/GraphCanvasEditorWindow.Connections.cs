@@ -116,7 +116,7 @@ public partial class GraphCanvasEditorWindow
     {
         if (_selectedConnection == null || !_selectedConnection.IsEditable()) return;
         var dialog = new AcceptDialog { Title = _selectedConnection.GetDisplayName(), DialogAutowrap = true };
-        var ui = _selectedConnection.CreateEditUI();
+        var ui = _selectedConnection.CreateEditUI(CreateEditorContext().WithConnection(_selectedConnection));
         ui.Name = "edit_ui";
         ui.CustomMinimumSize = new Vector2(300, 100);
         dialog.AddChild(ui);

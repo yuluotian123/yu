@@ -110,13 +110,19 @@ namespace GameLogic
         public override void _Process(double delta)
         {
             for (int i = 0; i < _sortedComponents.Count; i++)
+            {
+                if (!_sortedComponents[i].IsActive) continue;
                 _sortedComponents[i].OnUpdate(delta);
+            }
         }
 
         public override void _PhysicsProcess(double delta)
         {
             for (int i = 0; i < _sortedComponents.Count; i++)
+            {
+                if (!_sortedComponents[i].IsActive) continue;
                 _sortedComponents[i].OnPhysicsUpdate(delta);
+            }
         }
 
         public override void _ExitTree()

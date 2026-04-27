@@ -17,7 +17,7 @@ namespace GameLogic
         public override void _Ready()
         {
             base._Ready();
-             
+
             RootModule.Instance.GameState.RegisterSeriableGameObject(this);
 
             _serializationComponent = AddComponent<SerializationComponent2D>();
@@ -41,23 +41,21 @@ namespace GameLogic
         /// <param name="data"></param>
         /// <param name="root"></param>
         /// <returns></returns>
-        public SerializableGameObject2D CreateFromData(SerializableGameObjectData2D data,Node root = null)
+        public SerializableGameObject2D CreateFromData(SerializableGameObjectData2D data, Node root = null)
         {
-            if(data == null)
-            { 
-                return null;   
-            }
+            if (data == null)
+                return null;
 
 
-            if(root == null)
+            if (root == null)
                 root = RootModule.Instance;
 
-            this.PersistentId = data.PersistentId;
+            PersistentId = data.PersistentId;
 
-            root.AddChild(this);            
+            root.AddChild(this);
 
-            if(IsInsideTree())
-            _serializationComponent?.Load(data);
+            if (IsInsideTree())
+                _serializationComponent?.Load(data);
             else
                 Debugger.Warn($"Failed to create SerializableGameObject2D from data: not inside scene tree after adding to root.");
 

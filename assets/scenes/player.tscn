@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://jcbmfduqeu6j"]
+
+[ext_resource type="Script" uid="uid://dtjdqgsefw3ar" path="res://scripts/gamelogic/gameobject/GameObject2D.cs" id="1_gobj"]
+[ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_0hrit"]
+[ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/PlayerCharacterControllerComponent2D.cs" id="3_controller"]
+[ext_resource type="Script" uid="uid://dycdc7sulhe5q" path="res://scripts/gamelogic/player/CharacterFSMComponent2D.cs" id="4_fsm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterBodyMotorComponent2D.cs" id="5_motor"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
+[ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/states/CharacterMoveComponent2D.cs" id="7_move"]
+[ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/states/CharacterJumpComponent2D.cs" id="8_jump"]
+
+[sub_resource type="RectangleShape2D" id="shape_body"]
+size = Vector2(40, 72)
+
+[sub_resource type="Resource" id="sub_controller"]
+script = ExtResource("3_controller")
+
+[sub_resource type="Resource" id="sub_fsm"]
+script = ExtResource("4_fsm")
+
+[sub_resource type="Resource" id="sub_motor"]
+script = ExtResource("5_motor")
+BodyPath = NodePath("PhysicsBody")
+FloorSnapLength = 12.0
+BodySize = Vector2(40, 72)
+FootInset = 6.0
+GroundProbeDistance = 24.0
+
+[sub_resource type="Resource" id="sub_gravity"]
+script = ExtResource("6_gravity")
+Gravity = 1650.0
+MaxFallSpeed = 1000.0
+
+[sub_resource type="Resource" id="sub_move"]
+script = ExtResource("7_move")
+MoveSpeed = 300.0
+VisualRootPath = NodePath("VisualRoot")
+
+[sub_resource type="Resource" id="sub_jump"]
+script = ExtResource("8_jump")
+CoyoteTime = 0.3
+JumpCutMultiplier = 0.45
+
+[node name="Player" type="Node2D" unique_id=587364041]
+script = ExtResource("1_gobj")
+Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_jump"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_motor")])
+
+[node name="PhysicsBody" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicsBody"]
+shape = SubResource("shape_body")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1568589281]
+
+[node name="Body" type="Polygon2D" parent="VisualRoot" unique_id=946751149]
+color = Color(0.94902, 0.843137, 0.396078, 1)
+polygon = PackedVector2Array(-20, -36, 20, -36, 20, 36, -20, 36)
+
+[node name="Eye" type="Polygon2D" parent="VisualRoot" unique_id=1688044761]
+position = Vector2(8, -8)
+color = Color(0.168627, 0.14902, 0.192157, 1)
+polygon = PackedVector2Array(-4, -6, 4, -6, 4, 2, -4, 2)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2005186648]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0

@@ -14,6 +14,9 @@ namespace GameLogic
         public abstract int Priority { get; }
 
         [JsonIgnore]
+        public bool IsActive { get; set; } = true;
+
+        [JsonIgnore]
         public Node OwnerNode => Owner;
 
         [JsonIgnore]

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="GraphFsmGraphAsset" format=3 uid="uid://7b0v7spokg04"]
+
+[ext_resource type="Script" uid="uid://b0obcwqcuywpb" path="res://scripts/framework/fsm/graph/GraphFsmGraphAsset.cs" id="1_b0w64"]
+
+[resource]
+script = ExtResource("1_b0w64")
+NodesJson = "[{\"$type\":\"GraphFsmStateNodeData\",\"StateName\":\"State\",\"IsDefault\":false,\"Tags\":\"\",\"MetadataJson\":\"{}\",\"Id\":\"98fd0cfd_dcb47132_467137cd\",\"Position\":{\"x\":240,\"y\":300},\"NodeType\":\"GraphFsmStateNodeData\"},{\"$type\":\"GraphFsmStateNodeData\",\"StateName\":\"State\",\"IsDefault\":false,\"Tags\":\"\",\"MetadataJson\":\"{}\",\"Id\":\"99484cc8_830fd9bf_430dff31\",\"Position\":{\"x\":700,\"y\":280},\"NodeType\":\"GraphFsmStateNodeData\"}]"
+ConnectionsJson = "[{\"$type\":\"GraphFsmTransitionConnection\",\"TransitionName\":\"\",\"Condition\":\"Trigger\",\"TriggerName\":\"\",\"BoolParameterName\":\"\",\"ExpectedBoolValue\":true,\"DelaySeconds\":0,\"Priority\":0,\"FromNode\":\"98fd0cfd_dcb47132_467137cd\",\"FromPort\":0,\"ToNode\":\"99484cc8_830fd9bf_430dff31\",\"ToPort\":0,\"IsAvailable\":true}]"
+metadata/_custom_type_script = "uid://b0obcwqcuywpb"

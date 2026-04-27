@@ -1,3 +1,94 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
+[ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ai_runner.tscn" id="2_ai"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(2200, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_a"]
+size = Vector2(260, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_b"]
+size = Vector2(220, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_c"]
+size = Vector2(220, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_d"]
+size = Vector2(260, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_goal"]
+size = Vector2(96, 132)
+
 [node name="Spacelevel" type="Node2D" unique_id=2082760717]
+
+[node name="Sky" type="Polygon2D" parent="." unique_id=1317878513]
+color = Color(0.0862745, 0.117647, 0.211765, 1)
+polygon = PackedVector2Array(-200, -100, 2200, -100, 2200, 1300, -200, 1300)
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=2085808888 groups=["player_ground"]]
+position = Vector2(960, 980)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1534630935]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="Visual" type="Polygon2D" parent="Ground" unique_id=1538133487]
+color = Color(0.192157, 0.223529, 0.290196, 1)
+polygon = PackedVector2Array(-1100, -60, 1100, -60, 1100, 60, -1100, 60)
+
+[node name="PlatformA" type="StaticBody2D" parent="." unique_id=1424427727 groups=["player_ground"]]
+position = Vector2(430, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformA" unique_id=1951781239]
+shape = SubResource("RectangleShape2D_platform_a")
+
+[node name="Visual" type="Polygon2D" parent="PlatformA" unique_id=2042817171]
+color = Color(0.415686, 0.545098, 0.639216, 1)
+polygon = PackedVector2Array(-130, -14, 130, -14, 130, 14, -130, 14)
+
+[node name="PlatformB" type="StaticBody2D" parent="." unique_id=1963952000 groups=["player_ground"]]
+position = Vector2(760, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformB" unique_id=1824258864]
+shape = SubResource("RectangleShape2D_platform_b")
+
+[node name="Visual" type="Polygon2D" parent="PlatformB" unique_id=1899030052]
+color = Color(0.482353, 0.65098, 0.721569, 1)
+polygon = PackedVector2Array(-110, -14, 110, -14, 110, 14, -110, 14)
+
+[node name="PlatformC" type="StaticBody2D" parent="." unique_id=1637842310 groups=["player_ground"]]
+position = Vector2(1080, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformC" unique_id=1089330663]
+shape = SubResource("RectangleShape2D_platform_c")
+
+[node name="Visual" type="Polygon2D" parent="PlatformC" unique_id=812291793]
+color = Color(0.588235, 0.756863, 0.768627, 1)
+polygon = PackedVector2Array(-110, -14, 110, -14, 110, 14, -110, 14)
+
+[node name="PlatformD" type="StaticBody2D" parent="." unique_id=2068171076 groups=["player_ground"]]
+position = Vector2(1430, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformD" unique_id=924151816]
+shape = SubResource("RectangleShape2D_platform_d")
+
+[node name="Visual" type="Polygon2D" parent="PlatformD" unique_id=329099791]
+color = Color(0.717647, 0.854902, 0.792157, 1)
+polygon = PackedVector2Array(-130, -14, 130, -14, 130, 14, -130, 14)
+
+[node name="Player" parent="." unique_id=219661621 instance=ExtResource("1_player")]
+position = Vector2(160, 884)
+
+[node name="AIRunner" parent="." instance=ExtResource("2_ai")]
+position = Vector2(430, 750)
+
+[node name="Goal" type="Area2D" parent="." unique_id=1561473511 groups=["player_goal"]]
+position = Vector2(1640, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal" unique_id=887028794]
+shape = SubResource("RectangleShape2D_goal")
+
+[node name="Visual" type="Polygon2D" parent="Goal" unique_id=887938027]
+color = Color(0.980392, 0.447059, 0.239216, 1)
+polygon = PackedVector2Array(-48, -66, 48, -66, 48, 66, -48, 66)

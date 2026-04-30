@@ -17,8 +17,6 @@ namespace GameLogic
 
         private ICharacterIntentAbility2D<MoveIntent2D> _move;
         private ICharacterIntentAbility2D<JumpIntent2D> _jump;
-        private ICharacterIntentAbility2D<DashIntent2D> _dash;
-        private ICharacterIntentAbility2D<AttackIntent2D> _attack;
         private HfsmComponent2D _hfsm;
         private CharacterBodyMotorComponent2D _motor;
         private Vector2 _spawnPosition;
@@ -31,8 +29,6 @@ namespace GameLogic
         {
             _move = Owner.GetComponent<CharacterMoveComponent2D>();
             _jump = Owner.GetComponent<CharacterJumpComponent2D>();
-            _dash = Owner.GetComponent<CharacterDashComponent2D>();
-            _attack = Owner.GetComponent<CharacterAttackComponent2D>();
             _hfsm = Owner.GetComponent<HfsmComponent2D>();
             _motor = Owner.GetComponent<CharacterBodyMotorComponent2D>();
             _spawnPosition = Owner.GlobalPosition;
@@ -56,13 +52,9 @@ namespace GameLogic
 
             _move?.SetIntent(moveIntent);
             _jump?.SetIntent(jumpIntent);
-            _dash?.SetIntent(DashIntent2D.None);
-            _attack?.SetIntent(AttackIntent2D.None);
             WriteHfsmInputs(moveIntent, jumpIntent);
             _move?.ApproveIntent(moveIntent);
             _jump?.ApproveIntent(jumpIntent);
-            _dash?.ApproveIntent(DashIntent2D.None);
-            _attack?.ApproveIntent(AttackIntent2D.None);
         }
 
         private float UpdateMoveAxis(float dt)

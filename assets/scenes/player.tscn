@@ -9,8 +9,10 @@
 [ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/movement/CharacterMoveComponent2D.cs" id="7_move"]
 [ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/movement/CharacterJumpComponent2D.cs" id="8_jump"]
 [ext_resource type="Resource" uid="uid://ch7drwso2wxxc" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
-[ext_resource type="Script" uid="uid://d3ahnhm01dash" path="res://scripts/gamelogic/player/abilities/CharacterDashComponent2D.cs" id="10_dash"]
-[ext_resource type="Script" uid="uid://d3ahnhm02atk" path="res://scripts/gamelogic/player/abilities/CharacterAttackComponent2D.cs" id="11_attack"]
+[ext_resource type="Script" uid="uid://bkskillmgr2d01" path="res://scripts/gamelogic/skills/runtime/SkillManagerComponent2D.cs" id="10_skill_manager"]
+[ext_resource type="Script" uid="uid://cg2ytousxnyt1" path="res://scripts/gamelogic/skills/SkillResource.cs" id="11_skill_resource"]
+[ext_resource type="Resource" uid="uid://b3dashskill01" path="res://assets/skills/dash_skill.tres" id="12_dash_skill"]
+[ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/skills/attack_skill.tres" id="13_attack_skill"]
 
 [sub_resource type="Resource" id="sub_controller"]
 script = ExtResource("3_controller")
@@ -20,13 +22,14 @@ script = ExtResource("4_fsm")
 Graph = ExtResource("9_hfsm")
 LogStateChanges = true
 
+[sub_resource type="Resource" id="sub_skill_manager"]
+script = ExtResource("10_skill_manager")
+Skills = Array[ExtResource("11_skill_resource")]([ExtResource("12_dash_skill"), ExtResource("13_attack_skill")])
+
 [sub_resource type="Resource" id="sub_jump"]
 script = ExtResource("8_jump")
 CoyoteTime = 11.0
 JumpCutMultiplier = 0.45
-
-[sub_resource type="Resource" id="sub_attack"]
-script = ExtResource("11_attack")
 
 [sub_resource type="Resource" id="sub_move"]
 script = ExtResource("7_move")
@@ -37,9 +40,6 @@ script = ExtResource("6_gravity")
 Gravity = 1650.0
 MaxFallSpeed = 1000.0
 
-[sub_resource type="Resource" id="sub_dash"]
-script = ExtResource("10_dash")
-
 [sub_resource type="Resource" id="sub_motor"]
 script = ExtResource("5_motor")
 FootInset = 6.0
@@ -49,7 +49,7 @@ size = Vector2(40, 72)
 
 [node name="Player" type="Node2D" unique_id=587364041]
 script = ExtResource("1_gobj")
-Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_jump"), SubResource("sub_attack"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_dash"), SubResource("sub_motor")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_skill_manager"), SubResource("sub_jump"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_motor")])
 
 [node name="PhysicsBody" type="CharacterBody2D" parent="." unique_id=817041810]
 

@@ -20,8 +20,6 @@ namespace GameLogic
 
         private ICharacterIntentAbility2D<MoveIntent2D> _move;
         private ICharacterIntentAbility2D<JumpIntent2D> _jump;
-        private CharacterDashComponent2D _dash;
-        private CharacterAttackComponent2D _attack;
         private HfsmComponent2D _hfsm;
         private CharacterBodyMotorComponent2D _motor;
 
@@ -29,8 +27,6 @@ namespace GameLogic
         {
             _move = Owner.GetComponent<CharacterMoveComponent2D>();
             _jump = Owner.GetComponent<CharacterJumpComponent2D>();
-            _dash = Owner.GetComponent<CharacterDashComponent2D>();
-            _attack = Owner.GetComponent<CharacterAttackComponent2D>();
             _hfsm = Owner.GetComponent<HfsmComponent2D>();
             _motor = Owner.GetComponent<CharacterBodyMotorComponent2D>();
         }
@@ -52,44 +48,32 @@ namespace GameLogic
             var jumpIntent = new JumpIntent2D(
                 startRequested: input.IsJustPressed(JumpAction),
                 sustainRequested: input.IsPressed(JumpAction));
-            var dashIntent = new DashIntent2D(
-                startRequested: input.IsJustPressed(DashAction),
-                directionX: inputX);
-            var attackIntent = new AttackIntent2D(
-                startRequested: input.IsJustPressed(AttackAction),
-                sustainRequested: input.IsPressed(AttackAction));
+            bool dashStartRequested = input.IsJustPressed(DashAction);
+            bool attackStartRequested = input.IsJustPressed(AttackAction);
 
             _move?.SetIntent(moveIntent);
             _jump?.SetIntent(jumpIntent);
-            _dash?.SetIntent(dashIntent);
-            _attack?.SetIntent(attackIntent);
-            WriteHfsmInputs(moveIntent, jumpIntent, dashIntent, attackIntent);
+            WriteHfsmInputs(moveIntent, jumpIntent, dashStartRequested, attackStartRequested);
 
             _move?.ApproveIntent(moveIntent);
             _jump?.ApproveIntent(jumpIntent);
-            _dash?.ApproveIntent(DashIntent2D.None);
-            _attack?.ApproveIntent(AttackIntent2D.None);
         }
 
         private void ClearIntents()
         {
             _move?.SetIntent(MoveIntent2D.None);
             _jump?.SetIntent(JumpIntent2D.None);
-            _dash?.SetIntent(DashIntent2D.None);
-            _attack?.SetIntent(AttackIntent2D.None);
-            WriteHfsmInputs(MoveIntent2D.None, JumpIntent2D.None, DashIntent2D.None, AttackIntent2D.None);
+            WriteHfsmInputs(MoveIntent2D.None, JumpIntent2D.None, false, false);
 
             _move?.ApproveIntent(MoveIntent2D.None);
             _jump?.ApproveIntent(JumpIntent2D.None);
-            _dash?.ApproveIntent(DashIntent2D.None);
-            _attack?.ApproveIntent(AttackIntent2D.None);
         }
 
         private void WriteHfsmInputs(
             MoveIntent2D moveIntent,
             JumpIntent2D jumpIntent,
-            DashIntent2D dashIntent,
-            AttackIntent2D attackIntent)
+            bool dashStartRequested,
+            bool attackStartRequested)
         {
             if (_hfsm == null)
                 return;
@@ -99,8 +83,8 @@ namespace GameLogic
             _hfsm.SetValue(CharacterHfsmBlackboardKeys.JumpSustainRequested, jumpIntent.SustainRequested);
             _hfsm.SetValue(CharacterHfsmBlackboardKeys.MoveAxisX, moveIntent.AxisX);
             _hfsm.SetValue(CharacterHfsmBlackboardKeys.VelocityY, _motor?.Velocity.Y ?? 0f);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.DashStartRequested, dashIntent.StartRequested && _dash?.CanStartDash == true);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.AttackStartRequested, attackIntent.StartRequested && _attack?.CanStartAttack == true);
+            _hfsm.SetValue(CharacterHfsmBlackboardKeys.DashStartRequested, dashStartRequested);
+            _hfsm.SetValue(CharacterHfsmBlackboardKeys.AttackStartRequested, attackStartRequested);
         }
     }
 }

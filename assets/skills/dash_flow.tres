@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SkillFlowGraphAsset" format=3 uid="uid://b3dashflow01"]
+
+[ext_resource type="Script" uid="uid://bv51fcf1mxw62" path="res://scripts/gamelogic/skills/SkillFlowGraphAsset.cs" id="1_skill_flow"]
+
+[resource]
+script = ExtResource("1_skill_flow")
+NodesJson = "[{\"$type\":\"FlowEntryNodeData\",\"Id\":\"dash_entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"FlowTimelineNodeData\",\"Duration\":0.16,\"RunUpdateOnEnter\":false,\"StartActions\":[{\"$type\":\"SkillResolveDashDirectionAction\",\"DirectionBlackboardKey\":\"Skill.DashDirection\",\"MoveAxisBlackboardKey\":\"MoveAxisX\"},{\"$type\":\"SkillSetVisualModulateAction\",\"VisualRootPath\":\"VisualRoot\",\"Enabled\":true,\"ActiveColor\":{\"r\":0.55,\"g\":0.95,\"b\":1,\"a\":1}}],\"UpdateActions\":[{\"$type\":\"SkillApplyDashVelocityAction\",\"DirectionBlackboardKey\":\"Skill.DashDirection\",\"Speed\":760,\"StopVerticalVelocity\":true}],\"Events\":[],\"CompleteActions\":[{\"$type\":\"SkillSetVisualModulateAction\",\"VisualRootPath\":\"VisualRoot\",\"Enabled\":false,\"ActiveColor\":{\"r\":0.55,\"g\":0.95,\"b\":1,\"a\":1}}],\"CancelActions\":[{\"$type\":\"SkillSetVisualModulateAction\",\"VisualRootPath\":\"VisualRoot\",\"Enabled\":false,\"ActiveColor\":{\"r\":0.55,\"g\":0.95,\"b\":1,\"a\":1}}],\"Id\":\"dash_timeline\",\"Position\":{\"x\":320,\"y\":0},\"NodeType\":\"FlowTimelineNodeData\"},{\"$type\":\"FlowReturnNodeData\",\"Label\":\"Finished\",\"Id\":\"dash_return\",\"Position\":{\"x\":680,\"y\":0},\"NodeType\":\"FlowReturnNodeData\"}]"
+ConnectionsJson = "[{\"$type\":\"GraphConnection\",\"FromNode\":\"dash_entry\",\"FromPort\":0,\"ToNode\":\"dash_timeline\",\"ToPort\":0},{\"$type\":\"GraphConnection\",\"FromNode\":\"dash_timeline\",\"FromPort\":0,\"ToNode\":\"dash_return\",\"ToPort\":0}]"
+BlackboardJson = "[]"
+metadata/_custom_type_script = "uid://bv51fcf1mxw62"

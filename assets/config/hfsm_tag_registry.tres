@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="HfsmTagRegistry" format=3 uid="uid://c1wga60c8dxmi"]
 
-[ext_resource type="Script" uid="uid://belunulvhrbhd" path="res://scripts/gamelogic/hfsm/graph/HfsmTagRegistry.cs" id="1_registry"]
-[ext_resource type="Script" uid="uid://2wxxp2mvpxcs" path="res://scripts/gamelogic/hfsm/graph/HfsmTagDefinition.cs" id="2_tag"]
+[ext_resource type="Script" uid="uid://belunulvhrbhd" path="res://scripts/gamelogic/hfsm/graph/tags/HfsmTagRegistry.cs" id="1_registry"]
+[ext_resource type="Script" uid="uid://2wxxp2mvpxcs" path="res://scripts/gamelogic/hfsm/graph/tags/HfsmTagDefinition.cs" id="2_tag"]
 
 [sub_resource type="Resource" id="HfsmTagDefinition_grounded"]
 script = ExtResource("2_tag")

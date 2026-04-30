@@ -1,62 +1,124 @@
-# GameLogic HFSM 使用说明
+# GameLogic HFSM
 
-`scripts/gamelogic/hfsm` 是基于 GraphPlugin 的层级有限状态机实现。GraphPlugin 负责图资源、编辑器、连线和黑板；GameLogic HFSM 负责在运行时解释这些数据并切换状态。
+GameLogic HFSM 是基于 GraphPlugin `StateGraph` 的角色状态机封装。GraphPlugin 提供通用状态图能力；HFSM 层负责接入 `GameObject2D`、组件、技能和角色 blackboard。
 
-## 当前定位
+## 文件结构
 
-HFSM 主要负责三件事：
+- `runtime`
+  - `HfsmComponent2D`：挂在角色上的状态机组件。
+  - `HfsmRuntime`：继承 `StateGraphRuntime`，注入 owner 和 GameLogic 查询能力。
+  - `HfsmRuntimeExtensions`：GameLogic 上下文辅助方法。
+  - `IHfsmStateHandler`：组件状态回调兼容接口。
+- `graph/core`
+  - `HfsmGraphAsset`
+  - `HfsmTransitionConnection`
+- `graph/nodes`
+  - `HfsmStateNodeData`
+  - `ComponentHfsmStateNodeData`
+  - `HfsmCompositeStateNodeData`
+  - `HfsmAnyStateNodeData`
+  - `HfsmReturnStateNodeData`
+  - `SkillHfsmStateNodeData`
+- `graph/conditions`
+  - `HfsmConditionBase`
+  - `HfsmAlwaysCondition`
+  - `HfsmTriggerCondition`
+  - `HfsmBoolCondition`
+  - `HfsmFloatCondition`
+  - `HfsmTimerCondition`
+- `graph/tags`
+  - tag registry 和 tag 下拉 UI。
 
-- 根据黑板和 transition 条件切换状态。
-- 暴露当前状态语义，例如 `grounded`、`airborne`、`dashing`、`attacking`。
-- 在进入、更新、退出某些状态时，把状态生命周期转发给当前 GameObject 上的组件。
+## 核心职责
 
-移动、跳跃、冲刺、攻击等实际行为仍然放在各自的 `Component2D` 里。HFSM 不直接拖场景组件引用，也不做一套额外的 StateBehaviour 系统。
+HFSM 负责：
 
-## 核心类型
+- 根据 blackboard 和 transition 条件切换角色状态。
+- 暴露语义 tag，例如 `grounded`、`airborne`、`dashing`、`attacking`。
+- 管理复合状态子图。
+- 通过 `SkillHfsmStateNodeData` 启动技能。
+- 兼容 `ComponentHfsmStateNodeData` 这种组件生命周期状态。
 
-- `HfsmGraphAsset`：HFSM 图资源，保存状态节点、transition 连线和 Local Blackboard。
-- `HfsmComponent2D`：通用运行时组件，挂在 `GameObject2D.Components` 上并启动一张 `HfsmGraphAsset`。
-- `HfsmRuntime`：每个 `HfsmComponent2D` 自己的运行时实例，保存当前状态、触发器、状态时间、黑板运行时数据和子图 runtime。
-- `HfsmStateNodeData`：普通状态节点。
-- `ComponentHfsmStateNodeData`：通用组件状态节点，进入、更新、退出时查找当前 GameObject 上的组件并调用 `IHfsmStateHandler`。
-- `HfsmCompositeStateNodeData`：复合状态节点，引用另一张 `HfsmGraphAsset` 作为子图。
-- `HfsmAnyStateNodeData`：Any State 伪节点，不会被进入，输出 transition 会在每帧参与检查。
-- `HfsmReturnStateNodeData`：Return 伪节点，进入后会立即解析到它输出端连接的真实状态。
-- `HfsmTransitionConnection`：状态 transition，支持优先级和条件列表。
-- `IHfsmStateHandler`：组件实现的状态生命周期接口。
+HFSM 不负责：
 
-## 组件状态节点
+- 具体移动物理。
+- 具体技能 timeline。
+- 技能 cooldown 存储。
+- 命中检测和伤害结算。
 
-新增能力时，优先让能力组件实现 `IHfsmStateHandler`，然后在图中使用 `ComponentHfsmStateNodeData`，把 `ComponentTypeName` 设为组件类名。
+这些逻辑应该放在 movement、skill、combat 等业务组件中。
+
+## 运行时上下文
+
+`HfsmRuntime` 创建时会把这些对象加入 `GraphExecutionContext.UserData`：
+
+- 当前 `HfsmRuntime`
+- 当前 `HfsmComponent2D`
+- 当前 `GameObject2D`
+
+所以节点、condition、action 可以通过：
 
 ```csharp
-public partial class CharacterDashComponent2D : Component2D, IHfsmStateHandler
-{
-    public void OnHfsmStateEnter(HfsmRuntime runtime, IHfsmStateNodeData state)
-    {
-        TryStartDash(RawIntent.DirectionX);
-    }
-
-    public void OnHfsmStateUpdate(HfsmRuntime runtime, IHfsmStateNodeData state, double delta)
-    {
-    }
-
-    public void OnHfsmStateExit(HfsmRuntime runtime, IHfsmStateNodeData state)
-    {
-        if (IsDashing)
-            CancelDash();
-    }
-}
+var hfsm = context.GetUserData<HfsmRuntime>();
+var owner = context.GetUserData<GameObject2D>();
 ```
 
-`ComponentHfsmStateNodeData` 会从 `runtime.Owner.Owner`，也就是当前 `HfsmComponent2D` 所属的 `GameObject2D` 上查找组件。这样同一张图可以给 player 和 AI 共用，但每个角色调用的是自己身上的组件实例。
+读取业务上下文。
 
-当前示例：
+## 状态切换顺序
 
-- `Dash` 使用 `ComponentHfsmStateNodeData`，`ComponentTypeName = CharacterDashComponent2D`。
-- `Attack` 使用 `ComponentHfsmStateNodeData`，`ComponentTypeName = CharacterAttackComponent2D`。
+HFSM 复用 `StateGraphRuntime` 的顺序：
 
-## Player / AI 示例图
+1. 先检查 Any State transition，用于高优先级打断。
+2. 调用当前状态 `OnUpdate()`。
+3. 如果当前状态返回 completion，只检查 completion 指定输出口的 transition。
+4. 如果没有 completion 推进，再检查当前状态普通 transition。
+
+目标状态切换前会先调用：
+
+```csharp
+targetState.CanEnter(runtime)
+```
+
+`SkillHfsmStateNodeData` 用这个入口判断技能 cooldown 是否允许进入。
+
+## Completion-Only Transition
+
+`HfsmTransitionConnection` 继承自 `StateTransitionConnection`，支持 `CompletionOnly`。
+
+`CompletionOnly = true` 的连接只会在当前状态返回 `NodeCompletion` 时检查。
+
+典型用法：
+
+```text
+Dash -- Completed --> Locomotion
+Attack -- Completed --> Locomotion
+```
+
+这类连接不要再写技能完成类黑板条件。
+
+## Skill 状态
+
+Dash 和 Attack 已迁移为 Skill：
+
+- `res://assets/skills/dash_skill.tres`
+- `res://assets/skills/attack_skill.tres`
+
+根图中的状态：
+
+- `Dash`：`SkillHfsmStateNodeData`，`SkillResourcePath = res://assets/skills/dash_skill.tres`
+- `Attack`：`SkillHfsmStateNodeData`，`SkillResourcePath = res://assets/skills/attack_skill.tres`
+
+`SkillHfsmStateNodeData` 的职责很薄：
+
+- `CanEnter()`：通过 `SkillManagerComponent2D.CanStart()` 判断技能是否可进入。
+- `OnEnter()`：通过 `SkillManagerComponent2D.StartSkill()` 启动技能。
+- `TryGetCompletion()`：当 `SkillRuntime` 完成时返回 `NodeCompletion.Completed(label)`。
+- `OnExit()`：停止正在运行的技能。
+
+技能 cooldown 和 FlowGraph tick 都由 `SkillManagerComponent2D` 管理。
+
+## Player 示例图
 
 根图：
 
@@ -64,12 +126,19 @@ public partial class CharacterDashComponent2D : Component2D, IHfsmStateHandler
 res://assets/graphs/character_ground_air_hfsm.tres
 ```
 
-根图只表达高层模式：
+根图状态：
 
-- `Any State`：从任意非动作状态进入高优先级动作。
-- `Locomotion`：复合状态，子图为 `res://assets/graphs/character_locomotion_hfsm.tres`。
-- `Dash`：冲刺状态，tag 为 `dashing`。
-- `Attack`：攻击状态，tag 为 `attacking`。
+- `Any State`
+- `Locomotion`
+- `Dash`
+- `Attack`
+
+根图 transition：
+
+- `Any State -> Dash`：`DashStartRequested == true`
+- `Any State -> Attack`：`AttackStartRequested == true`
+- `Dash -> Locomotion`：completion-only
+- `Attack -> Locomotion`：completion-only
 
 Locomotion 子图：
 
@@ -77,38 +146,20 @@ Locomotion 子图：
 res://assets/graphs/character_locomotion_hfsm.tres
 ```
 
-- `Grounded`：tag 为 `grounded`。
-- `Airborne`：tag 为 `airborne`。
+状态：
 
-根图 transition：
+- `Grounded`
+- `Airborne`
 
-- `Any State -> Dash`：`DashStartRequested == true`。
-- `Any State -> Attack`：`AttackStartRequested == true`。
-- `Dash -> Locomotion`：`DashFinished == true`。
-- `Attack -> Locomotion`：`AttackFinished == true`。
+## 角色 Blackboard Key
 
-Locomotion transition：
-
-- `Grounded -> Airborne`：`IsOnFloor == false` 或 `JumpStartRequested == true`。
-- `Airborne -> Grounded`：`IsOnFloor == true`。
-
-## 数据流
-
-1. `PlayerCharacterControllerComponent2D` 或 `SimpleAICharacterControllerComponent2D` 读取输入或 AI 决策。
-2. Controller 写入各能力组件的 raw intent，并把输入、速度、落地状态写入 HFSM 黑板。
-3. `HfsmComponent2D` 更新 `HfsmRuntime`，根据图里的条件切换状态。
-4. 进入 `Dash` 或 `Attack` 时，`ComponentHfsmStateNodeData` 找到对应组件并调用 `IHfsmStateHandler.OnHfsmStateEnter()`。
-5. 能力组件执行真实行为，并把 `DashFinished`、`AttackFinished` 等输出写回黑板。
-
-组件优先级保证了 controller 先写黑板，HFSM 再切换状态，能力组件最后执行实际行为：
+定义位置：
 
 ```text
-Input -> State -> Combat -> Movement -> Physics -> Motor
+scripts/gamelogic/player/hfsm/CharacterHfsmBlackboardKeys.cs
 ```
 
-## 黑板 Key
-
-角色示例使用的 key 定义在 `scripts/gamelogic/player/hfsm/CharacterHfsmBlackboardKeys.cs`：
+当前 key：
 
 - `IsOnFloor`
 - `JumpStartRequested`
@@ -116,23 +167,52 @@ Input -> State -> Combat -> Movement -> Physics -> Motor
 - `MoveAxisX`
 - `VelocityY`
 - `DashStartRequested`
-- `DashActive`
-- `DashFinished`
 - `AttackStartRequested`
-- `AttackActive`
-- `AttackFinished`
 
-Controller 通常写输入类 key，能力组件通常写 active / finished 类 key。
+Controller 只写输入类 key。技能运行状态、return label 和 cooldown 不写回 HFSM blackboard。
 
-## 调试当前状态
+## Controller 数据流
 
-`HfsmComponent2D` 提供调试选项：
+Player controller 每帧：
 
-- `LogStateChanges`：启动和切换状态时打印当前状态。
-- `DebugStateLabelPath`：指向场景里的 `Label`，运行时显示当前状态路径。
-- `IncludeTagsInDebugText`：是否在调试文本里显示当前 tag。
+1. 读取输入。
+2. 写移动和跳跃 intent 给 movement/jump 组件。
+3. 写 HFSM blackboard：
+   - 落地状态
+   - 跳跃请求
+   - 移动轴
+   - Y 速度
+   - Dash/Attack 开始请求
+4. 不再查询 Dash/Attack 旧组件，也不负责判断技能 cooldown。
 
-示例显示：
+AI controller 也只写 movement/jump 和技能请求 key。
+
+## 组件状态节点
+
+`ComponentHfsmStateNodeData` 仍保留，用于需要把状态生命周期转发给某个组件的场景。
+
+组件实现：
+
+```csharp
+public class MyStateComponent : Component2D, IHfsmStateHandler
+{
+    public void OnHfsmStateEnter(HfsmRuntime runtime, IHfsmStateNodeData state) {}
+    public void OnHfsmStateUpdate(HfsmRuntime runtime, IHfsmStateNodeData state, double delta) {}
+    public void OnHfsmStateExit(HfsmRuntime runtime, IHfsmStateNodeData state) {}
+}
+```
+
+图中使用 `ComponentHfsmStateNodeData`，把 `ComponentTypeName` 填为组件类型名。
+
+## 调试
+
+`HfsmComponent2D` 提供：
+
+- `LogStateChanges`
+- `DebugStateLabelPath`
+- `IncludeTagsInDebugText`
+
+示例输出：
 
 ```text
 HFSM: Locomotion/Grounded [grounded]
@@ -141,54 +221,16 @@ HFSM: Dash [dashing]
 
 ## 创建 HFSM 图
 
-1. 在 Godot 中创建 `HfsmGraphAsset` 资源。
-2. 打开 Graph 编辑器。
-3. 添加 `HfsmStateNodeData`、`ComponentHfsmStateNodeData`、`HfsmCompositeStateNodeData`、`HfsmAnyStateNodeData` 或 `HfsmReturnStateNodeData`。
-4. 给一个状态勾选 `Default`，或在 `HfsmGraphAsset.InitialStateName` 填入初始状态名。
-5. 从状态输出端连接到另一个状态输入端，右键连线编辑 transition 条件。
+1. 创建 `HfsmGraphAsset`。
+2. 添加状态节点、Any State、Return、Composite 或 Skill 节点。
+3. 设置初始状态：`InitialStateName` 或节点 `IsDefault`。
+4. 添加 transition，并配置条件和优先级。
+5. 需要自动返回的状态使用 completion-only transition。
 
-`HfsmGraphAsset` 是共享配置资源。多个角色可以引用同一张图；每个角色会创建自己的 `HfsmRuntime`，运行时状态和黑板值不会写回图资源。
+## 注意事项
 
-## Transition 条件
-
-内置条件：
-
-- `HfsmAlwaysCondition`：永远满足。
-- `HfsmTriggerCondition`：调用 `runtime.Trigger("Name")` 后，本帧满足。
-- `HfsmBoolCondition`：读取黑板 bool key 并比较。
-- `HfsmFloatCondition`：读取黑板 float / int key 并比较。
-- `HfsmTimerCondition`：当前状态进入后经过指定秒数。
-
-黑板条件使用 `GraphBlackboardKeyReference`。编辑器会从当前图 Local Blackboard、父图 Local Blackboard 和场景里的 Global Blackboard 收集候选 key，并按类型过滤。
-
-## Tag Registry
-
-全局 tag 注册资源：
-
-```text
-res://assets/config/hfsm_tag_registry.tres
-```
-
-在 Godot Inspector 中直接编辑 `Tags` 数组即可。状态节点保存的是逗号分隔的 tag 字符串，但编辑器会优先从全局 registry 生成下拉和多选菜单。
-
-运行时查询：
-
-```csharp
-var hfsm = Owner.GetComponent<HfsmComponent2D>();
-if (hfsm.CurrentStateHasTag("dashing"))
-{
-    // 当前处于冲刺语义状态
-}
-```
-
-## 复合状态
-
-`HfsmCompositeStateNodeData` 继承 GraphPlugin 的 `SubGraphNodeData`。进入复合状态时，runtime 会加载 `SubGraphPath` 指向的子 `HfsmGraphAsset`，并创建子 `HfsmRuntime`。
-
-子 runtime 会继承父 runtime 的黑板层，再 `PushLocal(subGraph)`。读取顺序是：
-
-1. 子图 Local Blackboard。
-2. 父图 Local Blackboard。
-3. 场景里的 Global Blackboard。
-
-`CurrentStatePath` 会返回类似 `Locomotion/Grounded` 的路径。
+- Any State 会先于当前状态 update 检查，适合打断。
+- completion-only transition 不参与普通 transition 检查。
+- 技能节点能否进入由 `SkillManagerComponent2D` 判断。
+- 如果角色要使用 Skill 状态，场景中必须挂 `SkillManagerComponent2D`。
+- HFSM 图资源是共享配置，运行时状态和 blackboard 值不会写回资源。

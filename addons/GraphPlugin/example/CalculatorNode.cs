@@ -30,10 +30,10 @@ public partial class CalculatorNode : GraphNodeData
         vbox.AddChild(label);
 
         var option = new OptionButton();
-        option.AddItem("鍔犳硶", (int)Operation.Add);
-        option.AddItem("鍑忔硶", (int)Operation.Subtract);
-        option.AddItem("涔樻硶", (int)Operation.Multiply);
-        option.AddItem("闄ゆ硶", (int)Operation.Divide);
+        option.AddItem("Add", (int)Operation.Add);
+        option.AddItem("Subtract", (int)Operation.Subtract);
+        option.AddItem("Multiply", (int)Operation.Multiply);
+        option.AddItem("Divide", (int)Operation.Divide);
         option.Selected = (int)CurrentOperation;
         option.ItemSelected += (idx) => CurrentOperation = (Operation)idx;
         vbox.AddChild(option);

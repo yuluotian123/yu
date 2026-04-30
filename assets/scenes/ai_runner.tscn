@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://dtjdqgsefw3ar" path="res://scripts/gamelogic/gameobject/GameObject2D.cs" id="1_gobj"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_comp"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/SimpleAICharacterControllerComponent2D.cs" id="3_ai"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterFSMComponent2D.cs" id="4_fsm"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterBodyMotorComponent2D.cs" id="5_motor"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/states/CharacterMoveComponent2D.cs" id="7_move"]
-[ext_resource type="Script" path="res://scripts/gamelogic/player/states/CharacterJumpComponent2D.cs" id="8_jump"]
-[ext_resource type="Resource" uid="uid://b2tjh6v4charhfsm" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/controllers/SimpleAICharacterControllerComponent2D.cs" id="3_ai"]
+[ext_resource type="Script" uid="uid://b2tjh6v4hfs07" path="res://scripts/gamelogic/hfsm/runtime/HfsmComponent2D.cs" id="4_fsm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/movement/CharacterBodyMotorComponent2D.cs" id="5_motor"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/movement/CharacterGravityComponent2D.cs" id="6_gravity"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/movement/CharacterMoveComponent2D.cs" id="7_move"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/movement/CharacterJumpComponent2D.cs" id="8_jump"]
+[ext_resource type="Resource" uid="uid://ch7drwso2wxxc" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
 
 [sub_resource type="RectangleShape2D" id="shape_body"]
 size = Vector2(40, 72)
@@ -25,7 +25,7 @@ JumpSustainDuration = 0.14
 
 [sub_resource type="Resource" id="sub_fsm"]
 script = ExtResource("4_fsm")
-StateGraph = ExtResource("9_hfsm")
+Graph = ExtResource("9_hfsm")
 
 [sub_resource type="Resource" id="sub_motor"]
 script = ExtResource("5_motor")

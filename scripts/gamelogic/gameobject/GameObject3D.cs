@@ -53,12 +53,22 @@ namespace GameLogic
 
         public T GetComponent<T>() where T : Component3D
         {
-            return _runtimeComponents.TryGetValue(typeof(T), out var component) ? (T)component : null;
+            Type componentType = typeof(T);
+            if (_runtimeComponents.TryGetValue(componentType, out var component))
+                return (T)component;
+
+            for (int i = 0; i < _sortedComponents.Count; i++)
+            {
+                if (_sortedComponents[i] is T typedComponent)
+                    return typedComponent;
+            }
+
+            return null;
         }
 
         public bool HasComponent<T>() where T : Component3D
         {
-            return _runtimeComponents.ContainsKey(typeof(T));
+            return GetComponent<T>() != null;
         }
 
         public IReadOnlyList<Component3D> GetAllComponents() => _sortedComponents;
@@ -67,7 +77,7 @@ namespace GameLogic
 
         public bool HasComponent(Type componentType)
         {
-            return componentType != null && _runtimeComponents.ContainsKey(componentType);
+            return GetComponent(componentType) != null;
         }
 
         public IComponent GetComponent(Type componentType)
@@ -75,7 +85,16 @@ namespace GameLogic
             if (componentType == null)
                 return null;
 
-            return _runtimeComponents.TryGetValue(componentType, out var component) ? component : null;
+            if (_runtimeComponents.TryGetValue(componentType, out var component))
+                return component;
+
+            for (int i = 0; i < _sortedComponents.Count; i++)
+            {
+                if (componentType.IsInstanceOfType(_sortedComponents[i]))
+                    return _sortedComponents[i];
+            }
+
+            return null;
         }
 
         public void RemoveComponent<T>() where T : Component3D

@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 子图节点数据。节点只保存子图资源路径；进入子图、绑定子图等编辑器按钮由
-/// GraphCanvasEditorWindow 在创建节点 UI 时注入。
+/// Node data for a subgraph reference. The editor injects enter/bind buttons.
 /// </summary>
 public partial class SubGraphNodeData : GraphNodeData
 {
-    /// <summary>子图资源路径，通常是 .tres 文件。</summary>
+    /// <summary>Resource path for the child graph, usually a .tres file.</summary>
     public string SubGraphPath { get; set; } = string.Empty;
 
     private GraphAsset _cachedSubGraph;
@@ -20,10 +19,10 @@ public partial class SubGraphNodeData : GraphNodeData
         if (!string.IsNullOrEmpty(SubGraphPath))
         {
             string fileName = SubGraphPath.GetFile().GetBaseName();
-            return string.IsNullOrEmpty(fileName) ? "子图" : fileName;
+            return string.IsNullOrEmpty(fileName) ? "SubGraph" : fileName;
         }
 
-        return "子图（未绑定）";
+        return "SubGraph (Unbound)";
     }
 
     public override Color GetNodeColor() => new Color(0.4f, 0.6f, 1.0f);
@@ -34,9 +33,6 @@ public partial class SubGraphNodeData : GraphNodeData
     public override int GetInputMaxConnections(int port) => 1;
     public override int GetOutputMaxConnections(int port) => -1;
 
-    /// <summary>
-    /// 加载子图资源。路径为空、资源不存在或类型不匹配时返回 null。
-    /// </summary>
     public virtual GraphAsset GetSubGraph()
     {
         if (_cachedSubGraph != null)
@@ -47,7 +43,7 @@ public partial class SubGraphNodeData : GraphNodeData
 
         if (!ResourceLoader.Exists(SubGraphPath))
         {
-            GD.PushWarning($"[SubGraph] 子图资源不存在: {SubGraphPath}");
+            GD.PushWarning($"[SubGraph] Subgraph resource does not exist: {SubGraphPath}");
             return null;
         }
 
@@ -55,7 +51,6 @@ public partial class SubGraphNodeData : GraphNodeData
         return _cachedSubGraph;
     }
 
-    /// <summary>路径改变后清除缓存。</summary>
     public virtual void InvalidateCache()
     {
         _cachedSubGraph = null;
@@ -76,9 +71,6 @@ public partial class SubGraphNodeData : GraphNodeData
         return nameof(GraphAsset);
     }
 
-    /// <summary>
-    /// 创建节点内部 UI。编辑器专属的进入/绑定按钮会由 GraphCanvasEditorWindow 额外注入。
-    /// </summary>
     public override void CreateUI(GraphEditorContext context)
     {
         var vbox = new VBoxContainer
@@ -90,7 +82,7 @@ public partial class SubGraphNodeData : GraphNodeData
         var pathLabel = new Label
         {
             Name = "PathLabel",
-            Text = string.IsNullOrEmpty(SubGraphPath) ? "未绑定子图" : GetDisplayName(),
+            Text = string.IsNullOrEmpty(SubGraphPath) ? "Unbound SubGraph" : GetDisplayName(),
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
             HorizontalAlignment = HorizontalAlignment.Center
         };

@@ -1,8 +1,7 @@
 using Godot;
 
 /// <summary>
-/// 图连接数据，纯 C# 类。
-/// 序列化由 GraphJsonHelper 负责（存储在 GraphAsset.ConnectionsJson 中）。
+/// Base graph connection data. Serialized by GraphJsonHelper into GraphAsset.ConnectionsJson.
 /// </summary>
 public class GraphConnection
 {
@@ -11,17 +10,17 @@ public class GraphConnection
     public string ToNode { get; set; } = "";
     public int ToPort { get; set; } = 0;
 
-    public virtual string GetDisplayName() => " 连接";
+    public virtual string GetDisplayName() => "Connection";
     public virtual bool IsEditable() => true;
 
-    public virtual bool IsAvailable{get;} = true;
+    public virtual bool IsAvailable { get; } = true;
 
     public virtual Control CreateEditUI(GraphEditorContext context)
     {
         var container = new VBoxContainer();
         var info = new Label
         {
-            Text = $"从节点: {FromNode} (端口 {FromPort})\n到节点: {ToNode} (端口 {ToPort})"
+            Text = $"From node: {FromNode} (port {FromPort})\nTo node: {ToNode} (port {ToPort})"
         };
         container.AddChild(info);
         return container;

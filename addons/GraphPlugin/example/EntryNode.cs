@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 鍏ュ彛鑺傜偣 - 鐘舵€佹満鐨勮捣濮嬬偣
+/// Entry node. Usually the starting point of a graph.
 /// </summary>
 public partial class EntryNode : GraphNodeData
-{ 
-    public override string GetDisplayName() => "鍏ュ彛";
+{
+    public override string GetDisplayName() => "Entry";
     public override Color GetNodeColor() => Colors.LimeGreen;
     public override int GetInputCount() => 0;
     public override int GetOutputCount() => 1;

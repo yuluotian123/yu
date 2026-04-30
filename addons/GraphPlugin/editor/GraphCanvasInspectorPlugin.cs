@@ -13,7 +13,7 @@ public partial class GraphCanvasInspectorPlugin : EditorInspectorPlugin
 
     public override void _ParseBegin(GodotObject @object)
     {
-        var button = new Button { Text = "打开图编辑器" };
+        var button = new Button { Text = "Open Graph Editor" };
         button.Pressed += () => (Plugin as GraphPlugin)?.OpenGraphEditor(@object as GraphAsset);
         AddCustomControl(button);
     }

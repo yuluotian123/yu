@@ -5,54 +5,23 @@ using System.Reflection;
 using Godot;
 
 /// <summary>
-/// 通用可排序列表控件构建器。
-/// 泛型参数 T 为列表元素类型。
-/// 
-/// 使用方式：
-///   var builder = new ReorderableListControl&lt;MyItem&gt;(
-///       items,                               // 数据源（List&lt;T&gt; 或任何 IList&lt;T&gt;）
-///       item  => item.CreateEditUi(),        // 为每个元素生成参数 UI 的委托
-///       types => types.Name,                 // 在下拉框中显示的名称（可选）
-///       availableTypes                       // 可添加的类型列表（可选）
-///   );
-///   var control = builder.Build();          // 构建并返回 VBoxContainer
+/// Builds a reorderable editor list for a mutable item collection.
 /// </summary>
 public class ReorderableListControl<T> where T : class
 {
-    // ── 数据 ────────────────────────────────────────────────────────────────
     private readonly IList<T> _items;
-
-    // ── 委托 ────────────────────────────────────────────────────────────────
-    /// <summary>为列表中的每个元素生成参数编辑 UI</summary>
     private readonly Func<T, Control> _buildItemUi;
-
-    /// <summary>为每个元素生成标题文字（可选，默认使用类型名）</summary>
     private readonly Func<T, string> _getItemLabel;
-
-    /// <summary>创建新元素的工厂方法（用于「添加」按钮）</summary>
     private readonly Func<Type, T> _factory;
-
-    /// <summary>可选：可添加的类型列表</summary>
     private readonly IReadOnlyList<Type> _availableTypes;
 
-    /// <summary>当列表内容发生变化时触发</summary>
     public event Action ListChanged;
 
-    // ── 内部 UI ──────────────────────────────────────────────────────────────
     private VBoxContainer _root;
     private VBoxContainer _itemsContainer;
     private readonly Dictionary<int, bool> _itemExpandedStates = new();
     private bool _listExpanded = true;
 
-    // ── 构造 ────────────────────────────────────────────────────────────────
-
-    /// <param name="items">数据源引用（直接修改该列表）</param>
-    /// <param name="buildItemUi">为元素生成参数 UI 的委托，可为 null（不显示参数区域）</param>
-    /// <param name="getItemLabel">生成每行标题文字的委托，可为 null（默认用类型名）</param>
-    /// <param name="availableTypes">下拉添加时的候选类型，为 null 或空则不显示「添加」行</param>
-    /// <param name="factory">根据类型创建新元素，为 null 时使用 Activator.CreateInstance</param>
-    /// <param name="defaultItemExpanded">单项默认是否展开</param>
-    /// <param name="defaultListExpanded">整个列表默认是否展开</param>
     public ReorderableListControl(
         IList<T> items,
         Func<T, Control> buildItemUi = null,
@@ -72,31 +41,26 @@ public class ReorderableListControl<T> where T : class
             _itemExpandedStates[i] = defaultItemExpanded;
     }
 
-    // ── 公开方法 ───────────────────────────────────────────────────────────
-
-    /// <summary>构建并返回可排序列表控件</summary>
     public VBoxContainer Build()
     {
         _root = new VBoxContainer();
         _root.AddThemeConstantOverride("separation", 4);
 
-        // 全局折叠按钮
         var globalHeader = new HBoxContainer();
         var collapseAllBtn = new Button
         {
-            Text = _listExpanded ? "▼ 折叠列表" : "▶ 展开列表",
+            Text = _listExpanded ? "Collapse List" : "Expand List",
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
         };
         collapseAllBtn.Pressed += () =>
         {
             _listExpanded = !_listExpanded;
-            collapseAllBtn.Text = _listExpanded ? "▼ 折叠列表" : "▶ 展开列表";
+            collapseAllBtn.Text = _listExpanded ? "Collapse List" : "Expand List";
             _itemsContainer.Visible = _listExpanded;
         };
         globalHeader.AddChild(collapseAllBtn);
         _root.AddChild(globalHeader);
 
-        // 列表容器
         _itemsContainer = new VBoxContainer();
         _itemsContainer.AddThemeConstantOverride("separation", 2);
         _itemsContainer.Visible = _listExpanded;
@@ -104,7 +68,6 @@ public class ReorderableListControl<T> where T : class
 
         RefreshItemsContainer();
 
-        // 添加行（仅当提供了候选类型时）
         if (_availableTypes != null && _availableTypes.Count > 0)
         {
             _root.AddChild(new HSeparator());
@@ -114,10 +77,7 @@ public class ReorderableListControl<T> where T : class
         return _root;
     }
 
-    /// <summary>手动刷新整个列表 UI（外部修改数据后可调用）</summary>
     public void Refresh() => RefreshItemsContainer();
-
-    // ── 私有构建 ───────────────────────────────────────────────────────────
 
     private void RefreshItemsContainer()
     {
@@ -131,7 +91,7 @@ public class ReorderableListControl<T> where T : class
         {
             var emptyLabel = new Label
             {
-                Text = "（暂无元素）",
+                Text = "(empty)",
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             emptyLabel.AddThemeColorOverride("font_color", new Color(0.55f, 0.55f, 0.55f));
@@ -155,19 +115,17 @@ public class ReorderableListControl<T> where T : class
         var row = new VBoxContainer();
         row.AddThemeConstantOverride("separation", 2);
 
-        // ── 标题行 ──────────────────────────────────────────────────────
         var header = new HBoxContainer();
         row.AddChild(header);
 
-        // 折叠按钮
         if (!_itemExpandedStates.ContainsKey(index))
             _itemExpandedStates[index] = true;
-        
+
         var collapseBtn = new Button
         {
-            Text = _itemExpandedStates[index] ? "▼" : "▶",
+            Text = _itemExpandedStates[index] ? "v" : ">",
             CustomMinimumSize = new Vector2(28, 0),
-            TooltipText = "折叠/展开"
+            TooltipText = "Collapse/expand"
         };
         header.AddChild(collapseBtn);
 
@@ -179,13 +137,12 @@ public class ReorderableListControl<T> where T : class
         };
         header.AddChild(label);
 
-        // ↑ 上移
         var upBtn = new Button
         {
-            Text = "↑",
+            Text = "Up",
             Disabled = index == 0,
-            TooltipText = "上移",
-            CustomMinimumSize = new Vector2(28, 0)
+            TooltipText = "Move up",
+            CustomMinimumSize = new Vector2(44, 0)
         };
         upBtn.Pressed += () =>
         {
@@ -195,13 +152,12 @@ public class ReorderableListControl<T> where T : class
         };
         header.AddChild(upBtn);
 
-        // ↓ 下移
         var downBtn = new Button
         {
-            Text = "↓",
+            Text = "Down",
             Disabled = index == _items.Count - 1,
-            TooltipText = "下移",
-            CustomMinimumSize = new Vector2(28, 0)
+            TooltipText = "Move down",
+            CustomMinimumSize = new Vector2(54, 0)
         };
         downBtn.Pressed += () =>
         {
@@ -211,12 +167,11 @@ public class ReorderableListControl<T> where T : class
         };
         header.AddChild(downBtn);
 
-        // ✕ 删除
         var delBtn = new Button
         {
-            Text = "✕",
-            TooltipText = "删除",
-            CustomMinimumSize = new Vector2(28, 0)
+            Text = "Delete",
+            TooltipText = "Delete",
+            CustomMinimumSize = new Vector2(58, 0)
         };
         delBtn.AddThemeColorOverride("font_color", new Color(1f, 0.35f, 0.35f));
         delBtn.Pressed += () =>
@@ -227,7 +182,6 @@ public class ReorderableListControl<T> where T : class
         };
         header.AddChild(delBtn);
 
-        // ── 参数 UI ─────────────────────────────────────────────────────
         var paramUi = _buildItemUi?.Invoke(item);
         if (paramUi != null)
         {
@@ -237,17 +191,16 @@ public class ReorderableListControl<T> where T : class
             margin.Visible = _itemExpandedStates[index];
             row.AddChild(margin);
 
-            // 绑定折叠按钮事件
             collapseBtn.Pressed += () =>
             {
                 _itemExpandedStates[index] = !_itemExpandedStates[index];
-                collapseBtn.Text = _itemExpandedStates[index] ? "▼" : "▶";
+                collapseBtn.Text = _itemExpandedStates[index] ? "v" : ">";
                 margin.Visible = _itemExpandedStates[index];
             };
         }
         else
         {
-            collapseBtn.Visible = false; // 无参数 UI 时隐藏折叠按钮
+            collapseBtn.Visible = false;
         }
 
         row.AddChild(new HSeparator());
@@ -258,14 +211,17 @@ public class ReorderableListControl<T> where T : class
     {
         var addRow = new HBoxContainer();
 
-        var selectBtn = new Button { Text = "选择类型...", SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        var selectBtn = new Button
+        {
+            Text = "Select Type...",
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        };
         selectBtn.Pressed += () =>
         {
             var popup = new SearchablePopup<Type>(
                 _availableTypes,
                 type => type.Name,
-                type => type.Namespace
-            );
+                type => type.Namespace);
             popup.OnItemSelected += type =>
             {
                 var newItem = _factory(type);
@@ -282,28 +238,23 @@ public class ReorderableListControl<T> where T : class
 
     private void SwapItems(int a, int b)
     {
-        if (a < 0 || b < 0 || a >= _items.Count || b >= _items.Count) return;
+        if (a < 0 || b < 0 || a >= _items.Count || b >= _items.Count)
+            return;
+
         (_items[a], _items[b]) = (_items[b], _items[a]);
     }
 }
 
 /// <summary>
-/// 静态工具类：通过反射扫描子类型，结果按基类缓存，整个编辑器生命周期只扫描一次。
+/// Reflection helper that caches concrete subclasses for the editor lifetime.
 /// </summary>
 public static class SubTypeCache
 {
     private static readonly Dictionary<Type, IReadOnlyList<Type>> _cache = new();
 
-    /// <summary>
-    /// 获取所有继承自 <typeparamref name="TBase"/> 的具体（非抽象）类型列表。
-    /// 结果被静态缓存，多次调用不会重复反射。
-    /// </summary>
     public static IReadOnlyList<Type> GetSubTypes<TBase>() where TBase : class
         => GetSubTypes(typeof(TBase));
 
-    /// <summary>
-    /// 获取所有继承自 <paramref name="baseType"/> 的具体（非抽象）类型列表。
-    /// </summary>
     public static IReadOnlyList<Type> GetSubTypes(Type baseType)
     {
         if (_cache.TryGetValue(baseType, out var cached))
@@ -322,7 +273,7 @@ public static class SubTypeCache
             }
             catch (ReflectionTypeLoadException)
             {
-                // 跳过无法加载的程序集
+                // Skip assemblies that can not be reflected.
             }
         }
 

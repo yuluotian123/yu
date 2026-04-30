@@ -22,7 +22,11 @@ namespace GameLogic
         {
             return GraphNodeFactory
                 .GetNodesForGraphType(GraphTypeName)
-                .Where(nodeType => GraphNodeFactory.CreateNodeData(nodeType) is IHfsmStateNodeData)
+                .Where(nodeType =>
+                {
+                    GraphNodeData node = GraphNodeFactory.CreateNodeData(nodeType);
+                    return node is IHfsmStateNodeData || node is IHfsmPseudoNodeData;
+                })
                 .ToList();
         }
 
@@ -30,10 +34,17 @@ namespace GameLogic
         public override string GetEditorTitle() => "HFSM Editor";
 
         public IEnumerable<IHfsmStateNodeData> StateNodes => Nodes.OfType<IHfsmStateNodeData>();
+        public IEnumerable<IHfsmPseudoNodeData> PseudoNodes => Nodes.OfType<IHfsmPseudoNodeData>();
+        public IEnumerable<HfsmAnyStateNodeData> AnyStateNodes => Nodes.OfType<HfsmAnyStateNodeData>();
 
         public IHfsmStateNodeData FindStateById(string stateId)
         {
             return StateNodes.FirstOrDefault(state => state.Id == stateId);
+        }
+
+        public IHfsmPseudoNodeData FindPseudoNodeById(string nodeId)
+        {
+            return PseudoNodes.FirstOrDefault(node => node.Id == nodeId);
         }
 
         public IHfsmStateNodeData FindStateByName(string stateName)
@@ -71,6 +82,13 @@ namespace GameLogic
                 .OfType<HfsmTransitionConnection>()
                 .Where(connection => connection.FromNode == stateId)
                 .OrderByDescending(connection => connection.Priority);
+        }
+
+        public IEnumerable<HfsmTransitionConnection> GetAnyStateTransitions(IHfsmStateNodeData currentState)
+        {
+            return AnyStateNodes
+                .Where(node => node.CanTransitionFrom(currentState))
+                .SelectMany(node => GetOutgoingTransitions(node.Id));
         }
     }
 }

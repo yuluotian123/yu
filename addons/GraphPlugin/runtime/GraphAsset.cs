@@ -6,14 +6,12 @@ using Godot;
 [GlobalClass]
 public partial class GraphAsset : Resource
 {
-    // ── Godot 序列化字段（唯一需要 Export 的字段）────────────────────────────
     [Export] public string NodesJson { get; set; } = "[]";
     [Export] public string ConnectionsJson { get; set; } = "[]";
     [Export] public string BlackboardJson { get; set; } = "[]";
 
     public string graphName => ResourcePath.GetFile().Split('.')[0];
 
-    // ── 运行时数据（从 JSON 加载后填充）──────────────────────────────────────
     private List<GraphNodeData> _nodes;
     private List<GraphConnection> _connections;
     private List<GraphBlackboardEntry> _blackboardEntries;
@@ -22,7 +20,8 @@ public partial class GraphAsset : Resource
     {
         get
         {
-            if (_nodes == null) LoadFromJson();
+            if (_nodes == null)
+                LoadFromJson();
             return _nodes;
         }
         set
@@ -31,11 +30,13 @@ public partial class GraphAsset : Resource
             SaveToJson();
         }
     }
+
     public List<GraphConnection> Connections
     {
         get
         {
-            if (_connections == null) LoadFromJson();
+            if (_connections == null)
+                LoadFromJson();
             return _connections;
         }
         set
@@ -49,7 +50,8 @@ public partial class GraphAsset : Resource
     {
         get
         {
-            if (_blackboardEntries == null) LoadFromJson();
+            if (_blackboardEntries == null)
+                LoadFromJson();
             return _blackboardEntries;
         }
         set
@@ -73,30 +75,28 @@ public partial class GraphAsset : Resource
                     return node;
             }
 
-
             return null;
         }
     }
-    private string? _graphType;
+
+    private string _graphType;
     public virtual string GraphType
     {
-        get => _graphType ?? this.GetType().Name;
+        get => _graphType ?? GetType().Name;
         set => _graphType = value;
     }
 
     public virtual List<string> GetAllowedNodeTypes() => GraphNodeFactory.GetNodesForGraphType(GraphType);
     public virtual GraphConnection CreateConnection() => new GraphConnection();
     public virtual List<Control> GetCustomToolbarControls() => new();
-    public virtual string GetEditorTitle() => GraphType + " 编辑器";
-
-    // ── JSON 序列化 / 反序列化 ────────────────────────────────────────────────
+    public virtual string GetEditorTitle() => GraphType + " Editor";
 
     public void SaveToJson()
     {
         if (_blackboardEntries == null)
             _blackboardEntries = GraphJsonHelper.DeserializeList<GraphBlackboardEntry>(BlackboardJson);
 
-        GD.Print("当前节点数量：" + Nodes.Count());
+        GD.Print("Current node count: " + Nodes.Count());
         NodesJson = GraphJsonHelper.SerializeList(_nodes ?? new List<GraphNodeData>());
         ConnectionsJson = GraphJsonHelper.SerializeList(_connections ?? new List<GraphConnection>());
         BlackboardJson = GraphJsonHelper.SerializeList(_blackboardEntries ?? new List<GraphBlackboardEntry>());
@@ -110,18 +110,15 @@ public partial class GraphAsset : Resource
         TopologicalSortNodes();
     }
 
-    /// <summary>
-    /// 根据 connections 对 nodes 进行拓扑排序，使入度为 0 的节点排在前面。
-    /// </summary>
     private void TopologicalSortNodes()
     {
-        if (_nodes == null || _nodes.Count == 0) return;
+        if (_nodes == null || _nodes.Count == 0)
+            return;
 
         var nodeIndex = new Dictionary<string, int>();
         for (int i = 0; i < _nodes.Count; i++)
             nodeIndex[_nodes[i].Id] = i;
 
-        // 构建邻接表和入度表
         var adj = new Dictionary<string, List<string>>();
         var inDegree = new Dictionary<string, int>();
         foreach (var node in _nodes)
@@ -142,7 +139,6 @@ public partial class GraphAsset : Resource
             }
         }
 
-        // Kahn 算法 BFS 拓扑排序
         var queue = new Queue<string>();
         foreach (var kv in inDegree)
         {
@@ -155,7 +151,9 @@ public partial class GraphAsset : Resource
         while (queue.Count > 0)
         {
             var id = queue.Dequeue();
-            if (!visited.Add(id)) continue;
+            if (!visited.Add(id))
+                continue;
+
             if (nodeIndex.TryGetValue(id, out var idx))
                 sorted.Add(_nodes[idx]);
 
@@ -167,7 +165,6 @@ public partial class GraphAsset : Resource
             }
         }
 
-        // 未被排序到的节点（环或孤立）追加到末尾
         foreach (var node in _nodes)
         {
             if (!visited.Contains(node.Id))
@@ -177,20 +174,14 @@ public partial class GraphAsset : Resource
         _nodes = sorted;
     }
 
-    // ── 图操作方法 ────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// 尝试建立连接。成功返回 true，被规则拒绝返回 false。
-    /// </summary>
     public bool ConnectNodes(string fromNode, int fromPort, string toNode, int toPort)
     {
         if (HasConnection(fromNode, fromPort, toNode, toPort))
         {
-            GD.PushWarning($"连接已存在: {fromNode}:{fromPort} -> {toNode}:{toPort}");
+            GD.PushWarning($"Connection already exists: {fromNode}:{fromPort} -> {toNode}:{toPort}");
             return false;
         }
 
-        // ── 检查输出端口最大链接数 ────────────────────────────────────────────
         var fromNodeData = FindNodeById(fromNode);
         if (fromNodeData != null)
         {
@@ -200,13 +191,12 @@ public partial class GraphAsset : Resource
                 int outCount = Connections.Count(c => c.FromNode == fromNode && c.FromPort == fromPort);
                 if (outCount >= maxOut)
                 {
-                    GD.PushWarning($"输出端口 {fromNode}:{fromPort} 已达最大连接数 {maxOut}，拒绝建立新连接");
+                    GD.PushWarning($"Output port {fromNode}:{fromPort} reached max connection count {maxOut}; rejecting new connection.");
                     return false;
                 }
             }
         }
 
-        // ── 检查输入端口最大链接数 ────────────────────────────────────────────
         var toNodeData = FindNodeById(toNode);
         if (toNodeData != null)
         {
@@ -216,7 +206,7 @@ public partial class GraphAsset : Resource
                 int inCount = Connections.Count(c => c.ToNode == toNode && c.ToPort == toPort);
                 if (inCount >= maxIn)
                 {
-                    GD.PushWarning($"输入端口 {toNode}:{toPort} 已达最大连接数 {maxIn}，拒绝建立新连接");
+                    GD.PushWarning($"Input port {toNode}:{toPort} reached max connection count {maxIn}; rejecting new connection.");
                     return false;
                 }
             }
@@ -240,6 +230,7 @@ public partial class GraphAsset : Resource
                 conn.ToNode == toNode && conn.ToPort == toPort)
                 return true;
         }
+
         return false;
     }
 

@@ -4,7 +4,8 @@ using GameLogic;
 using Godot;
 
 /// <summary>
-/// 鍏冲崱娴佺▼銆?/// </summary>
+/// Level flow.
+/// </summary>
 public class LevelProcedure : ProcedureBase
 {
     private IInputModule _inputModule;
@@ -32,7 +33,7 @@ public class LevelProcedure : ProcedureBase
             ModuleSystem.GetModule<ISaveModule>().Save();
         }
 
-        // 杩涘叆涓昏彍鍗曪紙涓存椂锛?
+        // Return to the main menu for now.
         if (_inputModule != null &&
             _inputModule.IsJustPressed("ui_cancel") &&
             _inputModule.TryConsumeJustPressed("ui_cancel"))

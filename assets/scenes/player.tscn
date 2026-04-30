@@ -2,25 +2,31 @@
 
 [ext_resource type="Script" uid="uid://dtjdqgsefw3ar" path="res://scripts/gamelogic/gameobject/GameObject2D.cs" id="1_gobj"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_0hrit"]
-[ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/PlayerCharacterControllerComponent2D.cs" id="3_controller"]
-[ext_resource type="Script" uid="uid://dycdc7sulhe5q" path="res://scripts/gamelogic/player/CharacterFSMComponent2D.cs" id="4_fsm"]
-[ext_resource type="Script" uid="uid://c26f38a0omv2f" path="res://scripts/gamelogic/player/CharacterBodyMotorComponent2D.cs" id="5_motor"]
-[ext_resource type="Script" uid="uid://d0xx8r62p5c42" path="res://scripts/gamelogic/player/CharacterGravityComponent2D.cs" id="6_gravity"]
-[ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/states/CharacterMoveComponent2D.cs" id="7_move"]
-[ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/states/CharacterJumpComponent2D.cs" id="8_jump"]
+[ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/controllers/PlayerCharacterControllerComponent2D.cs" id="3_controller"]
+[ext_resource type="Script" uid="uid://b2tjh6v4hfs07" path="res://scripts/gamelogic/hfsm/runtime/HfsmComponent2D.cs" id="4_fsm"]
+[ext_resource type="Script" uid="uid://c26f38a0omv2f" path="res://scripts/gamelogic/player/movement/CharacterBodyMotorComponent2D.cs" id="5_motor"]
+[ext_resource type="Script" uid="uid://d0xx8r62p5c42" path="res://scripts/gamelogic/player/movement/CharacterGravityComponent2D.cs" id="6_gravity"]
+[ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/movement/CharacterMoveComponent2D.cs" id="7_move"]
+[ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/movement/CharacterJumpComponent2D.cs" id="8_jump"]
 [ext_resource type="Resource" uid="uid://ch7drwso2wxxc" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
+[ext_resource type="Script" uid="uid://d3ahnhm01dash" path="res://scripts/gamelogic/player/abilities/CharacterDashComponent2D.cs" id="10_dash"]
+[ext_resource type="Script" uid="uid://d3ahnhm02atk" path="res://scripts/gamelogic/player/abilities/CharacterAttackComponent2D.cs" id="11_attack"]
 
 [sub_resource type="Resource" id="sub_controller"]
 script = ExtResource("3_controller")
 
 [sub_resource type="Resource" id="sub_fsm"]
 script = ExtResource("4_fsm")
-StateGraph = ExtResource("9_hfsm")
+Graph = ExtResource("9_hfsm")
+LogStateChanges = true
 
 [sub_resource type="Resource" id="sub_jump"]
 script = ExtResource("8_jump")
-CoyoteTime = 0.3
+CoyoteTime = 11.0
 JumpCutMultiplier = 0.45
+
+[sub_resource type="Resource" id="sub_attack"]
+script = ExtResource("11_attack")
 
 [sub_resource type="Resource" id="sub_move"]
 script = ExtResource("7_move")
@@ -31,6 +37,9 @@ script = ExtResource("6_gravity")
 Gravity = 1650.0
 MaxFallSpeed = 1000.0
 
+[sub_resource type="Resource" id="sub_dash"]
+script = ExtResource("10_dash")
+
 [sub_resource type="Resource" id="sub_motor"]
 script = ExtResource("5_motor")
 FootInset = 6.0
@@ -40,7 +49,7 @@ size = Vector2(40, 72)
 
 [node name="Player" type="Node2D" unique_id=587364041]
 script = ExtResource("1_gobj")
-Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_jump"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_motor")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("sub_controller"), SubResource("sub_fsm"), SubResource("sub_jump"), SubResource("sub_attack"), SubResource("sub_move"), SubResource("sub_gravity"), SubResource("sub_dash"), SubResource("sub_motor")])
 
 [node name="PhysicsBody" type="CharacterBody2D" parent="." unique_id=817041810]
 

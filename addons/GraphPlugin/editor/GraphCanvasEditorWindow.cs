@@ -1,5 +1,4 @@
-﻿#if TOOLS
-using System;
+#if TOOLS
 using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
@@ -15,10 +14,9 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphConnection _hoveredConnection = null;
     private System.Collections.Generic.Dictionary<string, Label> _connectionLabels = new();
 
-    // 鈹€鈹€ 瀛愬浘瀵艰埅鏍?鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     /// <summary>
-    /// 瀵艰埅鍘嗗彶鏍堛€傛瘡涓厓绱犱负 (GraphAsset 鍥捐祫婧? 鑺傜偣鍦ㄧ埗鍥句腑鐨?Id)銆?
-    /// 鏍堥《涓哄綋鍓嶆鍦ㄧ紪杈戠殑鍥撅紝鏍堝簳涓烘牴鍥俱€?
+    /// Navigation stack. Each item is the parent graph and the breadcrumb label.
+    /// The top item is the direct parent of the current graph.
     /// </summary>
     private Stack<(GraphAsset graph, string label)> _graphStack = new();
     private HBoxContainer _breadcrumbBar;
@@ -40,6 +38,7 @@ public partial class GraphCanvasEditorWindow : Window
         CloseBlackboardWindow();
         Hide();
     }
+
     private void CreateToolbar()
     {
         _mainContainer = new VBoxContainer
@@ -49,24 +48,21 @@ public partial class GraphCanvasEditorWindow : Window
         };
         AddChild(_mainContainer);
 
-        // 鈹€鈹€ 闈㈠寘灞戝鑸爮 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         _breadcrumbBar = new HBoxContainer();
         _breadcrumbBar.CustomMinimumSize = new Vector2(0, 28);
         _breadcrumbBar.AddThemeConstantOverride("separation", 4);
-        // 榛樿闅愯棌锛岃繘鍏ュ瓙鍥炬椂鏄剧ず
         _breadcrumbBar.Visible = false;
         _mainContainer.AddChild(_breadcrumbBar);
 
-        // 鈹€鈹€ 涓诲伐鍏锋爮 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         _toolbar = new HBoxContainer();
         _toolbar.CustomMinimumSize = new Vector2(0, 40);
         _mainContainer.AddChild(_toolbar);
 
-        var saveBtn = new Button { Text = "淇濆瓨 (Ctrl+S)" };
+        var saveBtn = new Button { Text = "Save (Ctrl+S)" };
         saveBtn.Pressed += OnSave;
         _toolbar.AddChild(saveBtn);
 
-        var clearBtn = new Button { Text = "娓呯┖" };
+        var clearBtn = new Button { Text = "Clear" };
         clearBtn.Pressed += OnClear;
         _toolbar.AddChild(clearBtn);
 
@@ -75,10 +71,10 @@ public partial class GraphCanvasEditorWindow : Window
         _toolbar.AddChild(blackboardBtn);
 
         _toolbar.AddChild(new VSeparator());
-        _toolbar.AddChild(new Label { Text = "鍙抽敭娣诲姞鑺傜偣" });
+        _toolbar.AddChild(new Label { Text = "Right-click to add nodes" });
 
         _toolbar.AddChild(new VSeparator());
-        _toolbar.AddChild(new Label { Text = "鎾ゅ洖 (ctrl+Z)" });
+        _toolbar.AddChild(new Label { Text = "Undo (Ctrl+Z)" });
     }
 
     private void CreateGraphEdit()
@@ -102,7 +98,6 @@ public partial class GraphCanvasEditorWindow : Window
 
     public void LoadGraph(GraphAsset graph)
     {
-        // 娓呯┖杩炴帴鏍囩缂撳瓨鍜屽紩鐢?
         foreach (var label in _connectionLabels.Values)
             label.QueueFree();
         _connectionLabels.Clear();
@@ -113,7 +108,6 @@ public partial class GraphCanvasEditorWindow : Window
         Title = graph.GetEditorTitle();
         AddCustomToolbarControls();
 
-        // 绔嬪嵆绉婚櫎鎵€鏈夊瓙鑺傜偣
         foreach (var child in _graphEdit.GetChildren())
         {
             if (child is GraphNode or Label)
@@ -123,11 +117,9 @@ public partial class GraphCanvasEditorWindow : Window
             }
         }
 
-        // 鍒涘缓鑺傜偣
         foreach (var nodeData in graph.Nodes)
             CreateNodeFromData(nodeData);
 
-        // 寤惰繜寤虹珛杩炴帴锛岀瓑寰呰妭鐐圭鍙ｅ垵濮嬪寲瀹屾垚
         foreach (var conn in graph.Connections)
             CallDeferred(MethodName.DeferredConnectNode, conn.FromNode, conn.FromPort, conn.ToNode, conn.ToPort);
     }
@@ -164,9 +156,9 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void AddCustomToolbarControls()
     {
-        if (_currentGraph == null || _toolbar == null) return;
+        if (_currentGraph == null || _toolbar == null)
+            return;
 
-        // 鍏堟竻鐞嗕笂涓€寮犲浘鐣欎笅鐨勮嚜瀹氫箟鎺т欢
         for (int i = _toolbar.GetChildCount() - 1; i >= 0; i--)
         {
             var child = _toolbar.GetChild(i);
@@ -185,7 +177,8 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void OnSave()
     {
-        if (_currentGraph == null) return;
+        if (_currentGraph == null)
+            return;
 
         if (!GraphBlackboardValidator.TryValidate(_currentGraph.BlackboardEntries, out string blackboardError))
         {
@@ -199,7 +192,6 @@ public partial class GraphCanvasEditorWindow : Window
             return;
         }
 
-        // 鏋勫缓 Id -> NodeData 绱㈠紩锛岄伩鍏?O(n虏) 鏌ユ壘
         var nodeDict = new System.Collections.Generic.Dictionary<string, GraphNodeData>();
         foreach (var nodeData in _currentGraph.Nodes)
             nodeDict[nodeData.Id] = nodeData;
@@ -213,14 +205,13 @@ public partial class GraphCanvasEditorWindow : Window
             }
         }
 
-        // 搴忓垪鍖栨暟鎹埌 JSON 鍐嶄繚瀛?
         _currentGraph.SaveToJson();
         ResourceSaver.Save(_currentGraph, _currentGraph.ResourcePath);
-        GD.Print($"鍥惧凡淇濆瓨: {_currentGraph.ResourcePath}");
+        GD.Print($"Graph saved: {_currentGraph.ResourcePath}");
     }
+
     private void OnClear()
     {
-        // 蹇収搴忓垪鍖栦负 JSON 瀛楃涓诧紝缁曞紑 Godot Variant 闄愬埗
         var snapshotNodesJson = GraphJsonHelper.SerializeList(_currentGraph.Nodes);
         var snapshotConnsJson = GraphJsonHelper.SerializeList(_currentGraph.Connections);
 
@@ -236,6 +227,7 @@ public partial class GraphCanvasEditorWindow : Window
             DoClear();
         }
     }
+
     private void DoClear()
     {
         _currentGraph.Nodes.Clear();
@@ -246,6 +238,7 @@ public partial class GraphCanvasEditorWindow : Window
                 gn.QueueFree();
         }
     }
+
     private void DoRestoreSnapshot(string nodesJson, string connectionsJson)
     {
         DoClear();
@@ -265,7 +258,9 @@ public partial class GraphCanvasEditorWindow : Window
 
     public override void _Process(double delta)
     {
-        if (!Visible || _currentGraph == null) return;
+        if (!Visible || _currentGraph == null)
+            return;
+
         UpdateConnectionLabels();
         if (Input.IsKeyPressed(Key.Delete) && _hoveredConnection != null)
         {
@@ -273,6 +268,7 @@ public partial class GraphCanvasEditorWindow : Window
             GetViewport().SetInputAsHandled();
         }
     }
+
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventKey key && key.Pressed)
@@ -295,6 +291,7 @@ public partial class GraphCanvasEditorWindow : Window
             }
         }
     }
+
     private void OnGraphEditInput(InputEvent @event)
     {
         if (@event is InputEventMouseButton mb && mb.Pressed)

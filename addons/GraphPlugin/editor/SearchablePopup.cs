@@ -24,20 +24,21 @@ public class SearchablePopup<T> where T : class
 
     public void ShowBelow(Control control)
     {
-        _popup = new PopupPanel();
-        _popup.Transient = false;
-        _popup.Exclusive = false;
-        
+        _popup = new PopupPanel
+        {
+            Transient = false,
+            Exclusive = false
+        };
+
         BuildUI();
-        
+
         var editorInterface = EditorInterface.Singleton;
         var baseControl = editorInterface.GetBaseControl();
         baseControl.AddChild(_popup);
-        
+
         _searchBox.Text = "";
         RefreshTree();
-        
-        var rect = control.GetGlobalRect();
+
         var screenPos = control.GetScreenPosition();
         _popup.Position = new Vector2I((int)screenPos.X, (int)(screenPos.Y + control.Size.Y));
         _popup.Size = new Vector2I(400, 300);
@@ -49,14 +50,26 @@ public class SearchablePopup<T> where T : class
     {
         var vbox = new VBoxContainer();
         _popup.AddChild(vbox);
-        _searchBox = new LineEdit { PlaceholderText = "搜索..." };
+
+        _searchBox = new LineEdit { PlaceholderText = "Search..." };
         _searchBox.TextChanged += _ => RefreshTree();
         _searchBox.GuiInput += OnSearchBoxInput;
         vbox.AddChild(_searchBox);
-        _tree = new Tree { SizeFlagsVertical = Control.SizeFlags.ExpandFill, HideRoot = true };
+
+        _tree = new Tree
+        {
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill,
+            HideRoot = true
+        };
         _tree.ItemActivated += OnTreeItemActivated;
         vbox.AddChild(_tree);
-        _popup.AboutToPopup += () => { _searchBox.Text = ""; _searchBox.GrabFocus(); RefreshTree(); };
+
+        _popup.AboutToPopup += () =>
+        {
+            _searchBox.Text = "";
+            _searchBox.GrabFocus();
+            RefreshTree();
+        };
     }
 
     private void RefreshTree()
@@ -64,7 +77,13 @@ public class SearchablePopup<T> where T : class
         _tree.Clear();
         var root = _tree.CreateItem();
         var query = _searchBox.Text;
-        _filteredItems = string.IsNullOrWhiteSpace(query) ? _items.ToList() : _items.Where(x => FuzzyMatcher.Match(_getLabel(x), query)).OrderByDescending(x => FuzzyMatcher.Score(_getLabel(x), query)).ToList();
+        _filteredItems = string.IsNullOrWhiteSpace(query)
+            ? _items.ToList()
+            : _items
+                .Where(x => FuzzyMatcher.Match(_getLabel(x), query))
+                .OrderByDescending(x => FuzzyMatcher.Score(_getLabel(x), query))
+                .ToList();
+
         if (_getGroup == null)
         {
             for (int i = 0; i < _filteredItems.Count; i++)
@@ -81,7 +100,7 @@ public class SearchablePopup<T> where T : class
             foreach (var group in groups)
             {
                 var groupItem = _tree.CreateItem(root);
-                groupItem.SetText(0, group.Key ?? "(未分组)");
+                groupItem.SetText(0, group.Key ?? "(Ungrouped)");
                 groupItem.SetSelectable(0, false);
                 foreach (var item in group)
                 {
@@ -97,8 +116,15 @@ public class SearchablePopup<T> where T : class
     {
         if (@event is InputEventKey key && key.Pressed)
         {
-            if (key.Keycode == Key.Down) { _tree.GrabFocus(); _tree.GetRoot()?.GetFirstChild()?.Select(0); }
-            else if (key.Keycode == Key.Escape) _popup.QueueFree();
+            if (key.Keycode == Key.Down)
+            {
+                _tree.GrabFocus();
+                _tree.GetRoot()?.GetFirstChild()?.Select(0);
+            }
+            else if (key.Keycode == Key.Escape)
+            {
+                _popup.QueueFree();
+            }
         }
     }
 
@@ -121,14 +147,17 @@ public static class FuzzyMatcher
 {
     public static bool Match(string text, string query)
     {
-        if (string.IsNullOrEmpty(query)) return true;
+        if (string.IsNullOrEmpty(query))
+            return true;
+
         text = text.ToLower();
         query = query.ToLower();
         int pos = 0;
         foreach (var c in query)
         {
             pos = text.IndexOf(c, pos);
-            if (pos < 0) return false;
+            if (pos < 0)
+                return false;
             pos++;
         }
         return true;
@@ -138,11 +167,13 @@ public static class FuzzyMatcher
     {
         text = text.ToLower();
         query = query.ToLower();
-        int score = 0, pos = 0;
+        int score = 0;
+        int pos = 0;
         foreach (var c in query)
         {
             int newPos = text.IndexOf(c, pos);
-            if (newPos < 0) return 0;
+            if (newPos < 0)
+                return 0;
             score += 100 - (newPos - pos);
             pos = newPos + 1;
         }

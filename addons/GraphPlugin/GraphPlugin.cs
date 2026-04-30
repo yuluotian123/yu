@@ -11,7 +11,7 @@ public partial class GraphPlugin : EditorPlugin
     {
         GraphNodeFactory.AutoRegisterAll();
         var nodeCount = GraphNodeFactory.GetAllRegisteredTypes().Count;
-        GD.Print($"GraphCanvas: 已注册 {nodeCount} 个节点类型");
+        GD.Print($"GraphCanvas: registered {nodeCount} node types");
 
         _editorWindow = new GraphCanvasEditorWindow();
         EditorInterface.Singleton.GetBaseControl().AddChild(_editorWindow);
@@ -21,7 +21,7 @@ public partial class GraphPlugin : EditorPlugin
         _inspectorPlugin = new GraphCanvasInspectorPlugin { Plugin = this };
         AddInspectorPlugin(_inspectorPlugin);
 
-        GD.Print("GraphCanvas 插件已加载");
+        GD.Print("GraphCanvas plugin loaded");
     }
 
     public override void _ExitTree()
@@ -30,7 +30,7 @@ public partial class GraphPlugin : EditorPlugin
         if (_editorWindow != null)
             _editorWindow.QueueFree();
 
-        GD.Print("GraphCanvas 插件已卸载");
+        GD.Print("GraphCanvas plugin unloaded");
     }
 
     public void OpenGraphEditor(GraphAsset graph)
@@ -38,11 +38,9 @@ public partial class GraphPlugin : EditorPlugin
         if (graph != null && _editorWindow != null)
         {
             _editorWindow.Hide();
-            // 清空子图导航栈，确保每次从根图重新打开
             _editorWindow.ResetNavigation();
             _editorWindow.LoadGraph(graph);
-            _editorWindow.CallDeferred(Window.MethodName.PopupCentered,new Vector2I(1200,800));
-            //_editorWindow.PopupCentered(new Vector2I(1200, 800));
+            _editorWindow.CallDeferred(Window.MethodName.PopupCentered, new Vector2I(1200, 800));
         }
     }
 }

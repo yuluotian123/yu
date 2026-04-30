@@ -2,6 +2,20 @@ using Godot;
 
 namespace GameLogic
 {
+    public readonly struct JumpIntent2D
+    {
+        public JumpIntent2D(bool startRequested, bool sustainRequested)
+        {
+            StartRequested = startRequested;
+            SustainRequested = sustainRequested;
+        }
+
+        public bool StartRequested { get; }
+        public bool SustainRequested { get; }
+
+        public static JumpIntent2D None => new(false, false);
+    }
+
     [GlobalClass]
     public partial class CharacterJumpComponent2D : Component2D, ICharacterIntentAbility2D<JumpIntent2D>
     {

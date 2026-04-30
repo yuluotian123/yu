@@ -3,6 +3,20 @@ using Godot;
 
 namespace GameLogic
 {
+    public readonly struct MoveIntent2D
+    {
+        public MoveIntent2D(float axisX)
+        {
+            AxisX = Mathf.Clamp(axisX, -1f, 1f);
+            HasInput = !Mathf.IsZeroApprox(AxisX);
+        }
+
+        public float AxisX { get; }
+        public bool HasInput { get; }
+
+        public static MoveIntent2D None => new(0f);
+    }
+
     [GlobalClass]
     public partial class CharacterMoveComponent2D : Component2D, ICharacterIntentAbility2D<MoveIntent2D>
     {

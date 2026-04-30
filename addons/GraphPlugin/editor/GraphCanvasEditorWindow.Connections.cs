@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// 连接操作和标签管理
+/// Connection operations and connection label handling.
 /// </summary>
 public partial class GraphCanvasEditorWindow
 {
@@ -12,7 +12,7 @@ public partial class GraphCanvasEditorWindow
     {
         if (_undoRedo != null)
         {
-            _undoRedo.CreateAction("添加连接");
+            _undoRedo.CreateAction("Add Connection");
             _undoRedo.AddDoMethod(this, MethodName.DoAddConnection, fromNode, (int)fromPort, toNode, (int)toPort);
             _undoRedo.AddUndoMethod(this, MethodName.DoRemoveConnection, fromNode, (int)fromPort, toNode, (int)toPort);
             _undoRedo.CommitAction();
@@ -22,11 +22,12 @@ public partial class GraphCanvasEditorWindow
             DoAddConnection(fromNode, (int)fromPort, toNode, (int)toPort);
         }
     }
+
     private void OnDisconnectionRequest(StringName fromNode, long fromPort, StringName toNode, long toPort)
     {
         if (_undoRedo != null)
         {
-            _undoRedo.CreateAction("删除连接");
+            _undoRedo.CreateAction("Remove Connection");
             _undoRedo.AddDoMethod(this, MethodName.DoRemoveConnection, fromNode, (int)fromPort, toNode, (int)toPort);
             _undoRedo.AddUndoMethod(this, MethodName.DoAddConnection, fromNode, (int)fromPort, toNode, (int)toPort);
             _undoRedo.CommitAction();
@@ -43,6 +44,7 @@ public partial class GraphCanvasEditorWindow
         if (success)
             _graphEdit.ConnectNode(fromNode, fromPort, toNode, toPort);
     }
+
     private void DoRemoveConnection(StringName fromNode, int fromPort, StringName toNode, int toPort)
     {
         _graphEdit.DisconnectNode(fromNode, fromPort, toNode, toPort);
@@ -64,29 +66,42 @@ public partial class GraphCanvasEditorWindow
         var globalPos = node.GlobalPosition + portOffset * _graphEdit.Zoom;
         return globalPos - _graphEdit.GlobalPosition;
     }
+
     private GraphConnection FindConnectionAtPosition(Vector2 pos)
     {
-        if (_currentGraph == null) return null;
+        if (_currentGraph == null)
+            return null;
+
         foreach (var conn in _currentGraph.Connections)
         {
             var fromNode = _graphEdit.GetNodeOrNull<GraphNode>(conn.FromNode);
             var toNode = _graphEdit.GetNodeOrNull<GraphNode>(conn.ToNode);
-            if (fromNode == null || toNode == null) continue;
-            if (conn.FromPort < 0 || conn.FromPort >= fromNode.GetOutputPortCount()) continue;
-            if (conn.ToPort < 0 || conn.ToPort >= toNode.GetInputPortCount()) continue;
+            if (fromNode == null || toNode == null)
+                continue;
+
+            if (conn.FromPort < 0 || conn.FromPort >= fromNode.GetOutputPortCount())
+                continue;
+
+            if (conn.ToPort < 0 || conn.ToPort >= toNode.GetInputPortCount())
+                continue;
+
             var fromPos = GetPortPositionInLocal(fromNode, true, conn.FromPort);
             var toPos = GetPortPositionInLocal(toNode, false, conn.ToPort);
             if (IsPointNearLine(pos, fromPos, toPos, 10.0f))
                 return conn;
         }
+
         return null;
     }
+
     private bool IsPointNearLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd, float threshold)
     {
         var lineVec = lineEnd - lineStart;
         var pointVec = point - lineStart;
         var lineLen = lineVec.Length();
-        if (lineLen == 0) return point.DistanceTo(lineStart) <= threshold;
+        if (lineLen == 0)
+            return point.DistanceTo(lineStart) <= threshold;
+
         var t = Mathf.Clamp(pointVec.Dot(lineVec) / (lineLen * lineLen), 0.0f, 1.0f);
         var projection = lineStart + t * lineVec;
         return point.DistanceTo(projection) <= threshold;
@@ -94,28 +109,37 @@ public partial class GraphCanvasEditorWindow
 
     private void ShowConnectionMenu(Vector2 position)
     {
-        if (_selectedConnection == null) return;
+        if (_selectedConnection == null)
+            return;
+
         var popup = new PopupMenu();
         if (_selectedConnection.IsEditable())
-            popup.AddItem("编辑连接", 0);
-        popup.AddItem("删除连接", 1);
+            popup.AddItem("Edit Connection", 0);
+        popup.AddItem("Delete Connection", 1);
         popup.Position = (Vector2I)position;
         popup.IdPressed += OnConnectionMenuSelected;
         popup.PopupHide += () => popup.QueueFree();
         AddChild(popup);
         popup.Popup();
     }
+
     private void OnConnectionMenuSelected(long id)
     {
         switch (id)
         {
-            case 0: EditConnection(); break;
-            case 1: DeleteConnection(); break;
+            case 0:
+                EditConnection();
+                break;
+            case 1:
+                DeleteConnection();
+                break;
         }
     }
+
     private void EditConnection()
     {
-        if (_selectedConnection == null || !_selectedConnection.IsEditable()) return;
+        if (_selectedConnection == null || !_selectedConnection.IsEditable())
+            return;
 
         Vector2I dialogSize = GetConnectionEditDialogSize();
         var dialog = new AcceptDialog
@@ -163,7 +187,7 @@ public partial class GraphCanvasEditorWindow
             CreateConnectionLabel(connRef);
             _currentGraph.SaveToJson();
             ResourceSaver.Save(_currentGraph, _currentGraph.ResourcePath);
-            GD.Print("连接已更新");
+            GD.Print("Connection updated");
         };
         AddChild(dialog);
         dialog.PopupCentered(dialogSize);
@@ -176,19 +200,25 @@ public partial class GraphCanvasEditorWindow
         int height = Math.Clamp((int)(viewportSize.Y * 0.72f), 360, 680);
         return new Vector2I(width, height);
     }
+
     private void DeleteConnection()
     {
-        if (_selectedConnection == null) return;
+        if (_selectedConnection == null)
+            return;
+
         DeleteConnectionInternal(_selectedConnection);
         _selectedConnection = null;
     }
 
     private void DeleteHoveredConnection()
     {
-        if (_hoveredConnection == null) return;
+        if (_hoveredConnection == null)
+            return;
+
         DeleteConnectionInternal(_hoveredConnection);
         _hoveredConnection = null;
     }
+
     private void DeleteConnectionInternal(GraphConnection conn)
     {
         var fromNode = new StringName(conn.FromNode);
@@ -197,7 +227,7 @@ public partial class GraphCanvasEditorWindow
         var toPort = conn.ToPort;
         if (_undoRedo != null)
         {
-            _undoRedo.CreateAction("删除连接");
+            _undoRedo.CreateAction("Remove Connection");
             _undoRedo.AddDoMethod(this, MethodName.DoRemoveConnection, fromNode, fromPort, toNode, toPort);
             _undoRedo.AddUndoMethod(this, MethodName.DoAddConnection, fromNode, fromPort, toNode, toPort);
             _undoRedo.CommitAction();
@@ -216,16 +246,24 @@ public partial class GraphCanvasEditorWindow
             bool found = false;
             foreach (var conn in _currentGraph.Connections)
             {
-                if (GetConnectionKey(conn) == connKey) { found = true; break; }
+                if (GetConnectionKey(conn) == connKey)
+                {
+                    found = true;
+                    break;
+                }
             }
-            if (!found) keysToRemove.Add(connKey);
+
+            if (!found)
+                keysToRemove.Add(connKey);
         }
+
         foreach (var key in keysToRemove)
         {
             var label = _connectionLabels[key];
             label.QueueFree();
             _connectionLabels.Remove(key);
         }
+
         foreach (var conn in _currentGraph.Connections)
         {
             var connKey = GetConnectionKey(conn);
@@ -234,6 +272,7 @@ public partial class GraphCanvasEditorWindow
             UpdateConnectionLabelPosition(conn);
         }
     }
+
     private void CreateConnectionLabel(GraphConnection conn)
     {
         var label = conn.CreateConnectionLabel();
@@ -241,13 +280,20 @@ public partial class GraphCanvasEditorWindow
         _connectionLabels[connKey] = label;
         _graphEdit.AddChild(label);
     }
+
     private void UpdateConnectionLabelPosition(GraphConnection conn)
     {
         var fromNode = _graphEdit.GetNodeOrNull<GraphNode>(conn.FromNode);
         var toNode = _graphEdit.GetNodeOrNull<GraphNode>(conn.ToNode);
-        if (fromNode == null || toNode == null) return;
-        if (conn.FromPort < 0 || conn.FromPort >= fromNode.GetOutputPortCount()) return;
-        if (conn.ToPort < 0 || conn.ToPort >= toNode.GetInputPortCount()) return;
+        if (fromNode == null || toNode == null)
+            return;
+
+        if (conn.FromPort < 0 || conn.FromPort >= fromNode.GetOutputPortCount())
+            return;
+
+        if (conn.ToPort < 0 || conn.ToPort >= toNode.GetInputPortCount())
+            return;
+
         var fromPos = GetPortPositionInLocal(fromNode, true, conn.FromPort);
         var toPos = GetPortPositionInLocal(toNode, false, conn.ToPort);
         var midLocal = (fromPos + toPos) / 2.0f;

@@ -23,7 +23,7 @@ public static class GraphNodeFactory
         _nodesByGraphType.Clear();
         _nodeTypes.Clear();
 
-        GD.Print("注册节点");
+        GD.Print("[GraphNodeFactory] Registering graph nodes");
 
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -52,17 +52,17 @@ public static class GraphNodeFactory
                             _nodesByGraphType[graphType].Add(instance.NodeType);
                         }
 
-                        GD.Print($"注册节点: {instance.NodeType} 用于图类型: {string.Join(", ", graphTypes)}");
+                        GD.Print($"[GraphNodeFactory] Registered node: {instance.NodeType} for graph types: {string.Join(", ", graphTypes)}");
                     }
                     catch (Exception ex)
                     {
-                        GD.PushWarning($"无法实例化节点类型 {type.Name}: {ex.Message}");
+                        GD.PushWarning($"[GraphNodeFactory] Can not instantiate node type {type.Name}: {ex.Message}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                GD.PushWarning($"扫描程序集 {assembly.FullName} 时出错: {ex.Message}");
+                GD.PushWarning($"[GraphNodeFactory] Error while scanning assembly {assembly.FullName}: {ex.Message}");
             }
         }
     }
@@ -73,8 +73,11 @@ public static class GraphNodeFactory
 
         var listNode = new List<string>();
 
-        if (_nodesByGraphType.TryGetValue(graphType, out var list)) listNode.AddRange(list);
-        if (_nodesByGraphType.TryGetValue("All", out var listAll)) listNode.AddRange(listAll);
+        if (_nodesByGraphType.TryGetValue(graphType, out var list))
+            listNode.AddRange(list);
+
+        if (_nodesByGraphType.TryGetValue("All", out var listAll))
+            listNode.AddRange(listAll);
 
         return listNode;
     }
@@ -83,12 +86,12 @@ public static class GraphNodeFactory
     {
         EnsureInitialized();
 
-        GraphNodeData node = null;
+        GraphNodeData node;
 
         if (_nodeTypes.TryGetValue(typeName, out var type))
             node = (GraphNodeData)Activator.CreateInstance(type);
         else
-            node = new GraphNodeData() { NodeType = typeName };
+            node = new GraphNodeData { NodeType = typeName };
 
         return node;
     }

@@ -48,14 +48,18 @@ public partial class GraphCanvasEditorWindow : Window
         };
         AddChild(_mainContainer);
 
-        _breadcrumbBar = new HBoxContainer();
-        _breadcrumbBar.CustomMinimumSize = new Vector2(0, 28);
+        _breadcrumbBar = new HBoxContainer
+        {
+            CustomMinimumSize = new Vector2(0, 28)
+        };
         _breadcrumbBar.AddThemeConstantOverride("separation", 4);
         _breadcrumbBar.Visible = false;
         _mainContainer.AddChild(_breadcrumbBar);
 
-        _toolbar = new HBoxContainer();
-        _toolbar.CustomMinimumSize = new Vector2(0, 40);
+        _toolbar = new HBoxContainer
+        {
+            CustomMinimumSize = new Vector2(0, 40)
+        };
         _mainContainer.AddChild(_toolbar);
 
         var saveBtn = new Button { Text = "Save (Ctrl+S)" };

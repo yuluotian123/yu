@@ -1,18 +1,47 @@
 using Framework;
 using Godot;
+using System.Text.Json.Serialization;
 
 namespace GameLogic
 {
     public class SkillHfsmStateNodeData : HfsmStateNodeData
     {
+        private SkillResource _skillResource;
+
         public string SkillResourcePath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 编辑器中的技能资源引用。该属性不写入 GraphJson，保存时只持久化资源路径。
+        /// </summary>
+        [JsonIgnore]
+        public SkillResource SkillResource
+        {
+            get
+            {
+                string path = GetSkillResourcePath();
+                if (_skillResource != null && _skillResource.ResourcePath == path)
+                    return _skillResource;
+
+                if (string.IsNullOrWhiteSpace(path) || !ResourceLoader.Exists(path))
+                    return _skillResource;
+
+                _skillResource = SkillResource.LoadFromPath(path);
+                return _skillResource;
+            }
+            set
+            {
+                _skillResource = value;
+                SkillResourcePath = value?.ResourcePath ?? string.Empty;
+            }
+        }
 
         public override string GetDisplayName()
         {
             string stateName = string.IsNullOrWhiteSpace(StateName) ? "Skill" : StateName;
-            return string.IsNullOrWhiteSpace(SkillResourcePath)
+            string skillName = GetSkillDisplayName();
+            return string.IsNullOrWhiteSpace(skillName)
                 ? $"{stateName} [Skill]"
-                : $"{stateName} [{SkillResourcePath.GetFile().GetBaseName()}]";
+                : $"{stateName} [{skillName}]";
         }
 
         public override Color GetNodeColor() => IsDefault ? new Color(0.35f, 0.8f, 0.5f) : new Color(0.7f, 0.45f, 0.9f);
@@ -21,7 +50,7 @@ namespace GameLogic
         public override bool CanEnter(HfsmRuntime runtime)
         {
             SkillManagerComponent2D skillManager = runtime?.GetComponent<SkillManagerComponent2D>();
-            return skillManager?.CanStart(SkillResourcePath) == true;
+            return skillManager?.CanStart(GetSkillResourcePath()) == true;
         }
 
         public override void OnEnter(HfsmRuntime runtime)
@@ -30,10 +59,11 @@ namespace GameLogic
             RemoveExistingRuntime(runtime);
 
             SkillManagerComponent2D skillManager = runtime?.GetComponent<SkillManagerComponent2D>();
-            SkillRuntime skillRuntime = skillManager?.StartSkill(SkillResourcePath, runtime);
+            string skillResourcePath = GetSkillResourcePath();
+            SkillRuntime skillRuntime = skillManager?.StartSkill(skillResourcePath, runtime);
             if (skillRuntime == null)
             {
-                GD.PushWarning($"[SkillHfsmStateNodeData] Failed to start skill: {SkillResourcePath}");
+                GD.PushWarning($"[SkillHfsmStateNodeData] Failed to start skill: {skillResourcePath}");
                 runtime?.Context?.UserData.Add(new ActiveSkillStateRuntime(Id, null) { Completed = true, ReturnLabel = "Failed" });
                 return;
             }
@@ -74,15 +104,48 @@ namespace GameLogic
             AddStateFields(root, context);
             root.AddChild(new HSeparator());
 
-            var skillPathEdit = new LineEdit
-            {
-                PlaceholderText = "Skill resource path",
-                Text = SkillResourcePath
-            };
-            skillPathEdit.TextChanged += value => SkillResourcePath = value;
-            root.AddChild(skillPathEdit);
+#if TOOLS
+            root.AddChild(new GraphResourcePathField(
+                typeof(SkillResource),
+                SkillResourcePath,
+                path =>
+                {
+                    SetSkillResourcePath(path);
+                    if (context.GraphNode != null)
+                        context.GraphNode.Title = GetDisplayName();
+                },
+                resource => resource is SkillResource skill && !string.IsNullOrWhiteSpace(skill.DisplayName)
+                    ? skill.DisplayName
+                    : null));
+#else
+            root.AddChild(new Label { Text = string.IsNullOrWhiteSpace(SkillResourcePath) ? "No Skill" : SkillResourcePath });
+#endif
 
             context.GraphNode.AddChild(root);
+        }
+
+        private void SetSkillResourcePath(string path)
+        {
+            SkillResourcePath = path ?? string.Empty;
+            _skillResource = null;
+        }
+
+        private string GetSkillResourcePath()
+        {
+            if (!string.IsNullOrWhiteSpace(SkillResourcePath))
+                return SkillResourcePath;
+
+            return _skillResource?.ResourcePath ?? string.Empty;
+        }
+
+        private string GetSkillDisplayName()
+        {
+            SkillResource skill = SkillResource;
+            if (!string.IsNullOrWhiteSpace(skill?.DisplayName))
+                return skill.DisplayName;
+
+            string path = GetSkillResourcePath();
+            return string.IsNullOrWhiteSpace(path) ? string.Empty : path.GetFile().GetBaseName();
         }
 
         private ActiveSkillStateRuntime GetActiveRuntime(HfsmRuntime runtime)

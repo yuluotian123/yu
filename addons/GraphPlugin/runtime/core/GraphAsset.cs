@@ -250,12 +250,6 @@ public partial class GraphAsset : Resource
         return GetRuntimeIndex().GetIncomingConnections(nodeId, toPort);
     }
 
-    /// <summary>旧拼写兼容移除后的正确入口，保留语义名称。</summary>
-    public List<GraphConnection> GetIngoingConnections(string nodeId)
-    {
-        return GetIncomingConnections(nodeId);
-    }
-
     /// <summary>查询输出连线。</summary>
     public List<GraphConnection> GetOutgoingConnections(string nodeId, int? fromPort = null)
     {

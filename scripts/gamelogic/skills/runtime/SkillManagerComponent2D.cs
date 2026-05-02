@@ -138,8 +138,8 @@ namespace GameLogic
             {
             }
 
-            if (skill == null && ResourceLoader.Exists(skillResourcePath))
-                skill = ResourceLoader.Load<SkillResource>(skillResourcePath);
+            if (skill == null)
+                skill = SkillResource.LoadFromPath(skillResourcePath);
 
             if (skill == null)
                 return null;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using Godot;
 
 public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
@@ -56,14 +57,9 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
         return new StateGraphAsset();
     }
 
-    public override bool AcceptsSubGraph(GraphAsset graph)
+    public override Type GetSubGraphType()
     {
-        return graph is StateGraphAsset;
-    }
-
-    public override string GetSubGraphTypeName()
-    {
-        return nameof(StateGraphAsset);
+        return typeof(StateGraphAsset);
     }
 
     public virtual bool HasTag(string tag)

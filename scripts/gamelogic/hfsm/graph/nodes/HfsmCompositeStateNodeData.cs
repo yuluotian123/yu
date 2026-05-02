@@ -57,14 +57,9 @@ namespace GameLogic
             return new HfsmGraphAsset();
         }
 
-        public override bool AcceptsSubGraph(GraphAsset graph)
+        public override Type GetSubGraphType()
         {
-            return graph is HfsmGraphAsset;
-        }
-
-        public override string GetSubGraphTypeName()
-        {
-            return nameof(HfsmGraphAsset);
+            return typeof(HfsmGraphAsset);
         }
 
         public override bool HasTag(string tag)

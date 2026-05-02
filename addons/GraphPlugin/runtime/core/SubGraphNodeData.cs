@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -63,12 +64,15 @@ public partial class SubGraphNodeData : GraphNodeData
 
     public virtual bool AcceptsSubGraph(GraphAsset graph)
     {
-        return graph != null;
+        return graph != null && GetSubGraphType().IsInstanceOfType(graph);
     }
 
-    public virtual string GetSubGraphTypeName()
+    /// <summary>
+    /// 编辑器资源槽允许绑定的子图资源类型。
+    /// </summary>
+    public virtual Type GetSubGraphType()
     {
-        return nameof(GraphAsset);
+        return typeof(GraphAsset);
     }
 
     public override void CreateUI(GraphEditorContext context)

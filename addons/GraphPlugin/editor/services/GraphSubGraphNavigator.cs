@@ -70,6 +70,15 @@ public sealed class GraphSubGraphNavigator
         if (content == null)
             return;
 
+        var resourceField = new GraphResourcePathField(
+            subData.GetSubGraphType(),
+            subData.SubGraphPath,
+            path => BindSubGraphPath(subData, node, path))
+        {
+            Name = "SubGraphResourceField"
+        };
+        content.AddChild(resourceField);
+
         var enterBtn = new Button
         {
             Text = "Enter SubGraph >",
@@ -82,16 +91,14 @@ public sealed class GraphSubGraphNavigator
         enterBtn.Pressed += () => TryEnterSubGraph(subData);
         content.AddChild(enterBtn);
 
-        var bindBtn = new Button
+        var createBtn = new Button
         {
-            Text = string.IsNullOrEmpty(subData.SubGraphPath)
-                ? "Bind SubGraph Resource..."
-                : "Replace SubGraph Resource...",
-            TooltipText = "Select or create a GraphAsset resource file",
-            Name = "BindBtn"
+            Text = "Create SubGraph Resource...",
+            TooltipText = "Create a new subgraph resource file",
+            Name = "CreateBtn"
         };
-        bindBtn.Pressed += () => ShowBindSubGraphDialog(subData, node);
-        content.AddChild(bindBtn);
+        createBtn.Pressed += () => ShowCreateSubGraphDialog(subData, node);
+        content.AddChild(createBtn);
     }
 
     private void TryEnterSubGraph(SubGraphNodeData subData)
@@ -190,11 +197,37 @@ public sealed class GraphSubGraphNavigator
         _breadcrumbBar.AddChild(new Label { Text = current?.GetEditorTitle() ?? "Graph" });
     }
 
-    private void ShowBindSubGraphDialog(SubGraphNodeData subData, GraphNode node)
+    private void BindSubGraphPath(SubGraphNodeData subData, GraphNode node, string path)
+    {
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            if (!ResourceLoader.Exists(path))
+            {
+                ShowWarning("Resource Not Found", $"SubGraph resource does not exist:\n{path}");
+                return;
+            }
+
+            var resource = ResourceLoader.Load(path);
+            if (resource is not GraphAsset graphAsset || !subData.AcceptsSubGraph(graphAsset))
+            {
+                ShowWarning("Type Error", $"Selected file is not a {subData.GetSubGraphType().Name} resource:\n{path}");
+                return;
+            }
+        }
+
+        GraphAsset current = _getCurrentGraph();
+        subData.SubGraphPath = path ?? string.Empty;
+        subData.InvalidateCache();
+        current?.MarkDirty();
+        current?.SaveJsonFields();
+        RefreshSubGraphNodeUi(node, subData);
+    }
+
+    private void ShowCreateSubGraphDialog(SubGraphNodeData subData, GraphNode node)
     {
         var dialog = new EditorFileDialog
         {
-            Title = "Select Or Create SubGraph Resource (.tres)",
+            Title = "Create SubGraph Resource (.tres)",
             FileMode = EditorFileDialog.FileModeEnum.SaveFile,
             Access = EditorFileDialog.AccessEnum.Resources
         };
@@ -209,7 +242,7 @@ public sealed class GraphSubGraphNavigator
                 var res = ResourceLoader.Load(path);
                 if (res is not GraphAsset graphAsset || !subData.AcceptsSubGraph(graphAsset))
                 {
-                    ShowWarning("Type Error", $"Selected file is not a {subData.GetSubGraphTypeName()} resource:\n{path}");
+                    ShowWarning("Type Error", $"Selected file is not a {subData.GetSubGraphType().Name} resource:\n{path}");
                     return;
                 }
             }
@@ -220,12 +253,7 @@ public sealed class GraphSubGraphNavigator
                 GD.Print($"[SubGraph] Created new subgraph resource: {path}");
             }
 
-            GraphAsset current = _getCurrentGraph();
-            subData.SubGraphPath = path;
-            subData.InvalidateCache();
-            current?.MarkDirty();
-            current?.SaveJsonFields();
-            RefreshSubGraphNodeUi(node, subData);
+            BindSubGraphPath(subData, node, path);
             GD.Print($"[SubGraph] Bound subgraph: {path}");
         };
         _owner.AddChild(dialog);
@@ -243,16 +271,18 @@ public sealed class GraphSubGraphNavigator
         if (pathLabel != null)
             pathLabel.Text = subData.GetDisplayName();
 
+        var resourceField = content.GetNodeOrNull<GraphResourcePathField>("SubGraphResourceField");
+        if (resourceField != null)
+            resourceField.Path = subData.SubGraphPath;
+
         var enterBtn = content.GetNodeOrNull<Button>("EnterBtn");
         if (enterBtn != null)
         {
-            enterBtn.Disabled = false;
-            enterBtn.TooltipText = $"Enter: {subData.GetDisplayName()}";
+            enterBtn.Disabled = string.IsNullOrEmpty(subData.SubGraphPath);
+            enterBtn.TooltipText = string.IsNullOrEmpty(subData.SubGraphPath)
+                ? "Bind a subgraph resource first"
+                : $"Enter: {subData.GetDisplayName()}";
         }
-
-        var bindBtn = content.GetNodeOrNull<Button>("BindBtn");
-        if (bindBtn != null)
-            bindBtn.Text = "Replace SubGraph Resource...";
     }
 
     private void ShowWarning(string title, string text)

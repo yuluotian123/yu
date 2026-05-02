@@ -197,6 +197,17 @@ public sealed class GraphBlackboardRuntime
         return success;
     }
 
+    public List<GraphBlackboardDebugEntry> CreateDebugSnapshot()
+    {
+        var snapshot = new List<GraphBlackboardDebugEntry>();
+
+        for (int i = _localStack.Count - 1; i >= 0; i--)
+            AddDebugEntries(snapshot, _localStack[i].Entries, $"Local[{i}]", i, false);
+
+        AddDebugEntries(snapshot, _globalMap.Values, "Global", -1, true);
+        return snapshot;
+    }
+
     private static Dictionary<string, GraphBlackboardEntry> BuildMap(IList<GraphBlackboardEntry> entries)
     {
         var map = new Dictionary<string, GraphBlackboardEntry>(System.StringComparer.Ordinal);
@@ -241,5 +252,33 @@ public sealed class GraphBlackboardRuntime
         }
 
         entry.SetValue(value);
+    }
+
+    private static void AddDebugEntries(
+        List<GraphBlackboardDebugEntry> snapshot,
+        IEnumerable<GraphBlackboardEntry> entries,
+        string scope,
+        int depth,
+        bool isGlobal)
+    {
+        if (snapshot == null || entries == null)
+            return;
+
+        foreach (GraphBlackboardEntry entry in entries)
+        {
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Key))
+                continue;
+
+            GraphBlackboardValue value = entry.Value;
+            snapshot.Add(new GraphBlackboardDebugEntry
+            {
+                Scope = scope,
+                Depth = depth,
+                IsGlobal = isGlobal,
+                Key = entry.Key,
+                ValueType = value?.DisplayName ?? "null",
+                ValuePreview = GraphRuntimeDebugSnapshotFactory.Truncate(value?.GetPreviewText() ?? "null", 120)
+            });
+        }
     }
 }

@@ -49,4 +49,9 @@ public sealed class GraphExecutionContext
 
         return result;
     }
+
+    public GraphExecutionContextDebugSnapshot CreateDebugSnapshot()
+    {
+        return GraphRuntimeDebugSnapshotFactory.CreateContextSnapshot(this);
+    }
 }

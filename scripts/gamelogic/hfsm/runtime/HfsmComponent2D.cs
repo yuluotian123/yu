@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
@@ -21,6 +22,7 @@ namespace GameLogic
         public string CurrentStatePath => Runtime?.CurrentStatePath ?? string.Empty;
 
         private Label _debugStateLabel;
+        private GraphRuntimeDebugHandle _debugHandle;
 
         public override void OnInit()
         {
@@ -34,12 +36,15 @@ namespace GameLogic
             Runtime.StateChanged += OnRuntimeStateChanged;
             Runtime.StateEntered += OnRuntimeStateEntered;
             Runtime.StateExited += OnRuntimeStateExited;
+            _debugHandle = GraphRuntimeDebugRegistry.Register(Owner, Runtime, Graph, "HFSM", CreateRuntimeDebugMetadata);
             ResolveDebugStateLabel();
             OnBeforeStartRuntime();
 
             if (!Runtime.Start(InitialStateName))
             {
                 GD.PushWarning($"[HfsmComponent2D] Failed to start HFSM graph: {Graph.ResourcePath}");
+                _debugHandle?.Dispose();
+                _debugHandle = null;
             }
             else
             {
@@ -73,6 +78,8 @@ namespace GameLogic
 
             Runtime?.Stop();
             Runtime = null;
+            _debugHandle?.Dispose();
+            _debugHandle = null;
             _debugStateLabel = null;
         }
 
@@ -182,6 +189,19 @@ namespace GameLogic
         private string GetDebugOwnerName()
         {
             return Owner?.Name.ToString() ?? Graph?.ResourcePath ?? "Unknown";
+        }
+
+        private IEnumerable<string> CreateRuntimeDebugMetadata()
+        {
+            if (Runtime == null)
+                yield break;
+
+            yield return $"CurrentState={Runtime.CurrentStatePath}";
+            yield return $"StateTime={Runtime.CurrentStateTime:0.###}";
+
+            string tags = string.Join(",", Runtime.GetCurrentStateTags());
+            if (!string.IsNullOrWhiteSpace(tags))
+                yield return $"Tags={tags}";
         }
     }
 }

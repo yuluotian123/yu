@@ -85,6 +85,20 @@ Explorer 提供：
 - 双击节点定位到画布。
 - 展示当前图验证结果。
 
+## Runtime Debug
+
+运行游戏后，在图编辑器 toolbar 中打开 `Runtime Debug`。
+
+面板会显示：
+
+- 当前编辑器选中的远端场景节点路径。
+- 收到的 runtime snapshot 数量和匹配数量。
+- 当前 runtime 类型、scope、metadata。
+- 当前图 scope 的 active node 或 current state。
+- 黑板、UserData、Timeline 和最近事件。
+
+如果当前打开的图和 runtime scope 不一致，面板会提供 `Open Runtime Graph`。当图匹配时，画布里的 active node 会被高亮。
+
 ## 保存和验证
 
 点击 `Save` 或按 `Ctrl+S` 保存。保存流程：
@@ -105,4 +119,3 @@ Explorer 提供：
 - 连接数超过端口上限。
 - 连线类型不匹配。
 - 黑板 key 重复。
-

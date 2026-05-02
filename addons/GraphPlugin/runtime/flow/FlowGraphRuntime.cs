@@ -30,6 +30,21 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
     public bool IsRunning { get; private set; }
     public bool IsCompleted => IsRunning && _activeNodes.Count == 0;
     public IReadOnlyList<string> ReturnLabels => _returnLabels;
+    public IReadOnlyList<string> ActiveNodeIds
+    {
+        get
+        {
+            var ids = new List<string>();
+            for (int i = 0; i < _activeNodes.Count; i++)
+            {
+                string id = _activeNodes[i].Node?.Id;
+                if (!string.IsNullOrWhiteSpace(id))
+                    ids.Add(id);
+            }
+
+            return ids;
+        }
+    }
 
     private readonly List<string> _returnLabels = new();
 
@@ -59,6 +74,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
         _returnLabels.Clear();
         _nodeData.Clear();
         _propagationSteps = 0;
+        GraphRuntimeDebugRegistry.RecordEvent(this, "Start", "flow graph started", Graph);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         PropagateToNode(Graph.PrimeNode);
         return true;
     }
@@ -80,6 +97,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
 
         _nodeData.Clear();
         _propagationSteps = 0;
+        GraphRuntimeDebugRegistry.RecordEvent(this, "Stop", "flow graph stopped", Graph);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
     }
 
     public T GetNodeData<T>(string nodeId) where T : class, new()
@@ -192,6 +211,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
             return;
         }
 
+        GraphRuntimeDebugRegistry.RecordEvent(this, "NodeEntered", node.GetDisplayName(), Graph, node);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         NodeEntered?.Invoke(this, node);
 
         NodeCompletion completion;
@@ -210,6 +231,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
             completion = new NodeCompletion(0);
         }
 
+        GraphRuntimeDebugRegistry.RecordEvent(this, "NodeExited", node.GetDisplayName(), Graph, node);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         NodeExited?.Invoke(this, node);
         HandleCompletion(node, completion);
     }
@@ -219,6 +242,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
         if (node is FlowReturnNodeData)
         {
             _returnLabels.Add(completion.Label);
+            GraphRuntimeDebugRegistry.RecordEvent(this, "Returned", completion.Label, Graph, node);
+            GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
             Returned?.Invoke(this, completion.Label);
             return;
         }
@@ -231,6 +256,8 @@ public sealed class FlowGraphRuntime : IGraphRuntimeScope
         ActiveFlowNode active = _activeNodes[index];
         active.Handler.Exit(this, Context);
         _activeNodes.RemoveAt(index);
+        GraphRuntimeDebugRegistry.RecordEvent(this, "NodeExited", active.Node.GetDisplayName(), Graph, active.Node);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         NodeExited?.Invoke(this, active.Node);
     }
 

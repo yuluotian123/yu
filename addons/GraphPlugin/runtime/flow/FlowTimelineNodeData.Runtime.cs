@@ -106,12 +106,14 @@ public partial class FlowTimelineNodeData
         FlowTimelineContext timelineContext = data.TimelineContext;
         PopulateContext(timelineContext, phase, time, previousTime, delta, string.Empty, track, clip);
         context.UserData.Add(timelineContext);
+        GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
         try
         {
             clip.Action.Execute(context);
         }
         finally
         {
+            GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
             context.UserData.Remove(timelineContext);
         }
     }
@@ -132,6 +134,7 @@ public partial class FlowTimelineNodeData
         FlowTimelineContext timelineContext = data.TimelineContext;
         PopulateContext(timelineContext, phase, time, previousTime, delta, eventLabel, null, null);
         context.UserData.Add(timelineContext);
+        GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
         try
         {
             for (int i = 0; i < actions.Count; i++)
@@ -139,6 +142,7 @@ public partial class FlowTimelineNodeData
         }
         finally
         {
+            GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
             context.UserData.Remove(timelineContext);
         }
     }

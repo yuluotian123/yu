@@ -13,6 +13,9 @@
 - `GraphAsset.GetIncomingConnections()`：查输入连线。
 - `GraphBlackboardRuntime`：读取本地图、父图、全局黑板。
 - `GraphExecutionContext`：向节点传递图、黑板和业务对象。
+- `IGraphRuntimeScope`：把父图和子图 runtime 组织成可遍历的运行时树。
+- `GraphRuntimeBlackboardWriter`：从根 runtime 递归查找声明了某个 key 的本地图黑板并写入。
+- `GraphRuntimeDebugRegistry`：注册 runtime、记录事件、捕获 context/timeline 快照。
 
 ## FlowGraph
 
@@ -56,6 +59,8 @@ runtime.ChangeState("Airborne");
 
 StateGraph 查询已经走 `GraphRuntimeIndex` 的节点表和连线索引。
 
+StateGraph 已实现 `IGraphRuntimeScope`。Composite State 的子运行时会出现在 `ChildScopes` 中，因此外部 `SetValue()` 可以写到真正声明 key 的子图黑板，Runtime Debug 也能显示父子状态路径。
+
 ## HFSM
 
 HFSM 在 StateGraph 基础上扩展：
@@ -81,12 +86,40 @@ Skill Flow 继承 FlowGraph：
 
 MissionGraph 运行时由 `MissionChainHandle` 和 `MissionChainManager` 管理：
 
-- `MissionNode` 创建任务原型。
+- `MissionGraph` 继承 `GraphAsset`，图类型为 `MissionGraph`。
+- `MissionNode` 创建 `MissionPrototype<object>`。
+- `ActionNode` 执行一组 `ActionBase`。
 - `ConnectionWithConditon` 控制 Sequence/Parallel 和条件。
 - `SubGraphNodeData` 用于任务链子图。
+- `MissionChainSaver` 保存 active mission、pending subgraph 和任务需求进度。
 - 启动前调用 `GraphAsset.Validate()`，验证失败拒绝启动。
 
-MissionGraph 也使用 `GraphBlackboardRuntime`，子图可以继承父图黑板。
+MissionGraph 也使用 `GraphBlackboardRuntime`，子图通过父 handle 的 blackboard fork 继承父图黑板。当前实现还没有接入 `IGraphRuntimeScope` 和 Runtime Debug，后续应把 `MissionChainHandle` 收敛成可观察、可测试、可保存恢复的 runtime。
+
+## Runtime Debug
+
+运行时调试是可选能力。接入方式：
+
+```csharp
+_debugHandle = GraphRuntimeDebugRegistry.Register(owner, runtime, graph, "Skill", CreateMetadata);
+```
+
+运行时在关键事件处调用：
+
+```csharp
+GraphRuntimeDebugRegistry.RecordEvent(runtime, "NodeEntered", node.GetDisplayName(), graph, node);
+GraphRuntimeDebugRegistry.CaptureContext(runtime, context, true);
+```
+
+如果 runtime 实现 `IGraphRuntimeScope`，调试面板会自动遍历子图 scope，并显示：
+
+- active node ids 或 current state path。
+- 当前图黑板和父/全局黑板快照。
+- `GraphExecutionContext.UserData` 摘要。
+- Timeline phase、clip、normalized time。
+- 最近事件。
+
+编辑器中打开图后启用 toolbar 的 `Runtime Debug`。若当前选中的场景节点匹配某个远端 runtime owner，面板会优先显示该 runtime；当前图与 runtime scope 匹配时会高亮 active node。
 
 ## Blackboard 作用域
 
@@ -98,4 +131,3 @@ MissionGraph 也使用 `GraphBlackboardRuntime`，子图可以继承父图黑板
 
 `Fork()` 会复制本地栈，适合隔离子运行时。  
 `ForkSharedLocals()` 会共享本地栈，适合 Composite State 这类父子状态协同场景。
-

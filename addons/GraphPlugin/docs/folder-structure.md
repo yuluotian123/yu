@@ -23,6 +23,7 @@ addons/GraphPlugin/
 runtime/
 ├── blackboard/
 ├── core/
+├── debug/
 ├── flow/
 └── state/
 ```
@@ -37,6 +38,7 @@ runtime/
 - `GraphTypeRegistry`：注册中心和类型解析。
 - `GraphValidation`：结构验证。
 - `GraphRuntimeIndex`：运行时查询索引。
+- `GraphRuntimeScope`：父子图运行时作用域协议和跨子图黑板写入。
 - `GraphJsonHelper`：多态 JSON 序列化。
 
 `runtime/blackboard/` 放黑板系统：
@@ -47,6 +49,14 @@ runtime/
 - Bool、Int、Float、String、Vector2、Color 等值类型。
 
 `runtime/flow/` 和 `runtime/state/` 只放图类型自己的节点和运行时语义。HFSM、Skill、Mission 这类业务图类型放在 `scripts/gamelogic/`，不要反向塞进插件 core。
+
+`runtime/debug/` 放运行时调试通道：
+
+- `GraphRuntimeDebugRegistry`：运行时注册、事件记录和上下文快照。
+- `GraphRuntimeDebugSnapshots`：编辑器可展示的快照 DTO。
+- `GraphRuntimeDebugSnapshotFactory`：从黑板、UserData、Timeline 和运行时状态创建快照。
+- `GraphRuntimeDebugSerialization`：Godot `Dictionary`/`Array` 传输格式。
+- `GraphRuntimeDebugBridge`：通过 `EngineDebugger` 向编辑器发送快照。
 
 ## Editor
 
@@ -77,11 +87,15 @@ editor/
 - `GraphSnapshotService`：快照、恢复、清空和批量追加节点/连线。
 - `GraphNodeSearchService`：节点搜索弹窗。
 - `GraphEditorShortcutService`：窗口快捷键。
+- `GraphRuntimeDebugEditorDebuggerPlugin`：接收游戏运行时发来的调试快照。
+- `GraphRuntimeDebugRemoteStore`：保存编辑器侧最近收到的远端运行时快照。
 
 `editor/panels/` 放可独立开关的 UI 面板：
 
 - `GraphBlackboardPanel`：本地/全局黑板编辑。
 - `GraphExplorerPanel`：节点树、验证结果和定位。
+- `GraphTimelinePanel`：编辑 `FlowTimelineNodeData` 的轨道、片段和事件。
+- `GraphRuntimeDebugPanel`：显示远端运行时快照，并高亮当前图里的 active node。
 
 `editor/controls/` 放可复用小控件：
 

@@ -49,6 +49,7 @@ public class StateGraphRuntime : IGraphRuntimeScope
     }
 
     public string CurrentStateName => CurrentState?.StateName ?? string.Empty;
+    public string CurrentStateId => CurrentState?.Id ?? string.Empty;
     public double CurrentStateTime { get; private set; }
     public bool IsRunning => CurrentState != null;
 
@@ -97,7 +98,9 @@ public class StateGraphRuntime : IGraphRuntimeScope
 
         CurrentState = initialState;
         CurrentStateTime = 0d;
+        GraphRuntimeDebugRegistry.RecordEvent(this, "Start", "state graph started", Graph, CurrentState as GraphNodeData);
         EnterCurrentState();
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         return true;
     }
 
@@ -119,6 +122,9 @@ public class StateGraphRuntime : IGraphRuntimeScope
             Blackboard.PopLocal();
             _localBlackboardPushed = false;
         }
+
+        GraphRuntimeDebugRegistry.RecordEvent(this, "Stop", "state graph stopped", Graph);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
     }
 
     public void Update(double delta)
@@ -234,6 +240,13 @@ public class StateGraphRuntime : IGraphRuntimeScope
         CurrentState = nextState;
         CurrentStateTime = 0d;
         StateChanged?.Invoke(this, previousState, CurrentState, transition);
+        GraphRuntimeDebugRegistry.RecordEvent(
+            this,
+            "StateChanged",
+            $"{previousState?.StateName ?? "<none>"} -> {CurrentState?.StateName ?? "<none>"}",
+            Graph,
+            CurrentState as GraphNodeData);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
         EnterCurrentState();
         return true;
     }
@@ -245,6 +258,8 @@ public class StateGraphRuntime : IGraphRuntimeScope
 
         CurrentState.OnEnter(this);
         StateEntered?.Invoke(this, CurrentState);
+        GraphRuntimeDebugRegistry.RecordEvent(this, "StateEntered", CurrentState.StateName, Graph, CurrentState as GraphNodeData);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
 
         if (CurrentState is CompositeStateNodeData compositeState)
             StartChildRuntime(compositeState);
@@ -262,8 +277,11 @@ public class StateGraphRuntime : IGraphRuntimeScope
             _childRuntime = null;
         }
 
+        IStateNodeData exitingState = CurrentState;
         CurrentState.OnExit(this);
-        StateExited?.Invoke(this, CurrentState);
+        StateExited?.Invoke(this, exitingState);
+        GraphRuntimeDebugRegistry.RecordEvent(this, "StateExited", exitingState.StateName, Graph, exitingState as GraphNodeData);
+        GraphRuntimeDebugRegistry.CaptureContext(this, Context, true);
     }
 
     private void StartChildRuntime(CompositeStateNodeData compositeState)

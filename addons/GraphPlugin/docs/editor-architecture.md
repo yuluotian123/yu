@@ -1,6 +1,6 @@
 # 编辑器架构
 
-V2 编辑器的目标是窗口薄、服务清楚、面板独立。`GraphCanvasEditorWindow` 不再保存黑板窗口、连接标签、子图栈等重状态。
+V2 编辑器的目标是窗口薄、服务清楚、面板独立。`GraphCanvasEditorWindow` 不再保存黑板窗口、连接标签、子图栈、Timeline 编辑状态和 Runtime Debug 快照等重状态。
 
 ## 窗口职责
 
@@ -33,6 +33,8 @@ V2 编辑器的目标是窗口薄、服务清楚、面板独立。`GraphCanvasEd
 | `GraphSnapshotService` | 序列化快照、清空图、恢复图、批量追加节点和连线。 |
 | `GraphNodeSearchService` | 创建节点搜索弹窗，处理分类、关键字和选择回调。 |
 | `GraphEditorShortcutService` | 处理保存、撤销、重做快捷键。 |
+| `GraphRuntimeDebugEditorDebuggerPlugin` | 接收 `EngineDebugger` 的 `graph_runtime_debug:snapshots` 消息。 |
+| `GraphRuntimeDebugRemoteStore` | 缓存编辑器侧最近收到的运行时快照，并按当前选中的场景节点筛选。 |
 
 服务不持有业务图语义，只处理编辑器工作流。
 
@@ -42,8 +44,20 @@ V2 编辑器的目标是窗口薄、服务清楚、面板独立。`GraphCanvasEd
 | --- | --- |
 | `GraphBlackboardPanel` | 编辑场景全局黑板和当前图本地黑板。 |
 | `GraphExplorerPanel` | 展示节点树、验证结果，并定位节点。 |
+| `GraphTimelinePanel` | 编辑 Flow Timeline 节点的轨道、片段、事件和 action。 |
+| `GraphRuntimeDebugPanel` | 展示远端运行时、当前图 scope、黑板、UserData、Timeline 和事件。 |
 
 面板可以打开为独立窗口，生命周期由主窗口管理。
+
+## Runtime Debug
+
+编辑器侧的 Runtime Debug 分三段：
+
+1. 游戏运行时通过 `GraphRuntimeDebugRegistry.Register()` 注册根 runtime，并在节点进入、退出、状态切换、Timeline 更新等时机记录事件或上下文。
+2. `GraphRuntimeDebugBridge` 把快照序列化后通过 Godot `EngineDebugger` 发送给编辑器。
+3. `GraphRuntimeDebugEditorDebuggerPlugin` 接收快照，`GraphRuntimeDebugPanel` 根据当前编辑器选中的场景节点和当前打开的图选择最佳 runtime，并高亮画布里的 active node。
+
+窗口只负责定时刷新面板和节点高亮；远端快照缓存、消息捕获、展示内容都在独立类中。
 
 ## Controls
 

@@ -7,7 +7,7 @@ GraphPlugin V2 采用“瘦 core + 明确 editor 服务 + 业务图类型自扩�
 - 核心简单：图数据就是 `GraphAsset` + `GraphDocument` + 节点 + 连线。
 - 边界清楚：运行时、编辑器、业务图类型各自负责自己的事。
 - 扩展稳定：新增图类型和节点不需要修改窗口。
-- 体验完整：分类搜索、黑板、子图、连接标签、验证、Explorer、复制粘贴都作为插件级能力存在。
+- 体验完整：分类搜索、黑板、子图、连接标签、验证、Explorer、Timeline、复制粘贴和 Runtime Debug 都作为插件级能力存在。
 - 不保留旧实现：旧 `GraphNodeFactory` 和旧三段 JSON 已删除。
 
 ## Core Layer
@@ -24,8 +24,11 @@ core 位于 `runtime/core/`，负责所有图类型共享的能力。
 | `GraphNodeDefinition` | 节点定义，保存分类、端口和实例创建函数。 |
 | `GraphValidationService` | 保存和运行前验证重复 id、悬空连接、端口越界、连接类型、端口上限、黑板 key。 |
 | `GraphRuntimeIndex` | 预构建节点表、入边、出边，避免运行时反复扫描。 |
+| `IGraphRuntimeScope` | 描述父子图运行时树，支撑跨子图黑板写入和调试遍历。 |
 
 core 不创建 Godot 编辑器窗口，不知道具体 Flow/State/HFSM/Mission 的执行语义。
+
+`runtime/debug/` 属于运行时支撑层，不依赖编辑器 API。它只知道如何从 runtime、`GraphExecutionContext`、黑板、UserData 和 Timeline 创建快照，再交给 Godot debugger 通道发送。
 
 ## Editor Layer
 
@@ -47,6 +50,8 @@ editor 位于 `editor/`，只在 `#if TOOLS` 下编译。
 - `GraphSubGraphNavigator`：进入/返回子图、面包屑、绑定或创建子图资源。
 - `GraphBlackboardPanel`：本地图黑板和场景全局黑板。
 - `GraphExplorerPanel`：节点树、验证结果和定位。
+- `GraphTimelinePanel`：Timeline 节点的编辑面板。
+- `GraphRuntimeDebugPanel`：远端运行时快照展示和 active node 高亮。
 - `GraphNodeViewBuilder`：节点数据到 Godot `GraphNode` 视图。
 
 ## Runtime Layer
@@ -58,7 +63,31 @@ runtime 只保留图类型自己的语义：
 - HFSM：在 StateGraph 语义上接入角色、组件、技能状态。
 - MissionGraph：Sequence、Parallel、SubGraph 和任务实例部署。
 
-这些运行时都共享 core 的 `GraphRuntimeIndex`、`GraphBlackboardRuntime` 和 `GraphValidationService`。
+这些运行时都共享 core 的 `GraphRuntimeIndex`、`GraphBlackboardRuntime` 和 `GraphValidationService`。FlowGraph 和 StateGraph 已实现 `IGraphRuntimeScope`，因此可以被统一黑板写入器和 Runtime Debug 遍历。MissionGraph 当前仍是业务层 handle/manager 模式，重构目标是补齐同一套运行时协议。
+
+## Runtime Debug Layer
+
+Runtime Debug 的数据流是：
+
+```text
+runtime event/context
+  -> GraphRuntimeDebugRegistry
+  -> GraphRuntimeDebugSnapshotFactory
+  -> GraphRuntimeDebugSerialization
+  -> GraphRuntimeDebugBridge / EngineDebugger
+  -> GraphRuntimeDebugEditorDebuggerPlugin
+  -> GraphRuntimeDebugRemoteStore
+  -> GraphRuntimeDebugPanel + canvas highlight
+```
+
+快照内容包括：
+
+- owner 节点、runtime 类型、runtime scope 和 metadata。
+- 当前图和所有子 scope 的运行状态。
+- Flow active node ids、State current state path/time。
+- `GraphExecutionContext` 中的黑板和 UserData 摘要。
+- 最近的 Flow Timeline 上下文。
+- 最近事件列表。
 
 ## Business Layer
 
@@ -80,4 +109,3 @@ runtime 只保留图类型自己的语义：
 - `GraphCommandService`：执行数据和视图修改。
 
 旧 `NodesJson`、`ConnectionsJson`、`BlackboardJson` 不再作为图资源运行数据源。图资源只读取和写入 `GraphJson`。
-

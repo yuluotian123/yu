@@ -46,6 +46,11 @@ public partial class GraphCanvasEditorWindow
     private void DoRemoveNode(StringName nodeId)
     {
         GraphCommandService.RemoveNode(_currentGraph, _graphEdit, nodeId);
+        if (_boundTimelineNodeId == nodeId.ToString())
+        {
+            _timelinePanel?.Clear();
+            _boundTimelineNodeId = string.Empty;
+        }
     }
 
     private void OnDeleteNodes(Godot.Collections.Array<StringName> nodes)

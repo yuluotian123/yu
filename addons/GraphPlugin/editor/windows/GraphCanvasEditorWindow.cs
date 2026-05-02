@@ -14,8 +14,11 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphSubGraphNavigator _subGraphNavigator;
     private GraphConnectionEditorService _connectionEditor;
     private GraphExplorerPanel _explorerPanel;
+    private GraphTimelinePanel _timelinePanel;
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
+    private VSplitContainer _workArea;
+    private string _boundTimelineNodeId = string.Empty;
 
     public EditorUndoRedoManager _undoRedo { get; set; }
 
@@ -32,6 +35,7 @@ public partial class GraphCanvasEditorWindow : Window
         OnSave();
         _blackboardPanel?.Close();
         _explorerPanel?.Close();
+        _timelinePanel?.Clear();
         Hide();
     }
 
@@ -87,13 +91,21 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void CreateGraphEdit()
     {
+        _workArea = new VSplitContainer
+        {
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+        };
+        _mainContainer.AddChild(_workArea);
+
         _graphEdit = new GraphEdit
         {
             SizeFlagsVertical = Control.SizeFlags.ExpandFill,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             RightDisconnects = true,
             ShowZoomLabel = true
         };
-        _mainContainer.AddChild(_graphEdit);
+        _workArea.AddChild(_graphEdit);
         _controller = new GraphEditorController(_graphEdit);
 
         _graphEdit.ConnectionRequest += OnConnectionRequest;
@@ -132,6 +144,11 @@ public partial class GraphCanvasEditorWindow : Window
             this,
             () => _currentGraph,
             () => _graphEdit);
+
+        _timelinePanel = new GraphTimelinePanel(
+            () => _currentGraph,
+            CreateEditorContext);
+        _workArea.AddChild(_timelinePanel.Root);
     }
 
     public void LoadGraph(GraphAsset graph)
@@ -141,6 +158,8 @@ public partial class GraphCanvasEditorWindow : Window
         AddCustomToolbarControls();
         _connectionEditor?.Reset();
         _explorerPanel?.RefreshIfOpen();
+        _timelinePanel?.Clear();
+        _boundTimelineNodeId = string.Empty;
 
         _controller.ClearGraphEdit();
         _controller.LoadGraph(
@@ -246,6 +265,7 @@ public partial class GraphCanvasEditorWindow : Window
             return;
 
         _connectionEditor?.UpdateConnectionLabels();
+        UpdateTimelinePanelSelection();
         if (Input.IsKeyPressed(Key.Delete) && _connectionEditor?.DeleteHoveredConnection() == true)
         {
             GetViewport().SetInputAsHandled();
@@ -262,6 +282,50 @@ public partial class GraphCanvasEditorWindow : Window
     {
         if (_connectionEditor?.HandleGraphEditInput(@event, Position) == true)
             GetViewport().SetInputAsHandled();
+    }
+
+    private void UpdateTimelinePanelSelection()
+    {
+        FlowTimelineNodeData selectedTimeline = GetSingleSelectedTimelineNode(out string selectedNodeId);
+        if (selectedTimeline == null)
+        {
+            if (!string.IsNullOrEmpty(_boundTimelineNodeId))
+            {
+                _timelinePanel?.Clear();
+                _boundTimelineNodeId = string.Empty;
+            }
+            return;
+        }
+
+        if (_boundTimelineNodeId == selectedNodeId)
+            return;
+
+        _boundTimelineNodeId = selectedNodeId;
+        _timelinePanel?.Bind(selectedTimeline);
+    }
+
+    private FlowTimelineNodeData GetSingleSelectedTimelineNode(out string selectedNodeId)
+    {
+        selectedNodeId = string.Empty;
+        GraphNode selectedGraphNode = null;
+        int selectedCount = 0;
+
+        foreach (Node child in _graphEdit.GetChildren())
+        {
+            if (child is not GraphNode graphNode || !graphNode.Selected)
+                continue;
+
+            selectedCount++;
+            selectedGraphNode = graphNode;
+            if (selectedCount > 1)
+                return null;
+        }
+
+        if (selectedGraphNode == null || _currentGraph == null)
+            return null;
+
+        selectedNodeId = selectedGraphNode.Name.ToString();
+        return _currentGraph.FindNodeById(selectedNodeId) as FlowTimelineNodeData;
     }
 }
 #endif

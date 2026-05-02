@@ -33,6 +33,8 @@ namespace GameLogic
                 }
 
                 runtime.Update(delta);
+                if (!runtime.IsRunning)
+                    _activeRuntimes.RemoveAt(i);
             }
         }
 

@@ -2,12 +2,21 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>
+/// 黑板中的一条键值数据。
+/// </summary>
 public sealed class GraphBlackboardEntry
 {
+    /// <summary>黑板键名。运行时按这个字符串读写值。</summary>
     public string Key { get; set; } = string.Empty;
+
+    /// <summary>给设计者看的说明文字，不参与运行时逻辑。</summary>
     public string Description { get; set; } = string.Empty;
+
+    /// <summary>可序列化的黑板值对象。</summary>
     public GraphBlackboardValue Value { get; set; } = new GraphStringBlackboardValue();
 
+    /// <summary>尝试把当前值转换为指定类型。</summary>
     public bool TryGetValue<T>(out T value)
     {
         if (Value != null)
@@ -17,6 +26,7 @@ public sealed class GraphBlackboardEntry
         return false;
     }
 
+    /// <summary>设置当前值；如果值类型不匹配，会替换为新的黑板值对象。</summary>
     public bool SetValue<T>(T value)
     {
         if (Value == null || !Value.SetValue(value))
@@ -25,19 +35,25 @@ public sealed class GraphBlackboardEntry
         return true;
     }
 
+    /// <summary>深拷贝条目，用于运行时本地黑板栈隔离。</summary>
     public GraphBlackboardEntry Clone()
     {
         return GraphJsonHelper.Deserialize<GraphBlackboardEntry>(GraphJsonHelper.Serialize(this));
     }
 }
 
+/// <summary>
+/// 根据普通 C# 值创建合适的黑板值对象。
+/// </summary>
 public static class GraphBlackboardValueFactory
 {
+    /// <summary>根据泛型值创建黑板值。</summary>
     public static GraphBlackboardValue CreateForValue<T>(T value)
     {
         return CreateForObject(value);
     }
 
+    /// <summary>根据运行时对象创建黑板值。</summary>
     public static GraphBlackboardValue CreateForObject(object value)
     {
         return value switch
@@ -55,8 +71,12 @@ public static class GraphBlackboardValueFactory
     }
 }
 
+/// <summary>
+/// 黑板条目结构验证工具。
+/// </summary>
 public static class GraphBlackboardValidator
 {
+    /// <summary>验证黑板 key 是否为空、重复，以及 value 是否存在。</summary>
     public static bool TryValidate(IList<GraphBlackboardEntry> entries, out string error)
     {
         if (entries == null)
@@ -71,25 +91,25 @@ public static class GraphBlackboardValidator
             GraphBlackboardEntry entry = entries[i];
             if (entry == null)
             {
-                error = $"Blackboard entry {i} is invalid.";
+                error = $"黑板条目第 {i} 项为空。";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(entry.Key))
             {
-                error = $"Blackboard entry {i} has an empty key.";
+                error = $"黑板条目第 {i} 项的 key 为空。";
                 return false;
             }
 
             if (!keys.Add(entry.Key))
             {
-                error = $"Blackboard key '{entry.Key}' is duplicated.";
+                error = $"黑板 key 重复：{entry.Key}。";
                 return false;
             }
 
             if (entry.Value == null)
             {
-                error = $"Blackboard key '{entry.Key}' has no value.";
+                error = $"黑板 key {entry.Key} 没有值对象。";
                 return false;
             }
         }
@@ -98,6 +118,7 @@ public static class GraphBlackboardValidator
         return true;
     }
 
+    /// <summary>按 key 查找黑板条目。</summary>
     public static GraphBlackboardEntry FindEntry(IList<GraphBlackboardEntry> entries, string key)
     {
         if (entries == null || string.IsNullOrWhiteSpace(key))
@@ -113,6 +134,7 @@ public static class GraphBlackboardValidator
         return null;
     }
 
+    /// <summary>深拷贝黑板条目列表。</summary>
     public static List<GraphBlackboardEntry> CloneEntries(IList<GraphBlackboardEntry> entries)
     {
         var results = new List<GraphBlackboardEntry>();

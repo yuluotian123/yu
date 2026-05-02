@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public class StateGraphRuntime
+public class StateGraphRuntime : IGraphRuntimeScope
 {
     private readonly HashSet<string> _triggers = new(StringComparer.Ordinal);
     private StateGraphRuntime _childRuntime;
@@ -36,6 +36,18 @@ public class StateGraphRuntime
     public GraphBlackboardRuntime Blackboard { get; }
     public IStateNodeData CurrentState { get; private set; }
     public StateGraphRuntime ChildRuntime => _childRuntime;
+    /// <summary>
+    /// 当前 StateGraph 正在运行的子图作用域。没有进入 Composite State 时为空集合。
+    /// </summary>
+    public IEnumerable<IGraphRuntimeScope> ChildScopes
+    {
+        get
+        {
+            if (_childRuntime != null)
+                yield return _childRuntime;
+        }
+    }
+
     public string CurrentStateName => CurrentState?.StateName ?? string.Empty;
     public double CurrentStateTime { get; private set; }
     public bool IsRunning => CurrentState != null;
@@ -63,6 +75,12 @@ public class StateGraphRuntime
     {
         if (Graph == null)
             return false;
+
+        if (!Graph.Validate(out GraphValidationResult validation))
+        {
+            GD.PushWarning($"[StateGraphRuntime] 图验证失败，无法启动：\n{validation.ToDisplayText()}");
+            return false;
+        }
 
         IStateNodeData initialState = Graph.GetInitialState(initialStateName);
         if (initialState == null)
@@ -197,7 +215,7 @@ public class StateGraphRuntime
 
     public bool SetValue<T>(string key, T value)
     {
-        return Blackboard.SetValue(key, value);
+        return GraphRuntimeBlackboardWriter.SetValueRecursive(this, key, value);
     }
 
     public bool SetGlobalValue<T>(string key, T value)

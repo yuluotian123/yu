@@ -16,8 +16,8 @@ public partial class FlowGraphAsset : GraphAsset
 
     public override List<string> GetAllowedNodeTypes()
     {
-        return GraphNodeFactory
-            .GetNodesForGraphType(GraphTypeName)
+        return GraphTypeRegistry
+            .GetNodeTypeNamesForGraphType(GraphTypeName)
             .ToList();
     }
 

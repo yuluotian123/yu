@@ -9,8 +9,9 @@ public partial class GraphPlugin : EditorPlugin
 
     public override void _EnterTree()
     {
-        GraphNodeFactory.AutoRegisterAll();
-        var nodeCount = GraphNodeFactory.GetAllRegisteredTypes().Count;
+        RegisterBuiltInGraphTypes();
+        GraphTypeRegistry.AutoRegisterAll();
+        var nodeCount = GraphTypeRegistry.GetAllRegisteredTypes().Count;
         GD.Print($"GraphCanvas: registered {nodeCount} node types");
 
         _editorWindow = new GraphCanvasEditorWindow();
@@ -42,6 +43,23 @@ public partial class GraphPlugin : EditorPlugin
             _editorWindow.LoadGraph(graph);
             _editorWindow.CallDeferred(Window.MethodName.PopupCentered, new Vector2I(1200, 800));
         }
+    }
+
+    private static void RegisterBuiltInGraphTypes()
+    {
+        GraphTypeRegistry.RegisterGraphType(new GraphTypeDefinition
+        {
+            GraphType = FlowGraphAsset.GraphTypeName,
+            DisplayName = "FlowGraph",
+            CreateConnection = () => new GraphConnection()
+        });
+
+        GraphTypeRegistry.RegisterGraphType(new GraphTypeDefinition
+        {
+            GraphType = StateGraphAsset.GraphTypeName,
+            DisplayName = "StateGraph",
+            CreateConnection = () => new StateTransitionConnection()
+        });
     }
 }
 #endif

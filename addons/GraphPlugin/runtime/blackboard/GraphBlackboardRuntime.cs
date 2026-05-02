@@ -106,10 +106,20 @@ public sealed class GraphBlackboardRuntime
         return TryGetValue(key, out T value) ? value : defaultValue;
     }
 
+    /// <summary>
+    /// 写入黑板值。当前作用域已经声明过该 key 时会优先更新声明者；否则写入当前图的本地黑板。
+    /// </summary>
+    /// <remarks>
+    /// 这个方法只处理单个 <see cref="GraphBlackboardRuntime"/> 内部的本地图、父图和全局黑板。
+    /// 如果需要跨运行时子图查找声明者，请使用 <see cref="GraphRuntimeBlackboardWriter.SetValueRecursive{T}(IGraphRuntimeScope, string, T)"/>。
+    /// </remarks>
     public bool SetValue<T>(string key, T value)
     {
         if (string.IsNullOrWhiteSpace(key))
             return false;
+
+        if (TrySetDeclaredValue(key, value))
+            return true;
 
         if (_localStack.Count > 0)
         {
@@ -127,6 +137,48 @@ public sealed class GraphBlackboardRuntime
         }
 
         GD.PushWarning($"[GraphBlackboardRuntime] Can not set '{key}' because there is no local graph blackboard or global GraphBlackboardNode.");
+        return false;
+    }
+
+    /// <summary>
+    /// 只更新已经声明过的 key，不创建新条目。
+    /// </summary>
+    /// <remarks>
+    /// 子图参数归属调整后，外部系统可以先尝试写入声明该 key 的作用域。
+    /// 这样 `IsOnFloor` 这类只在子图声明的参数不会被误创建到父图黑板里。
+    /// </remarks>
+    public bool TrySetDeclaredLocalValue<T>(string key, T value)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            return false;
+
+        for (int i = _localStack.Count - 1; i >= 0; i--)
+        {
+            BlackboardFrame frame = _localStack[i];
+            if (!frame.Map.TryGetValue(key, out GraphBlackboardEntry entry))
+                continue;
+
+            entry.SetValue(value);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TrySetDeclaredValue<T>(string key, T value)
+    {
+        if (TrySetDeclaredLocalValue(key, value))
+            return true;
+
+        if (string.IsNullOrWhiteSpace(key))
+            return false;
+
+        if (_globalMap.TryGetValue(key, out GraphBlackboardEntry globalEntry))
+        {
+            globalEntry.SetValue(value);
+            return true;
+        }
+
         return false;
     }
 

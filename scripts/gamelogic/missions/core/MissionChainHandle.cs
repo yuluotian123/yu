@@ -33,14 +33,20 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// 从 primeNode 开始执行节点遍历。
+        /// 从 PrimeNode 开始执行节点遍历。
         /// 必须在 handle 已注册到 MissionChainManager.handles 之后再调用，
         /// 以确保子图立即完成时回调能正确找到父图。
         /// </summary>
         public void Start()
         {
-            if (chain.primeNode != null)
-                ExecuteNode(chain.primeNode);
+            if (!chain.Validate(out GraphValidationResult validation))
+            {
+                Debugger.Warn($"[MissionChain] 图验证失败，无法启动：\n{validation.ToDisplayText()}");
+                return;
+            }
+
+            if (chain.PrimeNode != null)
+                ExecuteNode(chain.PrimeNode);
         }
         public void Load(IEnumerable<string> missionIds, IEnumerable<string> subGraphPaths)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public sealed class FlowGraphRuntime
+public sealed class FlowGraphRuntime : IGraphRuntimeScope
 {
     private readonly List<ActiveFlowNode> _activeNodes = new();
     private readonly Dictionary<string, object> _nodeData = new(StringComparer.Ordinal);
@@ -18,6 +18,14 @@ public sealed class FlowGraphRuntime
 
     public FlowGraphAsset Graph { get; }
     public GraphExecutionContext Context { get; }
+    /// <summary>
+    /// FlowGraph 当前没有内建子运行时，保留空集合以接入统一运行时作用域协议。
+    /// </summary>
+    public IEnumerable<IGraphRuntimeScope> ChildScopes
+    {
+        get { yield break; }
+    }
+
     public int MaxPropagationSteps { get; set; } = 256;
     public bool IsRunning { get; private set; }
     public bool IsCompleted => IsRunning && _activeNodes.Count == 0;
@@ -31,8 +39,14 @@ public sealed class FlowGraphRuntime
 
     public bool Start()
     {
-        if (Graph == null || Graph.primeNode == null)
+        if (Graph == null || Graph.PrimeNode == null)
             return false;
+
+        if (!Graph.Validate(out GraphValidationResult validation))
+        {
+            GD.PushWarning($"[FlowGraphRuntime] 图验证失败，无法启动：\n{validation.ToDisplayText()}");
+            return false;
+        }
 
         Stop();
         IsRunning = true;
@@ -45,7 +59,7 @@ public sealed class FlowGraphRuntime
         _returnLabels.Clear();
         _nodeData.Clear();
         _propagationSteps = 0;
-        PropagateToNode(Graph.primeNode);
+        PropagateToNode(Graph.PrimeNode);
         return true;
     }
 
@@ -108,6 +122,26 @@ public sealed class FlowGraphRuntime
     {
         if (!string.IsNullOrWhiteSpace(nodeId))
             _nodeData.Remove(nodeId);
+    }
+
+    public bool TryGetValue<T>(string key, out T value)
+    {
+        return Context.Blackboard.TryGetValue(key, out value);
+    }
+
+    public T GetValue<T>(string key, T defaultValue = default)
+    {
+        return Context.Blackboard.GetValue(key, defaultValue);
+    }
+
+    public bool SetValue<T>(string key, T value)
+    {
+        return GraphRuntimeBlackboardWriter.SetValueRecursive(this, key, value);
+    }
+
+    public bool SetGlobalValue<T>(string key, T value)
+    {
+        return Context.Blackboard.SetGlobalValue(key, value);
     }
 
     public void Update(double delta)

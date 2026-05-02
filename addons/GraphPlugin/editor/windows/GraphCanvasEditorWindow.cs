@@ -1,24 +1,19 @@
 #if TOOLS
 using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
 
 [Tool]
 public partial class GraphCanvasEditorWindow : Window
 {
     private GraphEdit _graphEdit;
     private GraphAsset _currentGraph;
+    private GraphEditorController _controller;
     private VBoxContainer _mainContainer;
-    private List<Dictionary> _clipboard = new();
-    private GraphConnection _selectedConnection = null;
-    private GraphConnection _hoveredConnection = null;
-    private System.Collections.Generic.Dictionary<string, Label> _connectionLabels = new();
-
-    /// <summary>
-    /// Navigation stack. Each item is the parent graph and the breadcrumb label.
-    /// The top item is the direct parent of the current graph.
-    /// </summary>
-    private Stack<(GraphAsset graph, string label)> _graphStack = new();
+    private readonly GraphClipboardService _clipboard = new();
+    private GraphBlackboardPanel _blackboardPanel;
+    private GraphSubGraphNavigator _subGraphNavigator;
+    private GraphConnectionEditorService _connectionEditor;
+    private GraphExplorerPanel _explorerPanel;
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
 
@@ -35,7 +30,8 @@ public partial class GraphCanvasEditorWindow : Window
     private void CloseGraphEditor()
     {
         OnSave();
-        CloseBlackboardWindow();
+        _blackboardPanel?.Close();
+        _explorerPanel?.Close();
         Hide();
     }
 
@@ -75,8 +71,12 @@ public partial class GraphCanvasEditorWindow : Window
         _toolbar.AddChild(arrangeBtn);
 
         var blackboardBtn = new Button { Text = "Blackboard" };
-        blackboardBtn.Pressed += OpenBlackboardWindow;
+        blackboardBtn.Pressed += () => _blackboardPanel?.Open();
         _toolbar.AddChild(blackboardBtn);
+
+        var explorerBtn = new Button { Text = "Explorer" };
+        explorerBtn.Pressed += () => _explorerPanel?.Open();
+        _toolbar.AddChild(explorerBtn);
 
         _toolbar.AddChild(new VSeparator());
         _toolbar.AddChild(new Label { Text = "Right-click to add nodes" });
@@ -94,6 +94,7 @@ public partial class GraphCanvasEditorWindow : Window
             ShowZoomLabel = true
         };
         _mainContainer.AddChild(_graphEdit);
+        _controller = new GraphEditorController(_graphEdit);
 
         _graphEdit.ConnectionRequest += OnConnectionRequest;
         _graphEdit.DisconnectionRequest += OnDisconnectionRequest;
@@ -102,34 +103,55 @@ public partial class GraphCanvasEditorWindow : Window
         _graphEdit.CopyNodesRequest += OnCopyNodes;
         _graphEdit.PasteNodesRequest += OnPasteNodes;
         _graphEdit.GuiInput += OnGraphEditInput;
+
+        CreateServices();
+    }
+
+    private void CreateServices()
+    {
+        _blackboardPanel = new GraphBlackboardPanel(
+            this,
+            () => _currentGraph,
+            CreateEditorContext);
+
+        _subGraphNavigator = new GraphSubGraphNavigator(
+            this,
+            _breadcrumbBar,
+            () => _currentGraph,
+            LoadGraph,
+            OnSave);
+
+        _connectionEditor = new GraphConnectionEditorService(
+            this,
+            _graphEdit,
+            () => _currentGraph,
+            CreateEditorContext,
+            DeleteConnectionWithUndo);
+
+        _explorerPanel = new GraphExplorerPanel(
+            this,
+            () => _currentGraph,
+            () => _graphEdit);
     }
 
     public void LoadGraph(GraphAsset graph)
     {
-        foreach (var label in _connectionLabels.Values)
-            label.QueueFree();
-        _connectionLabels.Clear();
-        _selectedConnection = null;
-        _hoveredConnection = null;
-
         _currentGraph = graph;
         Title = graph.GetEditorTitle();
         AddCustomToolbarControls();
+        _connectionEditor?.Reset();
+        _explorerPanel?.RefreshIfOpen();
 
-        foreach (var child in _graphEdit.GetChildren())
-        {
-            if (child is GraphNode or Label)
-            {
-                _graphEdit.RemoveChild(child);
-                child.QueueFree();
-            }
-        }
+        _controller.ClearGraphEdit();
+        _controller.LoadGraph(
+            graph,
+            CreateNodeFromData,
+            conn => CallDeferred(MethodName.DeferredConnectNode, conn.FromNode, conn.FromPort, conn.ToNode, conn.ToPort));
+    }
 
-        foreach (var nodeData in graph.Nodes)
-            CreateNodeFromData(nodeData);
-
-        foreach (var conn in graph.Connections)
-            CallDeferred(MethodName.DeferredConnectNode, conn.FromNode, conn.FromPort, conn.ToNode, conn.ToPort);
+    public void ResetNavigation()
+    {
+        _subGraphNavigator?.Reset();
     }
 
     private void DeferredConnectNode(string fromNode, int fromPort, string toNode, int toPort)
@@ -139,16 +161,11 @@ public partial class GraphCanvasEditorWindow : Window
 
     private GraphEditorContext CreateEditorContext()
     {
-        GraphAsset rootGraph = _currentGraph;
-        var parentGraphs = new List<GraphAsset>();
-        foreach (var item in _graphStack)
-        {
-            parentGraphs.Add(item.graph);
-            rootGraph = item.graph;
-        }
+        GraphAsset rootGraph = _subGraphNavigator?.GetRootGraph(_currentGraph) ?? _currentGraph;
+        List<GraphAsset> parentGraphs = _subGraphNavigator?.GetParentGraphs() ?? new List<GraphAsset>();
 
         GraphBlackboardNode globalBlackboard = null;
-        var blackboardNodes = FindBlackboardNodesInEditedScene();
+        var blackboardNodes = GraphBlackboardPanel.FindBlackboardNodesInEditedScene();
         if (blackboardNodes.Count > 0)
             globalBlackboard = blackboardNodes[0];
 
@@ -185,43 +202,13 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void OnSave()
     {
-        if (_currentGraph == null)
-            return;
-
-        if (!GraphBlackboardValidator.TryValidate(_currentGraph.BlackboardEntries, out string blackboardError))
-        {
-            var dialog = new AcceptDialog
-            {
-                Title = "Blackboard Error",
-                DialogText = blackboardError
-            };
-            AddChild(dialog);
-            dialog.PopupCentered();
-            return;
-        }
-
-        var nodeDict = new System.Collections.Generic.Dictionary<string, GraphNodeData>();
-        foreach (var nodeData in _currentGraph.Nodes)
-            nodeDict[nodeData.Id] = nodeData;
-
-        foreach (var child in _graphEdit.GetChildren())
-        {
-            if (child is GraphNode gn)
-            {
-                if (nodeDict.TryGetValue(gn.Name, out var nodeData))
-                    nodeData.Position = gn.PositionOffset;
-            }
-        }
-
-        _currentGraph.SaveToJson();
-        ResourceSaver.Save(_currentGraph, _currentGraph.ResourcePath);
-        GD.Print($"Graph saved: {_currentGraph.ResourcePath}");
+        GraphSaveService.Save(this, _currentGraph, _graphEdit);
     }
 
     private void OnClear()
     {
-        var snapshotNodesJson = GraphJsonHelper.SerializeList(_currentGraph.Nodes);
-        var snapshotConnsJson = GraphJsonHelper.SerializeList(_currentGraph.Connections);
+        string snapshotNodesJson = GraphSnapshotService.CaptureNodes(_currentGraph);
+        string snapshotConnsJson = GraphSnapshotService.CaptureConnections(_currentGraph);
 
         if (_undoRedo != null)
         {
@@ -238,30 +225,19 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void DoClear()
     {
-        _currentGraph.Nodes.Clear();
-        _currentGraph.Connections.Clear();
-        foreach (var child in _graphEdit.GetChildren())
-        {
-            if (child is GraphNode gn)
-                gn.QueueFree();
-        }
+        GraphSnapshotService.Clear(_currentGraph, _controller, _connectionEditor);
     }
 
     private void DoRestoreSnapshot(string nodesJson, string connectionsJson)
     {
-        DoClear();
-        var nodes = GraphJsonHelper.DeserializeList<GraphNodeData>(nodesJson);
-        var connections = GraphJsonHelper.DeserializeList<GraphConnection>(connectionsJson);
-        foreach (var data in nodes)
-        {
-            _currentGraph.Nodes.Add(data);
-            CreateNodeFromData(data);
-        }
-        foreach (var conn in connections)
-        {
-            _currentGraph.Connections.Add(conn);
-            _graphEdit.ConnectNode(conn.FromNode, conn.FromPort, conn.ToNode, conn.ToPort);
-        }
+        GraphSnapshotService.Restore(
+            _currentGraph,
+            _graphEdit,
+            _controller,
+            _connectionEditor,
+            CreateNodeFromData,
+            nodesJson,
+            connectionsJson);
     }
 
     public override void _Process(double delta)
@@ -269,54 +245,23 @@ public partial class GraphCanvasEditorWindow : Window
         if (!Visible || _currentGraph == null)
             return;
 
-        UpdateConnectionLabels();
-        if (Input.IsKeyPressed(Key.Delete) && _hoveredConnection != null)
+        _connectionEditor?.UpdateConnectionLabels();
+        if (Input.IsKeyPressed(Key.Delete) && _connectionEditor?.DeleteHoveredConnection() == true)
         {
-            DeleteHoveredConnection();
             GetViewport().SetInputAsHandled();
         }
     }
 
     public override void _Input(InputEvent @event)
     {
-        if (@event is InputEventKey key && key.Pressed)
-        {
-            if (key.Keycode == Key.S && key.CtrlPressed)
-            {
-                OnSave();
-                GetViewport().SetInputAsHandled();
-            }
-            else if (key.Keycode == Key.Z && key.CtrlPressed && !key.ShiftPressed)
-            {
-                _undoRedo?.GetHistoryUndoRedo((int)EditorUndoRedoManager.SpecialHistory.GlobalHistory).Undo();
-                GetViewport().SetInputAsHandled();
-            }
-            else if ((key.Keycode == Key.Z && key.CtrlPressed && key.ShiftPressed) ||
-                     (key.Keycode == Key.Y && key.CtrlPressed))
-            {
-                _undoRedo?.GetHistoryUndoRedo((int)EditorUndoRedoManager.SpecialHistory.GlobalHistory).Redo();
-                GetViewport().SetInputAsHandled();
-            }
-        }
+        if (GraphEditorShortcutService.Handle(@event, _undoRedo, OnSave))
+            GetViewport().SetInputAsHandled();
     }
 
     private void OnGraphEditInput(InputEvent @event)
     {
-        if (@event is InputEventMouseButton mb && mb.Pressed)
-        {
-            var conn = FindConnectionAtPosition(mb.Position);
-            if (conn != null && mb.ButtonIndex == MouseButton.Right)
-            {
-                _selectedConnection = conn;
-                var menuPos = Position + _graphEdit.Position + mb.Position;
-                ShowConnectionMenu(menuPos);
-                GetViewport().SetInputAsHandled();
-            }
-        }
-        else if (@event is InputEventMouseMotion mm)
-        {
-            _hoveredConnection = FindConnectionAtPosition(mm.Position);
-        }
+        if (_connectionEditor?.HandleGraphEditInput(@event, Position) == true)
+            GetViewport().SetInputAsHandled();
     }
 }
 #endif

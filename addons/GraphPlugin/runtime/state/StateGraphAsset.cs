@@ -18,11 +18,11 @@ public partial class StateGraphAsset : GraphAsset
 
     public override List<string> GetAllowedNodeTypes()
     {
-        return GraphNodeFactory
-            .GetNodesForGraphType(GraphType)
+        return GraphTypeRegistry
+            .GetNodeTypeNamesForGraphType(GraphType)
             .Where(nodeType =>
             {
-                GraphNodeData node = GraphNodeFactory.CreateNodeData(nodeType);
+                GraphNodeData node = GraphTypeRegistry.CreateNodeData(nodeType);
                 return IsAllowedStateGraphNode(node);
             })
             .ToList();
@@ -36,9 +36,9 @@ public partial class StateGraphAsset : GraphAsset
         return node is IStateNodeData || node is IStatePseudoNodeData;
     }
 
-    public IEnumerable<IStateNodeData> StateNodes => Nodes.OfType<IStateNodeData>();
-    public IEnumerable<IStatePseudoNodeData> PseudoNodes => Nodes.OfType<IStatePseudoNodeData>();
-    public IEnumerable<AnyStateNodeData> AnyStateNodes => Nodes.OfType<AnyStateNodeData>();
+    public IEnumerable<IStateNodeData> StateNodes => GetRuntimeIndex().GetNodes<IStateNodeData>();
+    public IEnumerable<IStatePseudoNodeData> PseudoNodes => GetRuntimeIndex().GetNodes<IStatePseudoNodeData>();
+    public IEnumerable<AnyStateNodeData> AnyStateNodes => GetRuntimeIndex().GetNodes<AnyStateNodeData>();
 
     public IStateNodeData FindStateById(string stateId)
     {

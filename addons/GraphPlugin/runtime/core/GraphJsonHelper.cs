@@ -6,55 +6,69 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 /// <summary>
-/// GraphPlugin JSON 序列化辅助类。
-/// 支持多态：序列化时写入 "$type" 字段（类名），反序列化时据此还原具体子类实例。
+/// GraphPlugin 的轻量 JSON 序列化工具。
 /// </summary>
+/// <remarks>
+/// <para>
+/// Godot Resource 对纯 C# 多态对象支持有限，因此 GraphPlugin 在每个对象上写入
+/// <c>$type</c> 字段保存真实类型。反序列化时会先通过 <see cref="GraphTypeRegistry"/>
+/// 解析已注册类型，再回退到 AppDomain 反射查找。
+/// </para>
+/// <para>
+/// 该工具只覆盖图数据需要的常见类型：基础类型、枚举、Vector2、Color、List 和普通对象。
+/// 复杂结构应拆成显式类，避免使用 Dictionary 这类当前未支持的容器。
+/// </para>
+/// </remarks>
 public static class GraphJsonHelper
 {
-    private static readonly JsonSerializerOptions _opts = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = false,
-        IncludeFields = false,
+        IncludeFields = false
     };
 
-    // ── 序列化 ────────────────────────────────────────────────────────────────
+    private static readonly Dictionary<string, Type> TypeCache = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// 将对象序列化为 JSON 字符串，自动写入 "$type" 字段（具体类名）。
+    /// 序列化一个对象，并写入多态类型信息。
     /// </summary>
     public static string Serialize(object obj)
     {
-        if (obj == null) return "null";
+        if (obj == null)
+            return "null";
 
-        var node = ObjectToJsonNode(obj);
-        return node.ToJsonString(_opts);
+        return ObjectToJsonNode(obj).ToJsonString(Options);
     }
 
     /// <summary>
-    /// 将列表序列化为 JSON 字符串，每个元素都写入 "$type"。
+    /// 序列化列表。列表内每个对象都会保留自己的 <c>$type</c>。
     /// </summary>
     public static string SerializeList<T>(IList<T> list)
     {
         var array = new JsonArray();
-        foreach (var item in list)
-            array.Add(item == null ? null : ObjectToJsonNode(item));
-        return array.ToJsonString(_opts);
+        if (list != null)
+        {
+            foreach (T item in list)
+                array.Add(item == null ? null : ValueToJsonNode(item));
+        }
+
+        return array.ToJsonString(Options);
     }
 
-    // ── 反序列化 ──────────────────────────────────────────────────────────────
-
     /// <summary>
-    /// 从 JSON 字符串还原对象（根据 "$type" 创建具体子类实例）。
+    /// 反序列化一个对象。
     /// </summary>
     public static T Deserialize<T>(string json) where T : class
     {
-        if (string.IsNullOrWhiteSpace(json) || json == "null") return null;
-        var node = JsonNode.Parse(json);
-        return (T)JsonNodeToObject(node, typeof(T));
+        if (string.IsNullOrWhiteSpace(json) || json == "null")
+            return null;
+
+        JsonNode node = JsonNode.Parse(json);
+        return JsonNodeToObject(node, typeof(T)) as T;
     }
 
     /// <summary>
-    /// 从 JSON 字符串还原列表（每个元素根据 "$type" 还原为具体子类）。
+    /// 反序列化对象列表。
     /// </summary>
     public static List<T> DeserializeList<T>(string json) where T : class
     {
@@ -62,255 +76,286 @@ public static class GraphJsonHelper
         if (string.IsNullOrWhiteSpace(json) || json == "null" || json == "[]")
             return result;
 
-        var array = JsonNode.Parse(json)?.AsArray();
-        if (array == null) return result;
+        if (JsonNode.Parse(json) is not JsonArray array)
+            return result;
 
-        foreach (var node in array)
+        foreach (JsonNode node in array)
         {
-            if (node == null) continue;
-            var obj = JsonNodeToObject(node, typeof(T));
-            if (obj is T typed)
+            if (node == null)
+                continue;
+
+            if (JsonNodeToObject(node, typeof(T)) is T typed)
                 result.Add(typed);
         }
+
         return result;
     }
 
-    // ── 内部实现 ──────────────────────────────────────────────────────────────
-
     private static JsonNode ObjectToJsonNode(object obj)
     {
-        var type = obj.GetType();
-        var jObj = new JsonObject();
-
-        // 写入具体类型名
-        jObj["$type"] = JsonValue.Create(type.Name);
+        Type type = obj.GetType();
+        var jsonObject = new JsonObject
+        {
+            ["$type"] = JsonValue.Create(type.Name)
+        };
 
         const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        // 处理属性
-        foreach (var prop in type.GetProperties(flags))
+        foreach (PropertyInfo property in type.GetProperties(flags))
         {
-            if (prop.GetIndexParameters().Length > 0) continue;
-            if (prop.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
+            if (property.GetIndexParameters().Length > 0)
+                continue;
 
-            var include = prop.GetCustomAttribute<JsonIncludeAttribute>();
-            bool shouldSerialize = include != null || (prop.GetMethod?.IsPublic == true && prop.CanRead);
-            
-            if (shouldSerialize && prop.CanRead)
-            {
-                var value = prop.GetValue(obj);
-                jObj[prop.Name] = ValueToJsonNode(value);
-            }
+            if (property.GetCustomAttribute<JsonIgnoreAttribute>() != null)
+                continue;
+
+            bool include = property.GetCustomAttribute<JsonIncludeAttribute>() != null ||
+                           property.GetMethod?.IsPublic == true;
+            if (!include || !property.CanRead)
+                continue;
+
+            jsonObject[property.Name] = ValueToJsonNode(property.GetValue(obj));
         }
 
-        // 处理字段
-        foreach (var field in type.GetFields(flags))
+        foreach (FieldInfo field in type.GetFields(flags))
         {
-            if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
-            if (field.GetCustomAttribute<JsonIncludeAttribute>() != null)
-            {
-                var value = field.GetValue(obj);
-                jObj[field.Name] = ValueToJsonNode(value);
-            }
+            if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null)
+                continue;
+
+            if (field.GetCustomAttribute<JsonIncludeAttribute>() == null)
+                continue;
+
+            jsonObject[field.Name] = ValueToJsonNode(field.GetValue(obj));
         }
 
-        return jObj;
+        return jsonObject;
     }
 
     private static JsonNode ValueToJsonNode(object value)
     {
-        if (value == null) return null;
+        if (value == null)
+            return null;
 
-        var type = value.GetType();
+        Type type = value.GetType();
+        if (type == typeof(bool))
+            return JsonValue.Create((bool)value);
+        if (type == typeof(int))
+            return JsonValue.Create((int)value);
+        if (type == typeof(float))
+            return JsonValue.Create((float)value);
+        if (type == typeof(double))
+            return JsonValue.Create((double)value);
+        if (type == typeof(string))
+            return JsonValue.Create((string)value);
+        if (type.IsEnum)
+            return JsonValue.Create(value.ToString());
 
-        // 基本类型
-        if (type == typeof(bool))   return JsonValue.Create((bool)value);
-        if (type == typeof(int))    return JsonValue.Create((int)value);
-        if (type == typeof(float))  return JsonValue.Create((float)value);
-        if (type == typeof(double)) return JsonValue.Create((double)value);
-        if (type == typeof(string)) return JsonValue.Create((string)value);
-        if (type.IsEnum)            return JsonValue.Create(value.ToString());
-
-        // Godot.Vector2
         if (type == typeof(Godot.Vector2))
         {
-            var v = (Godot.Vector2)value;
-            return new JsonObject { ["x"] = v.X, ["y"] = v.Y };
+            var vector = (Godot.Vector2)value;
+            return new JsonObject { ["x"] = vector.X, ["y"] = vector.Y };
         }
 
-        // Godot.Color
         if (type == typeof(Godot.Color))
         {
-            var c = (Godot.Color)value;
-            return new JsonObject { ["r"] = c.R, ["g"] = c.G, ["b"] = c.B, ["a"] = c.A };
+            var color = (Godot.Color)value;
+            return new JsonObject
+            {
+                ["r"] = color.R,
+                ["g"] = color.G,
+                ["b"] = color.B,
+                ["a"] = color.A
+            };
         }
 
-        // 列表 / 数组
         if (value is System.Collections.IList list)
         {
-            var arr = new JsonArray();
-            foreach (var item in list)
-                arr.Add(item == null ? null : ValueToJsonNode(item));
-            return arr;
+            var array = new JsonArray();
+            foreach (object item in list)
+                array.Add(item == null ? null : ValueToJsonNode(item));
+            return array;
         }
 
-        // 嵌套对象（递归，带 $type）
         return ObjectToJsonNode(value);
     }
 
     private static object JsonNodeToObject(JsonNode node, Type targetType)
     {
-        if (node == null) return null;
+        if (node == null)
+            return null;
 
-        // 如果是 JsonObject，尝试根据 "$type" 确定具体类型
-        if (node is JsonObject jObj)
+        if (node is JsonValue value)
+            return ConvertJsonValue(value, targetType);
+
+        if (node is not JsonObject jsonObject)
+            return null;
+
+        Type concreteType = ResolveConcreteType(jsonObject, targetType);
+        if (concreteType == null || concreteType.IsAbstract || concreteType.IsInterface)
+            return null;
+
+        object instance = Activator.CreateInstance(concreteType);
+        const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+        foreach (PropertyInfo property in concreteType.GetProperties(flags))
         {
-            Type concreteType = targetType;
-
-            if (jObj.TryGetPropertyValue("$type", out var typeNode))
+            if (property.GetIndexParameters().Length > 0 ||
+                property.GetCustomAttribute<JsonIgnoreAttribute>() != null ||
+                !property.CanWrite)
             {
-                var typeName = typeNode?.GetValue<string>();
-                if (!string.IsNullOrEmpty(typeName))
-                {
-                    var found = FindType(typeName);
-                    if (found != null) concreteType = found;
-                }
+                continue;
             }
 
-            // 不能实例化抽象/接口类型
-            if (concreteType.IsAbstract || concreteType.IsInterface)
-                return null;
+            bool include = property.GetCustomAttribute<JsonIncludeAttribute>() != null ||
+                           property.GetMethod?.IsPublic == true;
+            if (!include)
+                continue;
 
-            var instance = Activator.CreateInstance(concreteType);
+            if (!jsonObject.TryGetPropertyValue(property.Name, out JsonNode propertyNode))
+                continue;
 
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-            // 处理属性
-            foreach (var prop in concreteType.GetProperties(flags))
-            {
-                if (prop.GetIndexParameters().Length > 0) continue;
-                if (prop.Name == "$type") continue;
-                if (prop.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
-
-                var include = prop.GetCustomAttribute<JsonIncludeAttribute>();
-                bool shouldDeserialize = include != null || (prop.GetMethod?.IsPublic == true && prop.CanWrite);
-
-                if (shouldDeserialize && prop.CanWrite && jObj.TryGetPropertyValue(prop.Name, out var propNode))
-                {
-                    var converted = JsonNodeToValue(propNode, prop.PropertyType);
-                    if (converted != null)
-                        prop.SetValue(instance, converted);
-                }
-            }
-
-            // 处理字段
-            foreach (var field in concreteType.GetFields(flags))
-            {
-                if (field.Name == "$type") continue;
-                if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
-
-                if (field.GetCustomAttribute<JsonIncludeAttribute>() != null && jObj.TryGetPropertyValue(field.Name, out var fieldNode))
-                {
-                    var converted = JsonNodeToValue(fieldNode, field.FieldType);
-                    if (converted != null)
-                        field.SetValue(instance, converted);
-                }
-            }
-
-            return instance;
+            object converted = JsonNodeToValue(propertyNode, property.PropertyType);
+            if (converted != null || !property.PropertyType.IsValueType)
+                property.SetValue(instance, converted);
         }
 
-        // 基本值节点
-        if (node is JsonValue jVal)
-            return ConvertJsonValue(jVal, targetType);
+        foreach (FieldInfo field in concreteType.GetFields(flags))
+        {
+            if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null ||
+                field.GetCustomAttribute<JsonIncludeAttribute>() == null)
+            {
+                continue;
+            }
 
-        return null;
+            if (!jsonObject.TryGetPropertyValue(field.Name, out JsonNode fieldNode))
+                continue;
+
+            object converted = JsonNodeToValue(fieldNode, field.FieldType);
+            if (converted != null || !field.FieldType.IsValueType)
+                field.SetValue(instance, converted);
+        }
+
+        return instance;
     }
 
     private static object JsonNodeToValue(JsonNode node, Type targetType)
     {
-        if (node == null) return null;
+        if (node == null)
+            return null;
 
-        if (targetType == typeof(bool))   return node.GetValue<bool>();
-        if (targetType == typeof(int))    return node.GetValue<int>();
-        if (targetType == typeof(float))  return (float)node.GetValue<double>();
-        if (targetType == typeof(double)) return node.GetValue<double>();
-        if (targetType == typeof(string)) return node.GetValue<string>();
+        if (targetType == typeof(bool))
+            return node.GetValue<bool>();
+        if (targetType == typeof(int))
+            return node.GetValue<int>();
+        if (targetType == typeof(float))
+            return (float)node.GetValue<double>();
+        if (targetType == typeof(double))
+            return node.GetValue<double>();
+        if (targetType == typeof(string))
+            return node.GetValue<string>();
 
         if (targetType.IsEnum)
+            return Enum.Parse(targetType, node.GetValue<string>());
+
+        if (targetType == typeof(Godot.Vector2) && node is JsonObject vector)
         {
-            var s = node.GetValue<string>();
-            return Enum.Parse(targetType, s);
+            return new Godot.Vector2(
+                (float)vector["x"].GetValue<double>(),
+                (float)vector["y"].GetValue<double>());
         }
 
-        if (targetType == typeof(Godot.Vector2) && node is JsonObject v2)
-            return new Godot.Vector2((float)v2["x"].GetValue<double>(), (float)v2["y"].GetValue<double>());
-
-        if (targetType == typeof(Godot.Color) && node is JsonObject col)
+        if (targetType == typeof(Godot.Color) && node is JsonObject color)
+        {
             return new Godot.Color(
-                (float)col["r"].GetValue<double>(),
-                (float)col["g"].GetValue<double>(),
-                (float)col["b"].GetValue<double>(),
-                (float)col["a"].GetValue<double>());
+                (float)color["r"].GetValue<double>(),
+                (float)color["g"].GetValue<double>(),
+                (float)color["b"].GetValue<double>(),
+                (float)color["a"].GetValue<double>());
+        }
 
-        // 泛型列表 List<T>
         if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
         {
-            var elemType = targetType.GetGenericArguments()[0];
-            var listInstance = (System.Collections.IList)Activator.CreateInstance(targetType);
-            if (node is JsonArray arr)
+            Type elementType = targetType.GetGenericArguments()[0];
+            var list = (System.Collections.IList)Activator.CreateInstance(targetType);
+            if (node is JsonArray array)
             {
-                foreach (var item in arr)
-                    listInstance.Add(JsonNodeToObject(item, elemType));
+                foreach (JsonNode item in array)
+                    list.Add(JsonNodeToValue(item, elementType));
             }
-            return listInstance;
+
+            return list;
         }
 
-        // 嵌套对象
         if (node is JsonObject)
             return JsonNodeToObject(node, targetType);
 
+        if (node is JsonValue jsonValue)
+            return ConvertJsonValue(jsonValue, targetType);
+
         return null;
     }
 
-    private static object ConvertJsonValue(JsonValue jVal, Type targetType)
+    private static object ConvertJsonValue(JsonValue value, Type targetType)
     {
         try
         {
-            if (targetType == typeof(bool))   return jVal.GetValue<bool>();
-            if (targetType == typeof(int))    return jVal.GetValue<int>();
-            if (targetType == typeof(float))  return (float)jVal.GetValue<double>();
-            if (targetType == typeof(double)) return jVal.GetValue<double>();
-            if (targetType == typeof(string)) return jVal.GetValue<string>();
-            if (targetType.IsEnum)            return Enum.Parse(targetType, jVal.GetValue<string>());
+            if (targetType == typeof(bool))
+                return value.GetValue<bool>();
+            if (targetType == typeof(int))
+                return value.GetValue<int>();
+            if (targetType == typeof(float))
+                return (float)value.GetValue<double>();
+            if (targetType == typeof(double))
+                return value.GetValue<double>();
+            if (targetType == typeof(string))
+                return value.GetValue<string>();
+            if (targetType.IsEnum)
+                return Enum.Parse(targetType, value.GetValue<string>());
         }
-        catch { }
+        catch
+        {
+        }
+
         return null;
     }
 
-    // ── 类型查找缓存 ──────────────────────────────────────────────────────────
+    private static Type ResolveConcreteType(JsonObject jsonObject, Type targetType)
+    {
+        if (!jsonObject.TryGetPropertyValue("$type", out JsonNode typeNode))
+            return targetType;
 
-    private static readonly Dictionary<string, Type> _typeCache = new();
+        string typeName = typeNode?.GetValue<string>();
+        if (string.IsNullOrWhiteSpace(typeName))
+            return targetType;
+
+        Type found = FindType(typeName);
+        return found ?? targetType;
+    }
 
     private static Type FindType(string typeName)
     {
-        if (_typeCache.TryGetValue(typeName, out var cached))
+        if (GraphTypeRegistry.TryResolveType(typeName, out Type registeredType))
+            return registeredType;
+
+        if (TypeCache.TryGetValue(typeName, out Type cached))
             return cached;
 
-        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             try
             {
-                foreach (var type in assembly.GetTypes())
+                foreach (Type type in assembly.GetTypes())
                 {
-                    if (type.Name == typeName)
-                    {
-                        _typeCache[typeName] = type;
-                        return type;
-                    }
+                    if (type.Name != typeName && type.FullName != typeName)
+                        continue;
+
+                    TypeCache[typeName] = type;
+                    return type;
                 }
             }
-            catch (ReflectionTypeLoadException) { }
+            catch (ReflectionTypeLoadException)
+            {
+            }
         }
 
         return null;

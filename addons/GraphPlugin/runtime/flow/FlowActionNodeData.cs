@@ -28,16 +28,53 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
 
     public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context) { }
 
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(160f, 0f) };
+        root.AddChild(new Label
+        {
+            Text = GetActionSummary(),
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
+        root.AddChild(new Label { Text = "Actions" });
+
+        var listControl = CreateActionList(context);
+        root.AddChild(listControl.Build());
+        return root;
+    }
+
     public override void CreateUI(GraphEditorContext context)
     {
-        var listControl = new ReorderableListControl<GraphActionBase>(
+        context.GraphNode.AddChild(CreateActionList(context).Build());
+    }
+
+    private ReorderableListControl<GraphActionBase> CreateActionList(GraphEditorContext context)
+    {
+        return new ReorderableListControl<GraphActionBase>(
             items: Actions,
             buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.Description,
             availableTypes: SubTypeCache.GetSubTypes<GraphActionBase>(),
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
+    }
 
-        context.GraphNode.AddChild(listControl.Build());
+    private string GetActionSummary()
+    {
+        if (Actions == null || Actions.Count == 0)
+            return "No actions";
+
+        string first = Actions[0]?.Description;
+        if (string.IsNullOrWhiteSpace(first))
+            first = Actions[0]?.GetType().Name ?? "Action";
+
+        return Actions.Count == 1 ? first : $"{first} +{Actions.Count - 1}";
     }
 }

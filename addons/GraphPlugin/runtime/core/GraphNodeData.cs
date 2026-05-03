@@ -128,6 +128,64 @@ public class GraphNodeData
         return definition;
     }
 
+    /// <summary>Builds the compact content shown inside the canvas node.</summary>
+    public virtual void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer
+        {
+            CustomMinimumSize = new Vector2(150f, 0f)
+        };
+
+        var typeLabel = new Label
+        {
+            Text = NodeType,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            ClipText = true
+        };
+        typeLabel.AddThemeColorOverride("font_color", new Color(0.72f, 0.72f, 0.72f));
+        root.AddChild(typeLabel);
+
+        context.GraphNode.AddChild(root);
+    }
+
+    /// <summary>Builds the detailed inspector UI shown outside the canvas node.</summary>
+    public virtual Control CreateInspectorUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer();
+        root.AddThemeConstantOverride("separation", 6);
+
+        root.AddChild(new Label
+        {
+            Text = GetDisplayName(),
+            AutowrapMode = TextServer.AutowrapMode.WordSmart
+        });
+
+        root.AddChild(new HSeparator());
+        root.AddChild(CreateInspectorInfoRow("Type", NodeType));
+        root.AddChild(CreateInspectorInfoRow("Id", Id));
+        return root;
+    }
+
+    protected static Control CreateInspectorInfoRow(string label, string value)
+    {
+        var row = new HBoxContainer();
+        row.AddChild(new Label
+        {
+            Text = label,
+            CustomMinimumSize = new Vector2(78f, 0f),
+            VerticalAlignment = VerticalAlignment.Center
+        });
+
+        var valueLabel = new Label
+        {
+            Text = value ?? string.Empty,
+            AutowrapMode = TextServer.AutowrapMode.WordSmart,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        };
+        row.AddChild(valueLabel);
+        return row;
+    }
+
     /// <summary>创建节点内部编辑 UI。</summary>
     public virtual void CreateUI(GraphEditorContext context)
     {

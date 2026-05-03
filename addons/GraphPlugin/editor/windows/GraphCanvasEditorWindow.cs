@@ -15,8 +15,10 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphConnectionEditorService _connectionEditor;
     private GraphExplorerPanel _explorerPanel;
     private GraphTimelinePanel _timelinePanel;
+    private GraphSelectionInspectorPanel _selectionInspector;
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
+    private HSplitContainer _contentSplit;
     private VSplitContainer _workArea;
     private string _boundTimelineNodeId = string.Empty;
     private bool _initialized;
@@ -70,8 +72,10 @@ public partial class GraphCanvasEditorWindow : Window
         _connectionEditor = null;
         _explorerPanel = null;
         _timelinePanel = null;
+        _selectionInspector = null;
         _breadcrumbBar = null;
         _toolbar = null;
+        _contentSplit = null;
         _workArea = null;
         _boundTimelineNodeId = string.Empty;
         _initialized = false;
@@ -138,12 +142,19 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void CreateGraphEdit()
     {
+        _contentSplit = new HSplitContainer
+        {
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+        };
+        _mainContainer.AddChild(_contentSplit);
+
         _workArea = new VSplitContainer
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsVertical = Control.SizeFlags.ExpandFill
         };
-        _mainContainer.AddChild(_workArea);
+        _contentSplit.AddChild(_workArea);
 
         _graphEdit = new GraphEdit
         {
@@ -162,6 +173,8 @@ public partial class GraphCanvasEditorWindow : Window
         _graphEdit.CopyNodesRequest += OnCopyNodes;
         _graphEdit.PasteNodesRequest += OnPasteNodes;
         _graphEdit.GuiInput += OnGraphEditInput;
+        _graphEdit.NodeSelected += OnNodeSelected;
+        _graphEdit.NodeDeselected += OnNodeDeselected;
 
         CreateServices();
     }
@@ -185,7 +198,8 @@ public partial class GraphCanvasEditorWindow : Window
             _graphEdit,
             () => _currentGraph,
             CreateEditorContext,
-            DeleteConnectionWithUndo);
+            DeleteConnectionWithUndo,
+            connection => _selectionInspector?.ShowConnection(connection));
 
         _explorerPanel = new GraphExplorerPanel(
             this,
@@ -196,6 +210,12 @@ public partial class GraphCanvasEditorWindow : Window
             () => _currentGraph,
             CreateEditorContext);
         _workArea.AddChild(_timelinePanel.Root);
+
+        _selectionInspector = new GraphSelectionInspectorPanel(
+            () => _currentGraph,
+            CreateEditorContext,
+            BuildExtraNodeInspector);
+        _contentSplit.AddChild(_selectionInspector.Root);
     }
 
     public void LoadGraph(GraphAsset graph)
@@ -221,6 +241,7 @@ public partial class GraphCanvasEditorWindow : Window
         _connectionEditor?.Reset();
         _explorerPanel?.RefreshIfOpen();
         _timelinePanel?.Clear();
+        _selectionInspector?.Clear();
         _boundTimelineNodeId = string.Empty;
 
         _controller.ClearGraphEdit();

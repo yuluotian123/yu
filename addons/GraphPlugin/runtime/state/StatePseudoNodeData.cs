@@ -37,9 +37,25 @@ public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
         return true;
     }
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(160f, 0f) };
+        root.AddChild(new Label
+        {
+            Text = "Global transitions",
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+        int ignoredCount = StateTagUtility.ParseTags(IgnoredStateNames).Count + StateTagUtility.ParseTags(IgnoredTags).Count;
+        if (ignoredCount > 0)
+            root.AddChild(new Label { Text = $"Ignored {ignoredCount}", HorizontalAlignment = HorizontalAlignment.Center });
+
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer { CustomMinimumSize = new Vector2(190f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
         root.AddChild(new Label
         {
             Text = "Global transitions",
@@ -62,7 +78,12 @@ public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
         ignoredTags.TextChanged += value => IgnoredTags = value;
         root.AddChild(ignoredTags);
 
-        context.GraphNode.AddChild(root);
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateInspectorUI(context));
     }
 }
 
@@ -80,15 +101,34 @@ public class StateReturnNodeData : GraphNodeData, IStatePseudoNodeData
     public override bool CanBePrime() => false;
     public override string GetOutputPortName(int port) => "Return";
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(140f, 0f) };
+        root.AddChild(new Label
+        {
+            Text = "Resolves immediately",
+            HorizontalAlignment = HorizontalAlignment.Center,
+            ClipText = true
+        });
+
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer { CustomMinimumSize = new Vector2(170f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
         var labelEdit = new LineEdit
         {
             PlaceholderText = "Return label",
             Text = Label
         };
-        labelEdit.TextChanged += value => Label = value;
+        labelEdit.TextChanged += value =>
+        {
+            Label = value;
+            if (context.GraphNode != null)
+                context.GraphNode.Title = GetDisplayName();
+        };
         root.AddChild(labelEdit);
 
         root.AddChild(new Label
@@ -97,6 +137,11 @@ public class StateReturnNodeData : GraphNodeData, IStatePseudoNodeData
             HorizontalAlignment = HorizontalAlignment.Center
         });
 
-        context.GraphNode.AddChild(root);
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateInspectorUI(context));
     }
 }

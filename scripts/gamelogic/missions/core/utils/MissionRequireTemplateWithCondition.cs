@@ -15,6 +15,22 @@ public class MissionRequireTemplateWithCondition : MissionRequireTemplate
     [JsonInclude] private ConditionUseMode _useMode = ConditionUseMode.And;
     [JsonInclude] private readonly List<ConditionBase> _conditions = new List<ConditionBase>();
 
+    public override string Description
+    {
+        get
+        {
+            string text = $"Event {eventType} x{count}";
+            if (useMessage)
+                text += ", consume message";
+
+            if (!hasCondition || _conditions.Count == 0)
+                return text;
+
+            string mode = _useMode == ConditionUseMode.Or ? "Any" : "All";
+            return $"{text}, if {mode}: {GetConditionSummary()}";
+        }
+    }
+
     public override bool CheckMessage(object message)
     {
         if (message is not GameMessage gameMessage)
@@ -165,5 +181,16 @@ public class MissionRequireTemplateWithCondition : MissionRequireTemplate
         return root;
     }
 
+    private string GetConditionSummary()
+    {
+        if (_conditions == null || _conditions.Count == 0)
+            return "no conditions";
+
+        string first = _conditions[0]?.Description;
+        if (string.IsNullOrWhiteSpace(first))
+            first = _conditions[0]?.GetType().Name ?? "Condition";
+
+        return _conditions.Count == 1 ? first : $"{first} +{_conditions.Count - 1}";
+    }
 
 }

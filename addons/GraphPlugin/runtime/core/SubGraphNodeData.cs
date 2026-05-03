@@ -75,23 +75,55 @@ public partial class SubGraphNodeData : GraphNodeData
         return typeof(GraphAsset);
     }
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
     {
         var vbox = new VBoxContainer
         {
             Name = "SubGraphContent",
             CustomMinimumSize = new Vector2(160, 0)
         };
+        vbox.AddThemeConstantOverride("separation", 3);
+
+        vbox.AddChild(new Label
+        {
+            Text = "SubGraph",
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
 
         var pathLabel = new Label
         {
             Name = "PathLabel",
-            Text = string.IsNullOrEmpty(SubGraphPath) ? "Unbound SubGraph" : GetDisplayName(),
-            AutowrapMode = TextServer.AutowrapMode.WordSmart,
-            HorizontalAlignment = HorizontalAlignment.Center
+            Text = GetCompactSubGraphLabel(),
+            ClipText = true,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            TooltipText = string.IsNullOrEmpty(SubGraphPath) ? "Unbound SubGraph" : SubGraphPath
         };
         vbox.AddChild(pathLabel);
 
         context.GraphNode.AddChild(vbox);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
+        root.AddChild(new Label { Text = "SubGraph" });
+        root.AddChild(CreateInspectorInfoRow("Path", string.IsNullOrWhiteSpace(SubGraphPath) ? "Unbound" : SubGraphPath));
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        CreateNodeUI(context);
+    }
+
+    public string GetCompactSubGraphLabel()
+    {
+        if (string.IsNullOrWhiteSpace(SubGraphPath))
+            return "Unbound";
+
+        string fileName = SubGraphPath.GetFile().GetBaseName();
+        return string.IsNullOrWhiteSpace(fileName) ? "Bound" : fileName;
     }
 }

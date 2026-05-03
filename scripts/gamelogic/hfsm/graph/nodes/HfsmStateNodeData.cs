@@ -104,6 +104,14 @@ namespace GameLogic
             return false;
         }
 
+        public override void CreateNodeUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(170f, 0f) };
+            HfsmStateNodeUi.AddStateSummary(root, this);
+            AddCompactFields(root);
+            context.GraphNode.AddChild(root);
+        }
+
         public override void CreateUI(GraphEditorContext context)
         {
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(190f, 0f) };
@@ -114,8 +122,27 @@ namespace GameLogic
             context.GraphNode.AddChild(root);
         }
 
+        public override Control CreateInspectorUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+            root.AddThemeConstantOverride("separation", 6);
+
+            AddStateFields(root, context);
+            AddExtraInspectorFields(root, context);
+            return root;
+        }
+
+        protected virtual void AddCompactFields(VBoxContainer root)
+        {
+        }
+
         protected virtual void AddExtraFields(VBoxContainer root)
         {
+        }
+
+        protected virtual void AddExtraInspectorFields(VBoxContainer root, GraphEditorContext context)
+        {
+            AddExtraFields(root);
         }
 
         protected void AddStateFields(VBoxContainer root, GraphEditorContext context)
@@ -126,6 +153,54 @@ namespace GameLogic
 
     internal static class HfsmStateNodeUi
     {
+        public static void AddStateSummary(VBoxContainer root, IHfsmStateNodeData state)
+        {
+            var row = new HBoxContainer();
+            row.AddThemeConstantOverride("separation", 4);
+
+            if (state.IsDefault)
+            {
+                row.AddChild(new Label
+                {
+                    Text = "Default",
+                    VerticalAlignment = VerticalAlignment.Center
+                });
+            }
+
+            int tagCount = HfsmTagUtility.ParseTags(state.Tags).Count;
+            if (tagCount > 0)
+            {
+                row.AddChild(new Label
+                {
+                    Text = $"Tags {tagCount}",
+                    VerticalAlignment = VerticalAlignment.Center
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(state.BehaviourKey))
+            {
+                row.AddChild(new Label
+                {
+                    Text = state.BehaviourKey,
+                    ClipText = true,
+                    SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+                    VerticalAlignment = VerticalAlignment.Center
+                });
+            }
+
+            if (row.GetChildCount() == 0)
+            {
+                row.AddChild(new Label
+                {
+                    Text = "State",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+                });
+            }
+
+            root.AddChild(row);
+        }
+
         public static void AddStateFields(VBoxContainer root, IHfsmStateNodeData state, GraphEditorContext context)
         {
             var nameEdit = new LineEdit
@@ -133,7 +208,11 @@ namespace GameLogic
                 PlaceholderText = "State name",
                 Text = state.StateName
             };
-            nameEdit.TextChanged += value => state.StateName = value;
+            nameEdit.TextChanged += value =>
+            {
+                state.StateName = value;
+                RefreshGraphNodeTitle(state, context);
+            };
             root.AddChild(nameEdit);
 
             var defaultCheck = new CheckBox
@@ -141,7 +220,11 @@ namespace GameLogic
                 Text = "Default",
                 ButtonPressed = state.IsDefault
             };
-            defaultCheck.Toggled += value => state.IsDefault = value;
+            defaultCheck.Toggled += value =>
+            {
+                state.IsDefault = value;
+                RefreshGraphNodeTitle(state, context);
+            };
             root.AddChild(defaultCheck);
 
             var behaviourEdit = new LineEdit
@@ -167,6 +250,14 @@ namespace GameLogic
             tagRoot.AddChild(new Label { Text = "Tags" });
             tagRoot.AddChild(new HfsmTagMultiSelectDropdown(registry, state.Tags, tags => state.Tags = tags));
             root.AddChild(tagRoot);
+        }
+
+        private static void RefreshGraphNodeTitle(IHfsmStateNodeData state, GraphEditorContext context)
+        {
+            if (context?.GraphNode == null || state is not GraphNodeData nodeData)
+                return;
+
+            context.GraphNode.Title = nodeData.GetDisplayName();
         }
     }
 }

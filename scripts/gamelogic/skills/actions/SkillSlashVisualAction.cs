@@ -73,5 +73,85 @@ namespace GameLogic
             slash.Color = new Color(SlashColor.R, SlashColor.G, SlashColor.B, alpha);
             slash.Visible = true;
         }
+
+        public override Control CreateEditUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer();
+            root.AddThemeConstantOverride("separation", 4);
+
+            root.AddChild(SkillActionEditorHelper.BuildEnumRow(
+                "Mode",
+                Mode,
+                value => Mode = value));
+            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+                "Visual Root",
+                VisualRootPath,
+                "VisualRoot",
+                value => VisualRootPath = value));
+            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+                "Slash Node",
+                SlashNodeName,
+                "AttackSlash",
+                value => SlashNodeName = value));
+            root.AddChild(BuildVector2Row(
+                "Offset",
+                SlashOffset,
+                value => SlashOffset = value));
+            root.AddChild(BuildVector2Row(
+                "Scale",
+                SlashScale,
+                value => SlashScale = value));
+            root.AddChild(BuildColorRow(
+                "Color",
+                SlashColor,
+                value => SlashColor = value));
+
+            return root;
+        }
+
+        private static Control BuildVector2Row(string label, Vector2 value, System.Action<Vector2> onChanged)
+        {
+            var row = new HBoxContainer();
+            row.AddChild(new Label
+            {
+                Text = label,
+                CustomMinimumSize = new Vector2(120, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            });
+
+            var xSpin = new SpinBox
+            {
+                MinValue = -999999,
+                MaxValue = 999999,
+                Step = 0.1,
+                Value = value.X,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            var ySpin = new SpinBox
+            {
+                MinValue = -999999,
+                MaxValue = 999999,
+                Step = 0.1,
+                Value = value.Y,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+
+            xSpin.ValueChanged += changed => onChanged(new Vector2((float)changed, (float)ySpin.Value));
+            ySpin.ValueChanged += changed => onChanged(new Vector2((float)xSpin.Value, (float)changed));
+            row.AddChild(xSpin);
+            row.AddChild(ySpin);
+            return row;
+        }
+
+        private static Control BuildColorRow(string label, Color color, System.Action<Color> onChanged)
+        {
+            var picker = new ColorPickerButton
+            {
+                Color = color,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            picker.ColorChanged += changed => onChanged(changed);
+            return SkillActionEditorHelper.BuildRow(label, picker);
+        }
     }
 }

@@ -20,8 +20,20 @@ public class FlowEntryNodeData : GraphNodeData, IFlowNode
 
     public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context) { }
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
     {
         context.GraphNode.AddChild(new Label { Text = "Start" });
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(220f, 0f) };
+        root.AddChild(new Label { Text = "Flow starts here." });
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        CreateNodeUI(context);
     }
 }

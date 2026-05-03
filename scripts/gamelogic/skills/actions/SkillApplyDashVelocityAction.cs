@@ -47,5 +47,30 @@ namespace GameLogic
 
             return 1f;
         }
+
+        public override Control CreateEditUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer();
+            root.AddThemeConstantOverride("separation", 4);
+
+            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+                "Move Axis Key",
+                MoveAxisBlackboardKey,
+                CharacterHfsmBlackboardKeys.MoveAxisX,
+                value => MoveAxisBlackboardKey = value));
+            root.AddChild(SkillActionEditorHelper.BuildSpinRow(
+                "Speed",
+                Speed,
+                0,
+                999999,
+                10,
+                value => Speed = (float)value));
+            root.AddChild(SkillActionEditorHelper.BuildCheckRow(
+                "Stop Vertical Velocity",
+                StopVerticalVelocity,
+                value => StopVerticalVelocity = value));
+
+            return root;
+        }
     }
 }

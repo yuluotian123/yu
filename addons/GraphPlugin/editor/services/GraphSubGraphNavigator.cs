@@ -63,33 +63,41 @@ public sealed class GraphSubGraphNavigator
         return root;
     }
 
-    /// <summary>向子图节点内容区注入进入和绑定按钮。</summary>
-    public void InjectSubGraphButtons(GraphNode node, SubGraphNodeData subData)
+    /// <summary>Creates the inspector controls for binding and entering a subgraph.</summary>
+    public Control CreateSubGraphInspectorControls(GraphNode node, SubGraphNodeData subData)
     {
-        var content = node.GetNodeOrNull<VBoxContainer>("SubGraphContent");
-        if (content == null)
-            return;
+        if (subData == null)
+            return null;
 
-        var resourceField = new GraphResourcePathField(
+        var root = new VBoxContainer();
+        root.AddThemeConstantOverride("separation", 6);
+        root.AddChild(new Label { Text = "SubGraph" });
+
+        Button enterBtn = null;
+        GraphResourcePathField resourceField = null;
+
+        resourceField = new GraphResourcePathField(
             subData.GetSubGraphType(),
             subData.SubGraphPath,
-            path => BindSubGraphPath(subData, node, path))
+            path =>
+            {
+                BindSubGraphPath(subData, node, path);
+                resourceField.Path = subData.SubGraphPath;
+                UpdateEnterButton(enterBtn, subData);
+            })
         {
             Name = "SubGraphResourceField"
         };
-        content.AddChild(resourceField);
+        root.AddChild(resourceField);
 
-        var enterBtn = new Button
+        enterBtn = new Button
         {
             Text = "Enter SubGraph >",
-            TooltipText = string.IsNullOrEmpty(subData.SubGraphPath)
-                ? "Bind a subgraph resource first"
-                : $"Enter: {subData.GetDisplayName()}",
-            Disabled = string.IsNullOrEmpty(subData.SubGraphPath),
             Name = "EnterBtn"
         };
+        UpdateEnterButton(enterBtn, subData);
         enterBtn.Pressed += () => TryEnterSubGraph(subData);
-        content.AddChild(enterBtn);
+        root.AddChild(enterBtn);
 
         var createBtn = new Button
         {
@@ -98,7 +106,31 @@ public sealed class GraphSubGraphNavigator
             Name = "CreateBtn"
         };
         createBtn.Pressed += () => ShowCreateSubGraphDialog(subData, node);
-        content.AddChild(createBtn);
+        root.AddChild(createBtn);
+
+        return root;
+    }
+
+    /// <summary>Adds a compact enter button to a subgraph node on the canvas.</summary>
+    public void InjectSubGraphEnterButton(GraphNode node, SubGraphNodeData subData)
+    {
+        if (node == null || subData == null)
+            return;
+
+        var content = node.GetNodeOrNull<VBoxContainer>("SubGraphContent");
+        if (content == null || content.GetNodeOrNull<Button>("EnterBtn") != null)
+            return;
+
+        var enterBtn = new Button
+        {
+            Text = ">",
+            Name = "EnterBtn",
+            CustomMinimumSize = new Vector2(28f, 0f),
+            SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter
+        };
+        UpdateEnterButton(enterBtn, subData);
+        enterBtn.Pressed += () => TryEnterSubGraph(subData);
+        content.AddChild(enterBtn);
     }
 
     private void TryEnterSubGraph(SubGraphNodeData subData)
@@ -269,7 +301,10 @@ public sealed class GraphSubGraphNavigator
 
         var pathLabel = content.GetNodeOrNull<Label>("PathLabel");
         if (pathLabel != null)
-            pathLabel.Text = subData.GetDisplayName();
+        {
+            pathLabel.Text = subData.GetCompactSubGraphLabel();
+            pathLabel.TooltipText = string.IsNullOrEmpty(subData.SubGraphPath) ? "Unbound SubGraph" : subData.SubGraphPath;
+        }
 
         var resourceField = content.GetNodeOrNull<GraphResourcePathField>("SubGraphResourceField");
         if (resourceField != null)
@@ -283,6 +318,19 @@ public sealed class GraphSubGraphNavigator
                 ? "Bind a subgraph resource first"
                 : $"Enter: {subData.GetDisplayName()}";
         }
+
+        node.CallDeferred("reset_size");
+    }
+
+    private static void UpdateEnterButton(Button enterBtn, SubGraphNodeData subData)
+    {
+        if (enterBtn == null || subData == null)
+            return;
+
+        enterBtn.Disabled = string.IsNullOrEmpty(subData.SubGraphPath);
+        enterBtn.TooltipText = string.IsNullOrEmpty(subData.SubGraphPath)
+            ? "Bind a subgraph resource first"
+            : $"Enter: {subData.GetDisplayName()}";
     }
 
     private void ShowWarning(string title, string text)

@@ -23,6 +23,16 @@ namespace GameLogic
         public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.25f, 0.62f, 0.88f);
         public override System.Collections.Generic.List<string> GetSearchKeywords() => new() { "animation", "animator", "sprite" };
 
+        protected override void AddCompactFields(VBoxContainer root)
+        {
+            root.AddChild(new Label
+            {
+                Text = string.IsNullOrWhiteSpace(AnimationName) ? "Animation: state name" : $"Animation: {AnimationName}",
+                ClipText = true,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            });
+        }
+
         public override void OnEnter(HfsmRuntime runtime)
         {
             base.OnEnter(runtime);
@@ -46,6 +56,23 @@ namespace GameLogic
             AddStateFields(root, context);
 
             root.AddChild(new HSeparator());
+            AddAnimationFields(root, context);
+
+            context.GraphNode.AddChild(root);
+        }
+
+        public override Control CreateInspectorUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+            root.AddThemeConstantOverride("separation", 6);
+            AddStateFields(root, context);
+            root.AddChild(new HSeparator());
+            AddAnimationFields(root, context);
+            return root;
+        }
+
+        private void AddAnimationFields(VBoxContainer root, GraphEditorContext context)
+        {
             root.AddChild(new Label { Text = "Animation Request" });
             root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
                 "Animation",
@@ -66,8 +93,6 @@ namespace GameLogic
             root.AddChild(SkillActionEditorHelper.BuildSpinRow("Speed", Speed, -20, 20, 0.05, value => Speed = (float)value));
             root.AddChild(SkillActionEditorHelper.BuildCheckRow("From End", FromEnd, value => FromEnd = value));
             root.AddChild(SkillActionEditorHelper.BuildCheckRow("Restart If Playing", RestartIfPlaying, value => RestartIfPlaying = value));
-
-            context.GraphNode.AddChild(root);
         }
 
         private void RequestAnimation(HfsmRuntime runtime)

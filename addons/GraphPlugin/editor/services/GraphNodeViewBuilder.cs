@@ -47,7 +47,8 @@ public static class GraphNodeViewBuilder
                 node.SetSlotMetadataRight(i, data.GetOutputPortName(i));
         }
 
-        data.CreateUI(context.WithGraphNode(data, node));
+        data.CreateNodeUI(context.WithGraphNode(data, node));
+        node.CallDeferred("reset_size");
         return node;
     }
 

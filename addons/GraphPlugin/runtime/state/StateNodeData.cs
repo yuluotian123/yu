@@ -51,16 +51,43 @@ public class StateNodeData : GraphNodeData, IStateNodeData
     {
     }
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(160f, 0f) };
+        var row = new HBoxContainer();
+        row.AddThemeConstantOverride("separation", 4);
+
+        row.AddChild(new Label
+        {
+            Text = IsDefault ? "Default" : "State",
+            HorizontalAlignment = HorizontalAlignment.Center,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        });
+
+        int tagCount = StateTagUtility.ParseTags(Tags).Count;
+        if (tagCount > 0)
+            row.AddChild(new Label { Text = $"Tags {tagCount}" });
+
+        root.AddChild(row);
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer { CustomMinimumSize = new Vector2(190f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
 
         var nameEdit = new LineEdit
         {
             PlaceholderText = "State name",
             Text = StateName
         };
-        nameEdit.TextChanged += value => StateName = value;
+        nameEdit.TextChanged += value =>
+        {
+            StateName = value;
+            if (context.GraphNode != null)
+                context.GraphNode.Title = GetDisplayName();
+        };
         root.AddChild(nameEdit);
 
         var defaultCheck = new CheckBox
@@ -79,6 +106,11 @@ public class StateNodeData : GraphNodeData, IStateNodeData
         tagEdit.TextChanged += value => Tags = value;
         root.AddChild(tagEdit);
 
-        context.GraphNode.AddChild(root);
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateInspectorUI(context));
     }
 }

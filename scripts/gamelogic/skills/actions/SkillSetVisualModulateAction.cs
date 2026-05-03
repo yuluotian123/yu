@@ -32,5 +32,38 @@ namespace GameLogic
             else
                 visual.Modulate = Colors.White;
         }
+
+        public override Control CreateEditUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer();
+            root.AddThemeConstantOverride("separation", 4);
+
+            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+                "Visual Root",
+                VisualRootPath,
+                "VisualRoot",
+                value => VisualRootPath = value));
+            root.AddChild(SkillActionEditorHelper.BuildCheckRow(
+                "Enabled",
+                Enabled,
+                value => Enabled = value));
+            root.AddChild(BuildColorRow(
+                "Active Color",
+                ActiveColor,
+                value => ActiveColor = value));
+
+            return root;
+        }
+
+        private static Control BuildColorRow(string label, Color color, System.Action<Color> onChanged)
+        {
+            var picker = new ColorPickerButton
+            {
+                Color = color,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            picker.ColorChanged += changed => onChanged(changed);
+            return SkillActionEditorHelper.BuildRow(label, picker);
+        }
     }
 }

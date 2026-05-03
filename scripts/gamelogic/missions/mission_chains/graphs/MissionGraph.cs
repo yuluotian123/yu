@@ -15,7 +15,13 @@ public partial class MissionGraph : FlowGraphAsset
         set { }
     }
 
-    public override string GetEditorTitle() => ResourcePath + "_" + GraphType + "编辑器";
+    public override string GetEditorTitle()
+    {
+        string name = string.IsNullOrWhiteSpace(ResourcePath)
+            ? GraphTypeName
+            : ResourcePath.GetFile().GetBaseName();
+        return $"{name} MissionGraph Editor";
+    }
 
     public override GraphConnection CreateConnection() => new FlowConnection();
 

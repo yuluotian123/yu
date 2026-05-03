@@ -51,6 +51,12 @@ public class GraphConnection
         return container;
     }
 
+    /// <summary>Builds the detailed inspector UI shown outside the canvas.</summary>
+    public virtual Control CreateInspectorUI(GraphEditorContext context)
+    {
+        return CreateEditUI(context);
+    }
+
     /// <summary>创建显示在连线中点附近的标签。</summary>
     public virtual Label CreateConnectionLabel()
     {

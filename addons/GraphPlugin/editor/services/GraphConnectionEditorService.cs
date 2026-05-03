@@ -13,6 +13,7 @@ public sealed class GraphConnectionEditorService
     private readonly Func<GraphAsset> _getCurrentGraph;
     private readonly Func<GraphEditorContext> _createContext;
     private readonly Action<GraphConnection> _deleteConnection;
+    private readonly Action<GraphConnection> _selectConnection;
     private readonly Dictionary<string, Label> _connectionLabels = new();
     private GraphConnection _selectedConnection;
     private GraphConnection _hoveredConnection;
@@ -23,13 +24,15 @@ public sealed class GraphConnectionEditorService
         GraphEdit graphEdit,
         Func<GraphAsset> getCurrentGraph,
         Func<GraphEditorContext> createContext,
-        Action<GraphConnection> deleteConnection)
+        Action<GraphConnection> deleteConnection,
+        Action<GraphConnection> selectConnection = null)
     {
         _owner = owner;
         _graphEdit = graphEdit;
         _getCurrentGraph = getCurrentGraph;
         _createContext = createContext;
         _deleteConnection = deleteConnection;
+        _selectConnection = selectConnection;
     }
 
     /// <summary>重置连线标签和选择状态。</summary>
@@ -48,9 +51,17 @@ public sealed class GraphConnectionEditorService
         if (@event is InputEventMouseButton mb && mb.Pressed)
         {
             GraphConnection connection = FindConnectionAtPosition(mb.Position);
+            if (connection != null && mb.ButtonIndex == MouseButton.Left)
+            {
+                _selectedConnection = connection;
+                _selectConnection?.Invoke(connection);
+                return true;
+            }
+
             if (connection != null && mb.ButtonIndex == MouseButton.Right)
             {
                 _selectedConnection = connection;
+                _selectConnection?.Invoke(connection);
                 Vector2 menuPos = windowPosition + _graphEdit.Position + mb.Position;
                 ShowConnectionMenu(menuPos);
                 return true;
@@ -74,18 +85,20 @@ public sealed class GraphConnectionEditorService
         var keysToRemove = new List<string>();
         foreach (string connectionKey in _connectionLabels.Keys)
         {
-            bool found = false;
+            GraphConnection matchedConnection = null;
             foreach (GraphConnection connection in graph.Connections)
             {
                 if (GetConnectionKey(connection) == connectionKey)
                 {
-                    found = true;
+                    matchedConnection = connection;
                     break;
                 }
             }
 
-            if (!found)
+            if (matchedConnection == null)
                 keysToRemove.Add(connectionKey);
+            else if (_connectionLabels.TryGetValue(connectionKey, out Label existingLabel))
+                existingLabel.Text = matchedConnection.GetDisplayName();
         }
 
         foreach (string key in keysToRemove)
@@ -170,8 +183,6 @@ public sealed class GraphConnectionEditorService
             return;
 
         var popup = new PopupMenu();
-        if (_selectedConnection.IsEditable())
-            popup.AddItem("Edit Connection", 0);
         popup.AddItem("Delete Connection", 1);
         popup.Position = (Vector2I)position;
         popup.IdPressed += OnConnectionMenuSelected;
@@ -184,79 +195,10 @@ public sealed class GraphConnectionEditorService
     {
         switch (id)
         {
-            case 0:
-                EditConnection();
-                break;
             case 1:
                 DeleteSelectedConnection();
                 break;
         }
-    }
-
-    private void EditConnection()
-    {
-        if (_selectedConnection == null || !_selectedConnection.IsEditable())
-            return;
-
-        Vector2I dialogSize = GetConnectionEditDialogSize();
-        var dialog = new AcceptDialog
-        {
-            Title = _selectedConnection.GetDisplayName(),
-            DialogAutowrap = true,
-            Unresizable = false,
-            MinSize = new Vector2I(420, 320),
-            Size = dialogSize
-        };
-
-        var scroll = new ScrollContainer
-        {
-            HorizontalScrollMode = ScrollContainer.ScrollMode.Auto,
-            VerticalScrollMode = ScrollContainer.ScrollMode.Auto,
-            CustomMinimumSize = new Vector2(dialogSize.X - 40, dialogSize.Y - 110),
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            SizeFlagsVertical = Control.SizeFlags.ExpandFill
-        };
-
-        var margin = new MarginContainer
-        {
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            SizeFlagsVertical = Control.SizeFlags.ExpandFill
-        };
-        margin.AddThemeConstantOverride("margin_left", 8);
-        margin.AddThemeConstantOverride("margin_top", 8);
-        margin.AddThemeConstantOverride("margin_right", 8);
-        margin.AddThemeConstantOverride("margin_bottom", 8);
-
-        Control ui = _selectedConnection.CreateEditUI(_createContext().WithConnection(_selectedConnection));
-        ui.Name = "edit_ui";
-        ui.CustomMinimumSize = new Vector2(360, 0);
-        ui.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-        ui.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
-
-        margin.AddChild(ui);
-        scroll.AddChild(margin);
-        dialog.AddChild(scroll);
-
-        GraphConnection connectionRef = _selectedConnection;
-        dialog.Confirmed += () =>
-        {
-            RemoveConnectionLabel(connectionRef);
-            CreateConnectionLabel(connectionRef);
-            GraphAsset graph = _getCurrentGraph();
-            if (graph != null)
-                GraphSaveService.Save(_owner, graph, _graphEdit, false);
-            GD.Print("Connection updated");
-        };
-        _owner.AddChild(dialog);
-        dialog.PopupCentered(dialogSize);
-    }
-
-    private Vector2I GetConnectionEditDialogSize()
-    {
-        Vector2 viewportSize = _owner.GetViewport().GetVisibleRect().Size;
-        int width = Math.Clamp((int)(viewportSize.X * 0.55f), 480, 760);
-        int height = Math.Clamp((int)(viewportSize.Y * 0.72f), 360, 680);
-        return new Vector2I(width, height);
     }
 
     private void DeleteSelectedConnection()

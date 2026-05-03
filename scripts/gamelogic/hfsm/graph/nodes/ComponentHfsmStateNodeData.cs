@@ -21,6 +21,16 @@ namespace GameLogic
                 : $"{stateName} [{ComponentTypeName}]";
         }
 
+        protected override void AddCompactFields(VBoxContainer root)
+        {
+            root.AddChild(new Label
+            {
+                Text = string.IsNullOrWhiteSpace(ComponentTypeName) ? "Handler: none" : $"Handler: {ComponentTypeName}",
+                ClipText = true,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            });
+        }
+
         public override void OnEnter(HfsmRuntime runtime)
         {
             base.OnEnter(runtime);

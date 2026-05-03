@@ -12,7 +12,7 @@ public partial class GraphCanvasEditorWindow
         _graphEdit.AddChild(node);
 
         if (data is SubGraphNodeData subData)
-            _subGraphNavigator?.InjectSubGraphButtons(node, subData);
+            _subGraphNavigator?.InjectSubGraphEnterButton(node, subData);
     }
 
     private void OnPopupRequest(Vector2 position)
@@ -73,6 +73,47 @@ public partial class GraphCanvasEditorWindow
 
         foreach (StringName nodeName in nodes)
             DoRemoveNode(nodeName);
+    }
+
+    private void OnNodeSelected(Node node)
+    {
+        if (node is GraphNode graphNode)
+            _selectionInspector?.ShowNode(graphNode);
+    }
+
+    private void OnNodeDeselected(Node node)
+    {
+        GraphNode selectedNode = GetSingleSelectedGraphNode();
+        if (selectedNode != null)
+            _selectionInspector?.ShowNode(selectedNode);
+        else
+            _selectionInspector?.Clear();
+    }
+
+    private GraphNode GetSingleSelectedGraphNode()
+    {
+        GraphNode selectedGraphNode = null;
+        int selectedCount = 0;
+
+        foreach (Node child in _graphEdit.GetChildren())
+        {
+            if (child is not GraphNode graphNode || !graphNode.Selected)
+                continue;
+
+            selectedCount++;
+            selectedGraphNode = graphNode;
+            if (selectedCount > 1)
+                return null;
+        }
+
+        return selectedGraphNode;
+    }
+
+    private Control BuildExtraNodeInspector(GraphNode graphNode, GraphNodeData nodeData)
+    {
+        return nodeData is SubGraphNodeData subData
+            ? _subGraphNavigator?.CreateSubGraphInspectorControls(graphNode, subData)
+            : null;
     }
 }
 #endif

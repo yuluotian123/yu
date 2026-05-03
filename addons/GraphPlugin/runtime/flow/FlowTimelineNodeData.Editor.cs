@@ -2,7 +2,27 @@ using Godot;
 
 public partial class FlowTimelineNodeData
 {
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        NormalizeTimelineData();
+
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(180f, 0f) };
+        root.AddChild(new Label
+        {
+            Text = $"{Duration:0.##}s",
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+        root.AddChild(new Label
+        {
+            Text = $"{Tracks.Count} tracks, {Markers.Count} markers",
+            HorizontalAlignment = HorizontalAlignment.Center,
+            ClipText = true
+        });
+
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
     {
         NormalizeTimelineData();
 
@@ -37,6 +57,11 @@ public partial class FlowTimelineNodeData
             ClipText = true
         });
 
-        context.GraphNode.AddChild(root);
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateInspectorUI(context));
     }
 }

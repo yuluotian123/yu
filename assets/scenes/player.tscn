@@ -15,7 +15,7 @@
 [ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/skills/attack_skill.tres" id="13_attack_skill"]
 [ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/PlayerCameraComponent2D.cs" id="14_camera"]
 [ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/player/visuals/PlayerSpriteAnimationComponent2D.cs" id="15_visual_anim"]
-[ext_resource type="SpriteFrames" uid="uid://chxhylra6w7mj" path="res://assets/generated/player_sprite_frames.tres" id="16_player_frames"]
+[ext_resource type="SpriteFrames" path="res://assets/generated/rika/rika_sprite_frames.tres" id="16_player_frames"]
 
 [sub_resource type="Resource" id="sub_controller"]
 script = ExtResource("3_controller")
@@ -74,7 +74,7 @@ texture_filter = 1
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=946751149]
 position = Vector2(6, -21)
 sprite_frames = ExtResource("16_player_frames")
-animation = &"isfalling"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2005186648]

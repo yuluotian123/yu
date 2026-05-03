@@ -97,20 +97,52 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
     {
     }
 
-    public override void CreateUI(GraphEditorContext context)
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer
+        {
+            Name = "SubGraphContent",
+            CustomMinimumSize = new Vector2(180f, 0f)
+        };
+
+        root.AddChild(new Label
+        {
+            Text = IsDefault ? "Default Composite" : "Composite",
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+
+        var pathLabel = new Label
+        {
+            Name = "PathLabel",
+            Text = string.IsNullOrEmpty(SubGraphPath) ? "Unbound State SubGraph" : SubGraphPath.GetFile().GetBaseName(),
+            ClipText = true,
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+        root.AddChild(pathLabel);
+
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer
         {
             Name = "SubGraphContent",
             CustomMinimumSize = new Vector2(190f, 0f)
         };
+        root.AddThemeConstantOverride("separation", 6);
 
         var nameEdit = new LineEdit
         {
             PlaceholderText = "State name",
             Text = StateName
         };
-        nameEdit.TextChanged += value => StateName = value;
+        nameEdit.TextChanged += value =>
+        {
+            StateName = value;
+            if (context.GraphNode != null)
+                context.GraphNode.Title = GetDisplayName();
+        };
         root.AddChild(nameEdit);
 
         var defaultCheck = new CheckBox
@@ -139,6 +171,11 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
         };
         root.AddChild(pathLabel);
 
-        context.GraphNode.AddChild(root);
+        return root;
+    }
+
+    public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateInspectorUI(context));
     }
 }

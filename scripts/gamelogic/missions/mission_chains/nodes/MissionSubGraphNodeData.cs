@@ -20,7 +20,7 @@ public class MissionSubGraphNodeData : SubGraphNodeData, IFlowNode
     public override string GetDisplayName()
     {
         if (!string.IsNullOrWhiteSpace(SubGraphPath))
-            return $"Mission SubGraph [{SubGraphPath.GetFile().GetBaseName()}]";
+            return $"SubGraph: {SubGraphPath.GetFile().GetBaseName()}";
 
         return "Mission SubGraph";
     }

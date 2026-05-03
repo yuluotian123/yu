@@ -47,6 +47,17 @@ namespace GameLogic
         public override Color GetNodeColor() => IsDefault ? new Color(0.35f, 0.8f, 0.5f) : new Color(0.7f, 0.45f, 0.9f);
         public override string GetOutputPortName(int port) => "Completed";
 
+        protected override void AddCompactFields(VBoxContainer root)
+        {
+            string skillName = GetSkillDisplayName();
+            root.AddChild(new Label
+            {
+                Text = string.IsNullOrWhiteSpace(skillName) ? "Skill: none" : $"Skill: {skillName}",
+                ClipText = true,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            });
+        }
+
         public override bool CanEnter(HfsmRuntime runtime)
         {
             SkillManagerComponent2D skillManager = runtime?.GetComponent<SkillManagerComponent2D>();
@@ -103,7 +114,23 @@ namespace GameLogic
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(190f, 0f) };
             AddStateFields(root, context);
             root.AddChild(new HSeparator());
+            AddSkillFields(root, context);
 
+            context.GraphNode.AddChild(root);
+        }
+
+        public override Control CreateInspectorUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+            root.AddThemeConstantOverride("separation", 6);
+            AddStateFields(root, context);
+            root.AddChild(new HSeparator());
+            AddSkillFields(root, context);
+            return root;
+        }
+
+        private void AddSkillFields(VBoxContainer root, GraphEditorContext context)
+        {
 #if TOOLS
             root.AddChild(new GraphResourcePathField(
                 typeof(SkillResource),
@@ -120,8 +147,6 @@ namespace GameLogic
 #else
             root.AddChild(new Label { Text = string.IsNullOrWhiteSpace(SkillResourcePath) ? "No Skill" : SkillResourcePath });
 #endif
-
-            context.GraphNode.AddChild(root);
         }
 
         private void SetSkillResourcePath(string path)

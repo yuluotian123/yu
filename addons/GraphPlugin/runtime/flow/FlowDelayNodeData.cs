@@ -43,7 +43,32 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
         runtime.ClearNodeData(Id);
     }
 
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(140f, 0f) };
+        root.AddChild(new Label
+        {
+            Text = $"{Seconds:0.##}s",
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+        context.GraphNode.AddChild(root);
+    }
+
+    public override Control CreateInspectorUI(GraphEditorContext context)
+    {
+        var root = new VBoxContainer { CustomMinimumSize = new Vector2(240f, 0f) };
+        root.AddThemeConstantOverride("separation", 6);
+        root.AddChild(new Label { Text = "Delay" });
+        root.AddChild(CreateSecondsSpin(context));
+        return root;
+    }
+
     public override void CreateUI(GraphEditorContext context)
+    {
+        context.GraphNode.AddChild(CreateSecondsSpin(context));
+    }
+
+    private SpinBox CreateSecondsSpin(GraphEditorContext context)
     {
         var spin = new SpinBox
         {
@@ -52,8 +77,13 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
             Step = 0.05,
             Value = Seconds
         };
-        spin.ValueChanged += value => Seconds = (float)value;
-        context.GraphNode.AddChild(spin);
+        spin.ValueChanged += value =>
+        {
+            Seconds = (float)value;
+            if (context.GraphNode != null)
+                context.GraphNode.Title = GetDisplayName();
+        };
+        return spin;
     }
 
     private sealed class DelayRuntimeData

@@ -117,6 +117,19 @@ namespace GameLogic
         {
         }
 
+        public override void CreateNodeUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer
+            {
+                Name = "SubGraphContent",
+                CustomMinimumSize = new Vector2(180f, 0f)
+            };
+
+            HfsmStateNodeUi.AddStateSummary(root, this);
+            AddSubGraphSummary(root);
+            context.GraphNode.AddChild(root);
+        }
+
         public override void CreateUI(GraphEditorContext context)
         {
             var root = new VBoxContainer
@@ -139,5 +152,29 @@ namespace GameLogic
 
             context.GraphNode.AddChild(root);
         }
+
+        public override Control CreateInspectorUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
+            root.AddThemeConstantOverride("separation", 6);
+
+            HfsmStateNodeUi.AddStateFields(root, this, context);
+            root.AddChild(new HSeparator());
+            root.AddChild(CreateInspectorInfoRow("SubGraph", string.IsNullOrWhiteSpace(SubGraphPath) ? "Unbound" : SubGraphPath));
+            return root;
+        }
+
+        private void AddSubGraphSummary(VBoxContainer root)
+        {
+            var pathLabel = new Label
+            {
+                Name = "PathLabel",
+                Text = string.IsNullOrEmpty(SubGraphPath) ? "SubGraph: unbound" : $"SubGraph: {SubGraphPath.GetFile().GetBaseName()}",
+                ClipText = true,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            root.AddChild(pathLabel);
+        }
+
     }
 }

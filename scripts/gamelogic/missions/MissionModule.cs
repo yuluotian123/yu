@@ -36,10 +36,11 @@ namespace GameLogic
 
         public void StartChain(string resPath)
         {
-            var handle = ModuleSystem.GetModule<IResourceModule>().LoadAsset<MissionGraph>(resPath);
-            if (handle.Asset != null)
-                _missionChainManager.StartChain(handle.Asset);
-            handle.Release();
+            MissionGraph graph = ModuleSystem
+                .GetModule<IResourceModule>()
+                .LoadAssetOnce<MissionGraph>(resPath);
+            if (graph != null)
+                _missionChainManager.StartChain(graph);
         }
 
 

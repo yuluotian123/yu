@@ -130,11 +130,7 @@ namespace GameLogic
             {
                 var resourceModule = ModuleSystem.GetModule<IResourceModule>();
                 if (resourceModule != null)
-                {
-                    var handle = resourceModule.LoadAsset<SkillResource>(skillResourcePath);
-                    skill = handle.Asset;
-                    handle.Release();
-                }
+                    skill = resourceModule.LoadAssetOnce<SkillResource>(skillResourcePath);
             }
             catch
             {

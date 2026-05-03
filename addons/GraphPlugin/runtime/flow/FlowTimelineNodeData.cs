@@ -31,7 +31,7 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
         if (Duration <= 0f)
         {
             data.Completed = true;
-            ClearActiveClips(data);
+            CompleteActiveClips(context, data, 0f);
         }
     }
 
@@ -50,7 +50,7 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
         if (nextTime >= Duration)
         {
             data.Completed = true;
-            ClearActiveClips(data);
+            CompleteActiveClips(context, data, nextTime);
         }
     }
 
@@ -73,7 +73,7 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
         var data = runtime.GetNodeData<TimelineRuntimeData>(Id);
         if (!data.Completed)
         {
-            ClearActiveClips(data);
+            CancelActiveClips(context, data, data.Elapsed);
             ExecuteActions(context, data, CancelActions, FlowTimelinePhase.Cancel, data.Elapsed, data.Elapsed, 0f);
         }
 

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CameraShakeProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/camera/CameraShakeProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+Duration = 0.18
+Amplitude = Vector2(24, 5)
+Frequency = 40.0
+RotationAmplitudeDegrees = 0.25
+DecayPower = 1.35
+metadata/_custom_type_script = "res://scripts/gamelogic/camera/CameraShakeProfile.cs"

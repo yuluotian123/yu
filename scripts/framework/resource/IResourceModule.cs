@@ -9,6 +9,10 @@ namespace Framework
     {
         ResourceHandle<T> LoadAsset<T>(string path) where T : Resource;
 
+        T LoadAssetOnce<T>(string path) where T : Resource;
+
+        bool TryLoadAssetOnce<T>(string path, out T asset) where T : Resource;
+
         ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource;
 
         /// <summary>

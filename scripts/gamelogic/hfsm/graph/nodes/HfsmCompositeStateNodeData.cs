@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Framework;
 using Godot;
 
 namespace GameLogic
@@ -33,16 +34,9 @@ namespace GameLogic
             if (string.IsNullOrWhiteSpace(SubGraphPath))
                 return null;
 
-            if (!ResourceLoader.Exists(SubGraphPath))
-            {
-                GD.PushWarning($"[HFSM] Sub graph resource does not exist: {SubGraphPath}");
-                return null;
-            }
-
-            _cachedSubGraph = ResourceLoader.Load<HfsmGraphAsset>(SubGraphPath);
-            if (_cachedSubGraph == null)
-                GD.PushWarning($"[HFSM] Resource is not a HfsmGraphAsset: {SubGraphPath}");
-
+            _cachedSubGraph = ModuleSystem
+                .GetModule<IResourceModule>()
+                .LoadAssetOnce<HfsmGraphAsset>(SubGraphPath);
             return _cachedSubGraph;
         }
 

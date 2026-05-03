@@ -76,6 +76,27 @@ public class MissionRequireTemplateWithCondition : MissionRequireTemplate
             else
                 return ++count == require.count;
         }
+
+        public override string SaveProgress()
+        {
+            return $"{count}|{IsCompleted}";
+        }
+
+        public override void LoadProgress(string status)
+        {
+            count = 0;
+            IsCompleted = false;
+
+            if (string.IsNullOrWhiteSpace(status))
+                return;
+
+            string[] parts = status.Split('|');
+            if (parts.Length > 0 && int.TryParse(parts[0], out int savedCount))
+                count = savedCount;
+
+            if (parts.Length > 1 && bool.TryParse(parts[1], out bool completed))
+                IsCompleted = completed;
+        }
     }
 
     public override Control CreateEditUI(GraphEditorContext context)

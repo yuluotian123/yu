@@ -8,7 +8,6 @@ namespace GameLogic
     {
         private readonly Dictionary<string, object> _data = new(StringComparer.Ordinal);
         private FlowGraphRuntime _flowRuntime;
-        private GraphRuntimeDebugHandle _debugHandle;
 
         public SkillRuntime(SkillManagerComponent2D manager, SkillResource resource, string resourcePath)
         {
@@ -62,13 +61,6 @@ namespace GameLogic
 
             _flowRuntime = new FlowGraphRuntime(Resource.Graph, context);
             _flowRuntime.Returned += OnFlowReturned;
-            Node ownerNode = hfsmRuntime.GameObject ?? Manager?.Owner;
-            _debugHandle = GraphRuntimeDebugRegistry.Register(
-                ownerNode,
-                _flowRuntime,
-                Resource.Graph,
-                $"Skill:{SkillKey}",
-                CreateRuntimeDebugMetadata);
 
             if (!_flowRuntime.Start())
             {
@@ -101,9 +93,6 @@ namespace GameLogic
                 _flowRuntime.Stop();
                 _flowRuntime = null;
             }
-
-            _debugHandle?.Dispose();
-            _debugHandle = null;
 
             if (IsRunning && !wasCompleted && string.IsNullOrWhiteSpace(LastReturnLabel))
                 LastReturnLabel = "Interrupted";
@@ -152,14 +141,6 @@ namespace GameLogic
             LastReturnLabel = string.IsNullOrWhiteSpace(label) ? "Finished" : label;
             IsCompleted = true;
             IsRunning = false;
-            if (_flowRuntime != null)
-            {
-                GraphRuntimeDebugRegistry.RecordEvent(_flowRuntime, "SkillCompleted", LastReturnLabel, Resource?.Graph);
-                GraphRuntimeDebugRegistry.CaptureContext(_flowRuntime, _flowRuntime.Context, true);
-            }
-
-            _debugHandle?.Dispose();
-            _debugHandle = null;
         }
 
         private static string ResolveSkillKey(SkillResource resource, string resourcePath)
@@ -173,19 +154,5 @@ namespace GameLogic
             return resource?.ResourcePath ?? string.Empty;
         }
 
-        private IEnumerable<string> CreateRuntimeDebugMetadata()
-        {
-            yield return $"SkillKey={SkillKey}";
-            if (!string.IsNullOrWhiteSpace(ResourcePath))
-                yield return $"ResourcePath={ResourcePath}";
-
-            yield return $"Running={IsRunning}";
-            yield return $"Completed={IsCompleted}";
-            if (!string.IsNullOrWhiteSpace(LastReturnLabel))
-                yield return $"Return={LastReturnLabel}";
-
-            double now = Time.GetTicksMsec() * 0.001d;
-            yield return $"CooldownRemaining={Mathf.Max(0f, (float)(CooldownReadyTime - now)):0.###}";
-        }
     }
 }

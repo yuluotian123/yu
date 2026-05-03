@@ -83,7 +83,7 @@ public override List<string> GetAllowedNodeTypes()
 - `StateGraphAsset`：状态图，默认 `StateTransitionConnection`。
 - `HfsmGraphAsset`：HFSM 图，复用 StateGraph 语义，默认 `HfsmTransitionConnection`。
 - `SkillFlowGraphAsset`：技能流程图，复用 FlowGraph 节点。
-- `MissionGraph`：任务链图，默认 `ConnectionWithConditon`。
+- `MissionGraph`：任务链图，基于 FlowGraph，默认 `FlowConnection`。
 
 ## 常见坑
 
@@ -91,4 +91,3 @@ public override List<string> GetAllowedNodeTypes()
 - 图类型重命名后，旧资源需要迁移 `GraphJson.GraphType`。
 - 自定义连线类型必须有无参构造，才能被反序列化。
 - 图类型不应该持有编辑器窗口状态，缩放和滚动已经由 `GraphDocument.EditorState` 保存。
-

@@ -84,17 +84,19 @@ Skill Flow 继承 FlowGraph：
 
 ## MissionGraph
 
-MissionGraph 运行时由 `MissionChainHandle` 和 `MissionChainManager` 管理：
+MissionGraph 现在是 FlowGraph 的业务特化：
 
-- `MissionGraph` 继承 `GraphAsset`，图类型为 `MissionGraph`。
+- `MissionGraph` 继承 `FlowGraphAsset`，图类型为 `MissionGraph`。
+- FlowGraph 通用 `FlowConnection` 提供 Sequence/Parallel 推进时机和条件列表。
 - `MissionNode` 创建 `MissionPrototype<object>`。
-- `ActionNode` 执行一组 `ActionBase`。
-- `ConnectionWithConditon` 控制 Sequence/Parallel 和条件。
-- `SubGraphNodeData` 用于任务链子图。
+- `MissionSubGraphNodeData` 启动并等待 Mission 子图。
+- `FlowActionNodeData` 执行一组 `GraphActionBase`，Mission action 也接入这套体系。
+- `MissionGraphRuntime` 继承 `FlowGraphRuntime`，补充任务部署队列、任务完成回调、子图 runtime、保存恢复和 Mission debug metadata。
+- `MissionChainManager` 管理所有 `MissionGraphRuntime`，并把 deployment request 转交给 `MissionManager<object>`。
 - `MissionChainSaver` 保存 active mission、pending subgraph 和任务需求进度。
 - 启动前调用 `GraphAsset.Validate()`，验证失败拒绝启动。
 
-MissionGraph 也使用 `GraphBlackboardRuntime`，子图通过父 handle 的 blackboard fork 继承父图黑板。当前实现还没有接入 `IGraphRuntimeScope` 和 Runtime Debug，后续应把 `MissionChainHandle` 收敛成可观察、可测试、可保存恢复的 runtime。
+MissionGraph 也使用 `GraphBlackboardRuntime`，子图通过父 runtime 的 blackboard fork 继承父图黑板。`MissionGraphRuntime` 实现 `IGraphRuntimeScope`，因此 Runtime Debug 和跨子图黑板写入会沿着 Mission 子图树工作。
 
 ## Runtime Debug
 

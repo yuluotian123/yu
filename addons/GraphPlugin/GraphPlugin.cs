@@ -6,7 +6,6 @@ public partial class GraphPlugin : EditorPlugin
 {
     private GraphCanvasEditorWindow _editorWindow;
     private GraphCanvasInspectorPlugin _inspectorPlugin;
-    private GraphRuntimeDebugEditorDebuggerPlugin _runtimeDebugDebuggerPlugin;
 
     public override void _EnterTree()
     {
@@ -23,20 +22,18 @@ public partial class GraphPlugin : EditorPlugin
         _inspectorPlugin = new GraphCanvasInspectorPlugin { Plugin = this };
         AddInspectorPlugin(_inspectorPlugin);
 
-        _runtimeDebugDebuggerPlugin = new GraphRuntimeDebugEditorDebuggerPlugin();
-        AddDebuggerPlugin(_runtimeDebugDebuggerPlugin);
-
         GD.Print("GraphCanvas plugin loaded");
     }
 
     public override void _ExitTree()
     {
-        if (_runtimeDebugDebuggerPlugin != null)
-            RemoveDebuggerPlugin(_runtimeDebugDebuggerPlugin);
-
         RemoveInspectorPlugin(_inspectorPlugin);
         if (_editorWindow != null)
+        {
+            GraphEditorSignalCleanup.DisconnectSubtree(_editorWindow);
             _editorWindow.QueueFree();
+            _editorWindow = null;
+        }
 
         GD.Print("GraphCanvas plugin unloaded");
     }
@@ -58,7 +55,7 @@ public partial class GraphPlugin : EditorPlugin
         {
             GraphType = FlowGraphAsset.GraphTypeName,
             DisplayName = "FlowGraph",
-            CreateConnection = () => new GraphConnection()
+            CreateConnection = () => new FlowConnection()
         });
 
         GraphTypeRegistry.RegisterGraphType(new GraphTypeDefinition

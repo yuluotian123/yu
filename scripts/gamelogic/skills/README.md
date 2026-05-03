@@ -15,7 +15,7 @@ Skill 系统把角色技能拆成资源、运行时、管理组件和 FlowGraph�
 - `SkillFlowGraphAsset.cs`：技能 FlowGraph 资源类型。
 - `runtime/SkillRuntime.cs`：单个技能在某个角色身上的运行时实例。
 - `runtime/SkillManagerComponent2D.cs`：角色技能管理组件。
-- `actions/SkillActions.cs`：技能 FlowGraph 可用 action。
+- `actions/`：技能 FlowGraph 可用 action。
 
 ## 设计边界
 
@@ -145,28 +145,26 @@ float progress = timeline.NormalizedTime;
 当前 action 定义在：
 
 ```text
-scripts/gamelogic/skills/actions/SkillActions.cs
-```
-
-### SkillResolveDashDirectionAction
-
-根据 blackboard `MoveAxisX` 计算 dash 方向；没有输入时使用 `CharacterMoveComponent2D.Facing`。
-
-默认写入：
-
-```text
-Skill.DashDirection
+scripts/gamelogic/skills/actions/
 ```
 
 ### SkillApplyDashVelocityAction
 
-读取 dash 方向并写入 `CharacterBodyMotorComponent2D.Velocity`。
+直接解析 dash 方向并写入 `CharacterBodyMotorComponent2D.Velocity`。
+
+方向来源优先级：
+
+- `CharacterMoveComponent2D.ApprovedIntent`
+- `CharacterMoveComponent2D.RawIntent`
+- HFSM blackboard `MoveAxisX`
+- `CharacterMoveComponent2D.InputX`
+- `CharacterMoveComponent2D.Facing`
 
 常用参数：
 
 - `Speed`
 - `StopVerticalVelocity`
-- `DirectionBlackboardKey`
+- `MoveAxisBlackboardKey`
 
 ### SkillSetVisualModulateAction
 
@@ -186,6 +184,24 @@ Attack 用的斩击表现 action。
 
 `Update` 会读取 `FlowTimelineContext.NormalizedTime` 调整斩击透明度和缩放。
 
+### SkillCameraShakeAction
+
+读取 `CameraShakeProfile` 资源，并直接调用角色身上的 `PlayerCameraComponent2D.Shake()`。
+
+常用资源：
+
+- `res://assets/camera_shakes/light_hit.tres`
+- `res://assets/camera_shakes/heavy_hit.tres`
+- `res://assets/camera_shakes/dash_burst.tres`
+
+常用参数在 `CameraShakeProfile` 中配置：
+
+- `Duration`
+- `Amplitude`
+- `Frequency`
+- `RotationAmplitudeDegrees`
+- `DecayPower`
+
 ## Dash Skill Flow
 
 资源：
@@ -200,7 +216,7 @@ res://assets/skills/dash_flow.tres
 Entry
   -> Timeline 0.16s
       Start:
-        ResolveDashDirection
+        CameraShake(dash_burst)
         SetVisualModulate(true)
       Update:
         ApplyDashVelocity
@@ -225,6 +241,7 @@ res://assets/skills/attack_flow.tres
 Entry
   -> Timeline 0.22s
       Start:
+        CameraShake(light_hit)
         Slash Show
       Update:
         Slash Update

@@ -95,6 +95,20 @@ namespace Framework
             return handle;
         }
 
+        public T LoadAssetOnce<T>(string path) where T : Resource
+        {
+            return TryLoadAssetOnce(path, out T asset) ? asset : null;
+        }
+
+        public bool TryLoadAssetOnce<T>(string path, out T asset) where T : Resource
+        {
+            ResourceHandle<T> handle = LoadAsset<T>(path);
+            asset = handle.Asset;
+            bool isValid = handle.IsValid;
+            handle.Release();
+            return isValid && asset != null;
+        }
+
         public ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource
         {
             var handle = CreateHandle<T>(path);

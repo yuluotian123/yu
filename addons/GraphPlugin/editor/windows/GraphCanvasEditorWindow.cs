@@ -15,22 +15,66 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphConnectionEditorService _connectionEditor;
     private GraphExplorerPanel _explorerPanel;
     private GraphTimelinePanel _timelinePanel;
-    private GraphRuntimeDebugPanel _runtimeDebugPanel;
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
     private VSplitContainer _workArea;
-    private CheckButton _runtimeDebugToggle;
-    private double _runtimeDebugRefreshElapsed;
     private string _boundTimelineNodeId = string.Empty;
+    private bool _initialized;
+    private bool _closeRequestedConnected;
 
     public EditorUndoRedoManager _undoRedo { get; set; }
 
     public override void _Ready()
     {
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (_initialized &&
+            _controller != null &&
+            GodotObject.IsInstanceValid(_mainContainer) &&
+            GodotObject.IsInstanceValid(_graphEdit))
+        {
+            return;
+        }
+
+        ResetEditorUi();
+
         Title = "GraphCanvas Editor";
-        CloseRequested += CloseGraphEditor;
+        if (!_closeRequestedConnected)
+        {
+            CloseRequested += CloseGraphEditor;
+            _closeRequestedConnected = true;
+        }
+
         CreateToolbar();
         CreateGraphEdit();
+        _initialized = _controller != null;
+    }
+
+    private void ResetEditorUi()
+    {
+        if (_mainContainer != null && GodotObject.IsInstanceValid(_mainContainer))
+        {
+            GraphEditorSignalCleanup.DisconnectSubtree(_mainContainer);
+            RemoveChild(_mainContainer);
+            _mainContainer.QueueFree();
+        }
+
+        _graphEdit = null;
+        _controller = null;
+        _mainContainer = null;
+        _blackboardPanel = null;
+        _subGraphNavigator = null;
+        _connectionEditor = null;
+        _explorerPanel = null;
+        _timelinePanel = null;
+        _breadcrumbBar = null;
+        _toolbar = null;
+        _workArea = null;
+        _boundTimelineNodeId = string.Empty;
+        _initialized = false;
     }
 
     private void CloseGraphEditor()
@@ -39,11 +83,6 @@ public partial class GraphCanvasEditorWindow : Window
         _blackboardPanel?.Close();
         _explorerPanel?.Close();
         _timelinePanel?.Clear();
-        if (_runtimeDebugToggle != null)
-            _runtimeDebugToggle.ButtonPressed = false;
-        else
-            _runtimeDebugPanel?.SetVisible(false);
-        ClearRuntimeDebugHighlights();
         Hide();
     }
 
@@ -89,10 +128,6 @@ public partial class GraphCanvasEditorWindow : Window
         var explorerBtn = new Button { Text = "Explorer" };
         explorerBtn.Pressed += () => _explorerPanel?.Open();
         _toolbar.AddChild(explorerBtn);
-
-        _runtimeDebugToggle = new CheckButton { Text = "Runtime Debug" };
-        _runtimeDebugToggle.Toggled += OnRuntimeDebugToggled;
-        _toolbar.AddChild(_runtimeDebugToggle);
 
         _toolbar.AddChild(new VSeparator());
         _toolbar.AddChild(new Label { Text = "Right-click to add nodes" });
@@ -161,13 +196,24 @@ public partial class GraphCanvasEditorWindow : Window
             () => _currentGraph,
             CreateEditorContext);
         _workArea.AddChild(_timelinePanel.Root);
-
-        _runtimeDebugPanel = new GraphRuntimeDebugPanel();
-        _runtimeDebugPanel.OpenGraphRequested += OnRuntimeDebugOpenGraph;
-        _mainContainer.AddChild(_runtimeDebugPanel.Root);
     }
 
     public void LoadGraph(GraphAsset graph)
+    {
+        if (graph == null)
+            return;
+
+        EnsureInitialized();
+        if (_controller == null)
+        {
+            GD.PushWarning("[GraphCanvasEditorWindow] Window is not initialized yet.");
+            return;
+        }
+
+        LoadGraphInitialized(graph);
+    }
+
+    private void LoadGraphInitialized(GraphAsset graph)
     {
         _currentGraph = graph;
         Title = graph.GetEditorTitle();
@@ -176,7 +222,6 @@ public partial class GraphCanvasEditorWindow : Window
         _explorerPanel?.RefreshIfOpen();
         _timelinePanel?.Clear();
         _boundTimelineNodeId = string.Empty;
-        ClearRuntimeDebugHighlights();
 
         _controller.ClearGraphEdit();
         _controller.LoadGraph(
@@ -283,7 +328,6 @@ public partial class GraphCanvasEditorWindow : Window
 
         _connectionEditor?.UpdateConnectionLabels();
         UpdateTimelinePanelSelection();
-        UpdateRuntimeDebug(delta);
         if (Input.IsKeyPressed(Key.Delete) && _connectionEditor?.DeleteHoveredConnection() == true)
         {
             GetViewport().SetInputAsHandled();
@@ -346,95 +390,5 @@ public partial class GraphCanvasEditorWindow : Window
         return _currentGraph.FindNodeById(selectedNodeId) as FlowTimelineNodeData;
     }
 
-    private void OnRuntimeDebugToggled(bool enabled)
-    {
-        _runtimeDebugPanel?.SetVisible(enabled);
-        _runtimeDebugRefreshElapsed = 999d;
-        if (!enabled)
-            ClearRuntimeDebugHighlights();
-    }
-
-    private void OnRuntimeDebugOpenGraph(GraphAsset graph)
-    {
-        if (graph == null)
-            return;
-
-        OnSave();
-        ResetNavigation();
-        LoadGraph(graph);
-    }
-
-    private void UpdateRuntimeDebug(double delta)
-    {
-        if (_runtimeDebugToggle?.ButtonPressed != true)
-        {
-            ClearRuntimeDebugHighlights();
-            return;
-        }
-
-        _runtimeDebugRefreshElapsed += delta;
-        if (_runtimeDebugRefreshElapsed < 0.1d)
-            return;
-
-        _runtimeDebugRefreshElapsed = 0d;
-        UpdateRuntimeDebugSelectedOwnerPath();
-        List<GraphRuntimeDebugSnapshot> snapshots = GraphRuntimeDebugRemoteStore.FindSnapshotsForSelectedOwner();
-        GraphRuntimeDebugSnapshot activeSnapshot = GraphRuntimeDebugRemoteStore.ChooseBestSnapshot(snapshots, _currentGraph);
-        _runtimeDebugPanel?.Refresh(
-            GraphRuntimeDebugRemoteStore.SelectedOwnerPath,
-            GraphRuntimeDebugRemoteStore.HasReceivedSnapshots,
-            snapshots,
-            activeSnapshot,
-            _currentGraph);
-        ApplyRuntimeDebugHighlights(activeSnapshot);
-    }
-
-    private void UpdateRuntimeDebugSelectedOwnerPath()
-    {
-        EditorSelection selection = EditorInterface.Singleton?.GetSelection();
-        if (selection == null)
-            return;
-
-        Godot.Collections.Array<Node> selectedNodes = selection.GetSelectedNodes();
-        if (selectedNodes == null || selectedNodes.Count == 0 || selectedNodes[0] == null)
-            return;
-
-        GraphRuntimeDebugRemoteStore.SetSelectedOwnerPath(GraphRuntimeDebugSnapshotFactory.GetObjectPath(selectedNodes[0]));
-    }
-
-    private void ApplyRuntimeDebugHighlights(GraphRuntimeDebugSnapshot snapshot)
-    {
-        var activeIds = new HashSet<string>();
-        GraphRuntimeDebugScopeSnapshot scope = GraphRuntimeDebugUtil.FindScopeForGraph(snapshot?.Scopes, _currentGraph);
-        if (scope != null)
-        {
-            for (int i = 0; i < scope.ActiveNodeIds.Count; i++)
-            {
-                if (!string.IsNullOrWhiteSpace(scope.ActiveNodeIds[i]))
-                    activeIds.Add(scope.ActiveNodeIds[i]);
-            }
-        }
-
-        foreach (Node child in _graphEdit.GetChildren())
-        {
-            if (child is not GraphNode graphNode)
-                continue;
-
-            bool active = activeIds.Contains(graphNode.Name.ToString());
-            graphNode.Modulate = active ? new Color(1f, 0.9f, 0.45f) : Colors.White;
-        }
-    }
-
-    private void ClearRuntimeDebugHighlights()
-    {
-        if (_graphEdit == null)
-            return;
-
-        foreach (Node child in _graphEdit.GetChildren())
-        {
-            if (child is GraphNode graphNode)
-                graphNode.Modulate = Colors.White;
-        }
-    }
 }
 #endif

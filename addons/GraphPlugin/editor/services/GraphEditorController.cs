@@ -62,6 +62,7 @@ public sealed class GraphEditorController
         {
             if (child is GraphNode or Label)
             {
+                GraphEditorSignalCleanup.DisconnectSubtree(child);
                 _graphEdit.RemoveChild(child);
                 child.QueueFree();
             }

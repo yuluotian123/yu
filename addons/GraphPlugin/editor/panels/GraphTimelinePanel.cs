@@ -158,11 +158,16 @@ public sealed partial class GraphTimelinePanel
         };
         duration.ValueChanged += value =>
         {
+            if (_timeline == null)
+                return;
+
             _timeline.Duration = (float)value;
             _timeline.NormalizeTimelineData();
             _playhead = Mathf.Clamp(_playhead, 0f, _timeline.Duration);
             MarkChanged();
-            RefreshAll();
+            RefreshTrackList();
+            RefreshInspector();
+            RefreshCanvas();
         };
         _header.AddChild(duration);
 
@@ -415,6 +420,7 @@ public sealed partial class GraphTimelinePanel
     {
         foreach (Node child in control.GetChildren())
         {
+            GraphEditorSignalCleanup.DisconnectSubtree(child);
             control.RemoveChild(child);
             child.QueueFree();
         }

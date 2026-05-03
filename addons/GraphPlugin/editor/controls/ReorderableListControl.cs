@@ -83,6 +83,7 @@ public class ReorderableListControl<T> where T : class
     {
         foreach (var child in _itemsContainer.GetChildren())
         {
+            GraphEditorSignalCleanup.DisconnectSubtree(child);
             _itemsContainer.RemoveChild(child);
             child.QueueFree();
         }

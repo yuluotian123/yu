@@ -78,13 +78,25 @@ namespace GameLogic
             if (_hfsm == null)
                 return;
 
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.IsOnFloor, _motor?.IsOnFloor == true);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.JumpStartRequested, jumpIntent.StartRequested);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.JumpSustainRequested, jumpIntent.SustainRequested);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.MoveAxisX, moveIntent.AxisX);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.VelocityY, _motor?.Velocity.Y ?? 0f);
+            bool isOnFloor = _motor?.IsOnFloor == true;
+            float velocityY = _motor?.Velocity.Y ?? 0f;
+
+            SetHfsmValue(CharacterHfsmBlackboardKeys.IsOnFloor, isOnFloor);
+            SetHfsmValue(CharacterHfsmBlackboardKeys.JumpStartRequested, jumpIntent.StartRequested);
+            SetHfsmValue(CharacterHfsmBlackboardKeys.JumpSustainRequested, jumpIntent.SustainRequested);
+            SetHfsmValue(CharacterHfsmBlackboardKeys.MoveAxisX, moveIntent.AxisX);
+            SetHfsmValue(CharacterHfsmBlackboardKeys.VelocityY, velocityY);
             _hfsm.SetValue(CharacterHfsmBlackboardKeys.DashStartRequested, dashStartRequested);
             _hfsm.SetValue(CharacterHfsmBlackboardKeys.AttackStartRequested, attackStartRequested);
+        }
+
+        private void SetHfsmValue<T>(string key, T value)
+        {
+            _hfsm.SetValue(key, value);
+
+            // Locomotion is a child HFSM graph. Write directly into the child too so
+            // parent-local fallback entries cannot shadow child blackboard inputs.
+            _hfsm.Runtime?.ChildRuntime?.SetValue(key, value);
         }
     }
 }

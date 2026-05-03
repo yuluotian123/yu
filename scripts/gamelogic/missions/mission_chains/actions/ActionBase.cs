@@ -1,7 +1,3 @@
-public abstract class ActionBase : MissionObject
+public abstract class ActionBase : GraphActionBase
 {
-    /// <summary>perform action with current parameters</summary>
-    public abstract void Execute(GraphExecutionContext context);
-
-
 }

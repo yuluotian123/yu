@@ -346,6 +346,8 @@ var visible = resource.IsProfilerOverlayVisible;
 
 ```csharp
 ResourceHandle<T> LoadAsset<T>(string path) where T : Resource;
+T LoadAssetOnce<T>(string path) where T : Resource;
+bool TryLoadAssetOnce<T>(string path, out T asset) where T : Resource;
 ResourceHandle<T> LoadAssetAsync<T>(string path) where T : Resource;
 SceneHandle LoadSceneAsync(string path);
 

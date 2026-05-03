@@ -219,6 +219,7 @@ public sealed class GraphBlackboardPanel
     {
         foreach (Node child in entriesContainer.GetChildren())
         {
+            GraphEditorSignalCleanup.DisconnectSubtree(child);
             entriesContainer.RemoveChild(child);
             child.QueueFree();
         }

@@ -61,9 +61,9 @@ runtime 只保留图类型自己的语义：
 - FlowGraph：Entry、Action、Condition、Delay、Timeline、Return、多 active node。
 - StateGraph：当前状态、Any State、CompletionOnly、Composite SubGraph、优先级、Tag。
 - HFSM：在 StateGraph 语义上接入角色、组件、技能状态。
-- MissionGraph：Sequence、Parallel、SubGraph 和任务实例部署。
+- MissionGraph：基于 FlowGraphRuntime 的 Sequence、Parallel、SubGraph 和任务实例部署。
 
-这些运行时都共享 core 的 `GraphRuntimeIndex`、`GraphBlackboardRuntime` 和 `GraphValidationService`。FlowGraph 和 StateGraph 已实现 `IGraphRuntimeScope`，因此可以被统一黑板写入器和 Runtime Debug 遍历。MissionGraph 当前仍是业务层 handle/manager 模式，重构目标是补齐同一套运行时协议。
+这些运行时都共享 core 的 `GraphRuntimeIndex`、`GraphBlackboardRuntime` 和 `GraphValidationService`。FlowGraph、StateGraph 和 MissionGraph 已实现 `IGraphRuntimeScope`，因此可以被统一黑板写入器和 Runtime Debug 遍历。
 
 ## Runtime Debug Layer
 

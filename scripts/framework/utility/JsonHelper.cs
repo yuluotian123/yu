@@ -167,12 +167,7 @@ namespace Framework
         {
             var resModule = ModuleSystem.GetModule<IResourceModule>();
             if (resModule != null)
-            {
-                var handle = resModule.LoadAsset<Resource>(path);
-                var asset = handle.Asset;
-                handle.Release();
-                return asset;
-            }
+                return resModule.LoadAssetOnce<Resource>(path);
 
             return ResourceLoader.Load(path);
         }

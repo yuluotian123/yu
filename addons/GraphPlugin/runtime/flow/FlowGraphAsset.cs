@@ -21,5 +21,7 @@ public partial class FlowGraphAsset : GraphAsset
             .ToList();
     }
 
+    public override GraphConnection CreateConnection() => new FlowConnection();
+
     public override string GetEditorTitle() => "FlowGraph Editor";
 }

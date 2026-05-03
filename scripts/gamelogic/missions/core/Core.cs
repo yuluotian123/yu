@@ -85,6 +85,9 @@ namespace GameLogic
             _require = require;
         }
 
+        /// <summary>当前需求是否已经完成。</summary>
+        public bool IsCompleted { get; protected set; }
+
         /// <summary>发送一条消息给玩家</summary>
         /// <param name="message"></param>
         /// <param name="hasStatusChanged"></param>
@@ -94,7 +97,8 @@ namespace GameLogic
             hasStatusChanged = false;
             if (!_require.CheckMessage(message)) return false;
             hasStatusChanged = true;
-            return UseMessage(message);
+            IsCompleted = IsCompleted || UseMessage(message);
+            return IsCompleted;
         }
 
         /// <summary>应用某条消息并返回当前需求是否已经完成</summary>
@@ -102,9 +106,13 @@ namespace GameLogic
         /// <returns></returns>
         protected abstract bool UseMessage(T message);
 
-        public virtual string SaveProgress() => this.ToString();
+        public virtual string SaveProgress() => IsCompleted ? "completed" : string.Empty;
 
-        public virtual void LoadProgress(string status) { }
+        public virtual void LoadProgress(string status)
+        {
+            IsCompleted = string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase) ||
+                          string.Equals(status, "true", StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     /// <summary>任务</summary>
@@ -191,9 +199,36 @@ namespace GameLogic
 
         public void LoadHandleProgresses(string[] statuses)
         {
-            if (statuses == null) return;
+            if (statuses == null)
+                return;
+
             for (int i = 0; i < handles.Length && i < statuses.Length; i++)
                 handles[i].LoadProgress(statuses[i]);
+
+            RebuildUnfinishedHandles();
+        }
+
+        private void RebuildUnfinishedHandles()
+        {
+            if (proto.isSingleRequire)
+                return;
+
+            _unfinishedHandles.Clear();
+
+            bool anyCompleted = handles.Any(handle => handle.IsCompleted);
+            if (proto.requireMode == MissionRequireMode.Any)
+            {
+                if (!anyCompleted)
+                    _unfinishedHandles.AddRange(handles);
+
+                return;
+            }
+
+            foreach (MissionRequireHandle<T> handle in handles)
+            {
+                if (!handle.IsCompleted)
+                    _unfinishedHandles.Add(handle);
+            }
         }
     }
 
@@ -259,6 +294,28 @@ namespace GameLogic
             foreach (var component in components)
                 component.OnMissionRemoved(mission, false);
             return true;
+        }
+
+        /// <summary>
+        /// 清空当前所有任务。
+        /// 读档时默认静默清空，避免旧任务触发取消回调并污染即将恢复的 MissionGraphRuntime。
+        /// </summary>
+        public void ClearMissions(bool notify = false, bool isFinished = false)
+        {
+            if (allMissions.Count == 0)
+                return;
+
+            Mission<T>[] missions = notify ? allMissions.Values.ToArray() : null;
+            allMissions.Clear();
+
+            if (!notify)
+                return;
+
+            foreach (Mission<T> mission in missions)
+            {
+                foreach (var component in components)
+                    component.OnMissionRemoved(mission, isFinished);
+            }
         }
 
         /// <summary>向任务系统发送消息以驱动任务系统</summary>

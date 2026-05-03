@@ -50,13 +50,45 @@ public partial class FlowTimelineNodeData
             }
 
             if (active && clip.EndTime > previousTime && clip.EndTime <= nextTime)
+            {
+                ExecuteClipAction(context, data, track, clip, FlowTimelinePhase.Complete, clip.EndTime, previousTime, delta);
                 data.ActiveClips.Remove(key);
+            }
         });
     }
 
-    private static void ClearActiveClips(TimelineRuntimeData data)
+    private void CancelActiveClips(GraphExecutionContext context, TimelineRuntimeData data, float time)
     {
-        data?.ActiveClips.Clear();
+        if (data == null || data.ActiveClips.Count == 0)
+            return;
+
+        ForEachClip((track, clip, trackIndex, clipIndex) =>
+        {
+            string key = GetClipKey(trackIndex, clipIndex, clip);
+            if (!data.ActiveClips.Contains(key))
+                return;
+
+            ExecuteClipAction(context, data, track, clip, FlowTimelinePhase.Cancel, time, time, 0f);
+        });
+
+        data.ActiveClips.Clear();
+    }
+
+    private void CompleteActiveClips(GraphExecutionContext context, TimelineRuntimeData data, float time)
+    {
+        if (data == null || data.ActiveClips.Count == 0)
+            return;
+
+        ForEachClip((track, clip, trackIndex, clipIndex) =>
+        {
+            string key = GetClipKey(trackIndex, clipIndex, clip);
+            if (!data.ActiveClips.Contains(key))
+                return;
+
+            ExecuteClipAction(context, data, track, clip, FlowTimelinePhase.Complete, time, time, 0f);
+        });
+
+        data.ActiveClips.Clear();
     }
 
     private void FireMarkers(
@@ -106,14 +138,12 @@ public partial class FlowTimelineNodeData
         FlowTimelineContext timelineContext = data.TimelineContext;
         PopulateContext(timelineContext, phase, time, previousTime, delta, string.Empty, track, clip);
         context.UserData.Add(timelineContext);
-        GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
         try
         {
             clip.Action.Execute(context);
         }
         finally
         {
-            GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
             context.UserData.Remove(timelineContext);
         }
     }
@@ -134,7 +164,6 @@ public partial class FlowTimelineNodeData
         FlowTimelineContext timelineContext = data.TimelineContext;
         PopulateContext(timelineContext, phase, time, previousTime, delta, eventLabel, null, null);
         context.UserData.Add(timelineContext);
-        GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
         try
         {
             for (int i = 0; i < actions.Count; i++)
@@ -142,7 +171,6 @@ public partial class FlowTimelineNodeData
         }
         finally
         {
-            GraphRuntimeDebugRegistry.CaptureTimelineContext(context, timelineContext, phase != FlowTimelinePhase.Update);
             context.UserData.Remove(timelineContext);
         }
     }

@@ -70,6 +70,7 @@ public sealed partial class GraphTimelinePanel
         _canvas.ClipSelected += SelectClip;
         _canvas.MarkerSelected += SelectMarker;
         _canvas.DeleteSelectedClipRequested += DeleteSelectedClip;
+        _canvas.DeleteSelectedMarkerRequested += DeleteSelectedMarker;
         _canvas.PlayheadChanged += value =>
         {
             _playhead = value;
@@ -374,6 +375,22 @@ public sealed partial class GraphTimelinePanel
         }
 
         track.Clips.RemoveAt(_selectedClipIndex);
+        ClearSelection();
+        MarkChanged();
+        RefreshAll();
+    }
+
+    private void DeleteSelectedMarker()
+    {
+        if (_timeline == null ||
+            _timeline.Markers == null ||
+            _selectedMarkerIndex < 0 ||
+            _selectedMarkerIndex >= _timeline.Markers.Count)
+        {
+            return;
+        }
+
+        _timeline.Markers.RemoveAt(_selectedMarkerIndex);
         ClearSelection();
         MarkChanged();
         RefreshAll();

@@ -31,6 +31,7 @@ public sealed partial class GraphTimelineCanvas : Control
     public event Action<float> PlayheadChanged;
     public event Action Changed;
     public event Action DeleteSelectedClipRequested;
+    public event Action DeleteSelectedMarkerRequested;
 
     private enum DragMode
     {
@@ -226,10 +227,13 @@ public sealed partial class GraphTimelineCanvas : Control
         if (keyEvent.Keycode is not (Key.Delete or Key.Backspace))
             return;
 
-        if (_selectedTrackIndex < 0 || _selectedClipIndex < 0)
+        if (_selectedMarkerIndex >= 0)
+            DeleteSelectedMarkerRequested?.Invoke();
+        else if (_selectedTrackIndex >= 0 && _selectedClipIndex >= 0)
+            DeleteSelectedClipRequested?.Invoke();
+        else
             return;
 
-        DeleteSelectedClipRequested?.Invoke();
         AcceptEvent();
     }
 

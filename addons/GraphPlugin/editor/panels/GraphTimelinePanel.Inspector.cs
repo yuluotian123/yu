@@ -101,7 +101,21 @@ public sealed partial class GraphTimelinePanel
 
     private void BuildMarkerInspector(FlowTimelineMarker marker)
     {
-        _inspector.AddChild(new Label { Text = "Marker" });
+        var header = new HBoxContainer();
+        header.AddChild(new Label
+        {
+            Text = "Marker",
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        });
+        var delete = new Button
+        {
+            Text = "Delete Marker",
+            TooltipText = "Delete selected marker"
+        };
+        delete.Pressed += DeleteSelectedMarker;
+        header.AddChild(delete);
+        _inspector.AddChild(header);
+
         _inspector.AddChild(SkillActionEditorHelper.BuildLineEditRow("Label", marker.Label, "Marker label", value =>
         {
             marker.Label = value;

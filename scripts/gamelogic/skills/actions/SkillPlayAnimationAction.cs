@@ -26,8 +26,8 @@ namespace GameLogic
             if (owner == null)
                 return;
 
-            PlayerSpriteAnimationComponent2D animationComponent =
-                owner.GetComponent<PlayerSpriteAnimationComponent2D>();
+            SpriteAnimationComponent2D animationComponent =
+                owner.GetComponent<SpriteAnimationComponent2D>();
             if (animationComponent == null)
                 return;
 

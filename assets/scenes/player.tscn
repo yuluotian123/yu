@@ -4,18 +4,18 @@
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_0hrit"]
 [ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/controllers/PlayerCharacterControllerComponent2D.cs" id="3_controller"]
 [ext_resource type="Script" uid="uid://b2tjh6v4hfs07" path="res://scripts/gamelogic/hfsm/runtime/HfsmComponent2D.cs" id="4_fsm"]
-[ext_resource type="Script" uid="uid://c26f38a0omv2f" path="res://scripts/gamelogic/player/movement/CharacterBodyMotorComponent2D.cs" id="5_motor"]
-[ext_resource type="Script" uid="uid://d0xx8r62p5c42" path="res://scripts/gamelogic/player/movement/CharacterGravityComponent2D.cs" id="6_gravity"]
-[ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/player/movement/CharacterMoveComponent2D.cs" id="7_move"]
-[ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/player/movement/CharacterJumpComponent2D.cs" id="8_jump"]
+[ext_resource type="Script" uid="uid://c26f38a0omv2f" path="res://scripts/gamelogic/abilities/movement/CharacterBodyMotorComponent2D.cs" id="5_motor"]
+[ext_resource type="Script" uid="uid://d0xx8r62p5c42" path="res://scripts/gamelogic/abilities/movement/CharacterGravityComponent2D.cs" id="6_gravity"]
+[ext_resource type="Script" uid="uid://ccqgxkelkot8m" path="res://scripts/gamelogic/abilities/movement/CharacterMoveComponent2D.cs" id="7_move"]
+[ext_resource type="Script" uid="uid://dwwhrw47nunfj" path="res://scripts/gamelogic/abilities/movement/CharacterJumpComponent2D.cs" id="8_jump"]
 [ext_resource type="Resource" uid="uid://ch7drwso2wxxc" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/skills/runtime/SkillManagerComponent2D.cs" id="10_skill_manager"]
 [ext_resource type="Script" uid="uid://cg2ytousxnyt1" path="res://scripts/gamelogic/skills/SkillResource.cs" id="11_skill_resource"]
 [ext_resource type="Resource" uid="uid://b3dashskill01" path="res://assets/skills/dash_skill.tres" id="12_dash_skill"]
 [ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/skills/attack_skill.tres" id="13_attack_skill"]
 [ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/PlayerCameraComponent2D.cs" id="14_camera"]
-[ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/player/visuals/PlayerSpriteAnimationComponent2D.cs" id="15_visual_anim"]
-[ext_resource type="SpriteFrames" path="res://assets/generated/rika/rika_sprite_frames.tres" id="16_player_frames"]
+[ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/abilities/visuals/SpriteAnimationComponent2D.cs" id="15_visual_anim"]
+[ext_resource type="SpriteFrames" uid="uid://blfobs5wepqeg" path="res://assets/sprites/rika_sprite_frames.tres" id="16_player_frames"]
 
 [sub_resource type="Resource" id="sub_controller"]
 script = ExtResource("3_controller")
@@ -45,6 +45,7 @@ MaxFallSpeed = 1000.0
 
 [sub_resource type="Resource" id="sub_motor"]
 script = ExtResource("5_motor")
+BodySize = Vector2(36, 72)
 FootInset = 6.0
 
 [sub_resource type="Resource" id="sub_camera"]
@@ -57,7 +58,7 @@ ManualLookDistance = 112.0
 script = ExtResource("15_visual_anim")
 
 [sub_resource type="RectangleShape2D" id="shape_body"]
-size = Vector2(40, 72)
+size = Vector2(36, 72)
 
 [node name="Player" type="Node2D" unique_id=587364041]
 script = ExtResource("1_gobj")
@@ -72,9 +73,9 @@ shape = SubResource("shape_body")
 texture_filter = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=946751149]
-position = Vector2(6, -21)
+position = Vector2(0, -17)
 sprite_frames = ExtResource("16_player_frames")
-animation = &"idle"
+animation = &"attack"
 autoplay = "idle"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2005186648]

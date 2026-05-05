@@ -1,15 +1,8 @@
 using Godot;
 
-public abstract class StateConditionBase
+public abstract class StateConditionBase : GraphConditionEditorBase
 {
-    public virtual string Description => GetType().Name;
-
     public abstract bool IsMet(StateGraphRuntime runtime);
-
-    public virtual Control CreateEditUI(GraphEditorContext context)
-    {
-        return new Label { Text = Description };
-    }
 }
 
 public enum StateFloatComparison
@@ -19,4 +12,37 @@ public enum StateFloatComparison
     Equal,
     GreaterOrEqual,
     Greater
+}
+
+public static class StateFloatComparisonUtility
+{
+    public static bool Evaluate(
+        StateFloatComparison comparison,
+        float actual,
+        float expected,
+        float tolerance = 0.0001f)
+    {
+        return comparison switch
+        {
+            StateFloatComparison.Less => actual < expected,
+            StateFloatComparison.LessOrEqual => actual <= expected,
+            StateFloatComparison.Equal => Mathf.Abs(actual - expected) <= tolerance,
+            StateFloatComparison.GreaterOrEqual => actual >= expected,
+            StateFloatComparison.Greater => actual > expected,
+            _ => false
+        };
+    }
+
+    public static string ToOperatorText(StateFloatComparison comparison)
+    {
+        return comparison switch
+        {
+            StateFloatComparison.Less => "<",
+            StateFloatComparison.LessOrEqual => "<=",
+            StateFloatComparison.Equal => "==",
+            StateFloatComparison.GreaterOrEqual => ">=",
+            StateFloatComparison.Greater => ">",
+            _ => "?"
+        };
+    }
 }

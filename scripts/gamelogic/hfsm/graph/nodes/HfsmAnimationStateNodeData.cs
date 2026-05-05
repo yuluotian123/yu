@@ -46,7 +46,7 @@ namespace GameLogic
 
         public override void OnExit(HfsmRuntime runtime)
         {
-            runtime?.GetComponent<PlayerSpriteAnimationComponent2D>()?.ClearAnimationRequest(GetRequestKey());
+            runtime?.GetComponent<SpriteAnimationComponent2D>()?.ClearAnimationRequest(GetRequestKey());
             base.OnExit(runtime);
         }
 
@@ -97,7 +97,7 @@ namespace GameLogic
 
         private void RequestAnimation(HfsmRuntime runtime)
         {
-            runtime?.GetComponent<PlayerSpriteAnimationComponent2D>()?.RequestAnimation(
+            runtime?.GetComponent<SpriteAnimationComponent2D>()?.RequestAnimation(
                 GetRequestKey(),
                 GetAnimationName(),
                 AnimationPriority,

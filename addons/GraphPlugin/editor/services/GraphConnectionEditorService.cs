@@ -8,6 +8,8 @@ using Godot;
 /// </summary>
 public sealed class GraphConnectionEditorService
 {
+    private const float ConnectionPickDistance = 12.0f;
+
     private readonly Window _owner;
     private readonly GraphEdit _graphEdit;
     private readonly Func<GraphAsset> _getCurrentGraph;
@@ -50,6 +52,14 @@ public sealed class GraphConnectionEditorService
     {
         if (@event is InputEventMouseButton mb && mb.Pressed)
         {
+            if (IsPositionInsideGraphNode(mb.GlobalPosition))
+            {
+                _hoveredConnection = null;
+                if (mb.ButtonIndex == MouseButton.Left)
+                    _selectedConnection = null;
+                return false;
+            }
+
             GraphConnection connection = FindConnectionAtPosition(mb.Position);
             if (connection != null && mb.ButtonIndex == MouseButton.Left)
             {
@@ -69,7 +79,9 @@ public sealed class GraphConnectionEditorService
         }
         else if (@event is InputEventMouseMotion mm)
         {
-            _hoveredConnection = FindConnectionAtPosition(mm.Position);
+            _hoveredConnection = IsPositionInsideGraphNode(mm.GlobalPosition)
+                ? null
+                : FindConnectionAtPosition(mm.Position);
         }
 
         return false;
@@ -142,39 +154,37 @@ public sealed class GraphConnectionEditorService
         if (graph == null)
             return null;
 
+        Godot.Collections.Dictionary closestConnection = _graphEdit.GetClosestConnectionAtPoint(position, ConnectionPickDistance);
+        if (closestConnection.Count == 0)
+            return null;
+
+        string fromNode = closestConnection["from_node"].AsStringName().ToString();
+        int fromPort = closestConnection["from_port"].AsInt32();
+        string toNode = closestConnection["to_node"].AsStringName().ToString();
+        int toPort = closestConnection["to_port"].AsInt32();
+
         foreach (GraphConnection connection in graph.Connections)
         {
-            var fromNode = _graphEdit.GetNodeOrNull<GraphNode>(connection.FromNode);
-            var toNode = _graphEdit.GetNodeOrNull<GraphNode>(connection.ToNode);
-            if (fromNode == null || toNode == null)
-                continue;
-
-            if (connection.FromPort < 0 || connection.FromPort >= fromNode.GetOutputPortCount())
-                continue;
-
-            if (connection.ToPort < 0 || connection.ToPort >= toNode.GetInputPortCount())
-                continue;
-
-            Vector2 fromPos = GetPortPositionInLocal(fromNode, true, connection.FromPort);
-            Vector2 toPos = GetPortPositionInLocal(toNode, false, connection.ToPort);
-            if (IsPointNearLine(position, fromPos, toPos, 10.0f))
+            if (connection.Matches(fromNode, fromPort, toNode, toPort))
                 return connection;
         }
 
         return null;
     }
 
-    private static bool IsPointNearLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd, float threshold)
+    private bool IsPositionInsideGraphNode(Vector2 globalPosition)
     {
-        Vector2 lineVector = lineEnd - lineStart;
-        Vector2 pointVector = point - lineStart;
-        float lineLength = lineVector.Length();
-        if (lineLength == 0)
-            return point.DistanceTo(lineStart) <= threshold;
+        foreach (Node child in _graphEdit.GetChildren())
+        {
+            if (child is GraphNode graphNode &&
+                graphNode.Visible &&
+                graphNode.GetGlobalRect().HasPoint(globalPosition))
+            {
+                return true;
+            }
+        }
 
-        float t = Mathf.Clamp(pointVector.Dot(lineVector) / (lineLength * lineLength), 0.0f, 1.0f);
-        Vector2 projection = lineStart + t * lineVector;
-        return point.DistanceTo(projection) <= threshold;
+        return false;
     }
 
     private void ShowConnectionMenu(Vector2 position)

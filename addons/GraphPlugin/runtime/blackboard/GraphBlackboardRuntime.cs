@@ -9,14 +9,23 @@ public sealed class GraphBlackboardRuntime
         {
             Entries = GraphBlackboardValidator.CloneEntries(entries);
             Map = BuildMap(Entries);
+            DeclaredKeys = new HashSet<string>(Map.Keys, System.StringComparer.Ordinal);
+        }
+
+        private BlackboardFrame(IList<GraphBlackboardEntry> entries, HashSet<string> declaredKeys)
+        {
+            Entries = GraphBlackboardValidator.CloneEntries(entries);
+            Map = BuildMap(Entries);
+            DeclaredKeys = new HashSet<string>(declaredKeys, System.StringComparer.Ordinal);
         }
 
         public List<GraphBlackboardEntry> Entries { get; }
         public Dictionary<string, GraphBlackboardEntry> Map { get; }
+        public HashSet<string> DeclaredKeys { get; }
 
         public BlackboardFrame Clone()
         {
-            return new BlackboardFrame(Entries);
+            return new BlackboardFrame(Entries, DeclaredKeys);
         }
     }
 
@@ -155,6 +164,9 @@ public sealed class GraphBlackboardRuntime
         for (int i = _localStack.Count - 1; i >= 0; i--)
         {
             BlackboardFrame frame = _localStack[i];
+            if (!frame.DeclaredKeys.Contains(key))
+                continue;
+
             if (!frame.Map.TryGetValue(key, out GraphBlackboardEntry entry))
                 continue;
 

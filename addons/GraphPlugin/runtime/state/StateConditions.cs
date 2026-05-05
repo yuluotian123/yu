@@ -90,15 +90,7 @@ public class StateFloatCondition : StateConditionBase
             return false;
 
         float actual = runtime.Blackboard.GetValue(key, 0f);
-        return Comparison switch
-        {
-            StateFloatComparison.Less => actual < Value,
-            StateFloatComparison.LessOrEqual => actual <= Value,
-            StateFloatComparison.Equal => Mathf.Abs(actual - Value) <= Tolerance,
-            StateFloatComparison.GreaterOrEqual => actual >= Value,
-            StateFloatComparison.Greater => actual > Value,
-            _ => false
-        };
+        return StateFloatComparisonUtility.Evaluate(Comparison, actual, Value, Tolerance);
     }
 
     public override Control CreateEditUI(GraphEditorContext context)
@@ -132,15 +124,7 @@ public class StateFloatCondition : StateConditionBase
 
     private string GetComparisonText()
     {
-        return Comparison switch
-        {
-            StateFloatComparison.Less => "<",
-            StateFloatComparison.LessOrEqual => "<=",
-            StateFloatComparison.Equal => "==",
-            StateFloatComparison.GreaterOrEqual => ">=",
-            StateFloatComparison.Greater => ">",
-            _ => "?"
-        };
+        return StateFloatComparisonUtility.ToOperatorText(Comparison);
     }
 }
 

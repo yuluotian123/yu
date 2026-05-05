@@ -37,21 +37,19 @@ namespace GameLogic
         }
     }
 
-    public class HfsmBoolCondition : HfsmConditionBase
+    public class HfsmBoolCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] BoolValueTypes = { typeof(bool) };
 
-        public GraphBlackboardKeyReference Parameter { get; set; } = new();
-        public string ParameterName { get; set; } = string.Empty;
         public bool ExpectedValue { get; set; } = true;
 
-        public override string Description => string.IsNullOrWhiteSpace(GetParameterKey())
+        public override string Description => string.IsNullOrWhiteSpace(ParameterKey)
             ? "Bool"
-            : $"{GetParameterKey()} == {ExpectedValue}";
+            : $"{ParameterKey} == {ExpectedValue}";
 
         public override bool IsMet(HfsmRuntime runtime)
         {
-            string key = GetParameterKey();
+            string key = ParameterKey;
             return runtime != null &&
                    !string.IsNullOrWhiteSpace(key) &&
                    runtime.Blackboard.GetValue(key, false) == ExpectedValue;
@@ -61,10 +59,7 @@ namespace GameLogic
         {
             var root = new VBoxContainer();
 
-            Parameter ??= new GraphBlackboardKeyReference { Key = ParameterName };
-            if (string.IsNullOrWhiteSpace(Parameter.Key) && !string.IsNullOrWhiteSpace(ParameterName))
-                Parameter.Key = ParameterName;
-
+            SyncLegacyParameterName();
             root.AddChild(Parameter.CreateEditUI(context, "Blackboard bool", BoolValueTypes));
 
             var check = new CheckBox
@@ -77,64 +72,43 @@ namespace GameLogic
 
             return root;
         }
-
-        private string GetParameterKey()
-        {
-            if (!string.IsNullOrWhiteSpace(Parameter?.Key))
-                return Parameter.Key;
-
-            return ParameterName;
-        }
     }
 
-    public class HfsmFloatCondition : HfsmConditionBase
+    public class HfsmFloatCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] FloatValueTypes = { typeof(float), typeof(int) };
 
-        public GraphBlackboardKeyReference Parameter { get; set; } = new();
-        public string ParameterName { get; set; } = string.Empty;
-        public HfsmFloatComparison Comparison { get; set; } = HfsmFloatComparison.GreaterOrEqual;
+        public StateFloatComparison Comparison { get; set; } = StateFloatComparison.GreaterOrEqual;
         public float Value { get; set; }
         public float Tolerance { get; set; } = 0.0001f;
 
-        public override string Description => string.IsNullOrWhiteSpace(GetParameterKey())
+        public override string Description => string.IsNullOrWhiteSpace(ParameterKey)
             ? "Float"
-            : $"{GetParameterKey()} {GetComparisonText()} {Value:0.###}";
+            : $"{ParameterKey} {GetComparisonText()} {Value:0.###}";
 
         public override bool IsMet(HfsmRuntime runtime)
         {
-            string key = GetParameterKey();
+            string key = ParameterKey;
             if (runtime == null || string.IsNullOrWhiteSpace(key))
                 return false;
 
             float actual = runtime.Blackboard.GetValue(key, 0f);
-            return Comparison switch
-            {
-                HfsmFloatComparison.Less => actual < Value,
-                HfsmFloatComparison.LessOrEqual => actual <= Value,
-                HfsmFloatComparison.Equal => Mathf.Abs(actual - Value) <= Tolerance,
-                HfsmFloatComparison.GreaterOrEqual => actual >= Value,
-                HfsmFloatComparison.Greater => actual > Value,
-                _ => false
-            };
+            return StateFloatComparisonUtility.Evaluate(Comparison, actual, Value, Tolerance);
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
 
-            Parameter ??= new GraphBlackboardKeyReference { Key = ParameterName };
-            if (string.IsNullOrWhiteSpace(Parameter.Key) && !string.IsNullOrWhiteSpace(ParameterName))
-                Parameter.Key = ParameterName;
-
+            SyncLegacyParameterName();
             root.AddChild(Parameter.CreateEditUI(context, "Blackboard number", FloatValueTypes));
 
             var row = new HBoxContainer();
             var option = new OptionButton();
-            foreach (HfsmFloatComparison comparison in System.Enum.GetValues<HfsmFloatComparison>())
+            foreach (StateFloatComparison comparison in System.Enum.GetValues<StateFloatComparison>())
                 option.AddItem(comparison.ToString(), (int)comparison);
             option.Selected = (int)Comparison;
-            option.ItemSelected += index => Comparison = (HfsmFloatComparison)index;
+            option.ItemSelected += index => Comparison = (StateFloatComparison)index;
             row.AddChild(option);
 
             var valueSpin = new SpinBox
@@ -154,74 +128,45 @@ namespace GameLogic
 
         private string GetComparisonText()
         {
-            return Comparison switch
-            {
-                HfsmFloatComparison.Less => "<",
-                HfsmFloatComparison.LessOrEqual => "<=",
-                HfsmFloatComparison.Equal => "==",
-                HfsmFloatComparison.GreaterOrEqual => ">=",
-                HfsmFloatComparison.Greater => ">",
-                _ => "?"
-            };
-        }
-
-        private string GetParameterKey()
-        {
-            if (!string.IsNullOrWhiteSpace(Parameter?.Key))
-                return Parameter.Key;
-
-            return ParameterName;
+            return StateFloatComparisonUtility.ToOperatorText(Comparison);
         }
     }
 
-    public class HfsmFloatAbsCondition : HfsmConditionBase
+    public class HfsmFloatAbsCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] FloatValueTypes = { typeof(float), typeof(int) };
 
-        public GraphBlackboardKeyReference Parameter { get; set; } = new();
-        public string ParameterName { get; set; } = string.Empty;
-        public HfsmFloatComparison Comparison { get; set; } = HfsmFloatComparison.Greater;
+        public StateFloatComparison Comparison { get; set; } = StateFloatComparison.Greater;
         public float Value { get; set; }
         public float Tolerance { get; set; } = 0.0001f;
 
-        public override string Description => string.IsNullOrWhiteSpace(GetParameterKey())
+        public override string Description => string.IsNullOrWhiteSpace(ParameterKey)
             ? "Abs Float"
-            : $"Abs({GetParameterKey()}) {GetComparisonText()} {Value:0.###}";
+            : $"Abs({ParameterKey}) {GetComparisonText()} {Value:0.###}";
 
         public override bool IsMet(HfsmRuntime runtime)
         {
-            string key = GetParameterKey();
+            string key = ParameterKey;
             if (runtime == null || string.IsNullOrWhiteSpace(key))
                 return false;
 
             float actual = Mathf.Abs(runtime.Blackboard.GetValue(key, 0f));
-            return Comparison switch
-            {
-                HfsmFloatComparison.Less => actual < Value,
-                HfsmFloatComparison.LessOrEqual => actual <= Value,
-                HfsmFloatComparison.Equal => Mathf.Abs(actual - Value) <= Tolerance,
-                HfsmFloatComparison.GreaterOrEqual => actual >= Value,
-                HfsmFloatComparison.Greater => actual > Value,
-                _ => false
-            };
+            return StateFloatComparisonUtility.Evaluate(Comparison, actual, Value, Tolerance);
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
 
-            Parameter ??= new GraphBlackboardKeyReference { Key = ParameterName };
-            if (string.IsNullOrWhiteSpace(Parameter.Key) && !string.IsNullOrWhiteSpace(ParameterName))
-                Parameter.Key = ParameterName;
-
+            SyncLegacyParameterName();
             root.AddChild(Parameter.CreateEditUI(context, "Blackboard number", FloatValueTypes));
 
             var row = new HBoxContainer();
             var option = new OptionButton();
-            foreach (HfsmFloatComparison comparison in System.Enum.GetValues<HfsmFloatComparison>())
+            foreach (StateFloatComparison comparison in System.Enum.GetValues<StateFloatComparison>())
                 option.AddItem(comparison.ToString(), (int)comparison);
             option.Selected = (int)Comparison;
-            option.ItemSelected += index => Comparison = (HfsmFloatComparison)index;
+            option.ItemSelected += index => Comparison = (StateFloatComparison)index;
             row.AddChild(option);
 
             var valueSpin = new SpinBox
@@ -241,23 +186,7 @@ namespace GameLogic
 
         private string GetComparisonText()
         {
-            return Comparison switch
-            {
-                HfsmFloatComparison.Less => "<",
-                HfsmFloatComparison.LessOrEqual => "<=",
-                HfsmFloatComparison.Equal => "==",
-                HfsmFloatComparison.GreaterOrEqual => ">=",
-                HfsmFloatComparison.Greater => ">",
-                _ => "?"
-            };
-        }
-
-        private string GetParameterKey()
-        {
-            if (!string.IsNullOrWhiteSpace(Parameter?.Key))
-                return Parameter.Key;
-
-            return ParameterName;
+            return StateFloatComparisonUtility.ToOperatorText(Comparison);
         }
     }
 

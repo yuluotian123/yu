@@ -7,7 +7,7 @@ public class StateTransitionConnection : GraphConnection
     public int Priority { get; set; }
     public bool CompletionOnly { get; set; }
     public GraphConditionUseMode UseMode { get; set; } = GraphConditionUseMode.And;
-    public List<StateConditionBase> Conditions { get; set; } = new();
+    public List<GraphConditionBase> Conditions { get; set; } = new();
 
     public override string GetDisplayName()
     {
@@ -26,27 +26,7 @@ public class StateTransitionConnection : GraphConnection
 
     public virtual bool CanUse(StateGraphRuntime runtime)
     {
-        if (Conditions == null || Conditions.Count == 0)
-            return true;
-
-        if (UseMode == GraphConditionUseMode.Or)
-        {
-            for (int i = 0; i < Conditions.Count; i++)
-            {
-                if (Conditions[i]?.IsMet(runtime) == true)
-                    return true;
-            }
-
-            return false;
-        }
-
-        for (int i = 0; i < Conditions.Count; i++)
-        {
-            if (Conditions[i]?.IsMet(runtime) != true)
-                return false;
-        }
-
-        return true;
+        return GraphConditionEvaluator.IsMet(Conditions, UseMode, runtime?.Context);
     }
 
     public override Label CreateConnectionLabel()
@@ -113,12 +93,12 @@ public class StateTransitionConnection : GraphConnection
 
         root.AddChild(new HSeparator());
 
-        var listControl = new ReorderableListControl<StateConditionBase>(
+        var listControl = new ReorderableListControl<GraphConditionBase>(
             items: Conditions,
             buildItemUi: condition => condition.CreateEditUI(context),
             getItemLabel: condition => condition.Description,
             availableTypes: SubTypeCache.GetSubTypes<StateConditionBase>(),
-            factory: type => (StateConditionBase)System.Activator.CreateInstance(type)
+            factory: type => (GraphConditionBase)System.Activator.CreateInstance(type)
         );
 
         root.AddChild(listControl.Build());

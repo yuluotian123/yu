@@ -79,12 +79,12 @@ namespace GameLogic
 
             root.AddChild(new HSeparator());
 
-            var listControl = new ReorderableListControl<StateConditionBase>(
+            var listControl = new ReorderableListControl<GraphConditionBase>(
                 items: Conditions,
                 buildItemUi: condition => condition.CreateEditUI(context),
                 getItemLabel: condition => condition.Description,
                 availableTypes: SubTypeCache.GetSubTypes<HfsmConditionBase>(),
-                factory: type => (StateConditionBase)System.Activator.CreateInstance(type)
+                factory: type => (GraphConditionBase)System.Activator.CreateInstance(type)
             );
 
             root.AddChild(listControl.Build());

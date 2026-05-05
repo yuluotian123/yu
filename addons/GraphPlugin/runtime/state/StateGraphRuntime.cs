@@ -29,6 +29,7 @@ public class StateGraphRuntime : IGraphRuntimeScope
         Graph = graph;
         Context = context ?? new GraphExecutionContext(graph, new GraphBlackboardRuntime());
         Blackboard = Context.Blackboard;
+        AddUserDataFirst(this);
     }
 
     public StateGraphAsset Graph { get; }
@@ -223,6 +224,15 @@ public class StateGraphRuntime : IGraphRuntimeScope
     public bool SetGlobalValue<T>(string key, T value)
     {
         return Blackboard.SetGlobalValue(key, value);
+    }
+
+    private void AddUserDataFirst(object value)
+    {
+        if (value == null)
+            return;
+
+        Context.UserData.Remove(value);
+        Context.UserData.Insert(0, value);
     }
 
     private bool ChangeState(IStateNodeData nextState, StateTransitionConnection transition)

@@ -1,8 +1,13 @@
 using Godot;
 
-public abstract class StateConditionBase : GraphConditionEditorBase
+public abstract class StateConditionBase : GraphConditionBase
 {
     public abstract bool IsMet(StateGraphRuntime runtime);
+
+    public override bool IsMet(GraphExecutionContext context)
+    {
+        return IsMet(context?.GetUserData<StateGraphRuntime>());
+    }
 }
 
 public enum StateFloatComparison

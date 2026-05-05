@@ -71,27 +71,7 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
 
     private bool IsMet(GraphExecutionContext context)
     {
-        if (Conditions == null || Conditions.Count == 0)
-            return true;
-
-        if (UseMode == GraphConditionUseMode.Or)
-        {
-            for (int i = 0; i < Conditions.Count; i++)
-            {
-                if (Conditions[i]?.IsMet(context) == true)
-                    return true;
-            }
-
-            return false;
-        }
-
-        for (int i = 0; i < Conditions.Count; i++)
-        {
-            if (Conditions[i]?.IsMet(context) != true)
-                return false;
-        }
-
-        return true;
+        return GraphConditionEvaluator.IsMet(Conditions, UseMode, context);
     }
 
     private string GetConditionSummary(string mode)

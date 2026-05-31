@@ -24,13 +24,13 @@ public static class GraphNodeSearchService
         var popup = new SearchablePopup<string>(
             allowedNodes,
             nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
-                ? definition.DisplayName
+                ? GetMenuName(definition)
                 : nodeType,
             nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
                 ? definition.Category
                 : "General",
             nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
-                ? string.Join(" ", definition.SearchKeywords)
+                ? $"{definition.NodeType} {definition.DisplayName} {string.Join(" ", definition.SearchKeywords)}"
                 : nodeType);
 
         popup.OnItemSelected += nodeType => onSelected?.Invoke(nodeType);
@@ -39,6 +39,17 @@ public static class GraphNodeSearchService
         graphEdit.AddChild(anchor);
         popup.ShowBelow(anchor);
         anchor.QueueFree();
+    }
+
+    private static string GetMenuName(GraphNodeDefinition definition)
+    {
+        if (!string.IsNullOrWhiteSpace(definition?.MenuName))
+            return definition.MenuName;
+
+        if (!string.IsNullOrWhiteSpace(definition?.DisplayName))
+            return definition.DisplayName;
+
+        return definition?.NodeType ?? string.Empty;
     }
 }
 #endif

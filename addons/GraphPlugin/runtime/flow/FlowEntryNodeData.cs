@@ -4,7 +4,8 @@ using Godot;
 public class FlowEntryNodeData : GraphNodeData, IFlowNode
 {
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
-    public override string GetDisplayName() => "Entry";
+    public override string GetDisplayName() => "FlowEntry";
+    public override string GetMenuName() => "Entry";
     public override Color GetNodeColor() => Colors.LimeGreen;
     public override int GetInputCount() => 0;
     public override int GetOutputCount() => 1;

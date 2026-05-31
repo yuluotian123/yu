@@ -7,6 +7,7 @@ public class FlowReturnNodeData : GraphNodeData, IFlowNode
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
     public override string GetDisplayName() => string.IsNullOrWhiteSpace(Label) ? "Return" : $"Return: {Label}";
+    public override string GetMenuName() => "Return";
     public override Color GetNodeColor() => new(0.66f, 0.56f, 0.92f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;

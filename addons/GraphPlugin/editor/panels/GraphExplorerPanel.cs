@@ -63,6 +63,7 @@ public sealed class GraphExplorerPanel
             Title = "Graph Explorer",
             Size = new Vector2I(420, 640)
         };
+        GraphEditorTranslationService.DisableAutoTranslate(_window);
         _window.CloseRequested += () => _window.Hide();
         _owner.AddChild(_window);
 
@@ -122,6 +123,7 @@ public sealed class GraphExplorerPanel
             SizeFlagsVertical = Control.SizeFlags.ExpandFill,
             CustomMinimumSize = new Vector2(0, 280)
         };
+        GraphEditorTranslationService.DisableAutoTranslate(tree);
         tree.ItemActivated += () => LocateSelectedNode(tree);
 
         TreeItem root = tree.CreateItem();
@@ -131,12 +133,14 @@ public sealed class GraphExplorerPanel
                      .OrderBy(group => group.Key))
         {
             TreeItem groupItem = tree.CreateItem(root);
+            GraphEditorTranslationService.DisableAutoTranslate(groupItem);
             groupItem.SetText(0, string.IsNullOrWhiteSpace(group.Key) ? "General" : group.Key);
             groupItem.SetSelectable(0, false);
 
             foreach (GraphNodeData node in group.OrderBy(node => node.GetDisplayName()))
             {
                 TreeItem nodeItem = tree.CreateItem(groupItem);
+                GraphEditorTranslationService.DisableAutoTranslate(nodeItem);
                 nodeItem.SetText(0, $"{node.GetDisplayName()}  [{node.Id}]");
                 nodeItem.SetMetadata(0, node.Id);
             }

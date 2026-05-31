@@ -22,6 +22,7 @@ public static class GraphNodeViewBuilder
             Draggable = true,
             Resizable = true
         };
+        GraphEditorTranslationService.DisableAutoTranslate(node);
 
         int inputCount = data.GetInputCount();
         int outputCount = data.GetOutputCount();
@@ -48,6 +49,7 @@ public static class GraphNodeViewBuilder
         }
 
         data.CreateNodeUI(context.WithGraphNode(data, node));
+        GraphEditorTranslationService.DisableAutoTranslateRecursive(node);
         node.CallDeferred("reset_size");
         return node;
     }

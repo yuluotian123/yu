@@ -50,6 +50,9 @@ public sealed class GraphNodeDefinition
     /// <summary>编辑器显示名。</summary>
     public string DisplayName { get; set; } = string.Empty;
 
+    /// <summary>右键创建菜单中的稳定名称。</summary>
+    public string MenuName { get; set; } = string.Empty;
+
     /// <summary>节点在搜索菜单里的分类。</summary>
     public string Category { get; set; } = "General";
 

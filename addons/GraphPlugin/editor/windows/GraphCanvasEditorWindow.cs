@@ -43,6 +43,7 @@ public partial class GraphCanvasEditorWindow : Window
 
         ResetEditorUi();
 
+        GraphEditorTranslationService.DisableAutoTranslate(this);
         Title = "GraphCanvas Editor";
         if (!_closeRequestedConnected)
         {
@@ -296,6 +297,7 @@ public partial class GraphCanvasEditorWindow : Window
         var customControls = _currentGraph.GetCustomToolbarControls();
         foreach (var control in customControls)
         {
+            GraphEditorTranslationService.DisableAutoTranslateRecursive(control);
             control.SetMeta("custom_control", true);
             _toolbar.AddChild(control);
             _toolbar.MoveChild(control, 2);

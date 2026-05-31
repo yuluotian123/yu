@@ -3,11 +3,12 @@ using Godot;
 
 public class StateNodeData : GraphNodeData, IStateNodeData
 {
-    public string StateName { get; set; } = "State";
+    public string StateName { get; set; } = "StateNode";
     public bool IsDefault { get; set; }
     public string Tags { get; set; } = string.Empty;
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
+    public override string GetMenuName() => "State";
     public override string GetDisplayName() => string.IsNullOrWhiteSpace(StateName) ? "State" : StateName;
     public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.35f, 0.55f, 0.9f);
     public override int GetInputCount() => 1;

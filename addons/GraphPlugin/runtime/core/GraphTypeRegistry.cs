@@ -159,6 +159,9 @@ public static class GraphTypeRegistry
 
         return result
             .OrderBy(definition => definition.Category)
+            .ThenBy(definition => string.IsNullOrWhiteSpace(definition.MenuName)
+                ? definition.DisplayName
+                : definition.MenuName)
             .ThenBy(definition => definition.DisplayName)
             .ToList();
     }

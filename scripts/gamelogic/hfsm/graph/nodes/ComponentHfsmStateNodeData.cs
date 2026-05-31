@@ -13,6 +13,8 @@ namespace GameLogic
 
         public override Color GetNodeColor() => new(0.2f, 0.68f, 0.86f);
 
+        public override string GetMenuName() => "Component State";
+
         public override string GetDisplayName()
         {
             string stateName = string.IsNullOrWhiteSpace(StateName) ? "Component State" : StateName;

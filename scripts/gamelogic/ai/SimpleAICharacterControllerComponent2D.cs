@@ -5,13 +5,19 @@ namespace GameLogic
     [GlobalClass]
     public partial class SimpleAICharacterControllerComponent2D : Component2D
     {
-        public override int Priority => ComponentPriority.Input;
+        public override int Priority => ComponentPriority.AI;
 
+        [Export] public BehaviorTreeGraphAsset Graph { get; set; }
+        [Export] public bool UpdateInPhysics { get; set; } = true;
+
+        [ExportGroup("Patrol")]
         [Export] public float PatrolDistance { get; set; } = 120f;
         [Export] public int StartDirection { get; set; } = 1;
         [Export] public bool ReverseAtEdges { get; set; } = true;
         [Export] public float EdgeLookAhead { get; set; } = 18f;
         [Export] public float TurnPauseDuration { get; set; } = 0.12f;
+
+        [ExportGroup("Jump")]
         [Export] public float JumpInterval { get; set; } = 1.8f;
         [Export] public float JumpSustainDuration { get; set; } = 0.12f;
 
@@ -24,6 +30,38 @@ namespace GameLogic
         private float _turnPauseTimer;
         private float _jumpCooldownTimer;
         private float _jumpSustainTimer;
+        private float _frameMoveAxis;
+        private bool _frameJumpStartRequested;
+        private bool _frameJumpSustainRequested;
+
+        public BehaviorTreeRuntime Runtime { get; private set; }
+        public CharacterBodyMotorComponent2D Motor => _motor;
+        public int Direction
+        {
+            get => _direction;
+            set => _direction = value;
+        }
+
+        public Vector2 SpawnPosition => _spawnPosition;
+        public float TurnPauseTimer
+        {
+            get => _turnPauseTimer;
+            set => _turnPauseTimer = Mathf.Max(0f, value);
+        }
+
+        public float JumpCooldownTimer
+        {
+            get => _jumpCooldownTimer;
+            set => _jumpCooldownTimer = Mathf.Max(0f, value);
+        }
+
+        public float JumpSustainTimer
+        {
+            get => _jumpSustainTimer;
+            set => _jumpSustainTimer = Mathf.Max(0f, value);
+        }
+
+        protected virtual string LogPrefix => nameof(SimpleAICharacterControllerComponent2D);
 
         public override void OnInit()
         {
@@ -35,65 +73,67 @@ namespace GameLogic
             _direction = StartDirection >= 0 ? 1 : -1;
             _jumpCooldownTimer = JumpInterval;
             _jumpSustainTimer = 0f;
+
+            if (Graph == null)
+            {
+                GD.PushWarning($"[{LogPrefix}] Graph is not assigned.");
+                return;
+            }
+
+            Runtime = new BehaviorTreeRuntime(Graph);
+            Runtime.Context.UserData.Add(Owner);
+            Runtime.Context.UserData.Add(this);
+
+            if (!Runtime.Start())
+                GD.PushWarning($"[{LogPrefix}] Failed to start BehaviorTree: {Graph.ResourcePath}");
+        }
+
+        public override void OnUpdate(double delta)
+        {
+            if (!UpdateInPhysics)
+                Tick(delta);
         }
 
         public override void OnPhysicsUpdate(double delta)
         {
-            float dt = (float)delta;
-            UpdateDirection();
+            if (UpdateInPhysics)
+                Tick(delta);
+        }
 
-            bool jumpStartRequested = UpdateJump(dt);
-            float moveAxis = UpdateMoveAxis(dt);
+        public override void OnDestroy()
+        {
+            Runtime?.Stop();
+            Runtime = null;
+        }
 
-            var moveIntent = new MoveIntent2D(moveAxis);
-            var jumpIntent = new JumpIntent2D(
-                startRequested: jumpStartRequested,
-                sustainRequested: _jumpSustainTimer > 0f);
+        public void SetFrameMoveAxis(float axis) => _frameMoveAxis = axis;
+        public void RequestFrameJumpStart() => _frameJumpStartRequested = true;
+        public void SetFrameJumpSustain(bool requested) => _frameJumpSustainRequested = requested;
+
+        private void Tick(double delta)
+        {
+            ResetFrameIntent();
+            Runtime?.Update(delta);
+            CommitFrameIntent();
+        }
+
+        private void ResetFrameIntent()
+        {
+            _frameMoveAxis = 0f;
+            _frameJumpStartRequested = false;
+            _frameJumpSustainRequested = false;
+        }
+
+        private void CommitFrameIntent()
+        {
+            var moveIntent = new MoveIntent2D(_frameMoveAxis);
+            var jumpIntent = new JumpIntent2D(_frameJumpStartRequested, _frameJumpSustainRequested);
 
             _move?.SetIntent(moveIntent);
             _jump?.SetIntent(jumpIntent);
             WriteHfsmInputs(moveIntent, jumpIntent);
             _move?.ApproveIntent(moveIntent);
             _jump?.ApproveIntent(jumpIntent);
-        }
-
-        private float UpdateMoveAxis(float dt)
-        {
-            if (_turnPauseTimer > 0f)
-            {
-                _turnPauseTimer = Mathf.Max(0f, _turnPauseTimer - dt);
-                return 0f;
-            }
-
-            return _direction;
-        }
-
-        private void UpdateDirection()
-        {
-            if (_motor == null || !_motor.IsOnFloor)
-                return;
-
-            bool reachedPatrolEdge = Mathf.Abs(Owner.GlobalPosition.X - _spawnPosition.X) >= PatrolDistance;
-            bool noGroundAhead = ReverseAtEdges && !_motor.HasGroundAhead(_direction, EdgeLookAhead);
-
-            if (reachedPatrolEdge || noGroundAhead)
-            {
-                _direction *= -1;
-                _turnPauseTimer = TurnPauseDuration;
-            }
-        }
-
-        private bool UpdateJump(float dt)
-        {
-            _jumpCooldownTimer = Mathf.Max(0f, _jumpCooldownTimer - dt);
-            _jumpSustainTimer = Mathf.Max(0f, _jumpSustainTimer - dt);
-
-            if (_motor == null || !_motor.IsOnFloor || _jumpCooldownTimer > 0f)
-                return false;
-
-            _jumpSustainTimer = JumpSustainDuration;
-            _jumpCooldownTimer = JumpInterval;
-            return true;
         }
 
         private void WriteHfsmInputs(MoveIntent2D moveIntent, JumpIntent2D jumpIntent)

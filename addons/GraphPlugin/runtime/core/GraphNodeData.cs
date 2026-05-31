@@ -40,7 +40,7 @@ public class GraphNodeData
     }
 
     /// <summary>声明节点可用于哪些图类型。All 表示所有图都可用。</summary>
-    public virtual List<string> GetGraphTypes() => new() { "All" };
+    public virtual List<string> GetGraphTypes() => new() { "" };
 
     /// <summary>节点搜索菜单分类。</summary>
     public virtual string GetCategory() => "General";
@@ -50,6 +50,9 @@ public class GraphNodeData
 
     /// <summary>节点标题。</summary>
     public virtual string GetDisplayName() => NodeType;
+
+    /// <summary>右键创建菜单中的稳定名称。动态标题请继续放在 GetDisplayName。</summary>
+    public virtual string GetMenuName() => GetDisplayName();
 
     /// <summary>节点主题色。</summary>
     public virtual Color GetNodeColor() => Colors.White;
@@ -96,6 +99,7 @@ public class GraphNodeData
         {
             NodeType = NodeType,
             DisplayName = GetDisplayName(),
+            MenuName = GetMenuName(),
             Category = GetCategory(),
             GraphTypes = GetGraphTypes() ?? new List<string> { "All" },
             SearchKeywords = GetSearchKeywords() ?? new List<string>()

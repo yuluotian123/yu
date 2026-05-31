@@ -13,7 +13,7 @@ public partial class SubGraphNodeData : GraphNodeData
     private GraphAsset _cachedSubGraph;
 
     public override List<string> GetGraphTypes()
-        => new List<string> { "All" };
+        => new List<string> { "" };
 
     public override string GetDisplayName()
     {
@@ -25,6 +25,8 @@ public partial class SubGraphNodeData : GraphNodeData
 
         return "SubGraph (Unbound)";
     }
+
+    public override string GetMenuName() => "SubGraph";
 
     public override Color GetNodeColor() => new Color(0.4f, 0.6f, 1.0f);
 

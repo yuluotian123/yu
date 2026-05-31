@@ -64,6 +64,13 @@ public partial class GraphPlugin : EditorPlugin
             DisplayName = "StateGraph",
             CreateConnection = () => new StateTransitionConnection()
         });
+
+        GraphTypeRegistry.RegisterGraphType(new GraphTypeDefinition
+        {
+            GraphType = BehaviorTreeGraphAsset.GraphTypeName,
+            DisplayName = "BehaviorTree",
+            CreateConnection = () => new BehaviorTreeConnection()
+        });
     }
 }
 #endif

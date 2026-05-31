@@ -6,7 +6,8 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
     public float Seconds { get; set; } = 1f;
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
-    public override string GetDisplayName() => $"Delay {Seconds:0.##}s";
+    public override string GetDisplayName() => $"Delay";
+    public override string GetMenuName() => "Delay";
     public override Color GetNodeColor() => new(0.52f, 0.62f, 0.9f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;

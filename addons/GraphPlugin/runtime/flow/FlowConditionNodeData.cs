@@ -7,7 +7,8 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
     public List<GraphConditionBase> Conditions { get; set; } = new();
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
-    public override string GetDisplayName() => "Condition";
+    public override string GetDisplayName() => "FlowCondition";
+    public override string GetMenuName() => "Condition";
     public override Color GetNodeColor() => new(0.95f, 0.72f, 0.28f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 2;

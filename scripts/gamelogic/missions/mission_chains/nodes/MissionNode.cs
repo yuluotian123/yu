@@ -26,6 +26,7 @@ public class MissionNode : GraphNodeData, IFlowNode
 
     public override List<string> GetGraphTypes()
         => new List<string> { "MissionGraph" };
+    public override string GetMenuName() => "Mission";
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;
 

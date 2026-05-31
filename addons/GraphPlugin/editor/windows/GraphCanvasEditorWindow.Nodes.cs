@@ -17,7 +17,8 @@ public partial class GraphCanvasEditorWindow
 
     private void OnPopupRequest(Vector2 position)
     {
-        GraphNodeSearchService.Show(_currentGraph, _graphEdit, position, nodeType => CreateNewNode(nodeType, position));
+        Vector2 graphPosition = ToGraphPosition(position);
+        GraphNodeSearchService.Show(_currentGraph, _graphEdit, position, nodeType => CreateNewNode(nodeType, graphPosition));
     }
 
     private void CreateNewNode(string nodeType, Vector2 position)
@@ -41,6 +42,18 @@ public partial class GraphCanvasEditorWindow
     private void DoAddNode(string nodeType, string nodeId, Vector2 position)
     {
         GraphCommandService.AddNode(_currentGraph, nodeType, nodeId, position, CreateNodeFromData);
+    }
+
+    private Vector2 ToGraphPosition(Vector2 localPosition)
+    {
+        if (_graphEdit == null)
+            return localPosition;
+
+        float zoom = _graphEdit.Zoom;
+        if (Mathf.IsZeroApprox(zoom))
+            zoom = 1f;
+
+        return (localPosition + _graphEdit.ScrollOffset) / zoom;
     }
 
     private void DoRemoveNode(StringName nodeId)

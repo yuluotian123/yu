@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yu Godot Project"
+  short_description: "Work effectively in the yu Godot C# project."
+  default_prompt: "Use $yu-godot-project when working in the yu Godot C# repository."

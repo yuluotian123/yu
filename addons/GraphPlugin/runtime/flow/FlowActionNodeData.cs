@@ -6,7 +6,8 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
     public List<GraphActionBase> Actions { get; set; } = new();
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
-    public override string GetDisplayName() => "Action";
+    public override string GetDisplayName() => "FlowAction";
+    public override string GetMenuName() => "Action";
     public override Color GetNodeColor() => new(0.42f, 0.72f, 0.92f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;

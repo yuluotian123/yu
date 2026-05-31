@@ -19,6 +19,7 @@ namespace GameLogic
                 : $"{stateName} [{AnimationName}]";
         }
 
+        public override string GetMenuName() => "Animation State";
         public override string GetCategory() => "HFSM";
         public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.25f, 0.62f, 0.88f);
         public override System.Collections.Generic.List<string> GetSearchKeywords() => new() { "animation", "animator", "sprite" };

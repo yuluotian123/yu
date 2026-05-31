@@ -25,6 +25,8 @@ public class MissionSubGraphNodeData : SubGraphNodeData, IFlowNode
         return "Mission SubGraph";
     }
 
+    public override string GetMenuName() => "Mission SubGraph";
+
     /// <summary>
     /// 编辑器创建新子图资源时使用 MissionGraph。
     /// </summary>

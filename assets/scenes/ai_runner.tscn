@@ -2,19 +2,22 @@
 
 [ext_resource type="Script" uid="uid://dtjdqgsefw3ar" path="res://scripts/gamelogic/gameobject/GameObject2D.cs" id="1_gobj"]
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_comp"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/SimpleAICharacterControllerComponent2D.cs" id="3_ai"]
+[ext_resource type="Script" uid="uid://d1ktne64vflep" path="res://scripts/gamelogic/ai/SimpleAICharacterControllerComponent2D.cs" id="3_ai"]
 [ext_resource type="Script" uid="uid://b2tjh6v4hfs07" path="res://scripts/gamelogic/hfsm/runtime/HfsmComponent2D.cs" id="4_fsm"]
 [ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterBodyMotorComponent2D.cs" id="5_motor"]
 [ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterGravityComponent2D.cs" id="6_gravity"]
 [ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterMoveComponent2D.cs" id="7_move"]
 [ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterJumpComponent2D.cs" id="8_jump"]
 [ext_resource type="Resource" uid="uid://ch7drwso2wxxc" path="res://assets/graphs/character_ground_air_hfsm.tres" id="9_hfsm"]
+[ext_resource type="Resource" path="res://assets/graphs/ai_patrol_behavior_tree.tres" id="10_bt"]
 
 [sub_resource type="RectangleShape2D" id="shape_body"]
 size = Vector2(40, 72)
 
 [sub_resource type="Resource" id="sub_ai"]
 script = ExtResource("3_ai")
+Graph = ExtResource("10_bt")
+UpdateInPhysics = true
 PatrolDistance = 110.0
 StartDirection = 1
 ReverseAtEdges = true

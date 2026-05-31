@@ -6,11 +6,12 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
 {
     private StateGraphAsset _cachedSubGraph;
 
-    public string StateName { get; set; } = "Composite";
+    public string StateName { get; set; } = "CompositeState";
     public bool IsDefault { get; set; }
     public string Tags { get; set; } = string.Empty;
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
+    public override string GetMenuName() => "Composite State";
 
     public override string GetDisplayName()
     {

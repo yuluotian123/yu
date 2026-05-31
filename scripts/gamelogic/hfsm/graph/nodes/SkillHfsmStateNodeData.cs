@@ -44,6 +44,7 @@ namespace GameLogic
                 : $"{stateName} [{skillName}]";
         }
 
+        public override string GetMenuName() => "Skill State";
         public override Color GetNodeColor() => IsDefault ? new Color(0.35f, 0.8f, 0.5f) : new Color(0.7f, 0.45f, 0.9f);
         public override string GetOutputPortName(int port) => "Completed";
 

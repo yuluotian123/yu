@@ -47,6 +47,7 @@ public class SearchablePopup<T> where T : class
             Transient = false,
             Exclusive = false
         };
+        GraphEditorTranslationService.DisableAutoTranslate(_popup);
 
         BuildUI();
 
@@ -67,9 +68,11 @@ public class SearchablePopup<T> where T : class
     private void BuildUI()
     {
         var vbox = new VBoxContainer();
+        GraphEditorTranslationService.DisableAutoTranslate(vbox);
         _popup.AddChild(vbox);
 
         _searchBox = new LineEdit { PlaceholderText = "Search..." };
+        GraphEditorTranslationService.DisableAutoTranslate(_searchBox);
         _searchBox.TextChanged += _ => RefreshTree();
         _searchBox.GuiInput += OnSearchBoxInput;
         vbox.AddChild(_searchBox);
@@ -79,6 +82,7 @@ public class SearchablePopup<T> where T : class
             SizeFlagsVertical = Control.SizeFlags.ExpandFill,
             HideRoot = true
         };
+        GraphEditorTranslationService.DisableAutoTranslate(_tree);
         _tree.ItemActivated += OnTreeItemActivated;
         vbox.AddChild(_tree);
 
@@ -116,6 +120,7 @@ public class SearchablePopup<T> where T : class
             foreach (var group in groups)
             {
                 var groupItem = _tree.CreateItem(root);
+                GraphEditorTranslationService.DisableAutoTranslate(groupItem);
                 groupItem.SetText(0, group.Key ?? "(Ungrouped)");
                 groupItem.SetSelectable(0, false);
                 foreach (var item in group)
@@ -127,6 +132,7 @@ public class SearchablePopup<T> where T : class
     private void CreateSelectableItem(TreeItem parent, T item)
     {
         var treeItem = _tree.CreateItem(parent);
+        GraphEditorTranslationService.DisableAutoTranslate(treeItem);
         treeItem.SetText(0, _getLabel(item));
         treeItem.SetMetadata(0, _treeItems.Count);
         _treeItems.Add(item);

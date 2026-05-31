@@ -93,6 +93,7 @@ public class StateReturnNodeData : GraphNodeData, IStatePseudoNodeData
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
     public override string GetDisplayName() => string.IsNullOrWhiteSpace(Label) ? "Return" : Label;
+    public override string GetMenuName() => "Return";
     public override Color GetNodeColor() => new(0.66f, 0.56f, 0.92f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;

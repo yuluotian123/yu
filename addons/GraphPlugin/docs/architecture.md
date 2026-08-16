@@ -1,5 +1,7 @@
 # GraphPlugin V2 架构
 
+> **当前状态提示**：文中的 Runtime Debug 链路是架构设计，当前仓库没有对应 runtime/editor 实现。其余 core、editor、Flow、State、Behavior Tree、黑板和子图边界按当前代码维护。
+
 GraphPlugin V2 采用“瘦 core + 明确 editor 服务 + 业务图类型自扩展”的架构。它参考 Unity GraphView、xNode、NodeGraphProcessor、NodeCanvas，以及 Godot GraphEdit/Orchestrator/Dialogic 的常见分层，但不依赖第三方图插件。
 
 ## 设计目标

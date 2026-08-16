@@ -1,5 +1,7 @@
 # 运行时接入
 
+> **未实现提示**：本文后半部分的 `GraphRuntimeDebugRegistry`、快照、bridge 和编辑器面板属于保留设计，当前代码树中没有对应实现。Flow、State、Behavior Tree、黑板和 `IGraphRuntimeScope` 内容仍与当前代码对应。
+
 运行时只处理图类型自己的语义。通用数据、黑板、验证和查询索引全部来自 core。
 
 ## 公共运行时能力
@@ -131,5 +133,5 @@ GraphRuntimeDebugRegistry.CaptureContext(runtime, context, true);
 2. 父图本地黑板。
 3. 场景全局 `GraphBlackboardNode`。
 
-`Fork()` 会复制本地栈，适合隔离子运行时。  
+`Fork()` 会复制本地栈，适合隔离子运行时。
 `ForkSharedLocals()` 会共享本地栈，适合 Composite State 这类父子状态协同场景。

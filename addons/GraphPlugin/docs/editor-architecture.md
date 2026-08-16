@@ -1,5 +1,7 @@
 # 编辑器架构
 
+> **当前状态提示**：文中的 Runtime Debug editor plugin、remote store 和 panel 当前未实现；不要把相关类型当作可用编辑器 API。
+
 V2 编辑器的目标是窗口薄、服务清楚、面板独立。`GraphCanvasEditorWindow` 不再保存黑板窗口、连接标签、子图栈、Timeline 编辑状态和 Runtime Debug 快照等重状态。
 
 ## 窗口职责

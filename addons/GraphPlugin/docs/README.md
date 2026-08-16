@@ -1,5 +1,7 @@
 # GraphPlugin V2 文档
 
+> **当前状态提示**：本文档中的 Runtime Debug 章节保留的是架构设计。当前代码树没有 `GraphRuntimeDebugRegistry`、debugger bridge 或编辑器调试面板实现，`runtime/debug/` 目录为空；这些 API 目前不可使用。
+
 这组文档描述当前已经落地的 V2 架构。V2 的目标不是把系统做重，而是让核心模型稳定、编辑器职责清楚、业务图类型能按统一规则扩展，并且能在运行中观察 Flow、State、HFSM、Skill 等图的真实状态。
 
 ## 阅读顺序
@@ -20,9 +22,9 @@
 - `GraphTypeRegistry` 负责图类型、节点类型、类型别名和反序列化类型解析。
 - `GraphValidationService` 在保存和运行前统一验证结构。
 - `GraphRuntimeIndex` 缓存节点表、入边和出边。
-- `GraphCanvasEditorWindow` 已瘦身，黑板、子图、连接编辑、保存、剪贴板、Explorer、Timeline、Runtime Debug 拆为独立服务或面板。
-- `IGraphRuntimeScope` 统一描述父子图运行时树，供跨子图黑板写入和 Runtime Debug 使用。
-- Runtime Debug 已通过 Godot `EngineDebugger` 把运行时快照推到编辑器侧，可显示 active node、当前状态、黑板、UserData、Timeline 和事件。
+- `GraphCanvasEditorWindow` 已瘦身，黑板、子图、连接编辑、保存、剪贴板、Explorer 和 Timeline 拆为独立服务或面板。
+- `IGraphRuntimeScope` 统一描述父子图运行时树，当前用于跨子图黑板写入，并为未来调试工具提供遍历接口。
+- `IGraphRuntimeScope` 已用于描述父子 Runtime；基于 `EngineDebugger` 的 Runtime Debug 快照和编辑器面板仍待恢复或重新实现。
 
 ## 扩展原则
 
@@ -31,4 +33,4 @@
 - Flow、State、HFSM、Mission 只保留自己的运行语义。
 - 新节点优先继承 `GraphNodeData` 并覆盖少量声明式方法。
 - 复杂业务对象放进 action、condition、task 等可复用类，不塞进编辑器窗口。
-- 新运行时若管理子图，应实现 `IGraphRuntimeScope`，让黑板写入和调试视图自动跨层级工作。
+- 新运行时若管理子图，应实现 `IGraphRuntimeScope`，让黑板写入自动跨层级工作，并为未来调试视图保留统一入口。

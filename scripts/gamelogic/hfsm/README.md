@@ -2,6 +2,26 @@
 
 GameLogic HFSM 是基于 GraphPlugin `StateGraph` 的角色状态机封装。GraphPlugin 提供通用状态图能力；HFSM 层负责接入 `GameObject2D`、组件、技能和角色 blackboard。
 
+## 快速开始
+
+1. 创建 `HfsmGraphAsset` 并通过 GraphPlugin 打开。
+2. 添加默认状态、普通状态、Any State、Return 或 Composite State。
+3. 使用 `HfsmTransitionConnection` 配置条件、优先级和 completion-only 行为。
+4. 将图赋给角色上的 `HfsmComponent2D.Graph`。
+5. 由组件初始化 `HfsmRuntime`，业务通过 `Trigger()`、`SetValue()` 和状态标签与运行时交互。
+
+```csharp
+HfsmComponent2D hfsm = gameObject.GetComponent<HfsmComponent2D>();
+hfsm.Trigger(Jump);
+hfsm.SetValue(IsGrounded, false);
+```
+
+## 文档边界
+
+- 通用 StateGraph、黑板和子图规则见 [`addons/GraphPlugin/README.md`](../../../addons/GraphPlugin/README.md)。
+- 本文只描述 GameLogic 角色上下文、组件状态、Skill 状态和项目内约定。
+- GraphPlugin 旧文档中的 Runtime Debug API 当前没有实现；HFSM 调试暂时使用 `HfsmComponent2D` 状态信息、标签和日志。
+
 ## 文件结构
 
 - `runtime`

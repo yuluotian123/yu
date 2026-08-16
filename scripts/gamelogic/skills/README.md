@@ -2,6 +2,26 @@
 
 Skill 系统把角色技能拆成资源、运行时、管理组件和 FlowGraph。
 
+## 快速开始
+
+1. 创建 `SkillFlowGraphAsset` 并编辑技能执行流程。
+2. 创建 `SkillResource`，设置 ID、冷却时间和 FlowGraph。
+3. 把技能资源加入角色的 `SkillManagerComponent2D.Skills`。
+4. 通过 `CanStart()` / `StartSkill()` 启动，或使用 `SkillHfsmStateNodeData` 从 HFSM 接入。
+5. 在 Skill Action 中从 `GraphExecutionContext.UserData` 获取 owner、HFSM 和 `SkillRuntime`。
+
+```csharp
+SkillManagerComponent2D skills = gameObject.GetComponent<SkillManagerComponent2D>();
+if (skills.CanStart(skillPath))
+    skills.StartSkill(skillPath, hfsmRuntime);
+```
+
+## 文档边界
+
+- FlowGraph 通用执行、节点和黑板规则见 [`addons/GraphPlugin/README.md`](../../../addons/GraphPlugin/README.md)。
+- HFSM 状态接入见 [`scripts/gamelogic/hfsm/README.md`](../hfsm/README.md)。
+- GraphPlugin 旧文档中的 Runtime Debug API 当前没有实现；技能调试暂时依赖 `SkillRuntime` 状态、Return label 和日志。
+
 当前 Dash 和 Attack 已从旧组件迁移为 Skill：
 
 - `res://assets/skills/dash_skill.tres`

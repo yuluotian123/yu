@@ -32,7 +32,8 @@ public sealed partial class GraphTimelinePanel
         header.AddChild(new Label
         {
             Text = "Clip",
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            TooltipText = $"Clip Id: {clip.Id}"
         });
         var delete = new Button
         {

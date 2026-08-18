@@ -17,7 +17,7 @@ namespace GameLogic
             ai.JumpCooldownTimer -= dt;
             ai.JumpSustainTimer -= dt;
 
-            if (ai.Motor != null && ai.Motor.IsOnFloor && ai.JumpCooldownTimer <= 0f)
+            if (ai.Movement != null && ai.Movement.IsOnFloor && ai.JumpCooldownTimer <= 0f)
             {
                 ai.JumpSustainTimer = ai.JumpSustainDuration;
                 ai.JumpCooldownTimer = ai.JumpInterval;

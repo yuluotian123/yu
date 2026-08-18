@@ -8,7 +8,6 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
 
     public string StateName { get; set; } = "CompositeState";
     public bool IsDefault { get; set; }
-    public string Tags { get; set; } = string.Empty;
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
     public override string GetMenuName() => "Composite State";
@@ -61,16 +60,6 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
     public override Type GetSubGraphType()
     {
         return typeof(StateGraphAsset);
-    }
-
-    public virtual bool HasTag(string tag)
-    {
-        return StateTagUtility.ContainsTag(Tags, tag);
-    }
-
-    public virtual IReadOnlyList<string> GetTags()
-    {
-        return StateTagUtility.ParseTags(Tags);
     }
 
     public virtual bool CanEnter(StateGraphRuntime runtime)
@@ -154,13 +143,6 @@ public class CompositeStateNodeData : SubGraphNodeData, IStateNodeData
         defaultCheck.Toggled += value => IsDefault = value;
         root.AddChild(defaultCheck);
 
-        var tagEdit = new LineEdit
-        {
-            PlaceholderText = "Tags",
-            Text = Tags
-        };
-        tagEdit.TextChanged += value => Tags = value;
-        root.AddChild(tagEdit);
         root.AddChild(new HSeparator());
 
         var pathLabel = new Label

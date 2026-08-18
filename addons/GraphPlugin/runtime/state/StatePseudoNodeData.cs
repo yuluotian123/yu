@@ -8,8 +8,18 @@ public interface IStatePseudoNodeData
 
 public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
 {
-    public string IgnoredStateNames { get; set; } = string.Empty;
-    public string IgnoredTags { get; set; } = string.Empty;
+    private string _ignoredStateNames = string.Empty;
+    private HashSet<string> _ignoredStates;
+
+    public string IgnoredStateNames
+    {
+        get => _ignoredStateNames;
+        set
+        {
+            _ignoredStateNames = value ?? string.Empty;
+            _ignoredStates = null;
+        }
+    }
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
     public override string GetDisplayName() => "Any State";
@@ -24,17 +34,8 @@ public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
         if (currentState == null)
             return false;
 
-        if (StateTagUtility.ContainsTag(IgnoredStateNames, currentState.StateName) ||
-            StateTagUtility.ContainsTag(IgnoredStateNames, currentState.Id))
-            return false;
-
-        foreach (string tag in currentState.GetTags())
-        {
-            if (StateTagUtility.ContainsTag(IgnoredTags, tag))
-                return false;
-        }
-
-        return true;
+        return !ContainsIgnoredState(currentState.StateName) &&
+            !ContainsIgnoredState(currentState.Id);
     }
 
     public override void CreateNodeUI(GraphEditorContext context)
@@ -45,7 +46,7 @@ public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
             Text = "Global transitions",
             HorizontalAlignment = HorizontalAlignment.Center
         });
-        int ignoredCount = StateTagUtility.ParseTags(IgnoredStateNames).Count + StateTagUtility.ParseTags(IgnoredTags).Count;
+        int ignoredCount = GetIgnoredStates().Count;
         if (ignoredCount > 0)
             root.AddChild(new Label { Text = $"Ignored {ignoredCount}", HorizontalAlignment = HorizontalAlignment.Center });
 
@@ -70,20 +71,37 @@ public class AnyStateNodeData : GraphNodeData, IStatePseudoNodeData
         ignoredStates.TextChanged += value => IgnoredStateNames = value;
         root.AddChild(ignoredStates);
 
-        var ignoredTags = new LineEdit
-        {
-            PlaceholderText = "Ignore tags",
-            Text = IgnoredTags
-        };
-        ignoredTags.TextChanged += value => IgnoredTags = value;
-        root.AddChild(ignoredTags);
-
         return root;
     }
 
     public override void CreateUI(GraphEditorContext context)
     {
         context.GraphNode.AddChild(CreateInspectorUI(context));
+    }
+
+    private bool ContainsIgnoredState(string stateNameOrId)
+    {
+        if (string.IsNullOrWhiteSpace(stateNameOrId))
+            return false;
+
+        return GetIgnoredStates().Contains(stateNameOrId);
+    }
+
+    private HashSet<string> GetIgnoredStates()
+    {
+        if (_ignoredStates != null)
+            return _ignoredStates;
+
+        _ignoredStates = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrWhiteSpace(IgnoredStateNames))
+            return _ignoredStates;
+
+        string[] values = IgnoredStateNames.Split(
+            ',',
+            System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
+        for (int i = 0; i < values.Length; i++)
+            _ignoredStates.Add(values[i]);
+        return _ignoredStates;
     }
 }
 

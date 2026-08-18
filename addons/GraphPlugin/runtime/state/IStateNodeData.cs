@@ -1,14 +1,9 @@
-using System.Collections.Generic;
-
 public interface IStateNodeData
 {
     string Id { get; set; }
     string StateName { get; set; }
     bool IsDefault { get; set; }
-    string Tags { get; set; }
 
-    bool HasTag(string tag);
-    IReadOnlyList<string> GetTags();
     bool CanEnter(StateGraphRuntime runtime);
     void OnEnter(StateGraphRuntime runtime);
     void OnUpdate(StateGraphRuntime runtime, double delta);

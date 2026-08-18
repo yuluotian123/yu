@@ -4,7 +4,7 @@ using Godot;
 namespace GameLogic
 {
     [GlobalClass]
-    public partial class PlayerCameraComponent2D : Component2D
+    public partial class PlayerCameraComponent2D : Component2D, ICharacterCameraShake2D
     {
         [ExportGroup("Camera")]
         [Export] public NodePath CameraPath { get; set; } = new("Camera2D");
@@ -31,8 +31,7 @@ namespace GameLogic
 
         private readonly RandomNumberGenerator _random = new();
         private Camera2D _camera;
-        private CharacterMoveComponent2D _move;
-        private CharacterBodyMotorComponent2D _motor;
+        private CharacterMovementComponent2D _movement;
         private IInputModule _input;
         private Vector2 _initialCameraPosition;
         private Vector2 _initialCameraOffset;
@@ -52,8 +51,7 @@ namespace GameLogic
         public override void OnInit()
         {
             _camera = Owner?.GetNodeOrNull<Camera2D>(CameraPath);
-            _move = Owner?.GetComponent<CharacterMoveComponent2D>();
-            _motor = Owner?.GetComponent<CharacterBodyMotorComponent2D>();
+            _movement = Owner?.GetComponent<CharacterMovementComponent2D>();
             _input = TryGetInputModule();
             _random.Randomize();
 
@@ -151,14 +149,12 @@ namespace GameLogic
         {
             float direction = 0f;
 
-            if (_move?.ApprovedIntent.HasInput == true)
-                direction = _move.ApprovedIntent.AxisX;
-            else if (_move?.RawIntent.HasInput == true)
-                direction = _move.RawIntent.AxisX;
-            else if (_move != null && Mathf.Abs(_move.InputX) > 0.01f)
-                direction = _move.InputX;
-            else if (_move != null)
-                direction = _move.Facing;
+            if (_movement != null && Mathf.Abs(_movement.MoveInputX) > 0.01f)
+                direction = _movement.MoveInputX;
+            else if (_movement != null && Mathf.Abs(_movement.RawMoveInputX) > 0.01f)
+                direction = _movement.RawMoveInputX;
+            else if (_movement != null)
+                direction = _movement.Facing;
 
             if (Mathf.Abs(direction) <= 0.01f)
                 return 0f;
@@ -172,7 +168,7 @@ namespace GameLogic
             if (Mathf.Abs(manual) > 0.01f)
                 return manual * ManualLookDistance;
 
-            float velocityY = _motor?.Velocity.Y ?? 0f;
+            float velocityY = _movement?.Velocity.Y ?? 0f;
             if (Mathf.Abs(velocityY) <= 1f)
                 return 0f;
 

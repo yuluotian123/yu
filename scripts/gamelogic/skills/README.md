@@ -6,14 +6,15 @@ Skill 系统把角色技能拆成资源、运行时、管理组件和 FlowGraph�
 
 1. 创建 `SkillFlowGraphAsset` 并编辑技能执行流程。
 2. 创建 `SkillResource`，设置 ID、冷却时间和 FlowGraph。
-3. 把技能资源加入角色的 `SkillManagerComponent2D.Skills`。
-4. 通过 `CanStart()` / `StartSkill()` 启动，或使用 `SkillHfsmStateNodeData` 从 HFSM 接入。
+3. 在角色图的 `CharacterSkillChainNodeData` 中选择技能资源，SkillManager 会自动建立索引。
+4. 通过带 `SkillExecutionPolicy` 的 `CanStart()` / `StartSkill()` 启动，或由角色图接入。
 5. 在 Skill Action 中从 `GraphExecutionContext.UserData` 获取 owner、HFSM 和 `SkillRuntime`。
 
 ```csharp
 SkillManagerComponent2D skills = gameObject.GetComponent<SkillManagerComponent2D>();
-if (skills.CanStart(skillPath))
-    skills.StartSkill(skillPath, hfsmRuntime);
+SkillExecutionPolicy policy = SkillExecutionPolicy.Default;
+if (skills.CanStart(skillPath, policy))
+    skills.StartSkill(skillPath, hfsmRuntime, policy);
 ```
 
 ## 文档边界
@@ -59,7 +60,7 @@ Skill FlowGraph 不负责：
 - 启动 cooldown。
 - 决定 HFSM 是否能进入技能状态。
 
-这些都由 `SkillManagerComponent2D` 和 `SkillHfsmStateNodeData` 处理。
+这些都由 `SkillManagerComponent2D` 和 `CharacterSkillChainNodeData` 处理。
 
 ## SkillResource
 
@@ -90,7 +91,8 @@ Graph = res://assets/skills/dash_flow.tres
 
 职责：
 
-- 注册 `Skills` 数组里的技能资源。
+- 递归索引 CharacterGraph 及其子图引用的技能资源。
+- 通过 `RegisterSkillPath()` 注册角色图之外的技能资源。
 - 按 path 或 `SkillId` 缓存技能。
 - 判断 cooldown。
 - 启动 `SkillRuntime`。
@@ -100,16 +102,16 @@ Graph = res://assets/skills/dash_flow.tres
 优先级：
 
 ```csharp
-ComponentPriority.Motor + 1
+ComponentPriority.Movement + 5
 ```
 
-这样技能 timeline 会在 movement/gravity 之后、motor 之前运行，Dash 写入的速度不会被移动组件覆盖。
+这样技能 timeline 会先提交帧级速度覆盖，再由统一 Movement 组件应用覆盖并执行 `MoveAndSlide()`。
 
 当前 player 场景已经挂了：
 
 ```text
 SkillManagerComponent2D
-Skills = [dash_skill, attack_skill]
+CharacterGraph = character_graph.tres
 ```
 
 ## SkillRuntime
@@ -124,12 +126,13 @@ Skills = [dash_skill, attack_skill]
 - `IsRunning`
 - `IsCompleted`
 - `LastReturnLabel`
+- `ExecutionPolicy`
 - runtime data 字典
 
 生命周期：
 
 1. `CanStart(now)` 检查 cooldown 和 graph。
-2. `Start(hfsmRuntime, now)` 创建 FlowGraphRuntime，并写入 cooldown。
+2. `Start(context, policy, now)` 保存执行策略、创建 FlowGraphRuntime，并写入 cooldown。
 3. `Update(delta)` tick FlowGraph。
 4. FlowGraph Return 或无 active node 时标记完成。
 5. `Stop()` 停止 FlowGraph，触发 Cancel action。
@@ -170,15 +173,14 @@ scripts/gamelogic/skills/actions/
 
 ### SkillApplyDashVelocityAction
 
-直接解析 dash 方向并写入 `CharacterBodyMotorComponent2D.Velocity`。
+每个 Timeline Update 根据 dash 方向向 `CharacterMovementComponent2D` 提交帧级速度覆盖。
 
 方向来源优先级：
 
-- `CharacterMoveComponent2D.ApprovedIntent`
-- `CharacterMoveComponent2D.RawIntent`
+- `CharacterMovementComponent2D.MoveInputX`
+- `CharacterMovementComponent2D.RawMoveInputX`
 - HFSM blackboard `MoveAxisX`
-- `CharacterMoveComponent2D.InputX`
-- `CharacterMoveComponent2D.Facing`
+- `CharacterMovementComponent2D.Facing`
 
 常用参数：
 
@@ -272,45 +274,27 @@ Entry
   -> Return Finished
 ```
 
-## HFSM 接入
+## CharacterGraph 接入
 
-HFSM 图中使用 `SkillHfsmStateNodeData`：
-
-```text
-Dash:
-  SkillResourcePath = res://assets/skills/dash_skill.tres
-
-Attack:
-  SkillResourcePath = res://assets/skills/attack_skill.tres
-```
-
-入口 transition 只判断输入请求：
+角色图中使用全局 Input 节点连接 `CharacterSkillChainNodeData`：
 
 ```text
-Any State -> Dash: DashStartRequested == true
-Any State -> Attack: AttackStartRequested == true
+Dash Input   -> Dash Action [dash_skill.tres]
+Attack Input -> Attack Action [attack_skill.tres]
 ```
 
-技能节点 `CanEnter()` 会调用 manager 判断 cooldown。
-
-返回 transition 用 completion-only：
-
-```text
-Dash -> Locomotion: CompletionOnly
-Attack -> Locomotion: CompletionOnly
-```
+Input 节点没有输入端口。连线条件负责地面、空中、cooldown 和黑板判断；Action 完成且没有有效完成连线时自动恢复触发前状态。
 
 ## 新增一个技能
 
 推荐步骤：
 
 1. 创建一个 `SkillFlowGraphAsset`。
-2. 用通用 Flow 节点描述技能流程：Entry、Timeline、Action、Condition、Return。
+2. 简单技能使用单个 `SkillTimelineNodeData`；复杂技能再添加 Entry、Action、Condition 和 Return。
 3. 如有业务行为，新增 `GraphActionBase` 子类。
 4. 创建 `SkillResource`，填写 `SkillId`、`DisplayName`、`Cooldown`、`Graph`。
-5. 把 `SkillResource` 加到角色的 `SkillManagerComponent2D.Skills`。
-6. 在 HFSM 图中添加 `SkillHfsmStateNodeData`，填写 `SkillResourcePath`。
-7. 添加入口 transition 和 completion-only 返回 transition。
+5. 在角色图中添加 `CharacterSkillChainNodeData`，通过资源选择器加入该技能并配置执行策略。
+6. 从全局 Input 节点连接到 Action；需要自定义完成去向时再添加完成连线。
 
 ## 注意事项
 

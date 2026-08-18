@@ -19,6 +19,30 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
     public override bool CanBePrime() => false;
     public override string GetOutputPortName(int port) => "Completed";
 
+    public override void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+        NormalizeTimelineData();
+
+        var clipIds = new HashSet<string>(System.StringComparer.Ordinal);
+        for (int trackIndex = 0; trackIndex < Tracks.Count; trackIndex++)
+        {
+            FlowTimelineTrack track = Tracks[trackIndex];
+            if (track?.Clips == null)
+                continue;
+
+            for (int clipIndex = 0; clipIndex < track.Clips.Count; clipIndex++)
+            {
+                FlowTimelineClip clip = track.Clips[clipIndex];
+                if (clip == null || clipIds.Add(clip.Id))
+                    continue;
+
+                result.AddError(
+                    $"Timeline clip Id is duplicated: '{clip.Id}'.",
+                    Id);
+            }
+        }
+    }
+
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
         NormalizeTimelineData();

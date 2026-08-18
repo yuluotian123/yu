@@ -203,6 +203,7 @@ public partial class FlowTimelineNodeData
         timelineContext.Delta = delta;
         timelineContext.Duration = Duration;
         timelineContext.TrackName = track?.Name ?? string.Empty;
+        timelineContext.ClipId = clip?.Id ?? string.Empty;
         timelineContext.ClipName = clip?.Name ?? string.Empty;
         timelineContext.ClipTime = clipTime;
         timelineContext.PreviousClipTime = previousClipTime;

@@ -181,13 +181,13 @@
 
 职责边界：
 
-- HFSM 负责状态切换、blackboard 条件、状态 tag、复合状态和技能状态接入。
+- HFSM 负责状态切换、blackboard 条件和复合状态；CharacterGraph 负责输入与技能 Action 接入。
 - 具体移动、跳跃、技能时间线、伤害结算不放在 HFSM 中。
 - Controller 负责写入输入和环境类 blackboard key。
 
 当前角色图资源示例：
 
-- `res://assets/graphs/character_ground_air_hfsm.tres`
+- `res://assets/graphs/character_graph.tres`
 - `res://assets/graphs/character_locomotion_hfsm.tres`
 
 ### Skill

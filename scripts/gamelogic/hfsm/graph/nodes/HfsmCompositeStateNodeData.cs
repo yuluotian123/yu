@@ -12,7 +12,7 @@ namespace GameLogic
         public string BehaviourKey { get; set; } = string.Empty;
         public string MetadataJson { get; set; } = "{}";
 
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
         public override string GetMenuName() => "Composite State";
 
         public override string GetDisplayName()
@@ -55,16 +55,6 @@ namespace GameLogic
         public override Type GetSubGraphType()
         {
             return typeof(HfsmGraphAsset);
-        }
-
-        public override bool HasTag(string tag)
-        {
-            return HfsmTagUtility.ContainsTag(Tags, tag);
-        }
-
-        public override IReadOnlyList<string> GetTags()
-        {
-            return HfsmTagUtility.ParseTags(Tags);
         }
 
         public override bool CanEnter(StateGraphRuntime runtime)

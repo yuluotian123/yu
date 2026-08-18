@@ -25,7 +25,14 @@ namespace GameLogic
         public bool IsRunning { get; private set; }
         public bool IsCompleted { get; private set; }
         public string LastReturnLabel { get; private set; } = string.Empty;
+        public SkillExecutionPolicy ExecutionPolicy { get; private set; } = SkillExecutionPolicy.Default;
         public FlowGraphRuntime FlowRuntime => _flowRuntime;
+        public float CooldownRemaining(double now) => Mathf.Max(0f, (float)(CooldownReadyTime - now));
+
+        internal void SetCooldownReadyTime(double value)
+        {
+            CooldownReadyTime = Math.Max(0d, value);
+        }
 
         public bool IsCooldownReady(double now)
         {
@@ -37,7 +44,7 @@ namespace GameLogic
             return Resource?.Graph != null && !IsRunning && IsCooldownReady(now);
         }
 
-        public bool Start(HfsmRuntime hfsmRuntime, double now)
+        public bool Start(SkillExecutionContext executionContext, SkillExecutionPolicy policy, double now)
         {
             if (!CanStart(now))
                 return false;
@@ -47,16 +54,21 @@ namespace GameLogic
             IsRunning = true;
             IsCompleted = false;
             LastReturnLabel = string.Empty;
+            ExecutionPolicy = policy;
             CooldownReadyTime = now + Mathf.Max(0f, Resource.Cooldown);
 
-            var context = new GraphExecutionContext(Resource.Graph, hfsmRuntime.Blackboard.ForkSharedLocals());
+            HfsmRuntime hfsmRuntime = executionContext?.Hfsm;
+            var context = new GraphExecutionContext(
+                Resource.Graph,
+                hfsmRuntime?.Blackboard.ForkSharedLocals() ?? new GraphBlackboardRuntime());
             context.UserData.Add(Manager);
             context.UserData.Add(this);
             context.UserData.Add(Resource);
-            context.UserData.Add(hfsmRuntime);
-            if (hfsmRuntime.Owner != null)
+            if (hfsmRuntime != null)
+                context.UserData.Add(hfsmRuntime);
+            if (hfsmRuntime?.Owner != null)
                 context.UserData.Add(hfsmRuntime.Owner);
-            if (hfsmRuntime.GameObject != null)
+            if (hfsmRuntime?.GameObject != null)
                 context.UserData.Add(hfsmRuntime.GameObject);
 
             _flowRuntime = new FlowGraphRuntime(Resource.Graph, context);
@@ -98,6 +110,7 @@ namespace GameLogic
                 LastReturnLabel = "Interrupted";
 
             IsRunning = false;
+            ExecutionPolicy = SkillExecutionPolicy.Default;
             _data.Clear();
         }
 

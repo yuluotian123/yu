@@ -31,7 +31,7 @@ public partial class FlowTimelineNodeData
                 }
 
                 if (string.IsNullOrWhiteSpace(clip.Id))
-                    clip.Id = $"clip_{trackIndex}_{clipIndex}_{Time.GetTicksUsec():x}";
+                    clip.Id = FlowTimelineClip.GenerateUniqueId();
                 if (string.IsNullOrWhiteSpace(clip.Name))
                     clip.Name = clip.Action?.Description ?? $"Clip {clipIndex + 1}";
                 clip.StartTime = Mathf.Max(0f, clip.StartTime);

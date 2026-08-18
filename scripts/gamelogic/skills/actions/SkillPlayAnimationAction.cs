@@ -31,7 +31,7 @@ namespace GameLogic
             if (animationComponent == null)
                 return;
 
-            string requestKey = GetAnimationRequestKey(context);
+            string requestKey = ResolveAnimationRequestKey(context);
             FlowTimelineContext timeline = context?.GetUserData<FlowTimelineContext>();
             if (timeline?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
             {
@@ -58,11 +58,28 @@ namespace GameLogic
                 AnimationName,
                 "Animation name",
                 value => AnimationName = value));
-            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+
+            var advancedContent = new VBoxContainer { Visible = false };
+            advancedContent.AddChild(SkillActionEditorHelper.BuildLineEditRow(
                 "Request Key",
                 RequestKey,
-                "Empty = clip or animation name",
+                "Empty = automatic skill/clip key",
                 value => RequestKey = value));
+
+            var advancedButton = new Button
+            {
+                Text = "Advanced >",
+                ToggleMode = true,
+                TooltipText = "Show optional animation request overrides"
+            };
+            advancedButton.Toggled += expanded =>
+            {
+                advancedButton.Text = expanded ? "Advanced v" : "Advanced >";
+                advancedContent.Visible = expanded;
+            };
+            root.AddChild(advancedButton);
+            root.AddChild(advancedContent);
+
             root.AddChild(SkillActionEditorHelper.BuildSpinRow("Priority", AnimationPriority, -1000, 1000, 1, value => AnimationPriority = (int)value));
             root.AddChild(SkillActionEditorHelper.BuildSpinRow("Speed", Speed, -20, 20, 0.05, value => Speed = (float)value));
             root.AddChild(SkillActionEditorHelper.BuildCheckRow("From End", FromEnd, value => FromEnd = value));
@@ -71,12 +88,22 @@ namespace GameLogic
             return root;
         }
 
-        private string GetAnimationRequestKey(GraphExecutionContext context)
+        internal string ResolveAnimationRequestKey(GraphExecutionContext context)
         {
             if (!string.IsNullOrWhiteSpace(RequestKey))
                 return RequestKey.Trim();
 
             FlowTimelineContext timeline = context?.GetUserData<FlowTimelineContext>();
+            SkillResource skill = context?.GetUserData<SkillResource>();
+            if (timeline != null && !string.IsNullOrWhiteSpace(timeline.ClipId))
+            {
+                string skillKey = !string.IsNullOrWhiteSpace(skill?.SkillId)
+                    ? skill.SkillId.Trim()
+                    : skill?.ResourcePath?.Trim();
+                if (!string.IsNullOrWhiteSpace(skillKey))
+                    return $"skill:{skillKey}:{timeline.ClipId.Trim()}";
+            }
+
             if (timeline != null && !string.IsNullOrWhiteSpace(timeline.ClipName))
             {
                 string track = string.IsNullOrWhiteSpace(timeline.TrackName)

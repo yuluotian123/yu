@@ -4,7 +4,7 @@ namespace GameLogic
 {
     public class SkillApplyDashVelocityAction : GraphActionBase
     {
-        public string MoveAxisBlackboardKey { get; set; } = CharacterHfsmBlackboardKeys.MoveAxisX;
+        public string MoveAxisBlackboardKey { get; set; } = CharacterGraphBlackboardKeys.CommandMoveAxisX;
         public float Speed { get; set; } = 2000f;
         public bool StopVerticalVelocity { get; set; } = true;
 
@@ -13,36 +13,37 @@ namespace GameLogic
         public override void Execute(GraphExecutionContext context)
         {
             GameObject2D owner = SkillActionRuntimeHelper.GetGameObject(context);
-            CharacterBodyMotorComponent2D motor = owner?.GetComponent<CharacterBodyMotorComponent2D>();
-            if (motor == null)
+            CharacterMovementComponent2D movement = owner?.GetComponent<CharacterMovementComponent2D>();
+            if (movement == null)
                 return;
 
             float direction = ResolveDirection(context, owner);
-            float velocityY = StopVerticalVelocity ? 0f : motor.Velocity.Y;
-            motor.Velocity = new Vector2(Mathf.Sign(direction) * Speed, velocityY);
+            float velocityY = StopVerticalVelocity ? 0f : movement.Velocity.Y;
+            movement.RequestVelocityOverride(new CharacterMovementOverride2D(
+                new Vector2(Mathf.Sign(direction) * Speed, velocityY),
+                overrideHorizontal: true,
+                overrideVertical: StopVerticalVelocity,
+                priority: 100));
         }
 
         private float ResolveDirection(GraphExecutionContext context, GameObject2D owner)
         {
-            CharacterMoveComponent2D move = owner?.GetComponent<CharacterMoveComponent2D>();
+            CharacterMovementComponent2D movement = owner?.GetComponent<CharacterMovementComponent2D>();
 
-            if (move?.ApprovedIntent.HasInput == true)
-                return Mathf.Sign(move.ApprovedIntent.AxisX);
+            if (movement != null && Mathf.Abs(movement.MoveInputX) > 0.01f)
+                return Mathf.Sign(movement.MoveInputX);
 
-            if (move?.RawIntent.HasInput == true)
-                return Mathf.Sign(move.RawIntent.AxisX);
+            if (movement != null && Mathf.Abs(movement.RawMoveInputX) > 0.01f)
+                return Mathf.Sign(movement.RawMoveInputX);
 
             float axisX = context?.Blackboard.GetValue(MoveAxisBlackboardKey, 0f) ?? 0f;
             if (Mathf.Abs(axisX) > 0.01f)
                 return Mathf.Sign(axisX);
 
-            if (move != null)
+            if (movement != null)
             {
-                if (Mathf.Abs(move.InputX) > 0.01f)
-                    return Mathf.Sign(move.InputX);
-
-                if (move.Facing != 0)
-                    return move.Facing >= 0 ? 1f : -1f;
+                if (movement.Facing != 0)
+                    return movement.Facing >= 0 ? 1f : -1f;
             }
 
             return 1f;
@@ -56,7 +57,7 @@ namespace GameLogic
             root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
                 "Move Axis Key",
                 MoveAxisBlackboardKey,
-                CharacterHfsmBlackboardKeys.MoveAxisX,
+                CharacterGraphBlackboardKeys.CommandMoveAxisX,
                 value => MoveAxisBlackboardKey = value));
             root.AddChild(SkillActionEditorHelper.BuildSpinRow(
                 "Speed",

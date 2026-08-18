@@ -7,7 +7,7 @@ README 用于快速了解和接入插件。架构、扩展规则与工作流细�
 ## 主要能力
 
 - **Flow Graph**：从入口节点开始传播，支持顺序/并行连线、条件、Delay、Action、Return 和 Timeline。
-- **State Graph**：支持状态进入/更新/退出、触发器、Any State、完成转换、优先级、状态标签和 Composite State。
+- **State Graph**：支持状态进入/更新/退出、触发器、Any State、完成转换、优先级和 Composite State。
 - **Behavior Tree**：提供 Root、Composite、Decorator、Condition、Action 节点以及有序子节点执行。
 - **Blackboard**：支持图本地、父图和场景全局作用域，以及父子 Runtime 间的变量访问。
 - **SubGraph**：支持编辑器内子图导航，以及 Flow、State 和业务 Runtime 的父子运行时结构。
@@ -112,7 +112,7 @@ public override void _ExitTree()
 }
 ```
 
-`Start()` 默认使用 `StateGraphAsset.InitialStateName` 或图中的默认状态，也可以传入状态名称。运行期间可使用 `ChangeState()`、`CurrentStateHasTag()` 和黑板 API。
+`Start()` 默认使用 `StateGraphAsset.InitialStateName` 或图中的默认状态，也可以传入状态名称。运行期间可使用 `ChangeState()` 和黑板 API。
 
 #### Behavior Tree
 

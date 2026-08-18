@@ -7,7 +7,7 @@ namespace GameLogic
         public override bool IsMet(GraphExecutionContext context)
         {
             SimpleAICharacterControllerComponent2D ai = CharacterBehaviorTreeContext.GetAi(context);
-            if (ai?.Motor == null || !ai.Motor.IsOnFloor || ai.TurnPauseTimer > 0f)
+            if (ai?.Movement == null || !ai.Movement.IsOnFloor || ai.TurnPauseTimer > 0f)
                 return false;
 
             float offsetX = ai.Owner.GlobalPosition.X - ai.SpawnPosition.X;
@@ -15,7 +15,7 @@ namespace GameLogic
                 ? offsetX >= ai.PatrolDistance
                 : offsetX <= -ai.PatrolDistance;
             bool noGroundAhead = ai.ReverseAtEdges &&
-                !ai.Motor.HasGroundAhead(ai.Direction, ai.EdgeLookAhead);
+                !ai.Movement.HasGroundAhead(ai.Direction, ai.EdgeLookAhead);
 
             return reachedPatrolEdge || noGroundAhead;
         }

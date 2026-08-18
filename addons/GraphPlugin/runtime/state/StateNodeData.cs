@@ -5,7 +5,6 @@ public class StateNodeData : GraphNodeData, IStateNodeData
 {
     public string StateName { get; set; } = "StateNode";
     public bool IsDefault { get; set; }
-    public string Tags { get; set; } = string.Empty;
 
     public override List<string> GetGraphTypes() => new() { StateGraphAsset.GraphTypeName };
     public override string GetMenuName() => "State";
@@ -16,16 +15,6 @@ public class StateNodeData : GraphNodeData, IStateNodeData
     public override int GetInputMaxConnections(int port) => -1;
     public override int GetOutputMaxConnections(int port) => -1;
     public override string GetOutputPortName(int port) => "Out";
-
-    public virtual bool HasTag(string tag)
-    {
-        return StateTagUtility.ContainsTag(Tags, tag);
-    }
-
-    public virtual IReadOnlyList<string> GetTags()
-    {
-        return StateTagUtility.ParseTags(Tags);
-    }
 
     public virtual bool CanEnter(StateGraphRuntime runtime)
     {
@@ -65,10 +54,6 @@ public class StateNodeData : GraphNodeData, IStateNodeData
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
         });
 
-        int tagCount = StateTagUtility.ParseTags(Tags).Count;
-        if (tagCount > 0)
-            row.AddChild(new Label { Text = $"Tags {tagCount}" });
-
         root.AddChild(row);
         context.GraphNode.AddChild(root);
     }
@@ -98,14 +83,6 @@ public class StateNodeData : GraphNodeData, IStateNodeData
         };
         defaultCheck.Toggled += value => IsDefault = value;
         root.AddChild(defaultCheck);
-
-        var tagEdit = new LineEdit
-        {
-            PlaceholderText = "Tags",
-            Text = Tags
-        };
-        tagEdit.TextChanged += value => Tags = value;
-        root.AddChild(tagEdit);
 
         return root;
     }

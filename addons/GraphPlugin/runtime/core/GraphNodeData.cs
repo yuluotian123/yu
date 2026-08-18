@@ -84,6 +84,11 @@ public class GraphNodeData
     /// <summary>没有显式入口节点时，是否允许该节点作为图入口。</summary>
     public virtual bool CanBePrime() => true;
 
+    /// <summary>Allows specialized nodes to report resource or configuration errors.</summary>
+    public virtual void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+    }
+
     /// <summary>指定输出端口允许的最大连接数。-1 表示不限制。</summary>
     public virtual int GetOutputMaxConnections(int port) => -1;
 

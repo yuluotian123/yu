@@ -19,7 +19,7 @@ namespace GameLogic
         public string BehaviourKey { get; set; } = string.Empty;
         public string MetadataJson { get; set; } = "{}";
 
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
         public override string GetMenuName() => "HFSM State";
         public override string GetDisplayName() => string.IsNullOrWhiteSpace(StateName) ? "State" : StateName;
         public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.35f, 0.55f, 0.9f);
@@ -27,16 +27,6 @@ namespace GameLogic
         public override int GetOutputCount() => 1;
         public override int GetInputMaxConnections(int port) => -1;
         public override int GetOutputMaxConnections(int port) => -1;
-
-        public override bool HasTag(string tag)
-        {
-            return HfsmTagUtility.ContainsTag(Tags, tag);
-        }
-
-        public override IReadOnlyList<string> GetTags()
-        {
-            return HfsmTagUtility.ParseTags(Tags);
-        }
 
         public override bool CanEnter(StateGraphRuntime runtime)
         {
@@ -168,16 +158,6 @@ namespace GameLogic
                 });
             }
 
-            int tagCount = HfsmTagUtility.ParseTags(state.Tags).Count;
-            if (tagCount > 0)
-            {
-                row.AddChild(new Label
-                {
-                    Text = $"Tags {tagCount}",
-                    VerticalAlignment = VerticalAlignment.Center
-                });
-            }
-
             if (!string.IsNullOrWhiteSpace(state.BehaviourKey))
             {
                 row.AddChild(new Label
@@ -236,21 +216,6 @@ namespace GameLogic
             behaviourEdit.TextChanged += value => state.BehaviourKey = value;
             root.AddChild(behaviourEdit);
 
-            AddTagFields(root, state);
-        }
-
-        private static void AddTagFields(VBoxContainer root, IHfsmStateNodeData state)
-        {
-            HfsmTagRegistry registry = HfsmTagRegistry.LoadDefault();
-            if (registry != null)
-                state.Tags = registry.NormalizeTags(state.Tags);
-
-            var tagRoot = new VBoxContainer();
-            tagRoot.AddThemeConstantOverride("separation", 4);
-
-            tagRoot.AddChild(new Label { Text = "Tags" });
-            tagRoot.AddChild(new HfsmTagMultiSelectDropdown(registry, state.Tags, tags => state.Tags = tags));
-            root.AddChild(tagRoot);
         }
 
         private static void RefreshGraphNodeTitle(IHfsmStateNodeData state, GraphEditorContext context)

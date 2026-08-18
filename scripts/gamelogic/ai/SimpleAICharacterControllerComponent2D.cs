@@ -21,10 +21,8 @@ namespace GameLogic
         [Export] public float JumpInterval { get; set; } = 1.8f;
         [Export] public float JumpSustainDuration { get; set; } = 0.12f;
 
-        private ICharacterIntentAbility2D<MoveIntent2D> _move;
-        private ICharacterIntentAbility2D<JumpIntent2D> _jump;
-        private HfsmComponent2D _hfsm;
-        private CharacterBodyMotorComponent2D _motor;
+        private CharacterCommandBufferComponent2D _commands;
+        private CharacterMovementComponent2D _movement;
         private Vector2 _spawnPosition;
         private int _direction;
         private float _turnPauseTimer;
@@ -35,7 +33,7 @@ namespace GameLogic
         private bool _frameJumpSustainRequested;
 
         public BehaviorTreeRuntime Runtime { get; private set; }
-        public CharacterBodyMotorComponent2D Motor => _motor;
+        public CharacterMovementComponent2D Movement => _movement;
         public int Direction
         {
             get => _direction;
@@ -65,10 +63,8 @@ namespace GameLogic
 
         public override void OnInit()
         {
-            _move = Owner.GetComponent<CharacterMoveComponent2D>();
-            _jump = Owner.GetComponent<CharacterJumpComponent2D>();
-            _hfsm = Owner.GetComponent<HfsmComponent2D>();
-            _motor = Owner.GetComponent<CharacterBodyMotorComponent2D>();
+            _commands = Owner.GetComponent<CharacterCommandBufferComponent2D>();
+            _movement = Owner.GetComponent<CharacterMovementComponent2D>();
             _spawnPosition = Owner.GlobalPosition;
             _direction = StartDirection >= 0 ? 1 : -1;
             _jumpCooldownTimer = JumpInterval;
@@ -109,6 +105,10 @@ namespace GameLogic
         public void SetFrameMoveAxis(float axis) => _frameMoveAxis = axis;
         public void RequestFrameJumpStart() => _frameJumpStartRequested = true;
         public void SetFrameJumpSustain(bool requested) => _frameJumpSustainRequested = requested;
+        public void RequestAction(string actionId, int priority = 0)
+        {
+            _commands?.SubmitAction(new CharacterActionRequest(actionId, priority));
+        }
 
         private void Tick(double delta)
         {
@@ -126,28 +126,10 @@ namespace GameLogic
 
         private void CommitFrameIntent()
         {
-            var moveIntent = new MoveIntent2D(_frameMoveAxis);
-            var jumpIntent = new JumpIntent2D(_frameJumpStartRequested, _frameJumpSustainRequested);
-
-            _move?.SetIntent(moveIntent);
-            _jump?.SetIntent(jumpIntent);
-            WriteHfsmInputs(moveIntent, jumpIntent);
-            _move?.ApproveIntent(moveIntent);
-            _jump?.ApproveIntent(jumpIntent);
-        }
-
-        private void WriteHfsmInputs(MoveIntent2D moveIntent, JumpIntent2D jumpIntent)
-        {
-            if (_hfsm == null)
-                return;
-
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.IsOnFloor, _motor?.IsOnFloor == true);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.JumpStartRequested, jumpIntent.StartRequested);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.JumpSustainRequested, jumpIntent.SustainRequested);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.MoveAxisX, moveIntent.AxisX);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.VelocityY, _motor?.Velocity.Y ?? 0f);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.DashStartRequested, false);
-            _hfsm.SetValue(CharacterHfsmBlackboardKeys.AttackStartRequested, false);
+            _commands?.Submit(new CharacterCommand2D(
+                _frameMoveAxis,
+                _frameJumpStartRequested,
+                _frameJumpSustainRequested), ComponentPriority.AI);
         }
     }
 }

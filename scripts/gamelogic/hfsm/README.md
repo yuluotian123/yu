@@ -1,228 +1,90 @@
-# GameLogic HFSM
+# GameLogic HFSM 与角色图
 
-GameLogic HFSM 是基于 GraphPlugin `StateGraph` 的角色状态机封装。GraphPlugin 提供通用状态图能力；HFSM 层负责接入 `GameObject2D`、组件、技能和角色 blackboard。
+GameLogic HFSM 基于 GraphPlugin `StateGraph`，负责状态切换、条件、子图和黑板。角色行为使用 `CharacterGraphAsset` 扩展：输入节点是全局触发器，Action 节点仍是 HFSM 状态。
 
-## 快速开始
-
-1. 创建 `HfsmGraphAsset` 并通过 GraphPlugin 打开。
-2. 添加默认状态、普通状态、Any State、Return 或 Composite State。
-3. 使用 `HfsmTransitionConnection` 配置条件、优先级和 completion-only 行为。
-4. 将图赋给角色上的 `HfsmComponent2D.Graph`。
-5. 由组件初始化 `HfsmRuntime`，业务通过 `Trigger()`、`SetValue()` 和状态标签与运行时交互。
-
-```csharp
-HfsmComponent2D hfsm = gameObject.GetComponent<HfsmComponent2D>();
-hfsm.Trigger(Jump);
-hfsm.SetValue(IsGrounded, false);
-```
-
-## 文档边界
-
-- 通用 StateGraph、黑板和子图规则见 [`addons/GraphPlugin/README.md`](../../../addons/GraphPlugin/README.md)。
-- 本文只描述 GameLogic 角色上下文、组件状态、Skill 状态和项目内约定。
-- GraphPlugin 旧文档中的 Runtime Debug API 当前没有实现；HFSM 调试暂时使用 `HfsmComponent2D` 状态信息、标签和日志。
-
-## 文件结构
-
-- `runtime`
-  - `HfsmComponent2D`：挂在角色上的状态机组件。
-  - `HfsmRuntime`：继承 `StateGraphRuntime`，注入 owner 和 GameLogic 查询能力。
-  - `HfsmRuntimeExtensions`：GameLogic 上下文辅助方法。
-  - `IHfsmStateHandler`：组件状态回调兼容接口。
-- `graph/core`
-  - `HfsmGraphAsset`
-  - `HfsmTransitionConnection`
-- `graph/nodes`
-  - `HfsmStateNodeData`
-  - `ComponentHfsmStateNodeData`
-  - `HfsmCompositeStateNodeData`
-  - `HfsmAnyStateNodeData`
-  - `HfsmReturnStateNodeData`
-  - `SkillHfsmStateNodeData`
-- `graph/conditions`
-  - `HfsmConditionBase`
-  - `HfsmAlwaysCondition`
-  - `HfsmTriggerCondition`
-  - `HfsmBoolCondition`
-  - `HfsmFloatCondition`
-  - `HfsmTimerCondition`
-- `graph/tags`
-  - tag registry 和 tag 下拉 UI。
-
-## 核心职责
-
-HFSM 负责：
-
-- 根据 blackboard 和 transition 条件切换角色状态。
-- 暴露语义 tag，例如 `grounded`、`airborne`、`dashing`、`attacking`。
-- 管理复合状态子图。
-- 通过 `SkillHfsmStateNodeData` 启动技能。
-- 兼容 `ComponentHfsmStateNodeData` 这种组件生命周期状态。
-
-HFSM 不负责：
-
-- 具体移动物理。
-- 具体技能 timeline。
-- 技能 cooldown 存储。
-- 命中检测和伤害结算。
-
-这些逻辑应该放在 movement、skill、combat 等业务组件中。
-
-## 运行时上下文
-
-`HfsmRuntime` 创建时会把这些对象加入 `GraphExecutionContext.UserData`：
-
-- 当前 `HfsmRuntime`
-- 当前 `HfsmComponent2D`
-- 当前 `GameObject2D`
-
-所以节点、condition、action 可以通过：
-
-```csharp
-var hfsm = context.GetUserData<HfsmRuntime>();
-var owner = context.GetUserData<GameObject2D>();
-```
-
-读取业务上下文。
-
-## 状态切换顺序
-
-HFSM 复用 `StateGraphRuntime` 的顺序：
-
-1. 先检查 Any State transition，用于高优先级打断。
-2. 调用当前状态 `OnUpdate()`。
-3. 如果当前状态返回 completion，只检查 completion 指定输出口的 transition。
-4. 如果没有 completion 推进，再检查当前状态普通 transition。
-
-目标状态切换前会先调用：
-
-```csharp
-targetState.CanEnter(runtime)
-```
-
-`SkillHfsmStateNodeData` 用这个入口判断技能 cooldown 是否允许进入。
-
-## Completion-Only Transition
-
-`HfsmTransitionConnection` 继承自 `StateTransitionConnection`，支持 `CompletionOnly`。
-
-`CompletionOnly = true` 的连接只会在当前状态返回 `NodeCompletion` 时检查。
-
-典型用法：
+## 角色图结构
 
 ```text
-Dash -- Completed --> Locomotion
-Attack -- Completed --> Locomotion
+Dash Input   -> Dash Action
+Attack Input -> Attack Action
+
+Locomotion (Composite State)
 ```
 
-这类连接不要再写技能完成类黑板条件。
+- `CharacterInputActionNodeData` 没有输入端口，不属于状态，也不从 Any State 连出。
+- Input 节点只输出 `Triggered`，可以通过多条条件连线复用到多个 Action。
+- `CharacterSkillChainNodeData` 是实际 Action 状态，负责技能链、优先级、中断和移动锁定。
+- Action 完成且没有有效完成连线时，自动恢复触发前的根状态；恢复目标失效时回到默认状态。
+- 玩家输入和 AI `CharacterActionRequest` 最终走同一条 Action 路由。
 
-## Skill 状态
-
-Dash 和 Attack 已迁移为 Skill：
-
-- `res://assets/skills/dash_skill.tres`
-- `res://assets/skills/attack_skill.tres`
-
-根图中的状态：
-
-- `Dash`：`SkillHfsmStateNodeData`，`SkillResourcePath = res://assets/skills/dash_skill.tres`
-- `Attack`：`SkillHfsmStateNodeData`，`SkillResourcePath = res://assets/skills/attack_skill.tres`
-
-`SkillHfsmStateNodeData` 的职责很薄：
-
-- `CanEnter()`：通过 `SkillManagerComponent2D.CanStart()` 判断技能是否可进入。
-- `OnEnter()`：通过 `SkillManagerComponent2D.StartSkill()` 启动技能。
-- `TryGetCompletion()`：当 `SkillRuntime` 完成时返回 `NodeCompletion.Completed(label)`。
-- `OnExit()`：停止正在运行的技能。
-
-技能 cooldown 和 FlowGraph tick 都由 `SkillManagerComponent2D` 管理。
-
-## Player 示例图
-
-根图：
+默认资源：
 
 ```text
-res://assets/graphs/character_ground_air_hfsm.tres
-```
-
-根图状态：
-
-- `Any State`
-- `Locomotion`
-- `Dash`
-- `Attack`
-
-根图 transition：
-
-- `Any State -> Dash`：`DashStartRequested == true`
-- `Any State -> Attack`：`AttackStartRequested == true`
-- `Dash -> Locomotion`：completion-only
-- `Attack -> Locomotion`：completion-only
-
-Locomotion 子图：
-
-```text
+res://assets/graphs/character_graph.tres
 res://assets/graphs/character_locomotion_hfsm.tres
 ```
 
-状态：
+## 运行时组件
 
-- `Grounded`
-- `Airborne`
+- `HfsmComponent2D`：通用 HFSM 组件。
+- `HfsmRuntime`：状态图运行时，注入 `GameObject2D` 和组件上下文。
+- `CharacterGraphComponent2D`：扫描全局 Input、路由 Action、处理中断与自动返回。
+- `CharacterCommandBufferComponent2D`：合并移动命令并缓冲逻辑 Action 请求。
+- `SkillManagerComponent2D`：更新技能 FlowGraph 和耐久 cooldown。
+- `CharacterMovementComponent2D`：统一执行移动、跳跃、重力、地面检测和 `MoveAndSlide()`。
 
-## 角色 Blackboard Key
-
-定义位置：
+物理帧优先级顺序：
 
 ```text
-scripts/gamelogic/player/hfsm/CharacterHfsmBlackboardKeys.cs
+Controller / AI -> CharacterGraph -> SkillManager -> CharacterMovement
 ```
 
-当前 key：
+## Input 节点
 
-- `IsOnFloor`
-- `JumpStartRequested`
-- `JumpSustainRequested`
-- `MoveAxisX`
-- `VelocityY`
-- `DashStartRequested`
-- `AttackStartRequested`
+Input 节点保存逻辑 Action 名称，不保存物理按键。物理绑定继续由 Godot `InputMap` 和 `InputModule` 管理。
 
-Controller 只写输入类 key。技能运行状态、return label 和 cooldown 不写回 HFSM blackboard。
+支持：
 
-## Controller 数据流
+- Pressed / Released / Held / Axis
+- 输入层和成功后的输入消费
+- BufferTime、HoldTime
+- Axis deadzone、threshold、scale 和 invert
+- 黑板条件与连线条件
+- 独立 `ActionId`，供 AI 提交 `CharacterActionRequest`
 
-Player controller 每帧：
+输入只会在 Action 成功进入后消费。
 
-1. 读取输入。
-2. 写移动和跳跃 intent 给 movement/jump 组件。
-3. 写 HFSM blackboard：
-   - 落地状态
-   - 跳跃请求
-   - 移动轴
-   - Y 速度
-   - Dash/Attack 开始请求
-4. 不再查询 Dash/Attack 旧组件，也不负责判断技能 cooldown。
+## Action 与技能链
 
-AI controller 也只写 movement/jump 和技能请求 key。
+`CharacterSkillChainNodeData.SkillResourcePaths` 通过资源选择器维护，不接受手填路径。列表顺序就是执行顺序，允许重复资源。
 
-## 组件状态节点
+Action 进入前会检查首个技能 cooldown；执行中可按 Action 优先级切换。当前默认关系为：
 
-`ComponentHfsmStateNodeData` 仍保留，用于需要把状态生命周期转发给某个组件的场景。
-
-组件实现：
-
-```csharp
-public class MyStateComponent : Component2D, IHfsmStateHandler
-{
-    public void OnHfsmStateEnter(HfsmRuntime runtime, IHfsmStateNodeData state) {}
-    public void OnHfsmStateUpdate(HfsmRuntime runtime, IHfsmStateNodeData state, double delta) {}
-    public void OnHfsmStateExit(HfsmRuntime runtime, IHfsmStateNodeData state) {}
-}
+```text
+Dash (100) > Attack (50)
 ```
 
-图中使用 `ComponentHfsmStateNodeData`，把 `ComponentTypeName` 填为组件类型名。
+Dash 可以打断 Attack，Attack 不能打断 Dash。离开 Action 或其所属子图会取消仍在运行的技能。
+
+## 状态条件
+
+StateGraph/HFSM 不再提供 Tag。语义由明确状态和条件表达：
+
+- grounded / airborne：`MovementMode` 或 `IsOnFloor`
+- moving：移动输入或速度
+- dashing / attacking：`Character.ActiveActionId`
+- movement / jump lock：Action 或 `SkillResource` 策略
+- Any State 排除：状态名称或稳定状态 ID
+
+可用条件包括 bool、float、string、trigger、timer、当前状态身份，以及 Character 条件组合器。
+
+## 子图
+
+`HfsmCompositeStateNodeData` 继续负责子图。角色图子图通过共享黑板、输入参数和完成标签通信。父状态退出时，子图运行时会停止，活动 Action 也会收到退出并取消技能。
+
+## Skill FlowGraph
+
+简单技能可只放一个 `SkillTimelineNodeData`：没有 Entry 时它作为隐式入口，没有后续连线时运行时自动完成为 `Finished`。复杂技能仍可使用显式 Entry、Return、条件和分支。
 
 ## 调试
 
@@ -230,27 +92,11 @@ public class MyStateComponent : Component2D, IHfsmStateHandler
 
 - `LogStateChanges`
 - `DebugStateLabelPath`
-- `IncludeTagsInDebugText`
+- `CurrentStateName`
+- `CurrentStatePath`
 
-示例输出：
+状态图运行时数据只存在于组件实例，不会写回共享图资源。
 
-```text
-HFSM: Locomotion/Grounded [grounded]
-HFSM: Dash [dashing]
-```
+## 存档边界
 
-## 创建 HFSM 图
-
-1. 创建 `HfsmGraphAsset`。
-2. 添加状态节点、Any State、Return、Composite 或 Skill 节点。
-3. 设置初始状态：`InitialStateName` 或节点 `IsDefault`。
-4. 添加 transition，并配置条件和优先级。
-5. 需要自动返回的状态使用 completion-only transition。
-
-## 注意事项
-
-- Any State 会先于当前状态 update 检查，适合打断。
-- completion-only transition 不参与普通 transition 检查。
-- 技能节点能否进入由 `SkillManagerComponent2D` 判断。
-- 如果角色要使用 Skill 状态，场景中必须挂 `SkillManagerComponent2D`。
-- HFSM 图资源是共享配置，运行时状态和 blackboard 值不会写回资源。
+Save V2 保存角色稳定 ID、位置、旋转、朝向、持久化标记和技能 cooldown。输入快照、命令缓冲、当前 Action、速度、技能时间线和图运行时节点均不保存；加载后从图默认语义状态重新开始。

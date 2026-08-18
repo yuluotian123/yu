@@ -24,7 +24,7 @@ namespace GameLogic
                 return;
 
             GameObject2D owner = SkillActionRuntimeHelper.GetGameObject(context);
-            PlayerCameraComponent2D camera = owner?.GetComponent<PlayerCameraComponent2D>();
+            ICharacterCameraShake2D camera = owner?.GetComponent(typeof(ICharacterCameraShake2D)) as ICharacterCameraShake2D;
             if (camera == null || string.IsNullOrWhiteSpace(ShakeProfilePath))
                 return;
 

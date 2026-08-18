@@ -175,35 +175,16 @@ public class StateGraphRuntime : IGraphRuntimeScope
         return state != null && ChangeState(state, null);
     }
 
-    public bool CurrentStateHasTag(string tag)
+    public bool TryTransitionTo(string stateNameOrId, StateTransitionConnection transition = null)
     {
-        return CurrentState?.HasTag(tag) == true ||
-               _childRuntime?.CurrentStateHasTag(tag) == true;
-    }
+        if (Graph == null)
+            return false;
 
-    public IReadOnlyList<string> GetCurrentStateTags()
-    {
-        var tags = new List<string>();
-        var seen = new HashSet<string>(StringComparer.Ordinal);
-
-        AddTags(CurrentState?.GetTags());
-        AddTags(_childRuntime?.GetCurrentStateTags());
-        return tags;
-
-        void AddTags(IReadOnlyList<string> source)
-        {
-            if (source == null)
-                return;
-
-            for (int i = 0; i < source.Count; i++)
-            {
-                string tag = source[i];
-                if (string.IsNullOrWhiteSpace(tag) || !seen.Add(tag))
-                    continue;
-
-                tags.Add(tag);
-            }
-        }
+        IStateNodeData state = Graph.FindState(stateNameOrId);
+        return state != null &&
+            state != CurrentState &&
+            state.CanEnter(this) &&
+            ChangeState(state, transition);
     }
 
     public bool TryGetValue<T>(string key, out T value)

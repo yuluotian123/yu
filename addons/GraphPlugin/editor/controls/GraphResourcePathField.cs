@@ -58,6 +58,11 @@ public partial class GraphResourcePathField : HBoxContainer
         set => SetPath(value, notify: false);
     }
 
+    public void OpenPicker()
+    {
+        OpenDialog();
+    }
+
     private void OpenDialog()
     {
         _dialog ??= CreateDialog();

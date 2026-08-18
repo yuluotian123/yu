@@ -10,7 +10,6 @@ namespace GameLogic
 
         [ExportGroup("Debug")]
         [Export] public bool LogStateChanges { get; set; }
-        [Export] public bool IncludeTagsInDebugText { get; set; } = true;
         [Export] public NodePath DebugStateLabelPath { get; set; } = new("");
 
         public override int Priority => ComponentPriority.State;
@@ -23,13 +22,14 @@ namespace GameLogic
 
         public override void OnInit()
         {
-            if (Graph == null)
+            HfsmGraphAsset graph = ResolveGraph();
+            if (graph == null)
             {
                 GD.PushWarning("[HfsmComponent2D] Graph is not assigned.");
                 return;
             }
 
-            Runtime = new HfsmRuntime(Graph, this);
+            Runtime = new HfsmRuntime(graph, this);
             Runtime.StateChanged += OnRuntimeStateChanged;
             Runtime.StateEntered += OnRuntimeStateEntered;
             Runtime.StateExited += OnRuntimeStateExited;
@@ -85,11 +85,6 @@ namespace GameLogic
             return Runtime?.ChangeState(stateNameOrId) == true;
         }
 
-        public bool CurrentStateHasTag(string tag)
-        {
-            return Runtime?.CurrentStateHasTag(tag) == true;
-        }
-
         public bool SetValue<T>(string key, T value)
         {
             return Runtime?.SetValue(key, value) == true;
@@ -102,6 +97,11 @@ namespace GameLogic
 
         protected virtual void OnBeforeStartRuntime()
         {
+        }
+
+        protected virtual HfsmGraphAsset ResolveGraph()
+        {
+            return Graph;
         }
 
         protected virtual void OnAfterStartRuntime()
@@ -169,13 +169,7 @@ namespace GameLogic
             if (Runtime == null || !Runtime.IsRunning)
                 return "HFSM: <stopped>";
 
-            if (!IncludeTagsInDebugText)
-                return $"HFSM: {Runtime.CurrentStatePath}";
-
-            string tags = string.Join(",", Runtime.GetCurrentStateTags());
-            return string.IsNullOrWhiteSpace(tags)
-                ? $"HFSM: {Runtime.CurrentStatePath}"
-                : $"HFSM: {Runtime.CurrentStatePath} [{tags}]";
+            return $"HFSM: {Runtime.CurrentStatePath}";
         }
 
         private string GetDebugOwnerName()

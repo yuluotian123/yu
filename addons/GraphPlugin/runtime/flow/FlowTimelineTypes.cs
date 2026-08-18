@@ -21,6 +21,7 @@ public sealed class FlowTimelineContext
     public float Delta { get; set; }
     public float Duration { get; set; }
     public string TrackName { get; set; } = string.Empty;
+    public string ClipId { get; internal set; } = string.Empty;
     public string ClipName { get; set; } = string.Empty;
     public float ClipTime { get; set; }
     public float PreviousClipTime { get; set; }
@@ -49,7 +50,7 @@ public class FlowTimelineClip
     [JsonIgnore]
     public float EndTime => StartTime + Mathf.Max(0f, Duration);
 
-    private static string GenerateUniqueId()
+    internal static string GenerateUniqueId()
     {
         ulong time = Time.GetTicksUsec();
         uint rand1 = (uint)GD.Randi();

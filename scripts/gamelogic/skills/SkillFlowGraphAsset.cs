@@ -19,7 +19,9 @@ namespace GameLogic
         public override List<string> GetAllowedNodeTypes()
         {
             var result = new List<string>();
-            result.AddRange(GraphTypeRegistry.GetNodeTypeNamesForGraphType(FlowGraphAsset.GraphTypeName));
+            result.AddRange(GraphTypeRegistry
+                .GetNodeTypeNamesForGraphType(FlowGraphAsset.GraphTypeName)
+                .Where(typeName => !string.Equals(typeName, nameof(FlowTimelineNodeData), System.StringComparison.Ordinal)));
             result.AddRange(GraphTypeRegistry.GetNodeTypeNamesForGraphType(SkillGraphTypeName));
             return result.Distinct(System.StringComparer.Ordinal).ToList();
         }

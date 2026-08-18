@@ -134,6 +134,8 @@ public static class GraphValidationService
 
             if (!GraphTypeRegistry.TryGetNodeDefinition(node.NodeType, out _))
                 result.AddError($"未知节点类型：{node.NodeType}。", node.Id);
+
+            node.Validate(graph, result);
         }
     }
 

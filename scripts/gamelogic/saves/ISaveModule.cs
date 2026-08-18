@@ -16,6 +16,9 @@ namespace GameLogic
         /// <summary>取消注册。</summary>
         void Unregister(ISaveable saveable);
 
+        void RegisterSection(ISaveSection section);
+        void UnregisterSection(ISaveSection section);
+
         /// <summary>将所有已注册对象保存到指定存档槽。</summary>
         void Save(string slot = "default");
 

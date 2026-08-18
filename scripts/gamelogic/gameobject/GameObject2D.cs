@@ -10,7 +10,7 @@ namespace GameLogic
 {
     public partial class GameObject2D : Node2D, IObjectPoolItem, IGameObject
     {
-        [JsonIgnore] public string PersistentId { get; set; } = string.Empty;
+        [Export] [JsonIgnore] public string PersistentId { get; set; } = string.Empty;
         [Export] public Array<Component2D> Components { get; set; } = new();
 
         private readonly System.Collections.Generic.Dictionary<Type, Component2D> _runtimeComponents = new();

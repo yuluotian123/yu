@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityResource" load_steps=4 format=3 uid="uid://b3dashskill01"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilityResource.cs" id="1_ability_resource"]
+[ext_resource type="Resource" uid="uid://b3dashflow01" path="res://assets/abilities/dash_timeline.tres" id="2_dash_timeline"]
+[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilityActivationPolicy.cs" id="3_policy"]
+
+[sub_resource type="Resource" id="policy_dash"]
+script = ExtResource("3_policy")
+Priority = 100
+CanInterrupt = true
+BlocksMovement = true
+BlocksJump = true
+
+[resource]
+script = ExtResource("1_ability_resource")
+AbilityId = "dash"
+DisplayName = "Dash"
+Cooldown = 0.45
+Graph = ExtResource("2_dash_timeline")
+ActivationPolicy = SubResource("policy_dash")

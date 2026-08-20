@@ -7,7 +7,7 @@
 - `scripts/framework`：可复用框架层，提供模块、状态机、资源、UI、事件、配置、对象池等横向能力。
 - `scripts/gamelogic`：游戏业务层，提供角色组件、输入、HFSM、技能、AI、任务、存档、流程和 UI。
 
-项目的核心思路是：框架层负责稳定的通用能力，业务层用组件和图资源组织玩法。`addons/GraphPlugin` 提供通用图编辑和运行时能力，HFSM、Skill、Mission、BehaviorTree 等业务系统在它之上定义各自的语义。
+项目的核心思路是：框架层负责稳定的通用能力，业务层用组件和图资源组织玩法。`addons/GraphPlugin` 提供通用图编辑和运行时能力，CharacterGraph、HFSM、Ability、Mission、BehaviorTree 等业务系统在它之上定义各自的语义。
 
 ## 启动流程
 
@@ -154,11 +154,10 @@
 
 当前角色能力主要分布在 `scripts/gamelogic/abilities`：
 
-- `CharacterMoveComponent2D`：移动意图和水平移动。
-- `CharacterJumpComponent2D`：跳跃意图和跳跃处理。
-- `CharacterGravityComponent2D`：重力处理。
-- `CharacterBodyMotorComponent2D`：`CharacterBody2D` 移动与碰撞提交。
-- `SpriteAnimationComponent2D`：动画表现。
+- `CharacterGraphComponent2D`：玩家输入和 Ability 编排图。
+- `AbilitySystemComponent2D`：Ability 授予、冷却、优先级、并发和运行时。
+- `CharacterMovementComponent2D`：移动意图仲裁、跳跃、重力和 `MoveAndSlide()`。
+- `CharacterAnimationComponent2D`：Locomotion HFSM、Ability 动画仲裁和 Sprite 写入。
 
 ### Input
 
@@ -175,45 +174,35 @@
 - UI、战斗、相机等系统按输入层消费输入。
 - 需要连招、跳跃缓冲等体验时优先使用 InputModule 的 buffer 能力。
 
-### HFSM
+### CharacterGraph 与 HFSM
 
-`scripts/gamelogic/hfsm` 是基于 `GraphPlugin` 状态图的角色分层状态机。
+CharacterGraph 是玩家专用的多入口 FlowGraph，负责生命周期、输入到移动/跳跃的映射，以及 Ability 请求和关系边。它不继承 HFSM，不包含 Idle 或 Locomotion。
 
-职责边界：
+HFSM 继续用于 `CharacterAnimationComponent2D` 内部的 LocomotionGraph，只读取 Movement 最终结果，表达 Idle、Run、Jump、Fall、Land 等动画状态。
 
-- HFSM 负责状态切换、blackboard 条件和复合状态；CharacterGraph 负责输入与技能 Action 接入。
-- 具体移动、跳跃、技能时间线、伤害结算不放在 HFSM 中。
-- Controller 负责写入输入和环境类 blackboard key。
-
-当前角色图资源示例：
+资源示例：
 
 - `res://assets/graphs/character_graph.tres`
 - `res://assets/graphs/character_locomotion_hfsm.tres`
 
-### Skill
+### Ability
 
-`scripts/gamelogic/skills` 把角色技能拆成资源、运行时、管理组件和 FlowGraph。
+`scripts/gamelogic/abilities` 把角色能力拆成显式授予资源、运行时、管理组件和 FlowGraph Timeline。
 
 核心类型：
 
-- `SkillResource`：技能静态配置。
-- `SkillFlowGraphAsset`：技能流程图资源。
-- `SkillRuntime`：单个技能在角色身上的运行时状态。
-- `SkillManagerComponent2D`：技能注册、cooldown、启动、tick、停止。
-- `actions/`：技能 FlowGraph 可执行动作。
-
-当前 Dash 和 Attack 已迁移到 Skill：
-
-- `res://assets/skills/dash_skill.tres`
-- `res://assets/skills/dash_flow.tres`
-- `res://assets/skills/attack_skill.tres`
-- `res://assets/skills/attack_flow.tres`
+- `AbilityResource`：稳定 AbilityId、冷却、Policy 和 Timeline 图。
+- `AbilitySetResource`：显式授予角色可用 Ability。
+- `AbilityRuntime`：单个 Ability 在角色身上的运行状态。
+- `AbilitySystemComponent2D`：授予、cooldown、优先级、并发、取消和 tick。
+- `AbilityFlowGraphAsset` / `AbilityTimelineNodeData`：Ability 时序与动作。
 
 推荐约定：
 
-- cooldown 属于 `SkillManagerComponent2D`，不要放进 FlowGraph。
-- FlowGraph 只描述技能已经开始后的时间线、表现和动作。
-- HFSM 中的 Skill 状态只负责判断能否进入、启动技能和根据完成结果返回。
+- cooldown 和最终激活裁决属于 AbilitySystem，不放进 CharacterGraph 或 Timeline。
+- CharacterGraph 只负责玩家输入映射以及 Interrupt/Completion 请求关系。
+- AI BehaviorTree 直接调用 AbilitySystem，不挂载 CharacterGraph。
+- Timeline 只描述 Ability 已开始后的动画、位移、Hitbox 和事件。
 
 ### AI
 
@@ -223,12 +212,13 @@
 
 - `SimpleAICharacterControllerComponent2D` 持有 `BehaviorTreeGraphAsset`。
 - 行为树 action 写入本帧移动和跳跃 intent。
-- Controller 在帧末将 intent 提交给移动、跳跃和 HFSM blackboard。
+- Controller 在帧末将 intent 直接提交给 CharacterMovementComponent2D。
+- 战斗 AI 按需直接调用 AbilitySystemComponent2D。
 
 推荐约定：
 
-- AI 和玩家 Controller 都只写 intent，不直接改 Motor 结果。
-- 具体运动裁决放在能力组件和状态机中。
+- AI 不使用 CharacterGraph；玩家才通过 CharacterGraph 把输入转换为 intent。
+- AI 和玩家共用 Movement 和 AbilitySystem 执行 API，不直接改 CharacterBody 结果。
 
 ### Mission
 
@@ -274,7 +264,7 @@
 
 业务层负责：
 
-- 定义业务图类型，如 HFSM、Skill、Mission、BehaviorTree。
+- 定义业务图类型，如 CharacterGraph、HFSM、Ability、Mission、BehaviorTree。
 - 定义业务节点、action、condition。
 - 定义运行时上下文和数据流。
 
@@ -301,13 +291,16 @@ dotnet build yu.csproj
 
 ## 文档入口
 
-- GraphPlugin：`addons/GraphPlugin/README.md`
-- GraphPlugin 详细文档：`addons/GraphPlugin/docs/README.md`
-- ResourceModule：`scripts/framework/resource/ResourceModule.md`
-- UIModule：`scripts/framework/ui/UIModule.md`
-- EventModule：`scripts/framework/event/EventModule.md`
-- ConfigModule：`scripts/framework/config/ConfigModule.md`
-- ObjectPoolModule：`scripts/framework/pool/objectpool/ObjectPool.md`
-- InputModule：`scripts/gamelogic/input/InputModule.md`
-- HFSM：`scripts/gamelogic/hfsm/README.md`
-- Skill：`scripts/gamelogic/skills/README.md`
+- [角色系统](CHARACTER_SYSTEM.md)
+- [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
+- [AI 角色示例](AI_CHARACTER_EXAMPLE.md)
+- [GraphPlugin](../addons/GraphPlugin/README.md)
+- [GraphPlugin 详细文档](../addons/GraphPlugin/docs/README.md)
+- [ResourceModule](../scripts/framework/resource/ResourceModule.md)
+- [UIModule](../scripts/framework/ui/UIModule.md)
+- [EventModule](../scripts/framework/event/EventModule.md)
+- [ConfigModule](../scripts/framework/config/ConfigModule.md)
+- [ObjectPoolModule](../scripts/framework/pool/objectpool/ObjectPool.md)
+- [InputModule](../scripts/gamelogic/input/InputModule.md)
+- [HFSM](../scripts/gamelogic/hfsm/README.md)
+- [Ability](../scripts/gamelogic/abilities/README.md)

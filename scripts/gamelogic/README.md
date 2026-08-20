@@ -1,24 +1,33 @@
 # GameLogic
 
-`scripts/gamelogic` 保存项目业务系统。框架层提供通用生命周期、资源、UI、事件、FSM 和图能力；GameLogic 负责角色、输入、技能、任务、存档和具体玩法语义。
+`scripts/gamelogic` 保存项目业务系统。框架层提供通用生命周期、资源、UI、事件、FSM 和图能力；GameLogic 负责角色、输入、Ability、AI、任务、存档和具体玩法语义。
 
-## 已有模块文档
+## 角色目录
 
-- [Input](input/README.md)：输入分组、层级、消费、buffer 和模拟输入。
-- [Save](saves/README.md)：`ISaveable` 注册与 JSON 存档槽。
-- [Mission](missions/README.md)：FlowGraph 任务链、任务部署和保存恢复。
-- [HFSM](hfsm/README.md)：角色层次状态机、组件状态和 Skill 状态。
-- [Skills](skills/README.md)：技能资源、冷却、Runtime 和 Skill FlowGraph。
+```text
+character/
+  graph/       玩家 CharacterGraph 资源、节点、运行时和组件
+  input/       CharacterGraph 输入提供者接口
+  movement/    移动命令、Movement 组件、模式和参数
+  animation/   Animation 组件与 Locomotion 黑板键
 
-## 其他业务目录
+abilities/
+  runtime/     AbilitySystem、Resource、Runtime、Policy 和 Timeline
+  actions/     Ability Timeline actions
 
-- `abilities/`：能力与属性相关逻辑。
-- `ai/`：AI 行为和感知。
-- `camera/`：玩家相机组件。
-- `gameobject/`：GameObject 和 Component 生命周期。
-- `procedures/`：项目具体主流程状态。
-- `ui/`：项目窗口和 Widget。
+player/input/  玩家 InputModule 适配组件
+ai/            BehaviorTree Controller 和 Actions
+hfsm/          通用 HFSM；角色侧仅用于 Locomotion 动画
+```
 
-新增业务系统时优先复用 Framework 和 GraphPlugin，不把玩法对象写入通用框架层。
+CharacterGraph 是 `FlowGraphAsset` 的业务扩展，不属于 HFSM。AI 不使用 CharacterGraph，而是直接调用 Movement 和 AbilitySystem。
 
-项目总览见 [`docs/PROJECT_OVERVIEW.md`](../../docs/PROJECT_OVERVIEW.md)，优化路线见 [`docs/OPTIMIZATION_ROADMAP.md`](../../docs/OPTIMIZATION_ROADMAP.md)。
+## 文档
+
+- [角色系统](../../docs/CHARACTER_SYSTEM.md)
+- [Ability](abilities/README.md)
+- [HFSM](hfsm/README.md)
+- [Input](input/README.md)
+- [Mission](missions/README.md)
+- [Save](saves/README.md)
+- [项目总览](../../docs/PROJECT_OVERVIEW.md)

@@ -47,7 +47,7 @@ namespace GameLogic
 
         public override void OnExit(HfsmRuntime runtime)
         {
-            runtime?.GetComponent<SpriteAnimationComponent2D>()?.ClearAnimationRequest(GetRequestKey());
+            runtime?.Context.GetUserData<CharacterAnimationComponent2D>()?.ClearAnimationRequest(GetRequestKey());
             base.OnExit(runtime);
         }
 
@@ -75,7 +75,7 @@ namespace GameLogic
         private void AddAnimationFields(VBoxContainer root, GraphEditorContext context)
         {
             root.AddChild(new Label { Text = "Animation Request" });
-            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+            root.AddChild(GraphEditorUi.BuildLineEditRow(
                 "Animation",
                 AnimationName,
                 "SpriteFrames animation",
@@ -85,20 +85,20 @@ namespace GameLogic
                     if (context.GraphNode != null)
                         context.GraphNode.Title = GetDisplayName();
                 }));
-            root.AddChild(SkillActionEditorHelper.BuildLineEditRow(
+            root.AddChild(GraphEditorUi.BuildLineEditRow(
                 "Request Key",
                 RequestKey,
                 "Empty = state id",
                 value => RequestKey = value));
-            root.AddChild(SkillActionEditorHelper.BuildSpinRow("Priority", AnimationPriority, -1000, 1000, 1, value => AnimationPriority = (int)value));
-            root.AddChild(SkillActionEditorHelper.BuildSpinRow("Speed", Speed, -20, 20, 0.05, value => Speed = (float)value));
-            root.AddChild(SkillActionEditorHelper.BuildCheckRow("From End", FromEnd, value => FromEnd = value));
-            root.AddChild(SkillActionEditorHelper.BuildCheckRow("Restart If Playing", RestartIfPlaying, value => RestartIfPlaying = value));
+            root.AddChild(GraphEditorUi.BuildSpinRow("Priority", AnimationPriority, -1000, 1000, 1, value => AnimationPriority = (int)value));
+            root.AddChild(GraphEditorUi.BuildSpinRow("Speed", Speed, -20, 20, 0.05, value => Speed = (float)value));
+            root.AddChild(GraphEditorUi.BuildCheckRow("From End", FromEnd, value => FromEnd = value));
+            root.AddChild(GraphEditorUi.BuildCheckRow("Restart If Playing", RestartIfPlaying, value => RestartIfPlaying = value));
         }
 
         private void RequestAnimation(HfsmRuntime runtime)
         {
-            runtime?.GetComponent<SpriteAnimationComponent2D>()?.RequestAnimation(
+            runtime?.Context.GetUserData<CharacterAnimationComponent2D>()?.RequestAnimation(
                 GetRequestKey(),
                 GetAnimationName(),
                 AnimationPriority,

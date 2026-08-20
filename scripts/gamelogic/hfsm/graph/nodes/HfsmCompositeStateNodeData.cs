@@ -12,7 +12,7 @@ namespace GameLogic
         public string BehaviourKey { get; set; } = string.Empty;
         public string MetadataJson { get; set; } = "{}";
 
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
         public override string GetMenuName() => "Composite State";
 
         public override string GetDisplayName()

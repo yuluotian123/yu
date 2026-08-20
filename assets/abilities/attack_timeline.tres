@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="AbilityFlowGraphAsset" format=3 uid="uid://b3atkflow01"]
+
+[ext_resource type="Script" uid="uid://bv51fcf1mxw62" path="res://scripts/gamelogic/abilities/runtime/AbilityFlowGraphAsset.cs" id="1_ability_flow"]
+
+[resource]
+script = ExtResource("1_ability_flow")
+GraphJson = "{\"$type\":\"GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"AbilityFlowGraph\",\"Nodes\":[{\"$type\":\"AbilityTimelineNodeData\",\"Duration\":0.34,\"Tracks\":[{\"$type\":\"FlowTimelineTrack\",\"Name\":\"Animation\",\"Enabled\":true,\"Clips\":[{\"$type\":\"FlowTimelineClip\",\"Id\":\"attack_animation\",\"Name\":\"Attack Animation\",\"StartTime\":0,\"Duration\":0.34,\"Enabled\":true,\"Action\":{\"$type\":\"AbilityPlayAnimationAction\",\"AnimationName\":\"attack\",\"RequestKey\":\"\",\"AnimationPriority\":100,\"Speed\":1,\"FromEnd\":false,\"RestartIfPlaying\":true,\"Description\":\"Request Animation attack [P100]\"}}]}],\"Markers\":[{\"$type\":\"FlowTimelineMarker\",\"Label\":\"Marker 1\",\"Time\":0,\"Enabled\":true,\"Actions\":[]}],\"CancelActions\":[],\"Id\":\"attack_timeline\",\"Position\":{\"x\":300,\"y\":-40},\"NodeType\":\"AbilityTimelineNodeData\"}],\"Connections\":[],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"GraphEditorState\",\"ScrollOffset\":{\"x\":29.12207,\"y\":-274.45456},\"Zoom\":0.90909064}}"

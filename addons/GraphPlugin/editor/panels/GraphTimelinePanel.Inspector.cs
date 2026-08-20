@@ -1,6 +1,5 @@
 #if TOOLS
 using System;
-using GameLogic;
 using Godot;
 
 public sealed partial class GraphTimelinePanel
@@ -44,25 +43,25 @@ public sealed partial class GraphTimelinePanel
         header.AddChild(delete);
         _inspector.AddChild(header);
 
-        _inspector.AddChild(SkillActionEditorHelper.BuildLineEditRow("Name", clip.Name, "Clip name", value =>
+        _inspector.AddChild(GraphEditorUi.BuildLineEditRow("Name", clip.Name, "Clip name", value =>
         {
             clip.Name = value;
             MarkChanged();
             RefreshCanvas();
         }));
-        _inspector.AddChild(SkillActionEditorHelper.BuildCheckRow("Enabled", clip.Enabled, value =>
+        _inspector.AddChild(GraphEditorUi.BuildCheckRow("Enabled", clip.Enabled, value =>
         {
             clip.Enabled = value;
             MarkChanged();
             RefreshCanvas();
         }));
-        _inspector.AddChild(SkillActionEditorHelper.BuildSpinRow("Start", clip.StartTime, 0, 999999, 0.01, value =>
+        _inspector.AddChild(GraphEditorUi.BuildSpinRow("Start", clip.StartTime, 0, 999999, 0.01, value =>
         {
             clip.StartTime = Mathf.Max(0f, (float)value);
             MarkChanged();
             RefreshCanvas();
         }));
-        _inspector.AddChild(SkillActionEditorHelper.BuildSpinRow("Duration", clip.Duration, 0, 999999, 0.01, value =>
+        _inspector.AddChild(GraphEditorUi.BuildSpinRow("Duration", clip.Duration, 0, 999999, 0.01, value =>
         {
             clip.Duration = Mathf.Max(0f, (float)value);
             MarkChanged();
@@ -117,19 +116,19 @@ public sealed partial class GraphTimelinePanel
         header.AddChild(delete);
         _inspector.AddChild(header);
 
-        _inspector.AddChild(SkillActionEditorHelper.BuildLineEditRow("Label", marker.Label, "Marker label", value =>
+        _inspector.AddChild(GraphEditorUi.BuildLineEditRow("Label", marker.Label, "Marker label", value =>
         {
             marker.Label = value;
             MarkChanged();
             RefreshCanvas();
         }));
-        _inspector.AddChild(SkillActionEditorHelper.BuildCheckRow("Enabled", marker.Enabled, value =>
+        _inspector.AddChild(GraphEditorUi.BuildCheckRow("Enabled", marker.Enabled, value =>
         {
             marker.Enabled = value;
             MarkChanged();
             RefreshCanvas();
         }));
-        _inspector.AddChild(SkillActionEditorHelper.BuildSpinRow("Time", marker.Time, 0, _timeline.Duration, 0.01, value =>
+        _inspector.AddChild(GraphEditorUi.BuildSpinRow("Time", marker.Time, 0, _timeline.Duration, 0.01, value =>
         {
             marker.Time = Mathf.Clamp((float)value, 0f, _timeline.Duration);
             MarkChanged();

@@ -62,6 +62,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     /// 主要用于防止 Enter/Complete 立即互相触发形成死循环。
     /// </summary>
     public int MaxPropagationSteps { get; set; } = 256;
+    public bool ManageLocalBlackboardScope { get; set; } = true;
 
     public bool IsRunning { get; protected set; }
 
@@ -125,6 +126,21 @@ public class FlowGraphRuntime : IGraphRuntimeScope
         _nodeData.Clear();
         _propagationSteps = 0;
         PropagateToNode(Graph.PrimeNode);
+        return true;
+    }
+
+    public virtual bool StartFromNode(GraphNodeData node)
+    {
+        if (Graph == null || node == null)
+            return false;
+
+        Stop();
+        IsRunning = true;
+        PushLocalBlackboardIfNeeded();
+        _returnLabels.Clear();
+        _nodeData.Clear();
+        _propagationSteps = 0;
+        PropagateToNode(node);
         return true;
     }
 
@@ -485,7 +501,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     /// </summary>
     private void PushLocalBlackboardIfNeeded()
     {
-        if (_localBlackboardPushed)
+        if (!ManageLocalBlackboardScope || _localBlackboardPushed)
             return;
 
         Context.Blackboard.PushLocal(Graph);

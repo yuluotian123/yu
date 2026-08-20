@@ -19,7 +19,7 @@ namespace GameLogic
         public string BehaviourKey { get; set; } = string.Empty;
         public string MetadataJson { get; set; } = "{}";
 
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
         public override string GetMenuName() => "HFSM State";
         public override string GetDisplayName() => string.IsNullOrWhiteSpace(StateName) ? "State" : StateName;
         public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.35f, 0.55f, 0.9f);

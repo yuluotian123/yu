@@ -50,7 +50,7 @@ runtime/
 - 运行时黑板作用域栈。
 - Bool、Int、Float、String、Vector2、Color 等值类型。
 
-`runtime/flow/` 和 `runtime/state/` 只放图类型自己的节点和运行时语义。HFSM、Skill、Mission 这类业务图类型放在 `scripts/gamelogic/`，不要反向塞进插件 core。
+`runtime/flow/` 和 `runtime/state/` 只放图类型自己的节点和运行时语义。CharacterGraph、HFSM、Ability、Mission 这类业务图类型放在 `scripts/gamelogic/`，不要反向塞进插件 core。
 
 `runtime/debug/` 放运行时调试通道：
 

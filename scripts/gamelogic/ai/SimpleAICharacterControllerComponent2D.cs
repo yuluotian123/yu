@@ -21,7 +21,7 @@ namespace GameLogic
         [Export] public float JumpInterval { get; set; } = 1.8f;
         [Export] public float JumpSustainDuration { get; set; } = 0.12f;
 
-        private CharacterCommandBufferComponent2D _commands;
+        private AbilitySystemComponent2D _abilities;
         private CharacterMovementComponent2D _movement;
         private Vector2 _spawnPosition;
         private int _direction;
@@ -63,8 +63,8 @@ namespace GameLogic
 
         public override void OnInit()
         {
-            _commands = Owner.GetComponent<CharacterCommandBufferComponent2D>();
             _movement = Owner.GetComponent<CharacterMovementComponent2D>();
+            _abilities = Owner.GetComponent<AbilitySystemComponent2D>();
             _spawnPosition = Owner.GlobalPosition;
             _direction = StartDirection >= 0 ? 1 : -1;
             _jumpCooldownTimer = JumpInterval;
@@ -100,6 +100,8 @@ namespace GameLogic
         {
             Runtime?.Stop();
             Runtime = null;
+            _abilities = null;
+            _movement = null;
         }
 
         public void SetFrameMoveAxis(float axis) => _frameMoveAxis = axis;
@@ -107,7 +109,7 @@ namespace GameLogic
         public void SetFrameJumpSustain(bool requested) => _frameJumpSustainRequested = requested;
         public void RequestAction(string actionId, int priority = 0)
         {
-            _commands?.SubmitAction(new CharacterActionRequest(actionId, priority));
+            _abilities?.TryActivateAbility(actionId, "BehaviorTree");
         }
 
         private void Tick(double delta)
@@ -126,7 +128,7 @@ namespace GameLogic
 
         private void CommitFrameIntent()
         {
-            _commands?.Submit(new CharacterCommand2D(
+            _movement?.SubmitCommand(new CharacterCommand2D(
                 _frameMoveAxis,
                 _frameJumpStartRequested,
                 _frameJumpSustainRequested), ComponentPriority.AI);

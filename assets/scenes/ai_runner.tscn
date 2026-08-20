@@ -4,13 +4,9 @@
 [ext_resource type="Script" uid="uid://cpwpk30eant74" path="res://scripts/gamelogic/gameobject/Component2D.cs" id="2_comp"]
 [ext_resource type="Script" uid="uid://d1ktne64vflep" path="res://scripts/gamelogic/ai/SimpleAICharacterControllerComponent2D.cs" id="3_ai"]
 [ext_resource type="Resource" path="res://assets/graphs/ai_patrol_behavior_tree.tres" id="10_bt"]
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/core/CharacterCommandBufferComponent2D.cs" id="11_command_buffer"]
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterMovementProfile.cs" id="13_movement_profile"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="13_movement_profile"]
 [ext_resource type="Script" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent2D.cs" id="14_persistence"]
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/movement/CharacterMovementComponent2D.cs" id="15_movement_component"]
-[ext_resource type="Resource" path="res://assets/graphs/character_graph.tres" id="16_character_graph"]
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/core/CharacterGraphComponent2D.cs" id="17_character_graph_component"]
-[ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/skills/runtime/SkillManagerComponent2D.cs" id="18_skill_manager"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent2D.cs" id="15_movement_component"]
 
 [sub_resource type="RectangleShape2D" id="shape_body"]
 size = Vector2(40, 72)
@@ -26,9 +22,6 @@ EdgeLookAhead = 20.0
 TurnPauseDuration = 0.12
 JumpInterval = 2.0
 JumpSustainDuration = 0.14
-
-[sub_resource type="Resource" id="sub_commands"]
-script = ExtResource("11_command_buffer")
 
 [sub_resource type="Resource" id="sub_profile"]
 script = ExtResource("13_movement_profile")
@@ -50,18 +43,10 @@ Profile = SubResource("sub_profile")
 BodySize = Vector2(40, 72)
 FootInset = 6.0
 
-[sub_resource type="Resource" id="sub_fsm"]
-script = ExtResource("17_character_graph_component")
-Graph = ExtResource("16_character_graph")
-PhysicalInputEnabled = false
-
-[sub_resource type="Resource" id="sub_skill_manager"]
-script = ExtResource("18_skill_manager")
-
 [node name="AIRunner" type="Node2D"]
 script = ExtResource("1_gobj")
 PersistentId = "ai_runner"
-Components = Array[ExtResource("2_comp")]([SubResource("sub_ai"), SubResource("sub_commands"), SubResource("sub_fsm"), SubResource("sub_skill_manager"), SubResource("sub_movement_component"), SubResource("sub_persistence")])
+Components = Array[ExtResource("2_comp")]([SubResource("sub_ai"), SubResource("sub_movement_component"), SubResource("sub_persistence")])
 
 [node name="PhysicsBody" type="CharacterBody2D" parent="."]
 

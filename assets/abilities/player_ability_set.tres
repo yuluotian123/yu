@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AbilitySetResource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilitySetResource.cs" id="1_set"]
+[ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/abilities/attack_ability.tres" id="2_attack"]
+[ext_resource type="Resource" uid="uid://b3dashskill01" path="res://assets/abilities/dash_ability.tres" id="3_dash"]
+
+[resource]
+script = ExtResource("1_set")
+Abilities = Array[Resource]([ExtResource("2_attack"), ExtResource("3_dash")])

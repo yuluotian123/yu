@@ -116,7 +116,7 @@
 
 - `addons/GraphPlugin/docs/`
 - `addons/GraphPlugin/runtime/debug/`
-- GraphPlugin、HFSM、Skills、Mission README
+- GraphPlugin、CharacterGraph、HFSM、Ability、Mission README
 
 **问题**：旧专题文档描述了 `GraphRuntimeDebugRegistry`、`EngineDebugger` bridge 和编辑器面板，但当前代码树没有对应实现，`runtime/debug/` 为空。
 

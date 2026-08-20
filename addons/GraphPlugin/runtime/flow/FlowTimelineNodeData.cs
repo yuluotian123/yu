@@ -12,7 +12,7 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
     public override string GetCategory() => "Flow";
     public override string GetDisplayName() => $"FlowTimeline";
     public override string GetMenuName() => "Timeline";
-    public override List<string> GetSearchKeywords() => new() { "skill", "timeline", "clip", "track" };
+    public override List<string> GetSearchKeywords() => new() { "ability", "timeline", "clip", "track" };
     public override Color GetNodeColor() => new(0.48f, 0.58f, 0.95f);
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;

@@ -18,7 +18,7 @@ namespace GameLogic
         public string EntryKey => string.IsNullOrWhiteSpace(PersistentIdOverride)
             ? Owner?.PersistentId ?? string.Empty
             : PersistentIdOverride.Trim();
-        public int SchemaVersion => 1;
+        public int SchemaVersion => 2;
 
         public override void OnInit()
         {
@@ -50,9 +50,9 @@ namespace GameLogic
                 ["flags"] = CaptureFlags()
             };
 
-            SkillManagerComponent2D skills = Owner.GetComponent<SkillManagerComponent2D>();
-            if (skills != null)
-                state["skills"] = skills.CaptureDurableState();
+            AbilitySystemComponent2D abilities = Owner.GetComponent<AbilitySystemComponent2D>();
+            if (abilities != null)
+                state["abilities"] = abilities.CaptureDurableState();
 
             return state;
         }
@@ -75,7 +75,8 @@ namespace GameLogic
 
             Owner.GetComponent<CharacterMovementComponent2D>()?.RestoreFacing(state["facing"]?.GetValue<int>() ?? 1);
             RestoreFlags(state["flags"] as JsonObject);
-            Owner.GetComponent<SkillManagerComponent2D>()?.RestoreDurableState(state["skills"] as JsonObject);
+            JsonObject abilityState = state["abilities"] as JsonObject ?? state["skills"] as JsonObject;
+            Owner.GetComponent<AbilitySystemComponent2D>()?.RestoreDurableState(abilityState);
         }
 
         private JsonObject CaptureFlags()

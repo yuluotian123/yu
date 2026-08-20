@@ -9,7 +9,7 @@ namespace GameLogic
 
     public class HfsmAnyStateNodeData : AnyStateNodeData, IHfsmPseudoNodeData
     {
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
         public override string GetDisplayName() => "Any State";
         public override Color GetNodeColor() => new(0.95f, 0.62f, 0.24f);
         public override int GetInputCount() => 0;
@@ -87,7 +87,7 @@ namespace GameLogic
 
     public class HfsmReturnStateNodeData : StateReturnNodeData, IHfsmPseudoNodeData
     {
-        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName, CharacterGraphAsset.CharacterGraphTypeName };
+        public override List<string> GetGraphTypes() => new() { HfsmGraphAsset.GraphTypeName };
         public override string GetDisplayName() => string.IsNullOrWhiteSpace(Label) ? "Return" : Label;
         public override Color GetNodeColor() => new(0.66f, 0.56f, 0.92f);
         public override int GetInputCount() => 1;

@@ -74,11 +74,11 @@ HFSM 在 StateGraph 基础上扩展：
 
 HFSM 子图使用 `HfsmCompositeStateNodeData`，只接受 `HfsmGraphAsset`。
 
-## Skill Flow
+## Ability Flow
 
-Skill Flow 继承 FlowGraph：
+Ability Flow 继承 FlowGraph：
 
-- `SkillFlowGraphAsset` 图类型是 `SkillFlowGraph`。
+- `AbilityFlowGraphAsset` 图类型是 `AbilityFlowGraph`。
 - 允许复用 FlowGraph 节点。
 - 技能行为通过 action、condition、timeline 等对象组合。
 
@@ -105,7 +105,7 @@ MissionGraph 也使用 `GraphBlackboardRuntime`，子图通过父 runtime 的 bl
 运行时调试是可选能力。接入方式：
 
 ```csharp
-_debugHandle = GraphRuntimeDebugRegistry.Register(owner, runtime, graph, "Skill", CreateMetadata);
+_debugHandle = GraphRuntimeDebugRegistry.Register(owner, runtime, graph, "Ability", CreateMetadata);
 ```
 
 运行时在关键事件处调用：

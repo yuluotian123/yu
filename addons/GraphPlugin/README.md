@@ -1,6 +1,6 @@
 # GraphPlugin
 
-GraphPlugin 是项目内的通用图编辑与运行时框架，基于 Godot 4 C# 实现。它统一处理图资源、节点与连线、黑板、子图、验证、序列化和编辑器工具；HFSM、Skill、Mission 等具体业务语义放在 `scripts/gamelogic/` 中扩展。
+GraphPlugin 是项目内的通用图编辑与运行时框架，基于 Godot 4 C# 实现。它统一处理图资源、节点与连线、黑板、子图、验证、序列化和编辑器工具；CharacterGraph、HFSM、Ability、Mission 等具体业务语义放在 `scripts/gamelogic/` 中扩展。
 
 README 用于快速了解和接入插件。架构、扩展规则与工作流细节请查看 [`docs/`](docs/README.md)。
 
@@ -35,7 +35,7 @@ addons/GraphPlugin/
 - `runtime/core/` 只保存通用图能力，不依赖具体玩法或角色逻辑。
 - `editor/` 只负责 Godot 编辑器体验，不进入游戏运行时语义。
 - Flow、State、Behavior Tree 只实现各自通用执行规则。
-- HFSM、Skill、Mission 等项目业务图放在 `scripts/gamelogic/`，通过继承插件资源或 Runtime 接入。
+- CharacterGraph、HFSM、Ability、Mission 等项目业务图放在 `scripts/gamelogic/`，通过继承插件资源或 Runtime 接入。
 - Action、Condition、Task 等业务对象应保持可复用，不应直接写进编辑器窗口或 core。
 
 ## 快速开始
@@ -51,7 +51,7 @@ addons/GraphPlugin/
 - `FlowGraphAsset`
 - `StateGraphAsset`
 - `BehaviorTreeGraphAsset`
-- 项目业务层提供的 `HfsmGraphAsset`、`SkillFlowGraphAsset` 或 `MissionGraph`
+- 项目业务层提供的 `CharacterGraphAsset`、`HfsmGraphAsset`、`AbilityFlowGraphAsset` 或 `MissionGraph`
 
 选中资源后，Inspector 顶部会显示 **Open Graph Editor**。进入编辑器后创建节点、连接端口、配置黑板，并通过工具栏保存。
 

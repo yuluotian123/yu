@@ -96,7 +96,7 @@ runtime event/context
 业务图类型放在 `scripts/gamelogic/`：
 
 - HFSM 节点和连接放在 `scripts/gamelogic/hfsm/graph/`。
-- Skill Flow 图资源放在 `scripts/gamelogic/skills/`。
+- Ability Flow 图资源和运行时放在 `scripts/gamelogic/abilities/`。
 - Mission 图和任务节点放在 `scripts/gamelogic/missions/mission_chains/`。
 
 业务层可以覆盖 `GraphAsset.CreateConnection()` 来指定自己的连线类型，也可以覆盖 `GraphNodeData.GetGraphTypes()` 控制节点出现在哪些图类型中。

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using GameLogic;
@@ -8,7 +7,6 @@ using Godot;
 public partial class CharacterGraphRuntimeSmokeTest : Node
 {
     private const double PhysicsDelta = 1d / 60d;
-    private const float DashSpeed = 760f;
 
     public override void _Ready()
     {
@@ -27,176 +25,243 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
 
     private void Run()
     {
-        VerifyTimelineClipKeys();
+        VerifyInputNodes();
+        VerifyLifecycleAndNonReentrancy();
 
         PackedScene playerScene = GD.Load<PackedScene>("res://assets/scenes/player.tscn");
         Require(playerScene != null, "Player scene could not be loaded.");
-
         GameObject2D player = playerScene.Instantiate<GameObject2D>();
         AddChild(player);
         player.SetProcess(false);
         player.SetPhysicsProcess(false);
 
         CharacterGraphComponent2D graph = player.GetComponent<CharacterGraphComponent2D>();
-        CharacterCommandBufferComponent2D commands = player.GetComponent<CharacterCommandBufferComponent2D>();
+        AbilitySystemComponent2D abilities = player.GetComponent<AbilitySystemComponent2D>();
         CharacterMovementComponent2D movement = player.GetComponent<CharacterMovementComponent2D>();
-        SkillManagerComponent2D skills = player.GetComponent<SkillManagerComponent2D>();
-        SpriteAnimationComponent2D animations = player.GetComponent<SpriteAnimationComponent2D>();
-        Require(graph?.Runtime?.IsRunning == true, "Character graph did not start.");
-        Require(commands != null, "Character command buffer is missing.");
-        Require(movement != null, "Character movement component is missing.");
-        Require(skills != null, "Skill manager is missing.");
-        Require(animations != null, "Sprite animation component is missing.");
-        Require(graph.PhysicalInputEnabled, "Player physical input is disabled.");
-        Require(skills.GetRuntime("dash") != null, "Graph skill index did not register dash by SkillId.");
-        Require(graph.CurrentStateName == "Locomotion", $"Expected Locomotion, got {graph.CurrentStateName}.");
-        Require(graph.Runtime.ChildRuntime?.Graph?.Connections.Count == 9,
-            "Locomotion graph was not simplified to nine connections.");
+        CharacterAnimationComponent2D animation = player.GetComponent<CharacterAnimationComponent2D>();
 
-        graph.SubmitAction(new CharacterActionRequest("attack", 50));
-        Tick(player);
-        Require(graph.CurrentStateName == "Attack", $"Attack request entered {graph.CurrentStateName}.");
-        Require(animations.ActiveRequestKey == "skill:attack:attack_animation",
-            $"Attack used unexpected animation request key '{animations.ActiveRequestKey}'.");
-        Tick(player);
-        Require(animations.ActiveRequestKey == "skill:attack:attack_animation",
-            "Attack animation request key changed between timeline phases.");
-        Require(skills.ActiveSkillBlocksMovement && skills.ActiveSkillBlocksJump,
-            "Attack Action policy was not applied by SkillManager.");
-        Require(movement.MovementLocked && movement.JumpLocked,
-            "Movement did not consume the active Action policy.");
+        Require(graph?.Runtime?.IsRunning == true, "CharacterGraph did not initialize.");
+        Require(abilities != null, "AbilitySystem is missing.");
+        Require(movement != null, "CharacterMovement is missing.");
+        Require(animation?.LocomotionRuntime?.IsRunning == true, "Locomotion graph did not start.");
+        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent2D"),
+            "Legacy CommandBuffer is still mounted.");
+        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "SkillManagerComponent2D"),
+            "Legacy SkillManager is still mounted.");
 
-        commands.Submit(new CharacterCommand2D(1f, false, false), int.MaxValue);
-        graph.SubmitAction(new CharacterActionRequest("dash", 100));
-        Tick(player);
-        Require(graph.CurrentStateName == "Dash", $"Dash did not interrupt Attack; current={graph.CurrentStateName}.");
-        Require(animations.ActiveRequestKey == "skill:dash:dash_animation",
-            $"Dash used unexpected animation request key '{animations.ActiveRequestKey}'.");
-        Require(Mathf.IsEqualApprox(movement.Velocity.X, DashSpeed),
-            $"Dash same-frame velocity was {movement.Velocity.X}, expected {DashSpeed}.");
+        CharacterGraphAsset graphAsset = graph.CharacterGraph;
+        Require(graphAsset.Nodes.OfType<HfsmCompositeStateNodeData>().Count() == 0, "CharacterGraph still contains Locomotion.");
+        Require(!graphAsset.GetAllowedNodeTypes().Contains(nameof(HfsmStateNodeData)),
+            "CharacterGraph editor still exposes HFSM states.");
+        Require(!graphAsset.GetAllowedNodeTypes().Contains(nameof(FlowTimelineNodeData)),
+            "CharacterGraph editor still exposes Timeline nodes.");
+        Require(!graphAsset.GetAllowedNodeTypes().Contains(nameof(FlowEntryNodeData)),
+            "CharacterGraph editor still exposes a single-entry Flow node.");
+        Require(graphAsset.Nodes.OfType<CharacterAddMovementInputNodeData>().Count() == 1, "Movement input is not configured in CharacterGraph.");
+        CharacterAbilityNodeData attackNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
+            .First(value => value.AbilityId == "attack");
+        CharacterAbilityNodeData dashNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
+            .First(value => value.AbilityId == "dash");
+        CharacterGraphConnection attackToDash = graphAsset.Connections.OfType<CharacterGraphConnection>().FirstOrDefault(value =>
+            value.FromNode == attackNode.Id && value.ToNode == dashNode.Id &&
+            value.RelationKind == CharacterGraphRelationKind.Interrupt);
+        Require(attackToDash != null,
+            "Attack -> Dash interrupt relationship is missing.");
+        Require(abilities.TryActivateAbility("missing", "SmokeTest") == AbilityActivationResult.NotGranted,
+            "AbilitySystem activated an Ability that was not granted.");
+        Require(abilities.GetRuntime("attack")?.Resource?.Graph?.Nodes
+                .OfType<AbilityTimelineNodeData>().Any() == true,
+            "Attack Ability Timeline did not deserialize.");
 
-        graph.SubmitAction(new CharacterActionRequest("attack", 50));
-        Tick(player);
-        Require(graph.CurrentStateName == "Dash", "Lower-priority Attack interrupted Dash.");
+        Require(abilities.TryActivateAbility("attack", "SmokeTest") == AbilityActivationResult.Activated,
+            "Attack could not activate.");
+        Require(abilities.TryActivateAbility("attack", "SmokeTest") == AbilityActivationResult.AlreadyActive,
+            "AbilitySystem did not reject an already active Ability.");
+        TickPhysics(player);
+        Require(animation.ActiveRequestKey == "ability:attack:attack_animation",
+            $"Unexpected attack animation key: {animation.ActiveRequestKey}");
+        Require(movement.MovementLocked && movement.JumpLocked, "Attack did not apply movement locks.");
 
-        for (int i = 0; i < 24 && graph.CurrentStateName == "Dash"; i++)
-            Tick(player);
+        int configuredPriority = attackToDash.RequestPriority;
+        attackToDash.RequestPriority = 40;
+        Require(graph.Runtime.TryActivateAbility(dashNode) == AbilityActivationResult.BlockedByCurrentAbility,
+            "Low-priority graph request interrupted Attack.");
+        attackToDash.RequestPriority = configuredPriority;
+        Require(graph.Runtime.TryActivateAbility(dashNode) == AbilityActivationResult.Activated,
+            "Dash did not interrupt Attack through the graph relationship.");
+        TickPhysics(player);
+        Require(Mathf.IsEqualApprox(Mathf.Abs(movement.Velocity.X), 760f),
+            $"Dash velocity was {movement.Velocity.X}.");
+        Require(animation.ActiveRequestKey == "ability:dash:dash_animation",
+            $"Unexpected dash animation key: {animation.ActiveRequestKey}");
+        Require(graph.Runtime.TryActivateAbility(attackNode) == AbilityActivationResult.BlockedByCurrentAbility,
+            "Attack bypassed the missing Dash -> Attack relationship.");
 
-        Require(graph.CurrentStateName == "Locomotion",
-            $"Completed Dash did not resume Locomotion; current={graph.CurrentStateName}.");
-        Require(animations.ActiveRequestKey != "skill:attack:attack_animation" &&
-            animations.ActiveRequestKey != "skill:dash:dash_animation",
-            "Completed or cancelled timeline left a skill animation request active.");
+        abilities.GetRuntime("attack").SetCooldownReadyTime(0d);
+        var completion = new CharacterGraphConnection
+        {
+            RelationKind = CharacterGraphRelationKind.Completion,
+            RequestPriority = 100,
+            FromNode = dashNode.Id,
+            FromPort = 0,
+            ToNode = attackNode.Id,
+            ToPort = 0
+        };
+        graphAsset.Connections.Add(completion);
 
-        VerifySaveV2(playerScene, player, movement);
-        VerifyAiInputIsolation();
+        for (int i = 0; i < 60 && abilities.ActiveAbilities.Count > 0; i++)
+            TickPhysics(player);
+        graphAsset.Connections.Remove(completion);
+        Require(abilities.ActiveAbilities.Count == 0, "Completed Ability remained active.");
+        Require(abilities.GetRuntime("attack").LastReturnLabel == "Finished",
+            "Completion relationship did not activate Attack after Dash.");
+        Require(!movement.MovementLocked && !movement.JumpLocked, "Ability movement locks were not released.");
+        TickPhysics(player);
+        Require(!animation.ActiveRequestKey.StartsWith("ability:", StringComparison.Ordinal),
+            "Completed Ability left an animation override active.");
+
+        movement.SubmitCommand(new CharacterCommand2D(-1f, true, true), ComponentPriority.Input);
+        TickPhysics(player);
+        Require(movement.RawMoveInputX < 0f, "Movement did not consume its internal command buffer.");
+        Require(movement.JumpSustainRequested, "Jump sustain did not persist after command consumption.");
+        TickPhysics(player);
+        Require(movement.JumpSustainRequested, "Jump sustain was cleared without a release request.");
+        movement.SetJumpSustain(false, ComponentPriority.Input);
+        TickPhysics(player);
+        Require(!movement.JumpSustainRequested, "Jump release did not clear persistent sustain.");
+
+        VerifyGraphMovementInput(player, graphAsset, movement);
+
+        CharacterPersistenceComponent2D persistence = player.GetComponent<CharacterPersistenceComponent2D>();
+        JsonObject state = persistence.Capture();
+        Require(state["abilities"] is JsonObject, "Ability cooldown state was not captured.");
+        Require(!state.ContainsKey("input") && !state.ContainsKey("timeline"),
+            "Persistence captured transient graph state.");
+        VerifyLegacyAbilityPersistence(playerScene, state);
+
+        VerifyAiScene();
     }
 
-    private static void VerifyTimelineClipKeys()
+    private static void VerifyInputNodes()
     {
-        var firstClip = new FlowTimelineClip { Id = string.Empty, Name = "First" };
-        var secondClip = new FlowTimelineClip { Name = "Second" };
-        var timeline = new SkillTimelineNodeData
+        var provider = new FakeInputProvider { Negative = 0.8f, Positive = 0.1f };
+        var axis = new CharacterInputActionNodeData
         {
-            Id = "timeline_clip_key_test",
-            Duration = 1f,
-            Tracks = new List<FlowTimelineTrack>
+            TriggerMode = CharacterInputTriggerMode.Axis1D,
+            NegativeAction = "left",
+            PositiveAction = "right",
+            AxisDeadzone = 0.1f,
+            AxisThreshold = 0.1f,
+            ConsumeInput = false
+        };
+        Require(axis.IsTriggered(provider), "Axis1D did not trigger outside its deadzone.");
+        Require(Mathf.IsEqualApprox(axis.ReadValue(provider), -0.7f), "Axis1D did not preserve its sign.");
+
+        provider.Negative = 0.1f;
+        provider.Positive = 0.05f;
+        Require(!axis.IsTriggered(provider), "Axis1D triggered inside its deadzone.");
+    }
+
+    private static void VerifyLifecycleAndNonReentrancy()
+    {
+        var update = new CharacterLifecycleEventNodeData
+        {
+            Id = "update",
+            Event = CharacterLifecycleEvent.Update
+        };
+        var delay = new FlowDelayNodeData { Id = "delay", Seconds = 0.1f };
+        var graph = new CharacterGraphAsset
+        {
+            Nodes = new System.Collections.Generic.List<GraphNodeData> { update, delay },
+            Connections = new System.Collections.Generic.List<GraphConnection>
             {
-                new()
+                new CharacterGraphConnection
                 {
-                    Name = "Animation",
-                    Clips = new List<FlowTimelineClip> { firstClip, secondClip }
+                    FromNode = update.Id,
+                    FromPort = 0,
+                    ToNode = delay.Id,
+                    ToPort = 0
                 }
             }
         };
+        var runtime = new CharacterGraphRuntime(graph, null, null);
 
-        timeline.NormalizeTimelineData();
-        Require(!string.IsNullOrWhiteSpace(firstClip.Id), "Timeline normalization did not create an empty clip Id.");
+        runtime.Update(0.01d, physics: false);
+        Require(runtime.GetEventVersion("Lifecycle.BeginPlay") == 1, "BeginPlay did not fire on the first update.");
+        Require(runtime.ActiveExecutionCount == 1, "Update flow did not enter Delay.");
+        for (int i = 0; i < 4; i++)
+            runtime.Update(0.01d, physics: false);
+        Require(runtime.GetEventVersion("Lifecycle.BeginPlay") == 1, "BeginPlay fired more than once.");
+        Require(runtime.ActiveExecutionCount == 1, "Update event re-entered while its Delay was active.");
 
-        secondClip.Id = firstClip.Id;
-        var validation = new GraphValidationResult();
-        timeline.Validate(new SkillFlowGraphAsset(), validation);
-        Require(validation.Errors.Any(issue => issue.Message.Contains("duplicated", StringComparison.OrdinalIgnoreCase)),
-            "Timeline validation accepted duplicate clip Ids.");
-
-        var executionContext = new GraphExecutionContext(
-            new SkillFlowGraphAsset(),
-            new GraphBlackboardRuntime());
-        executionContext.UserData.Add(new SkillResource { SkillId = "test_skill" });
-        var timelineContext = new FlowTimelineContext { ClipId = "clip_a", ClipName = "A", TrackName = "Animation" };
-        executionContext.UserData.Add(timelineContext);
-
-        var action = new SkillPlayAnimationAction { AnimationName = "attack" };
-        Require(action.ResolveAnimationRequestKey(executionContext) == "skill:test_skill:clip_a",
-            "Animation action did not generate a SkillId/ClipId request key.");
-
-        timelineContext.ClipId = "clip_b";
-        Require(action.ResolveAnimationRequestKey(executionContext) == "skill:test_skill:clip_b",
-            "Two clips in the same skill generated the same request key.");
-
-        action.RequestKey = "manual:animation";
-        Require(action.ResolveAnimationRequestKey(executionContext) == "manual:animation",
-            "Explicit animation request key did not override the automatic key.");
+        runtime.Update(0.1d, physics: false);
+        Require(runtime.ActiveExecutionCount == 1, "Update flow did not restart after the previous execution completed.");
+        runtime.Stop();
+        Require(runtime.GetEventVersion("Lifecycle.EndPlay") == 1, "EndPlay did not fire when the runtime stopped.");
     }
 
-    private void VerifySaveV2(
-        PackedScene playerScene,
+    private static void VerifyGraphMovementInput(
         GameObject2D player,
+        CharacterGraphAsset graphAsset,
         CharacterMovementComponent2D movement)
     {
-        CharacterPersistenceComponent2D persistence = player.GetComponent<CharacterPersistenceComponent2D>();
-        Require(persistence != null, "Character persistence component is missing.");
+        var provider = new FakeInputProvider { Negative = 0.8f, Positive = 0.1f };
+        var runtime = new CharacterGraphRuntime(graphAsset, player, provider);
 
-        JsonObject state = persistence.Capture();
-        Require(state["skills"] is JsonObject, "Skill cooldown state was not captured.");
-        Require(!state.ContainsKey("velocity") &&
-            !state.ContainsKey("action") &&
-            !state.ContainsKey("input") &&
-            !state.ContainsKey("timeline"),
-            "Save V2 captured transient character runtime state.");
+        runtime.Update(PhysicsDelta, physics: true);
+        movement.OnPhysicsUpdate(PhysicsDelta);
+        Require(Mathf.IsEqualApprox(movement.RawMoveInputX, -0.7f),
+            "CharacterGraph did not submit the signed movement axis.");
 
-        Vector2 savedPosition = player.GlobalPosition;
-        int savedFacing = movement.Facing;
-        player.GlobalPosition += new Vector2(1000f, 500f);
-        movement.RestoreFacing(-savedFacing);
-        persistence.Restore(state, persistence.SchemaVersion);
+        provider.JustPressedAction = "player_jump";
+        runtime.Update(PhysicsDelta, physics: true);
+        Require(movement.JumpSustainRequested, "CharacterGraph jump press did not enable sustain.");
 
-        Require(player.GlobalPosition.IsEqualApprox(savedPosition), "Save V2 did not restore character position.");
-        Require(movement.Facing == savedFacing, "Save V2 did not restore character facing.");
-
-        GameObject2D restoredPlayer = playerScene.Instantiate<GameObject2D>();
-        AddChild(restoredPlayer);
-        restoredPlayer.SetProcess(false);
-        restoredPlayer.SetPhysicsProcess(false);
-        SkillManagerComponent2D restoredSkills = restoredPlayer.GetComponent<SkillManagerComponent2D>();
-        restoredSkills.RestoreDurableState(state["skills"] as JsonObject);
-        SkillRuntime restoredDash = restoredSkills.GetRuntime("dash");
-        double now = Time.GetTicksMsec() * 0.001d;
-        Require(restoredDash != null && restoredDash.CooldownRemaining(now) > 0f,
-            "Fresh graph skill index did not restore dash cooldown by SkillId.");
-        restoredPlayer.QueueFree();
+        provider.JustPressedAction = null;
+        provider.JustReleasedAction = "player_jump";
+        runtime.Update(PhysicsDelta, physics: true);
+        Require(!movement.JumpSustainRequested, "CharacterGraph jump release did not disable sustain.");
+        runtime.Stop();
     }
 
-    private void VerifyAiInputIsolation()
+    private void VerifyAiScene()
     {
-        PackedScene aiScene = GD.Load<PackedScene>("res://assets/scenes/ai_runner.tscn");
-        Require(aiScene != null, "AI scene could not be loaded.");
-
-        GameObject2D ai = aiScene.Instantiate<GameObject2D>();
+        PackedScene scene = GD.Load<PackedScene>("res://assets/scenes/ai_runner.tscn");
+        Require(scene != null, "AI scene could not be loaded.");
+        GameObject2D ai = scene.Instantiate<GameObject2D>();
         AddChild(ai);
         ai.SetProcess(false);
         ai.SetPhysicsProcess(false);
-        CharacterGraphComponent2D graph = ai.GetComponent<CharacterGraphComponent2D>();
-        Require(graph != null && !graph.PhysicalInputEnabled,
-            "AI character accepts physical player input.");
-        Require(ai.GetComponent(typeof(ICharacterInputProvider)) == null,
-            "AI still exposes a physical input provider.");
+        Require(ai.GetComponent<CharacterGraphComponent2D>() == null, "Simple AI still mounts CharacterGraph.");
+        Require(ai.GetComponent<AbilitySystemComponent2D>() == null, "Simple AI unexpectedly mounts AbilitySystem.");
+        Require(!ai.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent2D"),
+            "Simple AI still mounts CommandBuffer.");
+        Require(ai.GetComponent<CharacterMovementComponent2D>() != null, "Simple AI has no Movement component.");
         ai.QueueFree();
     }
 
-    private static void Tick(GameObject2D player)
+    private void VerifyLegacyAbilityPersistence(PackedScene playerScene, JsonObject capturedState)
     {
-        foreach (Component2D component in player.GetAllComponents())
+        GameObject2D restored = playerScene.Instantiate<GameObject2D>();
+        AddChild(restored);
+        restored.SetProcess(false);
+        restored.SetPhysicsProcess(false);
+
+        var legacyState = new JsonObject
+        {
+            ["skills"] = capturedState["abilities"]?.DeepClone()
+        };
+        restored.GetComponent<CharacterPersistenceComponent2D>()?.Restore(legacyState, schemaVersion: 1);
+        AbilityRuntime dash = restored.GetComponent<AbilitySystemComponent2D>()?.GetRuntime("dash");
+        double now = Time.GetTicksMsec() * 0.001d;
+        Require(dash != null && dash.CooldownRemaining(now) > 0f,
+            "Legacy skills cooldown state was not restored by AbilityId.");
+        restored.QueueFree();
+    }
+
+    private static void TickPhysics(GameObject2D owner)
+    {
+        foreach (Component2D component in owner.GetAllComponents())
         {
             if (component.IsActive)
                 component.OnPhysicsUpdate(PhysicsDelta);
@@ -207,5 +272,22 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     {
         if (!condition)
             throw new InvalidOperationException(message);
+    }
+
+    private sealed class FakeInputProvider : ICharacterInputProvider
+    {
+        public float Negative { get; set; }
+        public float Positive { get; set; }
+        public string JustPressedAction { get; set; }
+        public string JustReleasedAction { get; set; }
+        public bool IsPressed(string action, string handlerLayer = null) => GetActionStrength(action, handlerLayer) > 0f;
+        public bool IsJustPressed(string action, string handlerLayer = null) => action == JustPressedAction;
+        public bool IsJustReleased(string action, string handlerLayer = null) => action == JustReleasedAction;
+        public bool IsBuffered(string action, float bufferTime) => false;
+        public float GetActionStrength(string action, string handlerLayer = null) => action == "left" ? Negative : Positive;
+        public float GetHoldTime(string action) => 0f;
+        public bool ConsumePressed(string action, string handlerLayer = null) => true;
+        public bool ConsumeJustPressed(string action, string handlerLayer = null) => true;
+        public bool ConsumeJustReleased(string action, string handlerLayer = null) => true;
     }
 }

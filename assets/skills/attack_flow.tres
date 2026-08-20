@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="SkillFlowGraphAsset" format=3 uid="uid://b3atkflow01"]
-
-[ext_resource type="Script" uid="uid://bv51fcf1mxw62" path="res://scripts/gamelogic/skills/SkillFlowGraphAsset.cs" id="1_skill_flow"]
-
-[resource]
-script = ExtResource("1_skill_flow")
-GraphJson = "{\"$type\":\"GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"SkillFlowGraph\",\"Nodes\":[{\"$type\":\"SkillTimelineNodeData\",\"Duration\":0.34,\"Tracks\":[{\"$type\":\"FlowTimelineTrack\",\"Name\":\"Animation\",\"Enabled\":true,\"Clips\":[{\"$type\":\"FlowTimelineClip\",\"Id\":\"attack_animation\",\"Name\":\"Attack Animation\",\"StartTime\":0,\"Duration\":0.34,\"Enabled\":true,\"Action\":{\"$type\":\"SkillPlayAnimationAction\",\"AnimationName\":\"attack\",\"AnimationPriority\":100,\"Speed\":1,\"FromEnd\":false,\"RestartIfPlaying\":true,\"Description\":\"Request Animation attack [P100]\"}}]}],\"Markers\":[{\"$type\":\"FlowTimelineMarker\",\"Label\":\"Marker 1\",\"Time\":0,\"Enabled\":true,\"Actions\":[]}],\"CancelActions\":[],\"Id\":\"attack_timeline\",\"Position\":{\"x\":300,\"y\":-40},\"NodeType\":\"SkillTimelineNodeData\"}],\"Connections\":[],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"GraphEditorState\",\"ScrollOffset\":{\"x\":-46.94815,\"y\":-306.81647},\"Zoom\":0.82644624}}"
-metadata/_custom_type_script = "uid://bv51fcf1mxw62"

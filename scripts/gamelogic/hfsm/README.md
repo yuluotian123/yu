@@ -1,102 +1,30 @@
-# GameLogic HFSM 与角色图
+# GameLogic HFSM
 
-GameLogic HFSM 基于 GraphPlugin `StateGraph`，负责状态切换、条件、子图和黑板。角色行为使用 `CharacterGraphAsset` 扩展：输入节点是全局触发器，Action 节点仍是 HFSM 状态。
+GameLogic HFSM 基于 GraphPlugin StateGraph，负责状态、条件、复合状态和黑板。当前角色架构只把 HFSM 用于动画 Locomotion；CharacterGraph 已改为独立 FlowGraph，不再继承 HFSM。
 
-## 角色图结构
-
-```text
-Dash Input   -> Dash Action
-Attack Input -> Attack Action
-
-Locomotion (Composite State)
-```
-
-- `CharacterInputActionNodeData` 没有输入端口，不属于状态，也不从 Any State 连出。
-- Input 节点只输出 `Triggered`，可以通过多条条件连线复用到多个 Action。
-- `CharacterSkillChainNodeData` 是实际 Action 状态，负责技能链、优先级、中断和移动锁定。
-- Action 完成且没有有效完成连线时，自动恢复触发前的根状态；恢复目标失效时回到默认状态。
-- 玩家输入和 AI `CharacterActionRequest` 最终走同一条 Action 路由。
-
-默认资源：
+## 当前职责
 
 ```text
-res://assets/graphs/character_graph.tres
-res://assets/graphs/character_locomotion_hfsm.tres
+CharacterMovementComponent2D
+  -> final velocity / IsOnFloor / MovementMode
+  -> CharacterAnimationComponent2D
+  -> Locomotion HFSM
+       Idle / Run / Jump / Fall / Land
+  -> animation request arbitration
+  -> AnimatedSprite2D
 ```
 
-## 运行时组件
+- `HfsmRuntime`：通用状态图运行时。
+- `HfsmComponent2D`：可独立挂载的通用 HFSM 组件。
+- `CharacterAnimationComponent2D`：内部启动 Locomotion HFSM 并发布 Movement 快照。
+- `HfsmAnimationStateNodeData`：向 Animation 组件提交 Locomotion 动画请求。
 
-- `HfsmComponent2D`：通用 HFSM 组件。
-- `HfsmRuntime`：状态图运行时，注入 `GameObject2D` 和组件上下文。
-- `CharacterGraphComponent2D`：扫描全局 Input、路由 Action、处理中断与自动返回。
-- `CharacterCommandBufferComponent2D`：合并移动命令并缓冲逻辑 Action 请求。
-- `SkillManagerComponent2D`：更新技能 FlowGraph 和耐久 cooldown。
-- `CharacterMovementComponent2D`：统一执行移动、跳跃、重力、地面检测和 `MoveAndSlide()`。
+默认 Locomotion 资源：[character_locomotion_hfsm.tres](../../../assets/graphs/character_locomotion_hfsm.tres)。
 
-物理帧优先级顺序：
+## 与 CharacterGraph 的关系
 
-```text
-Controller / AI -> CharacterGraph -> SkillManager -> CharacterMovement
-```
+[character_graph.tres](../../../assets/graphs/character_graph.tres) 是玩家输入与 Ability 编排图，包含生命周期、Input、Movement intent、流程和 Ability 节点。它不包含 Idle、Locomotion 或动画状态，也不供 AI 使用。
 
-## Input 节点
+两张图通过 Movement 的最终结果间接协作：CharacterGraph 向 Movement 提交玩家意图，Movement 计算结果，Locomotion HFSM 再根据结果选动画。
 
-Input 节点保存逻辑 Action 名称，不保存物理按键。物理绑定继续由 Godot `InputMap` 和 `InputModule` 管理。
-
-支持：
-
-- Pressed / Released / Held / Axis
-- 输入层和成功后的输入消费
-- BufferTime、HoldTime
-- Axis deadzone、threshold、scale 和 invert
-- 黑板条件与连线条件
-- 独立 `ActionId`，供 AI 提交 `CharacterActionRequest`
-
-输入只会在 Action 成功进入后消费。
-
-## Action 与技能链
-
-`CharacterSkillChainNodeData.SkillResourcePaths` 通过资源选择器维护，不接受手填路径。列表顺序就是执行顺序，允许重复资源。
-
-Action 进入前会检查首个技能 cooldown；执行中可按 Action 优先级切换。当前默认关系为：
-
-```text
-Dash (100) > Attack (50)
-```
-
-Dash 可以打断 Attack，Attack 不能打断 Dash。离开 Action 或其所属子图会取消仍在运行的技能。
-
-## 状态条件
-
-StateGraph/HFSM 不再提供 Tag。语义由明确状态和条件表达：
-
-- grounded / airborne：`MovementMode` 或 `IsOnFloor`
-- moving：移动输入或速度
-- dashing / attacking：`Character.ActiveActionId`
-- movement / jump lock：Action 或 `SkillResource` 策略
-- Any State 排除：状态名称或稳定状态 ID
-
-可用条件包括 bool、float、string、trigger、timer、当前状态身份，以及 Character 条件组合器。
-
-## 子图
-
-`HfsmCompositeStateNodeData` 继续负责子图。角色图子图通过共享黑板、输入参数和完成标签通信。父状态退出时，子图运行时会停止，活动 Action 也会收到退出并取消技能。
-
-## Skill FlowGraph
-
-简单技能可只放一个 `SkillTimelineNodeData`：没有 Entry 时它作为隐式入口，没有后续连线时运行时自动完成为 `Finished`。复杂技能仍可使用显式 Entry、Return、条件和分支。
-
-## 调试
-
-`HfsmComponent2D` 提供：
-
-- `LogStateChanges`
-- `DebugStateLabelPath`
-- `CurrentStateName`
-- `CurrentStatePath`
-
-状态图运行时数据只存在于组件实例，不会写回共享图资源。
-
-## 存档边界
-
-Save V2 保存角色稳定 ID、位置、旋转、朝向、持久化标记和技能 cooldown。输入快照、命令缓冲、当前 Action、速度、技能时间线和图运行时节点均不保存；加载后从图默认语义状态重新开始。
+完整结构见 [角色系统](../../../docs/CHARACTER_SYSTEM.md)。

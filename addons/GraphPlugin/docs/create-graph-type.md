@@ -75,14 +75,14 @@ public override List<string> GetAllowedNodeTypes()
 }
 ```
 
-`SkillFlowGraphAsset` 就采用这种方式复用 FlowGraph 节点，同时允许 Skill 专用节点。
+`AbilityFlowGraphAsset` 就采用这种方式复用 FlowGraph 节点，同时允许 Ability 专用节点。
 
 ## 现有图类型参考
 
 - `FlowGraphAsset`：通用流程图，默认普通连线。
 - `StateGraphAsset`：状态图，默认 `StateTransitionConnection`。
 - `HfsmGraphAsset`：HFSM 图，复用 StateGraph 语义，默认 `HfsmTransitionConnection`。
-- `SkillFlowGraphAsset`：技能流程图，复用 FlowGraph 节点。
+- `AbilityFlowGraphAsset`：Ability 流程图，复用 FlowGraph 节点。
 - `MissionGraph`：任务链图，基于 FlowGraph，默认 `FlowConnection`。
 
 ## 常见坑

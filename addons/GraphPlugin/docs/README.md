@@ -2,7 +2,7 @@
 
 > **当前状态提示**：本文档中的 Runtime Debug 章节保留的是架构设计。当前代码树没有 `GraphRuntimeDebugRegistry`、debugger bridge 或编辑器调试面板实现，`runtime/debug/` 目录为空；这些 API 目前不可使用。
 
-这组文档描述当前已经落地的 V2 架构。V2 的目标不是把系统做重，而是让核心模型稳定、编辑器职责清楚、业务图类型能按统一规则扩展，并且能在运行中观察 Flow、State、HFSM、Skill 等图的真实状态。
+这组文档描述当前已经落地的 V2 架构。V2 的目标不是把系统做重，而是让核心模型稳定、编辑器职责清楚、业务图类型能按统一规则扩展，并且能在运行中观察 Flow、State、CharacterGraph、HFSM、Ability 等图的真实状态。
 
 ## 阅读顺序
 

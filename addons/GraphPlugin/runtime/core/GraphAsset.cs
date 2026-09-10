@@ -279,5 +279,6 @@ public partial class GraphAsset : Resource
         _document.Connections ??= new List<GraphConnection>();
         _document.BlackboardEntries ??= new List<GraphBlackboardEntry>();
         _document.EditorState ??= new GraphEditorState();
+        GraphComponentBindingRuntime.ApplyDefaultBindings(this);
     }
 }

@@ -55,13 +55,19 @@ namespace GameLogic
             }
         }
 
+        [GraphValue("IsOnFloor", DisplayName = "是否在地面", Access = GraphValueAccess.ReadOnly)]
         public bool IsOnFloor => Body?.IsOnFloor() ?? false;
         public CharacterMovementMode MovementMode { get; private set; }
         public bool MovementLocked { get; private set; }
         public bool JumpLocked { get; private set; }
         public bool JumpSustainRequested => _jumpSustainRequested;
         public float RawMoveInputX { get; private set; }
+        [GraphValue("MoveInputX", DisplayName = "水平移动输入", Access = GraphValueAccess.ReadOnly)]
         public float MoveInputX { get; private set; }
+        [GraphValue("MovementModeName", DisplayName = "移动模式", Access = GraphValueAccess.ReadOnly)]
+        public string MovementModeName => MovementMode.ToString();
+        [GraphValue("VelocityY", DisplayName = "垂直速度", Access = GraphValueAccess.ReadOnly)]
+        public float VelocityY => Velocity.Y;
         public int Facing { get; private set; } = 1;
         public float HalfWidth => BodySize.X * 0.5f;
         public float HalfHeight => BodySize.Y * 0.5f;
@@ -158,6 +164,7 @@ namespace GameLogic
             _commandSourcePriority = sourcePriority;
         }
 
+        [GraphAction("AddMovementInput", DisplayName = "添加移动输入", UseInputEventValue = true)]
         public void AddMovementInput(float axis, int sourcePriority = 0)
         {
             if (!PreparePartialCommand(sourcePriority))
@@ -168,6 +175,7 @@ namespace GameLogic
                 _pendingCommand.JumpSustainRequested);
         }
 
+        [GraphAction("StopMovementInput", DisplayName = "停止移动输入")]
         public void StopMovementInput(int sourcePriority = 0)
         {
             if (!PreparePartialCommand(sourcePriority))
@@ -178,6 +186,7 @@ namespace GameLogic
                 _pendingCommand.JumpSustainRequested);
         }
 
+        [GraphAction("RequestJumpStart", DisplayName = "请求跳跃")]
         public void RequestJumpStart(int sourcePriority = 0)
         {
             if (!PreparePartialCommand(sourcePriority))
@@ -189,6 +198,7 @@ namespace GameLogic
             _jumpSustainRequested = true;
         }
 
+        [GraphAction("SetJumpSustain", DisplayName = "设置跳跃持续")]
         public void SetJumpSustain(bool requested, int sourcePriority = 0)
         {
             if (!PreparePartialCommand(sourcePriority))

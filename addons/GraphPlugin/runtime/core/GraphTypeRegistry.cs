@@ -76,7 +76,20 @@ public static class GraphTypeRegistry
         if (template == null || string.IsNullOrWhiteSpace(template.NodeType))
             return null;
 
-        GraphNodeDefinition definition = template.BuildDefinition();
+        GraphNodeDefinition definition;
+        try
+        {
+            definition = template.BuildDefinition();
+        }
+        catch (Exception ex)
+        {
+            GD.PushError($"[GraphTypeRegistry] 无法构建节点定义 {nodeType.FullName}: {ex}");
+            return null;
+        }
+
+        if (definition == null || string.IsNullOrWhiteSpace(definition.NodeType))
+            return null;
+
         definition.NodeDataType = nodeType;
         definition.Create = () => (GraphNodeData)Activator.CreateInstance(nodeType);
 

@@ -156,6 +156,15 @@ public static class GraphJsonHelper
             return new JsonObject { ["x"] = vector.X, ["y"] = vector.Y };
         }
 
+        if (type == typeof(Godot.Vector3))
+        {
+            var vector = (Godot.Vector3)value;
+            return new JsonObject { ["x"] = vector.X, ["y"] = vector.Y, ["z"] = vector.Z };
+        }
+
+        if (type == typeof(Godot.NodePath))
+            return JsonValue.Create(value.ToString());
+
         if (type == typeof(Godot.Color))
         {
             var color = (Godot.Color)value;
@@ -264,6 +273,17 @@ public static class GraphJsonHelper
                 (float)vector["y"].GetValue<double>());
         }
 
+        if (targetType == typeof(Godot.Vector3) && node is JsonObject vector3)
+        {
+            return new Godot.Vector3(
+                (float)vector3["x"].GetValue<double>(),
+                (float)vector3["y"].GetValue<double>(),
+                (float)vector3["z"].GetValue<double>());
+        }
+
+        if (targetType == typeof(Godot.NodePath) && node is JsonValue nodePath)
+            return new Godot.NodePath(nodePath.GetValue<string>());
+
         if (targetType == typeof(Godot.Color) && node is JsonObject color)
         {
             return new Godot.Color(
@@ -309,6 +329,8 @@ public static class GraphJsonHelper
                 return value.GetValue<double>();
             if (targetType == typeof(string))
                 return value.GetValue<string>();
+            if (targetType == typeof(Godot.NodePath))
+                return new Godot.NodePath(value.GetValue<string>());
             if (targetType.IsEnum)
                 return Enum.Parse(targetType, value.GetValue<string>());
         }

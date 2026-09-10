@@ -5,6 +5,6 @@ namespace GameLogic
     [GlobalClass]
     public partial class AbilitySetResource : Resource
     {
-        [Export] public Godot.Collections.Array<AbilityResource> Abilities { get; set; } = new();
+        [Export] public Godot.Collections.Array<Resource> Abilities { get; set; } = new();
     }
 }

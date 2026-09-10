@@ -218,6 +218,38 @@ public sealed class GraphVector2BlackboardValue : GraphBlackboardValue<Vector2>
     }
 }
 
+public sealed class GraphVector3BlackboardValue : GraphBlackboardValue<Vector3>
+{
+    public override string DisplayName => "Vector3";
+
+    public override Control CreateEditUI(GraphEditorContext context)
+    {
+        var row = new HBoxContainer();
+        row.AddChild(new Label { Text = "X" });
+        var x = CreateSpinBox(Value.X);
+        row.AddChild(x);
+        row.AddChild(new Label { Text = "Y" });
+        var y = CreateSpinBox(Value.Y);
+        row.AddChild(y);
+        row.AddChild(new Label { Text = "Z" });
+        var z = CreateSpinBox(Value.Z);
+        row.AddChild(z);
+        x.ValueChanged += value => Value = new Vector3((float)value, Value.Y, Value.Z);
+        y.ValueChanged += value => Value = new Vector3(Value.X, (float)value, Value.Z);
+        z.ValueChanged += value => Value = new Vector3(Value.X, Value.Y, (float)value);
+        return row;
+    }
+
+    private static SpinBox CreateSpinBox(float value) => new()
+    {
+        MinValue = -999999,
+        MaxValue = 999999,
+        Step = 0.01,
+        Value = value,
+        SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+    };
+}
+
 public sealed class GraphColorBlackboardValue : GraphBlackboardValue<Color>
 {
     public GraphColorBlackboardValue()

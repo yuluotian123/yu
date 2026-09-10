@@ -18,7 +18,59 @@ public partial class GraphCanvasEditorWindow
     private void OnPopupRequest(Vector2 position)
     {
         Vector2 graphPosition = ToGraphPosition(position);
-        GraphNodeSearchService.Show(_currentGraph, _graphEdit, position, nodeType => CreateNewNode(nodeType, graphPosition));
+        _componentPanel?.Refresh();
+        var dynamicEntries = new System.Collections.Generic.List<GraphNodeSearchService.GraphNodeSearchEntry>();
+        foreach (GraphComponentTypeDescriptor descriptor in _componentPanel?.GetAvailableDescriptors() ??
+                 System.Array.Empty<GraphComponentTypeDescriptor>())
+        {
+            foreach (GraphComponentActionDescriptor action in descriptor.Actions)
+            {
+                string typeName = descriptor.TypeName;
+                string memberId = action.MemberId;
+                dynamicEntries.Add(new GraphNodeSearchService.GraphNodeSearchEntry
+                {
+                    Label = $"{descriptor.DisplayName} / {action.DisplayName}",
+                    Group = $"Component / {descriptor.DisplayName} / Actions",
+                    SearchText = $"{descriptor.TypeName} {action.MemberId} {action.DisplayName}",
+                    DynamicAction = () => CreateComponentCallNode(typeName, memberId, graphPosition)
+                });
+            }
+            foreach (GraphComponentValueDescriptor value in descriptor.Values)
+            {
+                if (_currentGraph is GameLogic.HfsmGraphAsset)
+                    continue;
+                string typeName = descriptor.TypeName;
+                string memberId = value.MemberId;
+                if (value.CanRead)
+                {
+                    dynamicEntries.Add(new GraphNodeSearchService.GraphNodeSearchEntry
+                    {
+                        Label = $"{descriptor.DisplayName} / Get {value.DisplayName}",
+                        Group = $"Component / {descriptor.DisplayName} / Values",
+                        SearchText = $"{descriptor.TypeName} {memberId} {value.DisplayName} Get",
+                        DynamicAction = () => CreateComponentValueNode(typeName, memberId, false, graphPosition)
+                    });
+                }
+                if (value.CanWrite)
+                {
+                    dynamicEntries.Add(new GraphNodeSearchService.GraphNodeSearchEntry
+                    {
+                        Label = $"{descriptor.DisplayName} / Set {value.DisplayName}",
+                        Group = $"Component / {descriptor.DisplayName} / Values",
+                        SearchText = $"{descriptor.TypeName} {memberId} {value.DisplayName} Set",
+                        DynamicAction = () => CreateComponentValueNode(typeName, memberId, true, graphPosition)
+                    });
+                }
+            }
+        }
+
+        GraphNodeSearchService.Show(
+            _currentGraph,
+            _graphEdit,
+            position,
+            dynamicEntries,
+            nodeType => CreateNewNode(nodeType, graphPosition),
+            _ => { });
     }
 
     private void CreateNewNode(string nodeType, Vector2 position)
@@ -54,6 +106,95 @@ public partial class GraphCanvasEditorWindow
             zoom = 1f;
 
         return (localPosition + _graphEdit.ScrollOffset) / zoom;
+    }
+
+    private void CreateComponentCallNode(string componentTypeName, string actionId) =>
+        CreateComponentCallNode(componentTypeName, actionId, ToGraphPosition(new Vector2(320, 220)));
+
+    private void CreateComponentCallNode(string componentTypeName, string actionId, Vector2 position)
+    {
+        if (_currentGraph == null || string.IsNullOrWhiteSpace(componentTypeName) || string.IsNullOrWhiteSpace(actionId))
+            return;
+
+        string nodeType;
+        if (_currentGraph is BehaviorTreeGraphAsset)
+            nodeType = nameof(BehaviorTreeComponentCallNodeData);
+        else if (_currentGraph is GameLogic.HfsmGraphAsset)
+            nodeType = nameof(GameLogic.HfsmComponentActionStateNodeData);
+        else
+            nodeType = nameof(GraphComponentCallNodeData);
+
+        GraphNodeData data = GraphTypeRegistry.CreateNodeData(nodeType);
+        data.Position = position;
+        if (data is GraphComponentCallNodeData flowCall)
+        {
+            flowCall.ComponentTypeName = componentTypeName;
+            flowCall.MemberId = actionId;
+            flowCall.InitializeArguments();
+        }
+        else if (data is BehaviorTreeComponentCallNodeData behaviorCall)
+        {
+            behaviorCall.Call.ComponentTypeName = componentTypeName;
+            behaviorCall.Call.ActionId = actionId;
+        }
+        else if (data is GameLogic.HfsmComponentActionStateNodeData hfsmCall)
+        {
+            hfsmCall.Call.ComponentTypeName = componentTypeName;
+            hfsmCall.Call.ActionId = actionId;
+        }
+
+        _currentGraph.Nodes.Add(data);
+        _currentGraph.MarkDirty();
+        CreateNodeFromData(data);
+    }
+
+    private void CreateComponentValueNode(string componentTypeName, string memberId, bool write) =>
+        CreateComponentValueNode(componentTypeName, memberId, write, ToGraphPosition(new Vector2(320, 220)));
+
+    private void CreateComponentValueNode(string componentTypeName, string memberId, bool write, Vector2 position)
+    {
+        if (_currentGraph == null || string.IsNullOrWhiteSpace(componentTypeName) || string.IsNullOrWhiteSpace(memberId))
+            return;
+
+        string nodeType;
+        if (_currentGraph is BehaviorTreeGraphAsset)
+        {
+            nodeType = write
+                ? nameof(BehaviorTreeComponentSetNodeData)
+                : nameof(BehaviorTreeComponentGetNodeData);
+        }
+        else
+        {
+            nodeType = write
+                ? nameof(GraphComponentSetNodeData)
+                : nameof(GraphComponentGetNodeData);
+        }
+        GraphNodeData data = GraphTypeRegistry.CreateNodeData(nodeType);
+        data.Position = position;
+        if (data is GraphComponentSetNodeData setNode)
+        {
+            setNode.ComponentTypeName = componentTypeName;
+            setNode.MemberId = memberId;
+        }
+        else if (data is GraphComponentGetNodeData getNode)
+        {
+            getNode.ComponentTypeName = componentTypeName;
+            getNode.MemberId = memberId;
+        }
+        else if (data is BehaviorTreeComponentSetNodeData behaviorSet)
+        {
+            behaviorSet.ComponentTypeName = componentTypeName;
+            behaviorSet.MemberId = memberId;
+        }
+        else if (data is BehaviorTreeComponentGetNodeData behaviorGet)
+        {
+            behaviorGet.ComponentTypeName = componentTypeName;
+            behaviorGet.MemberId = memberId;
+        }
+
+        _currentGraph.Nodes.Add(data);
+        _currentGraph.MarkDirty();
+        CreateNodeFromData(data);
     }
 
     private void DoRemoveNode(StringName nodeId)

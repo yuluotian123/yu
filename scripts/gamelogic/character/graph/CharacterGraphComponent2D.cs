@@ -25,8 +25,23 @@ namespace GameLogic
             Runtime = new CharacterGraphRuntime(CharacterGraph, Owner, input);
         }
 
-        public override void OnUpdate(double delta) => Runtime?.Update(delta, physics: false);
-        public override void OnPhysicsUpdate(double delta) => Runtime?.Update(delta, physics: true);
+        public override void OnUpdate(double delta)
+        {
+            if (Runtime == null)
+                return;
+            GraphComponentBindingRuntime.SyncFromComponents(Runtime.Context);
+            Runtime.Update(delta, physics: false);
+            GraphComponentBindingRuntime.SyncToComponents(Runtime.Context);
+        }
+
+        public override void OnPhysicsUpdate(double delta)
+        {
+            if (Runtime == null)
+                return;
+            GraphComponentBindingRuntime.SyncFromComponents(Runtime.Context);
+            Runtime.Update(delta, physics: true);
+            GraphComponentBindingRuntime.SyncToComponents(Runtime.Context);
+        }
 
         public override void OnDestroy()
         {

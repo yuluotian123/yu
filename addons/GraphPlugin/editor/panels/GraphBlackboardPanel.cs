@@ -1,6 +1,7 @@
 #if TOOLS
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -305,7 +306,87 @@ public sealed class GraphBlackboardPanel
         valueUi.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         content.AddChild(valueUi);
 
+        BuildBindingEditor(content, entry, refresh);
+
         return panel;
+    }
+
+    private static void BuildBindingEditor(VBoxContainer content, GraphBlackboardEntry entry, Action refresh)
+    {
+        GraphComponentRegistry.EnsureScanned();
+        var binding = entry.Binding;
+        var enabled = new CheckButton { Text = "Component Binding", ButtonPressed = binding != null };
+        content.AddChild(enabled);
+
+        var componentTypes = GraphComponentRegistry.GetAll().Where(value => value.Values.Count > 0).ToList();
+        var component = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        for (int i = 0; i < componentTypes.Count; i++)
+            component.AddItem(componentTypes[i].DisplayName, i);
+        var member = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        var direction = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        direction.AddItem("Component to Blackboard", (int)GraphComponentBindingDirection.ComponentToBlackboard);
+        direction.AddItem("Blackboard to Component", (int)GraphComponentBindingDirection.BlackboardToComponent);
+        direction.AddItem("Two Way", (int)GraphComponentBindingDirection.TwoWay);
+        content.AddChild(component);
+        content.AddChild(member);
+        content.AddChild(direction);
+
+        int componentIndex = componentTypes.FindIndex(value => value.TypeName == binding?.ComponentTypeName || value.ComponentType.Name == binding?.ComponentTypeName);
+        if (componentIndex >= 0)
+            component.Select(componentIndex);
+
+        void PopulateMembers()
+        {
+            member.Clear();
+            GraphComponentTypeDescriptor type = component.Selected >= 0 && component.Selected < componentTypes.Count
+                ? componentTypes[(int)component.Selected]
+                : null;
+            if (type == null)
+                return;
+            for (int i = 0; i < type.Values.Count; i++)
+                member.AddItem($"{type.Values[i].DisplayName} ({type.Values[i].MemberId})", i);
+            int selected = type.Values.FindIndex(value => value.MemberId == binding?.MemberId);
+            if (selected >= 0)
+                member.Select(selected);
+        }
+
+        PopulateMembers();
+        if (binding != null)
+            direction.Select((int)binding.Direction);
+
+        enabled.Toggled += pressed =>
+        {
+            if (!pressed)
+            {
+                entry.Binding = null;
+                refresh();
+                return;
+            }
+            entry.Binding = new GraphComponentBinding
+            {
+                ComponentTypeName = componentTypes.Count > 0 ? componentTypes[0].TypeName : string.Empty,
+                MemberId = componentTypes.Count > 0 && componentTypes[0].Values.Count > 0 ? componentTypes[0].Values[0].MemberId : string.Empty
+            };
+            refresh();
+        };
+        component.ItemSelected += index =>
+        {
+            if (entry.Binding == null)
+                return;
+            entry.Binding.ComponentTypeName = componentTypes[(int)index].TypeName;
+            entry.Binding.MemberId = componentTypes[(int)index].Values.FirstOrDefault()?.MemberId ?? string.Empty;
+            PopulateMembers();
+        };
+        member.ItemSelected += index =>
+        {
+            if (entry.Binding != null && component.Selected >= 0 && component.Selected < componentTypes.Count)
+                entry.Binding.MemberId = componentTypes[(int)component.Selected].Values[(int)index].MemberId;
+        };
+        direction.ItemSelected += index =>
+        {
+            if (entry.Binding != null)
+                entry.Binding.Direction = (GraphComponentBindingDirection)(int)index;
+        };
     }
 
     private void ShowAddBlackboardEntryPopup(Control anchor, IList<GraphBlackboardEntry> entries, Action refresh)

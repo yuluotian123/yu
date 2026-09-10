@@ -31,7 +31,10 @@ public static class GraphEditorSignalCleanup
                     continue;
 
                 Callable callable = connection["callable"].AsCallable();
-                if (callable.Equals(default(Callable)))
+                GodotObject target = callable.Target;
+                if (target == null && callable.Delegate == null)
+                    continue;
+                if (target != null && !GodotObject.IsInstanceValid(target))
                     continue;
 
                 try

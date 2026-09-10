@@ -11,6 +11,7 @@ namespace GameLogic
         private readonly ICharacterInputProvider _input;
         private readonly AbilitySystemComponent2D _abilities;
         private readonly GraphBlackboardRuntime _blackboard = new();
+        private readonly GraphExecutionContext _context;
         private readonly List<EventExecution> _executions = new();
         private readonly Dictionary<string, int> _eventVersions = new(StringComparer.Ordinal);
         private bool _began;
@@ -22,16 +23,22 @@ namespace GameLogic
             ICharacterInputProvider input)
         {
             _graph = graph;
+            _graph?.MigrateMovementNodesToComponents();
             _owner = owner;
             _input = input;
             _abilities = owner?.GetComponent<AbilitySystemComponent2D>();
             _blackboard.PushLocal(graph);
+            _context = new GraphExecutionContext(graph, _blackboard);
+            _context.UserData.Add(this);
+            if (owner != null)
+                _context.UserData.Add(owner);
             if (_abilities != null)
                 _abilities.AbilityCompleted += OnAbilityCompleted;
         }
 
         public CharacterGraphAsset Graph => _graph;
         public GameObject2D Owner => _owner;
+        public GraphExecutionContext Context => _context;
         public bool IsRunning => !_stopped;
         public int ActiveExecutionCount => _executions.Count;
 

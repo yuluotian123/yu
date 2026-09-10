@@ -2,6 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
+    [Tool]
     [GlobalClass]
     public partial class AbilityActivationPolicy : Resource
     {

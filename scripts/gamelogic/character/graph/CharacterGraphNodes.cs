@@ -210,6 +210,7 @@ namespace GameLogic
         public override Color GetNodeColor() => new(0.75f, 0.45f, 0.9f);
         public override int GetInputCount() => 1;
         public override int GetOutputCount() => 4;
+        public override int GetInputMaxConnections(int port) => -1;
         public override string GetOutputPortName(int port) => port switch
         {
             0 => "Activated",

@@ -61,8 +61,11 @@ namespace GameLogic
         {
             if (set?.Abilities == null)
                 return;
-            foreach (AbilityResource ability in set.Abilities)
-                GrantAbility(ability);
+            foreach (Resource resource in set.Abilities)
+            {
+                if (resource is AbilityResource ability)
+                    GrantAbility(ability);
+            }
         }
 
         public bool GrantAbility(AbilityResource ability)

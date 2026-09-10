@@ -115,7 +115,9 @@ namespace GameLogic
         private void Tick(double delta)
         {
             ResetFrameIntent();
+            GraphComponentBindingRuntime.SyncFromComponents(Runtime?.Context);
             Runtime?.Update(delta);
+            GraphComponentBindingRuntime.SyncToComponents(Runtime?.Context);
             CommitFrameIntent();
         }
 

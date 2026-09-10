@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="AbilitySetResource" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="AbilitySetResource" format=3 uid="uid://buvhdk15gflcu"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilitySetResource.cs" id="1_set"]
+[ext_resource type="Script" uid="uid://digj62odsswyh" path="res://scripts/gamelogic/abilities/runtime/AbilitySetResource.cs" id="1_set"]
 [ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/abilities/attack_ability.tres" id="2_attack"]
 [ext_resource type="Resource" uid="uid://b3dashskill01" path="res://assets/abilities/dash_ability.tres" id="3_dash"]
 

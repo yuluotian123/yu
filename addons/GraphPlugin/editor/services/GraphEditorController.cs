@@ -35,7 +35,19 @@ public sealed class GraphEditorController
             return;
 
         foreach (GraphNodeData node in graph.Nodes)
-            createNodeView?.Invoke(node);
+        {
+            if (node == null)
+                continue;
+
+            try
+            {
+                createNodeView?.Invoke(node);
+            }
+            catch (Exception ex)
+            {
+                GD.PushError($"[GraphEditorController] 无法创建节点视图 {node.NodeType} ({node.Id}): {ex}");
+            }
+        }
 
         foreach (GraphConnection connection in graph.Connections)
             createConnectionView?.Invoke(connection);

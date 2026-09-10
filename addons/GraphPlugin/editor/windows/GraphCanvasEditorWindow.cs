@@ -16,9 +16,10 @@ public partial class GraphCanvasEditorWindow : Window
     private GraphExplorerPanel _explorerPanel;
     private GraphTimelinePanel _timelinePanel;
     private GraphSelectionInspectorPanel _selectionInspector;
+    private GraphComponentPanel _componentPanel;
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
-    private HSplitContainer _contentSplit;
+    private HBoxContainer _contentSplit;
     private VSplitContainer _workArea;
     private string _boundTimelineNodeId = string.Empty;
     private bool _initialized;
@@ -74,6 +75,7 @@ public partial class GraphCanvasEditorWindow : Window
         _explorerPanel = null;
         _timelinePanel = null;
         _selectionInspector = null;
+        _componentPanel = null;
         _breadcrumbBar = null;
         _toolbar = null;
         _contentSplit = null;
@@ -130,6 +132,10 @@ public partial class GraphCanvasEditorWindow : Window
         blackboardBtn.Pressed += () => _blackboardPanel?.Open();
         _toolbar.AddChild(blackboardBtn);
 
+        var componentsBtn = new Button { Text = "Components" };
+        componentsBtn.Pressed += () => _componentPanel?.Refresh();
+        _toolbar.AddChild(componentsBtn);
+
         var explorerBtn = new Button { Text = "Explorer" };
         explorerBtn.Pressed += () => _explorerPanel?.Open();
         _toolbar.AddChild(explorerBtn);
@@ -143,12 +149,19 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void CreateGraphEdit()
     {
-        _contentSplit = new HSplitContainer
+        _contentSplit = new HBoxContainer
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsVertical = Control.SizeFlags.ExpandFill
         };
         _mainContainer.AddChild(_contentSplit);
+
+        _componentPanel = new GraphComponentPanel(
+            this,
+            () => _currentGraph,
+            CreateComponentCallNode,
+            CreateComponentValueNode);
+        _contentSplit.AddChild(_componentPanel.Root);
 
         _workArea = new VSplitContainer
         {
@@ -211,7 +224,6 @@ public partial class GraphCanvasEditorWindow : Window
             () => _currentGraph,
             CreateEditorContext);
         _workArea.AddChild(_timelinePanel.Root);
-
         _selectionInspector = new GraphSelectionInspectorPanel(
             () => _currentGraph,
             CreateEditorContext,
@@ -220,6 +232,11 @@ public partial class GraphCanvasEditorWindow : Window
     }
 
     public void LoadGraph(GraphAsset graph)
+    {
+        LoadGraph(graph, null);
+    }
+
+    public void LoadGraph(GraphAsset graph, GodotObject source)
     {
         if (graph == null)
             return;
@@ -231,18 +248,22 @@ public partial class GraphCanvasEditorWindow : Window
             return;
         }
 
+        _componentPanel?.SetSource(source);
         LoadGraphInitialized(graph);
     }
 
     private void LoadGraphInitialized(GraphAsset graph)
     {
         _currentGraph = graph;
+        if (_currentGraph is GameLogic.CharacterGraphAsset characterGraph)
+            characterGraph.MigrateMovementNodesToComponents();
         Title = graph.GetEditorTitle();
         AddCustomToolbarControls();
         _connectionEditor?.Reset();
         _explorerPanel?.RefreshIfOpen();
         _timelinePanel?.Clear();
         _selectionInspector?.Clear();
+        _componentPanel?.Refresh();
         _boundTimelineNodeId = string.Empty;
 
         _controller.ClearGraphEdit();

@@ -25,6 +25,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
 
     private void Run()
     {
+        VerifyComponentMetadata();
         VerifyInputNodes();
         VerifyLifecycleAndNonReentrancy();
 
@@ -44,6 +45,11 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         Require(abilities != null, "AbilitySystem is missing.");
         Require(movement != null, "CharacterMovement is missing.");
         Require(animation?.LocomotionRuntime?.IsRunning == true, "Locomotion graph did not start.");
+        VerifyLocomotionBlackboard(animation.LocomotionGraph);
+        Require(GraphComponentBindingRuntime.SyncFromComponents(animation.LocomotionRuntime.Context),
+            "Locomotion component bindings failed to synchronize.");
+        Require(animation.LocomotionRuntime.Context.Blackboard.GetValue<string>(LocomotionBlackboardKeys.MovementMode) == movement.MovementModeName,
+            "Locomotion movement mode was not copied from the component.");
         Require(!player.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent2D"),
             "Legacy CommandBuffer is still mounted.");
         Require(!player.GetAllComponents().Any(value => value.GetType().Name == "SkillManagerComponent2D"),
@@ -57,7 +63,10 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
             "CharacterGraph editor still exposes Timeline nodes.");
         Require(!graphAsset.GetAllowedNodeTypes().Contains(nameof(FlowEntryNodeData)),
             "CharacterGraph editor still exposes a single-entry Flow node.");
-        Require(graphAsset.Nodes.OfType<CharacterAddMovementInputNodeData>().Count() == 1, "Movement input is not configured in CharacterGraph.");
+        Require(graphAsset.Nodes.OfType<GraphComponentCallNodeData>()
+                .Any(value => value.ComponentTypeName == typeof(CharacterMovementComponent2D).FullName &&
+                    value.MemberId == "AddMovementInput"),
+            "Movement input is not configured through CharacterMovementComponent2D.");
         CharacterAbilityNodeData attackNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
             .First(value => value.AbilityId == "attack");
         CharacterAbilityNodeData dashNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
@@ -140,6 +149,62 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         VerifyLegacyAbilityPersistence(playerScene, state);
 
         VerifyAiScene();
+    }
+
+    private static void VerifyLocomotionBlackboard(HfsmGraphAsset graph)
+    {
+        Require(graph?.BlackboardEntries?.Count == 4, "Locomotion graph blackboard is incomplete.");
+        Require(GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, LocomotionBlackboardKeys.MovementMode)?.Value
+                is GraphStringBlackboardValue,
+            "Locomotion movement mode is not a String blackboard value.");
+        Require(GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, LocomotionBlackboardKeys.MovementIsOnFloor)?.Value
+                is GraphBoolBlackboardValue,
+            "Locomotion grounded state is not a Bool blackboard value.");
+        Require(GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, LocomotionBlackboardKeys.MovementMoveAxisX)?.Value
+                is GraphFloatBlackboardValue,
+            "Locomotion move axis is not a Float blackboard value.");
+        Require(GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, LocomotionBlackboardKeys.MovementVelocityY)?.Value
+                is GraphFloatBlackboardValue,
+            "Locomotion vertical velocity is not a Float blackboard value.");
+
+        VerifyBinding(graph, LocomotionBlackboardKeys.MovementMode, "MovementModeName");
+        VerifyBinding(graph, LocomotionBlackboardKeys.MovementIsOnFloor, "IsOnFloor");
+        VerifyBinding(graph, LocomotionBlackboardKeys.MovementMoveAxisX, "MoveInputX");
+        VerifyBinding(graph, LocomotionBlackboardKeys.MovementVelocityY, "VelocityY");
+    }
+
+    private static void VerifyComponentMetadata()
+    {
+        Require(GraphComponentRegistry.TryGet(typeof(CharacterMovementComponent2D), out GraphComponentTypeDescriptor descriptor),
+            "CharacterMovementComponent2D was not registered.");
+        Require(descriptor.Values.Any(value => value.MemberId == "MoveInputX"), "MoveInputX metadata is missing.");
+        Require(descriptor.Values.Any(value => value.MemberId == "IsOnFloor"), "IsOnFloor metadata is missing.");
+        Require(descriptor.Actions.Any(value => value.MemberId == "AddMovementInput"), "AddMovementInput metadata is missing.");
+        Require(descriptor.Actions.First(value => value.MemberId == "AddMovementInput").UseInputEventValue,
+            "AddMovementInput is not marked as an input-event component action.");
+        Require(!GraphComponentInvoker.TryRead(null, descriptor.TypeName, "MoveInputX", out _, out _),
+            "Missing component owner did not fail a component read.");
+
+        var node = new GraphComponentCallNodeData
+        {
+            ComponentTypeName = descriptor.TypeName,
+            MemberId = "AddMovementInput",
+            Arguments = new System.Collections.Generic.List<GraphComponentArgument>
+            {
+                new GraphComponentArgument { Name = "axis", Value = new GraphFloatBlackboardValue { Value = 1f } }
+            }
+        };
+        GraphComponentCallNodeData restored = GraphJsonHelper.Deserialize<GraphComponentCallNodeData>(GraphJsonHelper.Serialize(node));
+        Require(restored?.ComponentTypeName == descriptor.TypeName && restored.MemberId == node.MemberId &&
+                restored.Arguments?.Count == 1, "Component Call node did not round-trip through GraphJson.");
+    }
+
+    private static void VerifyBinding(HfsmGraphAsset graph, string key, string memberId)
+    {
+        GraphBlackboardEntry entry = GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, key);
+        Require(entry?.Binding != null && entry.Binding.ComponentTypeName == typeof(CharacterMovementComponent2D).FullName &&
+                entry.Binding.MemberId == memberId && entry.Binding.Direction == GraphComponentBindingDirection.ComponentToBlackboard,
+            $"Locomotion binding for {key} is missing or incorrect.");
     }
 
     private static void VerifyInputNodes()

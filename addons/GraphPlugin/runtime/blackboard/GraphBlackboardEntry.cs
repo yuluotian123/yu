@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -15,6 +16,8 @@ public sealed class GraphBlackboardEntry
 
     /// <summary>可序列化的黑板值对象。</summary>
     public GraphBlackboardValue Value { get; set; } = new GraphStringBlackboardValue();
+
+    public GraphComponentBinding Binding { get; set; }
 
     /// <summary>尝试把当前值转换为指定类型。</summary>
     public bool TryGetValue<T>(out T value)
@@ -65,6 +68,8 @@ public static class GraphBlackboardValueFactory
             double doubleValue => new GraphFloatBlackboardValue { Value = (float)doubleValue },
             string stringValue => new GraphStringBlackboardValue { Value = stringValue },
             Vector2 vector2Value => new GraphVector2BlackboardValue { Value = vector2Value },
+            Vector3 vector3Value => new GraphVector3BlackboardValue { Value = vector3Value },
+            NodePath nodePathValue => new GraphStringBlackboardValue { Value = nodePathValue.ToString() },
             Color colorValue => new GraphColorBlackboardValue { Value = colorValue },
             _ => new GraphStringBlackboardValue { Value = value?.ToString() ?? string.Empty }
         };
@@ -112,10 +117,60 @@ public static class GraphBlackboardValidator
                 error = $"黑板 key {entry.Key} 没有值对象。";
                 return false;
             }
+            GraphComponentBinding binding = entry.Binding;
+            if (binding != null)
+            {
+                if (string.IsNullOrWhiteSpace(binding.ComponentTypeName) || string.IsNullOrWhiteSpace(binding.MemberId))
+                {
+                    error = $"Blackboard key {entry.Key} has an incomplete component binding.";
+                    return false;
+                }
+
+                if (!GraphComponentRegistry.TryGet(binding.ComponentTypeName, out GraphComponentTypeDescriptor component))
+                {
+                    error = $"Blackboard key {entry.Key} references unknown component type '{binding.ComponentTypeName}'.";
+                    return false;
+                }
+
+                GraphComponentValueDescriptor descriptor = component.Values.FirstOrDefault(value => value.MemberId == binding.MemberId);
+                if (descriptor == null)
+                {
+                    error = $"Blackboard key {entry.Key} references unknown component member '{binding.MemberId}'.";
+                    return false;
+                }
+
+                if (binding.CanRead && !descriptor.CanRead)
+                {
+                    error = $"Blackboard key {entry.Key} binding requires a readable component member.";
+                    return false;
+                }
+
+                if (binding.CanWrite && !descriptor.CanWrite)
+                {
+                    error = $"Blackboard key {entry.Key} binding requires a writable component member.";
+                    return false;
+                }
+
+                if (!IsCompatible(entry.Value.ValueType, descriptor.ValueType))
+                {
+                    error = $"Blackboard key {entry.Key} type is incompatible with component member '{binding.MemberId}'.";
+                    return false;
+                }
+            }
         }
 
         error = string.Empty;
         return true;
+    }
+
+    private static bool IsCompatible(Type blackboardType, Type componentType)
+    {
+        if (blackboardType == componentType || blackboardType.IsAssignableFrom(componentType) || componentType.IsAssignableFrom(blackboardType))
+            return true;
+        if ((blackboardType == typeof(float) || blackboardType == typeof(double) || blackboardType == typeof(int)) &&
+            (componentType == typeof(float) || componentType == typeof(double) || componentType == typeof(int)))
+            return true;
+        return componentType.IsEnum && blackboardType == typeof(string);
     }
 
     /// <summary>按 key 查找黑板条目。</summary>

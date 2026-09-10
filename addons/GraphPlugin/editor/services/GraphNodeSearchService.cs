@@ -1,5 +1,7 @@
 #if TOOLS
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -14,31 +16,80 @@ public static class GraphNodeSearchService
     /// <summary>在指定画布位置打开节点搜索弹窗。</summary>
     public static void Show(GraphAsset graph, GraphEdit graphEdit, Vector2 position, Action<string> onSelected)
     {
+        Show(graph, graphEdit, position, null, onSelected, null);
+    }
+
+    public static void Show(
+        GraphAsset graph,
+        GraphEdit graphEdit,
+        Vector2 position,
+        IReadOnlyList<GraphNodeSearchEntry> dynamicEntries,
+        Action<string> onSelected,
+        Action<GraphNodeSearchEntry> onDynamicSelected)
+    {
         if (graph == null || graphEdit == null)
             return;
 
-        var allowedNodes = graph.GetAllowedNodeTypes();
-        if (allowedNodes.Count == 0)
+        var allowedNodes = graph.GetAllowedNodeTypes()
+            .Where(nodeType => !IsGenericComponentNode(nodeType))
+            .ToList();
+        if (allowedNodes.Count == 0 && (dynamicEntries == null || dynamicEntries.Count == 0))
             return;
 
-        var popup = new SearchablePopup<string>(
-            allowedNodes,
-            nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
+        var entries = allowedNodes.Select(nodeType => new GraphNodeSearchEntry
+        {
+            NodeType = nodeType,
+            Label = GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
                 ? GetMenuName(definition)
                 : nodeType,
-            nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
+            Group = GraphTypeRegistry.TryGetNodeDefinition(nodeType, out definition)
                 ? definition.Category
                 : "General",
-            nodeType => GraphTypeRegistry.TryGetNodeDefinition(nodeType, out GraphNodeDefinition definition)
+            SearchText = GraphTypeRegistry.TryGetNodeDefinition(nodeType, out definition)
                 ? $"{definition.NodeType} {definition.DisplayName} {string.Join(" ", definition.SearchKeywords)}"
-                : nodeType);
+                : nodeType
+        }).ToList();
+        if (dynamicEntries != null)
+            entries.AddRange(dynamicEntries);
 
-        popup.OnItemSelected += nodeType => onSelected?.Invoke(nodeType);
+        var popup = new SearchablePopup<GraphNodeSearchEntry>(
+            entries,
+            entry => entry.Label,
+            entry => entry.Group,
+            entry => entry.SearchText);
+
+        popup.OnItemSelected += entry =>
+        {
+            if (entry.DynamicAction != null)
+            {
+                entry.DynamicAction();
+                onDynamicSelected?.Invoke(entry);
+            }
+            else
+                onSelected?.Invoke(entry.NodeType);
+        };
 
         var anchor = new Control { Position = position };
         graphEdit.AddChild(anchor);
         popup.ShowBelow(anchor);
         anchor.QueueFree();
+    }
+
+    private static bool IsGenericComponentNode(string nodeType) => nodeType == nameof(GraphComponentCallNodeData) ||
+        nodeType == nameof(GraphComponentGetNodeData) ||
+        nodeType == nameof(GraphComponentSetNodeData) ||
+        nodeType == nameof(BehaviorTreeComponentCallNodeData) ||
+        nodeType == nameof(BehaviorTreeComponentGetNodeData) ||
+        nodeType == nameof(BehaviorTreeComponentSetNodeData) ||
+        nodeType == nameof(GameLogic.HfsmComponentActionStateNodeData);
+
+    public sealed class GraphNodeSearchEntry
+    {
+        public string NodeType { get; init; } = string.Empty;
+        public string Label { get; init; } = string.Empty;
+        public string Group { get; init; } = string.Empty;
+        public string SearchText { get; init; } = string.Empty;
+        public Action DynamicAction { get; init; }
     }
 
     private static string GetMenuName(GraphNodeDefinition definition)

@@ -37,7 +37,6 @@ namespace GameLogic
                 LocomotionRuntime = new HfsmRuntime(LocomotionGraph);
                 LocomotionRuntime.Context.UserData.Add(this);
                 LocomotionRuntime.Context.UserData.Add(Owner);
-                PublishMovementSnapshot();
                 if (!LocomotionRuntime.Start())
                     Debugger.Warn("[CharacterAnimationComponent2D] Failed to start LocomotionGraph.");
             }
@@ -45,8 +44,9 @@ namespace GameLogic
 
         public override void OnPhysicsUpdate(double delta)
         {
-            PublishMovementSnapshot();
+            GraphComponentBindingRuntime.SyncFromComponents(LocomotionRuntime?.Context);
             LocomotionRuntime?.Update(delta);
+            GraphComponentBindingRuntime.SyncToComponents(LocomotionRuntime?.Context);
             ApplyBestAnimationRequest();
         }
 
@@ -92,16 +92,6 @@ namespace GameLogic
                 _animationRequests.Clear();
             else
                 _animationRequests.Remove(key.Trim());
-        }
-
-        private void PublishMovementSnapshot()
-        {
-            if (LocomotionRuntime == null || _movement == null)
-                return;
-            LocomotionRuntime.SetValue(LocomotionBlackboardKeys.MovementMode, _movement.MovementMode.ToString());
-            LocomotionRuntime.SetValue(LocomotionBlackboardKeys.MovementIsOnFloor, _movement.IsOnFloor);
-            LocomotionRuntime.SetValue(LocomotionBlackboardKeys.MovementMoveAxisX, _movement.MoveInputX);
-            LocomotionRuntime.SetValue(LocomotionBlackboardKeys.MovementVelocityY, _movement.Velocity.Y);
         }
 
         private void ApplyBestAnimationRequest()

@@ -22,6 +22,10 @@ public sealed class GraphDocument
     /// <summary>图类型名称，例如 FlowGraph、StateGraph、HfsmGraph、MissionGraph。</summary>
     public string GraphType { get; set; } = string.Empty;
 
+    /// <summary>How actions in this graph resolve component dependencies.</summary>
+    public GraphActionDependencyMode ActionDependencyMode { get; set; } = GraphActionDependencyMode.HostBound;
+    public bool HasActionDependencyMode { get; set; }
+
     /// <summary>图内所有节点数据。</summary>
     public List<GraphNodeData> Nodes { get; set; } = new();
 

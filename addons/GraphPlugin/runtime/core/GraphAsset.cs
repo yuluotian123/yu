@@ -45,6 +45,30 @@ public partial class GraphAsset : Resource
     /// <summary>图类型。子类应返回稳定常量。</summary>
     public virtual string GraphType { get; set; } = string.Empty;
 
+    public virtual GraphActionDependencyMode DefaultActionDependencyMode => GraphActionDependencyMode.HostBound;
+
+    /// <summary>How actions in this graph resolve component dependencies.</summary>
+    public GraphActionDependencyMode ActionDependencyMode
+    {
+        get
+        {
+            EnsureDocument();
+            return Document.ActionDependencyMode;
+        }
+        set
+        {
+            EnsureDocument();
+            if (Document.ActionDependencyMode == value)
+            {
+                Document.HasActionDependencyMode = true;
+                return;
+            }
+            Document.ActionDependencyMode = value;
+            Document.HasActionDependencyMode = true;
+            MarkDirty();
+        }
+    }
+
     /// <summary>完整文档对象。</summary>
     public GraphDocument Document
     {
@@ -126,6 +150,7 @@ public partial class GraphAsset : Resource
         EnsureDocument();
         _document.SchemaVersion = 2;
         _document.GraphType = GraphType;
+        _document.HasActionDependencyMode = true;
         _graphJson = GraphJsonHelper.Serialize(_document);
         _dirty = false;
     }
@@ -279,6 +304,11 @@ public partial class GraphAsset : Resource
         _document.Connections ??= new List<GraphConnection>();
         _document.BlackboardEntries ??= new List<GraphBlackboardEntry>();
         _document.EditorState ??= new GraphEditorState();
+        if (!_document.HasActionDependencyMode)
+        {
+            _document.ActionDependencyMode = DefaultActionDependencyMode;
+            _document.HasActionDependencyMode = true;
+        }
         GraphComponentBindingRuntime.ApplyDefaultBindings(this);
     }
 }

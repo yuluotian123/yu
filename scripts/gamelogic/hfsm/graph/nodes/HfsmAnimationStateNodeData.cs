@@ -47,7 +47,7 @@ namespace GameLogic
 
         public override void OnExit(HfsmRuntime runtime)
         {
-            runtime?.Context.GetUserData<CharacterAnimationComponent2D>()?.ClearAnimationRequest(GetRequestKey());
+            GetAnimationInstance(runtime)?.ClearAnimationRequest(GetRequestKey());
             base.OnExit(runtime);
         }
 
@@ -98,13 +98,21 @@ namespace GameLogic
 
         private void RequestAnimation(HfsmRuntime runtime)
         {
-            runtime?.Context.GetUserData<CharacterAnimationComponent2D>()?.RequestAnimation(
+            GetAnimationInstance(runtime)?.RequestAnimation(
                 GetRequestKey(),
                 GetAnimationName(),
                 AnimationPriority,
                 Speed,
                 FromEnd,
                 RestartIfPlaying);
+        }
+
+        private static CharacterAnimationInstance2D GetAnimationInstance(HfsmRuntime runtime)
+        {
+            if (runtime?.Context == null)
+                return null;
+            return runtime.Context.GetUserData<CharacterAnimationInstance2D>() ??
+                   runtime.Context.GetUserData<CharacterAnimationComponent2D>()?.AnimationInstance;
         }
 
         private string GetAnimationName()

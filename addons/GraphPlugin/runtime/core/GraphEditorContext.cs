@@ -34,6 +34,8 @@ public sealed class GraphEditorContext
     /// <summary>当前编辑场景中的全局黑板节点。</summary>
     public GraphBlackboardNode GlobalBlackboard { get; set; }
 
+    public IReadOnlyList<GraphComponentTypeDescriptor> AvailableComponentTypes { get; set; }
+
     /// <summary>当前黑板条目。仅在黑板值 UI 构建时有值。</summary>
     public GraphBlackboardEntry BlackboardEntry { get; set; }
 
@@ -72,6 +74,7 @@ public sealed class GraphEditorContext
         target.ParentGraphs = ParentGraphs;
         target.GraphEdit = GraphEdit;
         target.GlobalBlackboard = GlobalBlackboard;
+        target.AvailableComponentTypes = AvailableComponentTypes;
         return target;
     }
 }

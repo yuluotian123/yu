@@ -16,6 +16,8 @@ namespace GameLogic
             set { }
         }
 
+        public override GraphActionDependencyMode DefaultActionDependencyMode => GraphActionDependencyMode.Reusable;
+
         public override List<string> GetAllowedNodeTypes()
         {
             var result = new List<string>();

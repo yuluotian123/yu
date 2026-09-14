@@ -1,5 +1,7 @@
 # 角色系统
 
+当前代码的完整使用说明见：[角色系统与图使用说明](CHARACTER_GRAPH_USAGE.md)。本文保留架构背景和设计边界；新增角色、Property Get/Set、黑板绑定时以使用说明为准。
+
 本文描述当前玩家角色蓝图、Ability、移动、动画和 AI 的实际结构。玩家与 AI 共享 Movement、Ability 和 Animation 的运行能力，但只有玩家使用 CharacterGraph。
 
 相关示例：
@@ -8,7 +10,7 @@
 - [AI 角色示例](AI_CHARACTER_EXAMPLE.md)
 - [玩家场景](../assets/scenes/player.tscn)
 - [简单 AI 场景](../assets/scenes/ai_runner.tscn)
-- [默认 CharacterGraph](../assets/graphs/character_graph.tres)
+- [Player 场景内联 CharacterGraph](../assets/scenes/player.tscn)
 
 ## 1. 完整结构
 

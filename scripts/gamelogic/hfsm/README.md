@@ -1,5 +1,7 @@
 # GameLogic HFSM
 
+角色项目中的 HFSM/AnimGraph 操作步骤见：[角色系统与图使用说明](../../../docs/CHARACTER_GRAPH_USAGE.md)。
+
 GameLogic HFSM 基于 GraphPlugin StateGraph，负责状态、条件、复合状态和黑板。当前角色架构只把 HFSM 用于动画 Locomotion；CharacterGraph 已改为独立 FlowGraph，不再继承 HFSM。
 
 ## 当前职责
@@ -23,7 +25,7 @@ CharacterMovementComponent2D
 
 ## 与 CharacterGraph 的关系
 
-[character_graph.tres](../../../assets/graphs/character_graph.tres) 是玩家输入与 Ability 编排图，包含生命周期、Input、Movement intent、流程和 Ability 节点。它不包含 Idle、Locomotion 或动画状态，也不供 AI 使用。
+[player.tscn](../../../assets/scenes/player.tscn) 中的内联 CharacterGraph 是玩家输入与 Ability 编排图，包含生命周期、Input、Movement intent、流程和 Ability 节点。它不包含 Idle、Locomotion 或动画状态，也不供 AI 使用。
 
 两张图通过 Movement 的最终结果间接协作：CharacterGraph 向 Movement 提交玩家意图，Movement 计算结果，Locomotion HFSM 再根据结果选动画。
 

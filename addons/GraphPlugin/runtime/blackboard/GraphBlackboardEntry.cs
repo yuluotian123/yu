@@ -163,7 +163,7 @@ public static class GraphBlackboardValidator
         return true;
     }
 
-    private static bool IsCompatible(Type blackboardType, Type componentType)
+    public static bool IsCompatible(Type blackboardType, Type componentType)
     {
         if (blackboardType == componentType || blackboardType.IsAssignableFrom(componentType) || componentType.IsAssignableFrom(blackboardType))
             return true;

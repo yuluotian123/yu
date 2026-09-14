@@ -4,6 +4,7 @@ namespace GameLogic
 {
     public class AbilityApplyDashVelocityAction : GraphActionBase
     {
+        public GraphActionComponentReference Movement { get; set; } = new();
         public float Speed { get; set; } = 2000f;
         public bool StopVerticalVelocity { get; set; } = true;
 
@@ -11,12 +12,23 @@ namespace GameLogic
 
         public override void Execute(GraphExecutionContext context)
         {
-            GameObject2D owner = AbilityActionRuntimeHelper.GetGameObject(context);
-            CharacterMovementComponent2D movement = owner?.GetComponent<CharacterMovementComponent2D>();
-            if (movement == null)
-                return;
+            Execute(new GraphActionInvocation(context));
+        }
 
-            float direction = ResolveDirection(owner);
+        public override void Execute(GraphActionInvocation invocation)
+        {
+            CharacterMovementComponent2D movement = null;
+            string error = string.Empty;
+            bool hasInput = invocation.Execution?.ActionDependencyMode == GraphActionDependencyMode.HostBound &&
+                            invocation.TryGetInput("Component", out movement);
+            if (!hasInput &&
+                !GraphActionComponentResolver.TryResolve(invocation.Execution, Movement, nameof(AbilityApplyDashVelocityAction), out movement, out error))
+            {
+                GD.PushError($"[AbilityApplyDashVelocityAction] {error}");
+                return;
+            }
+
+            float direction = ResolveDirection(movement);
             float velocityY = StopVerticalVelocity ? 0f : movement.Velocity.Y;
             movement.RequestVelocityOverride(new CharacterMovementOverride2D(
                 new Vector2(Mathf.Sign(direction) * Speed, velocityY),
@@ -25,10 +37,8 @@ namespace GameLogic
                 priority: 100));
         }
 
-        private static float ResolveDirection(GameObject2D owner)
+        private static float ResolveDirection(CharacterMovementComponent2D movement)
         {
-            CharacterMovementComponent2D movement = owner?.GetComponent<CharacterMovementComponent2D>();
-
             if (movement != null && Mathf.Abs(movement.MoveInputX) > 0.01f)
                 return Mathf.Sign(movement.MoveInputX);
 
@@ -48,6 +58,7 @@ namespace GameLogic
         {
             var root = new VBoxContainer();
             root.AddThemeConstantOverride("separation", 4);
+            root.AddChild(Movement.CreateEditUI("Movement Component", context, () => { }));
 
             root.AddChild(GraphEditorUi.BuildSpinRow(
                 "Speed",

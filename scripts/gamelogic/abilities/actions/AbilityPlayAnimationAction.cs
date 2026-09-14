@@ -4,6 +4,7 @@ namespace GameLogic
 {
     public class AbilityPlayAnimationAction : GraphActionBase
     {
+        public GraphActionComponentReference Animation { get; set; } = new();
         public string AnimationName { get; set; } = string.Empty;
         public string RequestKey { get; set; } = string.Empty;
         public int AnimationPriority { get; set; } = 100;
@@ -22,14 +23,11 @@ namespace GameLogic
 
         public override void Execute(GraphExecutionContext context)
         {
-            GameObject2D owner = AbilityActionRuntimeHelper.GetGameObject(context);
-            if (owner == null)
+            if (!GraphActionComponentResolver.TryResolve(context, Animation, nameof(AbilityPlayAnimationAction), out CharacterAnimationComponent2D animationComponent, out string error))
+            {
+                GD.PushError($"[AbilityPlayAnimationAction] {error}");
                 return;
-
-            CharacterAnimationComponent2D animationComponent =
-                owner.GetComponent<CharacterAnimationComponent2D>();
-            if (animationComponent == null)
-                return;
+            }
 
             string requestKey = ResolveAnimationRequestKey(context);
             FlowTimelineContext timeline = context?.GetUserData<FlowTimelineContext>();
@@ -58,6 +56,7 @@ namespace GameLogic
                 AnimationName,
                 "Animation name",
                 value => AnimationName = value));
+            root.AddChild(Animation.CreateEditUI("Animation Component", context, () => { }));
 
             var advancedContent = new VBoxContainer { Visible = false };
             advancedContent.AddChild(GraphEditorUi.BuildLineEditRow(

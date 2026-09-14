@@ -42,9 +42,19 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         CharacterAnimationComponent2D animation = player.GetComponent<CharacterAnimationComponent2D>();
 
         Require(graph?.Runtime?.IsRunning == true, "CharacterGraph did not initialize.");
+        Require(graph.CharacterGraph?.ResourceLocalToScene == true,
+            "CharacterGraph is not configured as a scene-local inline resource.");
+        Require(graph.CharacterGraph.ResourcePath?.Contains("::", StringComparison.Ordinal) == true,
+            $"CharacterGraph is not embedded in the player scene: '{graph.CharacterGraph.ResourcePath}'.");
         Require(abilities != null, "AbilitySystem is missing.");
         Require(movement != null, "CharacterMovement is missing.");
         Require(animation?.LocomotionRuntime?.IsRunning == true, "Locomotion graph did not start.");
+        Require(animation.AnimationInstance != null, "CharacterAnimation AnimInstance was not created.");
+        Require(animation.PlaybackBackend?.IsValid == true, "CharacterAnimation playback backend is unavailable.");
+        Require(animation.LocomotionGraph?.ResourceLocalToScene == true,
+            "LocomotionGraph is not configured as a scene-local inline resource.");
+        Require(animation.LocomotionGraph.ResourcePath?.Contains("::", StringComparison.Ordinal) == true,
+            $"LocomotionGraph is not embedded in the player scene: '{animation.LocomotionGraph.ResourcePath}'.");
         VerifyLocomotionBlackboard(animation.LocomotionGraph);
         Require(GraphComponentBindingRuntime.SyncFromComponents(animation.LocomotionRuntime.Context),
             "Locomotion component bindings failed to synchronize.");
@@ -87,6 +97,8 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         Require(abilities.TryActivateAbility("attack", "SmokeTest") == AbilityActivationResult.AlreadyActive,
             "AbilitySystem did not reject an already active Ability.");
         TickPhysics(player);
+        Require(animation.AnimationInstance.Variables.ContainsKey(LocomotionBlackboardKeys.MovementMode),
+            "AnimInstance variables did not capture the Movement provider value.");
         Require(animation.ActiveRequestKey == "ability:attack:attack_animation",
             $"Unexpected attack animation key: {animation.ActiveRequestKey}");
         Require(movement.MovementLocked && movement.JumpLocked, "Attack did not apply movement locks.");
@@ -349,7 +361,12 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         public bool IsJustPressed(string action, string handlerLayer = null) => action == JustPressedAction;
         public bool IsJustReleased(string action, string handlerLayer = null) => action == JustReleasedAction;
         public bool IsBuffered(string action, float bufferTime) => false;
-        public float GetActionStrength(string action, string handlerLayer = null) => action == "left" ? Negative : Positive;
+        public float GetActionStrength(string action, string handlerLayer = null) =>
+            action == "left" || action?.EndsWith("_left", StringComparison.Ordinal) == true
+                ? Negative
+                : action == "right" || action?.EndsWith("_right", StringComparison.Ordinal) == true
+                    ? Positive
+                    : 0f;
         public float GetHoldTime(string action) => 0f;
         public bool ConsumePressed(string action, string handlerLayer = null) => true;
         public bool ConsumeJustPressed(string action, string handlerLayer = null) => true;

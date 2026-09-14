@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameLogic;
 using Godot;
 
 /// <summary>
@@ -16,17 +17,21 @@ public sealed class GraphBlackboardPanel
     private readonly Window _owner;
     private readonly Func<GraphAsset> _getCurrentGraph;
     private readonly Func<GraphEditorContext> _createContext;
+    private readonly Func<bool> _hasHost;
     private Window _window;
+    private bool _hostStateAtOpen;
 
     /// <summary>创建黑板面板。</summary>
     public GraphBlackboardPanel(
         Window owner,
         Func<GraphAsset> getCurrentGraph,
-        Func<GraphEditorContext> createContext)
+        Func<GraphEditorContext> createContext,
+        Func<bool> hasHost = null)
     {
         _owner = owner;
         _getCurrentGraph = getCurrentGraph;
         _createContext = createContext;
+        _hasHost = hasHost ?? (() => false);
     }
 
     /// <summary>打开黑板窗口。</summary>
@@ -37,28 +42,51 @@ public sealed class GraphBlackboardPanel
             return;
 
         Close();
+        _hostStateAtOpen = _hasHost();
         _window = new Window
         {
-            Title = "Graph Blackboard",
-            Size = new Vector2I(760, 600)
+            Title = "Blackboard",
+            Size = new Vector2I(900, 700),
+            MinSize = new Vector2I(720, 520)
         };
         _window.CloseRequested += () => _window.Hide();
         _owner.AddChild(_window);
 
         var margin = new MarginContainer();
         margin.SetAnchorsPreset(Control.LayoutPreset.FullRect);
-        margin.AddThemeConstantOverride("margin_left", 10);
-        margin.AddThemeConstantOverride("margin_top", 10);
-        margin.AddThemeConstantOverride("margin_right", 10);
-        margin.AddThemeConstantOverride("margin_bottom", 10);
+        margin.AddThemeConstantOverride("margin_left", 16);
+        margin.AddThemeConstantOverride("margin_top", 14);
+        margin.AddThemeConstantOverride("margin_right", 16);
+        margin.AddThemeConstantOverride("margin_bottom", 14);
         _window.AddChild(margin);
+
+        var shell = new VBoxContainer { SizeFlagsVertical = Control.SizeFlags.ExpandFill };
+        shell.AddThemeConstantOverride("separation", 10);
+        margin.AddChild(shell);
+
+        var heading = new VBoxContainer();
+        heading.AddThemeConstantOverride("separation", 2);
+        var title = new Label { Text = "BLACKBOARD" };
+        title.AddThemeFontSizeOverride("font_size", 18);
+        title.AddThemeColorOverride("font_color", new Color(0.92f, 0.94f, 0.98f));
+        heading.AddChild(title);
+        var subtitle = new Label
+        {
+            Text = "Define graph variables and bind them to the owning blueprint host.",
+            AutowrapMode = TextServer.AutowrapMode.WordSmart
+        };
+        subtitle.AddThemeFontSizeOverride("font_size", 11);
+        subtitle.AddThemeColorOverride("font_color", new Color(0.58f, 0.64f, 0.73f));
+        heading.AddChild(subtitle);
+        shell.AddChild(heading);
 
         var tabs = new TabContainer
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsVertical = Control.SizeFlags.ExpandFill
         };
-        margin.AddChild(tabs);
+        tabs.AddThemeConstantOverride("side_margin", 8);
+        shell.AddChild(tabs);
 
         Control globalPage = BuildGlobalBlackboardPage();
         globalPage.Name = "Global";
@@ -82,6 +110,16 @@ public sealed class GraphBlackboardPanel
 
         _window.QueueFree();
         _window = null;
+    }
+
+    public void RefreshIfHostChanged()
+    {
+        if (_window == null || !GodotObject.IsInstanceValid(_window) || !_window.Visible)
+            return;
+        bool hasHost = _hasHost();
+        if (hasHost == _hostStateAtOpen)
+            return;
+        Open();
     }
 
     /// <summary>查找当前编辑场景中的全局黑板节点。</summary>
@@ -154,7 +192,7 @@ public sealed class GraphBlackboardPanel
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsVertical = Control.SizeFlags.ExpandFill
         };
-        root.AddThemeConstantOverride("separation", 6);
+        root.AddThemeConstantOverride("separation", 8);
 
         var validationLabel = new Label
         {
@@ -181,12 +219,13 @@ public sealed class GraphBlackboardPanel
         Refresh();
 
         var buttons = new HBoxContainer();
+        buttons.Alignment = BoxContainer.AlignmentMode.End;
         root.AddChild(buttons);
 
         var addButton = new Button
         {
             Text = "Add Entry",
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            CustomMinimumSize = new Vector2(120, 32)
         };
         addButton.Pressed += () => ShowAddBlackboardEntryPopup(addButton, entries, Refresh);
         buttons.AddChild(addButton);
@@ -194,7 +233,7 @@ public sealed class GraphBlackboardPanel
         var saveButton = new Button
         {
             Text = saveButtonText,
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            CustomMinimumSize = new Vector2(170, 32)
         };
         saveButton.Pressed += () =>
         {
@@ -240,20 +279,27 @@ public sealed class GraphBlackboardPanel
             entriesContainer.AddChild(BuildBlackboardEntryRow(entries, i, refresh));
     }
 
-    private Control BuildBlackboardEntryRow(IList<GraphBlackboardEntry> entries, int index, Action refresh)
+    private Control BuildBlackboardEntryRow(
+        IList<GraphBlackboardEntry> entries,
+        int index,
+        Action refresh)
     {
         GraphBlackboardEntry entry = entries[index];
         entry.Value ??= new GraphStringBlackboardValue();
 
         var panel = new PanelContainer();
+        panel.AddThemeStyleboxOverride("panel", CreateCardStyle());
         var content = new VBoxContainer();
-        content.AddThemeConstantOverride("separation", 6);
+        content.AddThemeConstantOverride("separation", 8);
         panel.AddChild(content);
 
         var header = new HBoxContainer();
         content.AddChild(header);
 
-        header.AddChild(new Label { Text = "Key" });
+        var keyLabel = new Label { Text = "KEY", VerticalAlignment = VerticalAlignment.Center };
+        keyLabel.AddThemeFontSizeOverride("font_size", 10);
+        keyLabel.AddThemeColorOverride("font_color", new Color(0.43f, 0.72f, 0.98f));
+        header.AddChild(keyLabel);
         var keyEdit = new LineEdit
         {
             Text = entry.Key,
@@ -263,13 +309,15 @@ public sealed class GraphBlackboardPanel
         keyEdit.TextChanged += value => entry.Key = value;
         header.AddChild(keyEdit);
 
-        header.AddChild(new Label { Text = entry.Value.DisplayName });
+        var typeLabel = new Label { Text = entry.Value.DisplayName, VerticalAlignment = VerticalAlignment.Center };
+        typeLabel.AddThemeColorOverride("font_color", new Color(0.68f, 0.85f, 1.0f));
+        header.AddChild(typeLabel);
 
-        var replaceButton = new Button { Text = "Type" };
+        var replaceButton = new Button { Text = "Change Type", CustomMinimumSize = new Vector2(100, 28) };
         replaceButton.Pressed += () => ShowReplaceBlackboardValuePopup(replaceButton, entry, refresh);
         header.AddChild(replaceButton);
 
-        var upButton = new Button { Text = "Up", Disabled = index == 0 };
+        var upButton = new Button { Text = "↑", TooltipText = "Move entry up", Disabled = index == 0 };
         upButton.Pressed += () =>
         {
             (entries[index - 1], entries[index]) = (entries[index], entries[index - 1]);
@@ -277,7 +325,7 @@ public sealed class GraphBlackboardPanel
         };
         header.AddChild(upButton);
 
-        var downButton = new Button { Text = "Down", Disabled = index == entries.Count - 1 };
+        var downButton = new Button { Text = "↓", TooltipText = "Move entry down", Disabled = index == entries.Count - 1 };
         downButton.Pressed += () =>
         {
             (entries[index + 1], entries[index]) = (entries[index], entries[index + 1]);
@@ -285,7 +333,7 @@ public sealed class GraphBlackboardPanel
         };
         header.AddChild(downButton);
 
-        var deleteButton = new Button { Text = "Delete" };
+        var deleteButton = new Button { Text = "Delete", CustomMinimumSize = new Vector2(64, 28) };
         deleteButton.Pressed += () =>
         {
             entries.RemoveAt(index);
@@ -311,25 +359,66 @@ public sealed class GraphBlackboardPanel
         return panel;
     }
 
-    private static void BuildBindingEditor(VBoxContainer content, GraphBlackboardEntry entry, Action refresh)
+    private void BuildBindingEditor(
+        VBoxContainer content,
+        GraphBlackboardEntry entry,
+        Action refresh)
     {
         GraphComponentRegistry.EnsureScanned();
         var binding = entry.Binding;
-        var enabled = new CheckButton { Text = "Component Binding", ButtonPressed = binding != null };
-        content.AddChild(enabled);
+        bool hostAvailable = _hasHost();
+        var bindingPanel = new PanelContainer();
+        bindingPanel.AddThemeStyleboxOverride("panel", CreateSectionStyle());
+        var bindingContent = new VBoxContainer();
+        bindingContent.AddThemeConstantOverride("separation", 6);
+        bindingPanel.AddChild(bindingContent);
+        content.AddChild(bindingPanel);
 
-        var componentTypes = GraphComponentRegistry.GetAll().Where(value => value.Values.Count > 0).ToList();
-        var component = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        var bindingHeader = new HBoxContainer();
+        var bindingTitle = new Label { Text = "COMPONENT BINDING" };
+        bindingTitle.AddThemeFontSizeOverride("font_size", 10);
+        bindingTitle.AddThemeColorOverride("font_color", new Color(0.43f, 0.72f, 0.98f));
+        bindingHeader.AddChild(bindingTitle);
+        var enabled = new CheckButton
+        {
+            Text = binding == null ? "Enable" : "Enabled",
+            ButtonPressed = binding != null,
+            Disabled = !hostAvailable
+        };
+        bindingHeader.AddChild(enabled);
+        bindingContent.AddChild(bindingHeader);
+        if (!hostAvailable)
+        {
+            var hostWarning = new Label
+            {
+                Text = "No blueprint host found. Open the owning scene to edit component bindings.",
+                AutowrapMode = TextServer.AutowrapMode.WordSmart
+            };
+            hostWarning.AddThemeColorOverride("font_color", new Color(1f, 0.68f, 0.35f));
+            hostWarning.AddThemeFontSizeOverride("font_size", 11);
+            bindingContent.AddChild(hostWarning);
+        }
+        var available = _createContext()?.AvailableComponentTypes;
+        var componentTypes = (available ?? Array.Empty<GraphComponentTypeDescriptor>())
+            .Where(value => value != null && value.Values.Count > 0).ToList();
+        var fields = new GridContainer { Columns = 2 };
+        fields.AddThemeConstantOverride("h_separation", 8);
+        fields.AddThemeConstantOverride("v_separation", 6);
+        bindingContent.AddChild(fields);
+        fields.AddChild(new Label { Text = "Component" });
+        var component = new OptionButton { Disabled = binding == null || !hostAvailable, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
         for (int i = 0; i < componentTypes.Count; i++)
             component.AddItem(componentTypes[i].DisplayName, i);
-        var member = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
-        var direction = new OptionButton { Disabled = binding == null, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        fields.AddChild(component);
+        fields.AddChild(new Label { Text = "Member" });
+        var member = new OptionButton { Disabled = binding == null || !hostAvailable, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        fields.AddChild(member);
+        fields.AddChild(new Label { Text = "Direction" });
+        var direction = new OptionButton { Disabled = binding == null || !hostAvailable, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
         direction.AddItem("Component to Blackboard", (int)GraphComponentBindingDirection.ComponentToBlackboard);
         direction.AddItem("Blackboard to Component", (int)GraphComponentBindingDirection.BlackboardToComponent);
         direction.AddItem("Two Way", (int)GraphComponentBindingDirection.TwoWay);
-        content.AddChild(component);
-        content.AddChild(member);
-        content.AddChild(direction);
+        fields.AddChild(direction);
 
         int componentIndex = componentTypes.FindIndex(value => value.TypeName == binding?.ComponentTypeName || value.ComponentType.Name == binding?.ComponentTypeName);
         if (componentIndex >= 0)
@@ -343,11 +432,18 @@ public sealed class GraphBlackboardPanel
                 : null;
             if (type == null)
                 return;
-            for (int i = 0; i < type.Values.Count; i++)
-                member.AddItem($"{type.Values[i].DisplayName} ({type.Values[i].MemberId})", i);
-            int selected = type.Values.FindIndex(value => value.MemberId == binding?.MemberId);
-            if (selected >= 0)
+            var compatibleValues = type.Values.Where(value => IsCompatible(entry, value)).ToList();
+            for (int i = 0; i < compatibleValues.Count; i++)
+                member.AddItem($"{compatibleValues[i].DisplayName} ({compatibleValues[i].MemberId})", i);
+            int selected = compatibleValues.FindIndex(value => value.MemberId == binding?.MemberId);
+            if (selected < 0 && compatibleValues.Count > 0)
+                selected = 0;
+            if (selected >= 0 && selected < compatibleValues.Count)
+            {
                 member.Select(selected);
+                if (binding != null)
+                    binding.MemberId = compatibleValues[selected].MemberId;
+            }
         }
 
         PopulateMembers();
@@ -362,10 +458,17 @@ public sealed class GraphBlackboardPanel
                 refresh();
                 return;
             }
+            int selectedComponent = componentTypes.FindIndex(type => type.Values.Any(value => IsCompatible(entry, value)));
+            if (selectedComponent < 0)
+            {
+                enabled.SetPressedNoSignal(false);
+                ShowBlackboardError($"Blackboard key '{entry.Key}' has no component member compatible with {entry.Value?.ValueType?.Name ?? "its value type"}.");
+                return;
+            }
             entry.Binding = new GraphComponentBinding
             {
-                ComponentTypeName = componentTypes.Count > 0 ? componentTypes[0].TypeName : string.Empty,
-                MemberId = componentTypes.Count > 0 && componentTypes[0].Values.Count > 0 ? componentTypes[0].Values[0].MemberId : string.Empty
+                ComponentTypeName = componentTypes[selectedComponent].TypeName,
+                MemberId = componentTypes[selectedComponent].Values.First(value => IsCompatible(entry, value)).MemberId
             };
             refresh();
         };
@@ -374,13 +477,18 @@ public sealed class GraphBlackboardPanel
             if (entry.Binding == null)
                 return;
             entry.Binding.ComponentTypeName = componentTypes[(int)index].TypeName;
-            entry.Binding.MemberId = componentTypes[(int)index].Values.FirstOrDefault()?.MemberId ?? string.Empty;
+            entry.Binding.MemberId = componentTypes[(int)index].Values.FirstOrDefault(value => IsCompatible(entry, value))?.MemberId ?? string.Empty;
             PopulateMembers();
         };
         member.ItemSelected += index =>
         {
             if (entry.Binding != null && component.Selected >= 0 && component.Selected < componentTypes.Count)
-                entry.Binding.MemberId = componentTypes[(int)component.Selected].Values[(int)index].MemberId;
+            {
+                var compatibleValues = componentTypes[(int)component.Selected].Values
+                    .Where(value => IsCompatible(entry, value)).ToList();
+                if (index >= 0 && index < compatibleValues.Count)
+                    entry.Binding.MemberId = compatibleValues[(int)index].MemberId;
+            }
         };
         direction.ItemSelected += index =>
         {
@@ -404,6 +512,12 @@ public sealed class GraphBlackboardPanel
             refresh();
         };
         popup.ShowBelow(anchor);
+    }
+
+    private static bool IsCompatible(GraphBlackboardEntry entry, GraphComponentValueDescriptor descriptor)
+    {
+        return entry?.Value != null && descriptor != null &&
+               GraphBlackboardValidator.IsCompatible(entry.Value.ValueType, descriptor.ValueType);
     }
 
     private void ShowReplaceBlackboardValuePopup(Control anchor, GraphBlackboardEntry entry, Action refresh)
@@ -459,9 +573,8 @@ public sealed class GraphBlackboardPanel
         }
 
         graph.MarkDirty();
-        graph.SaveJsonFields();
-        ResourceSaver.Save(graph, graph.ResourcePath);
-        GD.Print($"[GraphBlackboard] Local blackboard saved: {graph.ResourcePath}");
+        if (GraphSaveService.SaveGraphResource(_owner, graph))
+            GD.Print($"[GraphBlackboard] Local blackboard saved: {graph.ResourcePath}");
     }
 
     private void ShowBlackboardError(string message)
@@ -482,6 +595,37 @@ public sealed class GraphBlackboardPanel
 
         foreach (Node child in node.GetChildren())
             CollectBlackboardNodes(child, results);
+    }
+
+    private static StyleBoxFlat CreateCardStyle()
+    {
+        return CreateStyle(new Color(0.075f, 0.085f, 0.105f, 0.98f), new Color(0.20f, 0.23f, 0.28f, 0.9f), 1, 5, 10);
+    }
+
+    private static StyleBoxFlat CreateSectionStyle()
+    {
+        return CreateStyle(new Color(0.055f, 0.065f, 0.08f, 0.95f), new Color(0.16f, 0.20f, 0.26f, 0.9f), 1, 4, 8);
+    }
+
+    private static StyleBoxFlat CreateStyle(Color background, Color border, int width, int radius, int margin)
+    {
+        return new StyleBoxFlat
+        {
+            BgColor = background,
+            BorderColor = border,
+            BorderWidthLeft = width,
+            BorderWidthTop = width,
+            BorderWidthRight = width,
+            BorderWidthBottom = width,
+            CornerRadiusTopLeft = radius,
+            CornerRadiusTopRight = radius,
+            CornerRadiusBottomLeft = radius,
+            CornerRadiusBottomRight = radius,
+            ContentMarginLeft = margin,
+            ContentMarginTop = margin,
+            ContentMarginRight = margin,
+            ContentMarginBottom = margin
+        };
     }
 }
 #endif

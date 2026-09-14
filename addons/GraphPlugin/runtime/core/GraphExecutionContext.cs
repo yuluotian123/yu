@@ -22,6 +22,13 @@ public sealed class GraphExecutionContext
     /// <summary>当前运行时黑板。内部包含本地图、父图和全局黑板作用域。</summary>
     public GraphBlackboardRuntime Blackboard { get; }
 
+    /// <summary>Action dependency policy inherited from the current graph.</summary>
+    public GraphActionDependencyMode ActionDependencyMode =>
+        Graph?.ActionDependencyMode ?? GraphActionDependencyMode.HostBound;
+
+    /// <summary>Current graph host, when one was supplied by the runtime owner.</summary>
+    public GameLogic.GameObject2D GameObject => GetUserData<GameLogic.GameObject2D>();
+
     /// <summary>业务层可挂入的运行时对象，例如角色、组件、技能实例或任务管理器。</summary>
     public List<object> UserData { get; } = new();
 

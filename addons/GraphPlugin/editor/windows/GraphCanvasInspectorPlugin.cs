@@ -11,7 +11,8 @@ public partial class GraphCanvasInspectorPlugin : EditorInspectorPlugin
 
     public override bool _CanHandle(GodotObject @object)
     {
-        return @object is GraphAsset || FindGraphProperties(@object).Count > 0;
+        return GodotObject.IsInstanceValid(@object) &&
+               (@object is GraphAsset || FindGraphProperties(@object).Count > 0);
     }
 
     public override void _ParseBegin(GodotObject @object)
@@ -33,7 +34,7 @@ public partial class GraphCanvasInspectorPlugin : EditorInspectorPlugin
     public static List<(string name, GraphAsset value)> FindGraphProperties(GodotObject target)
     {
         var result = new List<(string name, GraphAsset value)>();
-        if (target == null)
+        if (target == null || !GodotObject.IsInstanceValid(target))
             return result;
 
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;

@@ -115,6 +115,11 @@ public partial class GraphCanvasEditorWindow
     {
         if (_currentGraph == null || string.IsNullOrWhiteSpace(componentTypeName) || string.IsNullOrWhiteSpace(actionId))
             return;
+        if (_componentPanel != null && !_componentPanel.HasComponentType(componentTypeName))
+        {
+            GD.PushWarning($"[GraphCanvasEditorWindow] Component '{componentTypeName}' is not present on the selected graph host.");
+            return;
+        }
 
         string nodeType;
         if (_currentGraph is BehaviorTreeGraphAsset)
@@ -129,18 +134,26 @@ public partial class GraphCanvasEditorWindow
         if (data is GraphComponentCallNodeData flowCall)
         {
             flowCall.ComponentTypeName = componentTypeName;
+            flowCall.Component.ComponentTypeName = componentTypeName;
+            flowCall.Component.ComponentSlot = 0;
             flowCall.MemberId = actionId;
             flowCall.InitializeArguments();
         }
         else if (data is BehaviorTreeComponentCallNodeData behaviorCall)
         {
             behaviorCall.Call.ComponentTypeName = componentTypeName;
+            behaviorCall.Call.Component.ComponentTypeName = componentTypeName;
+            behaviorCall.Call.Component.ComponentSlot = 0;
             behaviorCall.Call.ActionId = actionId;
+            behaviorCall.Call.InitializeArguments();
         }
         else if (data is GameLogic.HfsmComponentActionStateNodeData hfsmCall)
         {
             hfsmCall.Call.ComponentTypeName = componentTypeName;
+            hfsmCall.Call.Component.ComponentTypeName = componentTypeName;
+            hfsmCall.Call.Component.ComponentSlot = 0;
             hfsmCall.Call.ActionId = actionId;
+            hfsmCall.Call.InitializeArguments();
         }
 
         _currentGraph.Nodes.Add(data);
@@ -155,6 +168,11 @@ public partial class GraphCanvasEditorWindow
     {
         if (_currentGraph == null || string.IsNullOrWhiteSpace(componentTypeName) || string.IsNullOrWhiteSpace(memberId))
             return;
+        if (_componentPanel != null && !_componentPanel.HasComponentType(componentTypeName))
+        {
+            GD.PushWarning($"[GraphCanvasEditorWindow] Component '{componentTypeName}' is not present on the selected graph host.");
+            return;
+        }
 
         string nodeType;
         if (_currentGraph is BehaviorTreeGraphAsset)
@@ -174,21 +192,29 @@ public partial class GraphCanvasEditorWindow
         if (data is GraphComponentSetNodeData setNode)
         {
             setNode.ComponentTypeName = componentTypeName;
+            setNode.Component.ComponentTypeName = componentTypeName;
+            setNode.Component.ComponentSlot = 0;
             setNode.MemberId = memberId;
         }
         else if (data is GraphComponentGetNodeData getNode)
         {
             getNode.ComponentTypeName = componentTypeName;
+            getNode.Component.ComponentTypeName = componentTypeName;
+            getNode.Component.ComponentSlot = 0;
             getNode.MemberId = memberId;
         }
         else if (data is BehaviorTreeComponentSetNodeData behaviorSet)
         {
             behaviorSet.ComponentTypeName = componentTypeName;
+            behaviorSet.Component.ComponentTypeName = componentTypeName;
+            behaviorSet.Component.ComponentSlot = 0;
             behaviorSet.MemberId = memberId;
         }
         else if (data is BehaviorTreeComponentGetNodeData behaviorGet)
         {
             behaviorGet.ComponentTypeName = componentTypeName;
+            behaviorGet.Component.ComponentTypeName = componentTypeName;
+            behaviorGet.Component.ComponentSlot = 0;
             behaviorGet.MemberId = memberId;
         }
 

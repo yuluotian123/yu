@@ -182,7 +182,7 @@ HFSM 继续用于 `CharacterAnimationComponent2D` 内部的 LocomotionGraph，�
 
 资源示例：
 
-- `res://assets/graphs/character_graph.tres`
+- `res://assets/scenes/player.tscn` (内联 CharacterGraph)
 - `res://assets/graphs/character_locomotion_hfsm.tres`
 
 ### Ability

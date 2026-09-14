@@ -34,6 +34,8 @@ public sealed class BehaviorTreeRuntime : IGraphRuntimeScope
         if (Graph == null)
             return false;
 
+        NormalizeComponentReferences();
+
         Graph.Validate(out GraphValidationResult validation);
         BehaviorTreeValidator.Append(Graph, validation);
         if (!validation.IsValid)
@@ -48,6 +50,41 @@ public sealed class BehaviorTreeRuntime : IGraphRuntimeScope
         LastStatus = BehaviorTreeStatus.Failure;
         IsRunning = true;
         return true;
+    }
+
+    private void NormalizeComponentReferences()
+    {
+        if (Graph?.ActionDependencyMode != GraphActionDependencyMode.HostBound)
+            return;
+
+        foreach (BehaviorTreeComponentCallNodeData node in Graph.Nodes.OfType<BehaviorTreeComponentCallNodeData>())
+        {
+            GraphActionComponentReference reference = node.Call?.Component;
+            if (reference?.IsAssigned == true || string.IsNullOrWhiteSpace(node.Call?.ComponentTypeName))
+                continue;
+            reference ??= new GraphActionComponentReference();
+            reference.ComponentTypeName = node.Call.ComponentTypeName;
+            reference.ComponentSlot = 0;
+            node.Call.Component = reference;
+        }
+
+        foreach (BehaviorTreeComponentGetNodeData node in Graph.Nodes.OfType<BehaviorTreeComponentGetNodeData>())
+        {
+            if (node.Component?.IsAssigned == true || string.IsNullOrWhiteSpace(node.ComponentTypeName))
+                continue;
+            node.Component ??= new GraphActionComponentReference();
+            node.Component.ComponentTypeName = node.ComponentTypeName;
+            node.Component.ComponentSlot = 0;
+        }
+
+        foreach (BehaviorTreeComponentSetNodeData node in Graph.Nodes.OfType<BehaviorTreeComponentSetNodeData>())
+        {
+            if (node.Component?.IsAssigned == true || string.IsNullOrWhiteSpace(node.ComponentTypeName))
+                continue;
+            node.Component ??= new GraphActionComponentReference();
+            node.Component.ComponentTypeName = node.ComponentTypeName;
+            node.Component.ComponentSlot = 0;
+        }
     }
 
     public void Stop()

@@ -19,6 +19,9 @@ public sealed class GraphComponentBinding
 
 public static class GraphComponentBindingRuntime
 {
+    private static readonly System.Collections.Generic.HashSet<string> ReportedBindingErrors =
+        new(System.StringComparer.Ordinal);
+
     public static bool ApplyDefaultBindings(GraphAsset graph)
     {
         if (graph == null || !string.Equals(graph.GraphType, HfsmGraphAsset.GraphTypeName, System.StringComparison.Ordinal))
@@ -35,15 +38,18 @@ public static class GraphComponentBindingRuntime
         bool changed = false;
         foreach (GraphBlackboardEntry entry in graph.BlackboardEntries)
         {
-            if (entry == null || entry.Binding != null || !defaults.TryGetValue(entry.Key, out string memberId))
+            if (entry == null || !defaults.TryGetValue(entry.Key, out string memberId))
                 continue;
-            entry.Binding = new GraphComponentBinding
+            if (entry.Binding == null)
             {
-                ComponentTypeName = movementType,
-                MemberId = memberId,
-                Direction = GraphComponentBindingDirection.ComponentToBlackboard
-            };
-            changed = true;
+                entry.Binding = new GraphComponentBinding
+                {
+                    ComponentTypeName = movementType,
+                    MemberId = memberId,
+                    Direction = GraphComponentBindingDirection.ComponentToBlackboard
+                };
+                changed = true;
+            }
         }
         if (changed)
             graph.MarkDirty();
@@ -72,7 +78,12 @@ public static class GraphComponentBindingRuntime
             string error;
             if (toBlackboard)
             {
-                stepSuccess = GraphComponentInvoker.TryRead(owner, binding.ComponentTypeName, binding.MemberId, out object value, out error);
+                stepSuccess = TryReadProvider(context, entry.Key, out object value);
+                error = string.Empty;
+                if (!stepSuccess)
+                {
+                    stepSuccess = GraphComponentInvoker.TryRead(owner, binding.ComponentTypeName, binding.MemberId, out value, out error);
+                }
                 if (stepSuccess)
                     stepSuccess = context.Blackboard.SetValue(entry.Key, value);
             }
@@ -94,9 +105,39 @@ public static class GraphComponentBindingRuntime
                 continue;
 
             success = false;
-            Godot.GD.PushError($"[GraphComponentBinding] {error}");
+            string reportKey = $"{binding.ComponentTypeName}|{binding.MemberId}|{entry.Key}|{error}";
+            if (ReportedBindingErrors.Add(reportKey))
+                Godot.GD.PushError($"[GraphComponentBinding] {error}");
         }
 
         return success;
+    }
+
+    private static bool TryReadProvider(
+        GraphExecutionContext context,
+        string entryKey,
+        out object value)
+    {
+        foreach (ICharacterAnimationVariableProvider provider in
+                 context?.GetUserDataAll<ICharacterAnimationVariableProvider>() ??
+                 System.Array.Empty<ICharacterAnimationVariableProvider>())
+        {
+            if (provider?.TryGetAnimationVariable(entryKey, out value) == true)
+                return true;
+        }
+
+        GameObject2D owner = context?.GetUserData<GameObject2D>();
+        if (owner != null)
+        {
+            foreach (Component2D component in owner.GetAllComponents())
+            {
+                if (component is ICharacterAnimationVariableProvider provider &&
+                    provider.TryGetAnimationVariable(entryKey, out value))
+                    return true;
+            }
+        }
+
+        value = null;
+        return false;
     }
 }

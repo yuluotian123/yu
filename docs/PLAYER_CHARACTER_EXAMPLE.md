@@ -1,5 +1,7 @@
 # 玩家操作角色示例
 
+推荐先阅读：[角色系统与图使用说明](CHARACTER_GRAPH_USAGE.md)。
+
 本文以 [player.tscn](../assets/scenes/player.tscn) 为例，说明移动、跳跃、Attack 和 Dash 如何从输入进入 CharacterGraph，再分别交给 Movement 或 AbilitySystem。
 
 总览见 [角色系统](CHARACTER_SYSTEM.md)，AI 对照见 [AI 角色示例](AI_CHARACTER_EXAMPLE.md)。
@@ -9,7 +11,7 @@
 | Priority | 组件 | 配置 |
 | ---: | --- | --- |
 | 100 | `PlayerCharacterInputComponent2D` | 无 Move/Jump/Ability Action 字段 |
-| 90 | `CharacterGraphComponent2D` | [character_graph.tres](../assets/graphs/character_graph.tres) |
+| 90 | `CharacterGraphComponent2D` | `player.tscn` 内联 CharacterGraph |
 | 55 | `AbilitySystemComponent2D` | [player_ability_set.tres](../assets/abilities/player_ability_set.tres) |
 | 50 | `CharacterMovementComponent2D` | 移速、跳跃、重力、Body 路径 |
 | 20 | `CharacterAnimationComponent2D` | [character_locomotion_hfsm.tres](../assets/graphs/character_locomotion_hfsm.tres) |

@@ -25,6 +25,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     /// key 通常是 nodeId，value 由节点自己决定。
     /// </summary>
     private readonly Dictionary<string, object> _nodeData = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, object> _nodeOutputs = new(StringComparer.Ordinal);
 
     /// <summary>
     /// 单次传播中的步数计数，防止图内同步循环导致无限递归。
@@ -124,6 +125,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
 
         _returnLabels.Clear();
         _nodeData.Clear();
+        _nodeOutputs.Clear();
         _propagationSteps = 0;
         PropagateToNode(Graph.PrimeNode);
         return true;
@@ -139,6 +141,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
         PushLocalBlackboardIfNeeded();
         _returnLabels.Clear();
         _nodeData.Clear();
+        _nodeOutputs.Clear();
         _propagationSteps = 0;
         PropagateToNode(node);
         return true;
@@ -250,6 +253,24 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     {
         if (!string.IsNullOrWhiteSpace(nodeId))
             _nodeData.Remove(nodeId);
+    }
+
+    public void SetNodeOutput(string nodeId, object value)
+    {
+        if (string.IsNullOrWhiteSpace(nodeId))
+            return;
+        if (value == null)
+            _nodeOutputs.Remove(nodeId);
+        else
+            _nodeOutputs[nodeId] = value;
+    }
+
+    public bool TryGetNodeOutput(string nodeId, out object value)
+    {
+        if (!string.IsNullOrWhiteSpace(nodeId) && _nodeOutputs.TryGetValue(nodeId, out value))
+            return true;
+        value = null;
+        return false;
     }
 
     public bool TryGetValue<T>(string key, out T value)

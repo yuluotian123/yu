@@ -6,120 +6,257 @@ using System.Reflection;
 using GameLogic;
 using Godot;
 
-public sealed class GraphComponentPanel
+public sealed partial class GraphComponentPanel
 {
     private readonly Window _owner;
     private readonly Func<GraphAsset> _getGraph;
+    private readonly Func<GraphAsset> _getBindingGraph;
     private readonly Action<string, string> _createCallNode;
     private readonly Action<string, string, bool> _createValueNode;
-    private readonly VBoxContainer _list = new();
+    private readonly ComponentTree _tree = new();
     private readonly Label _hostLabel = new();
+    private readonly Label _summaryLabel = new();
     private readonly LineEdit _search = new();
     private readonly OptionButton _hostSelector = new();
-    private readonly List<GameObject2D> _hosts = new();
+    private readonly Button _refreshButton = new();
+    private readonly List<Node> _hosts = new();
+    private readonly List<Action> _treeActions = new();
     private GodotObject _source;
+    private string _sceneContextKey = string.Empty;
+
+    private static readonly Color PanelBackground = new(0.075f, 0.085f, 0.105f, 0.98f);
+    private static readonly Color PanelBorder = new(0.20f, 0.23f, 0.28f, 0.9f);
+    private static readonly Color SubPanelBackground = new(0.055f, 0.065f, 0.08f, 0.95f);
+    private static readonly Color PrimaryText = new(0.90f, 0.92f, 0.96f);
+    private static readonly Color SecondaryText = new(0.57f, 0.62f, 0.70f);
+    private static readonly Color AccentText = new(0.43f, 0.72f, 0.98f);
+    private static readonly Color FunctionText = new(0.68f, 0.85f, 1.0f);
+    private static readonly Color PropertyText = new(0.77f, 0.87f, 0.76f);
 
     public GraphComponentPanel(
         Window owner,
         Func<GraphAsset> getGraph,
         Action<string, string> createCallNode,
-        Action<string, string, bool> createValueNode)
+        Action<string, string, bool> createValueNode,
+        Func<GraphAsset> getBindingGraph = null)
     {
         _owner = owner;
         _getGraph = getGraph;
+        _getBindingGraph = getBindingGraph ?? getGraph;
         _createCallNode = createCallNode;
         _createValueNode = createValueNode;
-        // Keep the browser visible when it shares the right side with the inspector.
-        Root = new VBoxContainer
+        // Keep the browser visually distinct when it shares the window with the graph.
+        var frame = new PanelContainer
         {
-            CustomMinimumSize = new Vector2(280, 0),
+            // Keep the browser compact by default. The surrounding
+            // HSplitContainer still lets the user widen it when member names
+            // need more room.
+            CustomMinimumSize = new Vector2(170, 0),
             SizeFlagsVertical = Control.SizeFlags.ExpandFill
         };
-        Root.AddThemeConstantOverride("separation", 6);
-        Root.AddChild(new Label { Text = "Components" });
+        frame.AddThemeStyleboxOverride("panel", CreateStyle(PanelBackground, PanelBorder, 1, 5, 10));
+        Root = frame;
+
+        var content = new VBoxContainer
+        {
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+        };
+        content.AddThemeConstantOverride("separation", 7);
+        frame.AddChild(content);
+
+        var header = new HBoxContainer();
+        var title = new Label
+        {
+            Text = "Components",
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        title.AddThemeFontSizeOverride("font_size", 14);
+        title.AddThemeColorOverride("font_color", PrimaryText);
+        header.AddChild(title);
+
+        _refreshButton.Icon = GetEditorIcon("Reload");
+        _refreshButton.Text = _refreshButton.Icon == null ? "Refresh" : string.Empty;
+        _refreshButton.Flat = true;
+        _refreshButton.FocusMode = Control.FocusModeEnum.None;
+        _refreshButton.CustomMinimumSize = new Vector2(28, 28);
+        _refreshButton.TooltipText = "Refresh components from the current blueprint host";
+        _refreshButton.Pressed += Refresh;
+        header.AddChild(_refreshButton);
+        content.AddChild(header);
+
+        var divider = new HSeparator();
+        divider.AddThemeColorOverride("color", PanelBorder);
+        content.AddChild(divider);
+
+        var hostPanel = new PanelContainer();
+        hostPanel.AddThemeStyleboxOverride("panel", CreateStyle(SubPanelBackground, PanelBorder, 1, 4, 7));
+        var hostContent = new VBoxContainer();
+        hostContent.AddThemeConstantOverride("separation", 4);
+        hostPanel.AddChild(hostContent);
+
+        var hostCaption = new Label { Text = "HOST" };
+        hostCaption.AddThemeFontSizeOverride("font_size", 10);
+        hostCaption.AddThemeColorOverride("font_color", AccentText);
+        hostContent.AddChild(hostCaption);
+
         _hostSelector.ItemSelected += _ => Refresh();
-        Root.AddChild(_hostSelector);
-        _search.PlaceholderText = "Search components or actions";
-        _search.TextChanged += _ => RefreshList();
-        Root.AddChild(_search);
+        _hostSelector.CustomMinimumSize = new Vector2(0, 28);
+        _hostSelector.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        hostContent.AddChild(_hostSelector);
+
         _hostLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        Root.AddChild(_hostLabel);
-        var scroll = new ScrollContainer { SizeFlagsVertical = Control.SizeFlags.ExpandFill };
-        scroll.AddChild(_list);
-        Root.AddChild(scroll);
+        _hostLabel.ClipText = true;
+        _hostLabel.AddThemeFontSizeOverride("font_size", 11);
+        _hostLabel.AddThemeColorOverride("font_color", SecondaryText);
+        hostContent.AddChild(_hostLabel);
+        content.AddChild(hostPanel);
+
+        _search.PlaceholderText = "Search components or actions";
+        _search.ClearButtonEnabled = true;
+        _search.CustomMinimumSize = new Vector2(0, 30);
+        _search.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        _search.AddThemeColorOverride("font_color", PrimaryText);
+        _search.AddThemeColorOverride("font_placeholder_color", SecondaryText);
+        _search.AddThemeStyleboxOverride("normal", CreateStyle(SubPanelBackground, PanelBorder, 1, 4, 7));
+        _search.AddThemeStyleboxOverride("focus", CreateStyle(SubPanelBackground, new Color(0.30f, 0.58f, 0.85f), 1, 4, 7));
+        _search.TextChanged += _ => RefreshList();
+        content.AddChild(_search);
+
+        _summaryLabel.AddThemeFontSizeOverride("font_size", 10);
+        _summaryLabel.AddThemeColorOverride("font_color", SecondaryText);
+        _summaryLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        content.AddChild(_summaryLabel);
+
+        _tree.DragDataFactory = item =>
+        {
+            Variant metadata = item?.GetMetadata(0) ?? default;
+            return metadata;
+        };
+        _tree.HideRoot = true;
+        _tree.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+        _tree.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        _tree.CustomMinimumSize = new Vector2(0, 180);
+        _tree.AddThemeColorOverride("font_color", PrimaryText);
+        _tree.AddThemeColorOverride("font_hovered_color", PrimaryText);
+        _tree.AddThemeColorOverride("font_selected_color", PrimaryText);
+        _tree.AddThemeColorOverride("selection_color", new Color(0.15f, 0.31f, 0.48f, 0.90f));
+        _tree.AddThemeColorOverride("guide_color", new Color(0.25f, 0.29f, 0.36f, 0.80f));
+        _tree.AddThemeConstantOverride("item_start_padding", 7);
+        _tree.AddThemeConstantOverride("item_end_padding", 7);
+        _tree.AddThemeConstantOverride("button_margin", 4);
+        _tree.AddThemeStyleboxOverride("panel", CreateStyle(SubPanelBackground, PanelBorder, 1, 4, 4));
+        _tree.ItemActivated += OnTreeItemActivated;
+        content.AddChild(_tree);
     }
 
     public Control Root { get; }
 
+    public GodotObject Source => _source;
+    public bool HasValidHost => GetSelectedHost() != null;
+
     public void SetSource(GodotObject source)
     {
-        _source = source;
+        _source = IsValidObject(source) ? source : null;
+    }
+
+    public bool RefreshIfSceneChanged()
+    {
+        string sceneContextKey = GetSceneContextKey();
+        bool sourceInvalidated = _source != null && !IsValidObject(_source);
+        if (!sourceInvalidated && string.Equals(sceneContextKey, _sceneContextKey, StringComparison.Ordinal))
+            return false;
+
+        Refresh();
+        return true;
+    }
+
+    public bool HasComponentType(string componentTypeName)
+    {
+        if (!GraphComponentRegistry.TryGet(componentTypeName, out GraphComponentTypeDescriptor descriptor))
+            return false;
+        return GetHostDescriptors(GetSelectedHost()).Any(available =>
+            descriptor.ComponentType.IsAssignableFrom(available.ComponentType));
     }
 
     public IReadOnlyList<GraphComponentTypeDescriptor> GetAvailableDescriptors()
     {
-        var descriptors = new List<GraphComponentTypeDescriptor>();
-        var seen = new HashSet<Type>();
-        foreach (GameObject2D host in _hosts)
-        {
-            if (host?.Components != null)
-                foreach (Component2D component in host.Components)
-                    AddDescriptor(component, descriptors, seen);
-            if (host != null)
-                foreach (Component2D component in host.GetAllComponents())
-                    AddDescriptor(component, descriptors, seen);
-        }
-
-        return descriptors;
+        return GetHostDescriptors(GetSelectedHost());
     }
 
-    private static void AddDescriptor(Component2D component, List<GraphComponentTypeDescriptor> descriptors, HashSet<Type> seen)
+    public static bool SceneContainsGraphHost(Node sceneRoot, GraphAsset graph)
     {
-        if (component == null || !seen.Add(component.GetType()))
+        if (!IsValidObject(sceneRoot) || !IsValidObject(graph))
+            return false;
+
+        var hosts = new List<Node>();
+        CollectHosts(sceneRoot, graph, hosts);
+        return hosts.Count > 0;
+    }
+
+    private static void AddDescriptor(GodotObject component, List<GraphComponentTypeDescriptor> descriptors, HashSet<Type> seen)
+    {
+        GraphComponentTypeDescriptor descriptor = ResolveDescriptor(component);
+        if (descriptor == null || !seen.Add(descriptor.ComponentType))
             return;
-        GraphComponentTypeDescriptor descriptor = GraphComponentRegistry.Register(component.GetType());
-        if (descriptor != null)
-            descriptors.Add(descriptor);
+        descriptors.Add(descriptor);
     }
 
     public void Refresh()
     {
+        Node previousHost = GetSelectedHost();
+        string previousHostPath = GetSafePath(previousHost);
+        if (!IsValidObject(_source))
+            _source = null;
+
         _hosts.Clear();
-        Node sceneRoot = EditorInterface.Singleton.GetEditedSceneRoot();
-        GraphAsset graph = _getGraph();
-        CollectHosts(sceneRoot, graph, _hosts);
-        if (_hosts.Count == 0)
-        {
-            // Inspector and scene resources can be different managed wrappers for the same .tres.
-            // Keep the component browser usable when the reference cannot be resolved exactly.
-            CollectAllHosts(sceneRoot, _hosts);
-        }
-        GodotObject editedObject = EditorInterface.Singleton.GetInspector()?.GetEditedObject();
-        if (editedObject is GameObject2D editedHost && !_hosts.Contains(editedHost))
-            _hosts.Add(editedHost);
-        if (_source is GameObject2D sourceHost && !_hosts.Contains(sourceHost))
-            _hosts.Insert(0, sourceHost);
-        else if (_source is Component2D sourceComponent && sourceComponent.Owner is GameObject2D sourceOwner &&
-                 !_hosts.Contains(sourceOwner))
-            _hosts.Insert(0, sourceOwner);
+        Node sceneRoot = GetEditedSceneRoot();
+        GraphAsset graph = _getBindingGraph();
+        if (!IsValidObject(graph))
+            graph = null;
+
+        // Only the currently edited scene is eligible. A graph opened from an
+        // Inspector resource may not expose its component owner, so the exact
+        // reference scan below remains the source of truth.
+        if (_source is Node sourceNode &&
+            IsInEditedScene(sourceNode, sceneRoot) &&
+            IsComponentHost(sourceNode) &&
+            ReferencesGraph(sourceNode, graph))
+            AddHost(sourceNode, _hosts);
+        else if (_source is GameObject2D sourceHost &&
+                 IsInEditedScene(sourceHost, sceneRoot) &&
+                 ReferencesGraph(sourceHost, graph))
+            AddHost(sourceHost, _hosts);
+        if (_source is Component2D sourceComponent &&
+            sourceComponent.Owner is GameObject2D sourceOwner &&
+            IsInEditedScene(sourceOwner, sceneRoot) &&
+            ReferencesGraph(sourceOwner, graph))
+            AddHost(sourceOwner, _hosts);
+
+        if (sceneRoot != null)
+            CollectHosts(sceneRoot, graph, _hosts);
+        _sceneContextKey = GetSceneContextKey(sceneRoot);
         _hostSelector.Clear();
         for (int i = 0; i < _hosts.Count; i++)
             _hostSelector.AddItem(_hosts[i].GetPath().ToString(), i);
         _hostSelector.Visible = _hosts.Count > 1;
         if (_hosts.Count == 0)
         {
-            _hostLabel.Text = "No GameObject2D host exists in the edited scene.";
+            _hostLabel.Text = "No component host exists in the edited scene.";
             RefreshList();
             return;
         }
-        _hostSelector.Select(Mathf.Clamp(_hostSelector.Selected, 0, _hosts.Count - 1));
-        _hostLabel.Text = $"Host: {_hosts[_hostSelector.Selected].GetPath()}";
+        int selectedIndex = _hosts.FindIndex(host => host.GetPath().ToString() == previousHostPath);
+        _hostSelector.Select(selectedIndex >= 0 ? selectedIndex : 0);
+        _hostLabel.Text = _hosts[_hostSelector.Selected].GetPath().ToString();
         RefreshList();
     }
 
     private void RefreshList()
     {
-        ClearList();
+        _tree.Clear();
+        _treeActions.Clear();
         string query = _search.Text?.Trim() ?? string.Empty;
         GraphComponentRegistry.EnsureScanned();
 
@@ -127,41 +264,23 @@ public sealed class GraphComponentPanel
         // component members. Without a host there is no valid component target.
         if (_hosts.Count == 0)
         {
-            _list.AddChild(new Label { Text = "Select/open a GameObject2D host to use component nodes." });
+            _hostLabel.Text = "No blueprint host found.";
+            _summaryLabel.Text = "Open the owning GameObject2D scene, then press Refresh.";
             return;
         }
 
-        GameObject2D host = _hosts[Mathf.Clamp(_hostSelector.Selected, 0, _hosts.Count - 1)];
-        var components = new List<Component2D>();
-        var componentTypes = new HashSet<Type>();
-        if (host.Components != null)
-        {
-            foreach (Component2D component in host.Components)
-                AddComponent(component, components, componentTypes);
-        }
-        // In an instantiated/editing scene GameObject2D may expose cloned runtime
-        // components while the exported resource array is empty or stale.
-        foreach (Component2D component in host.GetAllComponents())
-            AddComponent(component, components, componentTypes);
+        Node host = GetSelectedHost();
+        List<GodotObject> components = GetHostComponents(host);
+        List<GraphComponentTypeDescriptor> descriptors = GetHostDescriptors(host);
 
-        foreach (Component2D component in components)
-        {
-            if (component == null)
-                continue;
-            // Register the concrete instance type as well as relying on the initial
-            // assembly scan. This handles C# hot reload and resources loaded late by
-            // the editor.
-            GraphComponentTypeDescriptor descriptor = GraphComponentRegistry.Register(component.GetType());
-            if (descriptor == null)
-                continue;
+        foreach (GraphComponentTypeDescriptor descriptor in descriptors)
             AddDescriptorSection(descriptor, query);
-        }
-        if (_list.GetChildCount() == 0)
+        _summaryLabel.Text = $"{components.Count} component(s)  |  Double-click a function or property to add a node";
+        if (_treeActions.Count == 0)
         {
-            string message = components.Count == 0
+            _summaryLabel.Text = components.Count == 0
                 ? "No components found on this host."
                 : "No matching component members.";
-            _list.AddChild(new Label { Text = message });
         }
     }
 
@@ -170,8 +289,22 @@ public sealed class GraphComponentPanel
         if (descriptor == null)
             return;
         bool componentMatches = Matches(query, descriptor.DisplayName, descriptor.TypeName);
-        var section = new VBoxContainer();
-        section.AddChild(new Label { Text = descriptor.DisplayName });
+        TreeItem root = _tree.GetRoot() ?? _tree.CreateItem();
+        TreeItem componentItem = _tree.CreateItem(root);
+        componentItem.SetText(0, descriptor.DisplayName);
+        componentItem.SetSelectable(0, true);
+        componentItem.SetTooltipText(0, "Drag this component to an Action Inspector");
+        componentItem.SetMetadata(0, new Godot.Collections.Dictionary
+        {
+            ["kind"] = "graph_component",
+            ["component_type"] = descriptor.TypeName,
+            ["component_slot"] = 0
+        });
+        componentItem.SetCustomColor(0, AccentText);
+        componentItem.SetCustomFontSize(0, 12);
+        SetEditorIcon(componentItem, "Node");
+        TreeItem functionsItem = null;
+        TreeItem propertiesItem = null;
         bool hasMember = false;
         bool supportsValueNodes = _getGraph() is not GameLogic.HfsmGraphAsset;
         foreach (GraphComponentValueDescriptor value in descriptor.Values)
@@ -183,19 +316,17 @@ public sealed class GraphComponentPanel
             hasMember = true;
             if (value.CanRead)
             {
-                var getButton = new Button { Text = $"  Get  {value.DisplayName} ({value.MemberId})" };
                 string typeName = descriptor.TypeName;
                 string memberId = value.MemberId;
-                getButton.Pressed += () => _createValueNode?.Invoke(typeName, memberId, false);
-                section.AddChild(getButton);
+                propertiesItem ??= CreateCategory(componentItem, "Properties");
+                AddTreeAction(propertiesItem, $"Get {value.DisplayName}", $"{memberId}  |  Get", "Property", PropertyText, () => _createValueNode?.Invoke(typeName, memberId, false));
             }
             if (value.CanWrite)
             {
-                var setButton = new Button { Text = $"  Set  {value.DisplayName} ({value.MemberId})" };
                 string typeName = descriptor.TypeName;
                 string memberId = value.MemberId;
-                setButton.Pressed += () => _createValueNode?.Invoke(typeName, memberId, true);
-                section.AddChild(setButton);
+                propertiesItem ??= CreateCategory(componentItem, "Properties");
+                AddTreeAction(propertiesItem, $"Set {value.DisplayName}", $"{memberId}  |  Set", "Property", PropertyText, () => _createValueNode?.Invoke(typeName, memberId, true));
             }
         }
         foreach (GraphComponentActionDescriptor action in descriptor.Actions)
@@ -203,69 +334,287 @@ public sealed class GraphComponentPanel
             if (!componentMatches && !Matches(query, action.DisplayName, action.MemberId))
                 continue;
             hasMember = true;
-            var button = new Button { Text = $"  Call  {action.DisplayName} ({action.MemberId})" };
             string typeName = descriptor.TypeName;
             string actionId = action.MemberId;
-            button.Pressed += () => _createCallNode?.Invoke(typeName, actionId);
-            section.AddChild(button);
+            functionsItem ??= CreateCategory(componentItem, "Functions");
+            AddTreeAction(functionsItem, action.DisplayName, $"{action.MemberId}  |  Call", "Method", FunctionText, () => _createCallNode?.Invoke(typeName, actionId));
         }
         if (!hasMember && !componentMatches)
         {
-            section.QueueFree();
+            componentItem.Free();
             return;
         }
         if (!hasMember)
-            section.AddChild(new Label { Text = "  No graph members" });
-        _list.AddChild(section);
+            componentItem.SetText(0, $"{descriptor.DisplayName}  (no graph members)");
     }
 
-    private void ClearList()
+    private TreeItem CreateCategory(TreeItem parent, string text)
     {
-        foreach (Node child in _list.GetChildren())
+        TreeItem category = _tree.CreateItem(parent);
+        category.SetText(0, text);
+        category.SetSelectable(0, false);
+        category.SetMetadata(0, -1);
+        category.SetCustomColor(0, SecondaryText);
+        category.SetCustomFontSize(0, 10);
+        SetEditorIcon(category, text == "Functions" ? "Method" : "Property");
+        return category;
+    }
+
+    private void AddTreeAction(
+        TreeItem parent,
+        string label,
+        string metadata,
+        string iconName,
+        Color textColor,
+        Action action)
+    {
+        TreeItem item = _tree.CreateItem(parent);
+        item.SetText(0, label);
+        item.SetTooltipText(0, metadata);
+        item.SetMetadata(0, _treeActions.Count);
+        item.SetCustomColor(0, textColor);
+        SetEditorIcon(item, iconName);
+        _treeActions.Add(action);
+    }
+
+    private static StyleBoxFlat CreateStyle(
+        Color background,
+        Color border,
+        int borderWidth,
+        int cornerRadius,
+        int contentMargin)
+    {
+        var style = new StyleBoxFlat
         {
-            _list.RemoveChild(child);
-            child.QueueFree();
+            BgColor = background,
+            BorderColor = border,
+            BorderWidthLeft = borderWidth,
+            BorderWidthTop = borderWidth,
+            BorderWidthRight = borderWidth,
+            BorderWidthBottom = borderWidth,
+            CornerRadiusTopLeft = cornerRadius,
+            CornerRadiusTopRight = cornerRadius,
+            CornerRadiusBottomRight = cornerRadius,
+            CornerRadiusBottomLeft = cornerRadius,
+            ContentMarginLeft = contentMargin,
+            ContentMarginTop = contentMargin,
+            ContentMarginRight = contentMargin,
+            ContentMarginBottom = contentMargin
+        };
+        return style;
+    }
+
+    private static Texture2D GetEditorIcon(string name)
+    {
+        try
+        {
+            // Godot's EditorIcons set does not contain the semantic names
+            // "Method" and "Property". Use the stable Node icon for those
+            // categories instead of asking the theme for missing entries.
+            string iconName = name == "Method" || name == "Property" ? "Node" : name;
+            return EditorInterface.Singleton.GetEditorTheme()?.GetIcon(iconName, "EditorIcons");
         }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static void SetEditorIcon(TreeItem item, string name)
+    {
+        Texture2D icon = GetEditorIcon(name);
+        if (icon != null)
+            item.SetIcon(0, icon);
+    }
+
+    private sealed partial class ComponentTree : Tree
+    {
+        public Func<TreeItem, Variant> DragDataFactory { get; set; }
+
+        public override Variant _GetDragData(Vector2 atPosition)
+        {
+            TreeItem item = GetItemAtPosition(atPosition);
+            Variant data = DragDataFactory?.Invoke(item) ?? default;
+            if (data.VariantType != Variant.Type.Dictionary)
+                return default;
+            var preview = new Label
+            {
+                Text = item?.GetText(0) ?? "Component",
+                CustomMinimumSize = new Vector2(160, 28)
+            };
+            SetDragPreview(preview);
+            return data;
+        }
+    }
+
+    private void OnTreeItemActivated()
+    {
+        TreeItem selected = _tree.GetSelected();
+        if (selected == null)
+            return;
+        Variant metadata = selected.GetMetadata(0);
+        if (metadata.VariantType != Variant.Type.Int)
+            return;
+        int index = metadata.AsInt32();
+        if (index >= 0 && index < _treeActions.Count)
+            _treeActions[index]?.Invoke();
     }
 
     private static bool Matches(string query, params string[] values) =>
         string.IsNullOrWhiteSpace(query) || values.Any(value => value?.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0);
 
-    private static void AddComponent(Component2D component, List<Component2D> components, HashSet<Type> componentTypes)
+    private static void AddComponent(GodotObject component, List<GodotObject> components, HashSet<string> componentKeys)
     {
-        if (component == null || !componentTypes.Add(component.GetType()))
+        if (component == null)
             return;
-        components.Add(component);
+        GraphComponentTypeDescriptor descriptor = ResolveDescriptor(component);
+        string key = descriptor?.TypeName ?? component.GetInstanceId().ToString();
+        if (componentKeys.Add(key))
+            components.Add(component);
     }
 
-    private static void CollectHosts(Node node, GraphAsset graph, List<GameObject2D> hosts)
+    private static void AddHost(Node host, List<Node> hosts)
+    {
+        if (IsValidObject(host) && !hosts.Contains(host))
+            hosts.Add(host);
+    }
+
+    private static Node GetEditedSceneRoot()
+    {
+        try
+        {
+            Node editedRoot = EditorInterface.Singleton.GetEditedSceneRoot();
+            return IsValidObject(editedRoot) ? editedRoot : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string GetSceneContextKey() => GetSceneContextKey(GetEditedSceneRoot());
+
+    private static string GetSceneContextKey(Node sceneRoot)
+    {
+        if (!IsValidObject(sceneRoot))
+            return string.Empty;
+        try
+        {
+            return $"{sceneRoot.GetInstanceId()}|{sceneRoot.SceneFilePath}|{sceneRoot.GetPath()}";
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    private static bool IsInEditedScene(Node node, Node sceneRoot)
+    {
+        if (!IsValidObject(node) || !IsValidObject(sceneRoot))
+            return false;
+        if (node == sceneRoot)
+            return true;
+        try
+        {
+            return sceneRoot.IsAncestorOf(node);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private Node GetSelectedHost()
+    {
+        if (_hosts.Count == 0)
+            return null;
+        Node host = _hosts[Mathf.Clamp(_hostSelector.Selected, 0, _hosts.Count - 1)];
+        return IsValidObject(host) ? host : null;
+    }
+
+    private static List<GodotObject> GetHostComponents(Node host)
+    {
+        var components = new List<GodotObject>();
+        var componentKeys = new HashSet<string>(StringComparer.Ordinal);
+        if (IsValidObject(host) && TryGetProperty(host, "Components", out Variant componentArray) &&
+            componentArray.VariantType == Variant.Type.Array)
+        {
+            foreach (Variant item in componentArray.AsGodotArray())
+                AddComponent(item.AsGodotObject(), components, componentKeys);
+        }
+        if (host is GameObject2D gameObject && IsValidObject(gameObject))
+        {
+            // Running or tool-enabled objects may expose cloned component instances.
+            foreach (Component2D component in gameObject.GetAllComponents())
+                AddComponent(component, components, componentKeys);
+        }
+        return components;
+    }
+
+    private static List<GraphComponentTypeDescriptor> GetHostDescriptors(Node host)
+    {
+        var descriptors = new List<GraphComponentTypeDescriptor>();
+        var seen = new HashSet<Type>();
+        foreach (GodotObject component in GetHostComponents(host))
+            AddDescriptor(component, descriptors, seen);
+        return descriptors;
+    }
+
+    private static GraphComponentTypeDescriptor ResolveDescriptor(GodotObject component)
+    {
+        if (!IsValidObject(component))
+            return null;
+        if (component is Component2D typedComponent)
+            return GraphComponentRegistry.Register(typedComponent.GetType());
+        Script script = component?.GetScript().AsGodotObject() as Script;
+        return script != null && GraphComponentRegistry.TryGetByScriptPath(script.ResourcePath, out GraphComponentTypeDescriptor descriptor)
+            ? descriptor
+            : null;
+    }
+
+    private static bool IsComponentHost(Node node)
+    {
+        if (!IsValidObject(node))
+            return false;
+        if (node is GameObject2D)
+            return true;
+
+        if (TryGetProperty(node, "Components", out Variant value) && value.VariantType == Variant.Type.Array)
+            return true;
+
+        // During C# reload a scene node may still be exposed as a native Node2D
+        // wrapper. Its script path remains available and identifies the host.
+        Script script = node?.GetScript().AsGodotObject() as Script;
+        return string.Equals(
+            script?.ResourcePath,
+            "res://scripts/gamelogic/gameobject/GameObject2D.cs",
+            StringComparison.Ordinal);
+    }
+
+    private static void CollectHosts(Node node, GraphAsset graph, List<Node> hosts)
     {
         if (node == null)
             return;
-        if (node is GameObject2D gameObject && ReferencesGraph(gameObject, graph))
-            hosts.Add(gameObject);
+        if (IsComponentHost(node) && ReferencesGraph(node, graph))
+            AddHost(node, hosts);
         foreach (Node child in node.GetChildren())
             CollectHosts(child, graph, hosts);
     }
 
-    private static void CollectAllHosts(Node node, List<GameObject2D> hosts)
+    private static bool ReferencesGraph(Node host, GraphAsset graph)
     {
-        if (node == null)
-            return;
-        if (node is GameObject2D gameObject && !hosts.Contains(gameObject))
-            hosts.Add(gameObject);
-        foreach (Node child in node.GetChildren())
-            CollectAllHosts(child, hosts);
-    }
-
-    private static bool ReferencesGraph(GameObject2D host, GraphAsset graph)
-    {
-        if (graph == null || host.Components == null)
+        if (graph == null || host == null)
             return false;
         var visited = new HashSet<object>(ReferenceEqualityComparer.Instance);
-        foreach (Component2D component in host.Components)
+        // Inspect the host itself as well as its component collection. This
+        // covers scene wrappers that expose the exported array only after a
+        // tool-script refresh.
+        if (ContainsReference(host, graph, visited, 0))
+            return true;
+        foreach (GodotObject component in GetHostComponents(host))
         {
-            if (ContainsReference(component, graph, visited, 0))
+            if (ContainsReference(component, graph,
+                new HashSet<object>(ReferenceEqualityComparer.Instance), 0))
                 return true;
         }
         return false;
@@ -275,17 +624,35 @@ public sealed class GraphComponentPanel
     {
         if (value == null || depth > 4)
             return false;
-        if (ReferenceEquals(value, graph) || SameResource(value as GraphAsset, graph))
+        if (value is GodotObject godotValue && !IsValidObject(godotValue))
+            return false;
+        if (ReferenceEquals(value, graph) || value is Resource resource && SameResource(resource, graph))
             return true;
         if (value is string || value.GetType().IsValueType || !visited.Add(value))
             return false;
+
+        if (value is GodotObject godotObject)
+        {
+            foreach (Godot.Collections.Dictionary property in godotObject.GetPropertyList())
+            {
+                string propertyName = property["name"].AsString();
+                if (string.IsNullOrWhiteSpace(propertyName) || propertyName == "script")
+                    continue;
+                Variant child;
+                try { child = godotObject.Get(propertyName); } catch { continue; }
+                if (ContainsVariant(child, graph, visited, depth + 1))
+                    return true;
+            }
+            return false;
+        }
+
         foreach (PropertyInfo property in value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
         {
             if (!property.CanRead || property.GetIndexParameters().Length > 0)
                 continue;
             object child;
             try { child = property.GetValue(value); } catch { continue; }
-            if (child is System.Collections.IEnumerable enumerable && child is not Godot.Resource)
+            if (child is System.Collections.IEnumerable enumerable)
             {
                 foreach (object item in enumerable)
                     if (ContainsReference(item, graph, visited, depth + 1)) return true;
@@ -296,14 +663,68 @@ public sealed class GraphComponentPanel
         return false;
     }
 
-    private static bool SameResource(GraphAsset left, GraphAsset right)
+    private static bool ContainsVariant(Variant value, GraphAsset graph, HashSet<object> visited, int depth)
     {
-        if (left == null || right == null)
+        if (value.VariantType == Variant.Type.Object)
+            return ContainsReference(value.AsGodotObject(), graph, visited, depth);
+        if (value.VariantType != Variant.Type.Array)
+            return false;
+        foreach (Variant item in value.AsGodotArray())
+        {
+            if (ContainsVariant(item, graph, visited, depth))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool TryGetProperty(GodotObject target, string propertyName, out Variant value)
+    {
+        value = default;
+        if (!IsValidObject(target))
+            return false;
+        foreach (Godot.Collections.Dictionary property in target.GetPropertyList())
+        {
+            string candidate = property["name"].AsString();
+            if (!string.Equals(candidate, propertyName, StringComparison.OrdinalIgnoreCase))
+                continue;
+            try
+            {
+                value = target.Get(candidate);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private static bool SameResource(Resource left, Resource right)
+    {
+        if (!IsValidObject(left) || !IsValidObject(right))
             return false;
         string leftPath = left.ResourcePath;
         string rightPath = right.ResourcePath;
         return !string.IsNullOrWhiteSpace(leftPath) &&
                string.Equals(leftPath, rightPath, StringComparison.Ordinal);
+    }
+
+    private static bool IsValidObject(GodotObject value) =>
+        value != null && GodotObject.IsInstanceValid(value);
+
+    private static string GetSafePath(Node node)
+    {
+        if (!IsValidObject(node))
+            return string.Empty;
+        try
+        {
+            return node.GetPath().ToString();
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 
     private sealed class ReferenceEqualityComparer : IEqualityComparer<object>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace GameLogic
@@ -296,8 +297,23 @@ namespace GameLogic
             open.Pressed += () =>
             {
                 AbilityResource ability = AbilityResource.LoadFromPath(AbilityResourcePath);
-                if (ability?.Graph != null)
-                    EditorInterface.Singleton.EditResource(ability.Graph);
+                if (ability?.Graph == null)
+                {
+                    GD.PushWarning($"[CharacterAbilityNodeData] Ability resource '{AbilityResourcePath}' has no graph.");
+                    return;
+                }
+
+                GraphPlugin plugin = GraphPlugin.Instance;
+                if (plugin == null)
+                {
+                    GD.PushWarning("[CharacterAbilityNodeData] GraphPlugin is not available.");
+                    return;
+                }
+
+                plugin.OpenGraphEditor(
+                    ability.Graph,
+                    ability,
+                    ability.Graph.Nodes?.OfType<AbilityTimelineNodeData>().FirstOrDefault()?.Id);
             };
             root.AddChild(open);
 #endif

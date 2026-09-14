@@ -5,15 +5,16 @@ using Godot;
 [Tool]
 public partial class GraphPlugin : EditorPlugin
 {
+    public static GraphPlugin Instance { get; private set; }
+
     private GraphCanvasEditorWindow _editorWindow;
     private GraphCanvasInspectorPlugin _inspectorPlugin;
-    private Button _toolbarButton;
 
     public override void _EnterTree()
     {
+        Instance = this;
         _inspectorPlugin = new GraphCanvasInspectorPlugin { Plugin = this };
         AddInspectorPlugin(_inspectorPlugin);
-        CreateToolbarButton();
 
         try
         {
@@ -45,7 +46,6 @@ public partial class GraphPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
-        DestroyToolbarButton();
         RemoveInspectorPlugin(_inspectorPlugin);
         if (_editorWindow != null)
         {
@@ -55,6 +55,8 @@ public partial class GraphPlugin : EditorPlugin
         }
 
         GD.Print("GraphCanvas plugin unloaded");
+        if (ReferenceEquals(Instance, this))
+            Instance = null;
     }
 
     public override void _Notification(int what)
@@ -62,15 +64,53 @@ public partial class GraphPlugin : EditorPlugin
         if (what != NotificationExtensionReloaded)
             return;
 
-        DestroyToolbarButton();
-        CreateToolbarButton();
-        GD.Print("[GraphPlugin] C# extension reloaded; toolbar restored.");
+        GD.Print("[GraphPlugin] C# extension reloaded.");
     }
 
-    public void OpenGraphEditor(GraphAsset graph, GodotObject source = null)
+    public void OpenGraphEditor(GraphAsset graph, GodotObject source = null, string selectNodeId = null)
     {
-        if (graph == null)
+        if (graph == null || !GodotObject.IsInstanceValid(graph))
+        {
+            GD.PushWarning("[GraphPlugin] The selected graph resource is no longer valid.");
             return;
+        }
+
+        if (source != null && !GodotObject.IsInstanceValid(source))
+            source = null;
+
+        // Godot changes the Inspector edited object to the nested resource
+        // when the graph field itself is opened. Recover the owning animation
+        // component from the currently edited scene so the editor keeps its
+        // host, variables, and save context.
+        source = ResolveAnimationGraphSource(graph, source);
+
+        if (source is GameLogic.CharacterGraphComponent2D characterComponent &&
+            graph is GameLogic.CharacterGraphAsset)
+        {
+            GraphAsset preparedGraph = characterComponent.PrepareGraphForEditor();
+            if (preparedGraph != null && !ReferenceEquals(preparedGraph, graph))
+            {
+                graph = preparedGraph;
+                EditorInterface.Singleton.MarkSceneAsUnsaved();
+            }
+        }
+
+        if (source is GameLogic.CharacterAnimationComponent2D animationComponent &&
+            graph is GameLogic.HfsmGraphAsset)
+        {
+            GraphAsset preparedGraph = animationComponent.PrepareLocomotionGraphForEditor();
+            if (preparedGraph != null && !ReferenceEquals(preparedGraph, graph))
+            {
+                graph = preparedGraph;
+                EditorInterface.Singleton.MarkSceneAsUnsaved();
+            }
+            else if (preparedGraph != null)
+            {
+                // Provider migration and editor-local flags can dirty an
+                // already embedded resource without replacing its reference.
+                EditorInterface.Singleton.MarkSceneAsUnsaved();
+            }
+        }
 
         EnsureEditorWindow();
         if (_editorWindow == null)
@@ -79,7 +119,84 @@ public partial class GraphPlugin : EditorPlugin
         _editorWindow.Hide();
         _editorWindow.ResetNavigation();
         _editorWindow.LoadGraph(graph, source);
+        if (!string.IsNullOrWhiteSpace(selectNodeId))
+            _editorWindow.CallDeferred(nameof(GraphCanvasEditorWindow.SelectNode), selectNodeId);
         _editorWindow.CallDeferred(Window.MethodName.PopupCentered, new Vector2I(1200, 800));
+    }
+
+    private static GodotObject ResolveAnimationGraphSource(GraphAsset graph, GodotObject source)
+    {
+        GameLogic.HfsmGraphAsset hfsmGraph = graph as GameLogic.HfsmGraphAsset;
+        if (source is GameLogic.CharacterAnimationComponent2D || hfsmGraph == null)
+            return source;
+
+        Node sceneRoot;
+        try
+        {
+            sceneRoot = EditorInterface.Singleton.GetEditedSceneRoot();
+        }
+        catch
+        {
+            return source;
+        }
+
+        if (sceneRoot == null || !GodotObject.IsInstanceValid(sceneRoot))
+            return source;
+
+        return FindAnimationComponent(sceneRoot, hfsmGraph) ?? source;
+    }
+
+    private static GameLogic.CharacterAnimationComponent2D FindAnimationComponent(
+        Node node,
+        GameLogic.HfsmGraphAsset graph)
+    {
+        if (node == null || !GodotObject.IsInstanceValid(node))
+            return null;
+
+        if (node is GameLogic.GameObject2D gameObject)
+        {
+            // Check both serialized components and initialized runtime
+            // components. Tool scenes are not guaranteed to have run _Ready.
+            if (gameObject.Components != null)
+            {
+                foreach (GameLogic.Component2D component in gameObject.Components)
+                {
+                    if (component is GameLogic.CharacterAnimationComponent2D animation &&
+                        SameGraph(animation.LocomotionGraph, graph))
+                        return animation;
+                }
+            }
+
+            foreach (GameLogic.Component2D component in gameObject.GetAllComponents())
+            {
+                if (component is GameLogic.CharacterAnimationComponent2D animation &&
+                    SameGraph(animation.LocomotionGraph, graph))
+                    return animation;
+            }
+        }
+
+        foreach (Node child in node.GetChildren())
+        {
+            GameLogic.CharacterAnimationComponent2D found = FindAnimationComponent(child, graph);
+            if (found != null)
+                return found;
+        }
+
+        return null;
+    }
+
+    private static bool SameGraph(Resource left, Resource right)
+    {
+        if (left == null || right == null ||
+            !GodotObject.IsInstanceValid(left) || !GodotObject.IsInstanceValid(right))
+            return false;
+        if (ReferenceEquals(left, right))
+            return true;
+
+        string leftPath = left.ResourcePath;
+        string rightPath = right.ResourcePath;
+        return !string.IsNullOrWhiteSpace(leftPath) &&
+               string.Equals(leftPath, rightPath, StringComparison.Ordinal);
     }
 
     private void EnsureEditorWindow()
@@ -99,47 +216,6 @@ public partial class GraphPlugin : EditorPlugin
             GD.PushError($"[GraphPlugin] Editor window initialization failed: {ex}");
             _editorWindow = null;
         }
-    }
-
-    private void CreateToolbarButton()
-    {
-        _toolbarButton = new Button
-        {
-            Text = "Open Graph",
-            TooltipText = "Open the graph selected in the Inspector",
-            FocusMode = Control.FocusModeEnum.None
-        };
-        _toolbarButton.Pressed += OpenSelectedGraph;
-        AddControlToContainer(CustomControlContainer.Toolbar, _toolbarButton);
-    }
-
-    private void DestroyToolbarButton()
-    {
-        if (_toolbarButton == null || !GodotObject.IsInstanceValid(_toolbarButton))
-            return;
-
-        _toolbarButton.Pressed -= OpenSelectedGraph;
-        RemoveControlFromContainer(CustomControlContainer.Toolbar, _toolbarButton);
-        _toolbarButton.QueueFree();
-        _toolbarButton = null;
-    }
-
-    private void OpenSelectedGraph()
-    {
-        GodotObject edited = EditorInterface.Singleton.GetInspector()?.GetEditedObject();
-        if (edited is GraphAsset graph)
-        {
-            OpenGraphEditor(graph, edited);
-            return;
-        }
-
-        foreach ((string _, GraphAsset value) in GraphCanvasInspectorPlugin.FindGraphProperties(edited))
-        {
-            OpenGraphEditor(value, edited);
-            return;
-        }
-
-        GD.PushWarning("[GraphPlugin] Select a Graph resource or a component with a Graph property first.");
     }
 
     private static void RegisterBuiltInGraphTypes()

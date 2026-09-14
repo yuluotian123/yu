@@ -79,3 +79,6 @@ position = Vector2(160, 884)
 
 [node name="AIRunner" parent="." unique_id=716309721 instance=ExtResource("2_ai")]
 position = Vector2(430, 750)
+
+[node name="AIRunner2" parent="." unique_id=1602288585 instance=ExtResource("2_ai")]
+position = Vector2(899, 869)

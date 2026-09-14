@@ -27,7 +27,7 @@ namespace GameLogic
     }
 
     [GlobalClass]
-    public partial class CharacterMovementComponent2D : Component2D
+    public partial class CharacterMovementComponent2D : Component2D, ICharacterAnimationVariableProvider
     {
         public override int Priority => ComponentPriority.Movement;
 
@@ -71,6 +71,32 @@ namespace GameLogic
         public int Facing { get; private set; } = 1;
         public float HalfWidth => BodySize.X * 0.5f;
         public float HalfHeight => BodySize.Y * 0.5f;
+
+        public bool TryGetAnimationVariable(string key, out object value)
+        {
+            switch (key?.Trim())
+            {
+                case "Character.Movement.Mode":
+                case "MovementModeName":
+                    value = MovementModeName;
+                    return true;
+                case "Character.Movement.IsOnFloor":
+                case "IsOnFloor":
+                    value = IsOnFloor;
+                    return true;
+                case "Character.Movement.MoveAxisX":
+                case "MoveInputX":
+                    value = MoveInputX;
+                    return true;
+                case "Character.Movement.VelocityY":
+                case "VelocityY":
+                    value = VelocityY;
+                    return true;
+                default:
+                    value = null;
+                    return false;
+            }
+        }
 
         private readonly System.Collections.Generic.Dictionary<string, ControlLock> _controlLocks = new(StringComparer.Ordinal);
         private CharacterMovementProfile _settings;

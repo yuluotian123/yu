@@ -12,6 +12,14 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
     public override int GetInputCount() => 1;
     public override int GetOutputCount() => 1;
     public override bool CanBePrime() => false;
+
+    public override void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+        if (Actions == null)
+            return;
+        foreach (GraphActionBase action in Actions)
+            action?.Validate(graph, Id, result);
+    }
     public override string GetOutputPortName(int port) => "Next";
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)

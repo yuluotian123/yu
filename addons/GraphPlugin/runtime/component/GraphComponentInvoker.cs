@@ -6,6 +6,27 @@ using GameLogic;
 
 public static class GraphComponentInvoker
 {
+    public static bool TryReadComponent(Component2D component, string componentTypeName, string memberId, out object value, out string error)
+    {
+        value = null;
+        error = string.Empty;
+        if (!TryGetValueDescriptor(component, componentTypeName, memberId, out GraphComponentValueDescriptor descriptor, out error) || !descriptor.CanRead)
+        {
+            error ??= $"Component value '{componentTypeName}.{memberId}' is not readable.";
+            return false;
+        }
+        try
+        {
+            value = descriptor.Property?.GetValue(component) ?? descriptor.Getter?.Invoke(component, null);
+            return true;
+        }
+        catch (Exception exception)
+        {
+            error = $"Failed to read '{componentTypeName}.{memberId}': {exception.GetBaseException().Message}";
+            return false;
+        }
+    }
+
     public static bool TryRead(GameObject2D owner, string componentTypeName, string memberId, out object value, out string error)
     {
         value = null;
@@ -60,7 +81,48 @@ public static class GraphComponentInvoker
         }
     }
 
+    public static bool TryWriteComponent(Component2D component, string componentTypeName, string memberId, object value, out string error)
+    {
+        error = string.Empty;
+        if (!TryGetValueDescriptor(component, componentTypeName, memberId, out GraphComponentValueDescriptor descriptor, out error) || !descriptor.CanWrite)
+        {
+            error ??= $"Component value '{componentTypeName}.{memberId}' is not writable.";
+            return false;
+        }
+        if (!TryConvert(value, descriptor.ValueType, out object converted))
+        {
+            error = $"Value for '{componentTypeName}.{memberId}' is not compatible with {descriptor.ValueType.Name}.";
+            return false;
+        }
+        try
+        {
+            if (descriptor.Property != null)
+                descriptor.Property.SetValue(component, converted);
+            else
+                descriptor.Setter.Invoke(component, new[] { converted });
+            return true;
+        }
+        catch (Exception exception)
+        {
+            error = $"Failed to write '{componentTypeName}.{memberId}': {exception.GetBaseException().Message}";
+            return false;
+        }
+    }
+
     public static bool TryInvoke(GameObject2D owner, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
+    {
+        status = GraphActionStatus.Failure;
+        returnValue = null;
+        error = string.Empty;
+        if (!GraphComponentRegistry.TryGet(componentTypeName, out GraphComponentTypeDescriptor type))
+        {
+            error = $"Unknown component type '{componentTypeName}'.";
+            return false;
+        }
+        return TryInvokeComponent(owner?.GetComponent(type.ComponentType) as Component2D, componentTypeName, memberId, arguments, out status, out returnValue, out error);
+    }
+
+    public static bool TryInvokeComponent(Component2D component, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
     {
         status = GraphActionStatus.Failure;
         returnValue = null;
@@ -72,8 +134,7 @@ public static class GraphComponentInvoker
         }
 
         GraphComponentActionDescriptor descriptor = type.Actions.FirstOrDefault(action => action.MemberId == memberId);
-        Component2D component = owner?.GetComponent(type.ComponentType) as Component2D;
-        if (component == null)
+        if (component == null || !type.ComponentType.IsInstanceOfType(component))
         {
             error = $"GameObject does not contain component '{componentTypeName}'.";
             return false;
@@ -145,6 +206,31 @@ public static class GraphComponentInvoker
             return false;
         }
         return true;
+    }
+
+    private static bool TryGetValueDescriptor(Component2D component, string componentTypeName, string memberId, out GraphComponentValueDescriptor descriptor, out string error)
+    {
+        descriptor = null;
+        error = string.Empty;
+        if (component == null)
+        {
+            error = $"Component '{componentTypeName}' is unavailable.";
+            return false;
+        }
+        if (!GraphComponentRegistry.TryGet(componentTypeName, out GraphComponentTypeDescriptor type))
+        {
+            error = $"Unknown component type '{componentTypeName}'.";
+            return false;
+        }
+        if (!type.ComponentType.IsInstanceOfType(component))
+        {
+            error = $"Component instance is not compatible with '{componentTypeName}'.";
+            return false;
+        }
+        descriptor = type.Values.FirstOrDefault(value => value.MemberId == memberId);
+        if (descriptor == null)
+            error = $"Unknown component value '{componentTypeName}.{memberId}'.";
+        return descriptor != null;
     }
 
     private static bool TryConvert(object value, Type targetType, out object converted)

@@ -33,14 +33,22 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
             for (int clipIndex = 0; clipIndex < track.Clips.Count; clipIndex++)
             {
                 FlowTimelineClip clip = track.Clips[clipIndex];
+                clip?.Action?.Validate(graph, Id, result);
                 if (clip == null || clipIds.Add(clip.Id))
                     continue;
 
                 result.AddError(
                     $"Timeline clip Id is duplicated: '{clip.Id}'.",
                     Id);
+
             }
         }
+
+        foreach (FlowTimelineMarker marker in Markers)
+            foreach (GraphActionBase action in marker?.Actions ?? new List<GraphActionBase>())
+                action?.Validate(graph, Id, result);
+        foreach (GraphActionBase action in CancelActions)
+            action?.Validate(graph, Id, result);
     }
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)

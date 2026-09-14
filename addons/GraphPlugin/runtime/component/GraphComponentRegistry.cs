@@ -7,6 +7,7 @@ using GameLogic;
 public static class GraphComponentRegistry
 {
     private static readonly Dictionary<string, GraphComponentTypeDescriptor> ByName = new(StringComparer.Ordinal);
+    private static readonly Dictionary<string, GraphComponentTypeDescriptor> ByScriptPath = new(StringComparer.Ordinal);
     private static bool _scanned;
 
     public static void EnsureScanned()
@@ -59,6 +60,11 @@ public static class GraphComponentRegistry
         };
         ByName[typeName] = descriptor;
         ByName[componentType.Name] = descriptor;
+        foreach (Godot.ScriptPathAttribute attribute in componentType.GetCustomAttributes<Godot.ScriptPathAttribute>(false))
+        {
+            if (!string.IsNullOrWhiteSpace(attribute.Path))
+                ByScriptPath[attribute.Path] = descriptor;
+        }
 
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
         foreach (PropertyInfo property in componentType.GetProperties(flags))
@@ -136,6 +142,12 @@ public static class GraphComponentRegistry
     {
         EnsureScanned();
         return ByName.TryGetValue(typeName ?? string.Empty, out descriptor);
+    }
+
+    public static bool TryGetByScriptPath(string scriptPath, out GraphComponentTypeDescriptor descriptor)
+    {
+        EnsureScanned();
+        return ByScriptPath.TryGetValue(scriptPath ?? string.Empty, out descriptor);
     }
 
     public static IReadOnlyList<GraphComponentTypeDescriptor> GetAll()

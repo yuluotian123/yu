@@ -13,6 +13,7 @@ public sealed class GraphComponentArgument
 
 public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAction
 {
+    public GraphActionComponentReference Component { get; set; } = new();
     public string ComponentTypeName { get; set; } = string.Empty;
     public string ActionId { get; set; } = string.Empty;
     public List<GraphComponentArgument> ParameterValues { get; set; } = new();
@@ -60,16 +61,43 @@ public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAct
         LastStatus = GraphActionStatus.Failure;
     }
 
+    public void InitializeArguments()
+    {
+        GraphComponentActionDescriptor action = ResolveAction();
+        if (action == null)
+            return;
+        while (Arguments.Count < action.Parameters.Count)
+            Arguments.Add(new GraphComponentArgument
+            {
+                Name = action.Parameters[Arguments.Count].Name,
+                Value = CreateDefaultValue(action.Parameters[Arguments.Count].ValueType)
+            });
+        while (Arguments.Count > action.Parameters.Count)
+            Arguments.RemoveAt(Arguments.Count - 1);
+        for (int i = 0; i < Arguments.Count; i++)
+        {
+            Arguments[i] ??= new GraphComponentArgument();
+            Arguments[i].Name = action.Parameters[i].Name;
+            Arguments[i].Value ??= CreateDefaultValue(action.Parameters[i].ValueType);
+        }
+    }
+
 #if TOOLS
     public override Control CreateEditUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
         root.AddThemeConstantOverride("separation", 4);
+        root.AddChild(Component.CreateEditUI("Component", context, () => { }));
         GraphComponentRegistry.EnsureScanned();
 
         var component = new OptionButton { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
         var action = new OptionButton { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
-        var componentTypes = GraphComponentRegistry.GetAll().Where(value => value.Actions.Count > 0).ToList();
+        IReadOnlyList<GraphComponentTypeDescriptor> availableTypes = context?.AvailableComponentTypes;
+        // An empty list is meaningful: the current graph has no matching host,
+        // so do not expose unrelated component types from the global registry.
+        var componentTypes = (availableTypes ?? Array.Empty<GraphComponentTypeDescriptor>())
+            .Where(value => value.Actions.Count > 0)
+            .ToList();
         for (int i = 0; i < componentTypes.Count; i++)
             component.AddItem(componentTypes[i].DisplayName, i);
         int componentIndex = componentTypes.FindIndex(value => value.TypeName == ComponentTypeName || value.ComponentType.Name == ComponentTypeName);
@@ -90,7 +118,8 @@ public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAct
         PopulateActions(action, selectedType);
         action.ItemSelected += index =>
         {
-            GraphComponentTypeDescriptor type = componentTypes.FirstOrDefault(value => value.TypeName == ComponentTypeName);
+            GraphComponentTypeDescriptor type = componentTypes.FirstOrDefault(value =>
+                value.TypeName == ComponentTypeName || value.ComponentType.Name == ComponentTypeName);
             if (type == null || index >= type.Actions.Count)
                 return;
             ActionId = type.Actions[(int)index].MemberId;
@@ -137,30 +166,53 @@ public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAct
         }
     }
 
-    private static GraphBlackboardValue CreateDefaultValue(Type type)
-    {
-        if (type == typeof(bool)) return new GraphBoolBlackboardValue();
-        if (type == typeof(int)) return new GraphIntBlackboardValue();
-        if (type == typeof(float) || type == typeof(double)) return new GraphFloatBlackboardValue();
-        return new GraphStringBlackboardValue();
-    }
 #endif
 
     private GraphActionStatus Invoke(GraphExecutionContext context)
     {
-        GameObject2D owner = context?.GetUserData<GameObject2D>();
+        InitializeArguments();
+        Component2D component = null;
+        string resolveError = string.Empty;
+        if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
+            !GraphActionComponentResolver.TryResolve(
+                context,
+                Component,
+                componentType.ComponentType,
+                nameof(GraphComponentCallAction),
+                out component,
+                out resolveError))
+        {
+            GD.PushError($"[GraphComponentCallAction] {resolveError}");
+            return GraphActionStatus.Failure;
+        }
         object[] arguments = Arguments?.Select(value => value?.Value?.GetObjectValue()).ToArray() ?? Array.Empty<object>();
-        if (!GraphComponentInvoker.TryInvoke(owner, ComponentTypeName, ActionId, arguments, out GraphActionStatus status, out _, out string error))
+        if (!GraphComponentInvoker.TryInvokeComponent(component, ComponentTypeName, ActionId, arguments, out GraphActionStatus status, out _, out string error))
         {
             GD.PushError($"[GraphComponentCallAction] {error}");
             return GraphActionStatus.Failure;
         }
         return status;
     }
+
+    private GraphComponentActionDescriptor ResolveAction()
+    {
+        return GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor type)
+            ? type.Actions.FirstOrDefault(value => value.MemberId == ActionId)
+            : null;
+    }
+
+    private static GraphBlackboardValue CreateDefaultValue(Type type)
+    {
+        if (type == typeof(bool)) return new GraphBoolBlackboardValue();
+        if (type == typeof(int) || type?.IsEnum == true) return new GraphIntBlackboardValue();
+        if (type == typeof(float) || type == typeof(double)) return new GraphFloatBlackboardValue();
+        return new GraphStringBlackboardValue();
+    }
 }
 
 public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeAction
 {
+    public GraphActionComponentReference Component { get; set; } = new();
     public string ComponentTypeName { get; set; } = string.Empty;
     public string MemberId { get; set; } = string.Empty;
     public string OutputKey { get; set; } = string.Empty;
@@ -172,6 +224,7 @@ public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeActi
     {
         var root = new VBoxContainer();
         root.AddChild(new Label { Text = "Get component value" });
+        root.AddChild(Component.CreateEditUI("Component", context, () => { }));
         AddField(root, "Component type", ComponentTypeName, value => ComponentTypeName = value);
         AddField(root, "Member ID", MemberId, value => MemberId = value);
         AddField(root, "Output blackboard key", OutputKey, value => OutputKey = value);
@@ -192,9 +245,21 @@ public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeActi
     {
         if (string.IsNullOrWhiteSpace(OutputKey))
             return false;
-        if (!GraphComponentInvoker.TryRead(context?.GetUserData<GameObject2D>(), ComponentTypeName, MemberId, out object value, out string error))
+        string error = string.Empty;
+        object value = null;
+        Component2D component = null;
+        string resolveError = string.Empty;
+        if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
+            !GraphActionComponentResolver.TryResolve(
+                context,
+                Component,
+                componentType.ComponentType,
+                nameof(GraphComponentGetAction),
+                out component,
+                out resolveError) ||
+            !GraphComponentInvoker.TryReadComponent(component, ComponentTypeName, MemberId, out value, out error))
         {
-            GD.PushError($"[GraphComponentGetAction] {error}");
+            GD.PushError($"[GraphComponentGetAction] {(string.IsNullOrWhiteSpace(resolveError) ? error : resolveError)}");
             return false;
         }
         return context.Blackboard.SetValue(OutputKey, value);
@@ -213,6 +278,7 @@ public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeActi
 
 public sealed class GraphComponentSetAction : GraphActionBase, IBehaviorTreeAction
 {
+    public GraphActionComponentReference Component { get; set; } = new();
     public string ComponentTypeName { get; set; } = string.Empty;
     public string MemberId { get; set; } = string.Empty;
     public string InputKey { get; set; } = string.Empty;
@@ -224,6 +290,7 @@ public sealed class GraphComponentSetAction : GraphActionBase, IBehaviorTreeActi
     {
         var root = new VBoxContainer();
         root.AddChild(new Label { Text = "Set component value" });
+        root.AddChild(Component.CreateEditUI("Component", context, () => { }));
         GraphComponentGetAction.AddField(root, "Component type", ComponentTypeName, value => ComponentTypeName = value);
         GraphComponentGetAction.AddField(root, "Member ID", MemberId, value => MemberId = value);
         GraphComponentGetAction.AddField(root, "Input blackboard key", InputKey, value => InputKey = value);
@@ -244,9 +311,20 @@ public sealed class GraphComponentSetAction : GraphActionBase, IBehaviorTreeActi
     {
         if (string.IsNullOrWhiteSpace(InputKey) || !context.Blackboard.TryGetValue(InputKey, out object value))
             return false;
-        if (!GraphComponentInvoker.TryWrite(context?.GetUserData<GameObject2D>(), ComponentTypeName, MemberId, value, out string error))
+        string error = string.Empty;
+        Component2D component = null;
+        string resolveError = string.Empty;
+        if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
+            !GraphActionComponentResolver.TryResolve(
+                context,
+                Component,
+                componentType.ComponentType,
+                nameof(GraphComponentSetAction),
+                out component,
+                out resolveError) ||
+            !GraphComponentInvoker.TryWriteComponent(component, ComponentTypeName, MemberId, value, out error))
         {
-            GD.PushError($"[GraphComponentSetAction] {error}");
+            GD.PushError($"[GraphComponentSetAction] {(string.IsNullOrWhiteSpace(resolveError) ? error : resolveError)}");
             return false;
         }
         return true;

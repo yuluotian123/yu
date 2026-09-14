@@ -1,66 +1,89 @@
+using System;
+using System.Collections.Generic;
 using Framework;
 using Godot;
-using System.Collections.Generic;
 
 namespace GameLogic
 {
     [GlobalClass]
     public partial class CharacterAnimationComponent2D : Component2D
     {
+        private HfsmGraphAsset _locomotionGraph;
+        private AnimatedSprite2D _sprite;
         public override int Priority => 20;
 
         [Export] public NodePath SpritePath { get; set; } = new("VisualRoot/AnimatedSprite2D");
-        [Export] public HfsmGraphAsset LocomotionGraph { get; set; }
+        [Export]
+        public HfsmGraphAsset LocomotionGraph
+        {
+            get => _locomotionGraph;
+            set
+            {
+                _locomotionGraph = value;
+                if (_locomotionGraph != null && IsSceneLocalResource(_locomotionGraph))
+                    _locomotionGraph.ResourceLocalToScene = true;
+            }
+        }
 
-        public string ActiveRequestKey => _activeRequestKey;
-        public string ActiveAnimation => _activeAnimation;
+        public CharacterAnimationInstance2D AnimationInstance { get; private set; }
+        public IReadOnlyDictionary<string, object> AnimationVariables => AnimationInstance?.Variables;
+        public string CurrentStatePath => AnimationInstance?.CurrentStatePath ?? string.Empty;
+        public IAnimationPlaybackBackend PlaybackBackend => AnimationInstance?.PlaybackBackend;
+        public int ActiveRequestCount => AnimationInstance?.ActiveRequestCount ?? 0;
+        public int ActiveRequestPriority => AnimationInstance?.ActiveRequestPriority ?? 0;
+        public string ActiveRequestKey => AnimationInstance?.ActiveRequestKey ?? string.Empty;
+        public string ActiveAnimation => AnimationInstance?.ActiveAnimation ?? string.Empty;
         public AnimatedSprite2D Sprite => _sprite;
-        public HfsmRuntime LocomotionRuntime { get; private set; }
+        public HfsmRuntime LocomotionRuntime => AnimationInstance?.LocomotionRuntime;
 
-        private readonly Dictionary<string, AnimationRequest> _animationRequests = new();
-        private readonly HashSet<string> _missingAnimationWarnings = new();
-        private CharacterMovementComponent2D _movement;
-        private AnimatedSprite2D _sprite;
-        private ulong _requestSequence;
-        private string _activeRequestKey = string.Empty;
-        private string _activeAnimation = string.Empty;
+        public HfsmGraphAsset PrepareLocomotionGraphForEditor()
+        {
+            if (LocomotionGraph == null)
+            {
+                LocomotionGraph = new HfsmGraphAsset();
+                LocomotionGraph.ResourceLocalToScene = true;
+                return LocomotionGraph;
+            }
+
+            if (!IsSceneLocalResource(LocomotionGraph) &&
+                !string.IsNullOrWhiteSpace(LocomotionGraph.ResourcePath))
+            {
+                HfsmGraphAsset migrated = LocomotionGraph.Duplicate(true) as HfsmGraphAsset;
+                if (migrated != null)
+                {
+                    migrated.ResourcePath = string.Empty;
+                    LocomotionGraph = migrated;
+                }
+            }
+
+            LocomotionGraph.ResourceLocalToScene = true;
+            GraphComponentBindingRuntime.ApplyDefaultBindings(LocomotionGraph);
+            return LocomotionGraph;
+        }
 
         public override void OnInit()
         {
-            _movement = Owner?.GetComponent<CharacterMovementComponent2D>();
+            if (LocomotionGraph == null)
+                Debugger.Warn("[CharacterAnimationComponent2D] LocomotionGraph is not assigned.");
             _sprite = Owner?.GetNodeOrNull<AnimatedSprite2D>(SpritePath);
             if (_sprite == null)
                 Debugger.Warn("[CharacterAnimationComponent2D] Missing AnimatedSprite2D.");
-
-            if (LocomotionGraph != null)
-            {
-                LocomotionRuntime = new HfsmRuntime(LocomotionGraph);
+            AnimationInstance = new CharacterAnimationInstance2D();
+            AnimationInstance.Initialize(Owner, LocomotionGraph, new AnimatedSprite2DPlaybackBackend(_sprite));
+            if (LocomotionRuntime != null)
                 LocomotionRuntime.Context.UserData.Add(this);
-                LocomotionRuntime.Context.UserData.Add(Owner);
-                if (!LocomotionRuntime.Start())
-                    Debugger.Warn("[CharacterAnimationComponent2D] Failed to start LocomotionGraph.");
-            }
         }
 
         public override void OnPhysicsUpdate(double delta)
         {
-            GraphComponentBindingRuntime.SyncFromComponents(LocomotionRuntime?.Context);
-            LocomotionRuntime?.Update(delta);
-            GraphComponentBindingRuntime.SyncToComponents(LocomotionRuntime?.Context);
-            ApplyBestAnimationRequest();
+            AnimationInstance?.Update(delta);
         }
 
         public override void OnDestroy()
         {
-            LocomotionRuntime?.Stop();
-            LocomotionRuntime = null;
-            _animationRequests.Clear();
-            _missingAnimationWarnings.Clear();
-            _movement = null;
+            AnimationInstance?.Dispose();
+            AnimationInstance = null;
             _sprite = null;
-            _requestSequence = 0;
-            _activeRequestKey = string.Empty;
-            _activeAnimation = string.Empty;
         }
 
         public void RequestAnimation(
@@ -71,99 +94,21 @@ namespace GameLogic
             bool fromEnd = false,
             bool restartIfPlaying = true)
         {
-            if (string.IsNullOrWhiteSpace(animation))
-                return;
-            key = NormalizeRequestKey(key, animation);
-            _animationRequests[key] = new AnimationRequest
-            {
-                Key = key,
-                Animation = animation,
-                Priority = priority,
-                Speed = speed,
-                FromEnd = fromEnd,
-                RestartIfPlaying = restartIfPlaying,
-                Sequence = ++_requestSequence
-            };
+            AnimationInstance?.RequestAnimation(key, animation, priority, speed, fromEnd, restartIfPlaying);
         }
 
         public void ClearAnimationRequest(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
-                _animationRequests.Clear();
-            else
-                _animationRequests.Remove(key.Trim());
+            AnimationInstance?.ClearAnimationRequest(key);
         }
 
-        private void ApplyBestAnimationRequest()
+        private static bool IsSceneLocalResource(HfsmGraphAsset graph)
         {
-            if (_sprite == null || _animationRequests.Count == 0)
-            {
-                _activeRequestKey = string.Empty;
-                _activeAnimation = string.Empty;
-                return;
-            }
-
-            AnimationRequest best = null;
-            foreach (AnimationRequest request in _animationRequests.Values)
-            {
-                if (!CanPlayAnimation(request.Animation))
-                    continue;
-                if (best == null || request.Priority > best.Priority ||
-                    request.Priority == best.Priority && request.Sequence > best.Sequence)
-                    best = request;
-            }
-            if (best != null)
-                PlayRequest(best);
-        }
-
-        private bool CanPlayAnimation(string animation)
-        {
-            if (_sprite?.SpriteFrames == null || string.IsNullOrWhiteSpace(animation))
+            if (graph == null)
                 return false;
-            if (_sprite.SpriteFrames.HasAnimation(animation))
-                return true;
-            if (_missingAnimationWarnings.Add(animation))
-                Debugger.Warn($"[CharacterAnimationComponent2D] Missing animation '{animation}'.");
-            return false;
-        }
-
-        private void PlayRequest(AnimationRequest request)
-        {
-            var animationName = new StringName(request.Animation);
-            bool sameRequest = _activeRequestKey == request.Key;
-            bool sameAnimation = _sprite.Animation.ToString() == animationName.ToString();
-            if (sameRequest && sameAnimation)
-            {
-                _sprite.SpeedScale = request.Speed;
-                if (!_sprite.IsPlaying() && _sprite.SpriteFrames.GetAnimationLoop(animationName))
-                    _sprite.Play(animationName, request.Speed, request.FromEnd);
-                return;
-            }
-            if (sameAnimation && !request.RestartIfPlaying)
-            {
-                _activeRequestKey = request.Key;
-                _activeAnimation = request.Animation;
-                _sprite.SpeedScale = request.Speed;
-                return;
-            }
-            _activeRequestKey = request.Key;
-            _activeAnimation = request.Animation;
-            _sprite.Play(animationName, request.Speed, request.FromEnd);
-        }
-
-        private static string NormalizeRequestKey(string key, string animation) =>
-            !string.IsNullOrWhiteSpace(key) ? key.Trim() :
-            string.IsNullOrWhiteSpace(animation) ? "animation" : animation.Trim();
-
-        private sealed class AnimationRequest
-        {
-            public string Key;
-            public string Animation;
-            public int Priority;
-            public float Speed;
-            public bool FromEnd;
-            public bool RestartIfPlaying;
-            public ulong Sequence;
+            string path = graph.ResourcePath;
+            return graph.IsBuiltIn() || path?.Contains("::", StringComparison.Ordinal) == true ||
+                   (graph.ResourceLocalToScene && string.IsNullOrWhiteSpace(path));
         }
     }
 }

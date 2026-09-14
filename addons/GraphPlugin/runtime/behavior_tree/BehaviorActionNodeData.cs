@@ -9,6 +9,14 @@ public class BehaviorActionNodeData : BehaviorTreeNodeData
     public override string GetCategory() => "BehaviorTree/Leaf";
     public override Color GetNodeColor() => new(0.42f, 0.78f, 0.88f);
 
+    public override void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+        if (Actions == null)
+            return;
+        foreach (GraphActionBase action in Actions)
+            action?.Validate(graph, Id, result);
+    }
+
     public override BehaviorTreeStatus Tick(BehaviorTreeRuntime runtime, GraphExecutionContext context, double delta)
     {
         if (Actions == null || Actions.Count == 0)

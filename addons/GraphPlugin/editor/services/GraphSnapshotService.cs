@@ -51,8 +51,10 @@ public static class GraphSnapshotService
         string nodesJson,
         string connectionsJson)
     {
+        List<GraphNodeData> nodes = GraphJsonHelper.DeserializeList<GraphNodeData>(nodesJson);
+        List<GraphConnection> connections = GraphJsonHelper.DeserializeList<GraphConnection>(connectionsJson);
         Clear(graph, controller, connectionEditor);
-        AddSerialized(graph, graphEdit, createNodeView, nodesJson, connectionsJson);
+        Add(graph, graphEdit, createNodeView, nodes, connections);
     }
 
     /// <summary>把序列化节点和连线追加到当前图。</summary>

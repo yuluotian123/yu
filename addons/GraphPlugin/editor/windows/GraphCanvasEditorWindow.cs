@@ -382,6 +382,15 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void LoadGraphInitialized(GraphAsset graph)
     {
+        if (!graph.TryLoadDocument(out string loadError))
+        {
+            var dialog = new AcceptDialog { Title = "Graph Load Failed", DialogText = loadError };
+            dialog.Confirmed += dialog.QueueFree;
+            dialog.Canceled += dialog.QueueFree;
+            AddChild(dialog);
+            dialog.PopupCentered();
+            return;
+        }
         _currentGraph = graph;
         if (_dependencyModeOption != null)
         {

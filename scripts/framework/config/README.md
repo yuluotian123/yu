@@ -49,6 +49,10 @@ XlsxReader -> XlsxTableData -> JsonDataWriter / CSharpCodeGenerator
 
 生成类型放在 `scripts/generated/config/`，不要直接修改生成文件。
 
+`XlsxConverter` 会先锁定输出目录、恢复未完成事务，再完成整批校验和生成。发布使用持久日志、原文件快照、刷盘和逐文件替换；进程中断后的下次转换可恢复整批旧内容，已提交批次只清理资料。外部修改或损坏备份会阻止恢复，不自动覆盖冲突内容。`RecoverOutputs(...)` 可在不读取源表的情况下单独恢复。
+
+重复 ID、字段/类型错误不再静默降级。生成结果不含时间戳，内容相同的 JSON/C# 均不会重复写入。输出目录下的 `.config-converter/` 是恢复元数据，不能在事务未完成时删除。跨文件读取不具备原子可见性，真实断电场景尚未验证，详见 ConfigPlugin 文档。
+
 ## 当前注意事项
 
 - 表加载失败、重复 ID、字段类型转换失败需要明确区分并提供表名/行号上下文。

@@ -320,6 +320,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     private void VerifyLegacyAbilityPersistence(PackedScene playerScene, JsonObject capturedState)
     {
         GameObject2D restored = playerScene.Instantiate<GameObject2D>();
+        restored.PersistentId = "player_restore_smoke";
         AddChild(restored);
         restored.SetProcess(false);
         restored.SetPhysicsProcess(false);

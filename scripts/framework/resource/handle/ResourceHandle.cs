@@ -109,7 +109,7 @@ namespace Framework
         public ResourceHandle<T> OnCompleted(Action<ResourceHandle<T>> callback)
         {
             if (IsDone)
-                callback?.Invoke(this);
+                InvokeCallback(callback);
             else
                 _onCompleted += callback;
             return this;
@@ -223,9 +223,28 @@ namespace Framework
             Progress = 1f;
             Status = status;
 
-            _onCompleted?.Invoke(this);
+            var callbacks = _onCompleted;
             _onCompleted = null;
-            _tcs?.TrySetResult(this);
+            try
+            {
+                if (callbacks != null)
+                {
+                    foreach (Action<ResourceHandle<T>> callback in callbacks.GetInvocationList())
+                    {
+                        InvokeCallback(callback);
+                    }
+                }
+            }
+            finally { _tcs?.TrySetResult(this); }
+        }
+
+        private void InvokeCallback(Action<ResourceHandle<T>> callback)
+        {
+            try { callback?.Invoke(this); }
+            catch (Exception exception)
+            {
+                Debugger.Warn($"[ResourceHandle] Completion callback failed for '{Path}': {exception.Message}");
+            }
         }
     }
 }

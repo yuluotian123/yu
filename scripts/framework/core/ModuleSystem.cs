@@ -3,204 +3,173 @@ using System.Collections.Generic;
 
 namespace Framework
 {
-    /// <summary>
-    /// 游戏框架模块实现类管理系统。
-    /// </summary>
     public static class ModuleSystem
     {
-        /// <summary>
-        /// 默认设计的模块数量。
-        /// <remarks>有增删可以自行修改减少内存分配与GCAlloc。</remarks>
-        /// </summary>
         internal const int DESIGN_MODULE_COUNT = 16;
 
-        private static readonly Dictionary<Type, Module> _moduleMaps = new Dictionary<Type, Module>(DESIGN_MODULE_COUNT);
-        private static readonly LinkedList<Module> _modules = new LinkedList<Module>();
-        private static readonly LinkedList<Module> _processModules = new LinkedList<Module>();
-        private static readonly List<IProcessModule> _processExecuteList = new List<IProcessModule>(DESIGN_MODULE_COUNT);
-
+        private static readonly Dictionary<Type, Module> _moduleMaps = new(DESIGN_MODULE_COUNT);
+        private static readonly List<Module> _initializationOrder = new(DESIGN_MODULE_COUNT);
+        private static readonly HashSet<Type> _initializingTypes = new();
+        private static readonly List<IProcessModule> _processExecuteList = new(DESIGN_MODULE_COUNT);
         private static bool _isExecuteListDirty;
+        private static bool _isShuttingDown;
 
-        /// <summary>
-        /// 所有游戏框架模块轮询。
-        /// </summary>
-        /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
-        /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
         public static void Process(double elapseSeconds, double realElapseSeconds)
         {
+            if (_isShuttingDown)
+                return;
             if (_isExecuteListDirty)
             {
                 _isExecuteListDirty = false;
-                BuildExecuteList();
+                var modules = new List<Module>(_initializationOrder);
+                // List.Sort is not stable, so retain initialization order for equal priorities.
+                modules.Sort((left, right) =>
+                {
+                    int priority = right.Priority.CompareTo(left.Priority);
+                    return priority != 0 ? priority :
+                        _initializationOrder.IndexOf(left).CompareTo(_initializationOrder.IndexOf(right));
+                });
+                _processExecuteList.Clear();
+                foreach (var module in modules)
+                    if (module is IProcessModule process)
+                        _processExecuteList.Add(process);
             }
 
-            int executeCount = _processExecuteList.Count;
-            for (int i = 0; i < executeCount; i++)
-            {
+            for (int i = 0; i < _processExecuteList.Count; i++)
                 _processExecuteList[i].Process(elapseSeconds, realElapseSeconds);
-            }
         }
 
-        /// <summary>
-        /// 关闭并清理所有游戏框架模块。
-        /// </summary>
         public static void Shutdown()
         {
-            for (LinkedListNode<Module> current = _modules.Last; current != null; current = current.Previous)
+            if (_isShuttingDown)
+                return;
+            _isShuttingDown = true;
+            try
             {
-                current.Value.Shutdown();
+                RollbackFrom(0);
             }
-
-            _modules.Clear();
-            _moduleMaps.Clear();
-            _processModules.Clear();
-            _processExecuteList.Clear();
+            finally
+            {
+                _moduleMaps.Clear();
+                _processExecuteList.Clear();
+                _initializingTypes.Clear();
+                _isExecuteListDirty = false;
+                _isShuttingDown = false;
+            }
         }
 
-        /// <summary>
-        /// 获取游戏框架模块。
-        /// </summary>
-        /// <typeparam name="T">要获取的游戏框架模块类型。</typeparam>
-        /// <returns>要获取的游戏框架模块。</returns>
-        /// <remarks>如果要获取的游戏框架模块不存在，则自动创建该游戏框架模块。</remarks>
         public static T GetModule<T>() where T : class
         {
-            Type interfaceType = typeof(T);
-            if (!interfaceType.IsInterface)
-            {
-                throw new Exception(string.Format("You must get module by interface, but '{0}' is not.", interfaceType.FullName));
-            }
+            Type contract = typeof(T);
+            ValidateContract(contract);
+            if (_moduleMaps.TryGetValue(contract, out var module))
+                return (T)(object)module;
+            if (_isShuttingDown)
+                throw new InvalidOperationException($"Cannot create module '{contract}' during shutdown.");
 
-            if (_moduleMaps.TryGetValue(interfaceType, out Module module))
-            {
-                return module as T;
-            }
+            string name = contract.Namespace + "." + contract.Name.Substring(1);
+            Type implementation = contract.Assembly.GetType(name);
+            if (implementation == null || implementation.IsAbstract ||
+                !typeof(Module).IsAssignableFrom(implementation) || !contract.IsAssignableFrom(implementation))
+                throw new InvalidOperationException($"Cannot resolve module '{contract}' to '{name}'.");
 
-            string moduleName = string.Format("{0}.{1}", interfaceType.Namespace, interfaceType.Name.Substring(1));
-            Type moduleType = Type.GetType(moduleName);
-            if (moduleType == null)
+            if (!_moduleMaps.TryGetValue(implementation, out module))
             {
-                throw new Exception(string.Format("Can not find Game Framework module type '{0}'.", moduleName));
+                if (_initializingTypes.Contains(implementation))
+                    throw new InvalidOperationException($"Circular module dependency: {implementation}.");
+                module = (Module)Activator.CreateInstance(implementation);
+                Initialize(module);
             }
-
-            return GetModule(moduleType) as T;
+            _moduleMaps.Add(contract, module);
+            return (T)(object)module;
         }
 
-        /// <summary>
-        /// 获取游戏框架模块。
-        /// </summary>
-        /// <param name="moduleType">要获取的游戏框架模块类型。</param>
-        /// <returns>要获取的游戏框架模块。</returns>
-        /// <remarks>如果要获取的游戏框架模块不存在，则自动创建该游戏框架模块。</remarks>
-        private static Module GetModule(Type moduleType)
-        {
-            return _moduleMaps.TryGetValue(moduleType, out Module module) ? module : CreateModule(moduleType);
-        }
-
-        /// <summary>
-        /// 创建游戏框架模块。
-        /// </summary>
-        /// <param name="moduleType">要创建的游戏框架模块类型。</param>
-        /// <returns>要创建的游戏框架模块。</returns>
-        private static Module CreateModule(Type moduleType)
-        {
-            Module module = (Module)Activator.CreateInstance(moduleType);
-            if (module == null)
-            {
-                throw new Exception(string.Format("Can not create module '{0}'.", moduleType.FullName));
-            }
-
-            _moduleMaps[moduleType] = module;
-
-            RegisterUpdate(module);
-
-            return module;
-        }
-
-        /// <summary>
-        /// 注册自定义Module。
-        /// </summary>
-        /// <param name="module">Module。</param>
-        /// <returns>Module实例。</returns>
-        /// <exception cref="GameFrameworkException">框架异常。</exception>
         public static T RegisterModule<T>(Module module) where T : class
         {
-            Type interfaceType = typeof(T);
-            if (!interfaceType.IsInterface)
+            Type contract = typeof(T);
+            ValidateContract(contract);
+            ArgumentNullException.ThrowIfNull(module);
+            if (!contract.IsInstanceOfType(module))
+                throw new ArgumentException($"Module '{module.GetType()}' does not implement '{contract}'.", nameof(module));
+            if (_isShuttingDown)
+                throw new InvalidOperationException("Cannot register a module during shutdown.");
+
+            if (_moduleMaps.TryGetValue(contract, out var registered))
             {
-                throw new Exception(string.Format("You must get module by interface, but '{0}' is not.", interfaceType.FullName));
+                if (!ReferenceEquals(registered, module))
+                    throw new InvalidOperationException($"Module '{contract}' is already registered.");
+                return (T)(object)module;
             }
-
-            _moduleMaps[interfaceType] = module;
-
-            RegisterUpdate(module);
-
-            return module as T;
-        }
-
-        private static void RegisterUpdate(Module module)
-        {
-            LinkedListNode<Module> current = _modules.First;
-            while (current != null)
+            if (_moduleMaps.TryGetValue(module.GetType(), out registered))
             {
-                if (module.Priority > current.Value.Priority)
-                {
-                    break;
-                }
-
-                current = current.Next;
-            }
-
-            if (current != null)
-            {
-                _modules.AddBefore(current, module);
+                if (!ReferenceEquals(registered, module))
+                    throw new InvalidOperationException($"Module '{module.GetType()}' is already registered.");
             }
             else
-            {
-                _modules.AddLast(module);
-            }
+                Initialize(module);
 
-            Type interfaceType = typeof(IProcessModule);
-            bool implementsInterface = interfaceType.IsInstanceOfType(module);
-
-            if (implementsInterface)
-            {
-                LinkedListNode<Module> currentUpdate = _processModules.First;
-                while (currentUpdate != null)
-                {
-                    if (module.Priority > currentUpdate.Value.Priority)
-                    {
-                        break;
-                    }
-
-                    currentUpdate = currentUpdate.Next;
-                }
-
-                if (currentUpdate != null)
-                {
-                    _processModules.AddBefore(currentUpdate, module);
-                }
-                else
-                {
-                    _processModules.AddLast(module);
-                }
-
-                _isExecuteListDirty = true;
-            }
-
-            module.OnInit();
+            _moduleMaps.Add(contract, module);
+            return (T)(object)module;
         }
 
-        /// <summary>
-        /// 构造执行队列。
-        /// </summary>
-        private static void BuildExecuteList()
+        private static void Initialize(Module module)
         {
-            _processExecuteList.Clear();
-            foreach (var updateModule in _processModules)
+            Type type = module.GetType();
+            if (!_initializingTypes.Add(type))
+                throw new InvalidOperationException($"Circular module dependency: {type}.");
+            int checkpoint = _initializationOrder.Count;
+            try
             {
-                _processExecuteList.Add(updateModule as IProcessModule);
+                module.OnInit();
+                _moduleMaps.Add(type, module);
+                _initializationOrder.Add(module);
+                _isExecuteListDirty = true;
             }
+            catch
+            {
+                bool wasShuttingDown = _isShuttingDown;
+                _isShuttingDown = true;
+                try
+                {
+                    TryShutdown(module);
+                    RollbackFrom(checkpoint);
+                }
+                finally { _isShuttingDown = wasShuttingDown; }
+                throw;
+            }
+            finally { _initializingTypes.Remove(type); }
+        }
+
+        private static void RollbackFrom(int checkpoint)
+        {
+            for (int i = _initializationOrder.Count - 1; i >= checkpoint; i--)
+            {
+                Module module = _initializationOrder[i];
+                TryShutdown(module);
+                var keys = new List<Type>();
+                foreach (var entry in _moduleMaps)
+                    if (ReferenceEquals(entry.Value, module))
+                        keys.Add(entry.Key);
+                foreach (var key in keys)
+                    _moduleMaps.Remove(key);
+                _initializationOrder.RemoveAt(i);
+            }
+            _isExecuteListDirty = true;
+        }
+
+        private static void TryShutdown(Module module)
+        {
+            try { module.Shutdown(); }
+            catch (Exception exception)
+            {
+                Debugger.Warn($"[ModuleSystem] Shutdown failed for '{module.GetType()}': {exception.Message}");
+            }
+        }
+
+        private static void ValidateContract(Type contract)
+        {
+            if (!contract.IsInterface)
+                throw new ArgumentException($"Modules must be requested by interface: {contract}.");
         }
     }
 }

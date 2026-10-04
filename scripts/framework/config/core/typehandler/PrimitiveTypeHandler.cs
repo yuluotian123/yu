@@ -36,14 +36,25 @@ namespace Framework
         public object ParseCell(string cellValue, string typeStr)
         {
             cellValue ??= string.Empty;
+            if (typeStr == "string")
+                return cellValue;
+            cellValue = cellValue.Trim();
+            if (cellValue.Length == 0)
+                cellValue = typeStr == "bool" ? "false" : "0";
             return typeStr switch
             {
-                "int"    => int.TryParse(cellValue, out var i) ? i : 0,
-                "long"   => long.TryParse(cellValue, out var l) ? l : 0L,
-                "float"  => float.TryParse(cellValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var f) ? f : 0f,
-                "double" => double.TryParse(cellValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var d) ? d : 0.0,
-                "bool"   => cellValue.ToLowerInvariant() is "true" or "1" or "yes",
-                "string" => cellValue,
+                "int"    => int.Parse(cellValue, NumberStyles.Integer, CultureInfo.InvariantCulture),
+                "long"   => long.Parse(cellValue, NumberStyles.Integer, CultureInfo.InvariantCulture),
+                "float"  => float.TryParse(cellValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var f) && float.IsFinite(f)
+                    ? f : throw new FormatException($"Invalid float '{cellValue}'."),
+                "double" => double.TryParse(cellValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var d) && double.IsFinite(d)
+                    ? d : throw new FormatException($"Invalid double '{cellValue}'."),
+                "bool"   => cellValue.ToLowerInvariant() switch
+                {
+                    "true" or "1" or "yes" => true,
+                    "false" or "0" or "no" => false,
+                    _ => throw new FormatException($"Invalid bool '{cellValue}'.")
+                },
                 _ => throw new NotSupportedException($"PrimitiveTypeHandler 不支持类型：'{typeStr}'")
             };
         }

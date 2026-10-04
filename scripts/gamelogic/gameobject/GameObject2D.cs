@@ -15,6 +15,7 @@ namespace GameLogic
 
         private readonly System.Collections.Generic.Dictionary<Type, Component2D> _runtimeComponents = new();
         private List<Component2D> _sortedComponents = new();
+        private bool _componentsInitialized;
 
         public Vector2 WorldPosition => GlobalPosition;
 
@@ -40,11 +41,13 @@ namespace GameLogic
 
         public T AddComponent<T>() where T : Component2D, new()
         {
+            if (_runtimeComponents.ContainsKey(typeof(T)))
+                throw new InvalidOperationException($"Component '{typeof(T).Name}' already exists.");
             var component = new T { Owner = this };
             _runtimeComponents[typeof(T)] = component;
             SortComponents();
 
-            if (IsNodeReady())
+            if (_componentsInitialized)
                 component.OnInit();
 
             return component;
@@ -101,7 +104,8 @@ namespace GameLogic
             if (!_runtimeComponents.TryGetValue(typeof(T), out var component))
                 return;
 
-            component.OnDestroy();
+            if (_componentsInitialized)
+                component.OnDestroy();
             _runtimeComponents.Remove(typeof(T));
             _sortedComponents.Remove(component);
         }
@@ -111,23 +115,24 @@ namespace GameLogic
             if (componentType == null || !_runtimeComponents.TryGetValue(componentType, out var component))
                 return;
 
-            component.OnDestroy();
+            if (_componentsInitialized)
+                component.OnDestroy();
             _runtimeComponents.Remove(componentType);
             _sortedComponents.Remove(component);
         }
 
         public override void _Ready()
         {
-                        Debugger.Info($"GameObject '{PersistentId}' is ready. Ensuring PersistentId and initializing components.");
+            Debugger.Info($"GameObject '{PersistentId}' is ready. Ensuring PersistentId and initializing components.");
             PersistentIdUtility.EnsurePersistentId(this);
             InitializeComponents();
-
-            for (int i = 0; i < _sortedComponents.Count; i++)
-                _sortedComponents[i].OnInit();
+            ActivateComponents();
         }
 
         public override void _Process(double delta)
         {
+            if (!_componentsInitialized)
+                return;
             for (int i = 0; i < _sortedComponents.Count; i++)
             {
                 if (!_sortedComponents[i].IsActive) continue;
@@ -137,6 +142,8 @@ namespace GameLogic
 
         public override void _PhysicsProcess(double delta)
         {
+            if (!_componentsInitialized)
+                return;
             for (int i = 0; i < _sortedComponents.Count; i++)
             {
                 if (!_sortedComponents[i].IsActive) continue;
@@ -148,32 +155,42 @@ namespace GameLogic
         {
             Debugger.Info($"GameObject '{Name}' exiting tree, destroying components.");
 
-            for (int i = 0; i < _sortedComponents.Count; i++)
-                _sortedComponents[i].OnDestroy();
+            DeactivateComponents();
 
             _runtimeComponents.Clear();
             _sortedComponents.Clear();
-            Components.Clear();
         }
 
         public virtual void OnSpawn()
         {
             PersistentIdUtility.EnsurePersistentId(this);
 
-            if (_runtimeComponents.Count == 0)
-            {
-                InitializeComponents();
-                return;
-            }
-
-            for (int i = 0; i < _sortedComponents.Count; i++)
-                _sortedComponents[i].OnInit();
+            InitializeComponents();
+            if (IsNodeReady())
+                ActivateComponents();
         }
 
         public virtual void OnRecycle()
         {
-            foreach (var component in _runtimeComponents.Values)
-                component.OnDestroy();
+            DeactivateComponents();
+        }
+
+        private void ActivateComponents()
+        {
+            if (_componentsInitialized)
+                return;
+            _componentsInitialized = true;
+            for (int i = 0; i < _sortedComponents.Count; i++)
+                _sortedComponents[i].OnInit();
+        }
+
+        private void DeactivateComponents()
+        {
+            if (!_componentsInitialized)
+                return;
+            _componentsInitialized = false;
+            for (int i = 0; i < _sortedComponents.Count; i++)
+                _sortedComponents[i].OnDestroy();
         }
 
         private void InitializeComponents()

@@ -12,6 +12,8 @@ namespace Framework
         where T : class, IObjectPoolItem, new()
     {
         private readonly Queue<T> _idleQueue;
+        private readonly HashSet<T> _activeItems = new(ReferenceEqualityComparer.Instance);
+        private bool _shutdown;
         private readonly string _name;
         private int _capacity;
         private bool _allowOverflow;
@@ -79,8 +81,11 @@ namespace Framework
         /// </summary>
         public T Spawn()
         {
+            if (_shutdown)
+                throw new InvalidOperationException($"ObjectPool '{_name}' is shut down.");
             T item = _idleQueue.Count > 0 ? _idleQueue.Dequeue() : new T();
             item.OnSpawn();
+            _activeItems.Add(item);
             return item;
         }
 
@@ -91,9 +96,9 @@ namespace Framework
         /// </summary>
         public void Recycle(T item)
         {
-            if (item == null)
+            if (item == null || !_activeItems.Remove(item))
             {
-                Debugger.Warn($"[ObjectPool<{typeof(T).Name}>] Recycle: item is null, ignored.");
+                Debugger.Warn($"[ObjectPool<{typeof(T).Name}>] Recycle rejected: item is not active in this pool.");
                 return;
             }
 
@@ -143,6 +148,8 @@ namespace Framework
         /// </summary>
         internal override void Shutdown()
         {
+            _shutdown = true;
+            _activeItems.Clear();
             _idleQueue.Clear();
         }
     }

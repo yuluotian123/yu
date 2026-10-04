@@ -30,6 +30,7 @@ namespace Framework
         // 用于存储 scenePath 的虚拟 Type（以 string.GetHashCode 区分，通过包装类实现）
         // 实际直接使用 typeof(NodePool) 作为类型键，再用 scenePath 作为 name 键
         private IResourceModule _resourceModule;
+        private bool _shutdown;
 
         public ObjectPoolModule()
         {
@@ -47,11 +48,13 @@ namespace Framework
 
         public override void OnInit()
         {
+            _shutdown = false;
             Debugger.Info("[ObjectPoolModule] Initialized.");
         }
 
         public override void Shutdown()
         {
+            _shutdown = true;
             // 关闭所有纯 C# 对象池
             foreach (var pool in _objectPoolMap.Values)
                 pool.Shutdown();
@@ -181,11 +184,12 @@ namespace Framework
 
             if (handle == null || !handle.IsValid)
             {
+                handle?.Dispose();
                 throw new Exception(
                     $"[ObjectPoolModule] CreateNodePool: Failed to load PackedScene at '{scenePath}'.");
             }
 
-            var pool = new NodePool(scenePath, handle.Asset, parent, name, capacity, autoReleaseInterval, _resourceModule);
+            var pool = new NodePool(scenePath, handle.Asset, parent, name, capacity, autoReleaseInterval, handle);
             _nodePoolMap[key] = pool;
 
             Debugger.Info(
@@ -225,10 +229,11 @@ namespace Framework
             _resourceModule.LoadAssetAsync<PackedScene>(scenePath)
                 .OnCompleted(handle =>
                 {
-                    if (!handle.IsValid)
+                    if (!handle.IsValid || _shutdown || !GodotObject.IsInstanceValid(parent) || parent.IsQueuedForDeletion())
                     {
                         Debugger.Error(
                             $"[ObjectPoolModule] CreateNodePoolAsync: Failed to load PackedScene at '{scenePath}'. Error: {handle.Error}");
+                        handle.Dispose();
                         onCompleted?.Invoke(null);
                         return;
                     }
@@ -236,13 +241,14 @@ namespace Framework
                     // 加载完成后再次检查（防止在异步等待期间重复创建）
                     if (_nodePoolMap.ContainsKey(key))
                     {
+                        handle.Dispose();
                         Debugger.Warn(
                             $"[ObjectPoolModule] CreateNodePoolAsync: Pool was created during async load, returning existing pool.");
                         onCompleted?.Invoke(_nodePoolMap[key]);
                         return;
                     }
 
-                    var pool = new NodePool(scenePath, handle.Asset, parent, name, capacity, autoReleaseInterval, _resourceModule);
+                    var pool = new NodePool(scenePath, handle.Asset, parent, name, capacity, autoReleaseInterval, handle);
                     _nodePoolMap[key] = pool;
 
                     Debugger.Info(

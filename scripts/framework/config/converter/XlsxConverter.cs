@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Framework
@@ -25,7 +27,23 @@ namespace Framework
         /// <param name="options">转换参数。</param>
         public XlsxConvertResult Convert(XlsxConvertOptions options)
         {
-            
+            ArgumentNullException.ThrowIfNull(options);
+            using var transaction = ConfigOutputTransaction.Begin(new[] { options.JsonOutputDir, options.CsOutputDir });
+            var outputs = new List<ConfigOutput>();
+            XlsxConvertResult result = Prepare(options, outputs);
+            transaction.Publish(outputs, options.Overwrite);
+            return result;
+        }
+
+        /// <summary>Recover an interrupted batch without regenerating its source workbooks.</summary>
+        public int RecoverOutputs(params string[] outputDirectories)
+        {
+            using var transaction = ConfigOutputTransaction.Begin(outputDirectories);
+            return transaction.RecoveredTransactions;
+        }
+
+        private XlsxConvertResult Prepare(XlsxConvertOptions options, List<ConfigOutput> outputs)
+        {
             if (options == null) throw new ArgumentNullException(nameof(options));
             options.Validate();
 
@@ -36,14 +54,28 @@ namespace Framework
                 ? options.TableName
                 : Path.GetFileNameWithoutExtension(options.XlsxPath).ToLowerInvariant();
 
+            if (tableName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                tableName.Contains('/') || tableName.Contains('\\') || tableName is "." or "..")
+                throw new ArgumentException($"Invalid config table name: '{tableName}'.");
+
+            // Validate both representations even when only one output was requested.
+            string jsonContent;
+            string csContent;
+            try
+            {
+                csContent = _csGen.Generate(tableName, tableData, options.Namespace);
+                jsonContent = _jsonGen.Generate(tableData);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidOperationException($"Config '{options.XlsxPath}': {exception.Message}", exception);
+            }
+
             string jsonPath = null;
             if (options.JsonOutputDir != null)
             {
                 jsonPath = Path.Combine(options.JsonOutputDir, tableName + ".json");
-                if (!options.Overwrite && File.Exists(jsonPath))
-                    throw new IOException($"JSON 文件已存在且 Overwrite=false：'{jsonPath}'");
-                Directory.CreateDirectory(options.JsonOutputDir);
-                File.WriteAllText(jsonPath, _jsonGen.Generate(tableData), Encoding.UTF8);
+                outputs.Add(new ConfigOutput(jsonPath, jsonContent));
             }
 
             string csPath = null;
@@ -51,15 +83,7 @@ namespace Framework
             {
                 var className = ToPascalCase(tableName) + "Config";
                 csPath = Path.Combine(options.CsOutputDir, className + ".cs");
-                if (!options.Overwrite && File.Exists(csPath))
-                    throw new IOException($"C# 文件已存在且 Overwrite=false：'{csPath}'");
-                Directory.CreateDirectory(options.CsOutputDir);
-
-                // 先比较内容，内容相同则跳过写入。
-                // 避免重复写入相同内容后 Build，Godot ScriptManagerBridge 重复注册同名类导致程序集卸载失败。
-                var newCsContent = _csGen.Generate(tableName, tableData, options.Namespace);
-                if (!File.Exists(csPath) || File.ReadAllText(csPath, Encoding.UTF8) != newCsContent)
-                   File.WriteAllText(csPath, newCsContent, Encoding.UTF8);
+                outputs.Add(new ConfigOutput(csPath, csContent));
             }
 
             return new XlsxConvertResult
@@ -88,28 +112,30 @@ namespace Framework
             string namespaceName  = "Generated.Config",
             bool   overwrite      = true)
         {
+            using var transaction = ConfigOutputTransaction.Begin(new[] { jsonOutputDir, csOutputDir });
             if (!Directory.Exists(xlsxDir))
                 throw new DirectoryNotFoundException($"找不到目录：'{xlsxDir}'");
             if (jsonOutputDir == null && csOutputDir == null)
                 throw new ArgumentException("jsonOutputDir 和 csOutputDir 不能同时为 null。");
 
-            var files = Directory.GetFiles(xlsxDir, "*.xlsx", SearchOption.TopDirectoryOnly);
+            var files = Directory.GetFiles(xlsxDir, "*.xlsx", SearchOption.TopDirectoryOnly)
+                .Where(path => !Path.GetFileName(path).StartsWith("~", StringComparison.Ordinal))
+                .OrderBy(path => path, StringComparer.Ordinal).ToArray();
             var results = new XlsxConvertResult[files.Length];
+            var outputs = new List<ConfigOutput>();
 
             for (int i = 0; i < files.Length; i++)
             {
-                // 跳过以 ~ 开头的临时文件（Excel 打开时产生）
-                if (Path.GetFileName(files[i]).StartsWith("~")) continue;
-
-                results[i] = Convert(new XlsxConvertOptions
+                results[i] = Prepare(new XlsxConvertOptions
                 {
                     XlsxPath      = files[i],
                     JsonOutputDir = jsonOutputDir,
                     CsOutputDir   = csOutputDir,
                     Namespace     = namespaceName,
                     Overwrite     = overwrite
-                });
+                }, outputs);
             }
+            transaction.Publish(outputs, overwrite);
             return results;
         }
 

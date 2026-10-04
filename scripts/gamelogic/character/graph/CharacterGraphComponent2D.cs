@@ -34,6 +34,9 @@ namespace GameLogic
                 return CharacterGraph;
             }
 
+            if (!CharacterGraph.TryLoadDocument(out _))
+                return CharacterGraph;
+
             if (!IsSceneLocalResource(CharacterGraph) && !string.IsNullOrWhiteSpace(CharacterGraph.ResourcePath))
             {
                 CharacterGraphAsset migrated = CharacterGraph.Duplicate(true) as CharacterGraphAsset;
@@ -63,6 +66,11 @@ namespace GameLogic
             ICharacterInputProvider input = Owner?.GetAllComponents()
                 .OfType<ICharacterInputProvider>()
                 .FirstOrDefault();
+            if (!CharacterGraph.TryLoadDocument(out string loadError))
+            {
+                GD.PushWarning($"[CharacterGraphComponent2D] {loadError}");
+                return;
+            }
             Runtime = new CharacterGraphRuntime(CharacterGraph, Owner, input);
         }
 

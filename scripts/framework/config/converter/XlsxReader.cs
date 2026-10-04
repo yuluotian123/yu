@@ -38,59 +38,70 @@ namespace Framework
             // 将所有行读取为 string[]（按列索引）
             var allRows = ReadAllRows(xlsxPath, sheetName);
 
-            if (allRows.Count < 3)
+            if (!allRows.Any(row => row.Number == 1) || !allRows.Any(row => row.Number == 2))
                 throw new InvalidOperationException(
-                    $"xlsx 行数不足（至少需要 3 行表头），文件：{xlsxPath}");
+                    $"xlsx 缺少字段名或类型表头，文件：{xlsxPath}");
 
-            var headerRow  = allRows[0];
-            var typeRow    = allRows[1];
-            var commentRow = allRows[2];
+            var headerRow  = allRows.First(row => row.Number == 1).Cells;
+            var typeRow    = allRows.First(row => row.Number == 2).Cells;
+            var commentRow = allRows.FirstOrDefault(row => row.Number == 3).Cells ?? Array.Empty<string>();
 
             // ── 解析字段定义（第 1~3 行）──────────────────────────────────────
             var fields = new List<XlsxFieldDef>();
+            var columns = new List<int>();
+            var fieldNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             for (int col = 0; col < headerRow.Length; col++)
             {
                 var fieldName = headerRow[col]?.Trim() ?? "";
                 if (string.IsNullOrWhiteSpace(fieldName)) continue;
+                if (!fieldNames.Add(fieldName))
+                    throw new InvalidOperationException($"Duplicate field '{fieldName}': {xlsxPath}");
 
                 var typeStr = col < typeRow.Length    ? typeRow[col]?.Trim()    ?? "" : "";
                 var comment = col < commentRow.Length ? commentRow[col]?.Trim() ?? "" : "";
                 fields.Add(new XlsxFieldDef(fieldName, typeStr, comment));
+                columns.Add(col);
             }
 
             if (fields.Count == 0)
                 throw new InvalidOperationException($"xlsx 未找到任何字段定义：{xlsxPath}");
 
-            if (!fields[0].FieldName.Equals("id", StringComparison.OrdinalIgnoreCase))
+            if (columns[0] != 0 || !fields[0].FieldName.Equals("id", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException(
                     $"xlsx 第一列必须为 'id'，当前为 '{fields[0].FieldName}'，文件：{xlsxPath}");
 
             // ── 解析数据行（第 4 行起）────────────────────────────────────────
             var dataRows = new List<IReadOnlyDictionary<string, string>>();
-            for (int rowIdx = 3; rowIdx < allRows.Count; rowIdx++)
+            var sourceRows = new List<uint>();
+            foreach (var row in allRows.Where(row => row.Number >= 4))
             {
-                var rawRow  = allRows[rowIdx];
+                var rawRow  = row.Cells;
                 var dataRow = new Dictionary<string, string>();
                 bool hasData = false;
 
                 for (int col = 0; col < fields.Count; col++)
                 {
-                    var cellStr = col < rawRow.Length ? rawRow[col] ?? "" : "";
+                    int sourceColumn = columns[col];
+                    var cellStr = sourceColumn < rawRow.Length ? rawRow[sourceColumn] ?? "" : "";
                     dataRow[fields[col].FieldName] = cellStr;
                     if (!string.IsNullOrWhiteSpace(cellStr)) hasData = true;
                 }
 
-                if (hasData) dataRows.Add(dataRow);
+                if (hasData)
+                {
+                    dataRows.Add(dataRow);
+                    sourceRows.Add(row.Number);
+                }
             }
 
-            return new XlsxTableData(fields, dataRows);
+            return new XlsxTableData(fields, dataRows, sourceRows);
         }
 
         // ── 内部：用 Open XML SDK 读取所有行 ─────────────────────────────────
 
-        private static List<string[]> ReadAllRows(string xlsxPath, string sheetName)
+        private static List<(uint Number, string[] Cells)> ReadAllRows(string xlsxPath, string sheetName)
         {
-            var result = new List<string[]>();
+            var result = new List<(uint Number, string[] Cells)>();
 
             using var doc = SpreadsheetDocument.Open(xlsxPath, isEditable: false);
             var workbook  = doc.WorkbookPart ?? throw new InvalidOperationException("无法读取 Workbook。");
@@ -122,9 +133,12 @@ namespace Framework
             var rows   = sheetData.Elements<Row>().ToList();
             foreach (var row in rows)
             {
+                int nextColumn = 0;
                 foreach (var cell in row.Elements<Cell>())
                 {
-                    int col = ColIndexFromRef(cell.CellReference?.Value);
+                    int col = string.IsNullOrEmpty(cell.CellReference?.Value)
+                        ? nextColumn : ColIndexFromRef(cell.CellReference.Value);
+                    nextColumn = col + 1;
                     if (col + 1 > maxCol) maxCol = col + 1;
                 }
             }
@@ -132,12 +146,16 @@ namespace Framework
             foreach (var row in rows)
             {
                 var cells = new string[maxCol];
+                int nextColumn = 0;
                 foreach (var cell in row.Elements<Cell>())
                 {
-                    int colIdx = ColIndexFromRef(cell.CellReference?.Value);
+                    int colIdx = string.IsNullOrEmpty(cell.CellReference?.Value)
+                        ? nextColumn : ColIndexFromRef(cell.CellReference.Value);
+                    nextColumn = colIdx + 1;
                     cells[colIdx] = GetCellValue(cell, sst);
                 }
-                result.Add(cells);
+                uint number = row.RowIndex?.Value ?? (result.Count == 0 ? 1 : result[^1].Number + 1);
+                result.Add((number, cells));
             }
 
             return result;
@@ -152,18 +170,25 @@ namespace Framework
             {
                 if (!char.IsLetter(c)) break;
                 idx = idx * 26 + (char.ToUpperInvariant(c) - 'A' + 1);
+                if (idx < 1 || idx > 16384)
+                    throw new FormatException($"Invalid xlsx cell reference: '{cellRef}'.");
             }
+            if (idx == 0)
+                throw new FormatException($"Invalid xlsx cell reference: '{cellRef}'.");
             return idx - 1;
         }
 
         /// <summary>读取单元格的字符串值（处理共享字符串、数字、布尔等）。</summary>
         private static string GetCellValue(Cell cell, SharedStringTable sst)
         {
+            if (cell.DataType?.Value == CellValues.InlineString)
+                return cell.InlineString?.InnerText ?? string.Empty;
             var raw = cell.CellValue?.Text ?? "";
-            if (cell.DataType?.Value == CellValues.SharedString && sst != null)
+            if (cell.DataType?.Value == CellValues.SharedString)
             {
-                if (int.TryParse(raw, out int idx))
+                if (sst != null && int.TryParse(raw, out int idx) && idx >= 0 && idx < sst.ChildElements.Count)
                     return sst.ElementAt(idx).InnerText;
+                throw new FormatException($"Invalid shared string index '{raw}' at '{cell.CellReference}'.");
             }
             if (cell.DataType?.Value == CellValues.Boolean)
                 return raw == "1" ? "true" : "false";
@@ -198,13 +223,17 @@ namespace Framework
         public IReadOnlyList<XlsxFieldDef> Fields { get; }
         /// <summary>数据行列表（全空行已跳过）。key 为字段名，value 为单元格字符串。</summary>
         public IReadOnlyList<IReadOnlyDictionary<string, string>> DataRows { get; }
+        public IReadOnlyList<uint> SourceRows { get; }
 
         public XlsxTableData(
             IList<XlsxFieldDef> fields,
-            IList<IReadOnlyDictionary<string, string>> dataRows)
+            IList<IReadOnlyDictionary<string, string>> dataRows,
+            IList<uint> sourceRows = null)
         {
             Fields   = new ReadOnlyCollection<XlsxFieldDef>(fields);
             DataRows = new ReadOnlyCollection<IReadOnlyDictionary<string, string>>(dataRows);
+            SourceRows = new ReadOnlyCollection<uint>(sourceRows ??
+                Enumerable.Range(4, dataRows.Count).Select(row => (uint)row).ToList());
         }
     }
 }

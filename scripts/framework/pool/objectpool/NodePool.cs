@@ -25,7 +25,10 @@ namespace Framework
         private readonly string _name;
         private readonly string _scenePath;
         private readonly PackedScene _packedScene;
-        private readonly IResourceModule _resourceModule;
+        private readonly ResourceHandle<PackedScene> _sceneHandle;
+        private readonly HashSet<Node> _activeNodes = new();
+        private readonly Dictionary<Node, PooledNodeState> _idleStates = new();
+        private bool _shutdown;
         private Node _parent;
         private int _capacity;
         private bool _allowOverflow;
@@ -41,9 +44,9 @@ namespace Framework
         /// <param name="name">对象池名称。</param>
         /// <param name="capacity">容量上限。</param>
         /// <param name="autoReleaseInterval">自动释放间隔（秒），小于等于 0 表示禁用。</param>
-        /// <param name="resourceModule">资源模块引用，用于 Shutdown 时释放 PackedScene 缓存。</param>
+        /// <param name="sceneHandle">Owned resource reference, released on shutdown.</param>
         public NodePool(string scenePath, PackedScene packedScene, Node parent,
-            string name, int capacity, float autoReleaseInterval, IResourceModule resourceModule)
+            string name, int capacity, float autoReleaseInterval, ResourceHandle<PackedScene> sceneHandle = null)
         {
             if (packedScene == null)
                 throw new Exception($"[NodePool] PackedScene is null for path: '{scenePath}'.");
@@ -59,7 +62,7 @@ namespace Framework
             _allowOverflow = false;
             _autoReleaseTimer = 0;
             _idleQueue = new Queue<Node>(_capacity);
-            _resourceModule = resourceModule;
+            _sceneHandle = sceneHandle;
         }
 
         // ---- INodePool 属性实现 ----
@@ -107,15 +110,21 @@ namespace Framework
         /// </summary>
         public Node Spawn()
         {
-            Node node;
-
-            if (_idleQueue.Count > 0)
+            if (_shutdown || !GodotObject.IsInstanceValid(_parent) || _parent.IsQueuedForDeletion())
+                throw new InvalidOperationException($"NodePool '{_name}' has no active owner.");
+            Node node = null;
+            while (_idleQueue.Count > 0)
             {
-                // 从空闲队列取出，重新设为可见
                 node = _idleQueue.Dequeue();
-                SetNodeVisible(node, true);
+                _idleStates.Remove(node, out var state);
+                if (GodotObject.IsInstanceValid(node) && !node.IsQueuedForDeletion())
+                {
+                    state?.Restore();
+                    break;
+                }
+                node = null;
             }
-            else
+            if (node == null)
             {
                 // 实例化新节点并加入父节点
                 node = _packedScene.Instantiate();
@@ -123,10 +132,17 @@ namespace Framework
                 Debugger.Info($"[NodePool({_scenePath})] Instantiated new node (total managed: {_parent.GetChildCount()}).");
             }
 
-            // 可选：调用 OnSpawn
-            if (node is IObjectPoolItem poolItem)
+            _activeNodes.Add(node);
+            try
             {
-                poolItem.OnSpawn();
+                if (node is IObjectPoolItem poolItem)
+                    poolItem.OnSpawn();
+            }
+            catch
+            {
+                _activeNodes.Remove(node);
+                node.QueueFree();
+                throw;
             }
 
             return node;
@@ -139,22 +155,31 @@ namespace Framework
         /// </summary>
         public void Recycle(Node node)
         {
-            if (node == null)
+            if (node == null || !_activeNodes.Remove(node))
             {
-                Debugger.Warn($"[NodePool({_scenePath})] Recycle: node is null, ignored.");
+                Debugger.Warn($"[NodePool({_scenePath})] Recycle rejected: node is not active in this pool.");
                 return;
             }
-
-            // 调用可选回收回调
-            if (node is IObjectPoolItem poolItem)
+            if (!GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion())
+                return;
+            var state = new PooledNodeState(node);
+            state.Suspend();
+            try
             {
-                poolItem.OnRecycle();
+                if (node is IObjectPoolItem poolItem)
+                    poolItem.OnRecycle();
+            }
+            catch
+            {
+                node.QueueFree();
+                throw;
             }
 
-            if (_idleQueue.Count < _capacity || _allowOverflow)
+            if (!GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion())
+                return;
+            if (!_shutdown && (_idleQueue.Count < _capacity || _allowOverflow))
             {
-                // 隐藏节点，保留在父节点下
-                SetNodeVisible(node, false);
+                _idleStates[node] = state;
                 _idleQueue.Enqueue(node);
             }
             else
@@ -174,34 +199,11 @@ namespace Framework
             while (_idleQueue.Count > 0)
             {
                 var node = _idleQueue.Dequeue();
-                node?.QueueFree();
+                _idleStates.Remove(node);
+                if (GodotObject.IsInstanceValid(node))
+                    node.QueueFree();
             }
             Debugger.Info($"[NodePool({_scenePath})] Released {count} idle nodes.");
-        }
-
-        // ---- 私有辅助方法 ----
-
-        /// <summary>
-        /// 设置节点的可见性。
-        /// <para>对 <see cref="CanvasItem"/>（Node2D、Control 等）直接设置 <c>Visible</c> 属性；
-        /// 对纯 <see cref="Node"/> 则通过切换 <see cref="Node.ProcessMode"/> 来模拟隐藏/显示。</para>
-        /// </summary>
-        private static void SetNodeVisible(Node node, bool visible)
-        {
-            if (node is CanvasItem canvasItem)
-            {
-                canvasItem.Visible = visible;
-            }
-            else
-            {
-                // 非 CanvasItem 节点（如 Node3D 的基类 Node）：
-                // 通过禁用/恢复 ProcessMode 来"暂停"节点，
-                // 同时将其移出/加回场景树更彻底，但代价高；
-                // 这里使用 ProcessMode 作为轻量替代。
-                node.ProcessMode = visible
-                    ? Node.ProcessModeEnum.Inherit
-                    : Node.ProcessModeEnum.Disabled;
-            }
         }
 
         // ---- 供 ObjectPoolModule 调用的内部方法 ----
@@ -211,6 +213,14 @@ namespace Framework
         /// </summary>
         internal void Process(double elapseSeconds, double realElapseSeconds)
         {
+            if (_shutdown)
+                return;
+            if (!GodotObject.IsInstanceValid(_parent) || _parent.IsQueuedForDeletion())
+            {
+                Shutdown();
+                return;
+            }
+            _activeNodes.RemoveWhere(node => !GodotObject.IsInstanceValid(node));
             if (_autoReleaseInterval <= 0f || _idleQueue.Count == 0)
                 return;
 
@@ -226,24 +236,19 @@ namespace Framework
         /// 关闭并清理 Node 对象池：
         /// <list type="bullet">
         ///   <item>QueueFree 所有空闲节点。</item>
-        ///   <item>通过 <see cref="IResourceModule.UnloadAsset"/> 释放 PackedScene 的缓存强引用，
-        ///   避免 PackedScene 因留在缓存中而无法被 Godot 回收（资源泄漏）。</item>
+        ///   <item>Release this pool's scene handle without invalidating other users.</item>
         /// </list>
         /// <para>注意：Spawn 出去但尚未 Recycle 的节点不在此管理范围内，
         /// 调用方需自行确保所有活跃节点在 Shutdown 前已 Recycle 或 QueueFree。</para>
         /// </summary>
         internal void Shutdown()
         {
-            // 释放空闲节点
-            while (_idleQueue.Count > 0)
-            {
-                var node = _idleQueue.Dequeue();
-                node?.QueueFree();
-            }
-
-            // 释放 PackedScene 的缓存引用，让 Godot 引用计数归零后自动回收
-            _resourceModule?.ForceUnloadAsset(_scenePath);
-
+            if (_shutdown)
+                return;
+            _shutdown = true;
+            ReleaseAllUnused();
+            _activeNodes.Clear();
+            _sceneHandle?.Dispose();
             _parent = null;
         }
     }

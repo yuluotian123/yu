@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Framework
 {
@@ -34,6 +35,22 @@ namespace Framework
                 throw new ArgumentNullException(nameof(tableData));
 
             var className = ToPascalCase(tableName) + "Config";
+            ValidateIdentifier(className);
+            if (string.IsNullOrWhiteSpace(namespaceName))
+                throw new ArgumentException("Config namespace cannot be empty.");
+            foreach (string segment in namespaceName.Split('.'))
+                ValidateIdentifier(segment);
+            var properties = new HashSet<string>(StringComparer.Ordinal) { className };
+            foreach (XlsxFieldDef field in tableData.Fields)
+            {
+                string property = ToPascalCase(field.FieldName);
+                ValidateIdentifier(property);
+                if (!properties.Add(property))
+                    throw new ArgumentException($"Duplicate config property: '{property}'.");
+                ConfigTypeRegistry.GetCSharpTypeName(field.TypeStr);
+                if (property == "Id" && !string.Equals(field.TypeStr?.Trim(), "int", StringComparison.OrdinalIgnoreCase))
+                    throw new ArgumentException("Config Id must have type int.");
+            }
             var needsCollections = NeedsCollectionsUsing(tableData.Fields);
 
             var sb = new StringBuilder();
@@ -41,7 +58,6 @@ namespace Framework
             // 文件头注释
             sb.AppendLine($"// 【此文件由 XlsxConverter 自动生成，请勿手动修改】");
             sb.AppendLine($"// 源表名：{tableName}");
-            sb.AppendLine($"// 生成时间：{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
             sb.AppendLine();
 
             // using
@@ -53,7 +69,7 @@ namespace Framework
             // namespace & class
             sb.AppendLine($"namespace {namespaceName}");
             sb.AppendLine("{");
-            sb.AppendLine($"    [ConfigTable(\"{tableName}\")]");
+            sb.AppendLine($"    [ConfigTable({System.Text.Json.JsonSerializer.Serialize(tableName)})]");
             sb.AppendLine($"    public class {className} : ConfigRow");
             sb.AppendLine("    {");
 
@@ -65,17 +81,7 @@ namespace Framework
                     continue;
 
                 var propName = ToPascalCase(field.FieldName);
-                string csharpType;
-                try
-                {
-                    csharpType = ConfigTypeRegistry.GetCSharpTypeName(field.TypeStr);
-                }
-                catch
-                {
-                    // 不支持的类型降级为 string，并添加警告注释
-                    csharpType = "string";
-                    sb.AppendLine($"        // [WARNING] 不支持的类型 '{field.TypeStr}'，已降级为 string");
-                }
+                string csharpType = ConfigTypeRegistry.GetCSharpTypeName(field.TypeStr);
 
                 if (!string.IsNullOrWhiteSpace(field.Comment))
                 {
@@ -98,6 +104,7 @@ namespace Framework
         private static string ToPascalCase(string name)
         {
             if (string.IsNullOrEmpty(name)) return name;
+            if (name.Equals("id", StringComparison.OrdinalIgnoreCase)) return "Id";
             var parts = name.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
             foreach (var part in parts)
@@ -111,18 +118,25 @@ namespace Framework
             foreach (var f in fields)
             {
                 if (string.IsNullOrWhiteSpace(f.TypeStr)) continue;
-                try
-                {
-                    if (ConfigTypeRegistry.NeedsCollectionsUsing(f.TypeStr))
-                        return true;
-                }
-                catch { /* 忽略不支持的类型 */ }
+                if (ConfigTypeRegistry.NeedsCollectionsUsing(f.TypeStr))
+                    return true;
             }
             return false;
         }
 
         /// <summary>转义 XML 注释中的特殊字符。</summary>
         private static string EscapeXml(string text)
-            => text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+            => text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
+                .Replace("\r", " ").Replace("\n", " ");
+
+        private static void ValidateIdentifier(string name)
+        {
+            if (string.IsNullOrEmpty(name) || !Regex.IsMatch(name, @"^[_\p{L}][\p{L}\p{Nd}_]*$"))
+                throw new ArgumentException($"Invalid C# config identifier: '{name}'.");
+            // Generated property/class names start uppercase; namespaces may contain keywords.
+            const string keywords = " abstract as base bool break byte case catch char checked class const continue decimal default delegate do double else enum event explicit extern false finally fixed float for foreach goto if implicit in int interface internal is lock long namespace new null object operator out override params private protected public readonly ref return sbyte sealed short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unsafe ushort using virtual void volatile while ";
+            if (keywords.Contains(" " + name + " ", StringComparison.Ordinal))
+                throw new ArgumentException($"C# keyword cannot be a config identifier: '{name}'.");
+        }
     }
 }

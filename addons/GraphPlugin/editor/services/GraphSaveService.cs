@@ -13,6 +13,13 @@ public static class GraphSaveService
         if (graph == null || !GodotObject.IsInstanceValid(graph))
             return false;
 
+        if (!graph.TryLoadDocument(out string loadError))
+        {
+            if (showDialog)
+                ShowDialog(owner, "Graph Load Failed", loadError);
+            return false;
+        }
+
         SyncNodePositions(graph, graphEdit);
         SyncEditorState(graph, graphEdit);
 
@@ -31,7 +38,16 @@ public static class GraphSaveService
         if (graph == null || !GodotObject.IsInstanceValid(graph))
             return false;
 
-        graph.SaveJsonFields();
+        try
+        {
+            graph.SaveJsonFields();
+        }
+        catch (Exception exception)
+        {
+            if (showDialog)
+                ShowDialog(owner, "Graph Save Failed", exception.Message);
+            return false;
+        }
         Error error = SaveResource(graph);
         if (error != Error.Ok)
         {

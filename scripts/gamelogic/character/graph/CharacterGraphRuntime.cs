@@ -23,12 +23,17 @@ namespace GameLogic
             ICharacterInputProvider input)
         {
             _graph = graph;
-            _graph?.MigrateMovementNodesToComponents();
             _owner = owner;
             _input = input;
             _abilities = owner?.GetComponent<AbilitySystemComponent2D>();
-            _blackboard.PushLocal(graph);
             _context = new GraphExecutionContext(graph, _blackboard);
+            if (graph == null || !graph.TryLoadDocument(out _))
+            {
+                _stopped = true;
+                return;
+            }
+            _graph.MigrateMovementNodesToComponents();
+            _blackboard.PushLocal(graph);
             _context.UserData.Add(this);
             if (owner != null)
                 _context.UserData.Add(owner);

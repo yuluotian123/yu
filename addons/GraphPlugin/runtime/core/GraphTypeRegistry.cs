@@ -117,8 +117,13 @@ public static class GraphTypeRegistry
     public static void RegisterAlias(string oldName, string newName)
     {
         if (string.IsNullOrWhiteSpace(oldName) || string.IsNullOrWhiteSpace(newName))
-            return;
+            throw new ArgumentException("Both alias names are required.");
 
+        string target = ResolveAlias(newName);
+        if (oldName == target)
+            throw new ArgumentException($"Graph type alias cycle: {oldName} -> {newName}.");
+        if (Aliases.TryGetValue(oldName, out string existing) && existing != newName)
+            throw new ArgumentException($"Graph type alias already registered: {oldName}.");
         Aliases[oldName] = newName;
     }
 
@@ -197,7 +202,14 @@ public static class GraphTypeRegistry
     {
         EnsureScanned();
         nodeType = ResolveAlias(nodeType);
-        return NodesByType.TryGetValue(nodeType, out definition);
+        if (NodesByType.TryGetValue(nodeType, out definition))
+            return true;
+        if (TryResolveType(nodeType, out Type type))
+        {
+            definition = NodesByType.Values.FirstOrDefault(value => value.NodeDataType == type);
+            return definition != null;
+        }
+        return false;
     }
 
     /// <summary>
@@ -226,8 +238,14 @@ public static class GraphTypeRegistry
     {
         EnsureScanned();
         typeName = ResolveAlias(typeName);
-        return TypesByName.TryGetValue(typeName, out type);
+        type = null;
+        return !string.IsNullOrWhiteSpace(typeName) &&
+               TypesByName.TryGetValue(typeName, out type) && type != null;
     }
+
+    public static string GetSerializationId(Type type) =>
+        type.GetCustomAttribute<GraphSerializationIdAttribute>()?.Id ??
+        $"{type.Assembly.GetName().Name}:{type.FullName}";
 
     /// <summary>
     /// 返回指定图类型的默认连线。
@@ -248,10 +266,17 @@ public static class GraphTypeRegistry
 
     private static string ResolveAlias(string typeName)
     {
-        if (string.IsNullOrWhiteSpace(typeName))
+        if (string.IsNullOrWhiteSpace(typeName) || !Aliases.ContainsKey(typeName))
             return typeName;
 
-        return Aliases.TryGetValue(typeName, out string alias) ? alias : typeName;
+        var visited = new HashSet<string>(StringComparer.Ordinal);
+        while (Aliases.TryGetValue(typeName, out string alias))
+        {
+            if (!visited.Add(typeName))
+                throw new InvalidOperationException($"Graph type alias cycle: {typeName}.");
+            typeName = alias;
+        }
+        return typeName;
     }
 
     private static void RegisterTypeNamesFromAssemblies()
@@ -282,8 +307,18 @@ public static class GraphTypeRegistry
         if (type == null)
             return;
 
-        TypesByName[type.Name] = type;
+        RegisterName(type.Name, type);
         if (!string.IsNullOrWhiteSpace(type.FullName))
-            TypesByName[type.FullName] = type;
+            RegisterName(type.FullName, type);
+        RegisterName(GetSerializationId(type), type);
+    }
+
+    private static void RegisterName(string name, Type type)
+    {
+        // Never let assembly scan order select one of two identically named types.
+        if (TypesByName.TryGetValue(name, out Type existing) && existing != type)
+            TypesByName[name] = null;
+        else
+            TypesByName[name] = type;
     }
 }

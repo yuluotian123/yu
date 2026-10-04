@@ -105,6 +105,12 @@ public static class GraphValidationService
             return result;
         }
 
+        if (!graph.TryLoadDocument(out string loadError))
+        {
+            result.AddError(loadError);
+            return result;
+        }
+
         ValidateNodes(graph, result);
         ValidateConnections(graph, result);
         ValidateBlackboard(graph, result);

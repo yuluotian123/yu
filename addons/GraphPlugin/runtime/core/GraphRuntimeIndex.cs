@@ -10,6 +10,9 @@ using System.Linq;
 /// </remarks>
 public sealed class GraphRuntimeIndex
 {
+    private readonly GraphAsset _graph;
+    private GraphDocument _document;
+    private long _version = -1;
     private readonly Dictionary<string, GraphNodeData> _nodesById = new(System.StringComparer.Ordinal);
     private readonly Dictionary<string, List<GraphConnection>> _outgoing = new(System.StringComparer.Ordinal);
     private readonly Dictionary<string, List<GraphConnection>> _incoming = new(System.StringComparer.Ordinal);
@@ -19,10 +22,22 @@ public sealed class GraphRuntimeIndex
     /// </summary>
     public GraphRuntimeIndex(GraphAsset graph)
     {
-        if (graph == null)
-            return;
+        _graph = graph;
+        EnsureCurrent();
+    }
 
-        foreach (GraphNodeData node in graph.Nodes)
+    private void EnsureCurrent()
+    {
+        if (_graph == null)
+            return;
+        GraphDocument document = _graph.Document;
+        if (ReferenceEquals(_document, document) && _version == document.StructureVersion)
+            return;
+        _nodesById.Clear();
+        _outgoing.Clear();
+        _incoming.Clear();
+
+        foreach (GraphNodeData node in document.Nodes)
         {
             if (node == null || string.IsNullOrWhiteSpace(node.Id))
                 continue;
@@ -32,9 +47,10 @@ public sealed class GraphRuntimeIndex
             _incoming[node.Id] = new List<GraphConnection>();
         }
 
-        foreach (GraphConnection connection in graph.Connections)
+        foreach (GraphConnection connection in document.Connections)
         {
-            if (connection == null)
+            if (connection == null || string.IsNullOrWhiteSpace(connection.FromNode) ||
+                string.IsNullOrWhiteSpace(connection.ToNode))
                 continue;
 
             if (!_outgoing.TryGetValue(connection.FromNode, out List<GraphConnection> outgoing))
@@ -52,11 +68,14 @@ public sealed class GraphRuntimeIndex
             outgoing.Add(connection);
             incoming.Add(connection);
         }
+        _document = document;
+        _version = document.StructureVersion;
     }
 
     /// <summary>查找节点。</summary>
     public GraphNodeData FindNodeById(string nodeId)
     {
+        EnsureCurrent();
         return !string.IsNullOrWhiteSpace(nodeId) && _nodesById.TryGetValue(nodeId, out GraphNodeData node)
             ? node
             : null;
@@ -65,6 +84,7 @@ public sealed class GraphRuntimeIndex
     /// <summary>查询指定接口或基类的节点。</summary>
     public List<TNode> GetNodes<TNode>() where TNode : class
     {
+        EnsureCurrent();
         var result = new List<TNode>();
         foreach (GraphNodeData node in _nodesById.Values)
         {
@@ -78,6 +98,7 @@ public sealed class GraphRuntimeIndex
     /// <summary>查询输出连线。</summary>
     public List<GraphConnection> GetOutgoingConnections(string nodeId, int? fromPort = null)
     {
+        EnsureCurrent();
         if (string.IsNullOrWhiteSpace(nodeId) || !_outgoing.TryGetValue(nodeId, out List<GraphConnection> list))
             return new List<GraphConnection>();
 
@@ -89,6 +110,7 @@ public sealed class GraphRuntimeIndex
     /// <summary>查询输入连线。</summary>
     public List<GraphConnection> GetIncomingConnections(string nodeId, int? toPort = null)
     {
+        EnsureCurrent();
         if (string.IsNullOrWhiteSpace(nodeId) || !_incoming.TryGetValue(nodeId, out List<GraphConnection> list))
             return new List<GraphConnection>();
 

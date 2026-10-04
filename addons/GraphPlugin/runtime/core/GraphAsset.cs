@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Godot;
 
 /// <summary>
@@ -24,6 +26,7 @@ public partial class GraphAsset : Resource
     private GraphDocument _document;
     private GraphRuntimeIndex _runtimeIndex;
     private bool _dirty;
+    private string _loadError;
 
     /// <summary>V2 唯一图存储字段。</summary>
     [Export(PropertyHint.MultilineText)]
@@ -36,6 +39,7 @@ public partial class GraphAsset : Resource
             _document = null;
             _runtimeIndex = null;
             _dirty = false;
+            _loadError = null;
         }
     }
 
@@ -80,7 +84,7 @@ public partial class GraphAsset : Resource
     }
 
     /// <summary>节点列表。</summary>
-    public List<GraphNodeData> Nodes
+    public IList<GraphNodeData> Nodes
     {
         get => Document.Nodes;
         set
@@ -91,7 +95,7 @@ public partial class GraphAsset : Resource
     }
 
     /// <summary>连线列表。</summary>
-    public List<GraphConnection> Connections
+    public IList<GraphConnection> Connections
     {
         get => Document.Connections;
         set
@@ -117,7 +121,7 @@ public partial class GraphAsset : Resource
     {
         get
         {
-            GraphNodeData entryNode = Nodes.Find(node => node.NodeType == "EntryNode" || node.NodeType == "FlowEntryNodeData");
+            GraphNodeData entryNode = Nodes.FirstOrDefault(node => node?.NodeType == "EntryNode" || node?.NodeType == "FlowEntryNodeData");
             if (entryNode != null)
                 return entryNode;
 
@@ -291,12 +295,50 @@ public partial class GraphAsset : Resource
     {
         if (_document != null)
             return;
+        if (_loadError != null)
+            throw new JsonException(_loadError);
 
-        _document = string.IsNullOrWhiteSpace(_graphJson)
+        try
+        {
+            LoadDocument();
+        }
+        catch (Exception exception) when (exception is not OutOfMemoryException)
+        {
+            _document = null;
+            _loadError = $"Graph '{ResourcePath}': {exception.Message}";
+            throw new JsonException(_loadError, exception);
+        }
+    }
+
+    public bool TryLoadDocument(out string error)
+    {
+        try
+        {
+            EnsureDocument();
+            error = null;
+            return true;
+        }
+        catch (JsonException exception)
+        {
+            error = exception.Message;
+            return false;
+        }
+    }
+
+    private void LoadDocument()
+    {
+        GraphDocument document = string.IsNullOrWhiteSpace(_graphJson)
             ? new GraphDocument()
-            : GraphJsonHelper.Deserialize<GraphDocument>(_graphJson) ?? new GraphDocument();
+            : GraphJsonHelper.Deserialize<GraphDocument>(_graphJson)
+              ?? throw new JsonException("Graph document cannot be null.");
 
-        _document.SchemaVersion = 2;
+        if (document.SchemaVersion != 2)
+            throw new JsonException($"Unsupported graph schema version {document.SchemaVersion}; expected 2.");
+        if (!string.IsNullOrWhiteSpace(document.GraphType) && !string.IsNullOrWhiteSpace(GraphType) &&
+            document.GraphType != GraphType)
+            throw new JsonException($"Expected graph type '{GraphType}', found '{document.GraphType}'.");
+
+        _document = document;
         if (string.IsNullOrWhiteSpace(_document.GraphType))
             _document.GraphType = GraphType;
 

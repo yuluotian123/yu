@@ -110,7 +110,7 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     /// </summary>
     public virtual bool Start()
     {
-        if (Graph == null || Graph.PrimeNode == null)
+        if (Graph == null)
             return false;
 
         if (!Graph.Validate(out GraphValidationResult validation))
@@ -118,6 +118,9 @@ public class FlowGraphRuntime : IGraphRuntimeScope
             GD.PushWarning($"[FlowGraphRuntime] 图验证失败，无法启动：\n{validation.ToDisplayText()}");
             return false;
         }
+
+        if (Graph.PrimeNode == null)
+            return false;
 
         Stop();
         IsRunning = true;
@@ -135,6 +138,12 @@ public class FlowGraphRuntime : IGraphRuntimeScope
     {
         if (Graph == null || node == null)
             return false;
+
+        if (!Graph.TryLoadDocument(out string loadError))
+        {
+            GD.PushWarning($"[FlowGraphRuntime] {loadError}");
+            return false;
+        }
 
         Stop();
         IsRunning = true;

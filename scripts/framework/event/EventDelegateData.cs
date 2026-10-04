@@ -3,146 +3,117 @@ using System.Collections.Generic;
 
 namespace Framework
 {
-    /// <summary>
-    /// 单个事件 ID 的委托数据容器。
-    /// <para>
-    /// 参考 TEngine EventDelegateData 实现，通过"脏数据（dirty）"缓冲机制解决
-    /// 在回调执行期间 Subscribe / Unsubscribe 导致的迭代器失效问题：
-    /// <list type="bullet">
-    ///   <item>执行中调用 AddHandler → 先进 <c>_addList</c>，执行完再合并；</item>
-    ///   <item>执行中调用 RemoveHandler → 先进 <c>_removeList</c>，执行完再移除；</item>
-    ///   <item>执行完毕后统一通过 <c>ApplyModify()</c> 应用变更。</item>
-    /// </list>
-    /// </para>
-    /// </summary>
+    /// <summary>Dispatches a stable subscriber list until the outermost send finishes.</summary>
     internal class EventDelegateData
     {
         private readonly int _eventId;
-        private readonly List<Delegate> _handlers   = new List<Delegate>();
-        private readonly List<Delegate> _addList    = new List<Delegate>();
-        private readonly List<Delegate> _removeList = new List<Delegate>();
-        private bool _isExecuting = false;
-        private bool _dirty       = false;
+        private List<Delegate> _handlers = new();
+        private List<Delegate> _pendingHandlers;
+        private Type _signature;
+        private int _executionDepth;
 
-        internal EventDelegateData(int eventId)
-        {
-            _eventId = eventId;
-        }
+        internal EventDelegateData(int eventId) => _eventId = eventId;
 
-        // ------------------------------------------------------------------ 订阅管理
-
-        /// <summary>添加处理器。重复添加返回 false（打日志，不抛异常）。</summary>
         internal bool AddHandler(Delegate handler)
         {
-            if (_handlers.Contains(handler))
+            ArgumentNullException.ThrowIfNull(handler);
+            ValidateSignature(handler.GetType());
+            var handlers = GetWritableHandlers();
+            if (handlers.Contains(handler))
             {
-                Debugger.Error($"[EventDelegateData] Repeated Subscribe, EventId={_eventId}");
+                Debugger.Warn($"[EventDelegateData] Repeated Subscribe, EventId={_eventId}");
                 return false;
             }
-
-            if (_isExecuting)
-            {
-                _dirty = true;
-                _addList.Add(handler);
-            }
-            else
-            {
-                _handlers.Add(handler);
-            }
+            handlers.Add(handler);
             return true;
         }
 
-        /// <summary>移除处理器。不存在时打日志，不抛异常。</summary>
         internal void RemoveHandler(Delegate handler)
         {
-            if (_isExecuting)
-            {
-                _dirty = true;
-                _removeList.Add(handler);
-            }
-            else
-            {
-                if (!_handlers.Remove(handler))
-                {
-                    Debugger.Warn($"[EventDelegateData] Unsubscribe failed, handler not found, EventId={_eventId}");
-                }
-            }
+            ArgumentNullException.ThrowIfNull(handler);
+            ValidateSignature(handler.GetType());
+            if (!GetWritableHandlers().Remove(handler))
+                Debugger.Warn($"[EventDelegateData] Unsubscribe failed, EventId={_eventId}");
         }
-
-        // ------------------------------------------------------------------ 执行
 
         public void Invoke()
         {
-            _isExecuting = true;
-            for (int i = 0; i < _handlers.Count; i++)
+            BeginInvoke(typeof(Action));
+            try
             {
-                if (_handlers[i] is Action action)
-                    action();
+                for (int i = 0; i < _handlers.Count; i++)
+                    ((Action)_handlers[i])();
             }
-            ApplyModify();
+            finally { EndInvoke(); }
         }
 
         public void Invoke<T1>(T1 arg1)
         {
-            _isExecuting = true;
-            for (int i = 0; i < _handlers.Count; i++)
+            BeginInvoke(typeof(Action<T1>));
+            try
             {
-                if (_handlers[i] is Action<T1> action)
-                    action(arg1);
+                for (int i = 0; i < _handlers.Count; i++)
+                    ((Action<T1>)_handlers[i])(arg1);
             }
-            ApplyModify();
+            finally { EndInvoke(); }
         }
 
         public void Invoke<T1, T2>(T1 arg1, T2 arg2)
         {
-            _isExecuting = true;
-            for (int i = 0; i < _handlers.Count; i++)
+            BeginInvoke(typeof(Action<T1, T2>));
+            try
             {
-                if (_handlers[i] is Action<T1, T2> action)
-                    action(arg1, arg2);
+                for (int i = 0; i < _handlers.Count; i++)
+                    ((Action<T1, T2>)_handlers[i])(arg1, arg2);
             }
-            ApplyModify();
+            finally { EndInvoke(); }
         }
 
         public void Invoke<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
         {
-            _isExecuting = true;
-            for (int i = 0; i < _handlers.Count; i++)
+            BeginInvoke(typeof(Action<T1, T2, T3>));
+            try
             {
-                if (_handlers[i] is Action<T1, T2, T3> action)
-                    action(arg1, arg2, arg3);
+                for (int i = 0; i < _handlers.Count; i++)
+                    ((Action<T1, T2, T3>)_handlers[i])(arg1, arg2, arg3);
             }
-            ApplyModify();
+            finally { EndInvoke(); }
         }
 
         public void Invoke<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            _isExecuting = true;
-            for (int i = 0; i < _handlers.Count; i++)
+            BeginInvoke(typeof(Action<T1, T2, T3, T4>));
+            try
             {
-                if (_handlers[i] is Action<T1, T2, T3, T4> action)
-                    action(arg1, arg2, arg3, arg4);
+                for (int i = 0; i < _handlers.Count; i++)
+                    ((Action<T1, T2, T3, T4>)_handlers[i])(arg1, arg2, arg3, arg4);
             }
-            ApplyModify();
+            finally { EndInvoke(); }
         }
 
-        // ------------------------------------------------------------------ 私有辅助
+        private List<Delegate> GetWritableHandlers() => _executionDepth == 0
+            ? _handlers
+            : _pendingHandlers ??= new List<Delegate>(_handlers);
 
-        /// <summary>执行完毕后统一应用延迟的 Add/Remove 变更。</summary>
-        private void ApplyModify()
+        private void ValidateSignature(Type signature)
         {
-            _isExecuting = false;
-            if (!_dirty) return;
+            if (_signature != null && _signature != signature)
+                throw new ArgumentException($"Event {_eventId} expects {_signature}, received {signature}.");
+            _signature = signature;
+        }
 
-            for (int i = 0; i < _addList.Count; i++)
-                _handlers.Add(_addList[i]);
-            _addList.Clear();
+        private void BeginInvoke(Type signature)
+        {
+            ValidateSignature(signature);
+            _executionDepth++;
+        }
 
-            for (int i = 0; i < _removeList.Count; i++)
-                _handlers.Remove(_removeList[i]);
-            _removeList.Clear();
-
-            _dirty = false;
+        private void EndInvoke()
+        {
+            if (--_executionDepth != 0 || _pendingHandlers == null)
+                return;
+            _handlers = _pendingHandlers;
+            _pendingHandlers = null;
         }
     }
 }

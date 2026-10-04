@@ -16,6 +16,16 @@ using Godot;
 /// </remarks>
 public sealed class GraphDocument
 {
+    private GraphDataCollection<GraphNodeData> _nodes;
+    private GraphDataCollection<GraphConnection> _connections;
+    internal long StructureVersion { get; private set; }
+
+    public GraphDocument()
+    {
+        Nodes = new List<GraphNodeData>();
+        Connections = new List<GraphConnection>();
+    }
+
     /// <summary>当前 GraphJson 格式版本。后续格式变化时只递增这个值。</summary>
     public int SchemaVersion { get; set; } = 2;
 
@@ -27,16 +37,47 @@ public sealed class GraphDocument
     public bool HasActionDependencyMode { get; set; }
 
     /// <summary>图内所有节点数据。</summary>
-    public List<GraphNodeData> Nodes { get; set; } = new();
+    public IList<GraphNodeData> Nodes
+    {
+        get => _nodes;
+        set => ReplaceCollection(ref _nodes, value);
+    }
 
     /// <summary>图内所有连线数据。</summary>
-    public List<GraphConnection> Connections { get; set; } = new();
+    public IList<GraphConnection> Connections
+    {
+        get => _connections;
+        set => ReplaceCollection(ref _connections, value);
+    }
 
     /// <summary>图本地黑板条目。</summary>
     public List<GraphBlackboardEntry> BlackboardEntries { get; set; } = new();
 
     /// <summary>纯编辑器状态，例如缩放、滚动位置。运行时可以忽略。</summary>
     public GraphEditorState EditorState { get; set; } = new();
+
+    private void OnStructureChanged() => StructureVersion++;
+
+    private void ReplaceCollection<T>(ref GraphDataCollection<T> target, IList<T> value)
+        where T : GraphStructuralData
+    {
+        if (ReferenceEquals(target, value))
+            return;
+        var replacement = new GraphDataCollection<T>();
+        if (value != null)
+        {
+            foreach (T item in value)
+                replacement.Add(item);
+        }
+        if (target != null)
+        {
+            target.Changed -= OnStructureChanged;
+            target.StopObservingItems();
+        }
+        target = replacement;
+        target.Changed += OnStructureChanged;
+        OnStructureChanged();
+    }
 }
 
 /// <summary>

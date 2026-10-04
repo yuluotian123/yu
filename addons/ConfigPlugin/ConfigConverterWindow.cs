@@ -25,6 +25,7 @@ public partial class ConfigConverterWindow : Window
     private LineEdit _namespaceEdit;
     private TextEdit _logEdit;
     private Button   _convertBtn;
+    private Button   _recoverBtn;
 
     // 根容器
     private MarginContainer _margin;
@@ -45,6 +46,7 @@ public partial class ConfigConverterWindow : Window
 
         if (_xlsxDirEdit  != null) _xlsxDirEdit.TextChanged  -= OnXlsxDirTextChanged;
         if (_convertBtn   != null) _convertBtn.Pressed        -= OnConvertPressed;
+        if (_recoverBtn   != null) _recoverBtn.Pressed        -= OnRecoverPressed;
         if (_folderDialog != null) _folderDialog.DirSelected  -= OnFolderSelected;
     }
 
@@ -117,7 +119,12 @@ public partial class ConfigConverterWindow : Window
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
         };
         _convertBtn.Pressed += OnConvertPressed;
-        root.AddChild(_convertBtn);
+        var commands = new HBoxContainer();
+        commands.AddChild(_convertBtn);
+        _recoverBtn = new Button { Text = "恢复输出" };
+        _recoverBtn.Pressed += OnRecoverPressed;
+        commands.AddChild(_recoverBtn);
+        root.AddChild(commands);
 
         // ── 日志区 ────────────────────────────────────────────────────────────
         _logEdit = new TextEdit
@@ -199,61 +206,59 @@ public partial class ConfigConverterWindow : Window
 
         _logEdit.Clear();
         _convertBtn.Disabled = true;
+        _recoverBtn.Disabled = true;
 
         var xlsxDir = GlobalizePath(_xlsxDirEdit.Text.Trim());
         var jsonDir = GlobalizePath(_jsonDirEdit.Text.Trim());
         var csDir   = GlobalizePath(_csDirEdit.Text.Trim());
         var ns      = _namespaceEdit.Text.Trim();
 
-        if (!System.IO.Directory.Exists(xlsxDir))
-        {
-            Log($"[错误] xlsx 源文件夹不存在：{xlsxDir}");
-            _convertBtn.Disabled = false;
-            return;
-        }
-
-
         var converter = new XlsxConverter();
-        int success   = 0;
-        int failed    = 0;
-
-        var files = System.IO.Directory.GetFiles(xlsxDir, "*.xlsx",
-                        System.IO.SearchOption.TopDirectoryOnly);
-
-        if (files.Length == 0)
+        try
         {
-            Log($"[提示] 目录下没有找到 xlsx 文件：{xlsxDir}");
-            _convertBtn.Disabled = false;
-            return;
-        }
-
-        foreach (var file in files)
-        {
-            if (System.IO.Path.GetFileName(file).StartsWith("~")) continue;
-
-            try
-            {
-                var result = converter.Convert(new XlsxConvertOptions
-                {
-                    XlsxPath      = file,
-                    JsonOutputDir = string.IsNullOrWhiteSpace(jsonDir) ? null : jsonDir,
-                    CsOutputDir   = string.IsNullOrWhiteSpace(csDir)   ? null : csDir,
-                    Namespace     = ns,
-                    Overwrite     = true
-                });
+            var results = converter.ConvertDirectory(xlsxDir,
+                string.IsNullOrWhiteSpace(jsonDir) ? null : jsonDir,
+                string.IsNullOrWhiteSpace(csDir) ? null : csDir, ns);
+            foreach (var result in results)
                 Log($"[成功] {result}");
-                success++;
-            }
-            catch (Exception ex)
-            {
-                Log($"[失败] {System.IO.Path.GetFileName(file)}：{ex.Message}");
-                failed++;
-            }
+            Log($"\n转换完成：成功 {results.Length} 个。");
+            EditorInterface.Singleton.GetResourceFilesystem().Scan();
         }
+        catch (Exception ex)
+        {
+            Log($"[批量转换失败] {ex.Message}");
+        }
+        finally
+        {
+            _convertBtn.Disabled = false;
+            _recoverBtn.Disabled = false;
+        }
+    }
 
-        Log($"\n转换完成：成功 {success} 个，失败 {failed} 个。");
-        EditorInterface.Singleton.GetResourceFilesystem().Scan();
-        _convertBtn.Disabled = false;
+    private void OnRecoverPressed()
+    {
+        _logEdit.Clear();
+        _convertBtn.Disabled = true;
+        _recoverBtn.Disabled = true;
+        try
+        {
+            string jsonDir = GlobalizePath(_jsonDirEdit.Text.Trim());
+            string csDir = GlobalizePath(_csDirEdit.Text.Trim());
+            int recovered = new XlsxConverter().RecoverOutputs(
+                string.IsNullOrWhiteSpace(jsonDir) ? null : jsonDir,
+                string.IsNullOrWhiteSpace(csDir) ? null : csDir);
+            Log($"恢复完成：已处理 {recovered} 个未清理批次。");
+            EditorInterface.Singleton.GetResourceFilesystem().Scan();
+        }
+        catch (Exception exception)
+        {
+            Log($"[恢复失败] {exception.Message}");
+        }
+        finally
+        {
+            _convertBtn.Disabled = false;
+            _recoverBtn.Disabled = false;
+        }
     }
 
     // ── EditorSettings 持久化 ─────────────────────────────────────────────────

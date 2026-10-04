@@ -82,3 +82,4 @@ position = Vector2(430, 750)
 
 [node name="AIRunner2" parent="." unique_id=1602288585 instance=ExtResource("2_ai")]
 position = Vector2(899, 869)
+PersistentId = "ai_runner_2"

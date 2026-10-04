@@ -5,8 +5,8 @@ namespace GameLogic
     /// 负责将所有注册的 <see cref="ISaveable"/> 对象序列化到文件，
     /// 以及从文件反序列化并回写到对应对象。
     /// 
-    /// 存档文件格式为 JSON，路径为 res://saves/{slot}.json。
-    /// 每个 ISaveable 以其 SaveKey 为 key 存储在顶层 JSON 对象中。
+    /// JSON saves use user://saves/{slot}.json, with legacy objects and versioned sections.
+    /// Loading falls back to the backup and then the legacy res://saves directory.
     /// </summary>
     public interface ISaveModule
     {

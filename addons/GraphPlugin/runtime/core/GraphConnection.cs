@@ -7,19 +7,24 @@ using Godot;
 /// 连线只保存“从哪个节点的哪个输出端口，到哪个节点的哪个输入端口”以及可选业务数据。
 /// StateGraph、MissionGraph 可以继承它增加条件、优先级或执行模式。
 /// </remarks>
-public class GraphConnection
+public class GraphConnection : GraphStructuralData
 {
+    private string _fromNode = string.Empty;
+    private string _toNode = string.Empty;
+    private int _fromPort;
+    private int _toPort;
+
     /// <summary>起点节点 id。</summary>
-    public string FromNode { get; set; } = string.Empty;
+    public string FromNode { get => _fromNode; set => SetStructuralValue(ref _fromNode, value); }
 
     /// <summary>起点输出端口索引。</summary>
-    public int FromPort { get; set; }
+    public int FromPort { get => _fromPort; set => SetStructuralValue(ref _fromPort, value); }
 
     /// <summary>终点节点 id。</summary>
-    public string ToNode { get; set; } = string.Empty;
+    public string ToNode { get => _toNode; set => SetStructuralValue(ref _toNode, value); }
 
     /// <summary>终点输入端口索引。</summary>
-    public int ToPort { get; set; }
+    public int ToPort { get => _toPort; set => SetStructuralValue(ref _toPort, value); }
 
     /// <summary>编辑器连线标签文本。</summary>
     public virtual string GetDisplayName() => "Connection";

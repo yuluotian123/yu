@@ -31,7 +31,20 @@ namespace Framework.UI
 
         public override void Shutdown()
         {
-            CloseAll();
+            try
+            {
+                CloseAll();
+            }
+            finally
+            {
+                // Deferred attachment may not have run before the scene owner exits.
+                foreach (var layer in _layers.Values)
+                    if (GodotObject.IsInstanceValid(layer))
+                        layer.QueueFree();
+                _layers.Clear();
+                _resource = null;
+                _tree = null;
+            }
         }
 
         public void Process(double elapsed, double realElapsed)

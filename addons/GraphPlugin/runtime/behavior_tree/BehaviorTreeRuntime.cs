@@ -34,6 +34,12 @@ public sealed class BehaviorTreeRuntime : IGraphRuntimeScope
         if (Graph == null)
             return false;
 
+        if (!Graph.TryLoadDocument(out string loadError))
+        {
+            GD.PushWarning($"[BehaviorTreeRuntime] {loadError}");
+            return false;
+        }
+
         NormalizeComponentReferences();
 
         Graph.Validate(out GraphValidationResult validation);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -42,9 +43,12 @@ namespace Framework
             if (tableData == null) throw new ArgumentNullException(nameof(tableData));
 
             var array = new JsonArray();
+            var ids = new HashSet<int>();
+            int dataIndex = 0;
 
             foreach (var dataRow in tableData.DataRows)
             {
+                uint rowIndex = tableData.SourceRows[dataIndex++];
                 var rowObj = new JsonObject();
 
                 foreach (var field in tableData.Fields)
@@ -61,13 +65,15 @@ namespace Framework
                         var parsed = ConfigTypeRegistry.ParseCell(cellStr, field.TypeStr);
                         jsonValue = ConfigTypeRegistry.ToJsonValue(parsed, field.TypeStr);
                     }
-                    catch
+                    catch (Exception exception)
                     {
-                        // 不支持的类型降级为原始字符串
-                        jsonValue = cellStr;
+                        throw new FormatException($"Data row {rowIndex}, field '{field.FieldName}' ({field.TypeStr}): {exception.Message}", exception);
                     }
 
-                    rowObj[jsonKey] = ValueToJsonNode(jsonValue);
+                    if (jsonKey == "Id" && (string.IsNullOrWhiteSpace(cellStr) || jsonValue is not int id || !ids.Add(id)))
+                        throw new FormatException($"Data row {rowIndex}: missing, invalid or duplicate Id '{cellStr}'.");
+
+                    rowObj.Add(jsonKey, ValueToJsonNode(jsonValue));
                 }
 
                 array.Add(rowObj);
@@ -111,6 +117,7 @@ namespace Framework
         private static string ToPascalCase(string name)
         {
             if (string.IsNullOrEmpty(name)) return name;
+            if (name.Equals("id", StringComparison.OrdinalIgnoreCase)) return "Id";
             var parts = name.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
             foreach (var part in parts)

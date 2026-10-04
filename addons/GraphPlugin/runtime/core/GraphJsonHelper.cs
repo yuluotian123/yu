@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -12,7 +14,7 @@ using System.Text.Json.Serialization;
 /// <para>
 /// Godot Resource 对纯 C# 多态对象支持有限，因此 GraphPlugin 在每个对象上写入
 /// <c>$type</c> 字段保存真实类型。反序列化时会先通过 <see cref="GraphTypeRegistry"/>
-/// 解析已注册类型，再回退到 AppDomain 反射查找。
+/// 解析稳定 ID、兼容类型名和已注册别名；未知或歧义类型不会静默降级。
 /// </para>
 /// <para>
 /// 该工具只覆盖图数据需要的常见类型：基础类型、枚举、Vector2、Color、List 和普通对象。
@@ -27,7 +29,7 @@ public static class GraphJsonHelper
         IncludeFields = false
     };
 
-    private static readonly Dictionary<string, Type> TypeCache = new(StringComparer.Ordinal);
+    private static readonly ConditionalWeakTable<object, JsonObject> UnknownFields = new();
 
     /// <summary>
     /// 序列化一个对象，并写入多态类型信息。
@@ -64,7 +66,7 @@ public static class GraphJsonHelper
             return null;
 
         JsonNode node = JsonNode.Parse(json);
-        return JsonNodeToObject(node, typeof(T)) as T;
+        return (T)JsonNodeToObject(node, typeof(T));
     }
 
     /// <summary>
@@ -77,15 +79,11 @@ public static class GraphJsonHelper
             return result;
 
         if (JsonNode.Parse(json) is not JsonArray array)
-            return result;
+            throw new JsonException("Expected a graph data array.");
 
         foreach (JsonNode node in array)
         {
-            if (node == null)
-                continue;
-
-            if (JsonNodeToObject(node, typeof(T)) is T typed)
-                result.Add(typed);
+            result.Add((T)JsonNodeToObject(node, typeof(T)));
         }
 
         return result;
@@ -94,10 +92,13 @@ public static class GraphJsonHelper
     private static JsonNode ObjectToJsonNode(object obj)
     {
         Type type = obj.GetType();
-        var jsonObject = new JsonObject
-        {
-            ["$type"] = JsonValue.Create(type.Name)
-        };
+        string typeId = GraphTypeRegistry.GetSerializationId(type);
+        if (!GraphTypeRegistry.TryResolveType(typeId, out Type registered) || registered != type)
+            throw new JsonException($"Unregistered or ambiguous graph serialization ID '{typeId}'.");
+        // Keep historical/extension fields intact without coupling every data class to JSON.
+        var jsonObject = UnknownFields.TryGetValue(obj, out JsonObject extension)
+            ? (JsonObject)extension.DeepClone() : new JsonObject();
+        jsonObject["$type"] = JsonValue.Create(typeId);
 
         const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
@@ -197,14 +198,32 @@ public static class GraphJsonHelper
             return ConvertJsonValue(value, targetType);
 
         if (node is not JsonObject jsonObject)
-            return null;
+            throw new JsonException($"Expected object of type {targetType.FullName}.");
 
         Type concreteType = ResolveConcreteType(jsonObject, targetType);
-        if (concreteType == null || concreteType.IsAbstract || concreteType.IsInterface)
-            return null;
+        if (concreteType.IsAbstract || concreteType.IsInterface)
+            throw new JsonException($"Cannot instantiate graph type {concreteType.FullName}.");
 
         object instance = Activator.CreateInstance(concreteType);
         const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        var knownMembers = new HashSet<string>(concreteType.GetProperties(flags)
+            .Where(property => property.GetIndexParameters().Length == 0 &&
+                property.GetCustomAttribute<JsonIgnoreAttribute>() == null &&
+                (property.GetMethod?.IsPublic == true || property.GetCustomAttribute<JsonIncludeAttribute>() != null))
+            .Select(property => property.Name), StringComparer.Ordinal) { "$type" };
+        foreach (FieldInfo field in concreteType.GetFields(flags))
+        {
+            if (field.GetCustomAttribute<JsonIgnoreAttribute>() == null && field.GetCustomAttribute<JsonIncludeAttribute>() != null)
+                knownMembers.Add(field.Name);
+        }
+        var extension = new JsonObject();
+        foreach (var member in jsonObject)
+        {
+            if (!knownMembers.Contains(member.Key))
+                extension[member.Key] = member.Value?.DeepClone();
+        }
+        if (extension.Count > 0)
+            UnknownFields.Add(instance, extension);
 
         foreach (PropertyInfo property in concreteType.GetProperties(flags))
         {
@@ -223,9 +242,14 @@ public static class GraphJsonHelper
             if (!jsonObject.TryGetPropertyValue(property.Name, out JsonNode propertyNode))
                 continue;
 
-            object converted = JsonNodeToValue(propertyNode, property.PropertyType);
-            if (converted != null || !property.PropertyType.IsValueType)
-                property.SetValue(instance, converted);
+            try
+            {
+                property.SetValue(instance, JsonNodeToValue(propertyNode, property.PropertyType));
+            }
+            catch (Exception exception) when (exception is not OutOfMemoryException)
+            {
+                throw new JsonException($"{concreteType.Name}.{property.Name}: {exception.Message}", exception);
+            }
         }
 
         foreach (FieldInfo field in concreteType.GetFields(flags))
@@ -239,9 +263,7 @@ public static class GraphJsonHelper
             if (!jsonObject.TryGetPropertyValue(field.Name, out JsonNode fieldNode))
                 continue;
 
-            object converted = JsonNodeToValue(fieldNode, field.FieldType);
-            if (converted != null || !field.FieldType.IsValueType)
-                field.SetValue(instance, converted);
+            field.SetValue(instance, JsonNodeToValue(fieldNode, field.FieldType));
         }
 
         return instance;
@@ -250,7 +272,11 @@ public static class GraphJsonHelper
     private static object JsonNodeToValue(JsonNode node, Type targetType)
     {
         if (node == null)
+        {
+            if (targetType.IsValueType && Nullable.GetUnderlyingType(targetType) == null)
+                throw new JsonException($"Null is not valid for {targetType.FullName}.");
             return null;
+        }
 
         if (targetType == typeof(bool))
             return node.GetValue<bool>();
@@ -264,7 +290,7 @@ public static class GraphJsonHelper
             return node.GetValue<string>();
 
         if (targetType.IsEnum)
-            return Enum.Parse(targetType, node.GetValue<string>());
+            return ParseEnum(node, targetType);
 
         if (targetType == typeof(Godot.Vector2) && node is JsonObject vector)
         {
@@ -293,14 +319,21 @@ public static class GraphJsonHelper
                 (float)color["a"].GetValue<double>());
         }
 
-        if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
+        if (targetType.IsGenericType &&
+            (targetType.GetGenericTypeDefinition() == typeof(List<>) ||
+             targetType.GetGenericTypeDefinition() == typeof(IList<>)))
         {
             Type elementType = targetType.GetGenericArguments()[0];
-            var list = (System.Collections.IList)Activator.CreateInstance(targetType);
-            if (node is JsonArray array)
+            var list = (System.Collections.IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
+            if (node is not JsonArray array)
+                throw new JsonException($"Expected array for {targetType.FullName}.");
+            for (int index = 0; index < array.Count; index++)
             {
-                foreach (JsonNode item in array)
-                    list.Add(JsonNodeToValue(item, elementType));
+                try { list.Add(JsonNodeToValue(array[index], elementType)); }
+                catch (Exception exception) when (exception is not OutOfMemoryException)
+                {
+                    throw new JsonException($"[{index}]: {exception.Message}", exception);
+                }
             }
 
             return list;
@@ -312,33 +345,34 @@ public static class GraphJsonHelper
         if (node is JsonValue jsonValue)
             return ConvertJsonValue(jsonValue, targetType);
 
-        return null;
+        throw new JsonException($"Unsupported value for {targetType.FullName}.");
     }
 
     private static object ConvertJsonValue(JsonValue value, Type targetType)
     {
-        try
-        {
-            if (targetType == typeof(bool))
-                return value.GetValue<bool>();
-            if (targetType == typeof(int))
-                return value.GetValue<int>();
-            if (targetType == typeof(float))
-                return (float)value.GetValue<double>();
-            if (targetType == typeof(double))
-                return value.GetValue<double>();
-            if (targetType == typeof(string))
-                return value.GetValue<string>();
-            if (targetType == typeof(Godot.NodePath))
-                return new Godot.NodePath(value.GetValue<string>());
-            if (targetType.IsEnum)
-                return Enum.Parse(targetType, value.GetValue<string>());
-        }
-        catch
-        {
-        }
+        if (targetType == typeof(bool))
+            return value.GetValue<bool>();
+        if (targetType == typeof(int))
+            return value.GetValue<int>();
+        if (targetType == typeof(float))
+            return (float)value.GetValue<double>();
+        if (targetType == typeof(double))
+            return value.GetValue<double>();
+        if (targetType == typeof(string))
+            return value.GetValue<string>();
+        if (targetType == typeof(Godot.NodePath))
+            return new Godot.NodePath(value.GetValue<string>());
+        if (targetType.IsEnum)
+            return ParseEnum(value, targetType);
+        throw new JsonException($"Unsupported value for {targetType.FullName}.");
+    }
 
-        return null;
+    private static object ParseEnum(JsonNode node, Type targetType)
+    {
+        string name = node.GetValue<string>();
+        if (!Enum.TryParse(targetType, name, out object value) || !Enum.IsDefined(targetType, value))
+            throw new JsonException($"Unknown {targetType.Name} value '{name}'.");
+        return value;
     }
 
     private static Type ResolveConcreteType(JsonObject jsonObject, Type targetType)
@@ -348,38 +382,11 @@ public static class GraphJsonHelper
 
         string typeName = typeNode?.GetValue<string>();
         if (string.IsNullOrWhiteSpace(typeName))
-            return targetType;
-
-        Type found = FindType(typeName);
-        return found ?? targetType;
-    }
-
-    private static Type FindType(string typeName)
-    {
-        if (GraphTypeRegistry.TryResolveType(typeName, out Type registeredType))
-            return registeredType;
-
-        if (TypeCache.TryGetValue(typeName, out Type cached))
-            return cached;
-
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-        {
-            try
-            {
-                foreach (Type type in assembly.GetTypes())
-                {
-                    if (type.Name != typeName && type.FullName != typeName)
-                        continue;
-
-                    TypeCache[typeName] = type;
-                    return type;
-                }
-            }
-            catch (ReflectionTypeLoadException)
-            {
-            }
-        }
-
-        return null;
+            throw new JsonException("Graph $type cannot be empty.");
+        if (!GraphTypeRegistry.TryResolveType(typeName, out Type found))
+            throw new JsonException($"Unknown or ambiguous graph type '{typeName}'. Register a type alias to migrate it.");
+        if (!targetType.IsAssignableFrom(found))
+            throw new JsonException($"Graph type '{typeName}' is not assignable to {targetType.FullName}.");
+        return found;
     }
 }

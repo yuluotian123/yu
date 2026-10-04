@@ -16,10 +16,12 @@ using Godot;
 /// 如果重命名节点类，应该同步更新注册名或在注册中心登记别名。
 /// </para>
 /// </remarks>
-public class GraphNodeData
+public class GraphNodeData : GraphStructuralData
 {
+    private string _id = string.Empty;
+
     /// <summary>图内唯一节点 id。</summary>
-    public string Id { get; set; } = string.Empty;
+    public string Id { get => _id; set => SetStructuralValue(ref _id, value); }
 
     /// <summary>编辑器画布位置。</summary>
     public Vector2 Position { get; set; } = Vector2.Zero;

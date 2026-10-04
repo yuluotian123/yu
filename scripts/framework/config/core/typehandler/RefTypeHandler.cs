@@ -22,8 +22,7 @@ namespace Framework
         public object ParseCell(string cellValue, string typeStr)
         {
             if (string.IsNullOrWhiteSpace(cellValue)) return 0;
-            return int.TryParse(cellValue.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var id)
-                ? id : 0;
+            return int.Parse(cellValue.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
 
         public object ToJsonValue(object value, string typeStr) => value; // int 可直接写 JSON

@@ -21,19 +21,18 @@ namespace GameLogic
         public CharacterInputTriggerMode TriggerMode { get; set; } = CharacterInputTriggerMode.Pressed;
         public bool ConsumeInput { get; set; } = true;
         public float BufferTime { get; set; } = 0.12f;
-        public float AxisDeadzone { get; set; } = 0.1f;
         public float AxisThreshold { get; set; } = 0.1f;
         public float HoldTime { get; set; }
         public float ValueScale { get; set; } = 1f;
         public bool InvertValue { get; set; }
 
         public override List<string> GetGraphTypes() => new() { CharacterGraphAsset.CharacterGraphTypeName };
-        public override string GetMenuName() => "Input Action";
-        public override string GetCategory() => "Character / Input";
+        public override string GetMenuName() => "输入事件（Input Action）";
+        public override string GetCategory() => "角色 / 输入";
         public override Color GetNodeColor() => new(0.25f, 0.7f, 0.95f);
         public override string GetDisplayName() => TriggerMode == CharacterInputTriggerMode.Axis1D
             ? $"Axis: {NegativeAction} / {PositiveAction}"
-            : string.IsNullOrWhiteSpace(ActionName) ? "Input Action" : $"Input: {ActionName}";
+            : string.IsNullOrWhiteSpace(ActionName) ? "输入事件（Input Action）" : $"Input: {ActionName}";
         public override int GetInputCount() => 0;
         public override int GetOutputCount() => 1;
         public override int GetOutputMaxConnections(int port) => -1;
@@ -53,7 +52,7 @@ namespace GameLogic
                 CharacterInputTriggerMode.Held => provider.IsPressed(ActionName, HandlerLayer) &&
                     provider.GetHoldTime(ActionName) >= HoldTime,
                 CharacterInputTriggerMode.Axis1D => Mathf.Abs(ResolveValue(provider)) >=
-                    Mathf.Max(AxisDeadzone, AxisThreshold),
+                    Mathf.Max(0f, AxisThreshold),
                 _ => false
             };
         }
@@ -96,58 +95,70 @@ namespace GameLogic
         public override void CreateUI(GraphEditorContext context)
         {
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(220f, 0f) };
-            AddEditorFields(root);
+            AddEditorFields(root, context);
             context.GraphNode.AddChild(root);
         }
 
         public override Control CreateInspectorUI(GraphEditorContext context)
         {
             var root = new VBoxContainer { CustomMinimumSize = new Vector2(280f, 0f) };
-            AddEditorFields(root);
+            AddEditorFields(root, context);
             return root;
         }
 
-        private void AddEditorFields(VBoxContainer root)
+        private void AddEditorFields(VBoxContainer root, GraphEditorContext context)
         {
-            var action = new LineEdit { Text = ActionName, PlaceholderText = "Logical InputMap action" };
-            action.TextChanged += value => ActionName = value.Trim();
-            root.AddChild(action);
-
-            var negative = new LineEdit { Text = NegativeAction, PlaceholderText = "Axis negative action" };
-            negative.TextChanged += value => NegativeAction = value.Trim();
-            root.AddChild(negative);
-
-            var positive = new LineEdit { Text = PositiveAction, PlaceholderText = "Axis positive action" };
-            positive.TextChanged += value => PositiveAction = value.Trim();
-            root.AddChild(positive);
-
-            var mode = new OptionButton();
-            foreach (string value in Enum.GetNames<CharacterInputTriggerMode>())
-                mode.AddItem(value);
+            void Changed() => context?.CurrentGraph?.MarkDirty();
+            var mode = new OptionButton { Name = "TriggerMode" };
+            foreach (string label in new[] { "按下（Pressed）", "松开（Released）", "按住（Held）", "一维轴（Axis1D）" })
+                mode.AddItem(label);
             mode.Select((int)TriggerMode);
-            mode.ItemSelected += index => TriggerMode = (CharacterInputTriggerMode)index;
             root.AddChild(mode);
-
-            var layer = new LineEdit { Text = HandlerLayer, PlaceholderText = "Input layer (optional)" };
-            layer.TextChanged += value => HandlerLayer = value.Trim();
-            root.AddChild(layer);
-
-            AddFloatField(root, "Buffer", BufferTime, value => BufferTime = Mathf.Max(0f, value));
-            AddFloatField(root, "Deadzone", AxisDeadzone, value => AxisDeadzone = Mathf.Clamp(value, 0f, 1f));
-            AddFloatField(root, "Axis threshold", AxisThreshold, value => AxisThreshold = Mathf.Max(0f, value));
-            AddFloatField(root, "Hold time", HoldTime, value => HoldTime = Mathf.Max(0f, value));
-            AddFloatField(root, "Value scale", ValueScale, value => ValueScale = value);
-            AddCheckBox(root, "Consume input", ConsumeInput, value => ConsumeInput = value);
-            AddCheckBox(root, "Invert value", InvertValue, value => InvertValue = value);
+            var fields = new VBoxContainer { Name = "ModeFields" }; root.AddChild(fields);
+            void Text(string name, string label, string value, Action<string> setter)
+            {
+                fields.AddChild(new Label { Text = label });
+                var input = new LineEdit { Name = name, Text = value };
+                input.TextChanged += text => { setter(text.Trim()); Changed(); };
+                fields.AddChild(input);
+            }
+            void Refresh()
+            {
+                foreach (Node child in fields.GetChildren()) { fields.RemoveChild(child); child.QueueFree(); }
+                if (TriggerMode == CharacterInputTriggerMode.Axis1D)
+                {
+                    Text("NegativeAction", "负向输入", NegativeAction, value => NegativeAction = value);
+                    Text("PositiveAction", "正向输入", PositiveAction, value => PositiveAction = value);
+                    AddFloatField(fields, "触发阈值", AxisThreshold, value => { AxisThreshold = Mathf.Max(0, value); Changed(); });
+                    AddFloatField(fields, "数值缩放", ValueScale, value => { ValueScale = value; Changed(); }, -100, 100);
+                    AddCheckBox(fields, "反向", InvertValue, value => { InvertValue = value; Changed(); });
+                }
+                else
+                {
+                    Text("ActionName", "输入名称", ActionName, value => ActionName = value);
+                    if (TriggerMode == CharacterInputTriggerMode.Pressed)
+                        AddFloatField(fields, "缓存秒数", BufferTime, value => { BufferTime = value; Changed(); });
+                    if (TriggerMode == CharacterInputTriggerMode.Held)
+                        AddFloatField(fields, "按住秒数", HoldTime, value => { HoldTime = value; Changed(); });
+                }
+                Text("HandlerLayer", "输入层（可选）", HandlerLayer, value => HandlerLayer = value);
+                AddCheckBox(fields, "消费输入", ConsumeInput, value => { ConsumeInput = value; Changed(); });
+            }
+            mode.ItemSelected += index =>
+            {
+                TriggerMode = (CharacterInputTriggerMode)index; Changed();
+                Callable.From(() => { if (GodotObject.IsInstanceValid(fields) && !fields.IsQueuedForDeletion()) Refresh(); }).CallDeferred();
+            };
+            Refresh();
         }
 
-        private static void AddFloatField(VBoxContainer root, string label, float value, Action<float> setter)
+        private static void AddFloatField(VBoxContainer root, string label, float value, Action<float> setter, double min = 0, double max = 999999)
         {
             var row = new HBoxContainer();
             row.AddChild(new Label { Text = label });
             var spin = new SpinBox
             {
-                Value = value,
+                MinValue = min, MaxValue = max, Value = value,
                 Step = 0.01,
                 SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
             };
@@ -169,8 +180,8 @@ namespace GameLogic
                 ? (provider?.GetActionStrength(PositiveAction, HandlerLayer) ?? 0f) -
                   (provider?.GetActionStrength(NegativeAction, HandlerLayer) ?? 0f)
                 : provider?.GetActionStrength(ActionName, HandlerLayer) ?? 0f;
-            if (InvertValue)
-                value = -value;
+            if (TriggerMode != CharacterInputTriggerMode.Axis1D) return value;
+            if (InvertValue) value = -value;
             return value * ValueScale;
         }
 

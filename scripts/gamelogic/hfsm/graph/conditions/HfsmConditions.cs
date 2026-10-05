@@ -3,6 +3,7 @@ using System;
 
 namespace GameLogic
 {
+    [GraphCallable("Always", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "始终成立")]
     public class HfsmAlwaysCondition : HfsmConditionBase
     {
         public override string Description => "Always";
@@ -10,6 +11,7 @@ namespace GameLogic
         public override bool IsMet(HfsmRuntime runtime) => true;
     }
 
+    [GraphCallable("Trigger", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "触发器")]
     public class HfsmTriggerCondition : HfsmConditionBase
     {
         public string TriggerName { get; set; } = string.Empty;
@@ -37,6 +39,7 @@ namespace GameLogic
         }
     }
 
+    [GraphCallable("Boolean", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "布尔判断")]
     public class HfsmBoolCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] BoolValueTypes = { typeof(bool) };
@@ -74,6 +77,7 @@ namespace GameLogic
         }
     }
 
+    [GraphCallable("Number", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "数值比较")]
     public class HfsmFloatCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] FloatValueTypes = { typeof(float), typeof(int) };
@@ -132,6 +136,7 @@ namespace GameLogic
         }
     }
 
+    [GraphCallable("Absolute Number", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "绝对值比较")]
     public class HfsmFloatAbsCondition : HfsmBlackboardConditionBase
     {
         private static readonly Type[] FloatValueTypes = { typeof(float), typeof(int) };
@@ -190,6 +195,7 @@ namespace GameLogic
         }
     }
 
+    [GraphCallable("Timer", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "计时判断")]
     public class HfsmTimerCondition : HfsmConditionBase
     {
         public float Seconds { get; set; } = 1f;

@@ -9,6 +9,7 @@ public enum LogType
     Log
 }
 
+[GraphCallable("Log", "调试", GraphCallableUsage.All, ChineseName = "输出日志")]
 public class DebugLog : ActionBase
 {
     [JsonInclude]

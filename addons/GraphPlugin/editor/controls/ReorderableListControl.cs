@@ -132,7 +132,7 @@ public class ReorderableListControl<T> where T : class
 
         var label = new Label
         {
-            Text = $"[{index}]  {_getItemLabel(item)}",
+            Text = $"[{index}]  {GraphCallableCatalog.ItemLabel(item, _getItemLabel(item))}",
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             VerticalAlignment = VerticalAlignment.Center
         };
@@ -221,8 +221,9 @@ public class ReorderableListControl<T> where T : class
         {
             var popup = new SearchablePopup<Type>(
                 _availableTypes,
-                type => type.Name,
-                type => type.Namespace);
+                GraphCallableCatalog.Name,
+                GraphCallableCatalog.Category,
+                GraphCallableCatalog.SearchText);
             popup.OnItemSelected += type =>
             {
                 var newItem = _factory(type);

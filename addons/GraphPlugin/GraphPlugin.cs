@@ -31,7 +31,8 @@ public partial class GraphPlugin : EditorPlugin
         try
         {
             _editorWindow = new GraphCanvasEditorWindow();
-            EditorInterface.Singleton.GetBaseControl().AddChild(_editorWindow);
+            EditorInterface.Singleton.GetEditorMainScreen().AddChild(_editorWindow);
+            _editorWindow.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
             _editorWindow._undoRedo = GetUndoRedo();
             _editorWindow.Hide();
         }
@@ -42,6 +43,28 @@ public partial class GraphPlugin : EditorPlugin
         }
 
         GD.Print("GraphCanvas plugin loaded");
+    }
+
+    public override bool _HasMainScreen() => true;
+    public override string _GetPluginName() => "Graph";
+    public override Texture2D _GetPluginIcon() => EditorInterface.Singleton.GetBaseControl().GetThemeIcon("GraphEdit", "EditorIcons");
+    public override bool _Handles(GodotObject obj) => obj is GraphAsset;
+    public override void _Edit(GodotObject obj)
+    {
+        if (obj is GraphAsset graph && _editorWindow?.CurrentGraph != graph)
+            CallDeferred(MethodName.OpenGraphResource, graph);
+    }
+    private void OpenGraphResource(GraphAsset graph)
+    {
+        if (IsInsideTree() && GodotObject.IsInstanceValid(graph)) OpenGraphEditor(graph);
+    }
+    public override void _MakeVisible(bool visible)
+    {
+        if (GodotObject.IsInstanceValid(_editorWindow)) _editorWindow.Visible = visible;
+    }
+    public override void _SaveExternalData()
+    {
+        if (GodotObject.IsInstanceValid(_editorWindow)) _editorWindow.SaveCurrentGraph();
     }
 
     public override void _ExitTree()
@@ -121,7 +144,8 @@ public partial class GraphPlugin : EditorPlugin
         _editorWindow.LoadGraph(graph, source);
         if (!string.IsNullOrWhiteSpace(selectNodeId))
             _editorWindow.CallDeferred(nameof(GraphCanvasEditorWindow.SelectNode), selectNodeId);
-        _editorWindow.CallDeferred(Window.MethodName.PopupCentered, new Vector2I(1200, 800));
+        EditorInterface.Singleton.SetMainScreenEditor("Graph");
+        _editorWindow.Show();
     }
 
     private static GodotObject ResolveAnimationGraphSource(GraphAsset graph, GodotObject source)
@@ -207,7 +231,8 @@ public partial class GraphPlugin : EditorPlugin
         try
         {
             _editorWindow = new GraphCanvasEditorWindow();
-            EditorInterface.Singleton.GetBaseControl().AddChild(_editorWindow);
+            EditorInterface.Singleton.GetEditorMainScreen().AddChild(_editorWindow);
+            _editorWindow.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
             _editorWindow._undoRedo = GetUndoRedo();
             _editorWindow.Hide();
         }

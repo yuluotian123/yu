@@ -48,7 +48,7 @@ namespace GameLogic
             }
 
             CharacterGraph.ResourceLocalToScene = true;
-            CharacterGraph.MigrateMovementNodesToComponents();
+            CharacterGraph.InitializeComponentArguments();
             return CharacterGraph;
         }
 
@@ -98,7 +98,7 @@ namespace GameLogic
             Runtime = null;
         }
 
-        public void PublishEvent(string eventName) => Runtime?.PublishEvent(eventName);
+        public void PublishEvent(string eventName) => Runtime?.Context.Events.Publish(eventName);
 
         private static bool IsSceneLocalResource(CharacterGraphAsset graph)
         {

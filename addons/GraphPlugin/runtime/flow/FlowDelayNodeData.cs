@@ -5,7 +5,7 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
 {
     public float Seconds { get; set; } = 1f;
 
-    public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
+    public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName, GameLogic.CharacterGraphAsset.CharacterGraphTypeName };
     public override string GetDisplayName() => $"Delay";
     public override string GetMenuName() => "Delay";
     public override Color GetNodeColor() => new(0.52f, 0.62f, 0.9f);
@@ -16,27 +16,23 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
-        runtime.SetNodeData(Id, new DelayRuntimeData());
+        runtime.SetNodeData(Id, new GraphDelayTask(Seconds));
     }
 
     public void Tick(FlowGraphRuntime runtime, GraphExecutionContext context, double delta)
     {
-        var data = runtime.GetNodeData<DelayRuntimeData>(Id);
-        data.Elapsed += (float)delta;
+        if (runtime.TryGetNodeData(Id, out GraphDelayTask task)) task.Tick(delta);
     }
 
     public bool TryGetCompletion(FlowGraphRuntime runtime, GraphExecutionContext context, out NodeCompletion completion)
     {
-        if (Seconds <= 0f ||
-            runtime.TryGetNodeData<DelayRuntimeData>(Id, out var data) &&
-            data.Elapsed >= Seconds)
-        {
-            completion = NodeCompletion.Completed();
-            return true;
-        }
+        completion = NodeCompletion.Completed();
+        return runtime.TryGetNodeData(Id, out GraphDelayTask task) && task.Status != BehaviorTreeStatus.Running;
+    }
 
-        completion = default;
-        return false;
+    public override void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+        if (!float.IsFinite(Seconds) || Seconds < 0) result.AddError("等待秒数必须是非负有限数值。", Id);
     }
 
     public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context)
@@ -87,8 +83,4 @@ public class FlowDelayNodeData : GraphNodeData, IFlowNode
         return spin;
     }
 
-    private sealed class DelayRuntimeData
-    {
-        public float Elapsed;
-    }
 }

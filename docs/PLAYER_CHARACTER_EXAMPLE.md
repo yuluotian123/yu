@@ -42,7 +42,7 @@ CharacterGraph 不负责 Grant Ability。即使图里有 `ActivateAbility(attack
 Axis1D
   NegativeAction = player_move_left
   PositiveAction = player_move_right
-  Deadzone = 0.1
+  AxisThreshold = 0.1
   Scale = 1.0
         |
         v signed axis
@@ -68,13 +68,12 @@ InputModule.GetActionStrength(right) - GetActionStrength(left)
 ```text
 Pressed(player_jump)
   -> RequestJumpStart
-  -> SetJumpSustain(true)
 
 Released(player_jump)
   -> SetJumpSustain(false)
 ```
 
-`RequestJumpStart` 是一次性请求，进入 Movement 的 Jump Buffer。`SetJumpSustain(true)` 会持续保存，不会在下一物理帧自动清空；松开后设置 false，Movement 可按 `JumpCutMultiplier` 截短仍在上升的跳跃。
+`RequestJumpStart` 同时发起跳跃并开启持续输入，进入 Movement 的 Jump Buffer。持续输入会保存，不会在下一物理帧自动清空；松开后设置 false，Movement 可按 `JumpCutMultiplier` 截短仍在上升的跳跃。
 
 CharacterGraph 只提交“想跳”的意图。是否在地面、是否处于 Coyote Time、当前是否被 Ability 锁住，以及最终 Y 速度都由 Movement 决定。
 

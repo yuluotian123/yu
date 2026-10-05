@@ -26,7 +26,6 @@ CharacterGraphComponent2D (90)
         |-- 生命周期: BeginPlay / Update / PhysicsUpdate / EndPlay
         |-- Move Axis1D ----------> AddMovementInput ---------+
         |-- Jump Press -----------> RequestJumpStart          |
-        |                         -> SetJumpSustain(true)      |
         |-- Jump Release ---------> SetJumpSustain(false)     |
         |-- Attack / Dash --------> Ability 请求              |
         v                                                  v
@@ -84,7 +83,7 @@ BehaviorTree Controller (100)
 
 ### 输入节点
 
-`CharacterInputActionNodeData` 支持 `Pressed`、`Released`、`Held` 和 `Axis1D`。Axis1D 用 `PositiveAction - NegativeAction` 生成有符号值，并配置 `AxisDeadzone`、`AxisThreshold`、`ValueScale` 和反转。输入节点保存逻辑 Action 名，设备按键仍由 InputMap/InputModule 管理。
+`CharacterInputActionNodeData` 支持 `Pressed`、`Released`、`Held` 和 `Axis1D`。Axis1D 用 `PositiveAction - NegativeAction` 生成有符号值，并配置 `AxisThreshold`、`ValueScale` 和反转。输入节点保存逻辑 Action 名，设备按键仍由 InputMap/InputModule 管理。
 
 默认玩家图：
 
@@ -94,7 +93,6 @@ Axis1D(player_move_left, player_move_right)
 
 Pressed(player_jump)
     -> RequestJumpStart
-    -> SetJumpSustain(true)
 
 Released(player_jump)
     -> SetJumpSustain(false)
@@ -105,16 +103,21 @@ Pressed(player_dash)   -> ActivateAbility(dash)
 Attack -- Interrupt, priority 100 --> Dash
 ```
 
+CharacterGraph 的 Action 菜单隐藏组件 Call/Get/Set 包装和 Use Ability。组件操作使用直接成员节点；技能激活使用专用节点，确保打断窗口与关系规则生效。其他 Flow 与行为树仍可使用这些通用动作。旧的 Character 移动节点、专用 Sequence/WaitEvent 类型和加载时兼容迁移代码已删除。
+
+输入 Inspector 按 Pressed / Released / Held / Axis1D 显示适用参数；只保留一个 AxisThreshold，轴模式支持缩放与反向。切换模式保留之前填写的字段。
+
 ### 流程节点
 
 - `Branch`：按条件选择输出。
-- `Sequence`：按输出端口启动多条后续流程。
-- `Delay`：等待指定时间。
-- `WaitEvent`：等待事件版本变化，例如 `Ability.attack.Completed`。
+- `Sequence`：通用顺序触发节点，按端口依次启动分支，不等待前一分支完成。
+- `Delay`：等待指定时间，与 Wait Seconds 动作共用 GraphDelayTask。
+- `Wait Event`：等待进入节点之后的新事件，例如 `Ability.attack.Completed`；Inspector 可选择已有事件，必须设置正数 Timeout，分别从 Received / Timeout 输出。
+- `Publish Event`：向当前执行上下文的事件流发送事件。普通 Flow 各运行时隔离；CharacterGraph 的所有事件分支共享本角色的事件流。外部通过 `Runtime.Context.Events.Publish(name)` 或组件的 PublishEvent 调用发布。
 
 ### Ability 节点和关系边
 
-Ability 节点使用稳定 `AbilityId`，资源路径只用于编辑器定位 Timeline。节点输出 `Activated`、`Completed`、`Cancelled` 和 `Rejected`。
+Ability 节点使用稳定 `AbilityId`，资源路径只用于编辑器定位 Timeline。节点输出 `Activated`、`Completed`、`Cancelled` 和 `Rejected`。它与通用 Use Ability 共用 AbilityActivationHandle，跟踪一次激活的版本；同一技能重新激活后，旧节点走 Cancelled，既不会等待新一次激活，也不会将其取消。
 
 关系边分为普通 `Flow`、打断用 `Interrupt` 和完成后请求用 `Completion`。Interrupt/Completion 可配置时间窗口、请求优先级和条件。CharacterGraph 只判断“是否存在这条关系且当前能否请求”；AbilitySystem 仍会检查授予、冷却、Ability policy、当前 Ability 优先级和并发规则，因此是最终权威。
 

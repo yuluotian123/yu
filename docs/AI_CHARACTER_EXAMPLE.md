@@ -10,7 +10,7 @@
 
 | Priority | 组件 | 职责 |
 | ---: | --- | --- |
-| 100 | `SimpleAICharacterControllerComponent2D` | 运行 BehaviorTree，产生巡逻和跳跃意图 |
+| 100 | `SimpleAICharacterControllerComponent2D` | 运行 BehaviorTree，并将宿主配置写入黑板 |
 | 50 | `CharacterMovementComponent2D` | 仲裁命令并执行物理移动 |
 | 最后 | `CharacterPersistenceComponent2D` | 保存稳定状态 |
 
@@ -29,46 +29,32 @@
 行为树资源是 [ai_patrol_behavior_tree.tres](../assets/graphs/ai_patrol_behavior_tree.tres)。
 
 ```text
-BehaviorTree tick
-  -> MaintainDirection
-  -> ShouldTurn?
-       -> TurnAround / TurnPause
-  -> ApplyPatrolMove
-       -> SetFrameMoveAxis(direction)
-  -> TryPeriodicJump
-       -> RequestFrameJumpStart()
-       -> SetFrameJumpSustain(timer > 0)
-  -> SubmitCommand(move, jumpStart, jumpSustain, AI priority)
-  -> CharacterMovementComponent2D
-       -> acceleration / jump / gravity / MoveAndSlide
+Root → Parallel（RequireAll）
+         ├─ Action：往返巡逻（Patrol）
+         └─ Action：周期跳跃（Periodic Jump）
 ```
 
-Controller 每个物理帧先重置本帧意图，再 tick BehaviorTree，最后一次性向 Movement 提交 `CharacterCommand2D`。Move Axis 和 Jump Start 是帧级数据；AI 每帧都提交 Jump Sustain，因此与玩家的 Press/Release 持久语义可以共用同一个 Movement API。
+两种动作直接调用 CharacterMovementComponent2D，不读取 AI Controller。Controller 只负责运行图、同步组件绑定和初始化黑板。动作也可放进技能 Flow 的 Action 节点。
 
-## 转向与边缘检测
+## 巡逻与跳跃参数
 
-BehaviorTree 可以读取：
+Controller 的 Inspector 保留每个角色的配置，并在 Runtime.Start 后写入本地黑板：
 
-- 出生位置和巡逻距离。
-- 当前方向和转向暂停计时。
-- `Movement.HasGroundAhead()` 的地面探测结果。
-- 当前 `IsOnFloor`、速度和 MovementMode。
+| Inspector 配置 | 黑板键 |
+| --- | --- |
+| PatrolDistance | Patrol.Distance |
+| StartDirection | Patrol.StartDirection |
+| ReverseAtEdges | Patrol.ReverseAtEdges |
+| EdgeLookAhead | Patrol.LookAhead |
+| TurnPauseDuration | Patrol.TurnPause |
+| JumpInterval | Jump.Interval |
+| JumpSustainDuration | Jump.HoldDuration |
 
-检测到巡逻边界、墙体策略或悬崖时，行为树修改自己的 `_direction`。Movement 只接收最终 axis，不知道“巡逻”“追击”或“逃跑”等 AI 语义。
+图资源自带这些参数的默认值，也可不通过该 Controller 运行。持续动作创建任务时读取配置；巡逻中心取任务开始时的宿主世界位置。到达水平范围或检测到前方无地面时转向，暂停后继续。它不处理墙体导航或寻路。
 
-## 周期跳跃
+方向、巡逻中心、暂停、跳跃冷却和按住时间都保存在任务中；多个节点或角色可共用同一动作定义。周期跳跃在间隔到达且落地时请求起跳。移动与跳跃分别提交同一优先级命令的对应字段，不覆盖彼此；树中断时分别清除移动和跳跃输入。
 
-`CharacterAiTryPeriodicJumpAction` 维护跳跃冷却和 sustain timer：
-
-```text
-if IsOnFloor && JumpCooldown <= 0
-    RequestFrameJumpStart()
-    JumpSustainTimer = configured duration
-
-SetFrameJumpSustain(JumpSustainTimer > 0)
-```
-
-行为树决定什么时候想跳和按住多久；Movement 决定 Jump Buffer、Coyote Time、重力、释放截断和锁是否允许跳跃。
+更细的编排可以组合“设置朝向”“定向移动”“跳跃”“处于地面”“前方有地面”。旧的 CharacterAi 专用动作与辅助上下文已删除，现有巡逻资源已直接改为通用动作。
 
 ## 战斗 AI
 

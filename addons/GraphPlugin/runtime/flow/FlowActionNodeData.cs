@@ -6,11 +6,11 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
     public List<GraphActionBase> Actions { get; set; } = new();
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
-    public override string GetDisplayName() => "FlowAction";
-    public override string GetMenuName() => "Action";
+    public override string GetDisplayName() => "Action Sequence";
+    public override string GetMenuName() => "Action Sequence";
     public override Color GetNodeColor() => new(0.42f, 0.72f, 0.92f);
     public override int GetInputCount() => 1;
-    public override int GetOutputCount() => 1;
+    public override int GetOutputCount() => 2;
     public override bool CanBePrime() => false;
 
     public override void Validate(GraphAsset graph, GraphValidationResult result)
@@ -20,22 +20,29 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
         foreach (GraphActionBase action in Actions)
             action?.Validate(graph, Id, result);
     }
-    public override string GetOutputPortName(int port) => "Next";
+    public override string GetOutputPortName(int port) => port == 0 ? "Success" : "Failure";
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
-        for (int i = 0; i < Actions.Count; i++)
-            Actions[i]?.Execute(context);
+        var run = new GraphActionSequenceRun();
+        runtime.SetNodeData(Id, run);
+        run.Tick(Actions, new GraphActionInvocation(context), 0);
     }
 
-    public void Tick(FlowGraphRuntime runtime, GraphExecutionContext context, double delta) { }
+    public void Tick(FlowGraphRuntime runtime, GraphExecutionContext context, double delta) =>
+        runtime.GetNodeData<GraphActionSequenceRun>(Id).Tick(Actions, new GraphActionInvocation(context), delta);
     public bool TryGetCompletion(FlowGraphRuntime runtime, GraphExecutionContext context, out NodeCompletion completion)
     {
-        completion = NodeCompletion.Next();
-        return true;
+        var status = runtime.GetNodeData<GraphActionSequenceRun>(Id).Status;
+        completion = status == BehaviorTreeStatus.Failure ? NodeCompletion.False("Failure") : NodeCompletion.Next("Success");
+        return status != BehaviorTreeStatus.Running;
     }
 
-    public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context) { }
+    public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context)
+    {
+        if (runtime.TryGetNodeData(Id, out GraphActionSequenceRun run)) run.Cancel(context);
+        runtime.SetNodeData(Id, null);
+    }
 
     public override void CreateNodeUI(GraphEditorContext context)
     {
@@ -70,7 +77,7 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
             items: Actions,
             buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.Description,
-            availableTypes: SubTypeCache.GetSubTypes<GraphActionBase>(),
+            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.Flow),
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
     }
@@ -81,6 +88,9 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
             return "No actions";
 
         string first = Actions[0]?.Description;
+#if TOOLS
+        first = GraphCallableCatalog.ItemLabel(Actions[0], first);
+#endif
         if (string.IsNullOrWhiteSpace(first))
             first = Actions[0]?.GetType().Name ?? "Action";
 

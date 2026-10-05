@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Godot;
 
 [Tool]
-public partial class GraphCanvasEditorWindow : Window
+public partial class GraphCanvasEditorWindow : MarginContainer
 {
     private GraphEdit _graphEdit;
     private GraphAsset _currentGraph;
@@ -23,14 +23,17 @@ public partial class GraphCanvasEditorWindow : Window
     private HBoxContainer _breadcrumbBar;
     private HBoxContainer _toolbar;
     private HSplitContainer _contentSplit;
-    private HBoxContainer _rightContentSplit;
+    private HSplitContainer _rightContentSplit;
     private HSplitContainer _animationWorkSplit;
     private VSplitContainer _workArea;
     private string _boundTimelineNodeId = string.Empty;
     private bool _animationDebugVisible = true;
     private bool _initialized;
-    private bool _closeRequestedConnected;
+    private Label _documentTitle;
     private bool _initialLayoutApplied;
+    private bool _inspectingObject;
+    private bool _selectionRefreshQueued;
+    public GraphAsset CurrentGraph => _currentGraph;
 
     public EditorUndoRedoManager _undoRedo { get; set; }
 
@@ -52,13 +55,11 @@ public partial class GraphCanvasEditorWindow : Window
         ResetEditorUi();
 
         GraphEditorTranslationService.DisableAutoTranslate(this);
-        Title = "GraphCanvas Editor";
-        if (!_closeRequestedConnected)
-        {
-            CloseRequested += CloseGraphEditor;
-            _closeRequestedConnected = true;
-        }
 
+
+
+        SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        SizeFlagsVertical = SizeFlags.ExpandFill;
         CreateToolbar();
         CreateGraphEdit();
         _initialized = _controller != null;
@@ -66,6 +67,7 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void ResetEditorUi()
     {
+        _transitionSourceId = null;
         if (_mainContainer != null && GodotObject.IsInstanceValid(_mainContainer))
         {
             GraphEditorSignalCleanup.DisconnectSubtree(_mainContainer);
@@ -115,6 +117,9 @@ public partial class GraphCanvasEditorWindow : Window
         };
         AddChild(_mainContainer);
 
+        _documentTitle = new Label { Text = "Graph Blueprint · Select a graph resource", TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis };
+        _mainContainer.AddChild(_documentTitle);
+
         _breadcrumbBar = new HBoxContainer
         {
             CustomMinimumSize = new Vector2(0, 28)
@@ -127,11 +132,20 @@ public partial class GraphCanvasEditorWindow : Window
         {
             CustomMinimumSize = new Vector2(0, 40)
         };
-        _mainContainer.AddChild(_toolbar);
+        var toolbarScroll = new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Auto, VerticalScrollMode = ScrollContainer.ScrollMode.Disabled };
+        toolbarScroll.AddChild(_toolbar);
+        _mainContainer.AddChild(toolbarScroll);
 
         var saveBtn = new Button { Text = "Save (Ctrl+S)" };
         saveBtn.Pressed += OnSave;
         _toolbar.AddChild(saveBtn);
+
+        var hostProperties = new Button { Text = "Host Properties", TooltipText = "Edit the current scene host's properties" };
+        hostProperties.Pressed += ShowHostProperties;
+        _toolbar.AddChild(hostProperties);
+        var graphSettings = new Button { Text = "Graph Settings" };
+        graphSettings.Pressed += ShowGraphSettings;
+        _toolbar.AddChild(graphSettings);
 
         var clearBtn = new Button { Text = "Clear" };
         clearBtn.Pressed += OnClear;
@@ -218,11 +232,20 @@ public partial class GraphCanvasEditorWindow : Window
             () => _subGraphNavigator?.GetRootGraph(_currentGraph) ?? _currentGraph);
         _contentSplit.AddChild(_componentPanel.Root);
 
-        _rightContentSplit = new HBoxContainer
+        _rightContentSplit = new HSplitContainer
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            SizeFlagsVertical = Control.SizeFlags.ExpandFill
+            SizeFlagsVertical = Control.SizeFlags.ExpandFill,
+            DraggerVisibility = SplitContainer.DraggerVisibilityEnum.Visible,
+            DraggingEnabled = true
         };
+        _rightContentSplit.AddThemeConstantOverride("separation", 8);
+        _rightContentSplit.AddThemeStyleboxOverride("split_bar_background", new StyleBoxFlat
+        {
+            BgColor = new Color(0.16f, 0.19f, 0.24f, 0.95f),
+            ContentMarginLeft = 2,
+            ContentMarginRight = 2
+        });
         _contentSplit.AddChild(_rightContentSplit);
 
         _animationVariablesPanel = new GraphAnimationVariablesPanel(() => _currentGraph);
@@ -250,7 +273,7 @@ public partial class GraphCanvasEditorWindow : Window
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsVertical = Control.SizeFlags.ExpandFill,
-            CustomMinimumSize = new Vector2(500, 320)
+            CustomMinimumSize = new Vector2(320, 240)
         };
         _animationWorkSplit.AddChild(_workArea);
         _rightContentSplit.AddChild(_animationWorkSplit);
@@ -259,11 +282,20 @@ public partial class GraphCanvasEditorWindow : Window
         {
             SizeFlagsVertical = Control.SizeFlags.ExpandFill,
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            CustomMinimumSize = new Vector2(500, 280),
+            CustomMinimumSize = new Vector2(320, 200),
             Visible = true,
             RightDisconnects = true,
-            ShowZoomLabel = true
+            ShowZoomLabel = true,
+            MinimapEnabled = true,
+            SnappingEnabled = true,
+            SnappingDistance = 20,
+            ConnectionLinesCurvature = 0.6f,
+            ConnectionLinesAntialiased = true,
+            ConnectionLinesThickness = 2.5f
         };
+        _graphEdit.AddThemeStyleboxOverride("panel", new StyleBoxFlat { BgColor = new Color("181b20") });
+        _graphEdit.AddThemeColorOverride("grid_minor", new Color("252a32"));
+        _graphEdit.AddThemeColorOverride("grid_major", new Color("363e49"));
         _workArea.AddChild(_graphEdit);
         _controller = new GraphEditorController(_graphEdit);
 
@@ -292,7 +324,7 @@ public partial class GraphCanvasEditorWindow : Window
 
         // The Window can be constructed while hidden. Wait for _Process once
         // it is visible instead of recursively deferring forever at size 0.
-        if (!Visible || _contentSplit.Size.X <= 0)
+        if (!IsVisibleInTree() || _contentSplit.Size.X <= 0)
             return;
 
         int leftMinimum = Mathf.CeilToInt(_componentPanel?.Root?.GetCombinedMinimumSize().X ?? 170f);
@@ -321,9 +353,14 @@ public partial class GraphCanvasEditorWindow : Window
             this,
             _graphEdit,
             () => _currentGraph,
-            CreateEditorContext,
             DeleteConnectionWithUndo,
-            connection => _selectionInspector?.ShowConnection(connection));
+            connection =>
+            {
+                if (connection == null) { ShowGraphSettings(); return; }
+                DeselectGraphNodes();
+                _inspectingObject = true;
+                _selectionInspector?.ShowConnection(connection);
+            });
 
         _explorerPanel = new GraphExplorerPanel(
             this,
@@ -332,13 +369,16 @@ public partial class GraphCanvasEditorWindow : Window
 
         _timelinePanel = new GraphTimelinePanel(
             () => _currentGraph,
-            CreateEditorContext);
+            CreateEditorContext,
+            () => _undoRedo);
         _workArea.AddChild(_timelinePanel.Root);
         _selectionInspector = new GraphSelectionInspectorPanel(
             () => _currentGraph,
             CreateEditorContext,
             BuildExtraNodeInspector);
         _rightContentSplit.AddChild(_selectionInspector.Root);
+        _componentPanel.ComponentSelected += ShowComponentProperties;
+        _componentPanel.HostSelected += _ => ShowHostProperties();
     }
 
     public void LoadGraph(GraphAsset graph)
@@ -369,6 +409,8 @@ public partial class GraphCanvasEditorWindow : Window
             return;
 
         EnsureInitialized();
+        if (_currentGraph != null && _currentGraph != graph)
+            SaveCurrentGraph();
         if (_controller == null)
         {
             GD.PushWarning("[GraphCanvasEditorWindow] Window is not initialized yet.");
@@ -397,15 +439,16 @@ public partial class GraphCanvasEditorWindow : Window
             _dependencyModeOption.Select((int)_currentGraph.ActionDependencyMode);
         }
         if (_currentGraph is GameLogic.CharacterGraphAsset characterGraph)
-            characterGraph.MigrateMovementNodesToComponents();
-        Title = _componentPanel?.Source is GameLogic.CharacterAnimationComponent2D
+            characterGraph.InitializeComponentArguments();
+        _documentTitle.Text = _componentPanel?.Source is GameLogic.CharacterAnimationComponent2D
             ? "Animation Blueprint - Locomotion"
             : graph.GetEditorTitle();
         AddCustomToolbarControls();
+        CancelStateTransition();
         _connectionEditor?.Reset();
         _explorerPanel?.RefreshIfOpen();
         _timelinePanel?.Clear();
-        _selectionInspector?.Clear();
+        ShowGraphSettings();
         _componentPanel?.Refresh();
         _animationVariablesPanel?.SetHostAvailable(_componentPanel?.HasValidHost == true);
         _animationVariablesPanel?.Refresh();
@@ -492,6 +535,8 @@ public partial class GraphCanvasEditorWindow : Window
             ParentGraphs = parentGraphs,
             GraphEdit = _graphEdit,
             GlobalBlackboard = globalBlackboard,
+            ResolveHost = () => _componentPanel?.SelectedHost,
+            ResolveSource = () => _componentPanel?.Source,
             AvailableComponentTypes = _componentPanel?.GetAvailableDescriptors()
         };
     }
@@ -518,8 +563,17 @@ public partial class GraphCanvasEditorWindow : Window
         }
     }
 
+    public void SaveCurrentGraph()
+    {
+        _timelinePanel?.CancelPendingDrag();
+        _selectionInspector?.SaveChanges(false);
+        GraphSaveService.SyncForEditorSave(_currentGraph, _graphEdit);
+    }
+
     private void OnSave()
     {
+        _timelinePanel?.CancelPendingDrag();
+        _selectionInspector?.SaveChanges(true);
         _componentPanel?.RefreshIfSceneChanged();
         _animationVariablesPanel?.SetHostAvailable(_componentPanel?.HasValidHost == true);
         _animationVariablesPanel?.RefreshIfChanged();
@@ -528,6 +582,7 @@ public partial class GraphCanvasEditorWindow : Window
 
     private void OnClear()
     {
+        if (_currentGraph == null) return;
         string snapshotNodesJson = GraphSnapshotService.CaptureNodes(_currentGraph);
         string snapshotConnsJson = GraphSnapshotService.CaptureConnections(_currentGraph);
 
@@ -563,33 +618,91 @@ public partial class GraphCanvasEditorWindow : Window
 
     public override void _Process(double delta)
     {
-        if (!Visible || _currentGraph == null || !GodotObject.IsInstanceValid(_currentGraph))
+        if (!IsVisibleInTree() || _currentGraph == null || !GodotObject.IsInstanceValid(_currentGraph))
             return;
 
         ApplyInitialLayout();
+        if (_dependencyModeOption != null && _dependencyModeOption.Selected != (int)_currentGraph.ActionDependencyMode)
+            _dependencyModeOption.Select((int)_currentGraph.ActionDependencyMode);
+        _selectionInspector?.ValidateSelection();
         _componentPanel?.RefreshIfSceneChanged();
         _blackboardPanel?.RefreshIfHostChanged();
         _animationVariablesPanel?.SetHostAvailable(_componentPanel?.HasValidHost == true);
         _animationVariablesPanel?.RefreshIfChanged();
         UpdateAnimationDebugUi();
+        UpdateStateTransitionPreview();
         _connectionEditor?.UpdateConnectionLabels();
         UpdateTimelinePanelSelection();
-        if (Input.IsKeyPressed(Key.Delete) && _connectionEditor?.DeleteHoveredConnection() == true)
-        {
-            GetViewport().SetInputAsHandled();
-        }
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _ShortcutInput(InputEvent @event)
     {
+        if (!IsVisibleInTree() || _currentGraph == null) return;
+        var focus = GetViewport().GuiGetFocusOwner();
+        if (focus == null || !IsAncestorOf(focus) || focus is LineEdit or TextEdit) return;
+        if (_graphEdit.HasFocus() && _connectionEditor?.HandleShortcut(@event) == true)
+        {
+            GetViewport().SetInputAsHandled();
+            return;
+        }
+        if (_selectionInspector?.HandleInspectorUndo(@event, _undoRedo) == true)
+        {
+            GetViewport().SetInputAsHandled();
+            return;
+        }
         if (GraphEditorShortcutService.Handle(@event, _undoRedo, OnSave))
             GetViewport().SetInputAsHandled();
     }
 
     private void OnGraphEditInput(InputEvent @event)
     {
-        if (_connectionEditor?.HandleGraphEditInput(@event, Position) == true)
+        if (_connectionEditor?.HandleGraphEditInput(@event) == true)
+        {
             GetViewport().SetInputAsHandled();
+            return;
+        }
+        if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouse)
+        {
+            foreach (Node child in _graphEdit.GetChildren())
+                if (child is GraphNode node && node.GetGlobalRect().HasPoint(mouse.GlobalPosition)) return;
+            ShowGraphSettings();
+        }
+    }
+
+    private void ShowGraphSettings()
+    {
+        _connectionEditor?.ClearSelection();
+        DeselectGraphNodes();
+        _inspectingObject = true;
+        _selectionInspector?.ShowGraph();
+    }
+
+    private void ShowHostProperties()
+    {
+        _connectionEditor?.ClearSelection();
+        DeselectGraphNodes();
+        _inspectingObject = true;
+        Node host = _componentPanel?.SelectedHost;
+        if (!GodotObject.IsInstanceValid(host)) { _selectionInspector?.Clear(); return; }
+        _selectionInspector?.ShowObject(host, $"Host · {host.Name}", "Scene configuration · saved to the edited scene");
+    }
+
+    private void ShowComponentProperties(GodotObject component)
+    {
+        if (!GodotObject.IsInstanceValid(component)) return;
+        _connectionEditor?.ClearSelection();
+        DeselectGraphNodes();
+        _inspectingObject = true;
+        string name = component is Resource resource && !string.IsNullOrEmpty(resource.ResourceName)
+            ? resource.ResourceName : component.GetType().Name;
+        _selectionInspector?.ShowObject(component, name, "Component configuration · edit defaults on the scene host");
+    }
+
+    private void DeselectGraphNodes()
+    {
+        if (_graphEdit == null) return;
+        foreach (Node child in _graphEdit.GetChildren())
+            if (child is GraphNode node) node.Selected = false;
     }
 
     private void UpdateTimelinePanelSelection()

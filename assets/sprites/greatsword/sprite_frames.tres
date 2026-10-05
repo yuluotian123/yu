@@ -1,0 +1,280 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bew10n3wh847i"]
+
+[ext_resource type="Texture2D" uid="uid://dpji7uo1hjx5" path="res://assets/sprites/greatsword/atlas.png" id="1_atlas"]
+
+[sub_resource type="AtlasTexture" id="attack_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 576, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 576, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 576, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 576, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 192, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 192, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="death_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 960, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="death_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 960, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="death_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 960, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="death_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 960, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="hurt_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 768, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="hurt_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 768, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="hurt_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 768, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="hurt_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 768, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 0, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 0, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 0, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 0, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="jump_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 384, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="jump_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(192, 384, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="jump_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 384, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="jump_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(576, 384, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 192, 192, 192)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(384, 192, 192, 192)
+filter_clip = true
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 8.0,
+"texture": SubResource("attack_0")
+}, {
+"duration": 7.0,
+"texture": SubResource("attack_1")
+}, {
+"duration": 9.0,
+"texture": SubResource("attack_2")
+}, {
+"duration": 10.0,
+"texture": SubResource("attack_3")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 100.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}],
+"loop": false,
+"name": &"dash",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("death_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_3")
+}],
+"loop": false,
+"name": &"death",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("hurt_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_3")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("jump_2")
+}],
+"loop": true,
+"name": &"inair",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("jump_1")
+}],
+"loop": true,
+"name": &"isfalling",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("jump_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("jump_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("jump_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("jump_3")
+}],
+"loop": false,
+"name": &"jump",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("jump_1")
+}],
+"loop": false,
+"name": &"jumpup",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("jump_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_0")
+}],
+"loop": false,
+"name": &"land",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("run_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]

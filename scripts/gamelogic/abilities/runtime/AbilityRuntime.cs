@@ -22,6 +22,7 @@ namespace GameLogic
         public double ElapsedTime { get; private set; }
         public bool IsRunning { get; private set; }
         public bool IsCompleted { get; private set; }
+        public ulong ActivationVersion { get; private set; }
         public string LastReturnLabel { get; private set; } = string.Empty;
         public FlowGraphRuntime FlowRuntime => _flowRuntime;
         public float CooldownRemaining(double now) => Mathf.Max(0f, (float)(CooldownReadyTime - now));
@@ -35,6 +36,7 @@ namespace GameLogic
                 return false;
 
             Stop("Restarted");
+            ActivationVersion++;
             _data.Clear();
             ElapsedTime = 0d;
             IsRunning = true;

@@ -14,7 +14,7 @@ using Godot;
 /// </remarks>
 public sealed class GraphBlackboardPanel
 {
-    private readonly Window _owner;
+    private readonly Node _owner;
     private readonly Func<GraphAsset> _getCurrentGraph;
     private readonly Func<GraphEditorContext> _createContext;
     private readonly Func<bool> _hasHost;
@@ -23,7 +23,7 @@ public sealed class GraphBlackboardPanel
 
     /// <summary>创建黑板面板。</summary>
     public GraphBlackboardPanel(
-        Window owner,
+        Node owner,
         Func<GraphAsset> getCurrentGraph,
         Func<GraphEditorContext> createContext,
         Func<bool> hasHost = null)

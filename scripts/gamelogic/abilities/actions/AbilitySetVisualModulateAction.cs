@@ -2,6 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
+    [GraphCallable("Ability Visual Color", "动画与表现 / 特效", GraphCallableUsage.Timeline, ChineseName = "技能颜色效果")]
     public class AbilitySetVisualModulateAction : GraphActionBase
     {
         public string VisualRootPath { get; set; } = "VisualRoot";

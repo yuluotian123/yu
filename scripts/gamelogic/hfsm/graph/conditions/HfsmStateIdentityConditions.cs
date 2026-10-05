@@ -10,6 +10,7 @@ namespace GameLogic
         NotEqual
     }
 
+    [GraphCallable("String", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "字符串比较")]
     public class HfsmStringCondition : HfsmBlackboardConditionBase
     {
         public string Value { get; set; } = string.Empty;
@@ -58,6 +59,7 @@ namespace GameLogic
         }
     }
 
+    [GraphCallable("Current State", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "当前状态")]
     public class HfsmCurrentStateCondition : HfsmConditionBase
     {
         private string _stateNamesOrIds = string.Empty;

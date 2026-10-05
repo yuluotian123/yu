@@ -1,5 +1,6 @@
 using Godot;
 
+[GraphCallable("Always", "状态条件 / State", GraphCallableUsage.State, ChineseName = "始终成立")]
 public class StateAlwaysCondition : StateConditionBase
 {
     public override string Description => "Always";
@@ -7,6 +8,7 @@ public class StateAlwaysCondition : StateConditionBase
     public override bool IsMet(StateGraphRuntime runtime) => true;
 }
 
+[GraphCallable("Trigger", "状态条件 / State", GraphCallableUsage.State, ChineseName = "触发器")]
 public class StateTriggerCondition : StateConditionBase
 {
     public string TriggerName { get; set; } = string.Empty;
@@ -34,6 +36,7 @@ public class StateTriggerCondition : StateConditionBase
     }
 }
 
+[GraphCallable("Boolean", "状态条件 / State", GraphCallableUsage.State, ChineseName = "布尔判断")]
 public class StateBoolCondition : StateConditionBase
 {
     private static readonly System.Type[] BoolValueTypes = { typeof(bool) };
@@ -70,6 +73,7 @@ public class StateBoolCondition : StateConditionBase
     }
 }
 
+[GraphCallable("Number", "状态条件 / State", GraphCallableUsage.State, ChineseName = "数值比较")]
 public class StateFloatCondition : StateConditionBase
 {
     private static readonly System.Type[] FloatValueTypes = { typeof(float), typeof(int) };
@@ -128,6 +132,7 @@ public class StateFloatCondition : StateConditionBase
     }
 }
 
+[GraphCallable("Timer", "状态条件 / State", GraphCallableUsage.State, ChineseName = "计时判断")]
 public class StateTimerCondition : StateConditionBase
 {
     public float Seconds { get; set; } = 1f;

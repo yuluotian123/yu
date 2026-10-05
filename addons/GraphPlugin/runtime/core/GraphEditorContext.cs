@@ -36,6 +36,10 @@ public sealed class GraphEditorContext
 
     public IReadOnlyList<GraphComponentTypeDescriptor> AvailableComponentTypes { get; set; }
 
+    /// <summary>Resolve the currently selected scene host, including after host switching.</summary>
+    public System.Func<Node> ResolveHost { get; set; }
+    public System.Func<GodotObject> ResolveSource { get; set; }
+
     /// <summary>当前黑板条目。仅在黑板值 UI 构建时有值。</summary>
     public GraphBlackboardEntry BlackboardEntry { get; set; }
 
@@ -75,6 +79,8 @@ public sealed class GraphEditorContext
         target.GraphEdit = GraphEdit;
         target.GlobalBlackboard = GlobalBlackboard;
         target.AvailableComponentTypes = AvailableComponentTypes;
+        target.ResolveHost = ResolveHost;
+        target.ResolveSource = ResolveSource;
         return target;
     }
 }

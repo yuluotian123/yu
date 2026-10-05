@@ -11,6 +11,7 @@ public sealed class GraphComponentArgument
     public GraphBlackboardValue Value { get; set; } = new GraphStringBlackboardValue();
 }
 
+[GraphCallable("Call Component Method", "组件访问", GraphCallableUsage.Flow | GraphCallableUsage.BehaviorTree, ChineseName = "调用组件方法")]
 public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAction
 {
     public GraphActionComponentReference Component { get; set; } = new();
@@ -210,6 +211,7 @@ public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAct
     }
 }
 
+[GraphCallable("Get Component Property", "组件访问", GraphCallableUsage.All, ChineseName = "读取组件属性")]
 public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeAction
 {
     public GraphActionComponentReference Component { get; set; } = new();
@@ -276,6 +278,7 @@ public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeActi
 #endif
 }
 
+[GraphCallable("Set Component Property", "组件访问", GraphCallableUsage.All, ChineseName = "写入组件属性")]
 public sealed class GraphComponentSetAction : GraphActionBase, IBehaviorTreeAction
 {
     public GraphActionComponentReference Component { get; set; } = new();

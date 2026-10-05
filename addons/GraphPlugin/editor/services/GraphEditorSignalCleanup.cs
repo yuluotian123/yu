@@ -31,6 +31,10 @@ public static class GraphEditorSignalCleanup
                     continue;
 
                 Callable callable = connection["callable"].AsCallable();
+                // Native Tree/Container connections maintain internal item and layout state.
+                // Only detach the managed delegates created by the plugin.
+                if (callable.Delegate == null)
+                    continue;
                 GodotObject target = callable.Target;
                 if (target == null && callable.Delegate == null)
                     continue;

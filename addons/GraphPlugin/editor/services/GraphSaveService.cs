@@ -8,7 +8,24 @@ using Godot;
 /// </summary>
 public static class GraphSaveService
 {
-    public static bool Save(Window owner, GraphAsset graph, GraphEdit graphEdit, bool showDialog = true)
+    // Called while Godot is already saving: never call SaveScene recursively here.
+    public static void SyncForEditorSave(GraphAsset graph, GraphEdit graphEdit)
+    {
+        if (!GodotObject.IsInstanceValid(graph) || !GodotObject.IsInstanceValid(graphEdit)) return;
+        SyncNodePositions(graph, graphEdit);
+        SyncEditorState(graph, graphEdit);
+        graph.SaveJsonFields();
+        if (!IsInlineResource(graph) && !string.IsNullOrWhiteSpace(graph.ResourcePath))
+        {
+            Error error = ResourceSaver.Save(graph, graph.ResourcePath);
+            if (error != Error.Ok)
+            {
+                graph.MarkDirty();
+                GD.PushError($"[GraphPlugin] Unable to save graph: {error}");
+            }
+        }
+    }
+    public static bool Save(Node owner, GraphAsset graph, GraphEdit graphEdit, bool showDialog = true)
     {
         if (graph == null || !GodotObject.IsInstanceValid(graph))
             return false;
@@ -33,7 +50,7 @@ public static class GraphSaveService
         return SaveGraphResource(owner, graph, showDialog);
     }
 
-    public static bool SaveGraphResource(Window owner, GraphAsset graph, bool showDialog = true)
+    public static bool SaveGraphResource(Node owner, GraphAsset graph, bool showDialog = true)
     {
         if (graph == null || !GodotObject.IsInstanceValid(graph))
             return false;
@@ -164,7 +181,7 @@ public static class GraphSaveService
         graph.MarkDirty();
     }
 
-    private static void ShowDialog(Window owner, string title, string message)
+    private static void ShowDialog(Node owner, string title, string message)
     {
         if (owner == null)
             return;

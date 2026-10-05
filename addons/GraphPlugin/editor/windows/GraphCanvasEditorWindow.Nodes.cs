@@ -17,6 +17,7 @@ public partial class GraphCanvasEditorWindow
 
     private void OnPopupRequest(Vector2 position)
     {
+        if (_currentGraph == null) return;
         Vector2 graphPosition = ToGraphPosition(position);
         _componentPanel?.Refresh();
         var dynamicEntries = new System.Collections.Generic.List<GraphNodeSearchService.GraphNodeSearchEntry>();
@@ -257,17 +258,32 @@ public partial class GraphCanvasEditorWindow
 
     private void OnNodeSelected(Node node)
     {
-        if (node is GraphNode graphNode)
-            _selectionInspector?.ShowNode(graphNode);
+        _connectionEditor?.ClearSelection();
+        _inspectingObject = false;
+        QueueSelectionInspectorRefresh();
     }
 
     private void OnNodeDeselected(Node node)
     {
+        QueueSelectionInspectorRefresh();
+    }
+
+    private void QueueSelectionInspectorRefresh()
+    {
+        if (_selectionRefreshQueued) return;
+        _selectionRefreshQueued = true;
+        CallDeferred(MethodName.RefreshSelectionInspector);
+    }
+
+    private void RefreshSelectionInspector()
+    {
+        _selectionRefreshQueued = false;
+        if (!IsInsideTree() || IsQueuedForDeletion() || _inspectingObject) return;
         GraphNode selectedNode = GetSingleSelectedGraphNode();
         if (selectedNode != null)
             _selectionInspector?.ShowNode(selectedNode);
         else
-            _selectionInspector?.Clear();
+            _selectionInspector?.ShowGraph();
     }
 
     private GraphNode GetSingleSelectedGraphNode()

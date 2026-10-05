@@ -186,6 +186,9 @@ namespace GameLogic
             }
         }
 
+        public AbilityActivationResult CanActivateAbility(string abilityId, int? requestPriority = null) =>
+            ValidateActivation(abilityId, requestPriority, out _, out _);
+
         private AbilityActivationResult ValidateActivation(
             string abilityId,
             int? requestPriority,

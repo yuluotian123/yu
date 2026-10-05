@@ -22,12 +22,54 @@ public static class GraphNodeViewBuilder
             Draggable = true,
             Resizable = true
         };
+        var body = new StyleBoxFlat { BgColor = new Color("22272f"), BorderColor = new Color("101317") };
+        body.SetBorderWidthAll(1);
+        body.SetCornerRadiusAll(5);
+        var selected = (StyleBoxFlat)body.Duplicate();
+        selected.BorderColor = new Color("e6b558");
+        selected.SetBorderWidthAll(2);
+        var title = new StyleBoxFlat { BgColor = data.GetNodeColor().Darkened(0.55f) };
+        title.SetCornerRadiusAll(5);
+        title.ContentMarginLeft = title.ContentMarginRight = 12;
+        title.ContentMarginTop = title.ContentMarginBottom = 7;
+        node.AddThemeStyleboxOverride("panel", body);
+        node.AddThemeStyleboxOverride("panel_selected", selected);
+        node.AddThemeStyleboxOverride("titlebar", title);
+        node.AddThemeStyleboxOverride("titlebar_selected", title);
         GraphEditorTranslationService.DisableAutoTranslate(node);
 
+        RefreshNodeUI(data, node, context);
+        return node;
+    }
+
+    public static void RefreshNodeUI(GraphNodeData data, GraphNode node, GraphEditorContext context)
+    {
+        foreach (Node child in node.GetChildren())
+        {
+            GraphEditorSignalCleanup.DisconnectSubtree(child);
+            node.RemoveChild(child); child.QueueFree();
+        }
+        node.ClearAllSlots();
+        node.Title = data.GetDisplayName();
         int inputCount = data.GetInputCount();
         int outputCount = data.GetOutputCount();
         int maxSlots = Math.Max(inputCount, outputCount);
         Color color = data.GetNodeColor();
+
+        // State machines use the whole state body as their connection anchor.
+        // Transparent slots preserve GraphEdit routing/hit testing and stored topology.
+        if (context.CurrentGraph is StateGraphAsset && maxSlots <= 1)
+        {
+            data.CreateNodeUI(context.WithGraphNode(data, node));
+            if (node.GetChildCount() == 0) node.AddChild(new Control { CustomMinimumSize = new Vector2(150, 24) });
+            using var transparentImage = Image.CreateEmpty(8, 8, false, Image.Format.Rgba8);
+            var hiddenPort = ImageTexture.CreateFromImage(transparentImage);
+            node.SetSlot(0, inputCount > 0, inputCount > 0 ? data.GetInputPortType(0) : 0, color,
+                outputCount > 0, outputCount > 0 ? data.GetOutputPortType(0) : 0, color, hiddenPort, hiddenPort);
+            GraphEditorTranslationService.DisableAutoTranslateRecursive(node);
+            node.CallDeferred("reset_size");
+            return;
+        }
 
         for (int i = 0; i < maxSlots; i++)
         {
@@ -51,7 +93,6 @@ public static class GraphNodeViewBuilder
         data.CreateNodeUI(context.WithGraphNode(data, node));
         GraphEditorTranslationService.DisableAutoTranslateRecursive(node);
         node.CallDeferred("reset_size");
-        return node;
     }
 
     private static Control CreatePortLabelRow(GraphNodeData data, int port, bool hasInput, bool hasOutput)

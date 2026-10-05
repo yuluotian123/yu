@@ -2,391 +2,249 @@
 using System;
 using Godot;
 
+[Tool]
 public sealed partial class GraphTimelineCanvas : Control
 {
-    private const float RulerHeight = 24f;
-    private const float TrackHeight = 36f;
-    private const float PixelsPerSecond = 140f;
+    public const float RulerHeight = 24f;
+    public const float MarkerHeight = 28f;
+    public const float TracksTop = RulerHeight + MarkerHeight;
+    public const float TrackHeight = 36f;
+    public const float PixelsPerSecond = 140f;
     private const float ClipHeight = 24f;
-    private const float ResizeHandleWidth = 8f;
-
+    private const float HandleWidth = 7f;
     private FlowTimelineNodeData _timeline;
-    private float _zoom = 1f;
-    private float _playhead;
+    private float _zoom = 1, _playhead;
     private bool _snap = true;
-    private int _selectedTrackIndex = -1;
-    private int _selectedClipIndex = -1;
-    private int _selectedMarkerIndex = -1;
-    private int _dragTrackIndex = -1;
-    private int _dragClipIndex = -1;
-    private int _dragMarkerIndex = -1;
-    private float _dragStartMouseTime;
-    private float _dragStartClipTime;
-    private float _dragStartClipDuration;
-    private float _dragStartMarkerTime;
-    private DragMode _dragMode = DragMode.None;
+    public float SnapStep { get; set; } = 0.05f;
+    private int _selectedTrackIndex = -1, _selectedClipIndex = -1, _selectedMarkerIndex = -1;
+    private FlowTimelineClip _dragClip;
+    private FlowTimelineMarker _dragMarker;
+    private float _dragStartMouseTime, _dragStartTime, _dragStartDuration;
+    private DragMode _dragMode;
+    private enum DragMode { None, MoveClip, LeftEdge, RightEdge, MoveMarker, Playhead, Pan }
 
     public event Action<int, int> ClipSelected;
     public event Action<int> MarkerSelected;
+    public event Action<int> TrackSelected;
     public event Action<float> PlayheadChanged;
     public event Action Changed;
+    public event Action EditStarted;
+    public event Action EditFinished;
+    public event Action EditCancelled;
+    public event Action<float, float> ZoomRequested;
+    public event Action<Vector2> PanRequested;
     public event Action DeleteSelectedClipRequested;
     public event Action DeleteSelectedMarkerRequested;
 
-    private enum DragMode
+    public void Bind(FlowTimelineNodeData timeline, float zoom, float playhead, bool snap, int selectedTrackIndex, int selectedClipIndex, int selectedMarkerIndex)
     {
-        None,
-        MoveClip,
-        ResizeClip,
-        MoveMarker,
-        Playhead
+        if (_timeline != timeline) ResetDrag();
+        _timeline = timeline; _zoom = Mathf.Clamp(zoom, 0.05f, 8f); _playhead = playhead; _snap = snap;
+        _selectedTrackIndex = selectedTrackIndex; _selectedClipIndex = selectedClipIndex; _selectedMarkerIndex = selectedMarkerIndex;
+        UpdateMinimum(); QueueRedraw();
     }
-
-    public void Bind(
-        FlowTimelineNodeData timeline,
-        float zoom,
-        float playhead,
-        bool snap,
-        int selectedTrackIndex,
-        int selectedClipIndex,
-        int selectedMarkerIndex)
-    {
-        _timeline = timeline;
-        _zoom = Mathf.Max(0.25f, zoom);
-        _playhead = playhead;
-        _snap = snap;
-        _selectedTrackIndex = selectedTrackIndex;
-        _selectedClipIndex = selectedClipIndex;
-        _selectedMarkerIndex = selectedMarkerIndex;
-        UpdateMinimum();
-        QueueRedraw();
-    }
+    private float ScaleX => PixelsPerSecond * _zoom;
+    private float TimeToX(float time) => time * ScaleX;
+    private float RawTime(float x) => x / ScaleX;
+    private float SnapTime(float time, bool bypass = false) => _snap && !bypass ? Mathf.Round(time / SnapStep) * SnapStep : time;
 
     public override void _Draw()
     {
-        DrawRect(new Rect2(Vector2.Zero, Size), new Color(0.12f, 0.13f, 0.16f));
-        if (_timeline == null)
-            return;
-
-        float width = Mathf.Max(Size.X, _timeline.Duration * ScaleX + 40f);
-        DrawRect(new Rect2(0, 0, width, RulerHeight), new Color(0.18f, 0.19f, 0.23f));
-        DrawGrid(width);
-        DrawTracks(width);
-        DrawMarkers();
-        DrawPlayhead();
+        DrawRect(new Rect2(Vector2.Zero, Size), new Color("202329"));
+        if (_timeline == null) return;
+        DrawRect(new Rect2(0, 0, Size.X, RulerHeight), new Color("30343e"));
+        DrawRect(new Rect2(0, RulerHeight, Size.X, MarkerHeight), new Color("382e23"));
+        var font = GetThemeDefaultFont();
+        for (int trackIndex = 0; trackIndex < _timeline.Tracks.Count; trackIndex++)
+        {
+            var track = _timeline.Tracks[trackIndex];
+            float y = TracksTop + trackIndex * TrackHeight;
+            DrawRect(new Rect2(0, y, Size.X, TrackHeight), trackIndex % 2 == 0 ? new Color("282c34") : new Color("22262d"));
+            for (int clipIndex = 0; clipIndex < track.Clips.Count; clipIndex++)
+            {
+                var clip = track.Clips[clipIndex];
+                Rect2 rect = ClipRect(clip, trackIndex);
+                bool selected = trackIndex == _selectedTrackIndex && clipIndex == _selectedClipIndex;
+                bool compatible = clip.Action == null || GraphTimelineActionRules.Supports(clip.Action.GetType(), GraphTimelineActionKind.Clip);
+                Color color = !compatible ? new Color("a74949") : clip.Enabled && track.Enabled ? new Color("497abe") : new Color("4e535e");
+                DrawRect(rect, color);
+                DrawRect(rect, selected ? new Color("ffd773") : new Color("11151c"), false, selected ? 2 : 1);
+                float handle = Mathf.Min(HandleWidth, rect.Size.X / 3);
+                DrawRect(new Rect2(rect.Position, new Vector2(handle, rect.Size.Y)), new Color(1, 1, 1, .2f));
+                DrawRect(new Rect2(rect.End.X - handle, rect.Position.Y, handle, rect.Size.Y), new Color(1, 1, 1, .2f));
+                if (rect.Size.X > 28)
+                    DrawString(font, rect.Position + new Vector2(10, 17), clip.Name, HorizontalAlignment.Left, rect.Size.X - 20, 12, Colors.White);
+            }
+        }
+        // Draw only the visible ticks. Long timelines must not draw millions of grid lines.
+        float desiredStep = 80f / ScaleX;
+        float power = Mathf.Pow(10, Mathf.Floor(Mathf.Log(desiredStep) / Mathf.Log(10)));
+        float major = power * (desiredStep / power <= 2 ? 2 : desiredStep / power <= 5 ? 5 : 10);
+        var scroll = GetParent() as ScrollContainer;
+        float left = scroll?.ScrollHorizontal ?? 0;
+        float right = left + (scroll?.Size.X ?? Size.X);
+        float minor = major / 5;
+        int first = Mathf.Max(0, Mathf.FloorToInt(left / ScaleX / minor));
+        int last = Mathf.CeilToInt(Mathf.Min(_timeline.Duration * ScaleX, right) / ScaleX / minor);
+        for (int i = first; i <= last; i++)
+        {
+            float time = i * minor, x = TimeToX(time);
+            bool full = i % 5 == 0;
+            DrawLine(new Vector2(x, full ? 0 : RulerHeight - 5), new Vector2(x, RulerHeight), new Color("747d8d"));
+            if (full)
+            {
+                DrawString(font, new Vector2(x + 4, 16), $"{time:0.###}s", HorizontalAlignment.Left, -1, 12, new Color("d0d8e5"));
+                DrawLine(new Vector2(x, TracksTop), new Vector2(x, Size.Y), new Color(1, 1, 1, .09f));
+            }
+        }
+        for (int i = 0; i < _timeline.Markers.Count; i++)
+        {
+            var marker = _timeline.Markers[i];
+            float x = TimeToX(marker.Time), y = RulerHeight + MarkerHeight / 2;
+            Color color = !marker.Enabled ? new Color("71604a") : i == _selectedMarkerIndex ? new Color("ffe39b") : new Color("efa746");
+            DrawColoredPolygon(new[] { new Vector2(x, y - 7), new Vector2(x + 6, y), new Vector2(x, y + 7), new Vector2(x - 6, y) }, color);
+            float labelWidth = 110;
+            foreach (var other in _timeline.Markers)
+                if (other.Time > marker.Time) labelWidth = Mathf.Min(labelWidth, TimeToX(other.Time) - x - 18);
+            if (labelWidth > 15) DrawString(font, new Vector2(x + 9, y + 4), marker.Label, HorizontalAlignment.Left, labelWidth, 11, color);
+        }
+        DrawLine(new Vector2(TimeToX(_playhead), 0), new Vector2(TimeToX(_playhead), Size.Y), new Color("f97070"), 2);
+        DrawLine(new Vector2(TimeToX(_timeline.Duration), 0), new Vector2(TimeToX(_timeline.Duration), Size.Y), new Color("bac4d8"), 1);
     }
 
     public override void _GuiInput(InputEvent @event)
     {
-        if (_timeline == null)
-            return;
-
-        if (@event is InputEventMouseButton mouseButton)
-            HandleMouseButton(mouseButton);
-        else if (@event is InputEventMouseMotion mouseMotion)
-            HandleMouseMotion(mouseMotion);
-        else if (@event is InputEventKey keyEvent)
-            HandleKey(keyEvent);
-    }
-
-    private float ScaleX => PixelsPerSecond * _zoom;
-
-    private void DrawGrid(float width)
-    {
-        float majorStep = 0.5f;
-        float minorStep = 0.1f;
-        for (float time = 0f; time <= _timeline.Duration + 0.001f; time += minorStep)
+        if (_timeline == null) return;
+        if (@event is InputEventKey { Pressed: true, Echo: false } key)
         {
-            bool major = Mathf.IsEqualApprox(Mathf.PosMod(time, majorStep), 0f);
-            Color color = major ? new Color(0.36f, 0.38f, 0.44f) : new Color(0.22f, 0.23f, 0.27f);
-            float x = TimeToX(time);
-            DrawLine(new Vector2(x, 0f), new Vector2(x, Size.Y), color, major ? 1.4f : 1f);
+            if ((key.Keycode == Key.Escape || key.CtrlPressed && key.Keycode == Key.Z) && _dragMode != DragMode.None)
+            {
+                bool editing = _dragClip != null || _dragMarker != null;
+                ResetDrag(); if (editing) EditCancelled?.Invoke(); AcceptEvent();
+            }
+            else if (_dragMode == DragMode.None && key.Keycode is Key.Delete or Key.Backspace)
+            {
+                if (_selectedMarkerIndex >= 0) DeleteSelectedMarkerRequested?.Invoke();
+                else if (_selectedClipIndex >= 0) DeleteSelectedClipRequested?.Invoke();
+                AcceptEvent();
+            }
+            return;
         }
-
-        DrawLine(new Vector2(0f, RulerHeight), new Vector2(width, RulerHeight), new Color(0.42f, 0.43f, 0.48f), 1f);
-    }
-
-    private void DrawTracks(float width)
-    {
-        for (int trackIndex = 0; trackIndex < _timeline.Tracks.Count; trackIndex++)
+        if (@event is InputEventMouseButton mouse)
         {
-            FlowTimelineTrack track = _timeline.Tracks[trackIndex];
-            float y = RulerHeight + trackIndex * TrackHeight;
-            Color rowColor = trackIndex % 2 == 0
-                ? new Color(0.145f, 0.15f, 0.18f)
-                : new Color(0.12f, 0.125f, 0.15f);
-            DrawRect(new Rect2(0, y, width, TrackHeight), rowColor);
-            DrawLine(new Vector2(0, y + TrackHeight), new Vector2(width, y + TrackHeight), new Color(0.22f, 0.23f, 0.27f), 1f);
-
-            if (track?.Clips == null)
-                continue;
-
-            for (int clipIndex = 0; clipIndex < track.Clips.Count; clipIndex++)
-                DrawClip(track.Clips[clipIndex], trackIndex, clipIndex);
-        }
-    }
-
-    private void DrawClip(FlowTimelineClip clip, int trackIndex, int clipIndex)
-    {
-        if (clip == null)
-            return;
-
-        float x = TimeToX(clip.StartTime);
-        float y = RulerHeight + trackIndex * TrackHeight + (TrackHeight - ClipHeight) * 0.5f;
-        float width = Mathf.Max(6f, clip.Duration * ScaleX);
-        bool selected = trackIndex == _selectedTrackIndex && clipIndex == _selectedClipIndex;
-        Color color = clip.Enabled
-            ? new Color(0.36f, 0.52f, 0.95f)
-            : new Color(0.28f, 0.30f, 0.36f);
-        DrawRect(new Rect2(x, y, width, ClipHeight), color);
-        DrawRect(new Rect2(x, y, width, ClipHeight), selected ? new Color(1f, 0.86f, 0.36f) : new Color(0.08f, 0.09f, 0.11f), false, selected ? 2f : 1f);
-        DrawRect(new Rect2(x + width - ResizeHandleWidth, y, ResizeHandleWidth, ClipHeight), new Color(1f, 1f, 1f, 0.18f));
-    }
-
-    private void DrawMarkers()
-    {
-        if (_timeline.Markers == null)
-            return;
-
-        for (int markerIndex = 0; markerIndex < _timeline.Markers.Count; markerIndex++)
-        {
-            FlowTimelineMarker marker = _timeline.Markers[markerIndex];
-            if (marker == null)
-                continue;
-
-            float x = TimeToX(marker.Time);
-            Color color = marker.Enabled
-                ? new Color(0.96f, 0.62f, 0.18f)
-                : new Color(0.45f, 0.38f, 0.3f);
-            if (markerIndex == _selectedMarkerIndex)
-                color = new Color(1f, 0.9f, 0.35f);
-            DrawLine(new Vector2(x, RulerHeight), new Vector2(x, Size.Y), color, markerIndex == _selectedMarkerIndex ? 2.5f : 1.5f);
-            DrawCircle(new Vector2(x, RulerHeight * 0.5f), markerIndex == _selectedMarkerIndex ? 5f : 4f, color);
-        }
-    }
-
-    private void DrawPlayhead()
-    {
-        float x = TimeToX(_playhead);
-        DrawLine(new Vector2(x, 0f), new Vector2(x, Size.Y), new Color(1f, 0.22f, 0.22f), 2f);
-    }
-
-    private void HandleMouseButton(InputEventMouseButton mouseButton)
-    {
-        if (mouseButton.ButtonIndex != MouseButton.Left)
-            return;
-
-        if (mouseButton.Pressed)
-        {
+            if (mouse.Pressed && mouse.CtrlPressed && mouse.ButtonIndex is MouseButton.WheelUp or MouseButton.WheelDown)
+            {
+                if (_dragMode == DragMode.None) ZoomRequested?.Invoke(mouse.ButtonIndex == MouseButton.WheelUp ? 1.25f : 0.8f, mouse.Position.X);
+                AcceptEvent(); return;
+            }
+            if (mouse.ButtonIndex == MouseButton.Middle)
+            {
+                _dragMode = mouse.Pressed ? DragMode.Pan : DragMode.None; AcceptEvent(); return;
+            }
+            if (mouse.ButtonIndex != MouseButton.Left) return;
+            if (!mouse.Pressed)
+            {
+                bool editing = _dragClip != null || _dragMarker != null;
+                ResetDrag(); if (editing) EditFinished?.Invoke(); AcceptEvent(); return;
+            }
             GrabFocus();
-
-            if (TryHitMarker(mouseButton.Position, out int markerIndex))
+            if (HitMarker(mouse.Position, out int markerIndex))
             {
                 MarkerSelected?.Invoke(markerIndex);
-                _dragMarkerIndex = markerIndex;
-                _dragStartMouseTime = XToTime(mouseButton.Position.X);
-                _dragStartMarkerTime = _timeline.Markers[markerIndex].Time;
-                _dragMode = DragMode.MoveMarker;
-                SetPlayheadToTime(_timeline.Markers[markerIndex].Time);
-                return;
+                _dragMarker = _timeline.Markers[markerIndex]; _dragStartTime = _dragMarker.Time; _dragMode = DragMode.MoveMarker;
             }
-
-            if (TryHitClip(mouseButton.Position, out int trackIndex, out int clipIndex, out bool resize))
+            else if (HitClip(mouse.Position, out int trackIndex, out int clipIndex, out DragMode mode))
             {
                 ClipSelected?.Invoke(trackIndex, clipIndex);
-                _dragTrackIndex = trackIndex;
-                _dragClipIndex = clipIndex;
-                FlowTimelineClip clip = _timeline.Tracks[trackIndex].Clips[clipIndex];
-                _dragStartMouseTime = XToTime(mouseButton.Position.X);
-                _dragStartClipTime = clip.StartTime;
-                _dragStartClipDuration = clip.Duration;
-                _dragMode = resize ? DragMode.ResizeClip : DragMode.MoveClip;
-                return;
+                _dragClip = _timeline.Tracks[trackIndex].Clips[clipIndex]; _dragStartTime = _dragClip.StartTime;
+                _dragStartDuration = _dragClip.Duration; _dragMode = mode;
             }
-
-            if (mouseButton.Position.Y <= RulerHeight)
+            else if (mouse.Position.Y < RulerHeight)
             {
-                _dragMode = DragMode.Playhead;
-                SetPlayheadFromX(mouseButton.Position.X);
+                _dragMode = DragMode.Playhead; SetPlayhead(mouse.Position.X, mouse.AltPressed);
             }
+            else
+            {
+                TrackSelected?.Invoke(Mathf.FloorToInt((mouse.Position.Y - TracksTop) / TrackHeight));
+                SetPlayhead(mouse.Position.X, mouse.AltPressed);
+            }
+            _dragStartMouseTime = RawTime(mouse.Position.X);
+            if (_dragClip != null || _dragMarker != null) EditStarted?.Invoke();
+            AcceptEvent(); return;
         }
+        if (@event is not InputEventMouseMotion motion) return;
+        if (_dragMode == DragMode.None)
+        {
+            if (HitClip(motion.Position, out int t, out int c, out DragMode mode))
+            {
+                var clip = _timeline.Tracks[t].Clips[c];
+                MouseDefaultCursorShape = mode == DragMode.MoveClip ? CursorShape.Move : CursorShape.Hsize;
+                TooltipText = $"Clip · {clip.Name}\n{clip.StartTime:0.###}–{clip.EndTime:0.###} 秒\n{(clip.Action == null ? "请选择持续动作" : GraphCallableCatalog.Name(clip.Action.GetType()))}";
+            }
+            else if (HitMarker(motion.Position, out int m))
+            {
+                MouseDefaultCursorShape = CursorShape.Move; TooltipText = $"Marker · {_timeline.Markers[m].Label}\n{_timeline.Markers[m].Time:0.###} 秒 · 触发一次";
+            }
+            else { MouseDefaultCursorShape = CursorShape.Arrow; TooltipText = "Ctrl + 滚轮缩放 · 中键平移 · Alt 暂停吸附 · Esc 取消拖动"; }
+            return;
+        }
+        if (_dragMode == DragMode.Pan) PanRequested?.Invoke(-motion.Relative);
+        else if (_dragMode == DragMode.Playhead) SetPlayhead(motion.Position.X, motion.AltPressed);
         else
         {
-            _dragMode = DragMode.None;
-            _dragTrackIndex = -1;
-            _dragClipIndex = -1;
-            _dragMarkerIndex = -1;
+            float delta = RawTime(motion.Position.X) - _dragStartMouseTime;
+            if (_dragMarker != null) _dragMarker.Time = Mathf.Clamp(SnapTime(_dragStartTime + delta, motion.AltPressed), 0, _timeline.Duration);
+            else if (_dragClip != null)
+            {
+                float end = _dragStartTime + _dragStartDuration;
+                if (_dragMode == DragMode.MoveClip)
+                    _dragClip.StartTime = Mathf.Clamp(SnapTime(_dragStartTime + delta, motion.AltPressed), 0, Mathf.Max(0, _timeline.Duration - _dragStartDuration));
+                else if (_dragMode == DragMode.LeftEdge)
+                {
+                    _dragClip.StartTime = Mathf.Clamp(SnapTime(_dragStartTime + delta, motion.AltPressed), 0, Mathf.Max(0, end - .01f));
+                    _dragClip.Duration = end - _dragClip.StartTime;
+                }
+                else
+                    _dragClip.Duration = Mathf.Clamp(SnapTime(end + delta, motion.AltPressed) - _dragStartTime, .01f, Mathf.Max(.01f, _timeline.Duration - _dragStartTime));
+            }
+            Changed?.Invoke();
         }
+        QueueRedraw(); AcceptEvent();
     }
 
-    private void HandleKey(InputEventKey keyEvent)
+    private Rect2 ClipRect(FlowTimelineClip clip, int track) => new(TimeToX(clip.StartTime), TracksTop + track * TrackHeight + 6, Mathf.Max(8, clip.Duration * ScaleX), ClipHeight);
+    private bool HitClip(Vector2 point, out int trackIndex, out int clipIndex, out DragMode mode)
     {
-        if (!keyEvent.Pressed || keyEvent.Echo)
-            return;
-
-        if (keyEvent.Keycode is not (Key.Delete or Key.Backspace))
-            return;
-
-        if (_selectedMarkerIndex >= 0)
-            DeleteSelectedMarkerRequested?.Invoke();
-        else if (_selectedTrackIndex >= 0 && _selectedClipIndex >= 0)
-            DeleteSelectedClipRequested?.Invoke();
-        else
-            return;
-
-        AcceptEvent();
-    }
-
-    private void HandleMouseMotion(InputEventMouseMotion mouseMotion)
-    {
-        switch (_dragMode)
+        trackIndex = Mathf.FloorToInt((point.Y - TracksTop) / TrackHeight); clipIndex = -1; mode = DragMode.None;
+        if (trackIndex < 0 || trackIndex >= _timeline.Tracks.Count) return false;
+        var clips = _timeline.Tracks[trackIndex].Clips;
+        for (int i = clips.Count - 1; i >= 0; i--)
         {
-            case DragMode.Playhead:
-                SetPlayheadFromX(mouseMotion.Position.X);
-                break;
-            case DragMode.MoveClip:
-                DragClip(mouseMotion.Position.X, false);
-                break;
-            case DragMode.ResizeClip:
-                DragClip(mouseMotion.Position.X, true);
-                break;
-            case DragMode.MoveMarker:
-                DragMarker(mouseMotion.Position.X);
-                break;
-        }
-    }
-
-    private void DragClip(float mouseX, bool resize)
-    {
-        if (_dragTrackIndex < 0 ||
-            _dragTrackIndex >= _timeline.Tracks.Count ||
-            _dragClipIndex < 0 ||
-            _dragClipIndex >= _timeline.Tracks[_dragTrackIndex].Clips.Count)
-        {
-            return;
-        }
-
-        FlowTimelineClip clip = _timeline.Tracks[_dragTrackIndex].Clips[_dragClipIndex];
-        float delta = XToTime(mouseX) - _dragStartMouseTime;
-        if (resize)
-            clip.Duration = Mathf.Max(0f, SnapTime(_dragStartClipDuration + delta));
-        else
-            clip.StartTime = SnapTime(Mathf.Max(0f, _dragStartClipTime + delta));
-
-        Changed?.Invoke();
-        QueueRedraw();
-    }
-
-    private void DragMarker(float mouseX)
-    {
-        if (_dragMarkerIndex < 0 ||
-            _timeline.Markers == null ||
-            _dragMarkerIndex >= _timeline.Markers.Count)
-        {
-            return;
-        }
-
-        FlowTimelineMarker marker = _timeline.Markers[_dragMarkerIndex];
-        if (marker == null)
-            return;
-
-        float delta = XToTime(mouseX) - _dragStartMouseTime;
-        marker.Time = SnapTime(_dragStartMarkerTime + delta);
-        SetPlayheadToTime(marker.Time);
-        Changed?.Invoke();
-        QueueRedraw();
-    }
-
-    private bool TryHitClip(Vector2 position, out int trackIndex, out int clipIndex, out bool resize)
-    {
-        trackIndex = -1;
-        clipIndex = -1;
-        resize = false;
-
-        int row = (int)((position.Y - RulerHeight) / TrackHeight);
-        if (row < 0 || row >= _timeline.Tracks.Count)
-            return false;
-
-        FlowTimelineTrack track = _timeline.Tracks[row];
-        if (track?.Clips == null)
-            return false;
-
-        for (int i = track.Clips.Count - 1; i >= 0; i--)
-        {
-            FlowTimelineClip clip = track.Clips[i];
-            float x = TimeToX(clip.StartTime);
-            float y = RulerHeight + row * TrackHeight + (TrackHeight - ClipHeight) * 0.5f;
-            float width = Mathf.Max(6f, clip.Duration * ScaleX);
-            var rect = new Rect2(x, y, width, ClipHeight);
-            if (!rect.HasPoint(position))
-                continue;
-
-            trackIndex = row;
+            Rect2 rect = ClipRect(clips[i], trackIndex);
+            if (!rect.HasPoint(point)) continue;
+            float handle = Mathf.Min(HandleWidth, rect.Size.X / 3);
             clipIndex = i;
-            resize = position.X >= x + width - ResizeHandleWidth;
+            mode = point.X < rect.Position.X + handle ? DragMode.LeftEdge : point.X > rect.End.X - handle ? DragMode.RightEdge : DragMode.MoveClip;
             return true;
         }
-
         return false;
     }
-
-    private bool TryHitMarker(Vector2 position, out int markerIndex)
+    private bool HitMarker(Vector2 point, out int index)
     {
-        markerIndex = -1;
-        if (_timeline.Markers == null || position.Y > RulerHeight + 8f)
-            return false;
-
-        for (int i = 0; i < _timeline.Markers.Count; i++)
-        {
-            FlowTimelineMarker marker = _timeline.Markers[i];
-            if (marker == null)
-                continue;
-
-            if (Mathf.Abs(position.X - TimeToX(marker.Time)) <= 6f)
-            {
-                markerIndex = i;
-                return true;
-            }
-        }
-
+        index = -1;
+        if (point.Y < RulerHeight || point.Y >= TracksTop) return false;
+        for (int i = _timeline.Markers.Count - 1; i >= 0; i--)
+            if (Mathf.Abs(point.X - TimeToX(_timeline.Markers[i].Time)) <= 8) { index = i; return true; }
         return false;
     }
-
-    private void SetPlayheadFromX(float x)
+    private void SetPlayhead(float x, bool bypass)
     {
-        SetPlayheadToTime(SnapTime(XToTime(x)));
+        _playhead = Mathf.Clamp(SnapTime(RawTime(x), bypass), 0, _timeline.Duration);
+        PlayheadChanged?.Invoke(_playhead); QueueRedraw();
     }
-
-    private void SetPlayheadToTime(float time)
-    {
-        _playhead = Mathf.Clamp(time, 0f, _timeline?.Duration ?? 0f);
-        PlayheadChanged?.Invoke(_playhead);
-        QueueRedraw();
-    }
-
-    private float TimeToX(float time) => time * ScaleX;
-
-    private float XToTime(float x) => Mathf.Clamp(x / ScaleX, 0f, _timeline?.Duration ?? 0f);
-
-    private float SnapTime(float time)
-    {
-        if (!_snap)
-            return Mathf.Clamp(time, 0f, _timeline?.Duration ?? 0f);
-
-        return Mathf.Clamp(Mathf.Round(time / 0.05f) * 0.05f, 0f, _timeline?.Duration ?? 0f);
-    }
-
-    private void UpdateMinimum()
-    {
-        if (_timeline == null)
-        {
-            CustomMinimumSize = new Vector2(500, 180);
-            return;
-        }
-
-        float width = Mathf.Max(600f, _timeline.Duration * ScaleX + 80f);
-        float height = RulerHeight + Mathf.Max(1, _timeline.Tracks.Count) * TrackHeight + 24f;
-        CustomMinimumSize = new Vector2(width, height);
-    }
+    internal void ResetInteraction() => ResetDrag();
+    private void ResetDrag() { _dragMode = DragMode.None; _dragClip = null; _dragMarker = null; }
+    private void UpdateMinimum() => CustomMinimumSize = new Vector2(_timeline == null ? 360 : Mathf.Max(360, _timeline.Duration * ScaleX + 40),
+        TracksTop + Mathf.Max(1, _timeline?.Tracks.Count ?? 0) * TrackHeight + 16);
 }
 #endif

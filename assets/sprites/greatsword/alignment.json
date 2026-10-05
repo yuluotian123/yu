@@ -1,0 +1,702 @@
+{
+  "frame_size": 192,
+  "origin": [
+    96,
+    168
+  ],
+  "sprite_position": [
+    0,
+    -36
+  ],
+  "frames": {
+    "idle_0": {
+      "source_box": [
+        52,
+        38,
+        585,
+        614
+      ],
+      "source_anchor": [
+        320,
+        614
+      ],
+      "scale": 0.16,
+      "bounds": [
+        53,
+        76,
+        139,
+        169
+      ]
+    },
+    "idle_1": {
+      "source_box": [
+        652,
+        38,
+        1193,
+        614
+      ],
+      "source_anchor": [
+        920,
+        614
+      ],
+      "scale": 0.16,
+      "bounds": [
+        53,
+        76,
+        140,
+        169
+      ]
+    },
+    "idle_2": {
+      "source_box": [
+        52,
+        644,
+        585,
+        1220
+      ],
+      "source_anchor": [
+        320,
+        1220
+      ],
+      "scale": 0.16,
+      "bounds": [
+        53,
+        76,
+        139,
+        169
+      ]
+    },
+    "idle_3": {
+      "source_box": [
+        651,
+        644,
+        1196,
+        1220
+      ],
+      "source_anchor": [
+        920,
+        1220
+      ],
+      "scale": 0.16,
+      "bounds": [
+        53,
+        76,
+        141,
+        169
+      ]
+    },
+    "run_0": {
+      "source_box": [
+        42,
+        98,
+        594,
+        615
+      ],
+      "source_anchor": [
+        447,
+        615
+      ],
+      "scale": 0.155,
+      "bounds": [
+        33,
+        88,
+        119,
+        169
+      ]
+    },
+    "run_1": {
+      "source_box": [
+        635,
+        98,
+        1175,
+        616
+      ],
+      "source_anchor": [
+        1045,
+        616
+      ],
+      "scale": 0.155,
+      "bounds": [
+        32,
+        87,
+        116,
+        168
+      ]
+    },
+    "run_2": {
+      "source_box": [
+        42,
+        689,
+        636,
+        1188
+      ],
+      "source_anchor": [
+        474,
+        1188
+      ],
+      "scale": 0.155,
+      "bounds": [
+        29,
+        90,
+        122,
+        168
+      ]
+    },
+    "run_3": {
+      "source_box": [
+        655,
+        687,
+        1219,
+        1201
+      ],
+      "source_anchor": [
+        1084,
+        1201
+      ],
+      "scale": 0.155,
+      "bounds": [
+        29,
+        88,
+        117,
+        168
+      ]
+    },
+    "jump_0": {
+      "source_box": [
+        68,
+        119,
+        609,
+        662
+      ],
+      "source_anchor": [
+        335,
+        662
+      ],
+      "scale": 0.15,
+      "bounds": [
+        56,
+        86,
+        138,
+        168
+      ]
+    },
+    "jump_1": {
+      "source_box": [
+        666,
+        37,
+        1196,
+        660
+      ],
+      "source_anchor": [
+        894,
+        660
+      ],
+      "scale": 0.15,
+      "bounds": [
+        62,
+        74,
+        142,
+        168
+      ]
+    },
+    "jump_2": {
+      "source_box": [
+        83,
+        645,
+        622,
+        1149
+      ],
+      "source_anchor": [
+        346,
+        1238
+      ],
+      "scale": 0.15,
+      "bounds": [
+        56,
+        79,
+        137,
+        155
+      ]
+    },
+    "jump_3": {
+      "source_box": [
+        658,
+        691,
+        1221,
+        1242
+      ],
+      "source_anchor": [
+        935,
+        1242
+      ],
+      "scale": 0.15,
+      "bounds": [
+        54,
+        85,
+        139,
+        168
+      ]
+    },
+    "attack_0": {
+      "source_box": [
+        127,
+        14,
+        559,
+        662
+      ],
+      "source_anchor": [
+        337,
+        662
+      ],
+      "scale": 0.17,
+      "bounds": [
+        60,
+        57,
+        134,
+        168
+      ]
+    },
+    "attack_1": {
+      "source_box": [
+        713,
+        56,
+        1184,
+        661
+      ],
+      "source_anchor": [
+        958,
+        661
+      ],
+      "scale": 0.17,
+      "bounds": [
+        54,
+        65,
+        135,
+        169
+      ]
+    },
+    "attack_2": {
+      "source_box": [
+        84,
+        782,
+        727,
+        1224
+      ],
+      "source_anchor": [
+        377,
+        1224
+      ],
+      "scale": 0.17,
+      "bounds": [
+        46,
+        93,
+        156,
+        169
+      ]
+    },
+    "attack_3": {
+      "source_box": [
+        692,
+        674,
+        1233,
+        1228
+      ],
+      "source_anchor": [
+        961,
+        1228
+      ],
+      "scale": 0.17,
+      "bounds": [
+        50,
+        73,
+        143,
+        168
+      ]
+    },
+    "hurt_0": {
+      "source_box": [
+        27,
+        16,
+        605,
+        650
+      ],
+      "source_anchor": [
+        302,
+        650
+      ],
+      "scale": 0.145,
+      "bounds": [
+        56,
+        76,
+        140,
+        169
+      ]
+    },
+    "hurt_1": {
+      "source_box": [
+        628,
+        76,
+        1200,
+        649
+      ],
+      "source_anchor": [
+        922,
+        649
+      ],
+      "scale": 0.145,
+      "bounds": [
+        53,
+        85,
+        137,
+        169
+      ]
+    },
+    "hurt_2": {
+      "source_box": [
+        37,
+        717,
+        665,
+        1243
+      ],
+      "source_anchor": [
+        336,
+        1243
+      ],
+      "scale": 0.145,
+      "bounds": [
+        52,
+        91,
+        144,
+        168
+      ]
+    },
+    "hurt_3": {
+      "source_box": [
+        675,
+        656,
+        1213,
+        1245
+      ],
+      "source_anchor": [
+        978,
+        1245
+      ],
+      "scale": 0.145,
+      "bounds": [
+        52,
+        82,
+        131,
+        168
+      ]
+    },
+    "death_0": {
+      "source_box": [
+        87,
+        100,
+        668,
+        615
+      ],
+      "source_anchor": [
+        286,
+        615
+      ],
+      "scale": 0.16,
+      "bounds": [
+        64,
+        85,
+        158,
+        168
+      ]
+    },
+    "death_1": {
+      "source_box": [
+        737,
+        227,
+        1366,
+        629
+      ],
+      "source_anchor": [
+        936,
+        629
+      ],
+      "scale": 0.16,
+      "bounds": [
+        64,
+        103,
+        165,
+        168
+      ]
+    },
+    "death_2": {
+      "source_box": [
+        61,
+        820,
+        686,
+        1090
+      ],
+      "source_anchor": [
+        335,
+        1090
+      ],
+      "scale": 0.16,
+      "bounds": [
+        52,
+        124,
+        153,
+        168
+      ]
+    },
+    "death_3": {
+      "source_box": [
+        693,
+        923,
+        1368,
+        1101
+      ],
+      "source_anchor": [
+        1006,
+        1101
+      ],
+      "scale": 0.16,
+      "bounds": [
+        46,
+        139,
+        155,
+        168
+      ]
+    }
+  },
+  "animations": {
+    "idle": {
+      "fps": 5,
+      "loop": true,
+      "frames": [
+        [
+          "idle",
+          0,
+          1
+        ],
+        [
+          "idle",
+          1,
+          1
+        ],
+        [
+          "idle",
+          2,
+          1
+        ],
+        [
+          "idle",
+          3,
+          1
+        ]
+      ]
+    },
+    "run": {
+      "fps": 10,
+      "loop": true,
+      "frames": [
+        [
+          "run",
+          0,
+          1
+        ],
+        [
+          "run",
+          1,
+          1
+        ],
+        [
+          "run",
+          2,
+          1
+        ],
+        [
+          "run",
+          3,
+          1
+        ]
+      ]
+    },
+    "jump": {
+      "fps": 12,
+      "loop": false,
+      "frames": [
+        [
+          "jump",
+          0,
+          1
+        ],
+        [
+          "jump",
+          1,
+          1
+        ],
+        [
+          "jump",
+          2,
+          1
+        ],
+        [
+          "jump",
+          3,
+          1
+        ]
+      ]
+    },
+    "jumpup": {
+      "fps": 12,
+      "loop": false,
+      "frames": [
+        [
+          "jump",
+          1,
+          1
+        ]
+      ]
+    },
+    "inair": {
+      "fps": 8,
+      "loop": true,
+      "frames": [
+        [
+          "jump",
+          2,
+          1
+        ]
+      ]
+    },
+    "isfalling": {
+      "fps": 8,
+      "loop": true,
+      "frames": [
+        [
+          "jump",
+          1,
+          1
+        ]
+      ]
+    },
+    "land": {
+      "fps": 20,
+      "loop": false,
+      "frames": [
+        [
+          "jump",
+          3,
+          1
+        ],
+        [
+          "idle",
+          0,
+          1
+        ]
+      ]
+    },
+    "attack": {
+      "fps": 100,
+      "loop": false,
+      "frames": [
+        [
+          "attack",
+          0,
+          8
+        ],
+        [
+          "attack",
+          1,
+          7
+        ],
+        [
+          "attack",
+          2,
+          9
+        ],
+        [
+          "attack",
+          3,
+          10
+        ]
+      ]
+    },
+    "dash": {
+      "fps": 16,
+      "loop": false,
+      "frames": [
+        [
+          "run",
+          1,
+          1
+        ],
+        [
+          "run",
+          3,
+          1
+        ],
+        [
+          "run",
+          1,
+          1
+        ],
+        [
+          "run",
+          3,
+          1
+        ]
+      ]
+    },
+    "hurt": {
+      "fps": 10,
+      "loop": false,
+      "frames": [
+        [
+          "hurt",
+          0,
+          1
+        ],
+        [
+          "hurt",
+          1,
+          1
+        ],
+        [
+          "hurt",
+          2,
+          1
+        ],
+        [
+          "hurt",
+          3,
+          1
+        ]
+      ]
+    },
+    "death": {
+      "fps": 6,
+      "loop": false,
+      "frames": [
+        [
+          "death",
+          0,
+          1
+        ],
+        [
+          "death",
+          1,
+          1
+        ],
+        [
+          "death",
+          2,
+          1
+        ],
+        [
+          "death",
+          3,
+          1
+        ]
+      ]
+    }
+  }
+}

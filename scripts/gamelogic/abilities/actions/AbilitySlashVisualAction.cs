@@ -2,41 +2,18 @@ using Godot;
 
 namespace GameLogic
 {
-    public class AbilitySlashVisualAction : GraphActionBase
+    public abstract class AbilitySlashActionBase : GraphActionBase
     {
-        public AbilitySlashVisualMode Mode { get; set; } = AbilitySlashVisualMode.Show;
         public string VisualRootPath { get; set; } = "VisualRoot";
         public string SlashNodeName { get; set; } = "AttackSlash";
         public Vector2 SlashOffset { get; set; } = new(24f, -6f);
         public Vector2 SlashScale { get; set; } = new(1f, 1f);
         public Color SlashColor { get; set; } = new(1f, 0.42f, 0.18f, 0.72f);
 
-        public override string Description => $"{Mode} Slash";
-
-        public override void Execute(GraphExecutionContext context)
+        protected Polygon2D ResolveSlash(GraphExecutionContext context)
         {
-            Node2D visualRoot = AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<Node2D>(VisualRootPath);
-            if (visualRoot == null)
-                return;
-
-            Polygon2D slash = EnsureSlashVisual(visualRoot);
-            if (slash == null)
-                return;
-
-            switch (Mode)
-            {
-                case AbilitySlashVisualMode.Show:
-                    slash.Visible = true;
-                    UpdateSlash(slash, 0f);
-                    break;
-                case AbilitySlashVisualMode.Update:
-                    FlowTimelineContext timeline = context.GetUserData<FlowTimelineContext>();
-                    UpdateSlash(slash, timeline?.ClipDuration > 0f ? timeline.ClipNormalizedTime : timeline?.NormalizedTime ?? 0f);
-                    break;
-                case AbilitySlashVisualMode.Hide:
-                    slash.Visible = false;
-                    break;
-            }
+            Node2D root = AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<Node2D>(VisualRootPath);
+            return root == null ? null : EnsureSlashVisual(root);
         }
 
         private Polygon2D EnsureSlashVisual(Node2D visualRoot)
@@ -64,7 +41,7 @@ namespace GameLogic
             return slash;
         }
 
-        private void UpdateSlash(Polygon2D slash, float progress)
+        protected void UpdateSlash(Polygon2D slash, float progress)
         {
             progress = Mathf.Clamp(progress, 0f, 1f);
             float alpha = Mathf.Lerp(0.75f, 0.2f, progress);
@@ -79,10 +56,6 @@ namespace GameLogic
             var root = new VBoxContainer();
             root.AddThemeConstantOverride("separation", 4);
 
-            root.AddChild(GraphEditorUi.BuildEnumRow(
-                "Mode",
-                Mode,
-                value => Mode = value));
             root.AddChild(GraphEditorUi.BuildLineEditRow(
                 "Visual Root",
                 VisualRootPath,
@@ -152,6 +125,42 @@ namespace GameLogic
             };
             picker.ColorChanged += changed => onChanged(changed);
             return GraphEditorUi.BuildRow(label, picker);
+        }
+    }
+
+    [GraphCallable("Slash Visibility", "动画与表现 / 特效", GraphCallableUsage.Timeline, ChineseName = "显示或隐藏刀光")]
+    public class AbilitySlashVisualAction : AbilitySlashActionBase
+    {
+        public AbilitySlashVisualMode Mode { get; set; } = AbilitySlashVisualMode.Show;
+        public override string Description => Mode == AbilitySlashVisualMode.Show ? "显示刀光" : "隐藏刀光";
+        public override void Execute(GraphExecutionContext context)
+        {
+            Polygon2D slash = ResolveSlash(context);
+            if (slash == null) return;
+            if (Mode == AbilitySlashVisualMode.Show) UpdateSlash(slash, 0);
+            else slash.Visible = false;
+        }
+        public override Control CreateEditUI(GraphEditorContext context)
+        {
+            var root = (VBoxContainer)base.CreateEditUI(context);
+            root.AddChild(GraphEditorUi.BuildEnumRow("显示 / 隐藏", Mode, value => Mode = value));
+            return root;
+        }
+    }
+
+    [GraphCallable("Slash Clip", "动画与表现 / 特效", GraphCallableUsage.Timeline,
+        TimelineKind = GraphTimelineActionKind.Clip, ChineseName = "持续刀光")]
+    public class AbilitySlashClipAction : AbilitySlashActionBase
+    {
+        public override string Description => "片段内播放刀光，结束或取消时隐藏";
+        public override void Execute(GraphExecutionContext context)
+        {
+            FlowTimelineContext timeline = context?.GetUserData<FlowTimelineContext>();
+            if (timeline == null) return;
+            Polygon2D slash = ResolveSlash(context);
+            if (slash == null) return;
+            if (timeline.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel) slash.Visible = false;
+            else UpdateSlash(slash, timeline.ClipNormalizedTime);
         }
     }
 }

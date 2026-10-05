@@ -2,6 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
+    [GraphCallable("Apply Dash Velocity", "移动", GraphCallableUsage.Flow | GraphCallableUsage.Timeline, TimelineKind = GraphTimelineActionKind.Clip, ChineseName = "施加冲刺速度")]
     public class AbilityApplyDashVelocityAction : GraphActionBase
     {
         public GraphActionComponentReference Movement { get; set; } = new();
@@ -17,6 +18,8 @@ namespace GameLogic
 
         public override void Execute(GraphActionInvocation invocation)
         {
+            if (invocation.Execution?.GetUserData<FlowTimelineContext>()?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
+                return;
             CharacterMovementComponent2D movement = null;
             string error = string.Empty;
             bool hasInput = invocation.Execution?.ActionDependencyMode == GraphActionDependencyMode.HostBound &&

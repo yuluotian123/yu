@@ -19,6 +19,8 @@ public class SearchablePopup<T> where T : class
     private Tree _tree;
     private List<T> _filteredItems;
     private readonly List<T> _treeItems = new();
+    private bool _refreshQueued;
+    private bool _selectionPending;
 
     /// <summary>
     /// 创建搜索弹窗。
@@ -48,6 +50,7 @@ public class SearchablePopup<T> where T : class
             Exclusive = false
         };
         GraphEditorTranslationService.DisableAutoTranslate(_popup);
+        _popup.PopupHide += () => _popup.QueueFree();
 
         BuildUI();
 
@@ -61,7 +64,7 @@ public class SearchablePopup<T> where T : class
         var screenPos = control.GetScreenPosition();
         _popup.Position = new Vector2I((int)screenPos.X, (int)(screenPos.Y + control.Size.Y));
         _popup.Size = new Vector2I(400, 300);
-        _popup.Show();
+        _popup.Popup();
         _searchBox.CallDeferred("grab_focus");
     }
 
@@ -73,7 +76,7 @@ public class SearchablePopup<T> where T : class
 
         _searchBox = new LineEdit { PlaceholderText = "Search..." };
         GraphEditorTranslationService.DisableAutoTranslate(_searchBox);
-        _searchBox.TextChanged += _ => RefreshTree();
+        _searchBox.TextChanged += _ => QueueRefreshTree();
         _searchBox.GuiInput += OnSearchBoxInput;
         vbox.AddChild(_searchBox);
 
@@ -96,6 +99,8 @@ public class SearchablePopup<T> where T : class
 
     private void RefreshTree()
     {
+        _refreshQueued = false;
+        if (!GodotObject.IsInstanceValid(_tree) || !GodotObject.IsInstanceValid(_popup) || _popup.IsQueuedForDeletion()) return;
         _tree.Clear();
         _treeItems.Clear();
         var root = _tree.CreateItem();
@@ -127,6 +132,13 @@ public class SearchablePopup<T> where T : class
                     CreateSelectableItem(groupItem, item);
             }
         }
+    }
+
+    private void QueueRefreshTree()
+    {
+        if (_refreshQueued) return;
+        _refreshQueued = true;
+        Callable.From(RefreshTree).CallDeferred();
     }
 
     private void CreateSelectableItem(TreeItem parent, T item)
@@ -164,14 +176,21 @@ public class SearchablePopup<T> where T : class
 
     private void OnTreeItemActivated()
     {
+        if (_refreshQueued || _selectionPending) return;
         var selected = _tree.GetSelected();
-        if (selected != null)
+        if (selected != null && selected.GetMetadata(0).VariantType == Variant.Type.Int)
         {
             int index = selected.GetMetadata(0).AsInt32();
             if (index >= 0 && index < _treeItems.Count)
             {
-                OnItemSelected?.Invoke(_treeItems[index]);
-                _popup.QueueFree();
+                T item = _treeItems[index];
+                _selectionPending = true;
+                Callable.From(() =>
+                {
+                    if (!GodotObject.IsInstanceValid(_popup) || _popup.IsQueuedForDeletion()) return;
+                    _popup.Hide();
+                    OnItemSelected?.Invoke(item);
+                }).CallDeferred();
             }
         }
     }

@@ -4,6 +4,7 @@ using Godot;
 
 namespace GameLogic
 {
+    [GraphCallable("Camera Shake", "动画与表现 / 镜头", GraphCallableUsage.All, ChineseName = "镜头震动")]
     public class AbilityCameraShakeAction : GraphActionBase
     {
         public GraphActionComponentReference Camera { get; set; } = new();

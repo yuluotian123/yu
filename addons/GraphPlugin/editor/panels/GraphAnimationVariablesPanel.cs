@@ -62,12 +62,14 @@ public sealed class GraphAnimationVariablesPanel
         _tree.SetColumnTitlesVisible(true);
         _tree.ScrollHorizontalEnabled = true;
         _tree.ScrollVerticalEnabled = true;
-        // Keep the default view readable while allowing long values to be
-        // reached with the horizontal scrollbar.
-        _tree.SetColumnCustomMinimumWidth(0, 150);
-        _tree.SetColumnCustomMinimumWidth(1, 90);
-        _tree.SetColumnCustomMinimumWidth(2, 150);
-        _tree.SetColumnCustomMinimumWidth(3, 190);
+        // Fit all four columns inside the compact dock. Ignore cell text when
+        // measuring columns; full names, values and sources remain in tooltips.
+        _tree.SetColumnCustomMinimumWidth(0, 90);
+        _tree.SetColumnCustomMinimumWidth(1, 50);
+        _tree.SetColumnCustomMinimumWidth(2, 60);
+        _tree.SetColumnCustomMinimumWidth(3, 70);
+        for (int column = 0; column < _tree.Columns; column++)
+            _tree.SetColumnClipContent(column, true);
         _tree.SetColumnExpand(0, true);
         _tree.SetColumnExpand(1, false);
         _tree.SetColumnExpand(2, true);

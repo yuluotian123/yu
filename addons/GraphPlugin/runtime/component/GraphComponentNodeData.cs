@@ -95,15 +95,27 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
     public GraphActionBase Action { get; set; }
 
     public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName, GameLogic.CharacterGraphAsset.CharacterGraphTypeName };
-    public override string GetDisplayName() => Action?.Description ?? "Action";
+    public override string GetDisplayName()
+    {
+#if TOOLS
+        return Action == null ? "Action" : GraphCallableCatalog.ItemLabel(Action, Action.Description);
+#else
+        return Action?.Description ?? "Action";
+#endif
+    }
     public override string GetMenuName() => "Action";
     public override string GetCategory() => "Action";
     public override int GetInputCount() => 2;
-    public override int GetOutputCount() => 1;
+    public override int GetOutputCount() => 2;
     public override string GetInputPortName(int port) => port == 0 ? "Execute" : "Component";
-    public override string GetOutputPortName(int port) => "Next";
+    public override string GetOutputPortName(int port) => port == 0 ? "Success" : "Failure";
     public override int GetInputPortType(int port) => port == 0 ? 0 : GraphComponentPortTypes.Component;
     public override Color GetNodeColor() => new(0.55f, 0.42f, 0.82f);
+
+    public override void Validate(GraphAsset graph, GraphValidationResult result)
+    {
+        if (Action is GraphSharedAction shared) shared.Validate(graph, Id, result);
+    }
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
@@ -115,45 +127,56 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
             inputs["Component"] = value;
             break;
         }
-        Action?.Execute(new GraphActionInvocation(context, inputs));
+        var run = new GraphActionSequenceRun { Invocation = new GraphActionInvocation(context, inputs) };
+        runtime.SetNodeData(Id, run);
+        run.Tick(new[] { Action }, run.Invocation, 0);
     }
 
-    public void Tick(FlowGraphRuntime runtime, GraphExecutionContext context, double delta) { }
+    public void Tick(FlowGraphRuntime runtime, GraphExecutionContext context, double delta)
+    {
+        var run = runtime.GetNodeData<GraphActionSequenceRun>(Id);
+        run.Tick(new[] { Action }, run.Invocation ?? new GraphActionInvocation(context), delta);
+    }
     public bool TryGetCompletion(FlowGraphRuntime runtime, GraphExecutionContext context, out NodeCompletion completion)
     {
-        completion = NodeCompletion.Next();
-        return true;
+        var status = runtime.GetNodeData<GraphActionSequenceRun>(Id).Status;
+        completion = status == BehaviorTreeStatus.Failure ? NodeCompletion.False("Failure") : NodeCompletion.Next("Success");
+        return status != BehaviorTreeStatus.Running;
     }
-    public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context) { }
+    public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context)
+    {
+        if (runtime.TryGetNodeData(Id, out GraphActionSequenceRun run)) run.Cancel(context);
+        runtime.SetNodeData(Id, null);
+    }
 
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
-        var types = SubTypeCache.GetSubTypes<GraphActionBase>();
-        var selector = new OptionButton();
-        for (int i = 0; i < types.Count; i++)
-            selector.AddItem(types[i].Name, i);
-        int selected = -1;
-        if (Action != null)
+#if TOOLS
+        var selector = new Button { Text = Action == null ? "选择动作…" : GraphCallableCatalog.Name(Action.GetType()) };
+        var parameters = new VBoxContainer();
+        selector.Pressed += () =>
         {
-            for (int i = 0; i < types.Count; i++)
+            var popup = new SearchablePopup<Type>(GraphCallableCatalog.ActionsForGraph(context.CurrentGraph),
+                GraphCallableCatalog.Name, GraphCallableCatalog.Category, GraphCallableCatalog.SearchText);
+            popup.OnItemSelected += type =>
             {
-                if (types[i] == Action.GetType())
+                Action = (GraphActionBase)Activator.CreateInstance(type);
+                selector.Text = GraphCallableCatalog.Name(type);
+                context.CurrentGraph?.MarkDirty();
+                foreach (Node child in parameters.GetChildren())
                 {
-                    selected = i;
-                    break;
+                    GraphEditorSignalCleanup.DisconnectSubtree(child);
+                    parameters.RemoveChild(child); child.QueueFree();
                 }
-            }
-        }
-        if (selected >= 0)
-            selector.Select(selected);
-        selector.ItemSelected += index =>
-        {
-            Action = (GraphActionBase)Activator.CreateInstance(types[(int)index]);
+                parameters.AddChild(Action.CreateEditUI(context));
+            };
+            popup.ShowBelow(selector);
         };
         root.AddChild(selector);
-        if (Action != null)
-            root.AddChild(Action.CreateEditUI(context));
+        root.AddChild(parameters);
+        if (Action != null) parameters.AddChild(Action.CreateEditUI(context));
+#endif
         return root;
     }
 }

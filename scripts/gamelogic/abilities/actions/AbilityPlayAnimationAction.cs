@@ -2,6 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
+    [GraphCallable("Request Animation", "动画与表现 / 动画", GraphCallableUsage.Flow | GraphCallableUsage.Timeline, TimelineKind = GraphTimelineActionKind.Clip, ChineseName = "请求动画")]
     public class AbilityPlayAnimationAction : GraphActionBase
     {
         public GraphActionComponentReference Animation { get; set; } = new();

@@ -10,14 +10,16 @@ using System.Collections.Generic;
 public sealed class GraphExecutionContext
 {
     /// <summary>创建运行时上下文。</summary>
-    public GraphExecutionContext(GraphAsset graph, GraphBlackboardRuntime blackboard)
+    public GraphExecutionContext(GraphAsset graph, GraphBlackboardRuntime blackboard, GraphEventStream events = null)
     {
         Graph = graph;
         Blackboard = blackboard;
+        Events = events ?? new GraphEventStream();
     }
 
     /// <summary>当前执行的图资源。</summary>
     public GraphAsset Graph { get; }
+    public GraphEventStream Events { get; }
 
     /// <summary>当前运行时黑板。内部包含本地图、父图和全局黑板作用域。</summary>
     public GraphBlackboardRuntime Blackboard { get; }

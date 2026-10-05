@@ -13,7 +13,6 @@ namespace GameLogic
         private readonly GraphBlackboardRuntime _blackboard = new();
         private readonly GraphExecutionContext _context;
         private readonly List<EventExecution> _executions = new();
-        private readonly Dictionary<string, int> _eventVersions = new(StringComparer.Ordinal);
         private bool _began;
         private bool _stopped;
 
@@ -32,7 +31,7 @@ namespace GameLogic
                 _stopped = true;
                 return;
             }
-            _graph.MigrateMovementNodesToComponents();
+            _graph.InitializeComponentArguments();
             _blackboard.PushLocal(graph);
             _context.UserData.Add(this);
             if (owner != null)
@@ -101,22 +100,9 @@ namespace GameLogic
                 node.AbilityId,
                 "CharacterGraph",
                 relation?.RequestPriority);
-            PublishEvent($"Ability.{node.AbilityId}.{result}");
+            _context.Events.Publish($"Ability.{node.AbilityId}.{result}");
             return result;
         }
-
-        public void PublishEvent(string eventName)
-        {
-            if (string.IsNullOrWhiteSpace(eventName))
-                return;
-            _eventVersions.TryGetValue(eventName, out int version);
-            _eventVersions[eventName] = version + 1;
-        }
-
-        public int GetEventVersion(string eventName) =>
-            !string.IsNullOrWhiteSpace(eventName) && _eventVersions.TryGetValue(eventName, out int version)
-                ? version
-                : 0;
 
         private void TriggerLifecycle(CharacterLifecycleEvent eventType, bool physics)
         {
@@ -125,7 +111,7 @@ namespace GameLogic
                 if (node.Event == eventType)
                     Trigger(node, physics, null);
             }
-            PublishEvent($"Lifecycle.{eventType}");
+            _context.Events.Publish($"Lifecycle.{eventType}");
         }
 
         private void PollInputEvents()
@@ -138,7 +124,7 @@ namespace GameLogic
                     continue;
                 float value = node.ReadValue(_input);
                 Trigger(node, physics: true, new CharacterInputEventContext { NodeId = node.Id, Value = value });
-                PublishEvent($"Input.{node.Id}");
+                _context.Events.Publish($"Input.{node.Id}");
             }
         }
 
@@ -147,7 +133,7 @@ namespace GameLogic
             if (eventNode == null || _executions.Any(value => value.EventNodeId == eventNode.Id))
                 return;
 
-            var context = new GraphExecutionContext(_graph, _blackboard);
+            var context = new GraphExecutionContext(_graph, _blackboard, _context.Events);
             context.UserData.Add(this);
             context.UserData.Add(_owner);
             if (inputEvent != null)
@@ -204,7 +190,7 @@ namespace GameLogic
         {
             if (runtime == null)
                 return;
-            PublishEvent($"Ability.{runtime.AbilityId}.Completed");
+            _context.Events.Publish($"Ability.{runtime.AbilityId}.Completed");
             foreach (CharacterAbilityNodeData source in _graph.Nodes.OfType<CharacterAbilityNodeData>())
             {
                 if (!string.Equals(source.AbilityId, runtime.AbilityId, StringComparison.Ordinal))
@@ -229,7 +215,7 @@ namespace GameLogic
             if (relation == null || !relation.IsWithinWindow(elapsed))
                 return false;
 
-            var context = new GraphExecutionContext(_graph, _blackboard);
+            var context = new GraphExecutionContext(_graph, _blackboard, _context.Events);
             context.UserData.Add(this);
             if (_owner != null)
                 context.UserData.Add(_owner);

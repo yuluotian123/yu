@@ -42,6 +42,8 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         CharacterAnimationComponent2D animation = player.GetComponent<CharacterAnimationComponent2D>();
 
         Require(graph?.Runtime?.IsRunning == true, "CharacterGraph did not initialize.");
+        Require(graph.CharacterGraph.Nodes.Count == 10 && graph.CharacterGraph.FindNodeById("jump_sustain_on") == null,
+            "Player graph still contains redundant jump sustain input.");
         Require(graph.CharacterGraph?.ResourceLocalToScene == true,
             "CharacterGraph is not configured as a scene-local inline resource.");
         Require(graph.CharacterGraph.ResourcePath?.Contains("::", StringComparison.Ordinal) == true,
@@ -227,16 +229,15 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
             TriggerMode = CharacterInputTriggerMode.Axis1D,
             NegativeAction = "left",
             PositiveAction = "right",
-            AxisDeadzone = 0.1f,
             AxisThreshold = 0.1f,
             ConsumeInput = false
         };
-        Require(axis.IsTriggered(provider), "Axis1D did not trigger outside its deadzone.");
+        Require(axis.IsTriggered(provider), "Axis1D did not trigger outside its threshold.");
         Require(Mathf.IsEqualApprox(axis.ReadValue(provider), -0.7f), "Axis1D did not preserve its sign.");
 
         provider.Negative = 0.1f;
         provider.Positive = 0.05f;
-        Require(!axis.IsTriggered(provider), "Axis1D triggered inside its deadzone.");
+        Require(!axis.IsTriggered(provider), "Axis1D triggered inside its threshold.");
     }
 
     private static void VerifyLifecycleAndNonReentrancy()
@@ -264,17 +265,17 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         var runtime = new CharacterGraphRuntime(graph, null, null);
 
         runtime.Update(0.01d, physics: false);
-        Require(runtime.GetEventVersion("Lifecycle.BeginPlay") == 1, "BeginPlay did not fire on the first update.");
+        Require(runtime.Context.Events.GetVersion("Lifecycle.BeginPlay") == 1, "BeginPlay did not fire on the first update.");
         Require(runtime.ActiveExecutionCount == 1, "Update flow did not enter Delay.");
         for (int i = 0; i < 4; i++)
             runtime.Update(0.01d, physics: false);
-        Require(runtime.GetEventVersion("Lifecycle.BeginPlay") == 1, "BeginPlay fired more than once.");
+        Require(runtime.Context.Events.GetVersion("Lifecycle.BeginPlay") == 1, "BeginPlay fired more than once.");
         Require(runtime.ActiveExecutionCount == 1, "Update event re-entered while its Delay was active.");
 
         runtime.Update(0.1d, physics: false);
         Require(runtime.ActiveExecutionCount == 1, "Update flow did not restart after the previous execution completed.");
         runtime.Stop();
-        Require(runtime.GetEventVersion("Lifecycle.EndPlay") == 1, "EndPlay did not fire when the runtime stopped.");
+        Require(runtime.Context.Events.GetVersion("Lifecycle.EndPlay") == 1, "EndPlay did not fire when the runtime stopped.");
     }
 
     private static void VerifyGraphMovementInput(

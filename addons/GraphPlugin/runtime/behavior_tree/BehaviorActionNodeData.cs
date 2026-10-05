@@ -19,41 +19,15 @@ public class BehaviorActionNodeData : BehaviorTreeNodeData
 
     public override BehaviorTreeStatus Tick(BehaviorTreeRuntime runtime, GraphExecutionContext context, double delta)
     {
-        if (Actions == null || Actions.Count == 0)
-            return BehaviorTreeStatus.Success;
-
-        for (int i = 0; i < Actions.Count; i++)
-        {
-            GraphActionBase action = Actions[i];
-            if (action == null)
-                continue;
-
-            if (action is IBehaviorTreeAction behaviorAction)
-            {
-                BehaviorTreeStatus status = behaviorAction.Tick(runtime, context, delta);
-                if (status != BehaviorTreeStatus.Success)
-                    return status;
-
-                continue;
-            }
-
-            action.Execute(context);
-        }
-
-        return BehaviorTreeStatus.Success;
+        var run = runtime.GetNodeData<GraphActionSequenceRun>(Id);
+        var status = run.Tick(Actions, new GraphActionInvocation(context), delta, runtime);
+        if (status != BehaviorTreeStatus.Running) runtime.ClearNodeData(Id);
+        return status;
     }
 
     public override void Abort(BehaviorTreeRuntime runtime, GraphExecutionContext context)
     {
-        if (Actions != null)
-        {
-            for (int i = 0; i < Actions.Count; i++)
-            {
-                if (Actions[i] is IBehaviorTreeAction behaviorAction)
-                    behaviorAction.Abort(runtime, context);
-            }
-        }
-
+        runtime.GetNodeData<GraphActionSequenceRun>(Id).Cancel(context, runtime);
         base.Abort(runtime, context);
     }
 
@@ -79,7 +53,7 @@ public class BehaviorActionNodeData : BehaviorTreeNodeData
             items: Actions,
             buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.Description,
-            availableTypes: SubTypeCache.GetSubTypes<BehaviorTreeActionBase>(),
+            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.BehaviorTree),
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
         root.AddChild(listControl.Build());
@@ -93,6 +67,9 @@ public class BehaviorActionNodeData : BehaviorTreeNodeData
             return "No actions";
 
         string first = Actions[0]?.Description;
+#if TOOLS
+        first = GraphCallableCatalog.ItemLabel(Actions[0], first);
+#endif
         if (string.IsNullOrWhiteSpace(first))
             first = Actions[0]?.GetType().Name ?? "Action";
 

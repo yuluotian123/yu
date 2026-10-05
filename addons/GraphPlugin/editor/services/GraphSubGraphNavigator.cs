@@ -11,7 +11,7 @@ using Godot;
 /// </remarks>
 public sealed class GraphSubGraphNavigator
 {
-    private readonly Window _owner;
+    private readonly Node _owner;
     private readonly HBoxContainer _breadcrumbBar;
     private readonly Func<GraphAsset> _getCurrentGraph;
     private readonly Action<GraphAsset> _loadGraph;
@@ -20,7 +20,7 @@ public sealed class GraphSubGraphNavigator
 
     /// <summary>创建子图导航服务。</summary>
     public GraphSubGraphNavigator(
-        Window owner,
+        Node owner,
         HBoxContainer breadcrumbBar,
         Func<GraphAsset> getCurrentGraph,
         Action<GraphAsset> loadGraph,

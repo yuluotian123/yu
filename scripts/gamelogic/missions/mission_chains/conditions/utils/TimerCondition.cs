@@ -4,6 +4,7 @@ using Godot;
 /// 计时条件：等待指定秒数后条件满足。
 /// 纯 C# 类，序列化由 GraphJsonHelper 负责。
 /// </summary>
+[GraphCallable("Timer", "任务", GraphCallableUsage.Mission, ChineseName = "任务计时")]
 public class TimerCondition : ConditionBase
 {
     public float RequiredSeconds { get; set; } = 5.0f;

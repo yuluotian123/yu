@@ -224,6 +224,14 @@ namespace GameLogic
             _jumpSustainRequested = true;
         }
 
+        [GraphAction("ClearJumpInput", DisplayName = "清除跳跃输入")]
+        public void ClearJumpInput(int sourcePriority = 0)
+        {
+            if (!PreparePartialCommand(sourcePriority)) return;
+            _pendingCommand = new CharacterCommand2D(_pendingCommand.MoveAxisX, false, false);
+            _jumpSustainRequested = false;
+        }
+
         [GraphAction("SetJumpSustain", DisplayName = "设置跳跃持续")]
         public void SetJumpSustain(bool requested, int sourcePriority = 0)
         {

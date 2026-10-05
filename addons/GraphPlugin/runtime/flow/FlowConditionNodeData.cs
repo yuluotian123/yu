@@ -6,7 +6,7 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
     public GraphConditionUseMode UseMode { get; set; } = GraphConditionUseMode.And;
     public List<GraphConditionBase> Conditions { get; set; } = new();
 
-    public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName };
+    public override List<string> GetGraphTypes() => new() { FlowGraphAsset.GraphTypeName, GameLogic.CharacterGraphAsset.CharacterGraphTypeName };
     public override string GetDisplayName() => "FlowCondition";
     public override string GetMenuName() => "Condition";
     public override Color GetNodeColor() => new(0.95f, 0.72f, 0.28f);
@@ -56,7 +56,7 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
             items: Conditions,
             buildItemUi: condition => condition.CreateEditUI(context),
             getItemLabel: condition => condition.Description,
-            availableTypes: SubTypeCache.GetSubTypes<GraphConditionBase>(),
+            availableTypes: GraphCallableCatalog.Conditions(GraphCallableUsage.Flow),
             factory: type => (GraphConditionBase)System.Activator.CreateInstance(type)
         );
 

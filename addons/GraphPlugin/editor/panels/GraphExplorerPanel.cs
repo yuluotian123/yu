@@ -12,14 +12,14 @@ using Godot;
 /// </remarks>
 public sealed class GraphExplorerPanel
 {
-    private readonly Window _owner;
+    private readonly Node _owner;
     private readonly Func<GraphAsset> _getCurrentGraph;
     private readonly Func<GraphEdit> _getGraphEdit;
     private Window _window;
     private VBoxContainer _content;
 
     /// <summary>创建图浏览器面板。</summary>
-    public GraphExplorerPanel(Window owner, Func<GraphAsset> getCurrentGraph, Func<GraphEdit> getGraphEdit)
+    public GraphExplorerPanel(Node owner, Func<GraphAsset> getCurrentGraph, Func<GraphEdit> getGraphEdit)
     {
         _owner = owner;
         _getCurrentGraph = getCurrentGraph;

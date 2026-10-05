@@ -8,7 +8,7 @@ using Godot;
 
 public sealed partial class GraphComponentPanel
 {
-    private readonly Window _owner;
+    private readonly Node _owner;
     private readonly Func<GraphAsset> _getGraph;
     private readonly Func<GraphAsset> _getBindingGraph;
     private readonly Action<string, string> _createCallNode;
@@ -23,6 +23,10 @@ public sealed partial class GraphComponentPanel
     private readonly List<Action> _treeActions = new();
     private GodotObject _source;
     private string _sceneContextKey = string.Empty;
+    private bool _refreshQueued;
+    public event Action<GodotObject> ComponentSelected;
+    public event Action<Node> HostSelected;
+    public Node SelectedHost => GetSelectedHost();
 
     private static readonly Color PanelBackground = new(0.075f, 0.085f, 0.105f, 0.98f);
     private static readonly Color PanelBorder = new(0.20f, 0.23f, 0.28f, 0.9f);
@@ -34,7 +38,7 @@ public sealed partial class GraphComponentPanel
     private static readonly Color PropertyText = new(0.77f, 0.87f, 0.76f);
 
     public GraphComponentPanel(
-        Window owner,
+        Node owner,
         Func<GraphAsset> getGraph,
         Action<string, string> createCallNode,
         Action<string, string, bool> createValueNode,
@@ -101,7 +105,7 @@ public sealed partial class GraphComponentPanel
         hostCaption.AddThemeColorOverride("font_color", AccentText);
         hostContent.AddChild(hostCaption);
 
-        _hostSelector.ItemSelected += _ => Refresh();
+        _hostSelector.ItemSelected += _ => { Refresh(); HostSelected?.Invoke(GetSelectedHost()); };
         _hostSelector.CustomMinimumSize = new Vector2(0, 28);
         _hostSelector.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         hostContent.AddChild(_hostSelector);
@@ -121,7 +125,7 @@ public sealed partial class GraphComponentPanel
         _search.AddThemeColorOverride("font_placeholder_color", SecondaryText);
         _search.AddThemeStyleboxOverride("normal", CreateStyle(SubPanelBackground, PanelBorder, 1, 4, 7));
         _search.AddThemeStyleboxOverride("focus", CreateStyle(SubPanelBackground, new Color(0.30f, 0.58f, 0.85f), 1, 4, 7));
-        _search.TextChanged += _ => RefreshList();
+        _search.TextChanged += _ => QueueRefreshList();
         content.AddChild(_search);
 
         _summaryLabel.AddThemeFontSizeOverride("font_size", 10);
@@ -148,6 +152,7 @@ public sealed partial class GraphComponentPanel
         _tree.AddThemeConstantOverride("button_margin", 4);
         _tree.AddThemeStyleboxOverride("panel", CreateStyle(SubPanelBackground, PanelBorder, 1, 4, 4));
         _tree.ItemActivated += OnTreeItemActivated;
+        _tree.ItemSelected += OnComponentSelected;
         content.AddChild(_tree);
     }
 
@@ -255,6 +260,8 @@ public sealed partial class GraphComponentPanel
 
     private void RefreshList()
     {
+        _refreshQueued = false;
+        if (!GodotObject.IsInstanceValid(_tree) || _tree.IsQueuedForDeletion()) return;
         _tree.Clear();
         _treeActions.Clear();
         string query = _search.Text?.Trim() ?? string.Empty;
@@ -271,11 +278,13 @@ public sealed partial class GraphComponentPanel
 
         Node host = GetSelectedHost();
         List<GodotObject> components = GetHostComponents(host);
-        List<GraphComponentTypeDescriptor> descriptors = GetHostDescriptors(host);
 
-        foreach (GraphComponentTypeDescriptor descriptor in descriptors)
-            AddDescriptorSection(descriptor, query);
-        _summaryLabel.Text = $"{components.Count} component(s)  |  Double-click a function or property to add a node";
+        foreach (GodotObject component in components)
+        {
+            var descriptor = ResolveDescriptor(component);
+            if (descriptor != null) AddDescriptorSection(descriptor, query, component);
+        }
+        _summaryLabel.Text = $"{components.Count} component(s) · Select for Details; double-click a member to add a node";
         if (_treeActions.Count == 0)
         {
             _summaryLabel.Text = components.Count == 0
@@ -284,7 +293,14 @@ public sealed partial class GraphComponentPanel
         }
     }
 
-    private void AddDescriptorSection(GraphComponentTypeDescriptor descriptor, string query)
+    private void QueueRefreshList()
+    {
+        if (_refreshQueued) return;
+        _refreshQueued = true;
+        Callable.From(RefreshList).CallDeferred();
+    }
+
+    private void AddDescriptorSection(GraphComponentTypeDescriptor descriptor, string query, GodotObject component)
     {
         if (descriptor == null)
             return;
@@ -293,7 +309,11 @@ public sealed partial class GraphComponentPanel
         TreeItem componentItem = _tree.CreateItem(root);
         componentItem.SetText(0, descriptor.DisplayName);
         componentItem.SetSelectable(0, true);
-        componentItem.SetTooltipText(0, "Drag this component to an Action Inspector");
+        componentItem.SetTooltipText(0, "Select to edit this component's properties; drag to bind an action");
+        // Only serialized components are editable defaults. Runtime clones remain graph targets.
+        if (TryGetProperty(GetSelectedHost(), "Components", out Variant exported)
+            && exported.VariantType == Variant.Type.Array && exported.AsGodotArray().Contains(Variant.From(component)))
+            componentItem.SetMeta("inspector_target", component);
         componentItem.SetMetadata(0, new Godot.Collections.Dictionary
         {
             ["kind"] = "graph_component",
@@ -457,7 +477,30 @@ public sealed partial class GraphComponentPanel
             return;
         int index = metadata.AsInt32();
         if (index >= 0 && index < _treeActions.Count)
-            _treeActions[index]?.Invoke();
+        {
+            Action action = _treeActions[index];
+            GraphAsset graph = _getGraph();
+            Callable.From(() =>
+            {
+                if (GodotObject.IsInstanceValid(Root) && !Root.IsQueuedForDeletion() && graph == _getGraph())
+                    action?.Invoke();
+            }).CallDeferred();
+        }
+    }
+
+    private void OnComponentSelected()
+    {
+        TreeItem item = _tree.GetSelected();
+        while (item != null && !item.HasMeta("inspector_target")) item = item.GetParent();
+        if (item == null) return;
+        GodotObject target = item.GetMeta("inspector_target").AsGodotObject();
+        GraphAsset graph = _getGraph();
+        Node host = GetSelectedHost();
+        Callable.From(() =>
+        {
+            if (IsValidObject(target) && GodotObject.IsInstanceValid(Root) && !Root.IsQueuedForDeletion()
+                && graph == _getGraph() && host == GetSelectedHost()) ComponentSelected?.Invoke(target);
+        }).CallDeferred();
     }
 
     private static bool Matches(string query, params string[] values) =>

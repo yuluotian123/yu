@@ -3,6 +3,7 @@ using Godot;
 namespace GameLogic
 {
     /// <summary>Negates an HFSM condition without changing the graph runtime.</summary>
+    [GraphCallable("Not", "状态条件 / Hfsm", GraphCallableUsage.Hfsm, ChineseName = "条件取反")]
     public sealed class HfsmNotCondition : HfsmConditionBase
     {
         public HfsmConditionBase Condition { get; set; }

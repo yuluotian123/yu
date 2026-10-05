@@ -34,6 +34,8 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
             {
                 FlowTimelineClip clip = track.Clips[clipIndex];
                 clip?.Action?.Validate(graph, Id, result);
+                if (clip?.Action != null && !GraphTimelineActionRules.Supports(clip.Action.GetType(), GraphTimelineActionKind.Clip))
+                    result.AddError($"动作 {clip.Action.Description} 不支持 Clip；请选择持续动作，瞬时动作用 Marker，异步任务使用 Action 节点。", Id);
                 if (clip == null || clipIds.Add(clip.Id))
                     continue;
 
@@ -46,7 +48,11 @@ public partial class FlowTimelineNodeData : GraphNodeData, IFlowNode
 
         foreach (FlowTimelineMarker marker in Markers)
             foreach (GraphActionBase action in marker?.Actions ?? new List<GraphActionBase>())
+            {
                 action?.Validate(graph, Id, result);
+                if (action != null && !GraphTimelineActionRules.Supports(action.GetType(), GraphTimelineActionKind.Marker))
+                    result.AddError($"动作 {action.Description} 不支持 Marker；请选择瞬时动作，持续动作用 Clip，异步任务使用 Action 节点。", Id);
+            }
         foreach (GraphActionBase action in CancelActions)
             action?.Validate(graph, Id, result);
     }

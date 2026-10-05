@@ -13,22 +13,30 @@ namespace GameLogic
 
         public override string GetDisplayName()
         {
-            string stateName = string.IsNullOrWhiteSpace(StateName) ? "Animation State" : StateName;
+            string stateName = string.IsNullOrWhiteSpace(StateName) ? "动画状态" : StateName;
             return string.IsNullOrWhiteSpace(AnimationName)
                 ? $"{stateName} [Animation]"
                 : $"{stateName} [{AnimationName}]";
         }
 
-        public override string GetMenuName() => "Animation State";
+        public override string GetMenuName() => "动画状态 / Animation State";
         public override string GetCategory() => "HFSM";
         public override Color GetNodeColor() => IsDefault ? new Color(0.3f, 0.75f, 0.45f) : new Color(0.25f, 0.62f, 0.88f);
-        public override System.Collections.Generic.List<string> GetSearchKeywords() => new() { "animation", "animator", "sprite" };
+        public override System.Collections.Generic.List<string> GetSearchKeywords() => new() { "animation", "animator", "sprite", "动画", "播放" };
+
+        public override void CreateNodeUI(GraphEditorContext context)
+        {
+            var root = new VBoxContainer { CustomMinimumSize = new Vector2(170, 0) };
+            root.AddChild(new Label { Text = IsDefault ? "默认动画状态" : "动画状态" });
+            AddCompactFields(root);
+            context.GraphNode.AddChild(root);
+        }
 
         protected override void AddCompactFields(VBoxContainer root)
         {
             root.AddChild(new Label
             {
-                Text = string.IsNullOrWhiteSpace(AnimationName) ? "Animation: state name" : $"Animation: {AnimationName}",
+                Text = string.IsNullOrWhiteSpace(AnimationName) ? $"动画：跟随状态名 ({StateName})" : $"动画：{AnimationName}",
                 ClipText = true,
                 SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
             });
@@ -53,47 +61,16 @@ namespace GameLogic
 
         public override void CreateUI(GraphEditorContext context)
         {
-            var root = new VBoxContainer { CustomMinimumSize = new Vector2(210f, 0f) };
-            AddStateFields(root, context);
-
-            root.AddChild(new HSeparator());
-            AddAnimationFields(root, context);
-
-            context.GraphNode.AddChild(root);
+            context.GraphNode.AddChild(CreateInspectorUI(context));
         }
 
         public override Control CreateInspectorUI(GraphEditorContext context)
         {
-            var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
-            root.AddThemeConstantOverride("separation", 6);
-            AddStateFields(root, context);
-            root.AddChild(new HSeparator());
-            AddAnimationFields(root, context);
-            return root;
-        }
-
-        private void AddAnimationFields(VBoxContainer root, GraphEditorContext context)
-        {
-            root.AddChild(new Label { Text = "Animation Request" });
-            root.AddChild(GraphEditorUi.BuildLineEditRow(
-                "Animation",
-                AnimationName,
-                "SpriteFrames animation",
-                value =>
-                {
-                    AnimationName = value;
-                    if (context.GraphNode != null)
-                        context.GraphNode.Title = GetDisplayName();
-                }));
-            root.AddChild(GraphEditorUi.BuildLineEditRow(
-                "Request Key",
-                RequestKey,
-                "Empty = state id",
-                value => RequestKey = value));
-            root.AddChild(GraphEditorUi.BuildSpinRow("Priority", AnimationPriority, -1000, 1000, 1, value => AnimationPriority = (int)value));
-            root.AddChild(GraphEditorUi.BuildSpinRow("Speed", Speed, -20, 20, 0.05, value => Speed = (float)value));
-            root.AddChild(GraphEditorUi.BuildCheckRow("From End", FromEnd, value => FromEnd = value));
-            root.AddChild(GraphEditorUi.BuildCheckRow("Restart If Playing", RestartIfPlaying, value => RestartIfPlaying = value));
+#if TOOLS
+            return new GraphAnimationStateInspector(this, context);
+#else
+            return base.CreateInspectorUI(context);
+#endif
         }
 
         private void RequestAnimation(HfsmRuntime runtime)

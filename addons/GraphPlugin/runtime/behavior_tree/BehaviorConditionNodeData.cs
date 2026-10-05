@@ -49,7 +49,7 @@ public class BehaviorConditionNodeData : BehaviorTreeNodeData
             items: Conditions,
             buildItemUi: condition => condition.CreateEditUI(context),
             getItemLabel: condition => condition.Description,
-            availableTypes: SubTypeCache.GetSubTypes<BehaviorTreeConditionBase>(),
+            availableTypes: GraphCallableCatalog.Conditions(GraphCallableUsage.BehaviorTree),
             factory: type => (GraphConditionBase)System.Activator.CreateInstance(type)
         );
         root.AddChild(listControl.Build());

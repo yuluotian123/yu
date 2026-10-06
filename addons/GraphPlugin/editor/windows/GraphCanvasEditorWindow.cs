@@ -440,7 +440,7 @@ public partial class GraphCanvasEditorWindow : MarginContainer
         }
         if (_currentGraph is GameLogic.CharacterGraphAsset characterGraph)
             characterGraph.InitializeComponentArguments();
-        _documentTitle.Text = _componentPanel?.Source is GameLogic.CharacterAnimationComponent2D
+        _documentTitle.Text = _componentPanel?.Source is GameLogic.CharacterAnimationComponent3D
             ? "Animation Blueprint - Locomotion"
             : graph.GetEditorTitle();
         AddCustomToolbarControls();
@@ -499,7 +499,7 @@ public partial class GraphCanvasEditorWindow : MarginContainer
         // resource itself. A locomotion HFSM with a real host in the edited
         // scene is still an Animation Blueprint context.
         bool isAnimationBlueprint = _componentPanel?.HasValidHost == true &&
-            (_componentPanel.Source is GameLogic.CharacterAnimationComponent2D ||
+            (_componentPanel.Source is GameLogic.CharacterAnimationComponent3D ||
              _currentGraph is GameLogic.HfsmGraphAsset);
         if (_animationDebugButton == null || !GodotObject.IsInstanceValid(_animationDebugButton))
         {

@@ -172,7 +172,7 @@ public sealed class GraphComponentCallAction : GraphActionBase, IBehaviorTreeAct
     private GraphActionStatus Invoke(GraphExecutionContext context)
     {
         InitializeArguments();
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
             !GraphActionComponentResolver.TryResolve(
@@ -249,7 +249,7 @@ public sealed class GraphComponentGetAction : GraphActionBase, IBehaviorTreeActi
             return false;
         string error = string.Empty;
         object value = null;
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
             !GraphActionComponentResolver.TryResolve(
@@ -315,7 +315,7 @@ public sealed class GraphComponentSetAction : GraphActionBase, IBehaviorTreeActi
         if (string.IsNullOrWhiteSpace(InputKey) || !context.Blackboard.TryGetValue(InputKey, out object value))
             return false;
         string error = string.Empty;
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         if (!GraphComponentRegistry.TryGet(ComponentTypeName, out GraphComponentTypeDescriptor componentType) ||
             !GraphActionComponentResolver.TryResolve(

@@ -154,10 +154,10 @@
 
 当前角色能力主要分布在 `scripts/gamelogic/abilities`：
 
-- `CharacterGraphComponent2D`：玩家输入和 Ability 编排图。
-- `AbilitySystemComponent2D`：Ability 授予、冷却、优先级、并发和运行时。
-- `CharacterMovementComponent2D`：移动意图仲裁、跳跃、重力和 `MoveAndSlide()`。
-- `CharacterAnimationComponent2D`：Locomotion HFSM、Ability 动画仲裁和 Sprite 写入。
+- `CharacterGraphComponent3D`：玩家输入和 Ability 编排图。
+- `AbilitySystemComponent3D`：Ability 授予、冷却、优先级、并发和运行时。
+- `CharacterMovementComponent3D`：移动意图仲裁、跳跃、重力和 `MoveAndSlide()`。
+- `CharacterAnimationComponent3D`：Locomotion HFSM、Ability 动画仲裁和 Sprite 写入。
 
 ### Input
 
@@ -178,7 +178,7 @@
 
 CharacterGraph 是玩家专用的多入口 FlowGraph，负责生命周期、输入到移动/跳跃的映射，以及 Ability 请求和关系边。它不继承 HFSM，不包含 Idle 或 Locomotion。
 
-HFSM 继续用于 `CharacterAnimationComponent2D` 内部的 LocomotionGraph，只读取 Movement 最终结果，表达 Idle、Run、Jump、Fall、Land 等动画状态。
+HFSM 继续用于 `CharacterAnimationComponent3D` 内部的 LocomotionGraph，只读取 Movement 最终结果，表达 Idle、Run、Jump、Fall、Land 等动画状态。
 
 资源示例：
 
@@ -194,7 +194,7 @@ HFSM 继续用于 `CharacterAnimationComponent2D` 内部的 LocomotionGraph，�
 - `AbilityResource`：稳定 AbilityId、冷却、Policy 和 Timeline 图。
 - `AbilitySetResource`：显式授予角色可用 Ability。
 - `AbilityRuntime`：单个 Ability 在角色身上的运行状态。
-- `AbilitySystemComponent2D`：授予、cooldown、优先级、并发、取消和 tick。
+- `AbilitySystemComponent3D`：授予、cooldown、优先级、并发、取消和 tick。
 - `AbilityFlowGraphAsset` / `AbilityTimelineNodeData`：Ability 时序与动作。
 
 推荐约定：
@@ -210,10 +210,10 @@ HFSM 继续用于 `CharacterAnimationComponent2D` 内部的 LocomotionGraph，�
 
 运行方式：
 
-- `SimpleAICharacterControllerComponent2D` 持有 `BehaviorTreeGraphAsset`。
+- `SimpleAICharacterControllerComponent3D` 持有 `BehaviorTreeGraphAsset`。
 - 行为树 action 写入本帧移动和跳跃 intent。
-- Controller 在帧末将 intent 直接提交给 CharacterMovementComponent2D。
-- 战斗 AI 按需直接调用 AbilitySystemComponent2D。
+- Controller 在帧末将 intent 直接提交给 CharacterMovementComponent3D。
+- 战斗 AI 按需直接调用 AbilitySystemComponent3D。
 
 推荐约定：
 

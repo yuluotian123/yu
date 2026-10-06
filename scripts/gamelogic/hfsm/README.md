@@ -7,9 +7,9 @@ GameLogic HFSM 基于 GraphPlugin StateGraph，负责状态、条件、复合状
 ## 当前职责
 
 ```text
-CharacterMovementComponent2D
+CharacterMovementComponent3D
   -> final velocity / IsOnFloor / MovementMode
-  -> CharacterAnimationComponent2D
+  -> CharacterAnimationComponent3D
   -> Locomotion HFSM
        Idle / Run / Jump / Fall / Land
   -> animation request arbitration
@@ -18,7 +18,7 @@ CharacterMovementComponent2D
 
 - `HfsmRuntime`：通用状态图运行时。
 - `HfsmComponent2D`：可独立挂载的通用 HFSM 组件。
-- `CharacterAnimationComponent2D`：内部启动 Locomotion HFSM 并发布 Movement 快照。
+- `CharacterAnimationComponent3D`：内部启动 Locomotion HFSM 并发布 Movement 快照。
 - `HfsmAnimationStateNodeData`：向 Animation 组件提交 Locomotion 动画请求。
 
 默认 Locomotion 资源：[character_locomotion_hfsm.tres](../../../assets/graphs/character_locomotion_hfsm.tres)。

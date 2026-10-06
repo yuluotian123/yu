@@ -24,10 +24,13 @@ CharacterGraph 是 `FlowGraphAsset` 的业务扩展，不属于 HFSM。AI 不使
 
 ## 文档
 
+- [原生 3D、横版与自由移动](presentation/README.md)
 - [角色系统](../../docs/CHARACTER_SYSTEM.md)
 - [Ability](abilities/README.md)
 - [HFSM](hfsm/README.md)
 - [Input](input/README.md)
+- [Camera](../../docs/CAMERA_SYSTEM.md)
 - [Mission](missions/README.md)
 - [Save](saves/README.md)
 - [项目总览](../../docs/PROJECT_OVERVIEW.md)
+

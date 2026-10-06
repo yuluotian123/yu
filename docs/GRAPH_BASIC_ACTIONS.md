@@ -31,7 +31,7 @@
 - 周期跳跃在 Interval 到达且落地时请求起跳，持续 Running。Interval 必须大于 0，HoldDuration 必须大于等于 0。
 - 接近目标只处理水平距离，到达成功，超时或目标失效时失败；不执行寻路或自动跳跃。
 - 移动类动作默认使用 AI 优先级 100，可配置 Priority；Movement 负责最终命令优先级、跳跃锁和物理规则。
-- 这些动作只依赖移动组件与黑板，不依赖 SimpleAICharacterControllerComponent2D。每次运行创建独立任务，不在资源或 Controller 中共享进度。
+- 这些动作只依赖移动组件与黑板，不依赖 SimpleAICharacterControllerComponent3D。每次运行创建独立任务，不在资源或 Controller 中共享进度。
 
 参数中的 `Use blackboard` 决定从常量还是黑板读取。数值参数必须为有限数值；移动和技能等待的 Timeout 必须大于 0。
 
@@ -39,7 +39,7 @@
 
 第一版沿用现有黑板类型：`Target` 可以是世界坐标 Vector2，或 String 类型的节点路径。Find Nearest Target 写入绝对节点路径；目标节点删除后，依赖它的动作/条件会失败。固定坐标请使用 Vector2。
 
-Group 是 Godot 节点组名，需要将可选目标加入该组。它不推断阵营，也不执行视线或遮挡检测。Move To Target 适配现有横版 CharacterMovementComponent2D，只处理水平接近，不执行寻路、跳跃或避障。
+Group 是 Godot 节点组名，需要将可选目标加入该组。它不推断阵营，也不执行视线或遮挡检测。Move To Target 适配现有横版 CharacterMovementComponent3D，只处理水平接近，不执行寻路、跳跃或避障。
 
 ## Reusable 与 HostBound
 
@@ -62,7 +62,7 @@ Timeline 的 clip/marker 仍用于瞬时操作与专用时间轴动作。新增�
 
 ## 最小追击攻击配置
 
-1. 为宿主配置 CharacterMovementComponent2D、AbilitySystemComponent2D，并在 AbilitySet 中授予 `attack`。
+1. 为宿主配置 CharacterMovementComponent3D、AbilitySystemComponent3D，并在 AbilitySet 中授予 `attack`。
 2. 将敌方 Node2D 加入 `enemies` 组。行为树设为 Reusable，黑板声明 String `Target`。
 3. Root → Sequence：Action（Find Nearest Target）→ Selector。
 4. Selector 第一分支为 Sequence：Condition（Target Within Distance，100；Can Use Ability，attack）→ Action（Face Target；Use Ability，attack，Wait For Completion 开启）。

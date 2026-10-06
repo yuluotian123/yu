@@ -13,7 +13,7 @@ public sealed class UseAbilityAction : GraphSharedAction
     public override string Description => "Use Ability";
     public override GraphActionTask CreateTask(GraphActionInvocation call)
     {
-        AbilitySystemComponent2D system = null;
+        AbilitySystemComponent3D system = null;
         AbilityActivationHandle activation = null;
         string id = null;
         double elapsed = 0;
@@ -51,7 +51,7 @@ public sealed class CancelAbilityAction : GraphInstantAction
     public GraphActionValue AbilityId { get; set; } = GraphActionValue.Text("attack");
     public override string Description => "Cancel Ability";
     protected override bool Run(GraphActionInvocation call) => AbilityId.TryRead(call.Execution, out object value)
-        && value is string id && call.TryGetComponent("Component", AbilitySystem, Description, out AbilitySystemComponent2D system, out _)
+        && value is string id && call.TryGetComponent("Component", AbilitySystem, Description, out AbilitySystemComponent3D system, out _)
         && system.CancelAbility(id, "Graph cancel action");
 }
 
@@ -62,6 +62,6 @@ public sealed class CanUseAbilityCondition : GraphSharedCondition
     public GraphActionValue AbilityId { get; set; } = GraphActionValue.Text("attack");
     public override string Description => "Can Use Ability";
     public override bool IsMet(GraphExecutionContext context) => AbilityId.TryRead(context, out object value)
-        && value is string id && GraphActionComponentResolver.TryResolve(context, AbilitySystem, Description, out AbilitySystemComponent2D system, out _)
+        && value is string id && GraphActionComponentResolver.TryResolve(context, AbilitySystem, Description, out AbilitySystemComponent3D system, out _)
         && system.CanActivateAbility(id) == AbilityActivationResult.Activated;
 }

@@ -107,7 +107,7 @@ public partial class GraphPlugin : EditorPlugin
         // host, variables, and save context.
         source = ResolveAnimationGraphSource(graph, source);
 
-        if (source is GameLogic.CharacterGraphComponent2D characterComponent &&
+        if (source is GameLogic.CharacterGraphComponent3D characterComponent &&
             graph is GameLogic.CharacterGraphAsset)
         {
             GraphAsset preparedGraph = characterComponent.PrepareGraphForEditor();
@@ -118,7 +118,7 @@ public partial class GraphPlugin : EditorPlugin
             }
         }
 
-        if (source is GameLogic.CharacterAnimationComponent2D animationComponent &&
+        if (source is GameLogic.CharacterAnimationComponent3D animationComponent &&
             graph is GameLogic.HfsmGraphAsset)
         {
             GraphAsset preparedGraph = animationComponent.PrepareLocomotionGraphForEditor();
@@ -151,7 +151,7 @@ public partial class GraphPlugin : EditorPlugin
     private static GodotObject ResolveAnimationGraphSource(GraphAsset graph, GodotObject source)
     {
         GameLogic.HfsmGraphAsset hfsmGraph = graph as GameLogic.HfsmGraphAsset;
-        if (source is GameLogic.CharacterAnimationComponent2D || hfsmGraph == null)
+        if (source is GameLogic.CharacterAnimationComponent3D || hfsmGraph == null)
             return source;
 
         Node sceneRoot;
@@ -170,30 +170,30 @@ public partial class GraphPlugin : EditorPlugin
         return FindAnimationComponent(sceneRoot, hfsmGraph) ?? source;
     }
 
-    private static GameLogic.CharacterAnimationComponent2D FindAnimationComponent(
+    private static GameLogic.CharacterAnimationComponent3D FindAnimationComponent(
         Node node,
         GameLogic.HfsmGraphAsset graph)
     {
         if (node == null || !GodotObject.IsInstanceValid(node))
             return null;
 
-        if (node is GameLogic.GameObject2D gameObject)
+        if (node is GameLogic.GameObject3D gameObject)
         {
             // Check both serialized components and initialized runtime
             // components. Tool scenes are not guaranteed to have run _Ready.
             if (gameObject.Components != null)
             {
-                foreach (GameLogic.Component2D component in gameObject.Components)
+                foreach (GameLogic.Component3D component in gameObject.Components)
                 {
-                    if (component is GameLogic.CharacterAnimationComponent2D animation &&
+                    if (component is GameLogic.CharacterAnimationComponent3D animation &&
                         SameGraph(animation.LocomotionGraph, graph))
                         return animation;
                 }
             }
 
-            foreach (GameLogic.Component2D component in gameObject.GetAllComponents())
+            foreach (GameLogic.Component3D component in gameObject.GetAllComponents())
             {
-                if (component is GameLogic.CharacterAnimationComponent2D animation &&
+                if (component is GameLogic.CharacterAnimationComponent3D animation &&
                     SameGraph(animation.LocomotionGraph, graph))
                     return animation;
             }
@@ -201,7 +201,7 @@ public partial class GraphPlugin : EditorPlugin
 
         foreach (Node child in node.GetChildren())
         {
-            GameLogic.CharacterAnimationComponent2D found = FindAnimationComponent(child, graph);
+            GameLogic.CharacterAnimationComponent3D found = FindAnimationComponent(child, graph);
             if (found != null)
                 return found;
         }

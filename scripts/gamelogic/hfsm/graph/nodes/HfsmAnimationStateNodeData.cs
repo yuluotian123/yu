@@ -84,12 +84,12 @@ namespace GameLogic
                 RestartIfPlaying);
         }
 
-        private static CharacterAnimationInstance2D GetAnimationInstance(HfsmRuntime runtime)
+        private static CharacterAnimationInstance GetAnimationInstance(HfsmRuntime runtime)
         {
             if (runtime?.Context == null)
                 return null;
-            return runtime.Context.GetUserData<CharacterAnimationInstance2D>() ??
-                   runtime.Context.GetUserData<CharacterAnimationComponent2D>()?.AnimationInstance;
+            return runtime.Context.GetUserData<CharacterAnimationInstance>() ??
+                   runtime.Context.GetUserData<CharacterAnimationComponent3D>()?.AnimationInstance;
         }
 
         private string GetAnimationName()

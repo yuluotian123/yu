@@ -1,85 +1,158 @@
-[gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
+[gd_scene format=4 uid="uid://d0yq2aerjgd6i"]
 
 [ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://assets/scenes/ai_runner.tscn" id="2_ai"]
+[ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="5_host"]
+[ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="6_component"]
+[ext_resource type="Resource" uid="uid://dex0t18fwbshv" path="res://assets/camera/hd2d_side_view_3d.tres" id="8_camera_profile"]
+[ext_resource type="Script" uid="uid://b8lm4oftf5a3i" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="9_environment"]
+[ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="10_time_profile"]
+[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/environment/day_night_sky.gdshader" id="11_sky_shader"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/time_of_day_gm.tscn" id="12_time_gm"]
+[ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="14_camera_controller"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
-size = Vector2(2200, 120)
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_a"]
-size = Vector2(260, 28)
+[ext_resource type="Resource" path="res://assets/environment/reference_clouds/base_timeline.tres" id="original_cloud_timeline"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_b"]
-size = Vector2(220, 28)
+[sub_resource type="Resource" id="environment_profile"]
+script = ExtResource("10_time_profile")
+StartHour = 10.06
+CloudTimeline = ExtResource("original_cloud_timeline")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_c"]
-size = Vector2(220, 28)
+[sub_resource type="Resource" id="controller"]
+script = ExtResource("9_environment")
+Profile = SubResource("environment_profile")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_d"]
-size = Vector2(260, 28)
+[sub_resource type="ShaderMaterial" id="sky_material"]
+resource_local_to_scene = true
+shader = ExtResource("11_sky_shader")
+shader_parameter/day_zenith = Color(0.025, 0.15, 0.65, 1)
+shader_parameter/day_horizon = Color(0.12, 0.58, 1, 1)
+shader_parameter/day_ground = Color(0.3, 0.66, 0.88, 1)
+shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
+shader_parameter/night_zenith = Color(0.07, 0.11, 0.29, 1)
+shader_parameter/night_horizon = Color(0.2, 0.25, 0.44, 1)
+shader_parameter/sun_direction = Vector3(-0.109381, 0.965926, 0.23457)
+shader_parameter/moon_direction = Vector3(0.109381, -0.965926, -0.23457)
+shader_parameter/daylight = 1.0
+shader_parameter/twilight = 0.0
+shader_parameter/sun_radius = 0.015707962851830046
+shader_parameter/moon_radius = 0.026179938779914945
+shader_parameter/moon_visibility = 0.0
+shader_parameter/stars_visibility = 0.0
+shader_parameter/star_intensity = 1.0
+shader_parameter/star_rotation = 0.0
+shader_parameter/moon_light = 0.0
 
-[node name="Spacelevel" type="Node2D" unique_id=2082760717]
+[sub_resource type="Sky" id="sky"]
+resource_local_to_scene = true
+sky_material = SubResource("sky_material")
+process_mode = 3
 
-[node name="Sky" type="Polygon2D" parent="." unique_id=1317878513]
-color = Color(0.0862745, 0.117647, 0.211765, 1)
-polygon = PackedVector2Array(-200, -100, 2200, -100, 2200, 1300, -200, 1300)
+[sub_resource type="Environment" id="environment"]
+resource_local_to_scene = true
+background_mode = 2
+sky = SubResource("sky")
+sky_custom_fov = 65.0
+sky_rotation = Vector3(-0.57595867, 0, 0)
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 4
+ssao_enabled = true
+ssao_radius = 0.5
+ssao_intensity = 0.7
 
-[node name="Ground" type="StaticBody2D" parent="." unique_id=2085808888 groups=["player_ground"]]
-position = Vector2(960, 980)
+[sub_resource type="CameraAttributesPhysical" id="exposure"]
+resource_local_to_scene = true
+exposure_multiplier = 1.2
+frustum_focus_distance = 20.0
+frustum_focal_length = 20.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1534630935]
-shape = SubResource("RectangleShape2D_ground")
+[sub_resource type="Resource" id="camera_controller"]
+script = ExtResource("14_camera_controller")
+Profile = ExtResource("8_camera_profile")
 
-[node name="Visual" type="Polygon2D" parent="Ground" unique_id=1538133487]
-color = Color(0.192157, 0.223529, 0.290196, 1)
-polygon = PackedVector2Array(-1100, -60, 1100, -60, 1100, 60, -1100, 60)
+[sub_resource type="StandardMaterial3D" id="material_Ground"]
+albedo_color = Color(0.192157, 0.223529, 0.290196, 1)
+roughness = 0.85
 
-[node name="PlatformA" type="StaticBody2D" parent="." unique_id=1424427727 groups=["player_ground"]]
-position = Vector2(430, 800)
+[sub_resource type="BoxMesh" id="mesh_Ground"]
+material = SubResource("material_Ground")
+size = Vector3(22, 1.2, 2.4)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformA" unique_id=1951781239]
-shape = SubResource("RectangleShape2D_platform_a")
+[sub_resource type="BoxShape3D" id="shape_Ground"]
+size = Vector3(22, 1.2, 2.4)
 
-[node name="Visual" type="Polygon2D" parent="PlatformA" unique_id=2042817171]
-color = Color(0.415686, 0.545098, 0.639216, 1)
-polygon = PackedVector2Array(-130, -14, 130, -14, 130, 14, -130, 14)
+[node name="Spacelevel" type="Node3D" unique_id=1907641290]
+script = ExtResource("5_host")
 
-[node name="PlatformB" type="StaticBody2D" parent="." unique_id=1963952000 groups=["player_ground"]]
-position = Vector2(760, 680)
+[node name="EnvironmentRig" type="Node3D" parent="." unique_id=660897677]
+process_mode = 1
+script = ExtResource("5_host")
+PersistentId = "level_environment"
+Components = Array[ExtResource("6_component")]([SubResource("controller")])
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformB" unique_id=1824258864]
-shape = SubResource("RectangleShape2D_platform_b")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=594835174]
+environment = SubResource("environment")
+camera_attributes = SubResource("exposure")
 
-[node name="Visual" type="Polygon2D" parent="PlatformB" unique_id=1899030052]
-color = Color(0.482353, 0.65098, 0.721569, 1)
-polygon = PackedVector2Array(-110, -14, 110, -14, 110, 14, -110, 14)
+[node name="Sun" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1850925047]
+transform = Transform3D(0.9063078, 0, 0.4226183, 0.4082179, 0.258819, -0.875426, -0.1093817, 0.9659258, 0.2345697, 0, 0, 0)
+light_temperature = 5800.0
+light_angular_distance = 0.53
+shadow_enabled = true
+shadow_normal_bias = 1.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 40.0
 
-[node name="PlatformC" type="StaticBody2D" parent="." unique_id=1637842310 groups=["player_ground"]]
-position = Vector2(1080, 560)
+[node name="Moon" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=310034368]
+visible = false
+light_intensity_lux = 0.3
+light_temperature = 8500.0
+light_angular_distance = 0.52
+shadow_enabled = true
+shadow_normal_bias = 1.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 40.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformC" unique_id=1089330663]
-shape = SubResource("RectangleShape2D_platform_c")
+[node name="CameraRig" type="Node3D" parent="." unique_id=1603033638]
+process_priority = 100
+physics_interpolation_mode = 2
+script = ExtResource("5_host")
+Components = Array[ExtResource("6_component")]([SubResource("camera_controller")])
 
-[node name="Visual" type="Polygon2D" parent="PlatformC" unique_id=812291793]
-color = Color(0.588235, 0.756863, 0.768627, 1)
-polygon = PackedVector2Array(-110, -14, 110, -14, 110, 14, -110, 14)
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=106388751]
+transform = Transform3D(1, 0, 0, 0, 0.9063078, 0.4226183, 0, -0.4226183, 0.9063078, 1.6, 0.4123659, 18.126156)
+projection = 1
+current = true
+fov = 65.0
+size = 5.4
+far = 200.0
 
-[node name="PlatformD" type="StaticBody2D" parent="." unique_id=2068171076 groups=["player_ground"]]
-position = Vector2(1430, 430)
+[node name="Ground" type="Node3D" parent="." unique_id=1104172541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6, -9.8, 0)
+script = ExtResource("5_host")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformD" unique_id=924151816]
-shape = SubResource("RectangleShape2D_platform_d")
+[node name="Visual" type="MeshInstance3D" parent="Ground" unique_id=1118407196]
+mesh = SubResource("mesh_Ground")
 
-[node name="Visual" type="Polygon2D" parent="PlatformD" unique_id=329099791]
-color = Color(0.717647, 0.854902, 0.792157, 1)
-polygon = PackedVector2Array(-130, -14, 130, -14, 130, 14, -130, 14)
+[node name="GameplayBody" type="StaticBody3D" parent="Ground" unique_id=1042351921 groups=["player_ground"]]
+collision_mask = 0
 
-[node name="Player" parent="." unique_id=219661621 instance=ExtResource("1_player")]
-position = Vector2(160, 884)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
+shape = SubResource("shape_Ground")
 
-[node name="AIRunner" parent="." unique_id=716309721 instance=ExtResource("2_ai")]
-position = Vector2(430, 750)
+[node name="Player" parent="." unique_id=1448143200 instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -8.84, 0)
 
-[node name="AIRunner2" parent="." unique_id=1602288585 instance=ExtResource("2_ai")]
-position = Vector2(899, 869)
+[node name="AIRunner" parent="." unique_id=423667517 instance=ExtResource("2_ai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, -7.5, 0)
+
+[node name="AIRunner2" parent="." unique_id=1369962638 instance=ExtResource("2_ai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.99, -8.69, 0)
 PersistentId = "ai_runner_2"
+
+[node name="TimeGm" parent="." unique_id=1779226142 instance=ExtResource("12_time_gm")]
+
+[node name="OriginalClouds" parent="EnvironmentRig" instance=ExtResource("original_clouds")]

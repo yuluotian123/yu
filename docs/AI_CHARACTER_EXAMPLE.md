@@ -10,16 +10,16 @@
 
 | Priority | 组件 | 职责 |
 | ---: | --- | --- |
-| 100 | `SimpleAICharacterControllerComponent2D` | 运行 BehaviorTree，并将宿主配置写入黑板 |
-| 50 | `CharacterMovementComponent2D` | 仲裁命令并执行物理移动 |
-| 最后 | `CharacterPersistenceComponent2D` | 保存稳定状态 |
+| 100 | `SimpleAICharacterControllerComponent3D` | 运行 BehaviorTree，并将宿主配置写入黑板 |
+| 50 | `CharacterMovementComponent3D` | 仲裁命令并执行物理移动 |
+| 最后 | `CharacterPersistenceComponent3D` | 保存稳定状态 |
 
 它明确没有：
 
-- `PlayerCharacterInputComponent2D`
-- `CharacterGraphComponent2D`
-- `AbilitySystemComponent2D`
-- `CharacterAnimationComponent2D`
+- `PlayerCharacterInputComponent3D`
+- `CharacterGraphComponent3D`
+- `AbilitySystemComponent3D`
+- `CharacterAnimationComponent3D`
 - 已删除的 `CharacterCommandBufferComponent2D`
 
 这保证 AI 的感知、选择和行为顺序只由 BehaviorTree 表达，不会与玩家输入图形成两个决策权威。
@@ -34,7 +34,7 @@ Root → Parallel（RequireAll）
          └─ Action：周期跳跃（Periodic Jump）
 ```
 
-两种动作直接调用 CharacterMovementComponent2D，不读取 AI Controller。Controller 只负责运行图、同步组件绑定和初始化黑板。动作也可放进技能 Flow 的 Action 节点。
+两种动作直接调用 CharacterMovementComponent3D，不读取 AI Controller。Controller 只负责运行图、同步组件绑定和初始化黑板。动作也可放进技能 Flow 的 Action 节点。
 
 ## 巡逻与跳跃参数
 
@@ -60,13 +60,13 @@ Controller 的 Inspector 保留每个角色的配置，并在 Runtime.Start 后�
 
 战斗 AI 可以在场景中增加：
 
-- `AbilitySystemComponent2D` 和自己的 `AbilitySetResource`。
-- `CharacterAnimationComponent2D`，如果需要 Sprite 动画。
+- `AbilitySystemComponent3D` 和自己的 `AbilitySetResource`。
+- `CharacterAnimationComponent3D`，如果需要 Sprite 动画。
 
 BehaviorTree Action 直接调用：
 
 ```csharp
-AbilitySystemComponent2D abilities = owner.GetComponent<AbilitySystemComponent2D>();
+AbilitySystemComponent3D abilities = owner.GetComponent<AbilitySystemComponent3D>();
 AbilityActivationResult result = abilities.TryActivateAbility("attack", "BehaviorTree");
 ```
 
@@ -112,7 +112,7 @@ AI 通常不会模拟玩家按键，也不会复用玩家 Input Graph。它复�
 2. 在 BehaviorTree 增加距离、视线、冷却后的攻击 Action。
 3. Action 调用 `TryActivateAbility()`，根据返回值决定 Success、Failure 或稍后重试。
 4. 需要打断逻辑时，由 BehaviorTree 选择请求时机，Ability policy 做最终优先级裁决。
-5. 需要表现时增加 CharacterAnimationComponent2D 和 LocomotionGraph。
+5. 需要表现时增加 CharacterAnimationComponent3D 和 LocomotionGraph。
 
 不要加入 CharacterGraph，也不要恢复 CommandBuffer 或 SkillManager。
 

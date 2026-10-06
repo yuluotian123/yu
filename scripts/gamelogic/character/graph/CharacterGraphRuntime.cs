@@ -7,9 +7,9 @@ namespace GameLogic
     public sealed class CharacterGraphRuntime
     {
         private readonly CharacterGraphAsset _graph;
-        private readonly GameObject2D _owner;
+        private readonly IGameObject _owner;
         private readonly ICharacterInputProvider _input;
-        private readonly AbilitySystemComponent2D _abilities;
+        private readonly AbilitySystemComponent3D _abilities;
         private readonly GraphBlackboardRuntime _blackboard = new();
         private readonly GraphExecutionContext _context;
         private readonly List<EventExecution> _executions = new();
@@ -18,13 +18,13 @@ namespace GameLogic
 
         public CharacterGraphRuntime(
             CharacterGraphAsset graph,
-            GameObject2D owner,
+            IGameObject owner,
             ICharacterInputProvider input)
         {
             _graph = graph;
             _owner = owner;
             _input = input;
-            _abilities = owner?.GetComponent<AbilitySystemComponent2D>();
+            _abilities = owner?.GetComponent(typeof(AbilitySystemComponent3D)) as AbilitySystemComponent3D;
             _context = new GraphExecutionContext(graph, _blackboard);
             if (graph == null || !graph.TryLoadDocument(out _))
             {
@@ -41,7 +41,7 @@ namespace GameLogic
         }
 
         public CharacterGraphAsset Graph => _graph;
-        public GameObject2D Owner => _owner;
+        public IGameObject Owner => _owner;
         public GraphExecutionContext Context => _context;
         public bool IsRunning => !_stopped;
         public int ActiveExecutionCount => _executions.Count;

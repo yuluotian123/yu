@@ -76,11 +76,13 @@ public sealed partial class RootModule : Node
         ModuleSystem.GetModule<IFsmModule>();
         ModuleSystem.GetModule<IUIModule>();
         ModuleSystem.GetModule<ISaveModule>();
+        ModuleSystem.GetModule<ITimeOfDayModule>();
         ModuleSystem.GetModule<IMissionModule>();
         ModuleSystem.GetModule<IEventModule>();
         ModuleSystem.GetModule<IResourceModule>();
         ModuleSystem.GetModule<IConfigModule>();
         ModuleSystem.GetModule<IInputModule>();
+        ModuleSystem.GetModule<ICameraModule>();
         ModuleSystem.GetModule<IObjectPoolModule>();
 
         var procedureModule = ModuleSystem.GetModule<IProcedureModule>();

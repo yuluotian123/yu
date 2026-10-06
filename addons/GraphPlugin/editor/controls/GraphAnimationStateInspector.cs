@@ -147,7 +147,7 @@ public partial class GraphAnimationStateInspector : VBoxContainer
                 GodotObject component = item.AsGodotObject();
                 if (!GodotObject.IsInstanceValid(component)) continue;
                 Script script = component.GetScript().AsGodotObject() as Script;
-                if (component is CharacterAnimationComponent2D || script?.ResourcePath == "res://scripts/gamelogic/character/animation/CharacterAnimationComponent2D.cs")
+                if (component is CharacterAnimationComponent3D || script?.ResourcePath == "res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs")
                     components.Add(component);
             }
         GodotObject source = context.ResolveSource?.Invoke();
@@ -159,11 +159,11 @@ public partial class GraphAnimationStateInspector : VBoxContainer
         selected ??= matching.Count == 1 ? matching[0] : components.Count == 1 ? components[0] : null;
         if (selected == null)
         {
-            description = components.Count == 0 ? "当前角色没有动画组件。请添加 CharacterAnimationComponent2D。" : "此角色有多个动画组件，请从需要编辑的动画组件打开此图。";
+            description = components.Count == 0 ? "当前角色没有动画组件。请添加 CharacterAnimationComponent3D。" : "此角色有多个动画组件，请从需要编辑的动画组件打开此图。";
             return null;
         }
         if (!TryProperty(selected, "SpritePath", out Variant path)) { description = "动画组件没有配置 SpritePath。"; return null; }
-        var sprite = host.GetNodeOrNull<AnimatedSprite2D>(path.AsNodePath());
+        var sprite = host.GetNodeOrNull<AnimatedSprite3D>(path.AsNodePath());
         if (sprite == null) { description = $"找不到动画节点：{path.AsNodePath()}。请检查动画组件的 SpritePath。"; return null; }
         description = $"动画来源：{host.Name} / {sprite.Name}";
         if (sprite.SpriteFrames == null) description += "\n请为该节点指定 SpriteFrames。";

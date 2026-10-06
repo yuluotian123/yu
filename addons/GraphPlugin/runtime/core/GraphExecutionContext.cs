@@ -29,7 +29,8 @@ public sealed class GraphExecutionContext
         Graph?.ActionDependencyMode ?? GraphActionDependencyMode.HostBound;
 
     /// <summary>Current graph host, when one was supplied by the runtime owner.</summary>
-    public GameLogic.GameObject2D GameObject => GetUserData<GameLogic.GameObject2D>();
+    public GameLogic.IGameObject Host => GetUserData<GameLogic.IGameObject>();
+    public GameLogic.GameObject3D GameObject => GetUserData<GameLogic.GameObject3D>();
 
     /// <summary>业务层可挂入的运行时对象，例如角色、组件、技能实例或任务管理器。</summary>
     public List<object> UserData { get; } = new();

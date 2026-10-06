@@ -14,7 +14,7 @@ public sealed partial class GraphActionComponentReference
 
     public bool IsAssigned => !string.IsNullOrWhiteSpace(ComponentTypeName);
 
-    public bool TryResolve(GraphExecutionContext context, out Component2D component, out string error)
+    public bool TryResolve(GraphExecutionContext context, out IComponent component, out string error)
     {
         component = null;
         error = string.Empty;
@@ -24,7 +24,7 @@ public sealed partial class GraphActionComponentReference
             return false;
         }
 
-        GameObject2D owner = context?.GetUserData<GameObject2D>();
+        IGameObject owner = context?.GetUserData<IGameObject>();
         if (owner == null)
         {
             error = $"Component '{ComponentTypeName}' has no graph owner.";
@@ -51,9 +51,9 @@ public sealed partial class GraphActionComponentReference
     }
 
     public bool TryResolve<T>(GraphExecutionContext context, out T component, out string error)
-        where T : Component2D
+        where T : class, IComponent
     {
-        if (TryResolve(context, out Component2D resolved, out error) && resolved is T typed)
+        if (TryResolve(context, out IComponent resolved, out error) && resolved is T typed)
         {
             component = typed;
             return true;
@@ -159,13 +159,13 @@ public static class GraphActionComponentResolver
         string actionName,
         out T component,
         out string error)
-        where T : Component2D
+        where T : class, IComponent
     {
         component = null;
         error = string.Empty;
         if (context?.ActionDependencyMode == GraphActionDependencyMode.Reusable)
         {
-            GameObject2D owner = context.GameObject;
+            IGameObject owner = context.Host;
             component = owner?.GetAllComponents()?.FirstOrDefault(value => value is T) as T;
             if (component != null)
                 return true;
@@ -174,7 +174,7 @@ public static class GraphActionComponentResolver
             return false;
         }
 
-        if (explicitReference == null || !explicitReference.TryResolve(context, out Component2D resolved, out error))
+        if (explicitReference == null || !explicitReference.TryResolve(context, out IComponent resolved, out error))
         {
             error = $"[{actionName}] HostBound action requires an explicit '{typeof(T).Name}' component reference. {error}";
             return false;
@@ -195,18 +195,18 @@ public static class GraphActionComponentResolver
         GraphActionComponentReference explicitReference,
         Type expectedType,
         string actionName,
-        out Component2D component,
+        out IComponent component,
         out string error)
     {
         component = null;
         error = string.Empty;
-        if (expectedType == null || !typeof(Component2D).IsAssignableFrom(expectedType))
+        if (expectedType == null || !typeof(IComponent).IsAssignableFrom(expectedType))
         {
             error = $"[{actionName}] Invalid component type.";
             return false;
         }
 
-        GameObject2D owner = context?.GameObject;
+        IGameObject owner = context?.Host;
         if (context?.ActionDependencyMode == GraphActionDependencyMode.Reusable)
         {
             component = owner?.GetAllComponents()?.FirstOrDefault(value => value != null && expectedType.IsInstanceOfType(value));
@@ -245,7 +245,7 @@ public sealed class GraphActionInvocation
         Execution?.ActionDependencyMode ?? GraphActionDependencyMode.HostBound;
 
     public bool TryGetComponent<T>(string inputName, GraphActionComponentReference explicitReference, string actionName, out T component, out string error)
-        where T : Component2D
+        where T : class, IComponent
     {
         if (DependencyMode == GraphActionDependencyMode.HostBound && TryGetInput(inputName, out component))
         {

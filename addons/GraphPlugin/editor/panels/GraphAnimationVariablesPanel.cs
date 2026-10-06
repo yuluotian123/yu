@@ -6,7 +6,7 @@ using Godot;
 
 /// <summary>
 /// Small AnimBP-style read-only view of the variables published by the
-/// CharacterAnimationInstance2D and its locomotion state machine.
+/// CharacterAnimationInstance and its locomotion state machine.
 /// </summary>
 public sealed class GraphAnimationVariablesPanel
 {
@@ -14,7 +14,7 @@ public sealed class GraphAnimationVariablesPanel
     private readonly Tree _tree = new();
     private readonly Label _stateLabel = new();
     private readonly Label _animationLabel = new();
-    private CharacterAnimationComponent2D _source;
+    private CharacterAnimationComponent3D _source;
     private bool _hostAvailable;
     private string _lastSnapshot = string.Empty;
 
@@ -102,7 +102,7 @@ public sealed class GraphAnimationVariablesPanel
 
     public void SetSource(GodotObject source)
     {
-        _source = source as CharacterAnimationComponent2D;
+        _source = source as CharacterAnimationComponent3D;
         _lastSnapshot = string.Empty;
         Refresh();
     }
@@ -117,7 +117,7 @@ public sealed class GraphAnimationVariablesPanel
 
     public void RefreshIfChanged()
     {
-        CharacterAnimationInstance2D instance = _hostAvailable ? _source?.AnimationInstance : null;
+        CharacterAnimationInstance instance = _hostAvailable ? _source?.AnimationInstance : null;
         GraphAsset graph = _getGraph?.Invoke();
         string snapshot = instance == null
             ? _hostAvailable ? $"editor|{graph?.GraphJson?.GetHashCode() ?? 0}" : string.Empty
@@ -136,7 +136,7 @@ public sealed class GraphAnimationVariablesPanel
             _animationLabel.Text = "Animation: <none>";
             return;
         }
-        CharacterAnimationInstance2D instance = _hostAvailable ? _source?.AnimationInstance : null;
+        CharacterAnimationInstance instance = _hostAvailable ? _source?.AnimationInstance : null;
         GraphAsset graph = _getGraph?.Invoke();
         if (instance == null && graph is not HfsmGraphAsset)
         {

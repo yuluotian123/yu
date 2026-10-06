@@ -6,7 +6,7 @@ using GameLogic;
 
 public static class GraphComponentInvoker
 {
-    public static bool TryReadComponent(Component2D component, string componentTypeName, string memberId, out object value, out string error)
+    public static bool TryReadComponent(IComponent component, string componentTypeName, string memberId, out object value, out string error)
     {
         value = null;
         error = string.Empty;
@@ -27,7 +27,7 @@ public static class GraphComponentInvoker
         }
     }
 
-    public static bool TryRead(GameObject2D owner, string componentTypeName, string memberId, out object value, out string error)
+    public static bool TryRead(IGameObject owner, string componentTypeName, string memberId, out object value, out string error)
     {
         value = null;
         if (!TryResolveValue(owner, componentTypeName, memberId, out GraphComponentTypeDescriptor type, out GraphComponentValueDescriptor descriptor, out error) ||
@@ -37,7 +37,7 @@ public static class GraphComponentInvoker
             return false;
         }
 
-        Component2D component = owner.GetComponent(type.ComponentType) as Component2D;
+        IComponent component = owner.GetComponent(type.ComponentType) as IComponent;
         try
         {
             value = descriptor.Property?.GetValue(component) ?? descriptor.Getter?.Invoke(component, null);
@@ -50,7 +50,7 @@ public static class GraphComponentInvoker
         }
     }
 
-    public static bool TryWrite(GameObject2D owner, string componentTypeName, string memberId, object value, out string error)
+    public static bool TryWrite(IGameObject owner, string componentTypeName, string memberId, object value, out string error)
     {
         if (!TryResolveValue(owner, componentTypeName, memberId, out GraphComponentTypeDescriptor type, out GraphComponentValueDescriptor descriptor, out error) ||
             !descriptor.CanWrite)
@@ -59,7 +59,7 @@ public static class GraphComponentInvoker
             return false;
         }
 
-        Component2D component = owner.GetComponent(type.ComponentType) as Component2D;
+        IComponent component = owner.GetComponent(type.ComponentType) as IComponent;
         if (!TryConvert(value, descriptor.ValueType, out object converted))
         {
             error = $"Value for '{componentTypeName}.{memberId}' is not compatible with {descriptor.ValueType.Name}.";
@@ -81,7 +81,7 @@ public static class GraphComponentInvoker
         }
     }
 
-    public static bool TryWriteComponent(Component2D component, string componentTypeName, string memberId, object value, out string error)
+    public static bool TryWriteComponent(IComponent component, string componentTypeName, string memberId, object value, out string error)
     {
         error = string.Empty;
         if (!TryGetValueDescriptor(component, componentTypeName, memberId, out GraphComponentValueDescriptor descriptor, out error) || !descriptor.CanWrite)
@@ -109,7 +109,7 @@ public static class GraphComponentInvoker
         }
     }
 
-    public static bool TryInvoke(GameObject2D owner, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
+    public static bool TryInvoke(IGameObject owner, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
     {
         status = GraphActionStatus.Failure;
         returnValue = null;
@@ -119,10 +119,10 @@ public static class GraphComponentInvoker
             error = $"Unknown component type '{componentTypeName}'.";
             return false;
         }
-        return TryInvokeComponent(owner?.GetComponent(type.ComponentType) as Component2D, componentTypeName, memberId, arguments, out status, out returnValue, out error);
+        return TryInvokeComponent(owner?.GetComponent(type.ComponentType) as IComponent, componentTypeName, memberId, arguments, out status, out returnValue, out error);
     }
 
-    public static bool TryInvokeComponent(Component2D component, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
+    public static bool TryInvokeComponent(IComponent component, string componentTypeName, string memberId, object[] arguments, out GraphActionStatus status, out object returnValue, out string error)
     {
         status = GraphActionStatus.Failure;
         returnValue = null;
@@ -179,7 +179,7 @@ public static class GraphComponentInvoker
         }
     }
 
-    private static bool TryResolveValue(GameObject2D owner, string componentTypeName, string memberId, out GraphComponentTypeDescriptor type, out GraphComponentValueDescriptor descriptor, out string error)
+    private static bool TryResolveValue(IGameObject owner, string componentTypeName, string memberId, out GraphComponentTypeDescriptor type, out GraphComponentValueDescriptor descriptor, out string error)
     {
         type = null;
         descriptor = null;
@@ -208,7 +208,7 @@ public static class GraphComponentInvoker
         return true;
     }
 
-    private static bool TryGetValueDescriptor(Component2D component, string componentTypeName, string memberId, out GraphComponentValueDescriptor descriptor, out string error)
+    private static bool TryGetValueDescriptor(IComponent component, string componentTypeName, string memberId, out GraphComponentValueDescriptor descriptor, out string error)
     {
         descriptor = null;
         error = string.Empty;

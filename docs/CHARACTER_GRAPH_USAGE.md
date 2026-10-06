@@ -20,18 +20,18 @@ CharacterGraph --------------------> AbilitySystem
 
 | 组件 | 作用 | 当前优先级 |
 | --- | --- | ---: |
-| `PlayerCharacterInputComponent2D` | 将输入模块转换为 `ICharacterInputProvider` | 100 |
-| `SimpleAICharacterControllerComponent2D` | 驱动 BehaviorTree，并提交移动/战斗意图 | 100 |
-| `CharacterGraphComponent2D` | 执行玩家输入、生命周期和 Ability 编排 | 90 |
-| `AbilitySystemComponent2D` | 授权、冷却、优先级、打断和 Ability 运行时 | 55 |
-| `CharacterMovementComponent2D` | 消费移动命令、处理跳跃/重力并移动 `CharacterBody2D` | 50 |
-| `CharacterAnimationComponent2D` | 运行 Locomotion HFSM 并选择 `AnimatedSprite2D` 动画 | 20 |
+| `PlayerCharacterInputComponent3D` | 将输入模块转换为 `ICharacterInputProvider` | 100 |
+| `SimpleAICharacterControllerComponent3D` | 驱动 BehaviorTree，并提交移动/战斗意图 | 100 |
+| `CharacterGraphComponent3D` | 执行玩家输入、生命周期和 Ability 编排 | 90 |
+| `AbilitySystemComponent3D` | 授权、冷却、优先级、打断和 Ability 运行时 | 55 |
+| `CharacterMovementComponent3D` | 消费移动命令、处理跳跃/重力并移动 `CharacterBody3D` | 50 |
+| `CharacterAnimationComponent3D` | 运行 Locomotion HFSM 并选择 `AnimatedSprite3D` 动画 | 20 |
 
 CharacterGraph 不负责物理和 Locomotion 状态；它提交意图。Movement 计算最终结果，Animation 再读取结果并选择动画。AI 可以直接使用 Movement 和 Ability API，不需要挂载 CharacterGraph。
 
 ## 创建玩家角色
 
-1. 创建 `GameObject2D`，并添加 `CharacterMovementComponent2D`、`CharacterAnimationComponent2D`、`AbilitySystemComponent2D`、`PlayerCharacterInputComponent2D` 和 `CharacterGraphComponent2D`。
+1. 创建 `GameObject3D`，并添加 `CharacterMovementComponent3D`、`CharacterAnimationComponent3D`、`AbilitySystemComponent3D`、`PlayerCharacterInputComponent3D` 和 `CharacterGraphComponent3D`。
 2. 在 Movement 中配置 `BodyPath`、`VisualRootPath`、速度、跳跃和重力参数。
 3. 在 Animation 中配置 `SpritePath` 和 `LocomotionGraph`。
 4. 在 AbilitySystem 中配置 `AbilitySet`，确保 CharacterGraph 使用的每个 `AbilityId` 都已授予。
@@ -76,7 +76,7 @@ Ability Timeline 可以请求动画、速度覆盖、移动锁、镜头效果和
 
 ## Locomotion AnimGraph
 
-`CharacterAnimationComponent2D` 内部运行 `HfsmGraphAsset`。Locomotion 图应该只描述动画状态，例如 Idle、Run、Jump、Fall 和 Land。
+`CharacterAnimationComponent3D` 内部运行 `HfsmGraphAsset`。Locomotion 图应该只描述动画状态，例如 Idle、Run、Jump、Fall 和 Land。
 
 Movement 通过黑板绑定向 HFSM 提供这些值：
 
@@ -89,7 +89,7 @@ Movement 通过黑板绑定向 HFSM 提供这些值：
 
 AnimGraph 的条件读取黑板，不直接在状态条件中访问组件 Property。打开动画图黑板后，使用 `Component Binding` 选择宿主实际存在的组件和兼容成员。没有有效宿主时不能创建或修改绑定。
 
-运行时顺序是：Animation 读取绑定值，HFSM 判断状态，Animation 请求播放动画，最后由 `AnimatedSprite2D` 播放。Ability 动画请求可以用优先级覆盖 Locomotion 请求，Ability 完成或取消后会自动恢复 Locomotion。
+运行时顺序是：Animation 读取绑定值，HFSM 判断状态，Animation 请求播放动画，最后由 `AnimatedSprite3D` 播放。Ability 动画请求可以用优先级覆盖 Locomotion 请求，Ability 完成或取消后会自动恢复 Locomotion。
 
 ## Component Property Get / Set
 

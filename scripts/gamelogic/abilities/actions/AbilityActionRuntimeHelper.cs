@@ -4,9 +4,9 @@ namespace GameLogic
 {
     internal static class AbilityActionRuntimeHelper
     {
-        public static GameObject2D GetGameObject(GraphExecutionContext context)
+        public static GameObject3D GetGameObject(GraphExecutionContext context)
         {
-            return context?.GetUserData<GameObject2D>() ?? context?.GetUserData<HfsmRuntime>()?.GameObject;
+            return context?.GetUserData<GameObject3D>();
         }
 
         public static T FindFirst<T>(Node root) where T : Node

@@ -24,7 +24,7 @@ namespace GameLogic
 
         public override void Execute(GraphExecutionContext context)
         {
-            if (!GraphActionComponentResolver.TryResolve(context, Animation, nameof(AbilityPlayAnimationAction), out CharacterAnimationComponent2D animationComponent, out string error))
+            if (!GraphActionComponentResolver.TryResolve(context, Animation, nameof(AbilityPlayAnimationAction), out CharacterAnimationComponent3D animationComponent, out string error))
             {
                 GD.PushError($"[AbilityPlayAnimationAction] {error}");
                 return;

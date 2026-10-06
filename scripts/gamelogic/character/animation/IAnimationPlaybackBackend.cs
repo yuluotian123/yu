@@ -3,7 +3,7 @@ using Godot;
 namespace GameLogic
 {
     /// <summary>
-    /// Playback abstraction used by the 2D animation instance. This keeps the
+    /// Playback abstraction used by the sprite animation instance. This keeps the
     /// animation graph independent from a concrete visual node.
     /// </summary>
     public interface IAnimationPlaybackBackend
@@ -16,11 +16,11 @@ namespace GameLogic
         void Stop();
     }
 
-    public sealed class AnimatedSprite2DPlaybackBackend : IAnimationPlaybackBackend
+    public sealed class AnimatedSprite3DPlaybackBackend : IAnimationPlaybackBackend
     {
-        private readonly AnimatedSprite2D _sprite;
+        private readonly AnimatedSprite3D _sprite;
 
-        public AnimatedSprite2DPlaybackBackend(AnimatedSprite2D sprite)
+        public AnimatedSprite3DPlaybackBackend(AnimatedSprite3D sprite)
         {
             _sprite = sprite;
         }

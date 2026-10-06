@@ -1,4 +1,3 @@
-using System.Linq;
 using Framework;
 using Godot;
 
@@ -7,7 +6,6 @@ namespace GameLogic
     [GraphCallable("Camera Shake", "动画与表现 / 镜头", GraphCallableUsage.All, ChineseName = "镜头震动")]
     public class AbilityCameraShakeAction : GraphActionBase
     {
-        public GraphActionComponentReference Camera { get; set; } = new();
         public string ShakeProfilePath { get; set; } = string.Empty;
 
         public override string Description
@@ -26,32 +24,13 @@ namespace GameLogic
             if (ShouldSkipForTimelineUpdate(context))
                 return;
 
-            Component2D cameraComponent = null;
-            string error = string.Empty;
-            if (context?.ActionDependencyMode == GraphActionDependencyMode.Reusable)
-            {
-                cameraComponent = context.GameObject?.GetAllComponents()?.FirstOrDefault(value => value is ICharacterCameraShake2D);
-                if (cameraComponent == null)
-                    error = $"[{nameof(AbilityCameraShakeAction)}] Reusable action could not find a camera shake component on the current host.";
-            }
-            else if (!GraphActionComponentResolver.TryResolve(context, Camera, typeof(Component2D), nameof(AbilityCameraShakeAction), out cameraComponent, out error))
-            {
-                cameraComponent = null;
-            }
-
-            if (cameraComponent == null)
-            {
-                GD.PushError($"[AbilityCameraShakeAction] {error}");
-                return;
-            }
-            ICharacterCameraShake2D camera = cameraComponent as ICharacterCameraShake2D;
-            if (camera == null || string.IsNullOrWhiteSpace(ShakeProfilePath))
+            if (string.IsNullOrWhiteSpace(ShakeProfilePath))
                 return;
 
             CameraShakeProfile profile = ModuleSystem
                 .GetModule<IResourceModule>()
                 .LoadAssetOnce<CameraShakeProfile>(ShakeProfilePath);
-            camera.Shake(profile);
+            ModuleSystem.GetModule<ICameraModule>().Shake(profile);
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
@@ -62,7 +41,7 @@ namespace GameLogic
                 ShakeProfilePath,
                 "res://assets/camera_shakes/light_hit.tres",
                 value => ShakeProfilePath = value));
-            root.AddChild(Camera.CreateEditUI("Camera Component", context, () => { }));
+            root.AddChild(new Label { Text = "使用全局相机，无需绑定角色组件。" });
             return root;
         }
 

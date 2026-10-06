@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TimeOfDayProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="1"]
+
+
+[ext_resource type="Resource" path="res://assets/environment/reference_clouds/base_timeline.tres" id="timeline"]
+
+[resource]
+script = ExtResource("1")
+DayLengthSeconds = 1200.0
+StartHour = 12.0
+LunarPeriodDays = 29.53059
+StartLunarPhase = 0.5
+
+
+CloudTimeline = ExtResource("timeline")

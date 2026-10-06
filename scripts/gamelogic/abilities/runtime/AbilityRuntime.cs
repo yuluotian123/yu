@@ -9,13 +9,13 @@ namespace GameLogic
         private readonly Dictionary<string, object> _data = new(StringComparer.Ordinal);
         private FlowGraphRuntime _flowRuntime;
 
-        public AbilityRuntime(AbilitySystemComponent2D system, AbilityResource resource)
+        public AbilityRuntime(AbilitySystemComponent3D system, AbilityResource resource)
         {
             System = system;
             Resource = resource;
         }
 
-        public AbilitySystemComponent2D System { get; }
+        public AbilitySystemComponent3D System { get; }
         public AbilityResource Resource { get; }
         public string AbilityId => Resource?.AbilityId ?? string.Empty;
         public double CooldownReadyTime { get; private set; }

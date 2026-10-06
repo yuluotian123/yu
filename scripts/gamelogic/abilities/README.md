@@ -19,7 +19,7 @@ AbilitySetResource
 
 核心实现：
 
-- [AbilitySystemComponent2D.cs](../abilities/runtime/AbilitySystemComponent2D.cs)
+- [AbilitySystemComponent3D.cs](../abilities/runtime/AbilitySystemComponent3D.cs)
 - [AbilityResource.cs](../abilities/runtime/AbilityResource.cs)
 - [AbilityRuntime.cs](../abilities/runtime/AbilityRuntime.cs)
 - [AbilitySetResource.cs](../abilities/runtime/AbilitySetResource.cs)

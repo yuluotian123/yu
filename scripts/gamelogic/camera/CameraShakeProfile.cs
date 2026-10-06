@@ -6,7 +6,7 @@ namespace GameLogic
     public partial class CameraShakeProfile : Resource
     {
         [Export] public float Duration { get; set; } = 0.16f;
-        [Export] public Vector2 Amplitude { get; set; } = new(8f, 5f);
+        [Export] public Vector2 Amplitude { get; set; } = new(0.08f, 0.05f);
         [Export] public float Frequency { get; set; } = 38f;
         [Export(PropertyHint.Range, "0,1,0.01")]
         public float RotationAmplitudeDegrees { get; set; } = 0f;

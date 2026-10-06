@@ -6,7 +6,7 @@ namespace GameLogic
     public class AbilityApplyDashVelocityAction : GraphActionBase
     {
         public GraphActionComponentReference Movement { get; set; } = new();
-        public float Speed { get; set; } = 2000f;
+        public float Speed { get; set; } = 20f;
         public bool StopVerticalVelocity { get; set; } = true;
 
         public override string Description => "Apply Dash Velocity";
@@ -20,7 +20,7 @@ namespace GameLogic
         {
             if (invocation.Execution?.GetUserData<FlowTimelineContext>()?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
                 return;
-            CharacterMovementComponent2D movement = null;
+            CharacterMovementComponent3D movement = null;
             string error = string.Empty;
             bool hasInput = invocation.Execution?.ActionDependencyMode == GraphActionDependencyMode.HostBound &&
                             invocation.TryGetInput("Component", out movement);
@@ -31,30 +31,13 @@ namespace GameLogic
                 return;
             }
 
-            float direction = ResolveDirection(movement);
+            Vector3 direction = movement.FacingDirection;
             float velocityY = StopVerticalVelocity ? 0f : movement.Velocity.Y;
-            movement.RequestVelocityOverride(new CharacterMovementOverride2D(
-                new Vector2(Mathf.Sign(direction) * Speed, velocityY),
+            movement.RequestVelocityOverride(new CharacterMovementOverride3D(
+                new Vector3(direction.X * Speed, velocityY, direction.Z * Speed),
                 overrideHorizontal: true,
                 overrideVertical: StopVerticalVelocity,
                 priority: 100));
-        }
-
-        private static float ResolveDirection(CharacterMovementComponent2D movement)
-        {
-            if (movement != null && Mathf.Abs(movement.MoveInputX) > 0.01f)
-                return Mathf.Sign(movement.MoveInputX);
-
-            if (movement != null && Mathf.Abs(movement.RawMoveInputX) > 0.01f)
-                return Mathf.Sign(movement.RawMoveInputX);
-
-            if (movement != null)
-            {
-                if (movement.Facing != 0)
-                    return movement.Facing >= 0 ? 1f : -1f;
-            }
-
-            return 1f;
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
@@ -68,7 +51,7 @@ namespace GameLogic
                 Speed,
                 0,
                 999999,
-                10,
+                0.1,
                 value => Speed = (float)value));
             root.AddChild(GraphEditorUi.BuildCheckRow(
                 "Stop Vertical Velocity",

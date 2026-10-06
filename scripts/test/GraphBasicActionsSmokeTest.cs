@@ -41,7 +41,7 @@ public partial class GraphBasicActionsSmokeTest : Node
         graph.Connections.Add(new BehaviorTreeConnection { FromNode = root.Id, ToNode = node.Id });
         return graph;
     }
-    private static GraphExecutionContext Context(GraphAsset graph, GameObject2D host = null, bool local = false)
+    private static GraphExecutionContext Context(GraphAsset graph, GameObject3D host = null, bool local = false)
     {
         var context = new GraphExecutionContext(graph, new GraphBlackboardRuntime());
         if (host != null) context.UserData.Add(host);
@@ -94,27 +94,27 @@ public partial class GraphBasicActionsSmokeTest : Node
         singleRuntime.Update(0.3); Check(singleRuntime.IsCompleted, "Single Action tasks complete after elapsed time"); singleRuntime.Stop();
     }
 
-    private GameObject2D Host(string name)
+    private GameObject3D Host(string name)
     {
-        var host = new GameObject2D { Name = name };
-        host.AddChild(new CharacterBody2D { Name = "PhysicsBody" });
-        host.AddChild(new Node2D { Name = "VisualRoot" });
-        host.AddComponent<CharacterMovementComponent2D>(); host.AddComponent<AbilitySystemComponent2D>();
+        var host = new GameObject3D { Name = name };
+        host.AddChild(new CharacterBody3D { Name = "PhysicsBody" });
+        host.AddChild(new Node3D { Name = "VisualRoot" });
+        host.AddComponent<CharacterMovementComponent3D>(); host.AddComponent<AbilitySystemComponent3D>();
         AddChild(host); host.SetProcess(false); host.SetPhysicsProcess(false);
         return host;
     }
     private void CheckTargets()
     {
         var host = Host("TargetHost");
-        var target = new Node2D { Name = "Enemy", Position = new Vector2(100, 0) }; AddChild(target); target.AddToGroup("smoke_targets");
+        var target = new Node3D { Name = "Enemy", Position = new Vector3(100, 0, 0) }; AddChild(target); target.AddToGroup("smoke_targets");
         var graph = new FlowGraphAsset { ActionDependencyMode = GraphActionDependencyMode.Reusable };
         var context = Context(graph, host, true); var call = new GraphActionInvocation(context);
-        Check(new FindNearestTargetAction { Group = "smoke_targets" }.CreateTask(call).Tick(0) == BehaviorTreeStatus.Success,
+        Check(new FindNearestTargetAction { Group = "smoke_targets", Radius = GraphActionValue.Number(600) }.CreateTask(call).Tick(0) == BehaviorTreeStatus.Success,
             "FindNearestTarget writes a target into the blackboard");
         Check(new TargetValidCondition().IsMet(context) && new TargetDistanceCondition { Distance = GraphActionValue.Number(101) }.IsMet(context),
             "Target validity and distance conditions consume that target");
-        var movement = host.GetComponent<CharacterMovementComponent2D>();
-        using var ai = new SimpleAICharacterControllerComponent2D();
+        var movement = host.GetComponent<CharacterMovementComponent3D>();
+        using var ai = new SimpleAICharacterControllerComponent3D();
         movement.RestoreFacing(-1);
         Check(new FaceTargetAction().CreateTask(call).Tick(0) == BehaviorTreeStatus.Success && movement.Facing == 1,
             "Reusable FaceTarget resolves the current host's movement component");
@@ -122,16 +122,16 @@ public partial class GraphBasicActionsSmokeTest : Node
         var task = action.CreateTask(call);
         Check(task.Tick(0.1) == BehaviorTreeStatus.Running, "MoveTo remains running while the target is distant");
         task.Cancel();
-        var pending = (CharacterCommand2D)typeof(CharacterMovementComponent2D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
+        var pending = (CharacterCommand3D)typeof(CharacterMovementComponent3D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
         Check(pending.MoveAxisX == 0, "Cancelling MoveTo clears its pending movement input");
-        task = action.CreateTask(call); task.Tick(0.1); host.Position = new Vector2(99, 0);
+        task = action.CreateTask(call); task.Tick(0.1); host.Position = new Vector3(99, 0, 0);
         Check(task.Tick(0.1) == BehaviorTreeStatus.Success, "MoveTo finishes within arrival distance");
-        host.Position = Vector2.Zero;
+        host.Position = Vector3.Zero;
         task = new MoveToTargetAction { Timeout = GraphActionValue.Number(0.1f) }.CreateTask(call);
         Check(task.Tick(0.2) == BehaviorTreeStatus.Failure, "MoveTo fails on timeout");
         graph.ActionDependencyMode = GraphActionDependencyMode.HostBound;
         Check(new FaceTargetAction().CreateTask(call).Tick(0) == BehaviorTreeStatus.Failure, "HostBound fails without a component dependency");
-        var bound = new FaceTargetAction { Movement = new() { ComponentTypeName = typeof(CharacterMovementComponent2D).FullName } };
+        var bound = new FaceTargetAction { Movement = new() { ComponentTypeName = typeof(CharacterMovementComponent3D).FullName } };
         Check(bound.CreateTask(call).Tick(0) == BehaviorTreeStatus.Success, "HostBound resolves an explicit type and slot");
         var wired = new GraphActionInvocation(context, new Dictionary<string, object> { ["Component"] = movement });
         Check(new FaceTargetAction().CreateTask(wired).Tick(0) == BehaviorTreeStatus.Success, "HostBound accepts a component supplied by a graph input");
@@ -139,7 +139,7 @@ public partial class GraphBasicActionsSmokeTest : Node
         var integratedLeaf = new BehaviorActionNodeData { Actions = new() { new MoveToTargetAction() } };
         ai.Owner = host; ai.Graph = Tree(integratedLeaf); ai.OnInit();
         ai.Runtime.SetValue("Target", target.GetPath().ToString()); ai.OnPhysicsUpdate(0.1);
-        pending = (CharacterCommand2D)typeof(CharacterMovementComponent2D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
+        pending = (CharacterCommand3D)typeof(CharacterMovementComponent3D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
         Check(pending.MoveAxisX > 0, "The actual AI controller preserves MoveTo input without controller-specific action coupling");
         ai.OnDestroy();
         var leaf = new BehaviorActionNodeData { Actions = new() { new MoveToTargetAction() } };
@@ -157,12 +157,12 @@ public partial class GraphBasicActionsSmokeTest : Node
         context.Blackboard.PopLocal(); host.Free();
     }
 
-    private static CharacterCommand2D Pending(CharacterMovementComponent2D movement) =>
-        (CharacterCommand2D)typeof(CharacterMovementComponent2D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
+    private static CharacterCommand3D Pending(CharacterMovementComponent3D movement) =>
+        (CharacterCommand3D)typeof(CharacterMovementComponent3D).GetField("_pendingCommand", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(movement)!;
 
     private void CheckMovementActions()
     {
-        var host = Host("GenericMovement"); var movement = host.GetComponent<CharacterMovementComponent2D>();
+        var host = Host("GenericMovement"); var movement = host.GetComponent<CharacterMovementComponent3D>();
         var graph = new FlowGraphAsset { ActionDependencyMode = GraphActionDependencyMode.Reusable };
         var context = Context(graph, host, true); var call = new GraphActionInvocation(context);
         Check(new SetFacingAction { Direction = GraphActionValue.Number(-1) }.CreateTask(call).Tick(0) == BehaviorTreeStatus.Success
@@ -177,7 +177,7 @@ public partial class GraphBasicActionsSmokeTest : Node
         Check(move.Tick(0.7) == BehaviorTreeStatus.Success && Pending(movement).MoveAxisX == 0, "Timed movement stops on completion");
         var definition = new PatrolAction { Distance = GraphActionValue.Number(10), TurnPause = GraphActionValue.Number(0.1f) };
         var first = definition.CreateTask(call); first.Tick(0);
-        host.Position = new Vector2(11, 0);
+        host.Position = new Vector3(11, 0, 0);
         Check(first.Tick(0.01) == BehaviorTreeStatus.Running && Pending(movement).MoveAxisX == 0 && movement.Facing == -1,
             "Patrol reverses at its bound and pauses");
         var second = definition.CreateTask(call); second.Tick(0);
@@ -207,11 +207,11 @@ public partial class GraphBasicActionsSmokeTest : Node
 
     private async System.Threading.Tasks.Task CheckGroundedJump()
     {
-        var floor = new StaticBody2D { Position = new Vector2(0, 30) };
-        floor.AddChild(new CollisionShape2D { Shape = new RectangleShape2D { Size = new Vector2(1000, 20) } }); AddChild(floor);
-        var host = Host("JumpPhysics"); var movement = host.GetComponent<CharacterMovementComponent2D>();
-        movement.BodySize = new Vector2(10, 10);
-        movement.Body.AddChild(new CollisionShape2D { Shape = new RectangleShape2D { Size = new Vector2(10, 10) } });
+        var floor = new StaticBody3D { Position = new Vector3(0, -0.3f, 0) };
+        floor.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = new Vector3(10, 0.2f, 10) } }); AddChild(floor);
+        var host = Host("JumpPhysics"); var movement = host.GetComponent<CharacterMovementComponent3D>();
+        movement.BodySize = new Vector3(0.1f, 0.1f, 0.1f);
+        movement.Body.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = new Vector3(0.1f, 0.1f, 0.1f) } });
         for (int i = 0; i < 60 && !movement.IsOnFloor; i++)
         { await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame); movement.OnPhysicsUpdate(1.0 / 60); }
         var graph = new FlowGraphAsset { ActionDependencyMode = GraphActionDependencyMode.Reusable };
@@ -227,7 +227,7 @@ public partial class GraphBasicActionsSmokeTest : Node
         var jump = new JumpAction { HoldDuration = GraphActionValue.Number(0.1f) }.CreateTask(call);
         Check(jump.Tick(0) == BehaviorTreeStatus.Running, "Grounded Jump starts");
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame); movement.OnPhysicsUpdate(1.0 / 60);
-        Check(movement.Body.Velocity.Y < 0 && jump.Tick(0.2) == BehaviorTreeStatus.Success && !Pending(movement).JumpSustainRequested,
+        Check(movement.Body.Velocity.Y > 0 && jump.Tick(0.2) == BehaviorTreeStatus.Success && !Pending(movement).JumpSustainRequested,
             "Jump produces upward velocity and releases hold after its duration");
         context.Blackboard.PopLocal(); host.Free(); floor.Free();
     }
@@ -274,7 +274,7 @@ public partial class GraphBasicActionsSmokeTest : Node
 
     private void CheckCharacterActivation()
     {
-        var host = Host("CharacterActivation"); var system = host.GetComponent<AbilitySystemComponent2D>();
+        var host = Host("CharacterActivation"); var system = host.GetComponent<AbilitySystemComponent3D>();
         system.GrantAbility(Ability("attack", 0.5f));
         var node = new CharacterAbilityNodeData { AbilityId = "attack" };
         var graph = new CharacterGraphAsset { Nodes = new List<GraphNodeData> { node } };
@@ -301,7 +301,7 @@ public partial class GraphBasicActionsSmokeTest : Node
     }
     private void CheckAbilities()
     {
-        var host = Host("AbilityHost"); var system = host.GetComponent<AbilitySystemComponent2D>();
+        var host = Host("AbilityHost"); var system = host.GetComponent<AbilitySystemComponent3D>();
         system.GrantAbility(Ability("attack", 0.5f));
         var graph = new BehaviorTreeGraphAsset { ActionDependencyMode = GraphActionDependencyMode.Reusable };
         var context = Context(graph, host, true); var call = new GraphActionInvocation(context);

@@ -27,12 +27,12 @@ public static class GraphComponentBindingRuntime
         if (graph == null || !string.Equals(graph.GraphType, HfsmGraphAsset.GraphTypeName, System.StringComparison.Ordinal))
             return false;
 
-        const string movementType = "GameLogic.CharacterMovementComponent2D";
+        const string movementType = "GameLogic.CharacterMovementComponent3D";
         var defaults = new System.Collections.Generic.Dictionary<string, string>(System.StringComparer.Ordinal)
         {
             ["Character.Movement.Mode"] = "MovementModeName",
             ["Character.Movement.IsOnFloor"] = "IsOnFloor",
-            ["Character.Movement.MoveAxisX"] = "MoveInputX",
+            ["Character.Movement.MoveAmount"] = "MoveAmount",
             ["Character.Movement.VelocityY"] = "VelocityY"
         };
         bool changed = false;
@@ -67,7 +67,7 @@ public static class GraphComponentBindingRuntime
         ApplyDefaultBindings(context.Graph);
 
         bool success = true;
-        GameObject2D owner = context.GetUserData<GameObject2D>();
+        IGameObject owner = context.GetUserData<IGameObject>();
         foreach (GraphBlackboardEntry entry in context.Graph.BlackboardEntries)
         {
             GraphComponentBinding binding = entry?.Binding;
@@ -126,10 +126,10 @@ public static class GraphComponentBindingRuntime
                 return true;
         }
 
-        GameObject2D owner = context?.GetUserData<GameObject2D>();
+        IGameObject owner = context?.GetUserData<IGameObject>();
         if (owner != null)
         {
-            foreach (Component2D component in owner.GetAllComponents())
+            foreach (IComponent component in owner.GetAllComponents())
             {
                 if (component is ICharacterAnimationVariableProvider provider &&
                     provider.TryGetAnimationVariable(entryKey, out value))

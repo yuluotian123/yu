@@ -90,8 +90,8 @@ namespace GameLogic
             var data = new AbilityNodeRuntimeData { Result = result };
             if (result == AbilityActivationResult.Activated)
             {
-                data.Activation = new AbilityActivationHandle(context.GetUserData<GameObject2D>()?
-                    .GetComponent<AbilitySystemComponent2D>()?.GetRuntime(AbilityId));
+                data.Activation = new AbilityActivationHandle(context.GetUserData<GameObject3D>()?
+                    .GetComponent<AbilitySystemComponent3D>()?.GetRuntime(AbilityId));
             }
             runtime.SetNodeData(Id, data);
             if (result == AbilityActivationResult.Activated) runtime.PropagateFromOutput(Id, 0);

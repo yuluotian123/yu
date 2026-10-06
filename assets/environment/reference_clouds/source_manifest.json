@@ -1,0 +1,97 @@
+{
+  "repository": "https://github.com/xinyangaa/Unity_URP_Genshin_Impact_Programmed_Skybox",
+  "commit": "ef1bd4c6fa486977a323c3badaba5740feae1d55",
+  "files": [
+    {
+      "file": "cloud.fbx",
+      "source": "SKY/云/cloud.fbx",
+      "git_blob": "1e2e2b56714d88c1bd6f6d28940af73f21c6dca7",
+      "sha256": "29386389f4013f7413172d89d373243385e2a5a8ba69d91b69279f4b7c437573",
+      "bytes": 163264
+    },
+    {
+      "file": "78678.png",
+      "source": "SKY/云/78678.png",
+      "git_blob": "a70a64aab45a4d5d4923c42ba2fc4c453c7f8c14",
+      "sha256": "b93b6becfdb65ec468bfc830755d04abbcf7e06edcfbda7cd91fc11cc3104784",
+      "bytes": 4202201
+    },
+    {
+      "file": "000001EEA8FB26F8.png",
+      "source": "SKY/云/000001EEA8FB26F8.png",
+      "git_blob": "77cfbc71741ad91f173e04da32d91352dfaf3ea0",
+      "sha256": "07aad4c7f7566ac92d09883eb543818be1cef0373a3d9015613ff4ad55507ebd",
+      "bytes": 4202354
+    },
+    {
+      "file": "Noise_091.png",
+      "source": "SKY/云/Noise_091.png",
+      "git_blob": "ce5f3ac21c8a70ec959bc45a045c99571b847ddd",
+      "sha256": "515e941f15ccc9d70cafd3ec28875aa38be4c3766a8d8bd237a13cf20b53f867",
+      "bytes": 7149988
+    },
+    {
+      "file": "Cloud.shader.txt",
+      "source": "SKY/Cloud.shader",
+      "git_blob": "d1b98083c53a9e60704f515dd5670215df9cede9",
+      "sha256": "a69c4a68a4e36ac4449454f87c42d01755624fcfae54e494ea7d2517a3cbfd64",
+      "bytes": 5346
+    },
+    {
+      "file": "OriginalTimeline.playable.txt",
+      "source": "SKY/TimeLine脚本和日月向量脚本/GameObject (5)Timeline.playable",
+      "git_blob": "c81e07719adb7741f00920a54ce11eb6c3f63888",
+      "sha256": "2811db4f7cecc803554d9fd81a7cc2f978c64a342dcc6aeccaaa4c77c51ecc85",
+      "bytes": 479470
+    },
+    {
+      "file": "source_metadata/cloud.fbx.meta.txt",
+      "source": "SKY/云/cloud.fbx.meta",
+      "git_blob": "f923b0d7d5414893f9c6e921b524ea62192b2f3a",
+      "sha256": "506171240ccf84a1a6ecc56b2851adbfeece5ad4d748a028ae3e9a1e8f5ff627",
+      "bytes": 2830
+    },
+    {
+      "file": "source_metadata/78678.png.meta.txt",
+      "source": "SKY/云/78678.png.meta",
+      "git_blob": "f5676a283717b1833b8dd76c65c3b3523813e192",
+      "sha256": "fbe9b0b6c2c519ce7e37b942d19f4b0eb299c72449ab82592e41a707574b1d79",
+      "bytes": 2947
+    },
+    {
+      "file": "source_metadata/000001EEA8FB26F8.png.meta.txt",
+      "source": "SKY/云/000001EEA8FB26F8.png.meta",
+      "git_blob": "fb29ad55c3af84da1b108178988b7d04a51124b1",
+      "sha256": "ba640809c0453d47b3867b8ead38501a8e1a819c73e1601118d05d97fdf7b1cd",
+      "bytes": 3304
+    },
+    {
+      "file": "source_metadata/Cloud.mat.txt",
+      "source": "SKY/云/Cloud.mat",
+      "git_blob": "6e0387c87c1d4eb902b5bb93cd71f9bff467ddc0",
+      "sha256": "4fe99e2aa4dc1d3590a093f983f0efc51c48d05ab0974148042a54661da173bd",
+      "bytes": 1762
+    },
+    {
+      "file": "source_metadata/Cloud.mat.meta.txt",
+      "source": "SKY/云/Cloud.mat.meta",
+      "git_blob": "d06c25eda491886939c9d4c3ebcce001ed29afa5",
+      "sha256": "1311fa1fe584400007ecaae2850c10e0314eb6b561aafd5a44efc5891faf0768",
+      "bytes": 188
+    },
+    {
+      "file": "source_metadata/Cloud 2.mat.txt",
+      "source": "SKY/云/Cloud 2.mat",
+      "git_blob": "9da3236a135b83d1c6fd6ecfc0fa4c553954b685",
+      "sha256": "9bb1a0dcf96e0b6df46d3e630ae6a9040304d42aab196e6292235143eb6ba3a3",
+      "bytes": 1809
+    },
+    {
+      "file": "source_metadata/Cloud 2.mat.meta.txt",
+      "source": "SKY/云/Cloud 2.mat.meta",
+      "git_blob": "e808b5b18045b9caeb5a562c029c806b24a47610",
+      "sha256": "aee7898a5c258bc590b7528479d52ad6bfdd9df7e81ae2b3f67d29d51e55401c",
+      "bytes": 188
+    }
+  ]
+}

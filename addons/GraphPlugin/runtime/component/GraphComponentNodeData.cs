@@ -42,7 +42,7 @@ public sealed class GraphComponentReferenceNodeData : GraphNodeData, IFlowNode
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
-        if (!TryResolve(context, out Component2D component, out string error))
+        if (!TryResolve(context, out IComponent component, out string error))
         {
             GD.PushError($"[GraphComponentReferenceNode] {error}");
             runtime.SetNodeOutput(Id, null);
@@ -73,7 +73,7 @@ public sealed class GraphComponentReferenceNodeData : GraphNodeData, IFlowNode
         return root;
     }
 
-    private bool TryResolve(GraphExecutionContext context, out Component2D component, out string error)
+    private bool TryResolve(GraphExecutionContext context, out IComponent component, out string error)
     {
         var reference = new GraphActionComponentReference
         {
@@ -196,7 +196,7 @@ public abstract class GraphComponentNodeData : GraphNodeData
             result.AddError($"HostBound component node '{GetDisplayName()}' requires an explicit component reference.", Id);
     }
 
-    protected bool TryResolveComponent(GraphExecutionContext context, out Component2D component, out string error)
+    protected bool TryResolveComponent(GraphExecutionContext context, out IComponent component, out string error)
     {
         component = null;
         error = string.Empty;
@@ -334,7 +334,7 @@ public class GraphComponentCallNodeData : GraphComponentNodeData, IFlowNode
             if (input != null)
                 values[0] = input.Value;
         }
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         string invokeError = string.Empty;
         GraphActionStatus status;
@@ -399,7 +399,7 @@ public class GraphComponentGetNodeData : GraphComponentNodeData, IFlowNode
 
     private bool Read(GraphExecutionContext context, FlowGraphRuntime runtime)
     {
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         string error = string.Empty;
         object value;
@@ -478,7 +478,7 @@ public class GraphComponentSetNodeData : GraphComponentNodeData, IFlowNode
         {
             value = Value?.GetObjectValue();
         }
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         if (!TryResolveComponent(context, out component, out resolveError) ||
             !GraphComponentInvoker.TryWriteComponent(component, ComponentTypeName, MemberId, value, out error))
@@ -568,7 +568,7 @@ public sealed class BehaviorTreeComponentGetNodeData : BehaviorTreeNodeData
     public override BehaviorTreeStatus Tick(BehaviorTreeRuntime runtime, GraphExecutionContext context, double delta)
     {
         GraphComponentTypeDescriptor descriptor = null;
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         string error = string.Empty;
         object value;
@@ -621,7 +621,7 @@ public sealed class BehaviorTreeComponentSetNodeData : BehaviorTreeNodeData
         if (string.IsNullOrWhiteSpace(InputKey) || !context.Blackboard.TryGetValue(InputKey, out object value))
             return BehaviorTreeStatus.Failure;
         GraphComponentTypeDescriptor descriptor = null;
-        Component2D component = null;
+        IComponent component = null;
         string resolveError = string.Empty;
         string error = string.Empty;
         if (!GraphComponentRegistry.TryGet(ComponentTypeName, out descriptor) ||

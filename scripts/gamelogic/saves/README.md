@@ -54,4 +54,4 @@ user://saves/{slot}.json
 
 Save V2 writes to `user://saves/{slot}.json` and keeps `res://saves` as a read-only fallback for old slots. The root contains `meta`, `legacy`, and `sections` objects. Character state is registered through `ISaveSection` and stored as `sections.characters/{PersistentId}` with a section schema version.
 
-Writes use a temporary file followed by a backup and replacement. Character loading is safe before a level scene exists: `SaveModule` keeps pending sections and applies them when `CharacterPersistenceComponent2D` registers during scene initialization.
+Writes use a temporary file followed by a backup and replacement. Character loading is safe before a level scene exists: `SaveModule` keeps pending sections and applies them when `CharacterPersistenceComponent3D` registers during scene initialization.

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_profile")
 Duration = 0.28
-Amplitude = Vector2(32, 20)
+Amplitude = Vector2(0.32, 0.2)
 Frequency = 28.0
 RotationAmplitudeDegrees = 0.85
 DecayPower = 1.05

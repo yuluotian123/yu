@@ -5,22 +5,22 @@ namespace GameLogic;
 
 public static class GraphActionTarget
 {
-    public static void SetMoveAxis(GraphExecutionContext context, CharacterMovementComponent2D movement, float axis, int priority)
+    public static void SetMoveAxis(GraphExecutionContext context, CharacterMovementComponent3D movement, float axis, int priority)
     {
         if (!GodotObject.IsInstanceValid(movement)) return;
         movement.StopMovementInput(priority);
         if (axis != 0) movement.AddMovementInput(axis, priority);
     }
-    // A target is a world-space Vector2 or a scene node path stored in the blackboard.
-    public static bool TryPosition(GraphActionValue target, GraphExecutionContext context, out Vector2 position)
+    // A target is a world-space Vector3 or a scene node path stored in the blackboard.
+    public static bool TryPosition(GraphActionValue target, GraphExecutionContext context, out Vector3 position)
     {
         position = default;
         if (!target.TryRead(context, out object value)) return false;
-        if (value is Vector2 point) { position = point; return point.IsFinite(); }
+        if (value is Vector3 point) { position = point; return point.IsFinite(); }
         var host = context.GameObject;
         if (value is not string path || string.IsNullOrWhiteSpace(path)
             || !GodotObject.IsInstanceValid(host) || !host.IsInsideTree()) return false;
-        var node = host.GetNodeOrNull<Node2D>(new NodePath(path));
+        var node = host.GetNodeOrNull<Node3D>(new NodePath(path));
         if (!GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion()) return false;
         position = node.GlobalPosition;
         return position.IsFinite();
@@ -31,7 +31,7 @@ public static class GraphActionTarget
 public sealed class FindNearestTargetAction : GraphInstantAction
 {
     public string Group { get; set; } = "enemies";
-    public GraphActionValue Radius { get; set; } = GraphActionValue.Number(600);
+    public GraphActionValue Radius { get; set; } = GraphActionValue.Number(6);
     public GraphBlackboardKeyReference ResultKey { get; set; } = new() { Key = "Target" };
     public override string Description => "Find Nearest Target";
     protected override bool Run(GraphActionInvocation call)
@@ -40,11 +40,11 @@ public sealed class FindNearestTargetAction : GraphInstantAction
         var host = context.GameObject;
         if (!GodotObject.IsInstanceValid(host) || !host.IsInsideTree() || string.IsNullOrWhiteSpace(Group)
             || !Radius.TryNumber(context, out float radius) || radius < 0) return false;
-        Node2D nearest = null;
+        Node3D nearest = null;
         float distance = radius * radius;
         foreach (Node node in host.GetTree().GetNodesInGroup(Group))
         {
-            if (node is not Node2D candidate || candidate == host || candidate.IsQueuedForDeletion()) continue;
+            if (node is not Node3D candidate || candidate == host || candidate.IsQueuedForDeletion()) continue;
             float next = host.GlobalPosition.DistanceSquaredTo(candidate.GlobalPosition);
             if (next > distance) continue;
             nearest = candidate; distance = next;
@@ -66,14 +66,14 @@ public sealed class TargetValidCondition : GraphSharedCondition
 public sealed class TargetDistanceCondition : GraphSharedCondition
 {
     public GraphActionValue Target { get; set; } = GraphActionValue.Key("Target");
-    public GraphActionValue Distance { get; set; } = GraphActionValue.Number(100);
+    public GraphActionValue Distance { get; set; } = GraphActionValue.Number(1);
     public bool HorizontalOnly { get; set; }
     public override string Description => "Target Within Distance";
     public override bool IsMet(GraphExecutionContext context)
     {
         var host = context.GameObject;
         if (!GodotObject.IsInstanceValid(host) || !host.IsInsideTree()
-            || !GraphActionTarget.TryPosition(Target, context, out Vector2 position)
+            || !GraphActionTarget.TryPosition(Target, context, out Vector3 position)
             || !Distance.TryNumber(context, out float distance) || distance < 0) return false;
         return HorizontalOnly ? Mathf.Abs(host.GlobalPosition.X - position.X) <= distance
             : host.GlobalPosition.DistanceTo(position) <= distance;
@@ -88,11 +88,13 @@ public sealed class FaceTargetAction : GraphInstantAction
     public override string Description => "Face Target";
     protected override bool Run(GraphActionInvocation call)
     {
-        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent2D movement, out _)
-            || !GraphActionTarget.TryPosition(Target, call.Execution, out Vector2 position)
+        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent3D movement, out _)
+            || !GraphActionTarget.TryPosition(Target, call.Execution, out Vector3 position)
             || !GodotObject.IsInstanceValid(call.Execution.GameObject)) return false;
         float offset = position.X - call.Execution.GameObject.GlobalPosition.X;
         if (!Mathf.IsZeroApprox(offset)) movement.RestoreFacing(offset < 0 ? -1 : 1);
+        if (movement.MovementSpace == CharacterMovementSpace.Free3D)
+            movement.RestoreFacingDirection(position - call.Execution.GameObject.GlobalPosition);
         return true;
     }
 }
@@ -105,7 +107,7 @@ public sealed class StopMovementAction : GraphInstantAction
     public override string Description => "Stop Movement";
     protected override bool Run(GraphActionInvocation call)
     {
-        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent2D movement, out _)) return false;
+        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent3D movement, out _)) return false;
         GraphActionTarget.SetMoveAxis(call.Execution, movement, 0, Priority);
         return true;
     }
@@ -116,13 +118,13 @@ public sealed class MoveToTargetAction : GraphSharedAction
 {
     public GraphActionComponentReference Movement { get; set; } = new();
     public GraphActionValue Target { get; set; } = GraphActionValue.Key("Target");
-    public GraphActionValue ArrivalDistance { get; set; } = GraphActionValue.Number(24);
+    public GraphActionValue ArrivalDistance { get; set; } = GraphActionValue.Number(0.24f);
     public GraphActionValue Timeout { get; set; } = GraphActionValue.Number(5);
     public int Priority { get; set; } = ComponentPriority.AI;
-    public override string Description => "Move To Target (Horizontal)";
+    public override string Description => "Move To Target";
     public override GraphActionTask CreateTask(GraphActionInvocation call)
     {
-        CharacterMovementComponent2D movement = null;
+        CharacterMovementComponent3D movement = null;
         bool valid = call.TryGetComponent("Component", Movement, Description, out movement, out _);
         valid &= ArrivalDistance.TryNumber(call.Execution, out float arrival) && arrival >= 0;
         valid &= Timeout.TryNumber(call.Execution, out float timeout) && timeout > 0;
@@ -133,12 +135,15 @@ public sealed class MoveToTargetAction : GraphSharedAction
             elapsed += delta;
             var host = call.Execution.GameObject;
             if (!valid || !GodotObject.IsInstanceValid(movement) || !GodotObject.IsInstanceValid(host)
-                || !host.IsInsideTree() || !GraphActionTarget.TryPosition(Target, call.Execution, out Vector2 target))
+                || !host.IsInsideTree() || !GraphActionTarget.TryPosition(Target, call.Execution, out Vector3 target))
             { Stop(); return BehaviorTreeStatus.Failure; }
-            float offset = target.X - host.GlobalPosition.X;
-            if (Mathf.Abs(offset) <= arrival) { Stop(); return BehaviorTreeStatus.Success; }
+            Vector3 offset = target - host.GlobalPosition;
+            offset.Y = 0f;
+            if (movement.MovementSpace == CharacterMovementSpace.SideView) offset.Z = 0f;
+            if (offset.Length() <= arrival) { Stop(); return BehaviorTreeStatus.Success; }
             if (elapsed >= timeout) { Stop(); return BehaviorTreeStatus.Failure; }
-            GraphActionTarget.SetMoveAxis(call.Execution, movement, Mathf.Sign(offset), Priority);
+            Vector3 direction = offset.Normalized();
+            movement.SubmitCommand(new CharacterCommand3D(direction.X, false, false, direction.Z), Priority);
             return BehaviorTreeStatus.Running;
         }, Stop);
     }

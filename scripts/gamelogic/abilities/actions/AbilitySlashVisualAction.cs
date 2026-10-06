@@ -6,48 +6,47 @@ namespace GameLogic
     {
         public string VisualRootPath { get; set; } = "VisualRoot";
         public string SlashNodeName { get; set; } = "AttackSlash";
-        public Vector2 SlashOffset { get; set; } = new(24f, -6f);
+        public Vector2 SlashOffset { get; set; } = new(0.24f, 0.06f);
         public Vector2 SlashScale { get; set; } = new(1f, 1f);
         public Color SlashColor { get; set; } = new(1f, 0.42f, 0.18f, 0.72f);
 
-        protected Polygon2D ResolveSlash(GraphExecutionContext context)
+        protected MeshInstance3D ResolveSlash(GraphExecutionContext context)
         {
-            Node2D root = AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<Node2D>(VisualRootPath);
+            Node3D root = AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<Node3D>(new NodePath(VisualRootPath));
             return root == null ? null : EnsureSlashVisual(root);
         }
 
-        private Polygon2D EnsureSlashVisual(Node2D visualRoot)
+        private MeshInstance3D EnsureSlashVisual(Node3D visualRoot)
         {
-            Polygon2D slash = visualRoot.GetNodeOrNull<Polygon2D>(SlashNodeName);
+            MeshInstance3D slash = visualRoot.GetNodeOrNull<MeshInstance3D>(SlashNodeName);
             if (slash != null)
                 return slash;
 
-            slash = new Polygon2D
+            var mesh = new ImmediateMesh();
+            mesh.SurfaceBegin(Mesh.PrimitiveType.Triangles);
+            Vector3[] points = { new(0f, 0.24f, 0f), new(0.52f, 0.14f, 0f),
+                new(0.72f, 0f, 0f), new(0.52f, -0.14f, 0f), new(0f, -0.24f, 0f) };
+            for (int i = 1; i < points.Length - 1; i++)
+            { mesh.SurfaceAddVertex(points[0]); mesh.SurfaceAddVertex(points[i]); mesh.SurfaceAddVertex(points[i + 1]); }
+            mesh.SurfaceEnd();
+            slash = new MeshInstance3D
             {
-                Name = SlashNodeName,
-                Polygon = new[]
-                {
-                    new Vector2(0f, -24f),
-                    new Vector2(52f, -14f),
-                    new Vector2(72f, 0f),
-                    new Vector2(52f, 14f),
-                    new Vector2(0f, 24f)
-                },
-                ZIndex = 20,
-                Visible = false
+                Name = SlashNodeName, Mesh = mesh, Visible = false,
+                MaterialOverride = new StandardMaterial3D { ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+                    Transparency = BaseMaterial3D.TransparencyEnum.Alpha, CullMode = BaseMaterial3D.CullModeEnum.Disabled }
             };
 
             visualRoot.AddChild(slash);
             return slash;
         }
 
-        protected void UpdateSlash(Polygon2D slash, float progress)
+        protected void UpdateSlash(MeshInstance3D slash, float progress)
         {
             progress = Mathf.Clamp(progress, 0f, 1f);
             float alpha = Mathf.Lerp(0.75f, 0.2f, progress);
-            slash.Position = SlashOffset;
-            slash.Scale = SlashScale * Mathf.Lerp(0.9f, 1.18f, progress);
-            slash.Color = new Color(SlashColor.R, SlashColor.G, SlashColor.B, alpha);
+            slash.Position = new Vector3(SlashOffset.X, SlashOffset.Y, 0.01f);
+            slash.Scale = new Vector3(SlashScale.X, SlashScale.Y, 1f) * Mathf.Lerp(0.9f, 1.18f, progress);
+            ((StandardMaterial3D)slash.MaterialOverride).AlbedoColor = new Color(SlashColor.R, SlashColor.G, SlashColor.B, alpha);
             slash.Visible = true;
         }
 
@@ -135,7 +134,7 @@ namespace GameLogic
         public override string Description => Mode == AbilitySlashVisualMode.Show ? "显示刀光" : "隐藏刀光";
         public override void Execute(GraphExecutionContext context)
         {
-            Polygon2D slash = ResolveSlash(context);
+            MeshInstance3D slash = ResolveSlash(context);
             if (slash == null) return;
             if (Mode == AbilitySlashVisualMode.Show) UpdateSlash(slash, 0);
             else slash.Visible = false;
@@ -157,7 +156,7 @@ namespace GameLogic
         {
             FlowTimelineContext timeline = context?.GetUserData<FlowTimelineContext>();
             if (timeline == null) return;
-            Polygon2D slash = ResolveSlash(context);
+            MeshInstance3D slash = ResolveSlash(context);
             if (slash == null) return;
             if (timeline.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel) slash.Visible = false;
             else UpdateSlash(slash, timeline.ClipNormalizedTime);

@@ -1,5 +1,9 @@
 # Coding Patterns
 
+## Gameplay EC Structure
+
+Read [ec-framework.md](ec-framework.md) before adding gameplay behavior or changing scene hosts. Use existing GameObject hosts with Component resources and native child nodes.
+
 ## Godot C# Conventions
 
 - Use `partial class` for Godot script classes that inherit from `Node`, `Resource`, or other Godot types.

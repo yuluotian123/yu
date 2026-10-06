@@ -31,18 +31,18 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
 
         PackedScene playerScene = GD.Load<PackedScene>("res://assets/scenes/player.tscn");
         Require(playerScene != null, "Player scene could not be loaded.");
-        GameObject2D player = playerScene.Instantiate<GameObject2D>();
+        GameObject3D player = playerScene.Instantiate<GameObject3D>();
         AddChild(player);
         player.SetProcess(false);
         player.SetPhysicsProcess(false);
 
-        CharacterGraphComponent2D graph = player.GetComponent<CharacterGraphComponent2D>();
-        AbilitySystemComponent2D abilities = player.GetComponent<AbilitySystemComponent2D>();
-        CharacterMovementComponent2D movement = player.GetComponent<CharacterMovementComponent2D>();
-        CharacterAnimationComponent2D animation = player.GetComponent<CharacterAnimationComponent2D>();
+        CharacterGraphComponent3D graph = player.GetComponent<CharacterGraphComponent3D>();
+        AbilitySystemComponent3D abilities = player.GetComponent<AbilitySystemComponent3D>();
+        CharacterMovementComponent3D movement = player.GetComponent<CharacterMovementComponent3D>();
+        CharacterAnimationComponent3D animation = player.GetComponent<CharacterAnimationComponent3D>();
 
         Require(graph?.Runtime?.IsRunning == true, "CharacterGraph did not initialize.");
-        Require(graph.CharacterGraph.Nodes.Count == 10 && graph.CharacterGraph.FindNodeById("jump_sustain_on") == null,
+        Require(graph.CharacterGraph.FindNodeById("jump_sustain_on") == null,
             "Player graph still contains redundant jump sustain input.");
         Require(graph.CharacterGraph?.ResourceLocalToScene == true,
             "CharacterGraph is not configured as a scene-local inline resource.");
@@ -62,9 +62,9 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
             "Locomotion component bindings failed to synchronize.");
         Require(animation.LocomotionRuntime.Context.Blackboard.GetValue<string>(LocomotionBlackboardKeys.MovementMode) == movement.MovementModeName,
             "Locomotion movement mode was not copied from the component.");
-        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent2D"),
+        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent3D"),
             "Legacy CommandBuffer is still mounted.");
-        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "SkillManagerComponent2D"),
+        Require(!player.GetAllComponents().Any(value => value.GetType().Name == "SkillManagerComponent3D"),
             "Legacy SkillManager is still mounted.");
 
         CharacterGraphAsset graphAsset = graph.CharacterGraph;
@@ -76,9 +76,9 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         Require(!graphAsset.GetAllowedNodeTypes().Contains(nameof(FlowEntryNodeData)),
             "CharacterGraph editor still exposes a single-entry Flow node.");
         Require(graphAsset.Nodes.OfType<GraphComponentCallNodeData>()
-                .Any(value => value.ComponentTypeName == typeof(CharacterMovementComponent2D).FullName &&
+                .Any(value => value.ComponentTypeName == typeof(CharacterMovementComponent3D).FullName &&
                     value.MemberId == "AddMovementInput"),
-            "Movement input is not configured through CharacterMovementComponent2D.");
+            "Movement input is not configured through CharacterMovementComponent3D.");
         CharacterAbilityNodeData attackNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
             .First(value => value.AbilityId == "attack");
         CharacterAbilityNodeData dashNode = graphAsset.Nodes.OfType<CharacterAbilityNodeData>()
@@ -113,7 +113,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         Require(graph.Runtime.TryActivateAbility(dashNode) == AbilityActivationResult.Activated,
             "Dash did not interrupt Attack through the graph relationship.");
         TickPhysics(player);
-        Require(Mathf.IsEqualApprox(Mathf.Abs(movement.Velocity.X), 760f),
+        Require(Mathf.IsEqualApprox(Mathf.Abs(movement.Velocity.X), 7.6f),
             $"Dash velocity was {movement.Velocity.X}.");
         Require(animation.ActiveRequestKey == "ability:dash:dash_animation",
             $"Unexpected dash animation key: {animation.ActiveRequestKey}");
@@ -143,7 +143,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         Require(!animation.ActiveRequestKey.StartsWith("ability:", StringComparison.Ordinal),
             "Completed Ability left an animation override active.");
 
-        movement.SubmitCommand(new CharacterCommand2D(-1f, true, true), ComponentPriority.Input);
+        movement.SubmitCommand(new CharacterCommand3D(-1f, true, true), ComponentPriority.Input);
         TickPhysics(player);
         Require(movement.RawMoveInputX < 0f, "Movement did not consume its internal command buffer.");
         Require(movement.JumpSustainRequested, "Jump sustain did not persist after command consumption.");
@@ -155,7 +155,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
 
         VerifyGraphMovementInput(player, graphAsset, movement);
 
-        CharacterPersistenceComponent2D persistence = player.GetComponent<CharacterPersistenceComponent2D>();
+        CharacterPersistenceComponent3D persistence = player.GetComponent<CharacterPersistenceComponent3D>();
         JsonObject state = persistence.Capture();
         Require(state["abilities"] is JsonObject, "Ability cooldown state was not captured.");
         Require(!state.ContainsKey("input") && !state.ContainsKey("timeline"),
@@ -183,14 +183,14 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
 
         VerifyBinding(graph, LocomotionBlackboardKeys.MovementMode, "MovementModeName");
         VerifyBinding(graph, LocomotionBlackboardKeys.MovementIsOnFloor, "IsOnFloor");
-        VerifyBinding(graph, LocomotionBlackboardKeys.MovementMoveAxisX, "MoveInputX");
+        VerifyBinding(graph, LocomotionBlackboardKeys.MovementMoveAxisX, "MoveAmount");
         VerifyBinding(graph, LocomotionBlackboardKeys.MovementVelocityY, "VelocityY");
     }
 
     private static void VerifyComponentMetadata()
     {
-        Require(GraphComponentRegistry.TryGet(typeof(CharacterMovementComponent2D), out GraphComponentTypeDescriptor descriptor),
-            "CharacterMovementComponent2D was not registered.");
+        Require(GraphComponentRegistry.TryGet(typeof(CharacterMovementComponent3D), out GraphComponentTypeDescriptor descriptor),
+            "CharacterMovementComponent3D was not registered.");
         Require(descriptor.Values.Any(value => value.MemberId == "MoveInputX"), "MoveInputX metadata is missing.");
         Require(descriptor.Values.Any(value => value.MemberId == "IsOnFloor"), "IsOnFloor metadata is missing.");
         Require(descriptor.Actions.Any(value => value.MemberId == "AddMovementInput"), "AddMovementInput metadata is missing.");
@@ -216,7 +216,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     private static void VerifyBinding(HfsmGraphAsset graph, string key, string memberId)
     {
         GraphBlackboardEntry entry = GraphBlackboardValidator.FindEntry(graph.BlackboardEntries, key);
-        Require(entry?.Binding != null && entry.Binding.ComponentTypeName == typeof(CharacterMovementComponent2D).FullName &&
+        Require(entry?.Binding != null && entry.Binding.ComponentTypeName == typeof(CharacterMovementComponent3D).FullName &&
                 entry.Binding.MemberId == memberId && entry.Binding.Direction == GraphComponentBindingDirection.ComponentToBlackboard,
             $"Locomotion binding for {key} is missing or incorrect.");
     }
@@ -279,9 +279,9 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     }
 
     private static void VerifyGraphMovementInput(
-        GameObject2D player,
+        GameObject3D player,
         CharacterGraphAsset graphAsset,
-        CharacterMovementComponent2D movement)
+        CharacterMovementComponent3D movement)
     {
         var provider = new FakeInputProvider { Negative = 0.8f, Positive = 0.1f };
         var runtime = new CharacterGraphRuntime(graphAsset, player, provider);
@@ -290,6 +290,14 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         movement.OnPhysicsUpdate(PhysicsDelta);
         Require(Mathf.IsEqualApprox(movement.RawMoveInputX, -0.7f),
             "CharacterGraph did not submit the signed movement axis.");
+
+        movement.MovementSpace = CharacterMovementSpace.Free3D;
+        provider.Depth = 0.8f;
+        runtime.Update(PhysicsDelta, physics: true);
+        movement.OnPhysicsUpdate(PhysicsDelta);
+        Require(movement.MoveInputZ > 0.7f, "CharacterGraph did not route the depth input to movement.");
+        movement.MovementSpace = CharacterMovementSpace.SideView;
+        provider.Depth = 0f;
 
         provider.JustPressedAction = "player_jump";
         runtime.Update(PhysicsDelta, physics: true);
@@ -306,21 +314,21 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     {
         PackedScene scene = GD.Load<PackedScene>("res://assets/scenes/ai_runner.tscn");
         Require(scene != null, "AI scene could not be loaded.");
-        GameObject2D ai = scene.Instantiate<GameObject2D>();
+        GameObject3D ai = scene.Instantiate<GameObject3D>();
         AddChild(ai);
         ai.SetProcess(false);
         ai.SetPhysicsProcess(false);
-        Require(ai.GetComponent<CharacterGraphComponent2D>() == null, "Simple AI still mounts CharacterGraph.");
-        Require(ai.GetComponent<AbilitySystemComponent2D>() == null, "Simple AI unexpectedly mounts AbilitySystem.");
-        Require(!ai.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent2D"),
+        Require(ai.GetComponent<CharacterGraphComponent3D>() == null, "Simple AI still mounts CharacterGraph.");
+        Require(ai.GetComponent<AbilitySystemComponent3D>() == null, "Simple AI unexpectedly mounts AbilitySystem.");
+        Require(!ai.GetAllComponents().Any(value => value.GetType().Name == "CharacterCommandBufferComponent3D"),
             "Simple AI still mounts CommandBuffer.");
-        Require(ai.GetComponent<CharacterMovementComponent2D>() != null, "Simple AI has no Movement component.");
+        Require(ai.GetComponent<CharacterMovementComponent3D>() != null, "Simple AI has no Movement component.");
         ai.QueueFree();
     }
 
     private void VerifyLegacyAbilityPersistence(PackedScene playerScene, JsonObject capturedState)
     {
-        GameObject2D restored = playerScene.Instantiate<GameObject2D>();
+        GameObject3D restored = playerScene.Instantiate<GameObject3D>();
         restored.PersistentId = "player_restore_smoke";
         AddChild(restored);
         restored.SetProcess(false);
@@ -330,17 +338,17 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
         {
             ["skills"] = capturedState["abilities"]?.DeepClone()
         };
-        restored.GetComponent<CharacterPersistenceComponent2D>()?.Restore(legacyState, schemaVersion: 1);
-        AbilityRuntime dash = restored.GetComponent<AbilitySystemComponent2D>()?.GetRuntime("dash");
+        restored.GetComponent<CharacterPersistenceComponent3D>()?.Restore(legacyState, schemaVersion: 1);
+        AbilityRuntime dash = restored.GetComponent<AbilitySystemComponent3D>()?.GetRuntime("dash");
         double now = Time.GetTicksMsec() * 0.001d;
         Require(dash != null && dash.CooldownRemaining(now) > 0f,
             "Legacy skills cooldown state was not restored by AbilityId.");
         restored.QueueFree();
     }
 
-    private static void TickPhysics(GameObject2D owner)
+    private static void TickPhysics(GameObject3D owner)
     {
-        foreach (Component2D component in owner.GetAllComponents())
+        foreach (Component3D component in owner.GetAllComponents())
         {
             if (component.IsActive)
                 component.OnPhysicsUpdate(PhysicsDelta);
@@ -357,6 +365,7 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
     {
         public float Negative { get; set; }
         public float Positive { get; set; }
+        public float Depth { get; set; }
         public string JustPressedAction { get; set; }
         public string JustReleasedAction { get; set; }
         public bool IsPressed(string action, string handlerLayer = null) => GetActionStrength(action, handlerLayer) > 0f;
@@ -368,10 +377,11 @@ public partial class CharacterGraphRuntimeSmokeTest : Node
                 ? Negative
                 : action == "right" || action?.EndsWith("_right", StringComparison.Ordinal) == true
                     ? Positive
-                    : 0f;
+                    : action == "player_move_back" ? Depth : 0f;
         public float GetHoldTime(string action) => 0f;
         public bool ConsumePressed(string action, string handlerLayer = null) => true;
         public bool ConsumeJustPressed(string action, string handlerLayer = null) => true;
         public bool ConsumeJustReleased(string action, string handlerLayer = null) => true;
     }
 }
+

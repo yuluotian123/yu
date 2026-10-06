@@ -19,17 +19,17 @@
 InputMap / InputModule
         |
         v
-PlayerCharacterInputComponent2D (100)
+PlayerCharacterInputComponent3D (100)
         | ICharacterInputProvider
         v
-CharacterGraphComponent2D (90)
+CharacterGraphComponent3D (90)
         |-- 生命周期: BeginPlay / Update / PhysicsUpdate / EndPlay
         |-- Move Axis1D ----------> AddMovementInput ---------+
         |-- Jump Press -----------> RequestJumpStart          |
         |-- Jump Release ---------> SetJumpSustain(false)     |
         |-- Attack / Dash --------> Ability 请求              |
         v                                                  v
-AbilitySystemComponent2D (55)                  CharacterMovementComponent2D (50)
+AbilitySystemComponent3D (55)                  CharacterMovementComponent3D (50)
         |                                      |-- 输入仲裁
         |-- Grant / Cooldown / Priority        |-- 跳跃缓冲 / 土狼时间
         |-- Concurrent / Interrupt / Cancel    |-- 重力 / 速度覆盖
@@ -42,15 +42,15 @@ AbilitySystemComponent2D (55)                  CharacterMovementComponent2D (50)
         +--------+---- 动画请求 / 速度覆盖 -------------------+
                                                            |
                                                            v
-                                      CharacterAnimationComponent2D (20)
+                                      CharacterAnimationComponent3D (20)
                                       |-- Locomotion HFSM
                                       |-- Ability 动画仲裁
-                                      +-- AnimatedSprite2D 唯一写入者
+                                      +-- AnimatedSprite3D 唯一写入者
 
 AI
 BehaviorTree Controller (100)
-        |-- Movement API ----------------> CharacterMovementComponent2D
-        +-- Ability API (战斗 AI 可选) ---> AbilitySystemComponent2D
+        |-- Movement API ----------------> CharacterMovementComponent3D
+        +-- Ability API (战斗 AI 可选) ---> AbilitySystemComponent3D
 ```
 
 简单 AI 不挂载 CharacterGraph、AbilitySystem 或 Animation。战斗 AI 可以按需增加 AbilitySystem 和 Animation，但仍不增加 CharacterGraph。
@@ -59,18 +59,18 @@ BehaviorTree Controller (100)
 
 | 组件 | 职责 | 不负责 |
 | --- | --- | --- |
-| `PlayerCharacterInputComponent2D` | 把 InputModule 适配为 `ICharacterInputProvider` | 不硬编码 Move、Jump、Attack、Dash |
-| `CharacterGraphComponent2D` | 持有玩家图并驱动多入口事件运行时 | 不做物理、Locomotion 或 AI 决策 |
-| `AbilitySystemComponent2D` | 授予、冷却、优先级、并发、打断、取消、持久化 | 不扫描 CharacterGraph，不读取玩家输入 |
-| `CharacterMovementComponent2D` | 收集意图、仲裁来源、计算速度并移动 Body | 不依赖 AbilitySystem，不播放动画 |
-| `CharacterAnimationComponent2D` | 运行 LocomotionGraph、仲裁动画请求、写 Sprite | 不计算角色移动 |
-| `CharacterPersistenceComponent2D` | 保存位置、朝向、标记和 Ability 冷却 | 不保存输入、图执行流、动画和速度 |
+| `PlayerCharacterInputComponent3D` | 把 InputModule 适配为 `ICharacterInputProvider` | 不硬编码 Move、Jump、Attack、Dash |
+| `CharacterGraphComponent3D` | 持有玩家图并驱动多入口事件运行时 | 不做物理、Locomotion 或 AI 决策 |
+| `AbilitySystemComponent3D` | 授予、冷却、优先级、并发、打断、取消、持久化 | 不扫描 CharacterGraph，不读取玩家输入 |
+| `CharacterMovementComponent3D` | 收集意图、仲裁来源、计算速度并移动 Body | 不依赖 AbilitySystem，不播放动画 |
+| `CharacterAnimationComponent3D` | 运行 LocomotionGraph、仲裁动画请求、写 Sprite | 不计算角色移动 |
+| `CharacterPersistenceComponent3D` | 保存位置、朝向、标记和 Ability 冷却 | 不保存输入、图执行流、动画和速度 |
 
 旧的 `CharacterCommandBufferComponent2D`、`SkillManagerComponent2D`、`SpriteAnimationComponent2D` 和玩家 Controller 已删除。
 
 ## 3. CharacterGraph
 
-[CharacterGraphComponent2D](../scripts/gamelogic/character/graph/CharacterGraphComponent2D.cs) 持有 `CharacterGraphAsset : FlowGraphAsset`。它是 Character 专用的多入口 FlowGraph，不是 HFSM，也不包含 Idle、Run、Jump、Fall 等 Locomotion 状态。
+[CharacterGraphComponent3D](../scripts/gamelogic/character/graph/CharacterGraphComponent3D.cs) 持有 `CharacterGraphAsset : FlowGraphAsset`。它是 Character 专用的多入口 FlowGraph，不是 HFSM，也不包含 Idle、Run、Jump、Fall 等 Locomotion 状态。
 
 ### 生命周期入口
 
@@ -123,7 +123,7 @@ Ability 节点使用稳定 `AbilityId`，资源路径只用于编辑器定位 Ti
 
 ## 4. AbilitySystem
 
-[AbilitySystemComponent2D](../scripts/gamelogic/abilities/runtime/AbilitySystemComponent2D.cs) 只从 [AbilitySetResource](../scripts/gamelogic/abilities/runtime/AbilitySetResource.cs) 显式获得 Ability，不扫描 CharacterGraph。
+[AbilitySystemComponent3D](../scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs) 只从 [AbilitySetResource](../scripts/gamelogic/abilities/runtime/AbilitySetResource.cs) 显式获得 Ability，不扫描 CharacterGraph。
 
 ```text
 AbilitySetResource
@@ -156,7 +156,7 @@ Attack policy 优先级为 50，Dash 为 100。默认图只有 `Attack -> Dash`�
 
 ## 5. Movement
 
-[CharacterMovementComponent2D](../scripts/gamelogic/character/movement/CharacterMovementComponent2D.cs) 同时是移动输入缓冲和物理权威。公开入口：
+[CharacterMovementComponent3D](../scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs) 同时是移动输入缓冲和物理权威。公开入口：
 
 - `AddMovementInput(axis, sourcePriority)` / `StopMovementInput(sourcePriority)`
 - `SubmitCommand(command, sourcePriority)`
@@ -181,7 +181,7 @@ Move Axis 和 Jump Start 是本物理帧意图；Jump Sustain 是持久意图，
 
 ## 6. Animation 与 Locomotion
 
-[CharacterAnimationComponent2D](../scripts/gamelogic/character/animation/CharacterAnimationComponent2D.cs) 合并了旧 Locomotion 组件和 Sprite 动画仲裁。第一版继续使用 AnimatedSprite2D、SpriteFrames 和 Locomotion HFSM。
+[CharacterAnimationComponent3D](../scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs) 合并了旧 Locomotion 组件和 Sprite 动画仲裁。第一版继续使用 AnimatedSprite3D、SpriteFrames 和 Locomotion HFSM。
 
 LocomotionGraph 只读取 Movement 的 `MovementMode`、`IsOnFloor`、`MoveInputX` 和 `Velocity.Y`，包含 Idle、Run、Jump、Fall、Land 等动画语义。Ability Timeline 可以提交更高优先级动画请求；Ability 完成或取消时清除请求，下一物理帧自动恢复 Locomotion 动画。
 
@@ -231,3 +231,7 @@ Save schema 为 2。角色保存稳定 ID、位置、旋转、朝向、自定义
 ## 11. 验证
 
 [CharacterGraphRuntimeSmokeTest](../scripts/test/CharacterGraphRuntimeSmokeTest.cs) 覆盖生命周期、不可重入、Axis 符号/死区、图驱动移动与跳跃、Ability 优先级/打断、Timeline 动画与 Dash 位移、锁释放、AI 场景组成和持久化边界。
+
+## 3D 场景与移动模式
+
+当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。详见 [原生 3D 迁移说明](../scripts/gamelogic/presentation/README.md)。

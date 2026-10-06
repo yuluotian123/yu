@@ -233,6 +233,8 @@ public sealed partial class GraphComponentPanel
                  IsInEditedScene(sourceHost, sceneRoot) &&
                  ReferencesGraph(sourceHost, graph))
             AddHost(sourceHost, _hosts);
+        if (_source is Component3D source3D && source3D.Owner != null)
+            AddHost(source3D.Owner, _hosts);
         if (_source is Component2D sourceComponent &&
             sourceComponent.Owner is GameObject2D sourceOwner &&
             IsInEditedScene(sourceOwner, sceneRoot) &&
@@ -272,7 +274,7 @@ public sealed partial class GraphComponentPanel
         if (_hosts.Count == 0)
         {
             _hostLabel.Text = "No blueprint host found.";
-            _summaryLabel.Text = "Open the owning GameObject2D scene, then press Refresh.";
+            _summaryLabel.Text = "Open the owning GameObject scene, then press Refresh.";
             return;
         }
 
@@ -585,11 +587,11 @@ public sealed partial class GraphComponentPanel
             foreach (Variant item in componentArray.AsGodotArray())
                 AddComponent(item.AsGodotObject(), components, componentKeys);
         }
-        if (host is GameObject2D gameObject && IsValidObject(gameObject))
+        if (host is IGameObject gameObject && IsValidObject(host))
         {
             // Running or tool-enabled objects may expose cloned component instances.
-            foreach (Component2D component in gameObject.GetAllComponents())
-                AddComponent(component, components, componentKeys);
+            foreach (IComponent component in gameObject.GetAllComponents())
+                AddComponent(component as GodotObject, components, componentKeys);
         }
         return components;
     }
@@ -607,7 +609,7 @@ public sealed partial class GraphComponentPanel
     {
         if (!IsValidObject(component))
             return null;
-        if (component is Component2D typedComponent)
+        if (component is IComponent typedComponent)
             return GraphComponentRegistry.Register(typedComponent.GetType());
         Script script = component?.GetScript().AsGodotObject() as Script;
         return script != null && GraphComponentRegistry.TryGetByScriptPath(script.ResourcePath, out GraphComponentTypeDescriptor descriptor)
@@ -619,7 +621,7 @@ public sealed partial class GraphComponentPanel
     {
         if (!IsValidObject(node))
             return false;
-        if (node is GameObject2D)
+        if (node is IGameObject)
             return true;
 
         if (TryGetProperty(node, "Components", out Variant value) && value.VariantType == Variant.Type.Array)

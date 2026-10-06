@@ -6,9 +6,9 @@ public abstract class GraphMovementAction : GraphSharedAction
 {
     public GraphActionComponentReference Movement { get; set; } = new();
     public int Priority { get; set; } = ComponentPriority.AI;
-    protected bool Resolve(GraphActionInvocation call, out CharacterMovementComponent2D movement) =>
+    protected bool Resolve(GraphActionInvocation call, out CharacterMovementComponent3D movement) =>
         call.TryGetComponent("Component", Movement, Description, out movement, out _);
-    protected void Move(CharacterMovementComponent2D movement, float axis)
+    protected void Move(CharacterMovementComponent3D movement, float axis)
     {
         if (!GodotObject.IsInstanceValid(movement)) return;
         movement.StopMovementInput(Priority);
@@ -24,7 +24,7 @@ public sealed class SetFacingAction : GraphInstantAction
     public override string Description => "Set Facing";
     protected override bool Run(GraphActionInvocation call)
     {
-        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent2D movement, out _)
+        if (!call.TryGetComponent("Component", Movement, Description, out CharacterMovementComponent3D movement, out _)
             || !Direction.TryNumber(call.Execution, out float direction) || direction == 0) return false;
         movement.RestoreFacing(direction < 0 ? -1 : 1);
         return true;
@@ -58,11 +58,11 @@ public sealed class MoveInDirectionAction : GraphMovementAction
 [GraphCallable("Patrol", "移动", GraphCallableUsage.Flow | GraphCallableUsage.BehaviorTree, ChineseName = "往返巡逻", Keywords = "AI turn edge 转向 边缘")]
 public sealed class PatrolAction : GraphMovementAction
 {
-    public GraphActionValue Distance { get; set; } = GraphActionValue.Number(120);
+    public GraphActionValue Distance { get; set; } = GraphActionValue.Number(1.2f);
     public GraphActionValue StartDirection { get; set; } = GraphActionValue.Number(1);
     public GraphActionValue TurnPause { get; set; } = GraphActionValue.Number(0.12f);
     public GraphActionValue ReverseAtEdges { get; set; } = new() { Constant = new GraphBoolBlackboardValue { Value = true } };
-    public GraphActionValue LookAhead { get; set; } = GraphActionValue.Number(18);
+    public GraphActionValue LookAhead { get; set; } = GraphActionValue.Number(0.18f);
     public override string Description => "Patrol";
     public override GraphActionTask CreateTask(GraphActionInvocation call)
     {
@@ -167,7 +167,7 @@ public sealed class IsOnFloorCondition : GraphSharedCondition
     public GraphActionComponentReference Movement { get; set; } = new();
     public override string Description => "Is On Floor";
     public override bool IsMet(GraphExecutionContext context) =>
-        new GraphActionInvocation(context).TryGetComponent("Component", Movement, Description, out CharacterMovementComponent2D movement, out _) && movement.IsOnFloor;
+        new GraphActionInvocation(context).TryGetComponent("Component", Movement, Description, out CharacterMovementComponent3D movement, out _) && movement.IsOnFloor;
 }
 
 [GraphCallable("Ground Ahead", "移动 / 检测", GraphCallableUsage.Flow | GraphCallableUsage.BehaviorTree, ChineseName = "前方有地面")]
@@ -175,10 +175,11 @@ public sealed class GroundAheadCondition : GraphSharedCondition
 {
     public GraphActionComponentReference Movement { get; set; } = new();
     public GraphActionValue Direction { get; set; } = GraphActionValue.Number(1);
-    public GraphActionValue LookAhead { get; set; } = GraphActionValue.Number(18);
+    public GraphActionValue LookAhead { get; set; } = GraphActionValue.Number(0.18f);
     public override string Description => "Ground Ahead";
     public override bool IsMet(GraphExecutionContext context) =>
-        new GraphActionInvocation(context).TryGetComponent("Component", Movement, Description, out CharacterMovementComponent2D movement, out _)
+        new GraphActionInvocation(context).TryGetComponent("Component", Movement, Description, out CharacterMovementComponent3D movement, out _)
         && Direction.TryNumber(context, out float direction) && direction != 0
         && LookAhead.TryNumber(context, out float distance) && distance >= 0 && movement.HasGroundAhead(direction, distance);
 }
+

@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Mesh" path="res://assets/environment/reference_clouds/original_cloud_mesh.res" id="mesh"]
+[ext_resource type="Shader" path="res://assets/environment/reference_clouds/cloud.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/reference_clouds/78678.png" id="cloud"]
+[ext_resource type="Texture2D" path="res://assets/environment/reference_clouds/Noise_091.png" id="noise"]
+
+[sub_resource type="ShaderMaterial" id="material"]
+resource_local_to_scene = true
+render_priority = -128
+shader = ExtResource("shader")
+shader_parameter/cloud_map = ExtResource("cloud")
+shader_parameter/noise_map = ExtResource("noise")
+
+[node name="OriginalClouds" type="Node3D"]
+metadata/source_commit = "ef1bd4c6fa486977a323c3badaba5740feae1d55"
+metadata/missing_high_cloud_mesh_guid = "4e842a0dab424954fbbe40e4d81b5a3d"
+
+[node name="BaseClouds" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+cast_shadow = 0
+gi_mode = 0
+extra_cull_margin = 16384.0
+mesh = ExtResource("mesh")
+material_override = SubResource("material")

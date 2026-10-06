@@ -1,6 +1,6 @@
 ---
 name: yu-godot-project
-description: Work effectively in the yu Godot C# repository. Use when Codex is modifying or explaining this project's framework, gameplay, resources, FSM, UI, missions, AI, generated config, build setup, or Godot/C# code under scripts, assets, project.godot, or yu.csproj.
+description: Work effectively in the yu Godot C# repository. Use when Codex is modifying or explaining this project's GameObject/Component EC framework, gameplay, resources, FSM, UI, missions, AI, generated config, build setup, or Godot/C# code under scripts, assets, project.godot, or yu.csproj.
 ---
 
 # Yu Godot Project
@@ -8,6 +8,14 @@ description: Work effectively in the yu Godot C# repository. Use when Codex is m
 ## Overview
 
 Use this skill to get oriented in the yu Godot.NET project before changing code. Prefer existing project patterns, module boundaries, and Godot C# conventions over introducing new structure.
+
+## Entity-Component Architecture
+
+- This project's gameplay uses an entity-component (EC) framework. Keep behavior in `Component2D` or `Component3D` resources attached to `GameObject2D` or `GameObject3D` hosts.
+- Do not implement gameplay, presentation synchronization, platform behavior, or camera control as standalone scripts inheriting directly from `Node`, `Node2D`, `Node3D`, `Camera3D`, or physics bodies. Use components to control those native child nodes. Preserve the EC structure during 2D/3D migrations.
+- SpaceLevel uses native 3D physics with 2D sprite artwork. Keep SideView and Free3D as movement constraints on the same Component3D implementation; do not restore the former 2D-to-3D projection bridge.
+- Before changing a host, component, or gameplay scene, read [references/ec-framework.md](references/ec-framework.md) for lifecycle, ordering, ownership, and scene wiring.
+- This rule concerns gameplay behavior. Existing framework infrastructure, editor plugins, test runners, and UI framework classes may retain their required Godot/framework bases.
 
 ## Workflow
 

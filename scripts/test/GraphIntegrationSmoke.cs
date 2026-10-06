@@ -46,13 +46,13 @@ public partial class GraphIntegrationSmoke : Node
         Check(graph.ResourceName == "", "Graph settings participate in native undo");
         history.Redo();
 
-        var animation = new CharacterAnimationComponent2D { LocomotionGraph = new HfsmGraphAsset() };
+        var animation = new CharacterAnimationComponent3D { LocomotionGraph = new HfsmGraphAsset() };
         var profile = new CharacterMovementProfile();
         const string profilePath = "res://.godot/details-profile.tres";
         Check(ResourceSaver.Save(profile, profilePath) == Error.Ok, "External resource fixture saves");
         profile.TakeOverPath(profilePath);
-        var movement = new CharacterMovementComponent2D { Profile = profile };
-        var host = new GameObject2D { Name = "DetailsHost" };
+        var movement = new CharacterMovementComponent3D { Profile = profile };
+        var host = new GameObject3D { Name = "DetailsHost" };
         var sceneRoot = EditorInterface.Singleton.GetEditedSceneRoot();
         sceneRoot.AddChild(host);
         host.Owner = sceneRoot;
@@ -118,15 +118,15 @@ public partial class GraphIntegrationSmoke : Node
         var graph = new HfsmGraphAsset();
         var state = new HfsmAnimationStateNodeData { StateName = "idle" };
         graph.Nodes.Add(state);
-        var host = new GameObject2D { Name = "AnimationPickerHost" };
+        var host = new GameObject3D { Name = "AnimationPickerHost" };
         Node sceneRoot = EditorInterface.Singleton.GetEditedSceneRoot();
         sceneRoot.AddChild(host); host.Owner = sceneRoot;
-        var visual = new Node2D { Name = "CustomVisual" }; host.AddChild(visual); visual.Owner = sceneRoot;
+        var visual = new Node3D { Name = "CustomVisual" }; host.AddChild(visual); visual.Owner = sceneRoot;
         var frames = new SpriteFrames(); frames.RemoveAnimation("default");
         frames.AddAnimation("idle"); frames.AddAnimation("run");
         frames.SetAnimationSpeed("run", 12); frames.SetAnimationLoop("run", false);
-        var sprite = new AnimatedSprite2D { Name = "Body", SpriteFrames = frames }; visual.AddChild(sprite); sprite.Owner = sceneRoot;
-        var component = new CharacterAnimationComponent2D { SpritePath = new NodePath("CustomVisual/Body"), LocomotionGraph = graph };
+        var sprite = new AnimatedSprite3D { Name = "Body", SpriteFrames = frames }; visual.AddChild(sprite); sprite.Owner = sceneRoot;
+        var component = new CharacterAnimationComponent3D { SpritePath = new NodePath("CustomVisual/Body"), LocomotionGraph = graph };
         host.Components.Add(component);
         plugin.OpenGraphEditor(graph, component);
         await Frames(5);

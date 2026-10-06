@@ -10,24 +10,26 @@
 
 | Priority | 组件 | 配置 |
 | ---: | --- | --- |
-| 100 | `PlayerCharacterInputComponent2D` | 无 Move/Jump/Ability Action 字段 |
-| 90 | `CharacterGraphComponent2D` | `player.tscn` 内联 CharacterGraph |
-| 55 | `AbilitySystemComponent2D` | [player_ability_set.tres](../assets/abilities/player_ability_set.tres) |
-| 50 | `CharacterMovementComponent2D` | 移速、跳跃、重力、Body 路径 |
-| 20 | `CharacterAnimationComponent2D` | [character_locomotion_hfsm.tres](../assets/graphs/character_locomotion_hfsm.tres) |
-| 最后 | `PlayerCameraComponent2D`、`CharacterPersistenceComponent2D` | Camera 与 Save |
+| 100 | `PlayerCharacterInputComponent3D` | 无 Move/Jump/Ability Action 字段 |
+| 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
+| 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/abilities/player_ability_set.tres) |
+| 50 | `CharacterMovementComponent3D` | 移速、跳跃、重力、Body 路径 |
+| 20 | `CharacterAnimationComponent3D` | [character_locomotion_hfsm.tres](../assets/graphs/character_locomotion_hfsm.tres) |
+| 最后 | `CharacterPersistenceComponent3D` | Save |
 
 输入组件需要暴露在场景中，因为它是玩家与 InputModule 的设备边界；但它不暴露 `MoveAction`、`JumpAction` 或技能数组。所有逻辑 Action 映射都在 CharacterGraph 资源中编辑。
+
+相机直接放在关卡的 CameraRig/Camera3D 中，Player 不包含相机。CameraRig 的 SceneCameraComponent3D 自动绑定 Player 并处理跟随，ICameraModule 只路由控制接口。参见 [场景相机](CAMERA_SYSTEM.md)。
 
 ## 初始化
 
 ```text
-GameObject2D._Ready
+GameObject3D._Ready
   -> 克隆并按 Priority 排序组件
   -> Input.OnInit: 获取 IInputModule
   -> CharacterGraph.OnInit: 查找 ICharacterInputProvider，创建 runtime
   -> AbilitySystem.OnInit: 从 AbilitySet 显式 Grant
-  -> Movement.OnInit: 绑定 CharacterBody2D
+  -> Movement.OnInit: 绑定 CharacterBody3D
   -> Animation.OnInit: 启动 Locomotion HFSM
   -> 首次 Update/PhysicsUpdate: CharacterGraph 触发 BeginPlay
 ```
@@ -125,7 +127,7 @@ Attack -- Interrupt [window 0..any, request priority 100] --> Dash
 
 ## 动画恢复
 
-Locomotion 和 Ability 都向 `CharacterAnimationComponent2D` 提交动画请求，只有该组件写 `AnimatedSprite2D`。
+Locomotion 和 Ability 都向 `CharacterAnimationComponent3D` 提交动画请求，只有该组件写 `AnimatedSprite3D`。
 
 ```text
 Run request (Locomotion, lower priority)
@@ -147,7 +149,7 @@ Attack Complete/Cancel
 5. 用 Flow 连接输入到 Ability；需要连招时再增加 Interrupt 或 Completion 关系边。
 6. 为 Activated、Completed、Cancelled、Rejected 输出接入需要的时序或分支。
 
-不需要修改 `PlayerCharacterInputComponent2D`，也不需要向 Movement 增加技能 Action 名。
+不需要修改 `PlayerCharacterInputComponent3D`，也不需要向 Movement 增加技能 Action 名。
 
 ## 可点击链接说明
 

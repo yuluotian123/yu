@@ -34,7 +34,7 @@ public static class GraphComponentRegistry
 
             foreach (Type type in types)
             {
-                if (type == null || type.IsAbstract || !typeof(Component2D).IsAssignableFrom(type))
+                if (type == null || type.IsAbstract || !typeof(IComponent).IsAssignableFrom(type))
                     continue;
                 Register(type);
             }
@@ -43,7 +43,7 @@ public static class GraphComponentRegistry
 
     public static GraphComponentTypeDescriptor Register(Type componentType)
     {
-        if (componentType == null || componentType.IsAbstract || !typeof(Component2D).IsAssignableFrom(componentType))
+        if (componentType == null || componentType.IsAbstract || !typeof(IComponent).IsAssignableFrom(componentType))
             return null;
 
         string typeName = componentType.FullName ?? componentType.Name;
@@ -54,8 +54,8 @@ public static class GraphComponentRegistry
         {
             ComponentType = componentType,
             TypeName = typeName,
-            DisplayName = componentType.Name.EndsWith("Component2D", StringComparison.Ordinal)
-                ? componentType.Name[..^"Component2D".Length]
+            DisplayName = (componentType.Name.EndsWith("Component2D", StringComparison.Ordinal) || componentType.Name.EndsWith("Component3D", StringComparison.Ordinal))
+                ? componentType.Name[..^"Component3D".Length]
                 : componentType.Name
         };
         ByName[typeName] = descriptor;

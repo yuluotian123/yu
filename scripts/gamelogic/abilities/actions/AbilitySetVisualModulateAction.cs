@@ -13,7 +13,8 @@ namespace GameLogic
 
         public override void Execute(GraphExecutionContext context)
         {
-            CanvasItem visual = AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<CanvasItem>(VisualRootPath);
+            SpriteBase3D visual = AbilityActionRuntimeHelper.FindFirst<SpriteBase3D>(
+                AbilityActionRuntimeHelper.GetGameObject(context)?.GetNodeOrNull<Node3D>(new NodePath(VisualRootPath)));
             AbilityRuntime runtime = context.GetUserData<AbilityRuntime>();
             if (visual == null || runtime == null)
                 return;

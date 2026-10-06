@@ -29,12 +29,12 @@ func run() -> void:
 			check(pixels.get_pixel(0, 0).a == 0.0, "Frame is not transparent")
 	var scene: PackedScene = load("res://assets/scenes/player.tscn")
 	var player := scene.instantiate()
-	var player_sprite: AnimatedSprite2D = player.get_node("VisualRoot/AnimatedSprite2D")
+	var player_sprite: AnimatedSprite3D = player.get_node("VisualRoot/AnimatedSprite3D")
 	check(player_sprite.sprite_frames == frames, "Player still uses old sprite resource")
-	check(player_sprite.position == Vector2(0, -36), "Player foot alignment mismatch")
-	check(player.get_node("PhysicsBody/CollisionShape2D").shape.size == Vector2(36, 72), "Collision shape changed")
+	check(player_sprite.position == Vector3(0, 0.36, 0), "Player foot alignment mismatch")
+	check(player.get_node("PhysicsBody/CollisionShape3D").shape.size == Vector3(0.36, 0.72, 0.36), "Collision shape changed")
 	player.free()
-	var sprite := AnimatedSprite2D.new()
+	var sprite := AnimatedSprite3D.new()
 	sprite.sprite_frames = frames
 	root.add_child(sprite)
 	for animation in ["attack", "dash", "jump", "land", "hurt", "death"]:

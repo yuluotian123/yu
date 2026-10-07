@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Lantern warm glass Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.9911565, 0.8703449, 0.5838315, 1.0000000)
+shader_parameter/emission_color = Vector3(0.6860000, 0.5110000, 0.2100000)

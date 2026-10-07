@@ -75,6 +75,7 @@ namespace Framework
 
         private void HandleHotkeys()
         {
+            if (GetViewport().GuiGetFocusOwner() is TextEdit or LineEdit) return;
             var togglePressed = Input.IsActionPressed(ToggleActionName);
             if (togglePressed && !_prevTogglePressed)
                 SetOverlayVisible(!Visible);
@@ -176,11 +177,15 @@ namespace Framework
             if (_content == null || _snapshotProvider == null)
                 return;
 
-            var snapshot = _snapshotProvider();
+            _content.Text = FormatSnapshot(_snapshotProvider(), _maxRows);
+        }
+
+        public static string FormatSnapshot(ResourceProfilerSnapshot snapshot, int maxRows = 24)
+        {
             var builder = new StringBuilder();
 
             builder.AppendLine("Resource Profiler");
-            builder.AppendLine("` Toggle Overlay | F10 Dump To Log");
+
             builder.AppendLine($"Captured: {snapshot.CreatedAtUtc:HH:mm:ss} UTC");
             builder.AppendLine();
 
@@ -191,14 +196,14 @@ namespace Framework
             builder.AppendLine($"  Loader: active={snapshot.Loader.ActiveCount}/{snapshot.Loader.MaxConcurrent} waiting={snapshot.Loader.WaitingCount} tasks={snapshot.Loader.TaskCount}");
             builder.AppendLine();
 
-            AppendTasks(builder, snapshot);
-            AppendCacheEntries(builder, snapshot);
-            AppendHandles(builder, snapshot);
+            AppendTasks(builder, snapshot, maxRows);
+            AppendCacheEntries(builder, snapshot, maxRows);
+            AppendHandles(builder, snapshot, maxRows);
 
-            _content.Text = builder.ToString();
+            return builder.ToString();
         }
 
-        private void AppendTasks(StringBuilder builder, ResourceProfilerSnapshot snapshot)
+        private static void AppendTasks(StringBuilder builder, ResourceProfilerSnapshot snapshot, int maxRows)
         {
             builder.AppendLine("Tasks");
             if (snapshot.Loader.Tasks == null || snapshot.Loader.Tasks.Count == 0)
@@ -208,7 +213,7 @@ namespace Framework
                 return;
             }
 
-            var count = Math.Min(_maxRows, snapshot.Loader.Tasks.Count);
+            var count = Math.Min(maxRows, snapshot.Loader.Tasks.Count);
             for (var i = 0; i < count; i++)
             {
                 var task = snapshot.Loader.Tasks[i];
@@ -222,7 +227,7 @@ namespace Framework
             builder.AppendLine();
         }
 
-        private void AppendCacheEntries(StringBuilder builder, ResourceProfilerSnapshot snapshot)
+        private static void AppendCacheEntries(StringBuilder builder, ResourceProfilerSnapshot snapshot, int maxRows)
         {
             builder.AppendLine("Cache");
             if (snapshot.CacheEntries == null || snapshot.CacheEntries.Count == 0)
@@ -232,7 +237,7 @@ namespace Framework
                 return;
             }
 
-            var count = Math.Min(_maxRows, snapshot.CacheEntries.Count);
+            var count = Math.Min(maxRows, snapshot.CacheEntries.Count);
             for (var i = 0; i < count; i++)
             {
                 var entry = snapshot.CacheEntries[i];
@@ -246,7 +251,7 @@ namespace Framework
             builder.AppendLine();
         }
 
-        private void AppendHandles(StringBuilder builder, ResourceProfilerSnapshot snapshot)
+        private static void AppendHandles(StringBuilder builder, ResourceProfilerSnapshot snapshot, int maxRows)
         {
             builder.AppendLine("Handles");
             if (snapshot.Handles == null || snapshot.Handles.Count == 0)
@@ -255,7 +260,7 @@ namespace Framework
                 return;
             }
 
-            var count = Math.Min(_maxRows, snapshot.Handles.Count);
+            var count = Math.Min(maxRows, snapshot.Handles.Count);
             for (var i = 0; i < count; i++)
             {
                 var handle = snapshot.Handles[i];

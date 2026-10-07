@@ -230,8 +230,8 @@ Save schema 为 2。角色保存稳定 ID、位置、旋转、朝向、自定义
 
 ## 11. 验证
 
-[CharacterGraphRuntimeSmokeTest](../scripts/test/CharacterGraphRuntimeSmokeTest.cs) 覆盖生命周期、不可重入、Axis 符号/死区、图驱动移动与跳跃、Ability 优先级/打断、Timeline 动画与 Dash 位移、锁释放、AI 场景组成和持久化边界。
+运行 Spacelevel 检查移动、跳跃、技能打断、动画、AI 行为及持久化边界。
 
 ## 3D 场景与移动模式
 
-当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。详见 [原生 3D 迁移说明](../scripts/gamelogic/presentation/README.md)。
+当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。当前关卡的自由移动与镜头配置见 [HD-2D 场景镜头](../assets/camera/HD2D.md)。

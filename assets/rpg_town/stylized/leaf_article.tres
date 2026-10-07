@@ -1,0 +1,36 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cb387lb13jt7q"]
+
+[ext_resource type="Shader" uid="uid://ci4r06dqcpn7h" path="res://assets/rpg_town/stylized/leaf_article.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://5ypcpvl6kmtb" path="res://assets/rpg_town/stylized/textures/elm_leaf_painted.png" id="2_mask"]
+[ext_resource type="Shader" uid="uid://twc5v2nmsfqn" path="res://assets/rpg_town/stylized/leaf_article_rim.gdshader" id="3_rim"]
+
+[sub_resource type="ShaderMaterial" id="LeafRim"]
+resource_name = "Restrained depth edge light"
+render_priority = 0
+shader = ExtResource("3_rim")
+shader_parameter/leaf_texture = ExtResource("2_mask")
+shader_parameter/alpha_cutoff = 0.5
+shader_parameter/rim_width_pixels = 2.5
+shader_parameter/rim_depth_threshold = 1.0
+shader_parameter/rim_strength = 0.035
+shader_parameter/rim_tint = Vector3(1, 0.98, 0.82)
+shader_parameter/wind_strength = 0.018
+shader_parameter/wind_speed = 0.65
+
+[resource]
+resource_name = "Soft volume foliage - Zhihu reference"
+render_priority = 0
+next_pass = SubResource("LeafRim")
+shader = ExtResource("1_shader")
+shader_parameter/leaf_texture = ExtResource("2_mask")
+shader_parameter/alpha_cutoff = 0.5
+shader_parameter/lower_color = Vector3(0.11, 0.23, 0.15)
+shader_parameter/upper_color = Vector3(0.27, 0.46, 0.18)
+shader_parameter/normal_roundness = 0.68
+shader_parameter/vertex_color_strength = 0.4
+shader_parameter/directional_shadow_lift = 0.12
+shader_parameter/texture_detail = 0.0
+shader_parameter/gradient_strength = 0.6
+shader_parameter/transmission_strength = 0.075
+shader_parameter/wind_strength = 0.018
+shader_parameter/wind_speed = 0.65

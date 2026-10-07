@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 			var profile: Resource = component.get("Profile")
 			if profile == null:
 				continue
+			profile.call("ApplyAtmosphere", env, material, profile.get("StartHour"))
 			var ortho := camera.projection == Camera3D.PROJECTION_ORTHOGONAL
 			var sky_fov: float = clampf(profile.get("OrthographicSkyFov"), 30.0, 100.0) if ortho else 0.0
 			var sky_rotation := Vector3(deg_to_rad(profile.get("OrthographicSkyPitchDegrees")), 0, 0) if ortho else Vector3.ZERO
@@ -48,24 +49,47 @@ func _process(delta: float) -> void:
 			for key: String in SKY_PROPERTIES:
 				set_if_changed(material, SKY_PROPERTIES[key], profile.get(key))
 
-			var mesh := world.get_parent().get_node_or_null("OriginalClouds/BaseClouds") as MeshInstance3D
-			var timeline: Resource = profile.get("CloudTimeline")
-			if mesh == null or timeline == null:
-				continue
-			mesh.visible = profile.get("CloudsEnabled")
-			var clouds := mesh.material_override as ShaderMaterial
-			var seconds: float = (profile.get("StartDay") * 24.0 + profile.get("StartHour")) / 24.0 * profile.get("DayLengthSeconds")
-			var period: float = clampf(profile.get("CloudEvolutionPeriodSeconds"), 4, 240)
-			var phase: float = fposmod(seconds, period) / period
-			var day_phase: float = fposmod(profile.get("StartHour") + 18.0, 24.0) / 24.0
-			set_if_changed(clouds, "sky_custom_fov", sky_fov)
-			set_if_changed(clouds, "sky_pitch", sky_rotation.x)
-			set_if_changed(clouds, "noise_time", fposmod(seconds, 400.0) / 20.0)
-			set_if_changed(clouds, "cloud_sdf", timeline.call("Sample", "_Cloud_SDF_TSb", phase, 0.003))
-			set_if_changed(clouds, "sun_moon", timeline.call("Sample", "_SunMoon", day_phase, 0.0))
-			for pair in [["cloud_color_a", "_CloudColorA"], ["cloud_color_b", "_CloudColorB"], ["cloud_color_c", "_CloudColorC"], ["cloud_color_d", "_CloudColorD"], ["cloud_edge_color", "_Cloud_edgeColor"]]:
-				set_if_changed(clouds, pair[0], timeline.call("SampleColor", pair[1], day_phase))
+			var host: Node3D = world.get_parent()
+			var sun := host.get_node_or_null(component.get("SunPath")) as DirectionalLight3D
+			var moon := host.get_node_or_null(component.get("MoonPath")) as DirectionalLight3D
+			if sun != null and moon != null and world.camera_attributes is CameraAttributesPhysical:
+				profile.call("ApplyLighting", env, sun, moon, world.camera_attributes, profile.get("StartHour"), profile.get("StartLunarPhase"))
+			# Editing the calendar previews exactly that instant; the editor has no independent cloud clock.
+			var hours: float = profile.get("StartDay") * 24.0 + profile.get("StartHour")
+			var cloud_time: Vector4 = profile.call("SampleCloudTime", hours)
+			var rotation_phase: float = cloud_time.x
+			var phase: float = cloud_time.y
+			var day_phase: float = cloud_time.w
+			var rotation_timeline: Resource = profile.get("CloudRotationTimeline")
+			var pivot := host.get_node_or_null(component.get("CloudRootPath")) as Node3D
+			if pivot != null and rotation_timeline != null:
+				pivot.rotation = Vector3(0, deg_to_rad(-rotation_timeline.call("Sample", "GroupYaw", rotation_phase, 0.0)), 0)
+			for pair in [["CloudsPath", "CloudTimeline"], ["HighCloudsPath", "HighCloudTimeline"], ["SecondaryCloudsPath", "SecondaryCloudTimeline"]]:
+				var mesh := host.get_node_or_null(component.get(pair[0])) as MeshInstance3D
+				var timeline: Resource = profile.get(pair[1])
+				if mesh == null or timeline == null:
+					continue
+				mesh.visible = profile.get("CloudsEnabled")
+				var clouds := mesh.material_override as ShaderMaterial
+				if clouds == null:
+					continue
+				set_if_changed(clouds, "horizon_fade", profile.get("CloudHorizonFade"))
+				set_if_changed(clouds, "sky_custom_fov", sky_fov)
+				set_if_changed(clouds, "sky_pitch", sky_rotation.x)
+				set_if_changed(clouds, "noise_time", cloud_time.z)
+				set_if_changed(clouds, "cloud_sdf", timeline.call("Sample", "_Cloud_SDF_TSb", phase, 0.003))
+				set_if_changed(clouds, "sun_moon", timeline.call("Sample", "_SunMoon", day_phase, 0.0))
+				for colors in [["cloud_color_a", "_CloudColorA"], ["cloud_color_b", "_CloudColorB"], ["cloud_color_c", "_CloudColorC"], ["cloud_color_d", "_CloudColorD"], ["cloud_edge_color", "_Cloud_edgeColor"]]:
+					set_if_changed(clouds, colors[0], timeline.call("SampleColor", colors[1], day_phase))
+
 
 func set_if_changed(material: ShaderMaterial, parameter: String, value: Variant) -> void:
-	if material.get_shader_parameter(parameter) != value:
+	var current: Variant = material.get_shader_parameter(parameter)
+	# Plain vec4 uniforms return Vector4; C# SampleColor returns Color.
+	# Normalize before comparison without adding source_color (which would change source colors).
+	if current is Vector4 and value is Color:
+		value = Vector4(value.r, value.g, value.b, value.a)
+	elif current is Color and value is Vector4:
+		value = Color(value.x, value.y, value.z, value.w)
+	if typeof(current) != typeof(value) or current != value:
 		material.set_shader_parameter(parameter, value)

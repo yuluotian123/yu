@@ -18,6 +18,10 @@ uniform float stars_visibility = 0.0;
 uniform float star_intensity = 1.0;
 uniform float star_rotation = 0.0;
 uniform float moon_light = 0.0;
+uniform float horizon_haze : hint_range(0.0, 1.0) = 0.45;
+uniform float horizon_softness : hint_range(0.05, 0.8) = 0.3;
+uniform float mie_strength : hint_range(0.0, 1.0) = 0.18;
+uniform float mie_anisotropy : hint_range(0.0, 0.95) = 0.76;
 
 float hash21(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -36,16 +40,32 @@ vec2 round_disc_uv(vec2 tangent_uv) {
     return (axis_x * pixels.x + axis_y * pixels.y) * sqrt(abs(determinant));
 }
 
+// Art-directed scattering approximation: Rayleigh angular response plus a bounded
+// Henyey-Greenstein forward lobe. The palette remains authored, rather than a planet LUT.
 vec3 atmosphere(vec3 eye) {
-    float height = pow(clamp(abs(eye.y), 0.0, 1.0), 0.55);
+    float mu = clamp(dot(eye, sun_direction), -1.0, 1.0);
+    float altitude = sqrt(eye.y * eye.y + 0.0004) - 0.02;
+    float air_mass = exp(-altitude / max(horizon_softness, 0.05));
     vec3 horizon = mix(night_horizon, day_horizon, daylight);
+    // Broad pale blue near the horizon, saturated blue above it.
+    vec3 haze_tint = mix(night_horizon, mix(day_horizon, vec3(0.72, 0.83, 0.94), 0.48), daylight);
+    horizon = mix(horizon, haze_tint, horizon_haze);
+    float sun_side = pow(max(dot(normalize(vec3(eye.x, 0.001, eye.z)),
+        normalize(vec3(sun_direction.x, 0.001, sun_direction.z))), 0.0), 3.0);
+    horizon = mix(horizon, sunset_horizon, twilight * (0.2 + sun_side * 0.65));
     vec3 zenith = mix(night_zenith, day_zenith, daylight);
-    float sun_side = pow(max(0.0, dot(normalize(vec3(eye.x, 0.001, eye.z)), normalize(vec3(sun_direction.x, 0.001, sun_direction.z)))), 4.0);
-    horizon = mix(horizon, sunset_horizon, twilight * (0.3 + sun_side * 0.7));
-    vec3 lower = mix(night_horizon * 0.5, day_ground, daylight);
-    vec3 color = mix(horizon, eye.y >= 0.0 ? zenith : lower, height);
-    float glow = pow(max(dot(eye, sun_direction), 0.0), 8.0) * 0.09 * daylight;
-    return color + vec3(1.0, 0.78, 0.48) * glow;
+    float rayleigh = 0.75 * (1.0 + mu * mu);
+    zenith *= mix(1.0, rayleigh, 0.16 * daylight);
+    vec3 upper = mix(zenith, horizon, air_mass);
+    // The lower hemisphere remains close to the horizon's radiance. No abs(y)^p cusp
+    // or dark ground hemisphere meeting the sky along a sharp equatorial line.
+    vec3 lower = mix(horizon, mix(night_horizon * 0.8, day_ground, daylight),
+        smoothstep(0.04, 0.85, -eye.y) * 0.22);
+    vec3 color = mix(lower, upper, smoothstep(-0.025, 0.025, eye.y));
+    float g = clamp(mie_anisotropy, 0.0, 0.95);
+    float mie = pow(1.0 - g, 3.0) / pow(max(1.0 + g * g - 2.0 * g * mu, 0.001), 1.5);
+    vec3 sun_tint = mix(vec3(1.0, 0.82, 0.62), sunset_horizon, twilight);
+    return color + sun_tint * mie * mie_strength * daylight * (0.4 + air_mass * 0.6);
 }
 
 void sky() {

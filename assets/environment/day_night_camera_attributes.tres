@@ -1,0 +1,8 @@
+[gd_resource type="CameraAttributesPhysical" format=3 uid="uid://bonkel6lyv08n"]
+
+[resource]
+resource_local_to_scene = true
+exposure_multiplier = 1.2
+frustum_focus_distance = 20.0
+frustum_focal_length = 20.0
+exposure_shutter_speed = 81.5719

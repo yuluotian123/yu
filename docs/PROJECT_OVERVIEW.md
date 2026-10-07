@@ -182,8 +182,7 @@ HFSM 继续用于 `CharacterAnimationComponent3D` 内部的 LocomotionGraph，�
 
 资源示例：
 
-- `res://assets/scenes/player.tscn` (内联 CharacterGraph)
-- `res://assets/graphs/character_locomotion_hfsm.tres`
+- `res://assets/scenes/player.tscn`（内联 CharacterGraph 和 Locomotion HFSM）
 
 ### Ability
 
@@ -246,7 +245,7 @@ HFSM 继续用于 `CharacterAnimationComponent3D` 内部的 LocomotionGraph，�
 - 保存时逐个调用 `Save()` 并序列化状态。
 - 读取时反序列化状态并调用 `Load()`。
 
-当前默认保存目录是 `res://saves`。后续发布平台建议迁移到 `user://saves`，并保留旧路径兼容读取。
+当前默认保存目录是 `user://saves`，保留旧路径 `res://saves` 的兼容读取。存档编辑与恢复规则见 [SaveModule](../scripts/gamelogic/saves/README.md)。
 
 ## GraphPlugin
 

@@ -40,6 +40,7 @@ JumpCutMultiplier = 0.45
 [sub_resource type="Resource" id="sub_movement_component"]
 script = ExtResource("23_movement_component")
 Profile = SubResource("sub_profile")
+MovementSpace = 1
 BodySize = Vector3(0.36, 0.72, 0.36)
 FootInset = 0.06
 
@@ -73,7 +74,7 @@ shape = SubResource("shape_body")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="VisualRoot" unique_id=982452909]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
-billboard = 1
+billboard = 2
 alpha_cut = 2
 texture_filter = 0
 sprite_frames = ExtResource("16_player_frames")

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ReferenceCloudTimeline" format=3 uid="uid://btox8ltkjdvqf"]
+
+[ext_resource type="Script" uid="uid://br3decqwrvmgu" path="res://scripts/gamelogic/timeofday/ReferenceCloudTimeline.cs" id="script"]
+
+[sub_resource type="Curve" id="group"]
+resource_name = "Recorded (3) / root / Euler Y"
+_limits = [0.0, 361.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 360.0, 0, 0, Vector2(1, 361), 360.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="high"]
+resource_name = "Recorded (3) / high / Euler Y"
+_limits = [0.0, 361.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 361), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="secondary"]
+resource_name = "Recorded (4) / root / Euler Y"
+_limits = [0.0, 361.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 360.0, 0, 0, Vector2(1, 361), 360.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("script")
+Curves = Dictionary[String, Curve]({
+"GroupYaw": SubResource("group"),
+"HighYaw": SubResource("high"),
+"SecondaryYaw": SubResource("secondary")
+})

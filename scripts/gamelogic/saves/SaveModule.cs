@@ -16,6 +16,7 @@ namespace GameLogic
         private readonly Dictionary<string, ISaveable> _registry = new();
         private readonly Dictionary<string, ISaveSection> _sections = new();
         private JsonObject _pendingSections;
+        private string _pendingSlot;
 
         private static readonly JsonSerializerOptions _writeOpts = new() { WriteIndented = true };
 
@@ -128,6 +129,13 @@ namespace GameLogic
                 group[section.EntryKey] = state;
             }
 
+            WriteAtomic(path, root);
+            Debugger.Info($"[SaveModule] Saved slot '{slot}' -> {path}");
+        }
+
+        private void WriteAtomic(string path, JsonObject root)
+        {
+            EnsureSaveDir();
             string globalPath = ProjectSettings.GlobalizePath(path);
             string tempPath = $"{globalPath}.{Guid.NewGuid():N}.tmp";
             try
@@ -153,12 +161,15 @@ namespace GameLogic
                 if (System.IO.File.Exists(tempPath))
                     System.IO.File.Delete(tempPath);
             }
-            Debugger.Info($"[SaveModule] Saved slot '{slot}' -> {path}");
+            if (System.IO.File.Exists(globalPath + ".deleted"))
+                System.IO.File.Delete(globalPath + ".deleted");
         }
 
         public bool Load(string slot = "default")
         {
             _pendingSections = null;
+            _pendingSlot = null;
+            if (IsDeleted(slot)) return false;
             var path = GetPath(slot);
             JsonObject root = null;
             foreach (string candidate in new[] { path, $"{path}.bak", GetLegacyPath(slot) })
@@ -189,6 +200,7 @@ namespace GameLogic
                 }
             }
 
+            _pendingSlot = NormalizeSlot(slot);
             _pendingSections = root["sections"] as JsonObject;
             foreach (var section in _sections.Values)
             {
@@ -249,19 +261,125 @@ namespace GameLogic
             }
         }
 
-        public void Delete(string slot = "default")
+        public string[] ListSlots()
         {
-            var globalPath = ProjectSettings.GlobalizePath(GetPath(slot));
-            if (System.IO.File.Exists(globalPath))
-                System.IO.File.Delete(globalPath);
-            if (System.IO.File.Exists($"{globalPath}.bak"))
-                System.IO.File.Delete($"{globalPath}.bak");
+            var slots = new SortedSet<string>(StringComparer.Ordinal);
+            foreach (string folder in new[] { _saveDir, _legacySaveDir })
+            {
+                string directory = ProjectSettings.GlobalizePath(folder);
+                if (!System.IO.Directory.Exists(directory)) continue;
+                foreach (string file in System.IO.Directory.EnumerateFiles(directory))
+                {
+                    string name = System.IO.Path.GetFileName(file);
+                    if (name.EndsWith(".json.bak", StringComparison.Ordinal)) name = name[..^4];
+                    if (!name.EndsWith(".json", StringComparison.Ordinal)) continue;
+                    string slot = name[..^5];
+                    if (!IsDeleted(slot)) slots.Add(slot);
+                }
+            }
+            return System.Linq.Enumerable.ToArray(slots);
         }
 
-        public bool Exists(string slot = "default") =>
-            FileAccess.FileExists(GetPath(slot)) ||
-            FileAccess.FileExists($"{GetPath(slot)}.bak") ||
-            FileAccess.FileExists(GetLegacyPath(slot));
+        public string ReadSlot(string slot, out string sourcePath)
+        {
+            sourcePath = GetPath(slot);
+            if (IsDeleted(slot)) return null;
+            foreach (string candidate in new[] { GetPath(slot), GetPath(slot) + ".bak", GetLegacyPath(slot) })
+            {
+                if (!FileAccess.FileExists(candidate)) continue;
+                sourcePath = candidate;
+                using var file = FileAccess.Open(candidate, FileAccess.ModeFlags.Read)
+                    ?? throw new System.IO.IOException($"Cannot open {candidate}");
+                // Show the actual primary contents, even when damaged, so the GM can repair it.
+                return file.GetAsText();
+            }
+            return null;
+        }
+
+        public void WriteSlot(string slot, string json, string expectedJson)
+        {
+            var root = ValidateEditedDocument(json);
+            CheckUnchanged(slot, expectedJson);
+            WriteAtomic(GetPath(slot), root);
+        }
+
+        public void DeleteSlot(string slot, string expectedJson)
+        {
+            CheckUnchanged(slot, expectedJson);
+            Delete(slot);
+        }
+
+        private void CheckUnchanged(string slot, string expectedJson)
+        {
+            if (!string.Equals(ReadSlot(slot, out _), expectedJson, StringComparison.Ordinal))
+                throw new InvalidOperationException("存档已在外部改变，请先重新读取，再提交修改。");
+        }
+
+        internal static JsonObject ValidateEditedDocument(string json)
+        {
+            var root = JsonNode.Parse(json) as JsonObject ?? throw new JsonException("存档根节点必须是对象。");
+            if (root["meta"] is not JsonObject meta || meta["format_version"]?.GetValue<int>() != FormatVersion ||
+                root["legacy"] is not JsonObject || root["sections"] is not JsonObject sections)
+                throw new JsonException("需要 format_version = 2，以及 meta、legacy、sections 对象。");
+            foreach (var group in sections)
+            {
+                if (group.Value is not JsonObject entries) throw new JsonException("存档分组必须是对象。");
+                foreach (var entry in entries)
+                {
+                    if (entry.Value is not JsonObject state || (state["schema_version"]?.GetValue<int>() ?? 0) < 1)
+                        throw new JsonException("每个存档条目需要有效的 schema_version。");
+                    if (group.Key == "characters")
+                    {
+                        int schema = state["schema_version"].GetValue<int>();
+                        if (schema > 3) throw new JsonException("不支持的角色存档版本。");
+                        ValidateVector(state["position"]);
+                        ValidateVector(state["facing_direction"]);
+                        if (schema >= 3) ValidateVector(state["rotation"]);
+                        else if (state["rotation"] != null) _ = state["rotation"].GetValue<float>();
+                        if (state["facing"] != null) _ = state["facing"].GetValue<int>();
+                        if (state["flags"] != null)
+                            foreach (var flag in state["flags"].AsObject()) _ = flag.Value.GetValue<bool>();
+                    }
+                    if (group.Key == "world" && entry.Key == "time_of_day")
+                    {
+                        if (state["schema_version"].GetValue<int>() != 1) throw new JsonException("不支持的时间存档版本。");
+                        if (state["initialized"] != null) _ = state["initialized"].GetValue<bool>();
+                        new WorldClock().Restore(state["total_hours"]?.GetValue<double>() ?? 12,
+                            state["day_length_seconds"]?.GetValue<double>() ?? 1200,
+                            state["lunar_period_days"]?.GetValue<double>() ?? 29.53059,
+                            state["lunar_offset_days"]?.GetValue<double>() ?? 14.265295,
+                            state["speed"]?.GetValue<double>() ?? 1, state["paused"]?.GetValue<bool>() ?? false);
+                    }
+                }
+            }
+            return root;
+        }
+
+        private static void ValidateVector(JsonNode node)
+        {
+            if (node == null) return;
+            var vector = node.AsObject();
+            foreach (string axis in new[] { "x", "y", "z" })
+                if (vector[axis] != null && !float.IsFinite(vector[axis].GetValue<float>()))
+                    throw new JsonException("坐标必须是有限数值。");
+        }
+
+        public void Delete(string slot = "default")
+        {
+            string normalized = NormalizeSlot(slot);
+            EnsureSaveDir();
+            string globalPath = ProjectSettings.GlobalizePath(GetPath(normalized));
+            // A tombstone also suppresses the packaged legacy fallback without modifying project assets.
+            System.IO.File.WriteAllText(globalPath + ".deleted", "deleted");
+            if (System.IO.File.Exists(globalPath)) System.IO.File.Delete(globalPath);
+            if (System.IO.File.Exists(globalPath + ".bak")) System.IO.File.Delete(globalPath + ".bak");
+            if (_pendingSlot == normalized) { _pendingSections = null; _pendingSlot = null; }
+        }
+
+        private bool IsDeleted(string slot) => FileAccess.FileExists(GetPath(slot) + ".deleted");
+        public bool Exists(string slot = "default") => !IsDeleted(slot) &&
+            (FileAccess.FileExists(GetPath(slot)) || FileAccess.FileExists(GetPath(slot) + ".bak") ||
+             FileAccess.FileExists(GetLegacyPath(slot)));
 
         private string GetPath(string slot) => $"{_saveDir}/{NormalizeSlot(slot)}.json";
 

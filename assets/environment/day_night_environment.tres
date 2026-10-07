@@ -1,0 +1,69 @@
+[gd_resource type="Environment" format=3 uid="uid://dxed63sy3dnqa"]
+
+[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/environment/day_night_sky.gdshader" id="1_sky"]
+
+[sub_resource type="ShaderMaterial" id="SkyMaterial"]
+resource_local_to_scene = true
+shader = ExtResource("1_sky")
+shader_parameter/day_zenith = Color(0.025, 0.15, 0.65, 1)
+shader_parameter/day_horizon = Color(0.12, 0.58, 1, 1)
+shader_parameter/day_ground = Color(0.3, 0.66, 0.88, 1)
+shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
+shader_parameter/night_zenith = Color(0.07, 0.11, 0.29, 1)
+shader_parameter/night_horizon = Color(0.2, 0.25, 0.44, 1)
+shader_parameter/sun_direction = Vector3(-0.109381706, 0.9659258, 0.23456971)
+shader_parameter/moon_direction = Vector3(0.109381, -0.965926, -0.23457)
+shader_parameter/daylight = 1.0
+shader_parameter/twilight = 0.0
+shader_parameter/sun_radius = 0.015707962851830046
+shader_parameter/moon_radius = 0.026179938779914945
+shader_parameter/moon_visibility = 0.0
+shader_parameter/stars_visibility = 0.0
+shader_parameter/star_intensity = 1.0
+shader_parameter/star_rotation = 0.0
+shader_parameter/moon_light = 0.0
+shader_parameter/horizon_haze = 0.45
+shader_parameter/horizon_softness = 0.3
+shader_parameter/mie_strength = 0.18
+shader_parameter/mie_anisotropy = 0.76
+
+[sub_resource type="Sky" id="Sky"]
+resource_local_to_scene = true
+sky_material = SubResource("SkyMaterial")
+process_mode = 3
+
+[resource]
+resource_local_to_scene = true
+background_mode = 2
+background_intensity = 26000.0
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_energy = 0.35
+reflected_light_source = 2
+tonemap_mode = 4
+ssao_radius = 0.4
+ssao_intensity = 0.35
+ssao_power = 1.0
+ssao_detail = 0.2
+glow_enabled = true
+glow_levels/2 = 0.6
+glow_levels/3 = 0.2
+glow_levels/4 = 0.05
+glow_normalized = true
+glow_intensity = 0.18
+glow_strength = 0.85
+glow_blend_mode = 0
+glow_hdr_threshold = 1.4
+fog_enabled = true
+fog_mode = 1
+fog_density = 1.0
+fog_aerial_perspective = 1.0
+fog_sky_affect = 0.0
+fog_height = -9.0
+fog_height_density = 0.025
+fog_depth_curve = 1.15
+fog_depth_begin = 12.0
+fog_depth_end = 160.0
+adjustment_enabled = true
+adjustment_contrast = 1.01
+adjustment_saturation = 1.02

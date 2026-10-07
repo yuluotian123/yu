@@ -15,6 +15,3 @@ dash 复用奔跑中的腾空前冲姿态，以原冲刺技能的 1.25 倍速度
 sources/ 保存六组 imagegen 原始透明图集。构建脚本按 alpha 连通区域提取角色，而非简单四等分，避免剑和头发跨格造成串帧。
 scripts/tools/build_greatsword_sprites.py --project <项目路径> 可以从原始图集重建 atlas.png、sprite_frames.tres 和 alignment.json，需要 Pillow。
 alignment.json 记录每帧原始区域、缩放与锚点。源图关键姿势有绘制差异，若需要更流畅的动作，应继续补绘中间帧。
-
-验证命令：Godot --headless --path . --script res://scripts/test/greatsword_animation_smoke.gd
-已有角色/技能行为测试：Godot --headless --path . res://assets/scenes/character_graph_runtime_smoke.tscn

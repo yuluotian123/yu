@@ -1,0 +1,325 @@
+[gd_scene format=3 uid="uid://cmhkh18tb7up7"]
+
+
+[ext_resource type="PackedScene" uid="uid://cjxe4tft2ls6i" path="res://assets/rpg_town/models/Town_Structures.glb" id="1_props"]
+[ext_resource type="PackedScene" uid="uid://bsmhi3c4vlr7f" path="res://assets/rpg_town/models/B01_Blue_Roof_Shop.glb" id="2_blue"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/flowers_painterly.tres" id="2_lhuou"]
+[ext_resource type="PackedScene" uid="uid://blq3kyf16bp7w" path="res://assets/rpg_town/models/B01_Red_Roof_Variant.glb" id="3_red"]
+[ext_resource type="Shader" uid="uid://bke64cr2two8p" path="res://assets/rpg_town/river.gdshader" id="4_water"]
+[ext_resource type="Texture2D" uid="uid://c18nry24rcks2" path="res://assets/rpg_town/textures/river_reference.png" id="5_watertex"]
+[ext_resource type="Material" uid="uid://cb387lb13jt7q" path="res://assets/rpg_town/stylized/leaf_article.tres" id="15_r7cb6"]
+[ext_resource type="Material" uid="uid://bn66tld0hewyw" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_0.tres" id="toon_B01_Blue_Roof_Shop_0"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_1.tres" id="toon_B01_Blue_Roof_Shop_1"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_2.tres" id="toon_B01_Blue_Roof_Shop_2"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_3.tres" id="toon_B01_Blue_Roof_Shop_3"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_5.tres" id="toon_B01_Blue_Roof_Shop_5"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_6.tres" id="toon_B01_Blue_Roof_Shop_6"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_7.tres" id="toon_B01_Blue_Roof_Shop_7"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Blue_Roof_Shop_8.tres" id="toon_B01_Blue_Roof_Shop_8"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_0.tres" id="toon_B01_Red_Roof_Variant_0"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_1.tres" id="toon_B01_Red_Roof_Variant_1"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_2.tres" id="toon_B01_Red_Roof_Variant_2"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_3.tres" id="toon_B01_Red_Roof_Variant_3"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_5.tres" id="toon_B01_Red_Roof_Variant_5"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_6.tres" id="toon_B01_Red_Roof_Variant_6"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_7.tres" id="toon_B01_Red_Roof_Variant_7"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/B01_Red_Roof_Variant_8.tres" id="toon_B01_Red_Roof_Variant_8"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_0.tres" id="toon_Town_Structures_0"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_1.tres" id="toon_Town_Structures_1"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_2.tres" id="toon_Town_Structures_2"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_3.tres" id="toon_Town_Structures_3"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_4.tres" id="toon_Town_Structures_4"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_5.tres" id="toon_Town_Structures_5"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_7.tres" id="toon_Town_Structures_7"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_8.tres" id="toon_Town_Structures_8"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_9.tres" id="toon_Town_Structures_9"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_10.tres" id="toon_Town_Structures_10"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_11.tres" id="toon_Town_Structures_11"]
+[ext_resource type="Material" path="res://assets/rpg_town/stylized/materials/Town_Structures_12.tres" id="toon_Town_Structures_12"]
+
+[sub_resource type="ShaderMaterial" id="RiverMaterial"]
+render_priority = 0
+shader = ExtResource("4_water")
+shader_parameter/water_tex = ExtResource("5_watertex")
+
+[sub_resource type="BoxShape3D" id="Collision0"]
+size = Vector3(52, 1.2, 21.6)
+
+[sub_resource type="BoxShape3D" id="Collision1"]
+size = Vector3(52, 1.2, 13.6)
+
+[sub_resource type="BoxShape3D" id="Collision2"]
+size = Vector3(4.75, 0.28, 6.8)
+
+[sub_resource type="BoxShape3D" id="Collision3"]
+size = Vector3(8, 7, 5.9)
+
+[sub_resource type="BoxShape3D" id="Collision4"]
+size = Vector3(7.52, 6.6, 5.55)
+
+[sub_resource type="BoxShape3D" id="Collision5"]
+size = Vector3(23.1, 1.3, 0.42)
+
+[sub_resource type="BoxShape3D" id="Collision6"]
+size = Vector3(23.1, 1.3, 0.42)
+
+[sub_resource type="BoxShape3D" id="Collision7"]
+size = Vector3(23.1, 1.3, 0.42)
+
+[sub_resource type="BoxShape3D" id="Collision8"]
+size = Vector3(23.1, 1.3, 0.42)
+
+[sub_resource type="BoxShape3D" id="Collision9"]
+size = Vector3(0.38, 1.1, 6.8)
+
+[sub_resource type="BoxShape3D" id="Collision10"]
+size = Vector3(0.38, 1.1, 6.8)
+
+[sub_resource type="BoxShape3D" id="Collision11"]
+size = Vector3(4.5, 1.2, 3.2)
+
+[sub_resource type="BoxShape3D" id="Collision12"]
+size = Vector3(4.1, 1.2, 3.6)
+
+[sub_resource type="BoxShape3D" id="Collision13"]
+size = Vector3(3.4, 1.2, 2.7)
+
+[sub_resource type="BoxShape3D" id="Collision14"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[sub_resource type="BoxShape3D" id="Collision15"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[sub_resource type="BoxShape3D" id="Collision16"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[sub_resource type="BoxShape3D" id="Collision17"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[sub_resource type="BoxShape3D" id="Collision18"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[sub_resource type="BoxShape3D" id="Collision19"]
+size = Vector3(0.55, 2.5, 0.55)
+
+[node name="RiversideTown" type="Node3D" unique_id=2000440359]
+editor_description = "依据参考图搭建的三维河畔街区。B01 原模型及红瓦变体、实体石桥、河岸、植物和摆件。"
+
+[node name="Architecture" parent="." unique_id=186064729 instance=ExtResource("1_props")]
+
+[node name="Town_Bridge" parent="Architecture" index="0" unique_id=24423249]
+gi_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0005142689, -0.018520713, 0.005609989)
+surface_material_override/0 = ExtResource("toon_Town_Structures_0")
+surface_material_override/1 = ExtResource("toon_Town_Structures_1")
+surface_material_override/2 = ExtResource("toon_Town_Structures_2")
+
+[node name="Town_Canopies" parent="Architecture" index="1" unique_id=1343057821]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_3")
+surface_material_override/1 = ExtResource("toon_Town_Structures_4")
+surface_material_override/2 = ExtResource("toon_Town_Structures_5")
+
+[node name="Town_Curbs" parent="Architecture" index="2" unique_id=1312225883]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_2")
+
+[node name="Town_Fences" parent="Architecture" index="3" unique_id=1921922482]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_5")
+
+[node name="Town_Flowers" parent="Architecture" index="4" unique_id=1381006917]
+gi_mode = 0
+material_override = ExtResource("2_lhuou")
+
+[node name="Town_Furniture" parent="Architecture" index="5" unique_id=1664793233]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_7")
+surface_material_override/1 = ExtResource("toon_Town_Structures_5")
+surface_material_override/2 = ExtResource("toon_Town_Structures_2")
+surface_material_override/3 = ExtResource("toon_Town_Structures_8")
+surface_material_override/4 = ExtResource("toon_Town_Structures_4")
+
+[node name="Town_Gardens" parent="Architecture" index="6" unique_id=87480533]
+gi_mode = 0
+surface_material_override/0 = ExtResource("toon_Town_Structures_9")
+surface_material_override/1 = ExtResource("toon_Town_Structures_1")
+surface_material_override/2 = ExtResource("toon_Town_Structures_2")
+
+[node name="Town_Ground" parent="Architecture" index="7" unique_id=1807188203]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_0")
+surface_material_override/1 = ExtResource("toon_Town_Structures_9")
+
+[node name="Town_Lamps" parent="Architecture" index="8" unique_id=189545826]
+gi_mode = 0
+surface_material_override/0 = ExtResource("toon_Town_Structures_1")
+surface_material_override/1 = ExtResource("toon_Town_Structures_5")
+surface_material_override/2 = ExtResource("toon_Town_Structures_10")
+surface_material_override/3 = ExtResource("toon_Town_Structures_11")
+surface_material_override/4 = ExtResource("toon_Town_Structures_3")
+
+[node name="Town_Quays" parent="Architecture" index="9" unique_id=18835779]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_1")
+surface_material_override/1 = ExtResource("toon_Town_Structures_2")
+
+[node name="Town_Trees" parent="Architecture" index="10" unique_id=2143332741]
+gi_mode = 0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.001988411, -1.1920929e-07, 0.001737833)
+surface_material_override/0 = ExtResource("toon_Town_Structures_12")
+surface_material_override/1 = ExtResource("15_r7cb6")
+
+[node name="Town_Water" parent="Architecture" index="11" unique_id=798217309]
+gi_mode = 0
+material_override = SubResource("RiverMaterial")
+
+[node name="Town_WindowBoxes" parent="Architecture" index="12" unique_id=967043757]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_Town_Structures_7")
+
+[node name="BlueRoofShop" parent="." unique_id=401130924 instance=ExtResource("2_blue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -2)
+
+[node name="B01_Blue_Roof_Shop_Game" parent="BlueRoofShop" index="0" unique_id=395963173]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_B01_Blue_Roof_Shop_0")
+surface_material_override/1 = ExtResource("toon_B01_Blue_Roof_Shop_1")
+surface_material_override/2 = ExtResource("toon_B01_Blue_Roof_Shop_2")
+surface_material_override/3 = ExtResource("toon_B01_Blue_Roof_Shop_3")
+surface_material_override/5 = ExtResource("toon_B01_Blue_Roof_Shop_5")
+surface_material_override/6 = ExtResource("toon_B01_Blue_Roof_Shop_6")
+surface_material_override/7 = ExtResource("toon_B01_Blue_Roof_Shop_7")
+surface_material_override/8 = ExtResource("toon_B01_Blue_Roof_Shop_8")
+
+[node name="RedRoofShopVariant" parent="." unique_id=392773284 instance=ExtResource("3_red")]
+transform = Transform3D(0.94, 0, 0, 0, 0.94, 0, 0, 0, 0.94, 10, 0, -0.6)
+
+[node name="B01_Blue_Roof_Shop_Game" parent="RedRoofShopVariant" index="0" unique_id=1526440099]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_B01_Red_Roof_Variant_0")
+surface_material_override/1 = ExtResource("toon_B01_Red_Roof_Variant_1")
+surface_material_override/2 = ExtResource("toon_B01_Red_Roof_Variant_2")
+surface_material_override/3 = ExtResource("toon_B01_Red_Roof_Variant_3")
+surface_material_override/5 = ExtResource("toon_B01_Red_Roof_Variant_5")
+surface_material_override/6 = ExtResource("toon_B01_Red_Roof_Variant_6")
+surface_material_override/7 = ExtResource("toon_B01_Red_Roof_Variant_7")
+surface_material_override/8 = ExtResource("toon_B01_Red_Roof_Variant_8")
+
+[node name="FarBlueRoof" parent="." unique_id=1299001057 instance=ExtResource("2_blue")]
+transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, -15, 0, -19.2)
+
+[node name="B01_Blue_Roof_Shop_Game" parent="FarBlueRoof" index="0" unique_id=395963173]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_B01_Blue_Roof_Shop_0")
+surface_material_override/1 = ExtResource("toon_B01_Blue_Roof_Shop_1")
+surface_material_override/2 = ExtResource("toon_B01_Blue_Roof_Shop_2")
+surface_material_override/3 = ExtResource("toon_B01_Blue_Roof_Shop_3")
+surface_material_override/5 = ExtResource("toon_B01_Blue_Roof_Shop_5")
+surface_material_override/6 = ExtResource("toon_B01_Blue_Roof_Shop_6")
+surface_material_override/7 = ExtResource("toon_B01_Blue_Roof_Shop_7")
+surface_material_override/8 = ExtResource("toon_B01_Blue_Roof_Shop_8")
+
+[node name="FarRedRoof" parent="." unique_id=671346753 instance=ExtResource("3_red")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 15, 0, -19.5)
+
+[node name="B01_Blue_Roof_Shop_Game" parent="FarRedRoof" index="0" unique_id=1526440099]
+gi_mode = 1
+surface_material_override/0 = ExtResource("toon_B01_Red_Roof_Variant_0")
+surface_material_override/1 = ExtResource("toon_B01_Red_Roof_Variant_1")
+surface_material_override/2 = ExtResource("toon_B01_Red_Roof_Variant_2")
+surface_material_override/3 = ExtResource("toon_B01_Red_Roof_Variant_3")
+surface_material_override/5 = ExtResource("toon_B01_Red_Roof_Variant_5")
+surface_material_override/6 = ExtResource("toon_B01_Red_Roof_Variant_6")
+surface_material_override/7 = ExtResource("toon_B01_Red_Roof_Variant_7")
+surface_material_override/8 = ExtResource("toon_B01_Red_Roof_Variant_8")
+
+[node name="WorldCollision" type="StaticBody3D" parent="." unique_id=1420278222 groups=["player_ground"]]
+collision_mask = 0
+
+[node name="SouthBank" type="CollisionShape3D" parent="WorldCollision" unique_id=160630726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 5.2)
+shape = SubResource("Collision0")
+
+[node name="NorthBank" type="CollisionShape3D" parent="WorldCollision" unique_id=1913665971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -17.2)
+shape = SubResource("Collision1")
+
+[node name="Bridge" type="CollisionShape3D" parent="WorldCollision" unique_id=1745754222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13812049, -8)
+shape = SubResource("Collision2")
+
+[node name="BlueShop" type="CollisionShape3D" parent="WorldCollision" unique_id=764074766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3.5, -2)
+shape = SubResource("Collision3")
+
+[node name="RedShop" type="CollisionShape3D" parent="WorldCollision" unique_id=1912000331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3.3, -0.6)
+shape = SubResource("Collision4")
+
+[node name="Quay5" type="CollisionShape3D" parent="WorldCollision" unique_id=1300049693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.42, -5.53)
+shape = SubResource("Collision5")
+
+[node name="Quay6" type="CollisionShape3D" parent="WorldCollision" unique_id=52996816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3, 0.42, -5.53)
+shape = SubResource("Collision6")
+
+[node name="Quay7" type="CollisionShape3D" parent="WorldCollision" unique_id=161127816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.42, -10.47)
+shape = SubResource("Collision7")
+
+[node name="Quay8" type="CollisionShape3D" parent="WorldCollision" unique_id=1911175148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3, 0.42, -10.47)
+shape = SubResource("Collision8")
+
+[node name="BridgeRail-1" type="CollisionShape3D" parent="WorldCollision" unique_id=1807326019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.49, 0.48, -8)
+shape = SubResource("Collision9")
+
+[node name="BridgeRail1" type="CollisionShape3D" parent="WorldCollision" unique_id=1482868291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49, 0.48, -8)
+shape = SubResource("Collision10")
+
+[node name="Garden11" type="CollisionShape3D" parent="WorldCollision" unique_id=1072673269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 0.6, 7.7)
+shape = SubResource("Collision11")
+
+[node name="Garden12" type="CollisionShape3D" parent="WorldCollision" unique_id=1212092898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.6, 6.9)
+shape = SubResource("Collision12")
+
+[node name="Garden13" type="CollisionShape3D" parent="WorldCollision" unique_id=1460489221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.6, -3.65)
+shape = SubResource("Collision13")
+
+[node name="Tree14" type="CollisionShape3D" parent="WorldCollision" unique_id=827406302]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 1.25, 5)
+shape = SubResource("Collision14")
+
+[node name="Tree15" type="CollisionShape3D" parent="WorldCollision" unique_id=1965138699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.25, -1.5)
+shape = SubResource("Collision15")
+
+[node name="Tree16" type="CollisionShape3D" parent="WorldCollision" unique_id=1956124512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.25, 12.3)
+shape = SubResource("Collision16")
+
+[node name="Tree17" type="CollisionShape3D" parent="WorldCollision" unique_id=1914365796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1.25, -13.5)
+shape = SubResource("Collision17")
+
+[node name="Tree18" type="CollisionShape3D" parent="WorldCollision" unique_id=637934619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 1.25, -14)
+shape = SubResource("Collision18")
+
+[node name="Tree19" type="CollisionShape3D" parent="WorldCollision" unique_id=97424282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 1.25, -10.8)
+shape = SubResource("Collision19")
+
+
+[editable path="Architecture"]
+[editable path="BlueRoofShop"]
+[editable path="RedRoofShopVariant"]
+[editable path="FarBlueRoof"]
+[editable path="FarRedRoof"]

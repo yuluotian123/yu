@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/rpg_town/models/Town_Structures_wood_albedo.png" id="2_tex"]
+
+[resource]
+resource_name = "Town oak Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(1.0000000, 1.0000000, 1.0000000, 1.0000000)
+shader_parameter/use_texture = true
+shader_parameter/albedo_texture = ExtResource("2_tex")
+shader_parameter/texture_average = Vector3(0.1597770, 0.0862827, 0.0466652)

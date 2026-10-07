@@ -4,7 +4,7 @@
 
 ## 编辑构图
 
-选中 `CameraRig/Camera3D`，使用 Inspector 中的 Transform、Projection、Size（正交）或 FOV（透视）、Near/Far 调整；开启 Camera3D 的 Preview 查看实际构图。默认正交 Size=5.4，俯角 25°。透视取景大小由 FOV 和相机距离决定，Size 不参与透视。
+选中 `CameraRig/Camera3D`，使用 Inspector 中的 Transform、Projection、Size（正交）或 FOV（透视）、Near/Far 调整；开启 Camera3D 的 Preview 查看实际构图。当前关卡使用透视、30° FOV、4.1° 俯角，详细配置见 [HD-2D 场景镜头](../assets/camera/HD2D.md)。透视取景大小由 FOV 和相机距离决定，Size 不参与透视。
 
 相机启动时记住已编辑的旋转、与目标的相对位移和 Size，跟随时只在该构图基础上平移。代码不强制改为正交，也不重新计算俯角。运行中的 SetViewHeight 只改变正交 Size。
 
@@ -12,7 +12,7 @@
 
 - CameraPath：原生相机子节点，默认 Camera3D。
 - TargetPath：跟随目标，默认 ../Player。等目标准备完成后自动绑定，不依赖节点 Ready 顺序。
-- Profile：跟随参数，默认使用 hd2d_side_view_3d.tres；构图参数以原生 Camera3D 为准。
+- Profile：跟随参数，当前关卡使用 hd2d_free_3d.tres；构图参数以原生 Camera3D 为准。
 
 Profile 保留 DeadZone、FollowSmooth、LookSmooth、LookAheadDistance、VerticalVelocityLookDistance、TeleportDistance、PixelSnap 和手动上下观察参数。W/S 观察沿用 Camera 输入层；跟随 Free3D 角色时自动让出 W/S。GM 面板打开期间会隔离输入，收起后恢复。
 
@@ -43,4 +43,4 @@ camera.StopShake();
 
 ## 验证
 
-`dotnet build yu.csproj` 后运行 `res://assets/scenes/time_of_day_smoke.tscn`，检查相机使用场景节点、保留原生构图、节点顺序无关的自动绑定、常规帧移动跟随、正交/透视天空切换和退出释放。
+`dotnet build yu.csproj` 后运行 `res://assets/scenes/spacelevel.tscn`，检查场景相机的构图、自动绑定、移动跟随及正交/透视天空切换。

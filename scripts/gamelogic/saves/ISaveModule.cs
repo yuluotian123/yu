@@ -10,6 +10,11 @@ namespace GameLogic
     /// </summary>
     public interface ISaveModule
     {
+        string[] ListSlots();
+        string ReadSlot(string slot, out string sourcePath);
+        void WriteSlot(string slot, string json, string expectedJson);
+        void DeleteSlot(string slot, string expectedJson);
+
         /// <summary>注册一个可存档对象。同一 SaveKey 只能注册一次。</summary>
         void Register(ISaveable saveable);
 

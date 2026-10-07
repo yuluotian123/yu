@@ -1,6 +1,6 @@
 # 编辑器工作流
 
-角色图、AnimGraph、组件绑定和 Property Get/Set 的完整示例见：[角色系统与图使用说明](../../docs/CHARACTER_GRAPH_USAGE.md)。
+角色图、AnimGraph、组件绑定和 Property Get/Set 的完整示例见：[角色系统与图使用说明](../../../docs/CHARACTER_GRAPH_USAGE.md)。
 
 GraphPlugin 编辑器基于 Godot `GraphEdit`。资源在 Inspector 中打开后，会弹出 `GraphCanvasEditorWindow`。
 

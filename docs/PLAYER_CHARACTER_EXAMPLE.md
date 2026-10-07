@@ -14,7 +14,7 @@
 | 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
 | 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/abilities/player_ability_set.tres) |
 | 50 | `CharacterMovementComponent3D` | 移速、跳跃、重力、Body 路径 |
-| 20 | `CharacterAnimationComponent3D` | [character_locomotion_hfsm.tres](../assets/graphs/character_locomotion_hfsm.tres) |
+| 20 | `CharacterAnimationComponent3D` | `player.tscn` 内嵌 Locomotion HFSM |
 | 最后 | `CharacterPersistenceComponent3D` | Save |
 
 输入组件需要暴露在场景中，因为它是玩家与 InputModule 的设备边界；但它不暴露 `MoveAction`、`JumpAction` 或技能数组。所有逻辑 Action 映射都在 CharacterGraph 资源中编辑。

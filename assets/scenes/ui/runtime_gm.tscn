@@ -1,0 +1,369 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_host"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_base"]
+[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/TimeOfDayGmComponent3D.cs" id="3_gm"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="4_shell"]
+
+[sub_resource type="Resource" id="shell"]
+script = ExtResource("4_shell")
+
+[sub_resource type="Resource" id="gm"]
+script = ExtResource("3_gm")
+Embedded = true
+
+[sub_resource type="InputEventKey" id="toggle_key"]
+keycode = 4194339
+
+[sub_resource type="Shortcut" id="shortcut"]
+events = [SubResource("toggle_key")]
+
+[sub_resource type="StyleBoxFlat" id="panel_style"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(0.035, 0.055, 0.095, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.21, 0.36, 0.47, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+
+[node name="RuntimeGm" type="Node3D"]
+process_mode = 3
+script = ExtResource("1_host")
+Components = Array[ExtResource("2_base")]([SubResource("shell"), SubResource("gm")])
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Root" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+
+[node name="Toggle" type="Button" parent="CanvasLayer/Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 52.0
+grow_horizontal = 0
+focus_mode = 0
+text = "GM · F8"
+toggle_mode = true
+shortcut = SubResource("shortcut")
+
+[node name="Panel" type="PanelContainer" parent="CanvasLayer/Root"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchor_left = 0.04
+anchor_right = 0.96
+anchor_bottom = 1.0
+offset_top = 64.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("panel_style")
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/Root/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/Root/Panel/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 21
+text = "运行时 GM"
+
+[node name="Close" type="Button" parent="CanvasLayer/Root/Panel/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(32, 32)
+focus_mode = 0
+text = "×"
+
+[node name="Tabs" type="TabContainer" parent="CanvasLayer/Root/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Time" type="ScrollContainer" parent="CanvasLayer/Root/Panel/Content/Tabs"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Fields" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Time"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ClockLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 29
+text = "第 0 天   12:00"
+
+[node name="TimeSlider" type="HSlider" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+max_value = 1439.0
+value = 720.0
+tooltip_text = "拖动立即改变光照；松开后恢复原来的时间播放状态"
+
+[node name="DateRow" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Day" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/DateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000000.0
+suffix = "天"
+update_on_text_changed = false
+
+[node name="Hour" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/DateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 23.0
+value = 12.0
+suffix = "时"
+
+[node name="Minute" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/DateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 59.0
+suffix = "分"
+
+[node name="Presets" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Dawn" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "黎明"
+tooltip_text = "06:00"
+
+[node name="Noon" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "正午"
+tooltip_text = "12:00"
+
+[node name="Dusk" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "黄昏"
+tooltip_text = "18:00"
+
+[node name="Midnight" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "午夜"
+tooltip_text = "00:00"
+
+[node name="Playback" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Pause" type="CheckButton" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Playback"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "暂停时间"
+
+[node name="Speed" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields/Playback"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(124, 0)
+max_value = 10000.0
+step = 0.25
+value = 1.0
+suffix = "倍"
+tooltip_text = "只改变昼夜时钟倍率；1 倍时 20 分钟一个游戏日"
+
+[node name="Separator" type="HSeparator" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+
+[node name="MoonHeader" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+text = "月相"
+
+[node name="Phase" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 8
+selected = 4
+popup/item_0/text = "新月"
+popup/item_0/id = 0
+popup/item_1/text = "娥眉月"
+popup/item_1/id = 1
+popup/item_2/text = "上弦月"
+popup/item_2/id = 2
+popup/item_3/text = "盈凸月"
+popup/item_3/id = 3
+popup/item_4/text = "满月"
+popup/item_4/id = 4
+popup/item_5/text = "亏凸月"
+popup/item_5/id = 5
+popup/item_6/text = "下弦月"
+popup/item_6/id = 6
+popup/item_7/text = "残月"
+popup/item_7/id = 7
+
+[node name="MoonSlider" type="HSlider" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="MoonLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.71, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "月相 50.0%  ·  受光 100%"
+
+[node name="Hint" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Time/Fields"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.71, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "拖动即时预览 · 数值输入后回车生效\nF8 收起并恢复游戏操作"
+
+[node name="Resources" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Toolbar" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Resources"]
+layout_mode = 2
+
+
+[node name="DumpResources" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Resources/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "输出完整快照到日志"
+
+[node name="CollectGc" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Resources/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "执行 GC 回收"
+
+[node name="ResourcesText" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/Resources"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+selection_enabled = true
+
+[node name="Saves" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SlotRow" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SaveSlots" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/SlotRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(170, 0)
+
+[node name="SlotName" type="LineEdit" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/SlotRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "default"
+placeholder_text = "存档槽名称"
+
+[node name="RefreshSlots" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/SlotRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "刷新列表"
+
+[node name="ReadSave" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/SlotRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "读取存档"
+
+[node name="CaptureSave" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/SlotRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "保存当前状态"
+
+[node name="SaveSource" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "正在编辑：default"
+autowrap_mode = 2
+
+[node name="SaveJson" type="CodeEdit" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 160)
+gutters_draw_line_numbers = true
+wrap_mode = 1
+
+[node name="Actions" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ValidateSave" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "校验 JSON"
+
+[node name="WriteSave" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "写入修改"
+
+[node name="DeleteSave" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "删除存档…"
+
+[node name="SaveStatus" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+text = "读取存档后可编辑 JSON。"
+
+[node name="SaveHint" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/Saves"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 2
+text = "修改/删除只影响文件。关闭 GM 后按 Esc 返回菜单，再开始游戏以验证。恢复角色位置可修改 sections.characters.player.position。"
+
+[node name="Confirm" type="ConfirmationDialog" parent="CanvasLayer/Root"]
+unique_name_in_owner = true
+title = "确认存档操作"
+size = Vector2i(520, 160)
+ok_button_text = "确认"
+cancel_button_text = "取消"

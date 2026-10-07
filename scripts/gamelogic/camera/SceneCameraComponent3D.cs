@@ -8,8 +8,13 @@ namespace GameLogic;
 public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
 {
     public override int Priority => ComponentPriority.VFX;
+    /// <summary>相对于 CameraRig 的场景 Camera3D 路径。镜头的位置、旋转、投影和 FOV 直接在该节点编辑。</summary>
     [Export] public NodePath CameraPath { get; set; } = new("Camera3D");
+    /// <summary>相对于 CameraRig 的初始跟随目标路径，通常为 ../Player；运行时自动等待目标初始化后绑定。</summary>
     [Export] public NodePath TargetPath { get; set; } = new("../Player");
+    /// <summary>相对于 CameraRig 的编辑器构图参照点路径，通常为 ../CameraFramingTarget。参照点应位于场景中角色的初始位置，使读档和重新激活后保持原构图；它不会传送角色。留空则按激活时目标位置计算偏移。</summary>
+    [Export] public NodePath FramingOriginPath { get; set; } = new("");
+    /// <summary>镜头跟随配置资源：控制死区、响应速度和前视。Spacelevel 使用 hd2d_free_3d.tres；镜头距离、俯角和透视 FOV 在 Camera3D 节点调整。</summary>
     [Export] public CameraProfile3D Profile { get; set; }
 
     public bool HasShot { get; private set; }
@@ -34,10 +39,12 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
     private Basis _authoredBasis;
     private ICameraModule _module;
     private bool _boundOnce;
+    private Transform3D _sceneCameraTransform;
 
     public override void OnInit()
     {
         _camera = Owner.GetNode<Camera3D>(CameraPath);
+        _sceneCameraTransform = _camera.GlobalTransform;
         // 相机在渲染帧更新，只插值目标，避免再次对镜头做物理插值。
         _camera.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
         Owner.SetMeta("scene_camera", this);
@@ -55,8 +62,12 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
         _profile = profile ?? new CameraProfile3D();
         _input = _profile.EnableManualLook ? ModuleSystem.GetModule<IInputModule>() : null;
         _viewHeight = _desiredViewHeight = Mathf.Clamp(_camera.Size, 0.1f, 100f);
-        _authoredOffset = _camera.GlobalPosition - target.GlobalPosition - _profile.BaseOffset;
-        _authoredBasis = _camera.GlobalBasis.Orthonormalized();
+        // A scene marker defines the authored framing independently of a saved target position.
+        // Never recalculate that offset from the already-following camera on reactivation.
+        var origin = FramingOriginPath.IsEmpty ? null : Owner.GetNodeOrNull<Node3D>(FramingOriginPath);
+        Transform3D frame = origin != null ? _sceneCameraTransform : _camera.GlobalTransform;
+        _authoredOffset = frame.Origin - (origin?.GlobalPosition ?? target.GlobalPosition) - _profile.BaseOffset;
+        _authoredBasis = frame.Basis.Orthonormalized();
         _shake = null;
         HasShot = true;
         Follow(target, true);

@@ -118,4 +118,4 @@ AI 通常不会模拟玩家按键，也不会复用玩家 Input Graph。它复�
 
 ## 验证
 
-[CharacterGraphRuntimeSmokeTest](../scripts/test/CharacterGraphRuntimeSmokeTest.cs) 会加载 AIRunner 并断言简单 AI 没有 CharacterGraph、AbilitySystem 和 CommandBuffer，但具有 Movement。场景运行时再观察巡逻、边缘转向和周期跳跃。
+在场景运行时检查 AIRunner 仅保留简单 AI 所需的 Movement 等组件，并观察巡逻、边缘转向和周期跳跃。

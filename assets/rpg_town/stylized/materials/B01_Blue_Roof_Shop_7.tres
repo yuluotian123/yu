@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Chimney dark slate cap Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.4845292, 0.5168811, 0.5271128, 1.0000000)

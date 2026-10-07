@@ -13,7 +13,7 @@ CharacterMovementComponent3D
   -> Locomotion HFSM
        Idle / Run / Jump / Fall / Land
   -> animation request arbitration
-  -> AnimatedSprite2D
+  -> AnimatedSprite3D
 ```
 
 - `HfsmRuntime`：通用状态图运行时。
@@ -21,7 +21,7 @@ CharacterMovementComponent3D
 - `CharacterAnimationComponent3D`：内部启动 Locomotion HFSM 并发布 Movement 快照。
 - `HfsmAnimationStateNodeData`：向 Animation 组件提交 Locomotion 动画请求。
 
-默认 Locomotion 资源：[character_locomotion_hfsm.tres](../../../assets/graphs/character_locomotion_hfsm.tres)。
+当前 Locomotion HFSM 内嵌在 [player.tscn](../../../assets/scenes/player.tscn) 的 `CharacterAnimationComponent3D.LocomotionGraph` 中。
 
 ## 与 CharacterGraph 的关系
 

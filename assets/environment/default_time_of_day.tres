@@ -1,16 +1,14 @@
-[gd_resource type="Resource" script_class="TimeOfDayProfile" format=3]
+[gd_resource type="Resource" script_class="TimeOfDayProfile" format=3 uid="uid://2fq1gmkupqyn"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="1"]
-
-
-[ext_resource type="Resource" path="res://assets/environment/reference_clouds/base_timeline.tres" id="timeline"]
+[ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="1"]
+[ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/environment/reference_clouds/high_timeline.tres" id="cloud_high_timeline"]
+[ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/environment/reference_clouds/rotation_timeline.tres" id="cloud_rotation_timeline"]
+[ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/environment/reference_clouds/secondary_timeline.tres" id="cloud_secondary_timeline"]
+[ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/environment/reference_clouds/base_timeline.tres" id="timeline"]
 
 [resource]
 script = ExtResource("1")
-DayLengthSeconds = 1200.0
-StartHour = 12.0
-LunarPeriodDays = 29.53059
-StartLunarPhase = 0.5
-
-
 CloudTimeline = ExtResource("timeline")
+HighCloudTimeline = ExtResource("cloud_high_timeline")
+SecondaryCloudTimeline = ExtResource("cloud_secondary_timeline")
+CloudRotationTimeline = ExtResource("cloud_rotation_timeline")

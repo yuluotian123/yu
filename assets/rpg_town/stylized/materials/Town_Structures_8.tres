@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Slate chalkboard Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.2347951, 0.3406434, 0.3318300, 1.0000000)

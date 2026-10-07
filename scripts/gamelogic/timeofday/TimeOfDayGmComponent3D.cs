@@ -11,6 +11,7 @@ public partial class TimeOfDayGmComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX;
     [Export] public NodePath EnvironmentRigPath { get; set; } = new("../EnvironmentRig");
+    [Export] public bool Embedded { get; set; }
     [Export] public bool StartOpen { get; set; }
     [Export] public bool BlockGameplayInput { get; set; } = true;
 
@@ -34,9 +35,12 @@ public partial class TimeOfDayGmComponent3D : Component3D
         _environment = Owner.GetNodeOrNull<GameObject3D>(EnvironmentRigPath)?.GetComponent<DayNightEnvironmentComponent3D>();
         if (_environment == null)
         {
-            GD.PushError("[TimeOfDayGM] EnvironmentRigPath must point to a day/night EC host.");
-            Owner.GetNode<CanvasLayer>("CanvasLayer").Visible = false;
-            return;
+            if (!Embedded)
+            {
+                GD.PushError("[TimeOfDayGM] EnvironmentRigPath must point to a day/night EC host.");
+                Owner.GetNode<CanvasLayer>("CanvasLayer").Visible = false;
+                return;
+            }
         }
         _clock = ModuleSystem.GetModule<ITimeOfDayModule>().Clock;
         _input = ModuleSystem.GetModule<IInputModule>();
@@ -52,9 +56,12 @@ public partial class TimeOfDayGmComponent3D : Component3D
         _speed = Find<SpinBox>("Speed");
         _pause = Find<CheckButton>("Pause");
         _phase = Find<OptionButton>("Phase");
-        _panel.Visible = false;
-        BindButton("Toggle", TogglePanel);
-        BindButton("Close", () => ShowPanel(false));
+        if (!Embedded)
+        {
+            _panel.Visible = false;
+            BindButton("Toggle", TogglePanel);
+            BindButton("Close", () => ShowPanel(false));
+        }
         BindButton("Dawn", () => SetHour(6));
         BindButton("Noon", () => SetHour(12));
         BindButton("Dusk", () => SetHour(18));
@@ -70,7 +77,7 @@ public partial class TimeOfDayGmComponent3D : Component3D
         Bind(_moonSlider, Godot.Range.SignalName.ValueChanged, Callable.From<double>(SetMoonPhase));
         Bind(_phase, OptionButton.SignalName.ItemSelected, Callable.From<long>(index => SetMoonPhase(index / 8.0)));
         Owner.SetMeta("time_gm", this);
-        ShowPanel(StartOpen);
+        if (!Embedded) ShowPanel(StartOpen);
         Refresh();
     }
 
@@ -87,7 +94,7 @@ public partial class TimeOfDayGmComponent3D : Component3D
 
     public void ShowPanel(bool visible)
     {
-        if (_panel == null || _panel.Visible == visible) return;
+        if (Embedded || _panel == null || _panel.Visible == visible) return;
         _panel.Visible = visible;
         _toggle.SetPressedNoSignal(visible);
         if (visible)
@@ -116,16 +123,18 @@ public partial class TimeOfDayGmComponent3D : Component3D
     private void SetHour(double hour) => SetDate(_clock.State.Day, hour);
     private void SetDate(int day, double hour)
     {
-        _environment.SetDate(day, day == WorldClock.MaxDay ? 0 : hour);
+        if (_environment != null) _environment.SetDate(day, day == WorldClock.MaxDay ? 0 : hour);
+        else _clock.SetDate(day, day == WorldClock.MaxDay ? 0 : hour);
         Refresh();
     }
-    private void SetMoonPhase(double phase) { _environment.SetLunarPhase(phase); Refresh(); }
+    private void SetMoonPhase(double phase) { if (_environment != null) _environment.SetLunarPhase(phase); else _clock.SetLunarPhase(phase); Refresh(); }
     private void BeginScrub()
     {
         _scrubbing = true;
         _resumeAfterScrub = !_clock.Paused;
         _clock.Paused = true;
     }
+    internal void EndInteraction() => EndScrub();
     private void EndScrub()
     {
         if (!_scrubbing) return;

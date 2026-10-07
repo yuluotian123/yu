@@ -1,73 +1,47 @@
-[gd_scene format=4 uid="uid://d0yq2aerjgd6i"]
+[gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
 [ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://assets/scenes/ai_runner.tscn" id="2_ai"]
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="5_host"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="6_component"]
-[ext_resource type="Resource" uid="uid://dex0t18fwbshv" path="res://assets/camera/hd2d_side_view_3d.tres" id="8_camera_profile"]
+[ext_resource type="Resource" uid="uid://d3j7g4vybewnk" path="res://assets/camera/hd2d_free_3d.tres" id="8_camera_profile"]
 [ext_resource type="Script" uid="uid://b8lm4oftf5a3i" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="9_environment"]
 [ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="10_time_profile"]
-[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/environment/day_night_sky.gdshader" id="11_sky_shader"]
-[ext_resource type="PackedScene" path="res://assets/scenes/ui/time_of_day_gm.tscn" id="12_time_gm"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/runtime_gm.tscn" id="12_time_gm"]
 [ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="14_camera_controller"]
-
+[ext_resource type="PackedScene" uid="uid://cmhkh18tb7up7" path="res://assets/rpg_town/riverside_town.tscn" id="17_1ukst"]
+[ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/environment/reference_clouds/high_timeline.tres" id="cloud_high_timeline"]
+[ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/environment/reference_clouds/rotation_timeline.tres" id="cloud_rotation_timeline"]
+[ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/environment/reference_clouds/secondary_timeline.tres" id="cloud_secondary_timeline"]
+[ext_resource type="Environment" uid="uid://bav0756llhclb" path="res://assets/environment/relink_environment.tres" id="environment"]
+[ext_resource type="CameraAttributesPhysical" uid="uid://bonkel6lyv08n" path="res://assets/environment/day_night_camera_attributes.tres" id="exposure"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
-
-[ext_resource type="Resource" path="res://assets/environment/reference_clouds/base_timeline.tres" id="original_cloud_timeline"]
+[ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/environment/reference_clouds/base_timeline.tres" id="original_cloud_timeline"]
 
 [sub_resource type="Resource" id="environment_profile"]
 script = ExtResource("10_time_profile")
-StartHour = 10.06
+DriveFogFromProfile = true
+DrivePostEffectsFromProfile = true
+NoonTemperature = 4700.0
+NoonSunTint = Color(1, 0.96, 0.86, 1)
+ShadowFilterBlur = 0.65
+ContactOcclusionEnabled = true
+FogStart = 12.0
+FogEnd = 160.0
+FogOpacity = 1.0
 CloudTimeline = ExtResource("original_cloud_timeline")
+HighCloudTimeline = ExtResource("cloud_high_timeline")
+SecondaryCloudTimeline = ExtResource("cloud_secondary_timeline")
+CloudRotationTimeline = ExtResource("cloud_rotation_timeline")
+CloudRotationPeriodHours = 20.0
+CloudEvolutionPeriodHours = 4.0
+CloudNoisePeriodHours = 12.0
+DayExposureEv = 14.35
+NightExposureEv = -3.0
 
 [sub_resource type="Resource" id="controller"]
 script = ExtResource("9_environment")
 Profile = SubResource("environment_profile")
-
-[sub_resource type="ShaderMaterial" id="sky_material"]
-resource_local_to_scene = true
-shader = ExtResource("11_sky_shader")
-shader_parameter/day_zenith = Color(0.025, 0.15, 0.65, 1)
-shader_parameter/day_horizon = Color(0.12, 0.58, 1, 1)
-shader_parameter/day_ground = Color(0.3, 0.66, 0.88, 1)
-shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
-shader_parameter/night_zenith = Color(0.07, 0.11, 0.29, 1)
-shader_parameter/night_horizon = Color(0.2, 0.25, 0.44, 1)
-shader_parameter/sun_direction = Vector3(-0.109381, 0.965926, 0.23457)
-shader_parameter/moon_direction = Vector3(0.109381, -0.965926, -0.23457)
-shader_parameter/daylight = 1.0
-shader_parameter/twilight = 0.0
-shader_parameter/sun_radius = 0.015707962851830046
-shader_parameter/moon_radius = 0.026179938779914945
-shader_parameter/moon_visibility = 0.0
-shader_parameter/stars_visibility = 0.0
-shader_parameter/star_intensity = 1.0
-shader_parameter/star_rotation = 0.0
-shader_parameter/moon_light = 0.0
-
-[sub_resource type="Sky" id="sky"]
-resource_local_to_scene = true
-sky_material = SubResource("sky_material")
-process_mode = 3
-
-[sub_resource type="Environment" id="environment"]
-resource_local_to_scene = true
-background_mode = 2
-sky = SubResource("sky")
-sky_custom_fov = 65.0
-sky_rotation = Vector3(-0.57595867, 0, 0)
-ambient_light_source = 3
-reflected_light_source = 2
-tonemap_mode = 4
-ssao_enabled = true
-ssao_radius = 0.5
-ssao_intensity = 0.7
-
-[sub_resource type="CameraAttributesPhysical" id="exposure"]
-resource_local_to_scene = true
-exposure_multiplier = 1.2
-frustum_focus_distance = 20.0
-frustum_focal_length = 20.0
 
 [sub_resource type="Resource" id="camera_controller"]
 script = ExtResource("14_camera_controller")
@@ -79,10 +53,10 @@ roughness = 0.85
 
 [sub_resource type="BoxMesh" id="mesh_Ground"]
 material = SubResource("material_Ground")
-size = Vector3(22, 1.2, 2.4)
+size = Vector3(44, 1.2, 32)
 
 [sub_resource type="BoxShape3D" id="shape_Ground"]
-size = Vector3(22, 1.2, 2.4)
+size = Vector3(44, 1.2, 32)
 
 [node name="Spacelevel" type="Node3D" unique_id=1907641290]
 script = ExtResource("5_host")
@@ -94,47 +68,70 @@ PersistentId = "level_environment"
 Components = Array[ExtResource("6_component")]([SubResource("controller")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=594835174]
-environment = SubResource("environment")
-camera_attributes = SubResource("exposure")
+environment = ExtResource("environment")
+camera_attributes = ExtResource("exposure")
 
 [node name="Sun" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1850925047]
-transform = Transform3D(0.9063078, 0, 0.4226183, 0.4082179, 0.258819, -0.875426, -0.1093817, 0.9659258, 0.2345697, 0, 0, 0)
-light_temperature = 5800.0
-light_angular_distance = 0.53
+physics_interpolation_mode = 2
+transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.9659258, 0.42261842, -0.875426, 0.23456971, 0, 0, 0)
+light_intensity_lux = 120000.0
+light_temperature = 4700.0
+light_color = Color(1, 0.96, 0.86, 1)
+light_indirect_energy = 0.75
 shadow_enabled = true
-shadow_normal_bias = 1.0
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
+shadow_blur = 0.65
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 40.0
+directional_shadow_max_distance = 55.0
 
 [node name="Moon" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=310034368]
+physics_interpolation_mode = 2
+transform = Transform3D(-0.9063079, 0.40821782, 0.10938164, 0, 0.2588191, -0.9659259, -0.42261815, -0.87542623, -0.23456976, 0, 0, 0)
 visible = false
-light_intensity_lux = 0.3
+light_intensity_lux = 0.0
 light_temperature = 8500.0
-light_angular_distance = 0.52
 shadow_enabled = true
-shadow_normal_bias = 1.0
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
+shadow_blur = 0.65
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 40.0
+directional_shadow_max_distance = 55.0
+
+[node name="OriginalClouds" parent="EnvironmentRig" unique_id=1997370813 instance=ExtResource("original_clouds")]
+transform = Transform3D(-0.79863536, 0, 0.601815, 0, 1, 0, -0.601815, 0, -0.79863536, 0, 0, 0)
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=1603033638]
 process_priority = 100
 physics_interpolation_mode = 2
+editor_description = "场景镜头控制器。展开 Components > SceneCameraComponent3D > Profile 调整跟随参数。X/Y/Z 对应世界左右/上下/前后，距离单位为米。DeadZone 越大越允许角色自由移动；FollowSmooth 越大跟随越快，0 表示直接到位。距离、俯角、FOV 请在子节点 Camera3D 调整。详见 res://assets/camera/HD2D.md。"
 script = ExtResource("5_host")
 Components = Array[ExtResource("6_component")]([SubResource("camera_controller")])
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=106388751]
-transform = Transform3D(1, 0, 0, 0, 0.9063078, 0.4226183, 0, -0.4226183, 0.9063078, 1.6, 0.4123659, 18.126156)
-projection = 1
+editor_description = "偏横版近景镜头：透视 FOV=30°，Rotation Degrees.X=-4.1°（轻微俯视），拍摄距离约 9 米。人物位于屏幕中心下方，天空和云保留在上半部。
+Transform/Position：沿镜头局部 Z 轴向负方向移动可拉近，向正方向移动可拉远；这是实际拍摄距离。Rotation Degrees.X 越接近 0 越平视，越负越俯视。
+FOV：仅透视生效，越小人物越大、视野越窄；越大视野越广。默认 Keep Aspect=Keep Height 时表示竖直视角。
+Size=7：仅正交/视锥投影生效，越小人物越大；不影响透视。Far=500：最远可见距离（米），减小可能裁掉远处天空或云。
+构图位置为 (1.6, -7.15, 8.8033)，视线高于角色中心，人物约在画面高度的三分之二处。保持角度和 Z 距离时，提高 Position.Y 会让人物更靠下，降低则让人物上移。运行时保留场景镜头角度和相对偏移，随角色平移；请在停止游戏时编辑。跟随死区、平滑及前视在 CameraRig 的 Profile 中调整。"
+transform = Transform3D(1, 0, 0, 0, 0.99744076, 0.07149744, 0, -0.07149744, 0.99744076, 1.6, -7.15, 8.8033285)
 current = true
-fov = 65.0
-size = 5.4
-far = 200.0
+fov = 30.0
+size = 7.0
+far = 500.0
 
 [node name="Ground" type="Node3D" parent="." unique_id=1104172541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6, -9.8, 0)
 script = ExtResource("5_host")
 
 [node name="Visual" type="MeshInstance3D" parent="Ground" unique_id=1118407196]
+visible = false
 mesh = SubResource("mesh_Ground")
 
 [node name="GameplayBody" type="StaticBody3D" parent="Ground" unique_id=1042351921 groups=["player_ground"]]
@@ -142,9 +139,10 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
 shape = SubResource("shape_Ground")
+disabled = true
 
 [node name="Player" parent="." unique_id=1448143200 instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -8.84, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -8.603256, 0)
 
 [node name="AIRunner" parent="." unique_id=423667517 instance=ExtResource("2_ai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, -7.5, 0)
@@ -153,6 +151,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, -7.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.99, -8.69, 0)
 PersistentId = "ai_runner_2"
 
-[node name="TimeGm" parent="." unique_id=1779226142 instance=ExtResource("12_time_gm")]
+[node name="RuntimeGm" parent="." unique_id=1779226142 instance=ExtResource("12_time_gm")]
 
-[node name="OriginalClouds" parent="EnvironmentRig" instance=ExtResource("original_clouds")]
+[node name="RPGTown" type="Node3D" parent="." unique_id=1157839552]
+editor_description = "参考图河畔街区：B01 商店及红瓦变体、石桥、河道、花坛和树木。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -9.2, 0)
+
+[node name="TownContent" parent="RPGTown" unique_id=2000440359 instance=ExtResource("17_1ukst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0142884, -1.7751112, 0.549147)

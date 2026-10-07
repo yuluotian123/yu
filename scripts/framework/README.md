@@ -24,5 +24,5 @@ IEventModule events = ModuleSystem.GetModule<IEventModule>();
 
 新模块遵循 `IXxxModule -> XxxModule` 命名规则，并在项目退出时完整释放事件、句柄和静态状态。
 
-跨模块优化事项见 [`docs/OPTIMIZATION_ROADMAP.md`](../../docs/OPTIMIZATION_ROADMAP.md)。
+模块职责和接入方式见 [项目总览](../../docs/PROJECT_OVERVIEW.md) 及各模块文档。
 

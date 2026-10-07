@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bn66tld0hewyw"]
+
+[ext_resource type="Shader" uid="uid://bmsxj3pag3e0h" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://6mwwbeip1knl" path="res://assets/rpg_town/models/B01_Blue_Roof_Shop_stone_albedo.png" id="2_tex"]
+
+[resource]
+resource_name = "Sandstone • ImageGen Toon"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/use_texture = true
+shader_parameter/albedo_texture = ExtResource("2_tex")
+shader_parameter/texture_average = Vector3(0.6585925, 0.5046125, 0.3416864)
+shader_parameter/texture_detail = 0.62
+shader_parameter/use_vertex_color = false
+shader_parameter/color_saturation = 1.02
+shader_parameter/band_softness = 0.14
+shader_parameter/painterly_blend = 0.65
+shader_parameter/light_wrap = 0.12
+shader_parameter/shadow_tint = Vector3(0.72, 0.82, 1)
+shader_parameter/middle_tint = Vector3(1, 0.99, 0.97)
+shader_parameter/light_tint = Vector3(1.03, 1.01, 0.97)
+shader_parameter/emission_color = Vector3(0, 0, 0)

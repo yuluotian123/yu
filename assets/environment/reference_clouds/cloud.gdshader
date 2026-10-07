@@ -7,6 +7,8 @@ uniform sampler2D noise_map : filter_linear_mipmap, repeat_enable;
 uniform vec4 noise_map_st = vec4(0.3, 0.3, 0.0, 0.0);
 uniform float noise_time = 0.0;
 uniform float cloud_sdf = 0.003;
+// Prevent noise UVs from borrowing the neighboring cell in the original 2 x 4 atlases.
+uniform bool bound_atlas_cell = false;
 uniform vec4 cloud_color_a = vec4(0.5050285, 0.70413554, 0.9150943, 1.0);
 uniform vec4 cloud_color_b = vec4(0.9858491, 0.9863516, 1.0, 1.0);
 uniform vec4 cloud_color_c = vec4(0.8632076, 0.9483539, 1.0, 1.0);
@@ -19,6 +21,7 @@ uniform float sun_moon = 0.0;
 // Godot bridge: match the scene sky's projection and reversed-Z far depth.
 uniform float sky_custom_fov = 65.0;
 uniform float sky_pitch = -0.57595865;
+uniform float horizon_fade : hint_range(0.0, 0.5) = 0.22;
 varying vec3 position_ws;
 varying vec2 source_uv;
 varying vec2 source_noise_uv;
@@ -49,9 +52,23 @@ void fragment() {
     vec3 color_ab = mix(cloud_color_a.rgb, cloud_color_b.rgb, weight);
     vec3 color_cd = mix(cloud_color_c.rgb, cloud_color_d.rgb, weight);
     float uv_disturbance = texture(noise_map, source_noise_uv).b * 0.03;
-    vec4 base_map = texture(cloud_map, source_uv + vec2(uv_disturbance));
+    vec2 cloud_uv = source_uv + vec2(uv_disturbance);
+    float cell_mask = 1.0;
+    if (bound_atlas_cell) {
+        vec2 atlas_cell_origin = floor(source_uv / vec2(0.5, 0.25)) * vec2(0.5, 0.25);
+        vec2 edge = min(cloud_uv - atlas_cell_origin, atlas_cell_origin + vec2(0.5, 0.25) - cloud_uv);
+        cell_mask = smoothstep(0.0, 0.012, min(edge.x, edge.y));
+        vec2 half_texel = 0.5 / vec2(textureSize(cloud_map, 0));
+        cloud_uv = clamp(cloud_uv, atlas_cell_origin + half_texel, atlas_cell_origin + vec2(0.5, 0.25) - half_texel);
+    }
+    vec4 base_map = texture(cloud_map, cloud_uv);
     float opacity = smoothstep(clamp(cloud_sdf - 0.08, 0.0, 1.5), cloud_sdf, base_map.b) * base_map.a;
     vec3 color = mix(color_ab, color_cd, base_map.r) + cloud_edge_color.rgb * base_map.g * weight;
     ALBEDO = color;
-    ALPHA = opacity;
+    // Sky cards live at far depth: regular distance fog would erase all layers.
+    // Fade their low angular silhouettes into the atmosphere instead, in the same
+    // unrotated sky coordinates as the original cloud mesh and light directions.
+    float elevation = normalize(position_ws - vec3(0.0, -14.0, 0.0)).y;
+    float horizon_visibility = horizon_fade > 0.0001 ? smoothstep(-0.02, horizon_fade, elevation) : 1.0;
+    ALPHA = opacity * cell_mask * horizon_visibility;
 }

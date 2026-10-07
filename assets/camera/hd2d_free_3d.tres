@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CameraProfile3D" format=3 uid="uid://d3j7g4vybewnk"]
+
+[ext_resource type="Script" uid="uid://cbebyceleqmkc" path="res://scripts/gamelogic/camera/CameraProfile3D.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+DeadZone = Vector3(0.32, 0.4, 0.32)
+FollowSmooth = Vector3(7, 4, 7)
+LookAheadDistance = 0.3
+VerticalVelocityLookDistance = 0.08
+EnableManualLook = false

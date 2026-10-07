@@ -1,118 +1,140 @@
-[gd_resource type="Resource" script_class="ReferenceCloudTimeline" format=3]
+[gd_resource type="Resource" script_class="ReferenceCloudTimeline" format=3 uid="uid://dwmv4g61gvcbr"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/ReferenceCloudTimeline.cs" id="script"]
+[ext_resource type="Script" uid="uid://br3decqwrvmgu" path="res://scripts/gamelogic/timeofday/ReferenceCloudTimeline.cs" id="script"]
 
-[sub_resource type="Curve" id="curve_0"]
-resource_name = "material._CloudColorD.r"
-_data = [Vector2(0, 0.87136734), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.87136734), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 0.75294244), -3.582612, -3.582612, 0, 0, Vector2(0.5875, 0.6745728), -0.026549546, -0.026549546, 0, 0, Vector2(0.8625, 0.67244333), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.87136734), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_20"]
+resource_name = "material._CloudColorA.a"
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 10
 
-[sub_resource type="Curve" id="curve_1"]
-resource_name = "material._CloudColorD.g"
-_data = [Vector2(0, 0.70837605), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.70837605), -0.84674968, -0.84674968, 0, 0, Vector2(0.5, 0.63075733), -0.542023, -0.542023, 0, 0, Vector2(0.541666675, 0.61720675), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.7621963), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.76052475), -0.019103458, -0.019103458, 0, 0, Vector2(0.9375, 0.70837605), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_19"]
+resource_name = "material._CloudColorA.b"
+_data = [Vector2(0, 0.79129815), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8796226), 1.5652637, 1.5652637, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.79129815), -1.025562, -1.025562, 0, 0, Vector2(0.5, 0.62396055), -3.1776652, -3.1776652, 0, 0, Vector2(0.5416667, 0.47353154), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.52711535), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.49056596), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.62396055), 2.1871433, 2.1871433, 0, 0, Vector2(1, 0.79129815), 0.0, 0.0, 0, 0]
+point_count = 10
 
-[sub_resource type="Curve" id="curve_2"]
-resource_name = "material._CloudColorD.b"
-_data = [Vector2(0, 0.58407855), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.58407855), -1.6872924, -1.6872924, 0, 0, Vector2(0.5, 0.38132608), 0.0, 0.0, 0, 0, Vector2(0.541666675, 0.637597), 5.6689436, 5.6689436, 0, 0, Vector2(0.5875, 0.8773585), 0.028227524, 0.028227524, 0, 0, Vector2(0.8625, 0.8796226), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.58407855), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_18"]
+resource_name = "material._CloudColorA.g"
+_data = [Vector2(0, 0.7379106), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8307701), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.8026642), -0.24762519, -0.24762519, 0, 0, Vector2(0.44166666, 0.7379106), -0.45018324, -0.45018324, 0, 0, Vector2(0.5, 0.637597), -4.012543, -4.012543, 0, 0, Vector2(0.5416667, 0.3277781), -1.4463912, -1.4463912, 0, 0, Vector2(0.5875, 0.2961383), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.3265263), 0.3472917, 0.3472917, 0, 0, Vector2(0.9375, 0.47353154), 2.9918861, 2.9918861, 0, 0, Vector2(1, 0.7379106), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="curve_17"]
+resource_name = "material._CloudColorA.r"
+_data = [Vector2(0, 0.6104957), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.70110214), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.6179245), -0.0792408, -0.0792408, 0, 0, Vector2(0.44166666, 0.6104957), 0.0, 0.0, 0, 0, Vector2(0.5, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.5416667, 0.34191442), -6.8897266, -6.8897266, 0, 0, Vector2(0.5875, 0.19120169), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.22908503), 0.403571, 0.403571, 0, 0, Vector2(0.9375, 0.33245155), 2.773896, 2.773896, 0, 0, Vector2(1, 0.6104957), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="curve_12"]
+resource_name = "material._CloudColorB.a"
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="Curve" id="curve_11"]
+resource_name = "material._CloudColorB.b"
+_data = [Vector2(0, 0.62396055), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.90466136), 2.8202958, 2.8202958, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.62396055), -1.7418904, -1.7418904, 0, 0, Vector2(0.5, 0.36130685), 0.0, 0.0, 0, 0, Vector2(0.5416667, 0.58407855), 4.0648503, 4.0648503, 0, 0, Vector2(0.5875, 0.7169812), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.6037736), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.62396055), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="Curve" id="curve_10"]
+resource_name = "material._CloudColorB.g"
+_data = [Vector2(0, 0.637597), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.822786), 2.271674, 2.271674, 0, 0, Vector2(0.13333334, 0.9404869), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.637597), -1.160643, -1.160643, 0, 0, Vector2(0.5, 0.5149178), -1.6406544, -1.6406544, 0, 0, Vector2(0.5416667, 0.47353154), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.49823135), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.4112217), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.637597), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="Curve" id="curve_9"]
+resource_name = "material._CloudColorB.r"
+_data = [Vector2(0, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8307701), 0.5515395, 0.5515395, 0, 0, Vector2(0.13333334, 0.8726415), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 0.48514998), -4.0894895, -4.0894895, 0, 0, Vector2(0.5875, 0.3956924), -0.5090721, -0.5090721, 0, 0, Vector2(0.8625, 0.32182267), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.7991029), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="Curve" id="curve_16"]
+resource_name = "material._CloudColorC.a"
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="curve_15"]
+resource_name = "material._CloudColorC.b"
+_data = [Vector2(0, 0.77582246), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.9646866), 1.0594028, 1.0594028, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.77582246), -1.1343312, -1.1343312, 0, 0, Vector2(0.5, 0.58407855), -2.6694095, -2.6694095, 0, 0, Vector2(0.5416667, 0.50888145), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.72305536), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.6792453), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.7991029), 0.0, 0.0, 0, 0, Vector2(1, 0.77582246), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="curve_14"]
+resource_name = "material._CloudColorC.g"
+_data = [Vector2(0, 0.921582), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.9473068), -0.20911472, -0.20911472, 0, 0, Vector2(0.44166666, 0.921582), -0.2806345, -0.2806345, 0, 0, Vector2(0.5, 0.70837605), -4.246489, -4.246489, 0, 0, Vector2(0.5416667, 0.49693298), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.52711535), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.51993465), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.69387203), 2.9210718, 2.9210718, 0, 0, Vector2(1, 0.921582), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="curve_13"]
+resource_name = "material._CloudColorC.r"
+_data = [Vector2(0, 0.90466136), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.8631574), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.90466136), 0.0, 0.0, 0, 0, Vector2(0.5, 0.87136734), -1.3317605, -1.3317605, 0, 0, Vector2(0.5416667, 0.57758063), -5.600473, -5.600473, 0, 0, Vector2(0.5875, 0.38132608), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.44535422), 0.5057556, 0.5057556, 0, 0, Vector2(0.9375, 0.55834055), 3.2868752, 3.2868752, 0, 0, Vector2(1, 0.90466136), 0.0, 0.0, 0, 0]
+point_count = 10
 
 [sub_resource type="Curve" id="curve_3"]
 resource_name = "material._CloudColorD.a"
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0]
+point_count = 9
 
-[sub_resource type="Curve" id="curve_4"]
-resource_name = "material._Cloud_edgeColor.r"
-_data = [Vector2(0, 0.8018868), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.31132075), -0.9297238, -0.9297238, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.09530745), 2.7725804, 2.7725804, 0, 0, Vector2(1, 0.7991029), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_2"]
+resource_name = "material._CloudColorD.b"
+_data = [Vector2(0, 0.58407855), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.58407855), -1.6872925, -1.6872925, 0, 0, Vector2(0.5, 0.38132608), 0.0, 0.0, 0, 0, Vector2(0.5416667, 0.637597), 5.6689434, 5.6689434, 0, 0, Vector2(0.5875, 0.8773585), 0.028227525, 0.028227525, 0, 0, Vector2(0.8625, 0.8796226), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.58407855), 0.0, 0.0, 0, 0]
+point_count = 9
 
-[sub_resource type="Curve" id="curve_5"]
-resource_name = "material._Cloud_edgeColor.g"
-_data = [Vector2(0, 0.6236569), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.2265152), -0.72308052, -0.72308052, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.08437618), 2.45457984, 2.45457984, 0, 0, Vector2(1, 0.62396055), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_1"]
+resource_name = "material._CloudColorD.g"
+_data = [Vector2(0, 0.70837605), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.70837605), -0.84674966, -0.84674966, 0, 0, Vector2(0.5, 0.63075733), -0.542023, -0.542023, 0, 0, Vector2(0.5416667, 0.61720675), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.7621963), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.76052475), -0.019103458, -0.019103458, 0, 0, Vector2(0.9375, 0.70837605), 0.0, 0.0, 0, 0]
+point_count = 9
 
-[sub_resource type="Curve" id="curve_6"]
-resource_name = "material._Cloud_edgeColor.b"
-_data = [Vector2(0, 0.56359017), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.19824669), -0.65343784, -0.65343784, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.07421354), 2.15893984, 2.15893984, 0, 0, Vector2(1, 0.56471163), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_0"]
+resource_name = "material._CloudColorD.r"
+_data = [Vector2(0, 0.87136734), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.44166666, 0.87136734), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.5416667, 0.75294244), -3.582612, -3.582612, 0, 0, Vector2(0.5875, 0.6745728), -0.026549546, -0.026549546, 0, 0, Vector2(0.8625, 0.67244333), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.87136734), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="Curve" id="curve_8"]
+resource_name = "material._Cloud_SDF_TSb"
+_data = [Vector2(0, 0.05), 0.0, 0.0, 0, 0, Vector2(0.1875, 0.294), 0.0, 0.0, 0, 0, Vector2(0.38333333, 0.086), 0.0, 0.0, 0, 0, Vector2(0.56666666, 0.35), 0.0, 0.0, 0, 0, Vector2(0.7125, 0.069), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.07), 0.020869609, 0.020869609, 0, 0, Vector2(0.90416664, 0.205), 0.0, 0.0, 0, 0, Vector2(1, 0.05), 0.0, 0.0, 0, 0]
+point_count = 8
 
 [sub_resource type="Curve" id="curve_7"]
 resource_name = "material._Cloud_edgeColor.a"
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 5
 
-[sub_resource type="Curve" id="curve_8"]
-resource_name = "material._Cloud_SDF_TSb"
-_data = [Vector2(0, 0.05), 0.0, 0.0, 0, 0, Vector2(0.1875, 0.294), 0.0, 0.0, 0, 0, Vector2(0.383333325, 0.086), 0.0, 0.0, 0, 0, Vector2(0.566666675, 0.35), 0.0, 0.0, 0, 0, Vector2(0.7125, 0.069), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.07), 0.0208696088, 0.0208696088, 0, 0, Vector2(0.90416665, 0.205), 0.0, 0.0, 0, 0, Vector2(1, 0.05), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_6"]
+resource_name = "material._Cloud_edgeColor.b"
+_data = [Vector2(0, 0.56359017), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.19824669), -0.65343785, -0.65343785, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.07421354), 2.1589398, 2.1589398, 0, 0, Vector2(1, 0.56471163), 0.0, 0.0, 0, 0]
+point_count = 5
 
-[sub_resource type="Curve" id="curve_9"]
-resource_name = "material._CloudColorB.r"
-_data = [Vector2(0, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8307701), 0.55153948, 0.55153948, 0, 0, Vector2(0.13333334, 0.8726415), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 0.48514998), -4.0894896, -4.0894896, 0, 0, Vector2(0.5875, 0.3956924), -0.50907212, -0.50907212, 0, 0, Vector2(0.8625, 0.32182267), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.7991029), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_5"]
+resource_name = "material._Cloud_edgeColor.g"
+_data = [Vector2(0, 0.6236569), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.2265152), -0.7230805, -0.7230805, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.08437618), 2.4545798, 2.4545798, 0, 0, Vector2(1, 0.62396055), 0.0, 0.0, 0, 0]
+point_count = 5
 
-[sub_resource type="Curve" id="curve_10"]
-resource_name = "material._CloudColorB.g"
-_data = [Vector2(0, 0.637597), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.822786), 2.271674, 2.271674, 0, 0, Vector2(0.13333334, 0.9404869), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.637597), -1.160643, -1.160643, 0, 0, Vector2(0.5, 0.5149178), -1.6406544, -1.6406544, 0, 0, Vector2(0.541666675, 0.47353154), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.49823135), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.4112217), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.637597), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_11"]
-resource_name = "material._CloudColorB.b"
-_data = [Vector2(0, 0.62396055), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.90466136), 2.8202958, 2.8202958, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.62396055), -1.7418904, -1.7418904, 0, 0, Vector2(0.5, 0.36130685), 0.0, 0.0, 0, 0, Vector2(0.541666675, 0.58407855), 4.0648504, 4.0648504, 0, 0, Vector2(0.5875, 0.7169812), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.6037736), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.62396055), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_12"]
-resource_name = "material._CloudColorB.a"
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_13"]
-resource_name = "material._CloudColorC.r"
-_data = [Vector2(0, 0.90466136), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.8631574), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.90466136), 0.0, 0.0, 0, 0, Vector2(0.5, 0.87136734), -1.33176052, -1.33176052, 0, 0, Vector2(0.541666675, 0.57758063), -5.6004728, -5.6004728, 0, 0, Vector2(0.5875, 0.38132608), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.44535422), 0.5057556, 0.5057556, 0, 0, Vector2(0.9375, 0.55834055), 3.2868752, 3.2868752, 0, 0, Vector2(1, 0.90466136), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_14"]
-resource_name = "material._CloudColorC.g"
-_data = [Vector2(0, 0.921582), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.9473068), -0.20911472, -0.20911472, 0, 0, Vector2(0.441666675, 0.921582), -0.28063448, -0.28063448, 0, 0, Vector2(0.5, 0.70837605), -4.2464892, -4.2464892, 0, 0, Vector2(0.541666675, 0.49693298), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.52711535), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.51993465), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.69387203), 2.92107176, 2.92107176, 0, 0, Vector2(1, 0.921582), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_15"]
-resource_name = "material._CloudColorC.b"
-_data = [Vector2(0, 0.77582246), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.9646866), 1.0594028, 1.0594028, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.77582246), -1.1343312, -1.1343312, 0, 0, Vector2(0.5, 0.58407855), -2.6694096, -2.6694096, 0, 0, Vector2(0.541666675, 0.50888145), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.72305536), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.6792453), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.7991029), 0.0, 0.0, 0, 0, Vector2(1, 0.77582246), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_16"]
-resource_name = "material._CloudColorC.a"
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_17"]
-resource_name = "material._CloudColorA.r"
-_data = [Vector2(0, 0.6104957), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.70110214), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.6179245), -0.0792408, -0.0792408, 0, 0, Vector2(0.441666675, 0.6104957), 0.0, 0.0, 0, 0, Vector2(0.5, 0.7991029), 0.0, 0.0, 0, 0, Vector2(0.541666675, 0.34191442), -6.8897268, -6.8897268, 0, 0, Vector2(0.5875, 0.19120169), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.22908503), 0.403571, 0.403571, 0, 0, Vector2(0.9375, 0.33245155), 2.773896, 2.773896, 0, 0, Vector2(1, 0.6104957), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_18"]
-resource_name = "material._CloudColorA.g"
-_data = [Vector2(0, 0.7379106), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8307701), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.8026642), -0.247625188, -0.247625188, 0, 0, Vector2(0.441666675, 0.7379106), -0.45018324, -0.45018324, 0, 0, Vector2(0.5, 0.637597), -4.0125432, -4.0125432, 0, 0, Vector2(0.541666675, 0.3277781), -1.4463912, -1.4463912, 0, 0, Vector2(0.5875, 0.2961383), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.3265263), 0.34729172, 0.34729172, 0, 0, Vector2(0.9375, 0.47353154), 2.99188612, 2.99188612, 0, 0, Vector2(1, 0.7379106), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_19"]
-resource_name = "material._CloudColorA.b"
-_data = [Vector2(0, 0.79129815), 0.0, 0.0, 0, 0, Vector2(0.06666667, 0.8796226), 1.56526376, 1.56526376, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 0.79129815), -1.025562, -1.025562, 0, 0, Vector2(0.5, 0.62396055), -3.1776652, -3.1776652, 0, 0, Vector2(0.541666675, 0.47353154), 0.0, 0.0, 0, 0, Vector2(0.5875, 0.52711535), 0.0, 0.0, 0, 0, Vector2(0.8625, 0.49056596), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.62396055), 2.18714332, 2.18714332, 0, 0, Vector2(1, 0.79129815), 0.0, 0.0, 0, 0]
-
-[sub_resource type="Curve" id="curve_20"]
-resource_name = "material._CloudColorA.a"
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.06666667, 1), 0.0, 0.0, 0, 0, Vector2(0.13333334, 1), 0.0, 0.0, 0, 0, Vector2(0.441666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.541666675, 1), 0.0, 0.0, 0, 0, Vector2(0.5875, 1), 0.0, 0.0, 0, 0, Vector2(0.8625, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="curve_4"]
+resource_name = "material._Cloud_edgeColor.r"
+_data = [Vector2(0, 0.8018868), 0.0, 0.0, 0, 0, Vector2(0.13333334, 0.31132075), -0.9297238, -0.9297238, 0, 0, Vector2(0.8625, 0), 0.0, 0.0, 0, 0, Vector2(0.9375, 0.09530745), 2.7725804, 2.7725804, 0, 0, Vector2(1, 0.7991029), 0.0, 0.0, 0, 0]
+point_count = 5
 
 [sub_resource type="Curve" id="curve_21"]
 resource_name = "material._SunMoon"
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(0.541666675, 1), 0.0, 0.0, 0, 0, Vector2(0.89166665, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(0.5416667, 1), 0.0, 0.0, 0, 0, Vector2(0.89166665, 1), 0.0, 0.0, 0, 0, Vector2(0.9375, 0), 0.0, 0.0, 0, 0]
+point_count = 5
 
 [resource]
 script = ExtResource("script")
-Curves = {
-"_CloudColorD.r": SubResource("curve_0"),
-"_CloudColorD.g": SubResource("curve_1"),
-"_CloudColorD.b": SubResource("curve_2"),
-"_CloudColorD.a": SubResource("curve_3"),
-"_Cloud_edgeColor.r": SubResource("curve_4"),
-"_Cloud_edgeColor.g": SubResource("curve_5"),
-"_Cloud_edgeColor.b": SubResource("curve_6"),
-"_Cloud_edgeColor.a": SubResource("curve_7"),
-"_Cloud_SDF_TSb": SubResource("curve_8"),
-"_CloudColorB.r": SubResource("curve_9"),
-"_CloudColorB.g": SubResource("curve_10"),
-"_CloudColorB.b": SubResource("curve_11"),
-"_CloudColorB.a": SubResource("curve_12"),
-"_CloudColorC.r": SubResource("curve_13"),
-"_CloudColorC.g": SubResource("curve_14"),
-"_CloudColorC.b": SubResource("curve_15"),
-"_CloudColorC.a": SubResource("curve_16"),
-"_CloudColorA.r": SubResource("curve_17"),
-"_CloudColorA.g": SubResource("curve_18"),
-"_CloudColorA.b": SubResource("curve_19"),
+Curves = Dictionary[String, Curve]({
 "_CloudColorA.a": SubResource("curve_20"),
+"_CloudColorA.b": SubResource("curve_19"),
+"_CloudColorA.g": SubResource("curve_18"),
+"_CloudColorA.r": SubResource("curve_17"),
+"_CloudColorB.a": SubResource("curve_12"),
+"_CloudColorB.b": SubResource("curve_11"),
+"_CloudColorB.g": SubResource("curve_10"),
+"_CloudColorB.r": SubResource("curve_9"),
+"_CloudColorC.a": SubResource("curve_16"),
+"_CloudColorC.b": SubResource("curve_15"),
+"_CloudColorC.g": SubResource("curve_14"),
+"_CloudColorC.r": SubResource("curve_13"),
+"_CloudColorD.a": SubResource("curve_3"),
+"_CloudColorD.b": SubResource("curve_2"),
+"_CloudColorD.g": SubResource("curve_1"),
+"_CloudColorD.r": SubResource("curve_0"),
+"_Cloud_SDF_TSb": SubResource("curve_8"),
+"_Cloud_edgeColor.a": SubResource("curve_7"),
+"_Cloud_edgeColor.b": SubResource("curve_6"),
+"_Cloud_edgeColor.g": SubResource("curve_5"),
+"_Cloud_edgeColor.r": SubResource("curve_4"),
 "_SunMoon": SubResource("curve_21")
-}
+})

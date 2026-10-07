@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/rpg_town/stylized/town_toon.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/rpg_town/models/Town_Structures_living_bark.png" id="2_tex"]
+
+[resource]
+resource_name = "V2_Living_bark Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(1.0000000, 1.0000000, 1.0000000, 1.0000000)
+shader_parameter/use_texture = true
+shader_parameter/albedo_texture = ExtResource("2_tex")
+shader_parameter/texture_average = Vector3(0.1913686, 0.1177219, 0.0553902)
+shader_parameter/use_vertex_color = true
+shader_parameter/texture_detail = 0.65
+

@@ -4,42 +4,16 @@
 [ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_base"]
 [ext_resource type="Script" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="3_controller"]
 [ext_resource type="Resource" path="res://assets/environment/default_time_of_day.tres" id="4_profile"]
-[ext_resource type="Shader" path="res://assets/environment/day_night_sky.gdshader" id="5_shader"]
 
 
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
 
+[ext_resource type="Environment" path="res://assets/environment/day_night_environment.tres" id="environment"]
+[ext_resource type="CameraAttributesPhysical" path="res://assets/environment/day_night_camera_attributes.tres" id="exposure"]
+
 [sub_resource type="Resource" id="controller"]
 script = ExtResource("3_controller")
 Profile = ExtResource("4_profile")
-
-[sub_resource type="ShaderMaterial" id="sky_material"]
-resource_local_to_scene = true
-shader = ExtResource("5_shader")
-
-[sub_resource type="Sky" id="sky"]
-resource_local_to_scene = true
-process_mode = 3
-sky_material = SubResource("sky_material")
-
-[sub_resource type="Environment" id="environment"]
-resource_local_to_scene = true
-background_mode = 2
-sky = SubResource("sky")
-sky_custom_fov = 65.0
-sky_rotation = Vector3(-0.5759587, 0, 0)
-ambient_light_source = 3
-reflected_light_source = 2
-tonemap_mode = 4
-ssao_enabled = true
-ssao_radius = 0.5
-ssao_intensity = 0.7
-
-[sub_resource type="CameraAttributesPhysical" id="exposure"]
-resource_local_to_scene = true
-exposure_multiplier = 1.2
-frustum_focus_distance = 20.0
-frustum_focal_length = 20.0
 
 [node name="EnvironmentRig" type="Node3D"]
 process_mode = 1
@@ -48,26 +22,40 @@ PersistentId = "level_environment"
 Components = Array[ExtResource("2_base")]([SubResource("controller")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("environment")
-camera_attributes = SubResource("exposure")
+environment = ExtResource("environment")
+camera_attributes = ExtResource("exposure")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
+physics_interpolation_mode = 2
 transform = Transform3D(0.9063078, 0, 0.4226183, 0.4082179, 0.258819, -0.875426, -0.1093817, 0.9659258, 0.2345697, 0, 0, 0)
-light_temperature = 5800.0
-light_angular_distance = 0.53
+light_color = Color(1, 0.99, 0.96, 1)
+light_intensity_lux = 120000.0
+light_temperature = 5600.0
+light_angular_distance = 0.0
+shadow_blur = 1.0
 shadow_enabled = true
-shadow_normal_bias = 1.0
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 40.0
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
+directional_shadow_max_distance = 55.0
 
 [node name="Moon" type="DirectionalLight3D" parent="."]
+physics_interpolation_mode = 2
 visible = false
 light_intensity_lux = 0.3
 light_temperature = 8500.0
-light_angular_distance = 0.52
+light_angular_distance = 0.0
+shadow_blur = 1.0
 shadow_enabled = true
-shadow_normal_bias = 1.0
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 40.0
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
+directional_shadow_max_distance = 55.0
 
 [node name="OriginalClouds" parent="." instance=ExtResource("original_clouds")]

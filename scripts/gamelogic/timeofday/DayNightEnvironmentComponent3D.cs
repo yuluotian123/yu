@@ -15,6 +15,9 @@ public partial class DayNightEnvironmentComponent3D : Component3D
     [Export] public NodePath SunPath { get; set; } = new("Sun");
     [Export] public NodePath MoonPath { get; set; } = new("Moon");
     [Export] public NodePath CloudsPath { get; set; } = new("OriginalClouds/BaseClouds");
+    [Export] public NodePath CloudRootPath { get; set; } = new("OriginalClouds");
+    [Export] public NodePath HighCloudsPath { get; set; } = new("OriginalClouds/HighClouds");
+    [Export] public NodePath SecondaryCloudsPath { get; set; } = new("OriginalClouds/SecondaryClouds");
     [Export] public bool LightSceneSprites { get; set; } = true;
 
     private ITimeOfDayModule _time;
@@ -24,8 +27,8 @@ public partial class DayNightEnvironmentComponent3D : Component3D
     private Godot.Environment _environment;
     private CameraAttributesPhysical _exposure;
     private ShaderMaterial _sky;
-    private ShaderMaterial _clouds;
-    private MeshInstance3D _cloudMesh;
+    private readonly List<(MeshInstance3D Mesh, ShaderMaterial Material, ReferenceCloudTimeline Timeline)> _cloudLayers = new();
+    private Node3D _cloudRoot;
     private TimeOfDayProfile _profile;
     private readonly Dictionary<SpriteBase3D, bool> _spriteFlags = new();
     private double _lastHours = double.NaN;
@@ -39,8 +42,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         _sun = Owner.GetNodeOrNull<DirectionalLight3D>(SunPath);
         _moon = Owner.GetNodeOrNull<DirectionalLight3D>(MoonPath);
         _profile = Profile;
-        _cloudMesh = Owner.GetNodeOrNull<MeshInstance3D>(CloudsPath);
-        _clouds = _cloudMesh?.MaterialOverride as ShaderMaterial;
+        _cloudRoot = Owner.GetNodeOrNull<Node3D>(CloudRootPath);
         if (_world?.Environment?.Sky?.SkyMaterial is not ShaderMaterial ||
             _world.CameraAttributes is not CameraAttributesPhysical || _sun == null || _moon == null || _profile == null)
         {
@@ -51,6 +53,9 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         _environment = _world.Environment;
         _sky = (ShaderMaterial)_environment.Sky.SkyMaterial;
         _exposure = (CameraAttributesPhysical)_world.CameraAttributes;
+        // 日月方向在渲染帧更新，不能再由物理帧插值，否则阴影会反复回退。
+        _sun.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
+        _moon.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
         _time = ModuleSystem.GetModule<ITimeOfDayModule>();
         _time.Attach(Owner, _profile);
         _time.Clock.Changed += OnClockChanged;
@@ -71,6 +76,9 @@ public partial class DayNightEnvironmentComponent3D : Component3D
     public override void OnUpdate(double delta)
     {
         if (_time == null) return;
+        // 阴影投影方向逐帧取世界时钟，天空辐照、雾和曝光仍按配置频率刷新。
+        WorldTimeState state = _time.Clock.State;
+        _profile.ApplyLightDirections(_sun, _moon, state.Hour, state.LunarPhase);
         // 投影切换独立于时钟暂停，不把正交背景构图带到透视相机。
         UpdateSkyProjection();
         // 云形逐帧更新；不受环境光 10 Hz 刷新频率限制。
@@ -92,13 +100,14 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         _sky.SetShaderParameter("sun_radius", Mathf.DegToRad(Mathf.Clamp(_profile.SunDiameterDegrees, .1f, 5) * .5f));
         _sky.SetShaderParameter("moon_radius", Mathf.DegToRad(Mathf.Clamp(_profile.MoonDiameterDegrees, .1f, 5) * .5f));
         _sky.SetShaderParameter("star_intensity", Mathf.Max(0, _profile.StarIntensity));
-        if (_cloudMesh != null) _cloudMesh.Visible = _profile.CloudsEnabled;
-        _sun.LightAngularDistance = _profile.SunDiameterDegrees;
-        _moon.LightAngularDistance = 0.52f;
-        _exposure.AutoExposureEnabled = false;
-        _exposure.ExposureSensitivity = 100;
-        _exposure.ExposureAperture = 16;
-        _exposure.ExposureMultiplier = Mathf.Max(.01f, _profile.ExposureMultiplier);
+        // Refresh bindings as well as uniforms when the Inspector replaces a Timeline resource.
+        _cloudLayers.Clear();
+        BindCloudLayer(CloudsPath, _profile.CloudTimeline);
+        BindCloudLayer(HighCloudsPath, _profile.HighCloudTimeline);
+        BindCloudLayer(SecondaryCloudsPath, _profile.SecondaryCloudTimeline);
+        _sun.LightAngularDistance = _profile.ShadowAngularDistance;
+        _moon.LightAngularDistance = _profile.ShadowAngularDistance;
+        // 曝光统一在 ApplyLighting 中按 DriveExposureFromProfile 开关应用。
     }
 
     private void UpdateSkyProjection()
@@ -110,8 +119,12 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         Vector3 rotation = ortho ? new Vector3(Mathf.DegToRad(_profile.OrthographicSkyPitchDegrees), 0, 0) : Vector3.Zero;
         if (!Mathf.IsEqualApprox(_environment.SkyCustomFov, fov)) _environment.SkyCustomFov = fov;
         if (!_environment.SkyRotation.IsEqualApprox(rotation)) _environment.SkyRotation = rotation;
-        _clouds?.SetShaderParameter("sky_custom_fov", fov);
-        _clouds?.SetShaderParameter("sky_pitch", rotation.X);
+        foreach (var layer in _cloudLayers)
+        {
+            layer.Material.SetShaderParameter("horizon_fade", _profile.CloudHorizonFade);
+            layer.Material.SetShaderParameter("sky_custom_fov", fov);
+            layer.Material.SetShaderParameter("sky_pitch", rotation.X);
+        }
     }
 
     public void ApplyEnvironment()
@@ -119,28 +132,20 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         if (_time == null || !GodotObject.IsInstanceValid(_world)) return;
         UpdateSkyProjection();
         WorldTimeState state = _time.Clock.State;
+        _profile.ApplyAtmosphere(_environment, _sky, state.Hour);
         Vector3 sun = CelestialMath.Direction(state.Hour, 0, _profile.NoonElevation, _profile.Azimuth);
         Vector3 moon = CelestialMath.Direction(state.Hour, state.LunarPhase, _profile.NoonElevation, _profile.Azimuth);
         float daylight = CelestialMath.Smooth(-.16f, .25f, sun.Y);
-        float directSun = CelestialMath.Smooth(0, .25f, sun.Y);
         float directMoon = CelestialMath.Smooth(0, .18f, moon.Y) * (float)state.MoonIllumination;
-        _sun.Basis = Basis.LookingAt(-sun, Vector3.Up);
-        _moon.Basis = Basis.LookingAt(-moon, Vector3.Up);
-        _sun.Visible = sun.Y > 0;
-        _moon.Visible = moon.Y > 0 && directMoon > .001f;
-        _sun.LightIntensityLux = Mathf.Max(0, _profile.SunLux) * directSun;
-        _sun.LightTemperature = Mathf.Lerp(3000, 5800, CelestialMath.Smooth(0, .35f, sun.Y));
-        _moon.LightIntensityLux = Mathf.Max(0, _profile.FullMoonLux) * directMoon;
-        _moon.LightTemperature = 8500;
-        _environment.BackgroundIntensity = Mathf.Lerp(Mathf.Max(.001f, _profile.NightSkyIntensity), Mathf.Max(1, _profile.DaySkyIntensity), daylight);
-        // 以曝光分母插值，避免黎明/黄昏先亮灯后收光造成闪白。
-        float exposureDenominator = Mathf.Lerp(Mathf.Pow(2, _profile.NightExposureEv), Mathf.Pow(2, _profile.DayExposureEv), daylight);
-        _exposure.ExposureShutterSpeed = exposureDenominator / 256f;
+        _profile.ApplyLighting(_environment, _sun, _moon, _exposure, state.Hour, state.LunarPhase);
         _sky.SetShaderParameter("sun_direction", sun);
         _sky.SetShaderParameter("moon_direction", moon);
         _sky.SetShaderParameter("daylight", daylight);
-        _clouds?.SetShaderParameter("sun_direction", sun);
-        _clouds?.SetShaderParameter("moon_direction", moon);
+        foreach (var layer in _cloudLayers)
+        {
+            layer.Material.SetShaderParameter("sun_direction", sun);
+            layer.Material.SetShaderParameter("moon_direction", moon);
+        }
         _sky.SetShaderParameter("twilight", (1 - CelestialMath.Smooth(.03f, .45f, Mathf.Abs(sun.Y))) * CelestialMath.Smooth(-.22f, .04f, sun.Y));
         _sky.SetShaderParameter("moon_visibility", CelestialMath.Smooth(-.015f, .03f, moon.Y));
         _sky.SetShaderParameter("stars_visibility", (1 - CelestialMath.Smooth(-.20f, -.04f, sun.Y)) * (1 - directMoon * .5f));
@@ -152,25 +157,46 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         _dirty = false;
     }
 
+    private MeshInstance3D BindCloudLayer(NodePath path, ReferenceCloudTimeline timeline)
+    {
+        var mesh = Owner.GetNodeOrNull<MeshInstance3D>(path);
+        if (mesh == null) return null;
+        mesh.Visible = _profile.CloudsEnabled;
+        if (mesh.MaterialOverride is ShaderMaterial material && timeline != null)
+            _cloudLayers.Add((mesh, material, timeline));
+        else GD.PushWarning($"[DayNightEnvironment] Missing cloud material or Timeline: {path}");
+        return mesh;
+    }
+
     private void UpdateCloudMotion()
     {
-        if (_clouds == null || _profile.CloudTimeline == null || _lastCloudHours == _time.Clock.TotalHours) return;
+        if (_lastCloudHours == _time.Clock.TotalHours) return;
         _lastCloudHours = _time.Clock.TotalHours;
-        double seconds = _time.Clock.TotalHours / 24 * _time.Clock.DayLengthSeconds;
-        float phase = (float)((seconds % Mathf.Clamp(_profile.CloudEvolutionPeriodSeconds, 4, 240)) /
-            Mathf.Clamp(_profile.CloudEvolutionPeriodSeconds, 4, 240));
-        // Unity _Time.x = seconds / 20. Keep the source noise formula and original SDF keys.
-        _clouds.SetShaderParameter("noise_time", (float)((seconds % 400) / 20));
-        var timeline = _profile.CloudTimeline;
-        _clouds.SetShaderParameter("cloud_sdf", timeline.Sample("_Cloud_SDF_TSb", phase, .003f));
+        // WorldClock is the only time source. Day length changes the clock rate, not the cloud position.
+        Vector4 cloudTime = _profile.SampleCloudTime(_time.Clock.TotalHours);
+        float rotationPhase = cloudTime.X;
+        float phase = cloudTime.Y;
+        var rotation = _profile.CloudRotationTimeline;
+        // Unity's +Y yaw becomes -Y in Godot. Meshes and pivots are authored in the scene.
+        // All layers inherit one wind rotation; additional child yaw doubled their speed and distorted parallax.
+        if (_cloudRoot != null && rotation != null)
+            _cloudRoot.Rotation = new Vector3(0, Mathf.DegToRad(-rotation.Sample("GroupYaw", rotationPhase)), 0);
         // Source Timeline 0/1/2/3 seconds = sunrise/noon/sunset/midnight.
-        float dayPhase = (float)((_time.Clock.State.Hour + 18) % 24 / 24);
-        _clouds.SetShaderParameter("cloud_color_a", timeline.SampleColor("_CloudColorA", dayPhase));
-        _clouds.SetShaderParameter("cloud_color_b", timeline.SampleColor("_CloudColorB", dayPhase));
-        _clouds.SetShaderParameter("cloud_color_c", timeline.SampleColor("_CloudColorC", dayPhase));
-        _clouds.SetShaderParameter("cloud_color_d", timeline.SampleColor("_CloudColorD", dayPhase));
-        _clouds.SetShaderParameter("cloud_edge_color", timeline.SampleColor("_Cloud_edgeColor", dayPhase));
-        _clouds.SetShaderParameter("sun_moon", timeline.Sample("_SunMoon", dayPhase));
+        float dayPhase = cloudTime.W;
+        foreach (var layer in _cloudLayers)
+        {
+            var material = layer.Material;
+            var timeline = layer.Timeline;
+            // Keep the source noise formula, with its phase sampled from the same game calendar.
+            material.SetShaderParameter("noise_time", cloudTime.Z);
+            material.SetShaderParameter("cloud_sdf", timeline.Sample("_Cloud_SDF_TSb", phase, .003f));
+            material.SetShaderParameter("cloud_color_a", timeline.SampleColor("_CloudColorA", dayPhase));
+            material.SetShaderParameter("cloud_color_b", timeline.SampleColor("_CloudColorB", dayPhase));
+            material.SetShaderParameter("cloud_color_c", timeline.SampleColor("_CloudColorC", dayPhase));
+            material.SetShaderParameter("cloud_color_d", timeline.SampleColor("_CloudColorD", dayPhase));
+            material.SetShaderParameter("cloud_edge_color", timeline.SampleColor("_Cloud_edgeColor", dayPhase));
+            material.SetShaderParameter("sun_moon", timeline.Sample("_SunMoon", dayPhase));
+        }
     }
 
     // Graph 组件动作和远程 Inspector 都可调用这些方法。
@@ -206,8 +232,8 @@ public partial class DayNightEnvironmentComponent3D : Component3D
         _time = null;
         _world = null;
         _sky = null;
-        _clouds = null;
-        _cloudMesh = null;
+        _cloudLayers.Clear();
+        _cloudRoot = null;
         _environment = null;
         _exposure = null;
         _lastHours = double.NaN;

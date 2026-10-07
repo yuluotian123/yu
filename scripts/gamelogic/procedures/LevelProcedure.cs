@@ -27,12 +27,6 @@ public class LevelProcedure : ProcedureBase
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
-        if (_inputModule != null &&
-            _inputModule.IsJustPressed("camera_down"))
-        {
-            ModuleSystem.GetModule<ISaveModule>().Save();
-        }
-
         // Return to the main menu for now.
         if (_inputModule != null &&
             _inputModule.IsJustPressed("ui_cancel") &&

@@ -1,0 +1,31 @@
+[gd_resource type="Compositor" format=3 uid="uid://cg742svyaalfl"]
+
+[ext_resource type="Script" uid="uid://xop3p8flwjrs" path="res://scripts/gamelogic/rendering/RelinkPostProcessEffect.cs" id="1"]
+[ext_resource type="Resource" uid="uid://cfyh6r7i8r6f8" path="res://assets/resources/rendering/relink_post/profile.tres" id="profile"]
+
+[sub_resource type="CompositorEffect" id="grade"]
+resource_local_to_scene = true
+resource_name = "Relink · HDR LUT (Before Transparency)"
+enabled = true
+effect_callback_type = 3
+access_resolved_color = true
+access_resolved_depth = true
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1")
+Pass = 0
+Profile = ExtResource("profile")
+
+[sub_resource type="CompositorEffect" id="film"]
+resource_local_to_scene = true
+resource_name = "Relink · Film + Bloom (After Transparency)"
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1")
+Profile = ExtResource("profile")
+
+[resource]
+resource_local_to_scene = true
+compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource("film")])

@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/weather/precipitation.gdshader" id="1"]
+
+[sub_resource type="ShaderMaterial" id="rain_draw"]
+resource_local_to_scene = true
+shader = ExtResource("1")
+
+[sub_resource type="QuadMesh" id="rain_mesh"]
+resource_local_to_scene = true
+material = SubResource("rain_draw")
+size = Vector2(0.018, 0.30)
+
+[sub_resource type="ParticleProcessMaterial" id="rain_process"]
+resource_local_to_scene = true
+emission_shape = 3
+emission_box_extents = Vector3(18, 0.2, 12)
+direction = Vector3(0, -1, 0)
+spread = 3.0
+initial_velocity_min = 16.0
+initial_velocity_max = 20.0
+gravity = Vector3(1.5, -1, 0.4)
+scale_min = 0.6
+scale_max = 1.1
+
+[sub_resource type="ShaderMaterial" id="snow_draw"]
+resource_local_to_scene = true
+shader = ExtResource("1")
+shader_parameter/snow = true
+
+[sub_resource type="QuadMesh" id="snow_mesh"]
+resource_local_to_scene = true
+material = SubResource("snow_draw")
+size = Vector2(0.09, 0.09)
+
+[sub_resource type="ParticleProcessMaterial" id="snow_process"]
+resource_local_to_scene = true
+emission_shape = 3
+emission_box_extents = Vector3(18, 0.5, 12)
+direction = Vector3(0, -1, 0)
+spread = 12.0
+initial_velocity_min = 1.8
+initial_velocity_max = 2.4
+gravity = Vector3(0.3, -0.1, 0.08)
+scale_min = 0.45
+scale_max = 1.25
+
+[node name="Precipitation" type="Node3D"]
+physics_interpolation_mode = 2
+
+[node name="Rain" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 3200
+amount_ratio = 0.0
+lifetime = 0.7
+visibility_aabb = AABB(-24, -20, -18, 48, 24, 36)
+local_coords = false
+transform_align = 3
+process_material = SubResource("rain_process")
+draw_pass_1 = SubResource("rain_mesh")
+cast_shadow = 0
+
+[node name="Snow" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1400
+amount_ratio = 0.0
+lifetime = 5.0
+visibility_aabb = AABB(-24, -20, -18, 48, 24, 36)
+local_coords = false
+transform_align = 1
+process_material = SubResource("snow_process")
+draw_pass_1 = SubResource("snow_mesh")
+cast_shadow = 0

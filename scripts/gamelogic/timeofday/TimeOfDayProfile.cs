@@ -18,11 +18,11 @@ public partial class TimeOfDayProfile : Resource
     [ExportGroup("Scene Environment Controls")]
     /// <summary>开启时将 Profile 的雾参数写入 Environment。默认关闭，可直接在 WorldEnvironment 的 Environment 中调整雾，编辑器和运行时均保留场景值。</summary>
     [Export] public bool DriveFogFromProfile { get; set; } = false;
-    /// <summary>开启时由 Profile 控制 SSAO、Adjustment 开关和饱和度。默认关闭，这些静态效果直接在 Environment 中编辑。</summary>
+    /// <summary>开启时由 Profile 控制 SSAO 和饱和度；BlendNightPostEffects 额外控制昼夜对比度与泛光。</summary>
     [Export] public bool DrivePostEffectsFromProfile { get; set; } = false;
     /// <summary>开启时按昼夜自动改变天空背景亮度。关闭后可直接修改 Environment 的 Background Intensity，系统不会重写。</summary>
     [Export] public bool DriveSkyBrightnessFromProfile { get; set; } = true;
-    /// <summary>开启时按昼夜自动曝光。关闭后 WorldEnvironment 的 Camera Attributes 可直接手动调整，系统不会重写曝光、快门或光圈。</summary>
+    /// <summary>由 Profile 控制相机。关闭后保留 WorldEnvironment 的手动相机设置。</summary>
     [Export] public bool DriveExposureFromProfile { get; set; } = true;
 
     [ExportGroup("Sun and Moon")]
@@ -30,9 +30,7 @@ public partial class TimeOfDayProfile : Resource
     [Export(PropertyHint.Range, "-180,180,0.1")] public float Azimuth { get; set; } = -25;
     [Export(PropertyHint.Range, "0,200000,100")] public float SunLux { get; set; } = 120000;
     [Export(PropertyHint.Range, "0,10,0.01")] public float FullMoonLux { get; set; } = 0.3f;
-    /// <summary>主光反弹贡献；由 SDFGI 产生间接光，不用自发光抬亮整个材质。</summary>
-    [Export(PropertyHint.Range, "0,2,0.05")] public float SunIndirectEnergy { get; set; } = .75f;
-    [Export(PropertyHint.Range, "0,2,0.05")] public float MoonIndirectEnergy { get; set; } = 1f;
+    [Export] public Color MoonTint { get; set; } = Colors.White;
     [Export(PropertyHint.Range, "0.1,5,0.01")] public float SunDiameterDegrees { get; set; } = 1.8f;
     [Export(PropertyHint.Range, "0.1,5,0.01")] public float MoonDiameterDegrees { get; set; } = 3.0f;
 
@@ -60,6 +58,20 @@ public partial class TimeOfDayProfile : Resource
     /// <summary>仅 DrivePostEffectsFromProfile 开启时控制饱和度；否则直接编辑 Environment 的 Adjustment。1 为原色。</summary>
     [Export(PropertyHint.Range, "0.5,1.5,0.01")] public float ColorSaturation { get; set; } = 1.08f;
 
+    [ExportGroup("Day and Night Post Effects")]
+    /// <summary>仅 DrivePostEffectsFromProfile 开启时生效；关闭后保留 Environment 的对比度与泛光。</summary>
+    [Export] public bool BlendNightPostEffects { get; set; }
+    [Export(PropertyHint.Range, "0.5,1.5,0.01")] public float NightColorSaturation { get; set; } = 1.1f;
+    [Export(PropertyHint.Range, "0.5,1.5,0.005")] public float DayContrast { get; set; } = 1.04f;
+    [Export(PropertyHint.Range, "0.5,1.5,0.005")] public float NightContrast { get; set; } = 1.015f;
+    [Export] public bool GlowEnabled { get; set; } = true;
+    [Export(PropertyHint.Range, "0,1,0.01")] public float DayGlowIntensity { get; set; } = .04f;
+    [Export(PropertyHint.Range, "0,1,0.01")] public float NightGlowIntensity { get; set; } = .26f;
+    [Export(PropertyHint.Range, "0.1,4,0.05")] public float DayGlowThreshold { get; set; } = 1.8f;
+    [Export(PropertyHint.Range, "0.1,4,0.05")] public float NightGlowThreshold { get; set; } = .9f;
+    /// <summary>少量低于高光阈值的柔光；白天固定为 0，避免泛白。</summary>
+    [Export(PropertyHint.Range, "0,0.2,0.005")] public float NightBloom { get; set; } = .025f;
+
     // 编辑器预览与运行时共用，防止运行后被旧色温或太阳盘大小覆盖。
     public void ApplyLighting(Godot.Environment environment, DirectionalLight3D sunLight,
         DirectionalLight3D moonLight, CameraAttributesPhysical exposure, double hour, double phase)
@@ -67,6 +79,8 @@ public partial class TimeOfDayProfile : Resource
         Vector3 sun = CelestialMath.Direction(hour, 0, NoonElevation, Azimuth);
         Vector3 moon = CelestialMath.Direction(hour, phase, NoonElevation, Azimuth);
         float day = CelestialMath.Smooth(-.16f, .25f, sun.Y);
+        float linearShutter = Mathf.Lerp(Mathf.Pow(2, NightExposureEv), Mathf.Pow(2, DayExposureEv), day) / 256f;
+        float shutter = SampleExposureShutter(sun.Y, linearShutter);
         float noon = CelestialMath.Smooth(0, .35f, sun.Y);
         float moonLightAmount = CelestialMath.Smooth(0, .18f, moon.Y) * (float)((1 - Math.Cos(phase * Math.Tau)) * .5);
         ApplyLightDirection(sunLight, sun);
@@ -77,9 +91,15 @@ public partial class TimeOfDayProfile : Resource
         sunLight.LightTemperature = Mathf.Lerp(3000, Mathf.Clamp(NoonTemperature, 3000, 7500), noon);
         sunLight.LightColor = Colors.White.Lerp(NoonSunTint, noon);
         moonLight.LightIntensityLux = Mathf.Max(0, FullMoonLux) * moonLightAmount;
+        // 光源保持世界空间物理单位；曝光只在相机端应用，包含局部灯和材质发光。
+        sunLight.LightEnergy = moonLight.LightEnergy = 1;
         moonLight.LightTemperature = 8500;
-        sunLight.LightIndirectEnergy = Mathf.Clamp(SunIndirectEnergy, 0, 2);
-        moonLight.LightIndirectEnergy = Mathf.Clamp(MoonIndirectEnergy, 0, 2);
+        moonLight.LightColor = MoonTint;
+        environment.SdfgiEnabled = false;
+        environment.SsilEnabled = false;
+        // 光栅风格使用天空补光；路径追踪需要日月参与反弹光照。
+        float indirectEnergy = environment.PathtracingEnabled ? 1 : 0;
+        sunLight.LightIndirectEnergy = moonLight.LightIndirectEnergy = indirectEnergy;
         sunLight.LightAngularDistance = moonLight.LightAngularDistance = Mathf.Clamp(ShadowAngularDistance, 0, 2);
         sunLight.ShadowBlur = moonLight.ShadowBlur = Mathf.Clamp(ShadowFilterBlur, 0, 2);
         sunLight.ShadowBias = moonLight.ShadowBias = Mathf.Clamp(ShadowBias, 0, 1);
@@ -96,18 +116,101 @@ public partial class TimeOfDayProfile : Resource
             environment.SsaoEnabled = ContactOcclusionEnabled;
             environment.AdjustmentEnabled = true;
             environment.AdjustmentSaturation = Mathf.Clamp(ColorSaturation, .5f, 1.5f);
+            if (BlendNightPostEffects)
+            {
+                // 与天空使用相同日照权重，晨昏不切换预设，也不改变物理曝光。
+                environment.AdjustmentSaturation = Mathf.Lerp(Mathf.Clamp(NightColorSaturation, .5f, 1.5f),
+                    Mathf.Clamp(ColorSaturation, .5f, 1.5f), day);
+                environment.AdjustmentContrast = Mathf.Lerp(Mathf.Clamp(NightContrast, .5f, 1.5f),
+                    Mathf.Clamp(DayContrast, .5f, 1.5f), day);
+                environment.GlowEnabled = GlowEnabled;
+                environment.GlowIntensity = Mathf.Lerp(Mathf.Clamp(NightGlowIntensity, 0, 1),
+                    Mathf.Clamp(DayGlowIntensity, 0, 1), day);
+                environment.GlowHdrThreshold = Mathf.Lerp(Mathf.Clamp(NightGlowThreshold, .1f, 4),
+                    Mathf.Clamp(DayGlowThreshold, .1f, 4), day);
+                environment.GlowBloom = Mathf.Clamp(NightBloom, 0, .2f) * (1 - day);
+            }
         }
         if (DriveSkyBrightnessFromProfile)
-            environment.BackgroundIntensity = Mathf.Lerp(Mathf.Max(.001f, NightSkyIntensity), Mathf.Max(1, DaySkyIntensity), day);
+        {
+            float intensity = Mathf.Lerp(Mathf.Max(.001f, NightSkyIntensity), Mathf.Max(1, DaySkyIntensity), day);
+            if (sun.Y < 0)
+            {
+                float horizon = Mathf.Lerp(Mathf.Max(.001f, NightSkyIntensity), Mathf.Max(1, DaySkyIntensity), CelestialMath.Smooth(-.16f, .25f, 0));
+                float night = 1 - CelestialMath.Smooth(-.16f, 0, sun.Y);
+                // Twilight luminance falls with solar elevation, independently of camera exposure.
+                intensity = Mathf.Exp(Mathf.Lerp(Mathf.Log(horizon), Mathf.Log(Mathf.Max(.001f, NightSkyIntensity)), night));
+            }
+            environment.BackgroundIntensity = intensity;
+        }
         if (DriveExposureFromProfile)
         {
-            exposure.AutoExposureEnabled = false;
+            if (exposure.AutoExposureEnabled) exposure.AutoExposureEnabled = false;
             exposure.ExposureSensitivity = 100;
             exposure.ExposureAperture = 16;
             exposure.ExposureMultiplier = Mathf.Max(.01f, ExposureMultiplier);
-            // 在曝光分母上插值，避免晨昏闪白；保持完整昼夜动态范围。
-            exposure.ExposureShutterSpeed = Mathf.Lerp(Mathf.Pow(2, NightExposureEv), Mathf.Pow(2, DayExposureEv), day) / 256f;
+            exposure.ExposureShutterSpeed = shutter;
         }
+    }
+
+    private float SampleExposureShutter(float sunHeight, float linearShutter)
+    {
+        if (sunHeight >= 0) return linearShutter;
+        float horizonDay = CelestialMath.Smooth(-.16f, .25f, 0);
+        float horizonShutter = Mathf.Lerp(Mathf.Pow(2, NightExposureEv), Mathf.Pow(2, DayExposureEv), horizonDay) / 256f;
+        float night = 1 - CelestialMath.Smooth(-.16f, 0, sunHeight);
+        // 对数域均匀跨越多档曝光，避免满月在暮光最后一分钟被突然放大数十倍。
+        return Mathf.Pow(2, Mathf.Lerp(Mathf.Log(horizonShutter * 256) / Mathf.Log(2), NightExposureEv, night)) / 256f;
+    }
+
+    public void ApplyCloudMaterial(ShaderMaterial material, ReferenceCloudTimeline timeline, Vector4 cloudTime)
+    {
+        material.SetShaderParameter("noise_time", cloudTime.Z);
+        material.SetShaderParameter("cloud_sdf", timeline.Sample("_Cloud_SDF_TSb", cloudTime.Y, .003f));
+        material.SetShaderParameter("cloud_color_a", timeline.SampleColor("_CloudColorA", cloudTime.W));
+        material.SetShaderParameter("cloud_color_b", timeline.SampleColor("_CloudColorB", cloudTime.W));
+        material.SetShaderParameter("cloud_color_c", timeline.SampleColor("_CloudColorC", cloudTime.W));
+        material.SetShaderParameter("cloud_color_d", timeline.SampleColor("_CloudColorD", cloudTime.W));
+        material.SetShaderParameter("cloud_edge_color", timeline.SampleColor("_Cloud_edgeColor", cloudTime.W));
+        material.SetShaderParameter("sun_moon", timeline.Sample("_SunMoon", cloudTime.W));
+    }
+
+    public void ApplyRelinkPostProcessing(Compositor compositor, Godot.Environment environment, double hour)
+    {
+        if (compositor == null) return;
+        RelinkPostProcessProfile fallback = null;
+        bool active = RelinkPostProcessEffect.HasActiveFilm(compositor);
+        float day = CelestialMath.Smooth(-.16f, .25f, CelestialMath.Direction(hour, 0, NoonElevation, Azimuth).Y);
+        var effects = compositor.CompositorEffects;
+        using var effectsOwner = (Godot.Collections.Array)effects;
+        foreach (CompositorEffect effect in effects)
+        {
+            if (effect is not RelinkPostProcessEffect relink || relink.Profile == null) continue;
+            var post = relink.Profile;
+            if (fallback == null || relink.Pass == RelinkPostProcessEffect.PassKind.FilmAndBloom) fallback = post;
+            if (!DrivePostEffectsFromProfile) continue;
+            post.BloomEnabled = GlowEnabled;
+            post.BloomIntensity = BlendNightPostEffects ? Mathf.Lerp(NightGlowIntensity, DayGlowIntensity, day) : DayGlowIntensity;
+            post.BloomThreshold = BlendNightPostEffects ? Mathf.Lerp(NightGlowThreshold, DayGlowThreshold, day) : DayGlowThreshold;
+            post.BloomFloor = BlendNightPostEffects ? NightBloom * (1 - day) : 0;
+        }
+        if (fallback == null) return;
+        // 合成器已执行电影曲线和泛光；Godot 只负责最后一次 sRGB 输出。
+        // 原生 setter 即使值不变也会重建检查器，编辑器预览逐帧调用时只在切换模式时写入。
+        var tonemap = active ? Godot.Environment.ToneMapper.Linear : fallback.NativeTonemap;
+        if (environment.TonemapMode != tonemap) environment.TonemapMode = tonemap;
+        environment.TonemapExposure = active ? 1 : Mathf.Max(.01f, fallback.NativeExposure);
+        if (active)
+        {
+            environment.GlowEnabled = false;
+            environment.AdjustmentEnabled = false;
+        }
+        else if (!DrivePostEffectsFromProfile)
+        {
+            environment.GlowEnabled = fallback.NativeGlow;
+            environment.AdjustmentEnabled = fallback.NativeAdjustment;
+        }
+        else if (!BlendNightPostEffects) environment.GlowEnabled = fallback.NativeGlow;
     }
 
     // 单独逐帧更新投影方向；编辑器和主动跳时仍由 ApplyLighting 应用全部光照。
@@ -136,6 +239,35 @@ public partial class TimeOfDayProfile : Resource
     [Export(PropertyHint.Range, "1,100000,1")] public float DaySkyIntensity { get; set; } = 26000;
     [Export(PropertyHint.Range, "0.001,100,0.001")] public float NightSkyIntensity { get; set; } = 0.08f;
     [Export(PropertyHint.Range, "0,3,0.01")] public float StarIntensity { get; set; } = 1;
+    [Export(PropertyHint.Range, "0,1,0.01")] public float MoonHaloStrength { get; set; }
+
+    // 天空配色、月相与星光共用一处，编辑器跳时与游戏保持一致。
+    public void ApplySky(ShaderMaterial sky, double hour, double phase)
+    {
+        Vector3 sun = CelestialMath.Direction(hour, 0, NoonElevation, Azimuth);
+        Vector3 moon = CelestialMath.Direction(hour, phase, NoonElevation, Azimuth);
+        float directMoon = CelestialMath.Smooth(0, .18f, moon.Y) * (float)((1 - Math.Cos(phase * Math.Tau)) * .5);
+        // 天空辐照持续存在；昼夜亮度由 BackgroundIntensity 和曝光共同控制。
+        sky.SetShaderParameter("ibl_strength", 1f);
+        sky.SetShaderParameter("day_zenith", DayZenith);
+        sky.SetShaderParameter("day_horizon", DayHorizon);
+        sky.SetShaderParameter("day_ground", DayGround);
+        sky.SetShaderParameter("sunset_horizon", SunsetHorizon);
+        sky.SetShaderParameter("night_zenith", NightZenith);
+        sky.SetShaderParameter("night_horizon", NightHorizon);
+        sky.SetShaderParameter("sun_radius", Mathf.DegToRad(Mathf.Clamp(SunDiameterDegrees, .1f, 5) * .5f));
+        sky.SetShaderParameter("moon_radius", Mathf.DegToRad(Mathf.Clamp(MoonDiameterDegrees, .1f, 5) * .5f));
+        sky.SetShaderParameter("star_intensity", Mathf.Clamp(StarIntensity, 0, 3));
+        sky.SetShaderParameter("moon_halo_strength", Mathf.Clamp(MoonHaloStrength, 0, 1));
+        sky.SetShaderParameter("sun_direction", sun);
+        sky.SetShaderParameter("moon_direction", moon);
+        sky.SetShaderParameter("daylight", CelestialMath.Smooth(-.16f, .25f, sun.Y));
+        sky.SetShaderParameter("twilight", (1 - CelestialMath.Smooth(.03f, .45f, Mathf.Abs(sun.Y))) * CelestialMath.Smooth(-.22f, .04f, sun.Y));
+        sky.SetShaderParameter("moon_visibility", CelestialMath.Smooth(-.015f, .03f, moon.Y));
+        sky.SetShaderParameter("stars_visibility", (1 - CelestialMath.Smooth(-.20f, -.04f, sun.Y)) * (1 - directMoon * .5f));
+        sky.SetShaderParameter("star_rotation", (float)(hour / 24 * Math.Tau));
+        sky.SetShaderParameter("moon_light", directMoon);
+    }
 
     [ExportGroup("Atmosphere and Aerial Perspective")]
     [Export(PropertyHint.Range, "0,1,0.01")] public float HorizonHaze { get; set; } = 0.45f;
@@ -149,6 +281,12 @@ public partial class TimeOfDayProfile : Resource
     [Export(PropertyHint.Range, "0,1,0.01")] public float FogOpacity { get; set; } = .65f;
     [Export] public float FogHeight { get; set; } = -9f;
     [Export(PropertyHint.Range, "0,0.5,0.001")] public float FogHeightDensity { get; set; } = 0.025f;
+    /// <summary>仅 DriveFogFromProfile 开启时生效；原 Fog 参数作为白天端点。</summary>
+    [Export] public bool BlendNightFog { get; set; }
+    [Export(PropertyHint.Range, "0,500,0.5")] public float NightFogStart { get; set; } = 14f;
+    [Export(PropertyHint.Range, "1,2000,1")] public float NightFogEnd { get; set; } = 150f;
+    [Export(PropertyHint.Range, "0,1,0.01")] public float NightFogOpacity { get; set; } = .7f;
+    [Export(PropertyHint.Range, "0,0.5,0.001")] public float NightFogHeightDensity { get; set; } = .016f;
     [Export(PropertyHint.Range, "0,0.5,0.01")] public float CloudHorizonFade { get; set; } = 0.22f;
 
     // Shared by the runtime EC and editor preview. Fog samples the same sky radiance,
@@ -167,13 +305,14 @@ public partial class TimeOfDayProfile : Resource
         sky.SetShaderParameter("sun_direction", sun);
         if (!DriveFogFromProfile) return;
         environment.FogEnabled = FogEnabled;
-        environment.FogMode = Godot.Environment.FogModeEnum.Depth;
-        environment.FogDensity = Mathf.Clamp(FogOpacity, 0, 1);
-        environment.FogDepthBegin = Mathf.Max(0, FogStart);
-        environment.FogDepthEnd = Mathf.Max(environment.FogDepthBegin + 1, FogEnd);
+        if (environment.FogMode != Godot.Environment.FogModeEnum.Depth)
+            environment.FogMode = Godot.Environment.FogModeEnum.Depth;
+        environment.FogDensity = Mathf.Clamp(BlendNightFog ? Mathf.Lerp(NightFogOpacity, FogOpacity, day) : FogOpacity, 0, 1);
+        environment.FogDepthBegin = Mathf.Max(0, BlendNightFog ? Mathf.Lerp(NightFogStart, FogStart, day) : FogStart);
+        environment.FogDepthEnd = Mathf.Max(environment.FogDepthBegin + 1, BlendNightFog ? Mathf.Lerp(NightFogEnd, FogEnd, day) : FogEnd);
         environment.FogDepthCurve = Mathf.Clamp(FogCurve, .1f, 4);
         environment.FogHeight = FogHeight;
-        environment.FogHeightDensity = Mathf.Clamp(FogHeightDensity, 0, .5f);
+        environment.FogHeightDensity = Mathf.Clamp(BlendNightFog ? Mathf.Lerp(NightFogHeightDensity, FogHeightDensity, day) : FogHeightDensity, 0, .5f);
         environment.FogAerialPerspective = 1;
         environment.FogSkyAffect = 0;
         // Sky already includes the directional lobe; adding direct sun again overexposes the mist.

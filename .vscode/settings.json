@@ -1,3 +1,4 @@
 {
-    "godotTools.editorPath.godot4": "d:\\DCC\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64_console.exe"
+    "godotTools.editorPath.godot4": "D:/DCC/Godot_NVIDIA_RTX/bin/godot.windows.editor.x86_64.mono.console.exe",
+    "C_Cpp.default.compileCommands": "D:/DCC/Godot_NVIDIA_RTX/compile_commands.json"
 }

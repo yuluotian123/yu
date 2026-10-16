@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/xinyangaa/Unity_URP_Genshin_Impact_Programmed_Skybox",
+  "commit": "ef1bd4c6fa486977a323c3badaba5740feae1d55",
+  "files": [
+    {
+      "file": "res://assets/models/environment/clouds/cloud.fbx",
+      "source": "SKY/云/cloud.fbx",
+      "git_blob": "1e2e2b56714d88c1bd6f6d28940af73f21c6dca7",
+      "sha256": "29386389f4013f7413172d89d373243385e2a5a8ba69d91b69279f4b7c437573",
+      "bytes": 163264
+    },
+    {
+      "file": "res://assets/textures/environment/clouds/78678.png",
+      "source": "SKY/云/78678.png",
+      "git_blob": "a70a64aab45a4d5d4923c42ba2fc4c453c7f8c14",
+      "sha256": "b93b6becfdb65ec468bfc830755d04abbcf7e06edcfbda7cd91fc11cc3104784",
+      "bytes": 4202201
+    },
+    {
+      "file": "res://assets/textures/environment/clouds/000001EEA8FB26F8.png",
+      "source": "SKY/云/000001EEA8FB26F8.png",
+      "git_blob": "77cfbc71741ad91f173e04da32d91352dfaf3ea0",
+      "sha256": "07aad4c7f7566ac92d09883eb543818be1cef0373a3d9015613ff4ad55507ebd",
+      "bytes": 4202354
+    },
+    {
+      "file": "res://assets/textures/environment/clouds/Noise_091.png",
+      "source": "SKY/云/Noise_091.png",
+      "git_blob": "ce5f3ac21c8a70ec959bc45a045c99571b847ddd",
+      "sha256": "515e941f15ccc9d70cafd3ec28875aa38be4c3766a8d8bd237a13cf20b53f867",
+      "bytes": 7149988
+    }
+  ]
+}

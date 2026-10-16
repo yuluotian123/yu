@@ -17,6 +17,25 @@ Use this skill to get oriented in the yu Godot.NET project before changing code.
 - Before changing a host, component, or gameplay scene, read [references/ec-framework.md](references/ec-framework.md) for lifecycle, ordering, ownership, and scene wiring.
 - This rule concerns gameplay behavior. Existing framework infrastructure, editor plugins, test runners, and UI framework classes may retain their required Godot/framework bases.
 
+## Asset Layout
+
+Put game art under one type-first tree; use domain subfolders such as town, environment, weather, rendering, sprites, and ui within each type.
+
+| Directory | Contents |
+| --- | --- |
+| `assets/shaders/` | `.gdshader`, `.gdshaderinc`, and rendering `.glsl`; includes use the same tree. |
+| `assets/materials/` | Reusable ShaderMaterial / StandardMaterial3D `.tres` files. |
+| `assets/textures/` | PNG/SVG textures, sprite atlases and source artwork, concept references, and Texture3D LUT `.res` files. |
+| `assets/models/` | GLB/FBX sources and saved Mesh `.res` files. |
+| `assets/scenes/` | `.tscn` scenes, grouped by town, environment, ui, etc. |
+| `assets/resources/` | Non-material definitions: Environment, Sky/Compositor profiles, CameraAttributes, SpriteFrames, timelines, abilities, graphs, camera and framework settings, and art metadata. |
+
+- Classify `.tres` / `.res` by resource type, not extension alone. Scene-local inline subresources may stay in scenes. Do not create feature folders that mix shaders, textures, models, and documentation again.
+- Move `.uid` and `.import` sidecars with their source, preserving UIDs and import options. Update serialized references, shader includes, C#/GDScript dynamic load paths, and tooling output paths. Respect relative texture URIs in imported models.
+- Keep maintained art/rendering guidance in `docs/art/`; keep module documentation beside its code. Third-party addon files retain their package layout and licenses under `addons/`.
+- Put disposable captures, logs, and probes under ignored `.godot/<task>/`, not the root or `assets/`. Preserve engine-managed import/build caches and useful source artwork. Recoverable worktree archives belong in ignored `archives/worktrees/`.
+- After a migration, rescan/reimport assets and verify references, resource loading, and affected runtime scenes; a C# build alone does not validate Godot paths.
+
 ## Workflow
 
 - Start by searching with `rg` and reading the nearby implementation before editing.
@@ -31,4 +50,4 @@ Use this skill to get oriented in the yu Godot.NET project before changing code.
 - Do not hand-edit generated config files under `scripts/generated/config`; extend behavior outside generated output.
 - Preserve Godot resource paths and serialized exported members unless the task explicitly requires migration.
 - Keep comments concise and useful. The project already contains a mix of Chinese and English comments; follow nearby file style.
-- For tests or smoke checks, prefer existing `scripts/test` patterns and project-local build commands.
+- For tests or smoke checks, use the maintained validators under `scripts/tools/weather/` and `scripts/tools/rendering/`, plus project-local build commands.

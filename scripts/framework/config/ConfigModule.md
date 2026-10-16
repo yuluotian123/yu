@@ -90,8 +90,8 @@ XlsxReader          ← 读取表格结构和数据
 
 | 输入项 | 说明 | 默认值 |
 |--------|------|--------|
-| xlsx 源文件夹 | 存放 xlsx 文件的目录 | `res://assets/config/xlsx/` |
-| JSON 输出目录 | 运行时 JSON 数据的输出目录 | `res://assets/config/tables/` |
+| xlsx 源文件夹 | 存放 xlsx 文件的目录 | `res://assets/resources/config/xlsx/` |
+| JSON 输出目录 | 运行时 JSON 数据的输出目录 | `res://assets/resources/config/tables/` |
 | C# 代码输出目录 | 生成的 C# 类文件目录 | `res://scripts/generated/config/` |
 | C# 命名空间 | 生成类的命名空间 | `Generated.Config` |
 
@@ -234,5 +234,5 @@ cfg.ReloadAll();                    // 重载已加载的全部表
 2. **Excel 临时文件**（以 `~` 开头）会被自动跳过。
 3. **list\<T\> 分隔符**默认为 `;`，单元格填写示例：`1;2;3`。
 4. **ref\<T\>** 类型在 C# 中生成为 `int`（存储目标表的 id），运行时需手动调用 `cfg.GetById<T>(id)` 查询。
-5. `ConfigSetting.TablePath` 默认为 `res://assets/config/tables/`，可在编辑器的 **Settings** 资源中修改。
+5. `ConfigSetting.TablePath` 默认为 `res://assets/resources/config/tables/`，可在编辑器的 **Settings** 资源中修改。
 6. 预加载推荐使用 `cfg.PreloadTables(typeof(X), ...)` 显式指定，不要依赖反射扫描。

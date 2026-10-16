@@ -14,7 +14,7 @@ namespace GameLogic
     ///   <item>CreateWidget 创建子 Widget</item>
     ///   <item>ShowUI / CloseUI / HideUI 操作</item>
     /// </list>
-    /// <para>对应场景：res://assets/minigame/ui/main_menu_window.tscn</para>
+    /// <para>对应场景：res://assets/scenes/ui/main_menu_window.tscn</para>
     /// <para>
     /// 场景结构要求（节点设置为 UniqueNode）：
     /// <code>

@@ -1,61 +1,66 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://co07hftpcxec2"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_host"]
-[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_base"]
-[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="3_controller"]
-[ext_resource type="Resource" path="res://assets/environment/default_time_of_day.tres" id="4_profile"]
-
-
+[ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_host"]
+[ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_base"]
+[ext_resource type="Script" uid="uid://b8lm4oftf5a3i" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="3_controller"]
+[ext_resource type="Resource" uid="uid://2fq1gmkupqyn" path="res://assets/resources/environment/default_time_of_day.tres" id="4_profile"]
+[ext_resource type="Environment" uid="uid://dxed63sy3dnqa" path="res://assets/resources/environment/day_night_environment.tres" id="environment"]
+[ext_resource type="CameraAttributesPhysical" uid="uid://bonkel6lyv08n" path="res://assets/resources/environment/day_night_camera_attributes.tres" id="exposure"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
-
-[ext_resource type="Environment" path="res://assets/environment/day_night_environment.tres" id="environment"]
-[ext_resource type="CameraAttributesPhysical" path="res://assets/environment/day_night_camera_attributes.tres" id="exposure"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/precipitation.tscn" id="precipitation"]
+[ext_resource type="Script" uid="uid://8lwsqfyrq2lf" path="res://scripts/gamelogic/weather/WeatherComponent3D.cs" id="weather_controller"]
+[ext_resource type="Resource" uid="uid://bcac25hfauhxt" path="res://assets/resources/weather/default_weather.tres" id="weather_profile"]
 
 [sub_resource type="Resource" id="controller"]
 script = ExtResource("3_controller")
 Profile = ExtResource("4_profile")
 
-[node name="EnvironmentRig" type="Node3D"]
+[sub_resource type="Resource" id="weather"]
+script = ExtResource("weather_controller")
+Profile = ExtResource("weather_profile")
+
+[node name="EnvironmentRig" type="Node3D" unique_id=2031481052]
 process_mode = 1
 script = ExtResource("1_host")
 PersistentId = "level_environment"
-Components = Array[ExtResource("2_base")]([SubResource("controller")])
+Components = Array[ExtResource("2_base")]([SubResource("controller"), SubResource("weather")])
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Precipitation" parent="." unique_id=393391044 instance=ExtResource("precipitation")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1491351502]
 environment = ExtResource("environment")
 camera_attributes = ExtResource("exposure")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1629258935]
 physics_interpolation_mode = 2
-transform = Transform3D(0.9063078, 0, 0.4226183, 0.4082179, 0.258819, -0.875426, -0.1093817, 0.9659258, 0.2345697, 0, 0, 0)
-light_color = Color(1, 0.99, 0.96, 1)
+transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.9659258, 0.42261842, -0.875426, 0.23456971, 0, 0, 0)
 light_intensity_lux = 120000.0
 light_temperature = 5600.0
-light_angular_distance = 0.0
-shadow_blur = 1.0
+light_color = Color(1, 0.99, 0.96, 1)
+light_indirect_energy = 0.75
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5
-directional_shadow_blend_splits = true
 directional_shadow_split_1 = 0.2
 directional_shadow_split_2 = 0.4
 directional_shadow_split_3 = 0.7
+directional_shadow_blend_splits = true
 directional_shadow_max_distance = 55.0
 
-[node name="Moon" type="DirectionalLight3D" parent="."]
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=945562600]
 physics_interpolation_mode = 2
+transform = Transform3D(-0.9063079, 0.40821782, 0.10938164, 0, 0.2588191, -0.9659259, -0.42261815, -0.87542623, -0.23456976, 0, 0, 0)
 visible = false
-light_intensity_lux = 0.3
+light_intensity_lux = 0.0
 light_temperature = 8500.0
-light_angular_distance = 0.0
-shadow_blur = 1.0
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5
-directional_shadow_blend_splits = true
 directional_shadow_split_1 = 0.2
 directional_shadow_split_2 = 0.4
 directional_shadow_split_3 = 0.7
+directional_shadow_blend_splits = true
 directional_shadow_max_distance = 55.0
 
-[node name="OriginalClouds" parent="." instance=ExtResource("original_clouds")]
+[node name="OriginalClouds" parent="." unique_id=1089061592 instance=ExtResource("original_clouds")]
+transform = Transform3D(-0.9998477, 0, 0.017452395, 0, 1, 0, -0.017452395, 0, -0.9998477, 0, 0, 0)

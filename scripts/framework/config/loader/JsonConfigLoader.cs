@@ -30,7 +30,7 @@ namespace Framework
         /// <param name="tablePath">JSON 数据文件所在目录（res:// 格式，末尾有无 / 均可）。</param>
         public JsonConfigLoader(string tablePath)
         {
-            _tablePath = (tablePath ?? "res://assets/config/tables/").TrimEnd('/') + "/";
+            _tablePath = (tablePath ?? "res://assets/resources/config/tables/").TrimEnd('/') + "/";
         }
 
         /// <inheritdoc/>

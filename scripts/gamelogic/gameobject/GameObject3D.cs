@@ -8,6 +8,7 @@ using Godot.Collections;
 
 namespace GameLogic
 {
+    [Tool]
     public partial class GameObject3D : Node3D, IObjectPoolItem, IGameObject
     {
         [Export] [JsonIgnore] public string PersistentId { get; set; } = string.Empty;
@@ -17,6 +18,8 @@ namespace GameLogic
         private readonly System.Collections.Generic.Dictionary<Type, Component3D> _runtimeComponents = new();
         private List<Component3D> _sortedComponents = new();
         private bool _componentsInitialized;
+        private double _editorElapsed;
+        private bool _editorSaving;
 
         public Vector3 WorldPosition => GlobalPosition;
 
@@ -130,6 +133,7 @@ namespace GameLogic
 
         public override void _Ready()
         {
+            if (Engine.IsEditorHint()) return;
             PersistentIdUtility.EnsurePersistentId(this);
             InitializeComponents();
             ActivateComponents();
@@ -137,6 +141,20 @@ namespace GameLogic
 
         public override void _Process(double delta)
         {
+            if (Engine.IsEditorHint())
+            {
+                if (_editorSaving) return;
+                // Components 持有这个原生数组，转换后的视图不拥有它，不能 Dispose。
+                var definitions = (Godot.Collections.Array)Components;
+                foreach (Variant item in definitions)
+                    if (item.AsGodotObject() is Component3D component) component.OnEditorFrameUpdate(this, delta);
+                _editorElapsed += delta;
+                if (_editorElapsed < .1) return;
+                _editorElapsed = 0;
+                foreach (Variant item in definitions)
+                    if (item.AsGodotObject() is Component3D component) component.OnEditorUpdate(this);
+                return;
+            }
             if (!_componentsInitialized)
                 return;
             for (int i = 0; i < _sortedComponents.Count; i++)
@@ -148,6 +166,7 @@ namespace GameLogic
 
         public override void _PhysicsProcess(double delta)
         {
+            if (Engine.IsEditorHint()) return;
             if (!_componentsInitialized)
                 return;
             for (int i = 0; i < _sortedComponents.Count; i++)
@@ -157,8 +176,26 @@ namespace GameLogic
             }
         }
 
+        public override void _Notification(int what)
+        {
+            // 临时渲染资源必须在 PackedScene 序列化前解绑，下一帧自动恢复预览。
+            if (!Engine.IsEditorHint()) return;
+            if (what == NotificationEditorPostSave) { _editorSaving = false; return; }
+            if (what != NotificationEditorPreSave) return;
+            _editorSaving = true;
+            var definitions = (Godot.Collections.Array)Components;
+            foreach (Variant item in definitions)
+                if (item.AsGodotObject() is Component3D component) component.OnEditorPreSave(this);
+        }
+
         public override void _ExitTree()
         {
+            if (Engine.IsEditorHint())
+            {
+                foreach (Variant item in (Godot.Collections.Array)Components)
+                    if (item.AsGodotObject() is Component3D component) component.OnEditorExit(this);
+                return;
+            }
             Debugger.Info($"GameObject '{Name}' exiting tree, destroying components.");
 
             DeactivateComponents();

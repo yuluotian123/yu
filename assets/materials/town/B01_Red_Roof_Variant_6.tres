@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/town_toon.gdshader" id="1_shader"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/rendering/ggx_energy.res" id="ggx_energy"]
+
+[resource]
+resource_name = "Chimney soot Toon"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.1283540, 0.1517037, 0.1718441, 1.0000000)
+
+shader_parameter/ggx_energy_lut = ExtResource("ggx_energy")

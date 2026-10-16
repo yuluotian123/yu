@@ -39,7 +39,7 @@ namespace GameLogic
             root.AddChild(GraphEditorUi.BuildLineEditRow(
                 "Profile Path",
                 ShakeProfilePath,
-                "res://assets/camera_shakes/light_hit.tres",
+                "res://assets/resources/camera_shakes/light_hit.tres",
                 value => ShakeProfilePath = value));
             root.AddChild(new Label { Text = "使用全局相机，无需绑定角色组件。" });
             return root;

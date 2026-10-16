@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="WeatherProfile" format=3 uid="uid://bcac25hfauhxt"]
+
+[ext_resource type="Script" uid="uid://dtmkaciontqnb" path="res://scripts/gamelogic/weather/WeatherProfile.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+RainOpacity = 0.6
+RippleStrength = 0.25

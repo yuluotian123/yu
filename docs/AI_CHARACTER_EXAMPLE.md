@@ -26,7 +26,7 @@
 
 ## 巡逻流程
 
-行为树资源是 [ai_patrol_behavior_tree.tres](../assets/graphs/ai_patrol_behavior_tree.tres)。
+行为树资源是 [ai_patrol_behavior_tree.tres](../assets/resources/graphs/ai_patrol_behavior_tree.tres)。
 
 ```text
 Root → Parallel（RequireAll）

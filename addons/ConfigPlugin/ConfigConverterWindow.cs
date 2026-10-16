@@ -11,8 +11,8 @@ using System;
 public partial class ConfigConverterWindow : Window
 {
     // ── 默认路径常量 ──────────────────────────────────────────────────────────
-    public const string DefaultXlsxDir = "res://assets/config/xlsx/";
-    public const string DefaultJsonDir = "res://assets/config/tables/";
+    public const string DefaultXlsxDir = "res://assets/resources/config/xlsx/";
+    public const string DefaultJsonDir = "res://assets/resources/config/tables/";
     public const string DefaultCsDir   = "res://scripts/generated/config/";
 
     /// <summary>由 ConfigPlugin 在 _EnterTree / 热重载后主动赋值。</summary>

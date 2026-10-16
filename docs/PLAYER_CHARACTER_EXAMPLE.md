@@ -12,7 +12,7 @@
 | ---: | --- | --- |
 | 100 | `PlayerCharacterInputComponent3D` | 无 Move/Jump/Ability Action 字段 |
 | 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
-| 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/abilities/player_ability_set.tres) |
+| 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/resources/abilities/player_ability_set.tres) |
 | 50 | `CharacterMovementComponent3D` | 移速、跳跃、重力、Body 路径 |
 | 20 | `CharacterAnimationComponent3D` | `player.tscn` 内嵌 Locomotion HFSM |
 | 最后 | `CharacterPersistenceComponent3D` | Save |
@@ -83,8 +83,8 @@ CharacterGraph 只提交“想跳”的意图。是否在地面、是否处于 C
 
 资源：
 
-- [attack_ability.tres](../assets/abilities/attack_ability.tres)
-- [attack_timeline.tres](../assets/abilities/attack_timeline.tres)
+- [attack_ability.tres](../assets/resources/abilities/attack_ability.tres)
+- [attack_timeline.tres](../assets/resources/abilities/attack_timeline.tres)
 
 ```text
 Pressed(player_attack)
@@ -104,8 +104,8 @@ Ability 节点的 `Activated` 输出在启动成功时执行。节点保持活�
 
 资源：
 
-- [dash_ability.tres](../assets/abilities/dash_ability.tres)
-- [dash_timeline.tres](../assets/abilities/dash_timeline.tres)
+- [dash_ability.tres](../assets/resources/abilities/dash_ability.tres)
+- [dash_timeline.tres](../assets/resources/abilities/dash_timeline.tres)
 
 默认 CharacterGraph 只有：
 

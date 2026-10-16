@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_gobj"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_comp"]
 [ext_resource type="Script" uid="uid://d1ktne64vflep" path="res://scripts/gamelogic/ai/SimpleAICharacterControllerComponent3D.cs" id="3_ai"]
-[ext_resource type="Resource" path="res://assets/graphs/ai_patrol_behavior_tree.tres" id="10_bt"]
+[ext_resource type="Resource" path="res://assets/resources/graphs/ai_patrol_behavior_tree.tres" id="10_bt"]
 [ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="13_movement_profile"]
 [ext_resource type="Script" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="14_persistence"]
 [ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="15_movement_component"]
 
 
-[ext_resource type="Texture2D" path="res://assets/sprites/ai_runner.svg" id="31_art"]
+[ext_resource type="Texture2D" path="res://assets/textures/sprites/ai_runner.svg" id="31_art"]
 
 [sub_resource type="BoxShape3D" id="shape_body"]
 size = Vector3(0.4, 0.72, 0.4)

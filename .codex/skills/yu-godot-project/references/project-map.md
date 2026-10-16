@@ -15,8 +15,10 @@
 - `scripts/framework`: reusable engine/framework systems.
 - `scripts/gamelogic`: game-specific systems, components, runtime behavior, AI, missions, skills, input, UI, and procedures.
 - `scripts/generated/config`: generated config row classes. Do not edit generated output directly.
-- `scripts/test`: smoke tests and test helpers intended to run inside or alongside Godot scenes.
-- `assets`: Godot assets, scenes, resources, and imported content.
+- `scripts/tools/weather` and `scripts/tools/rendering`: maintained runtime and GPU validators.
+- `assets/shaders`, `assets/materials`, `assets/textures`, `assets/models`, `assets/scenes`: game art grouped by type.
+- `assets/resources`: non-material definitions and art metadata.
+- `docs/art`: maintained art and rendering documentation. See the Asset Layout table in the main skill.
 
 ## Common Namespaces
 

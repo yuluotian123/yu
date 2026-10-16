@@ -21,7 +21,7 @@ ConfigPlugin 是项目内的 Godot C# 编辑器插件，用于把 `.xlsx` 配置
 
 推荐输出位置：
 
-- JSON：`res://assets/config/tables/`
+- JSON：`res://assets/resources/config/tables/`
 - C#：`res://scripts/generated/config/`
 
 `scripts/generated/config/` 是生成目录，不应手工编辑；需要改变字段或类型时应修改源表或转换器。
@@ -77,8 +77,6 @@ int recovered = new XlsxConverter().RecoverOutputs(jsonOutputDir, csOutputDir);
 - 转换会写入目标目录，提交前检查生成 diff，避免误覆盖手工文件。
 - `.xlsx` 文件格式、字段行和类型字符串必须符合转换器约定。
 - 生成 C# 后可能触发 Godot 域重载；插件窗口和工具栏必须保持热重载安全。
-- 回归入口：`assets/scenes/graph_config_reliability_smoke.tscn`，文件样本仅创建在项目 `tmp/` 的独立目录。
-- 独立进程故障测试：从项目根目录执行 `dotnet run --project tests/ConfigTransactionTests/ConfigTransactionTests.csproj`。测试仅终止自身子进程，样本位于项目 `tmp/` 独立目录，构建产物位于 `.godot/`。
 - 插件版本、支持的表格式和生成 schema 目前没有独立版本号，后续格式升级需要显式兼容策略。
 
 ## 相关代码

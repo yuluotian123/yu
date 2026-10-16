@@ -19,12 +19,12 @@ AbilitySetResource
 
 核心实现：
 
-- [AbilitySystemComponent3D.cs](../abilities/runtime/AbilitySystemComponent3D.cs)
-- [AbilityResource.cs](../abilities/runtime/AbilityResource.cs)
-- [AbilityRuntime.cs](../abilities/runtime/AbilityRuntime.cs)
-- [AbilitySetResource.cs](../abilities/runtime/AbilitySetResource.cs)
-- [AbilityFlowGraphAsset.cs](../abilities/runtime/AbilityFlowGraphAsset.cs)
-- [Ability Timeline Actions](../abilities/actions/)
+- [AbilitySystemComponent3D.cs](runtime/AbilitySystemComponent3D.cs)
+- [AbilityResource.cs](runtime/AbilityResource.cs)
+- [AbilityRuntime.cs](runtime/AbilityRuntime.cs)
+- [AbilitySetResource.cs](runtime/AbilitySetResource.cs)
+- [AbilityFlowGraphAsset.cs](runtime/AbilityFlowGraphAsset.cs)
+- [Ability Timeline Actions](actions/)
 
 ## 边界
 
@@ -42,8 +42,8 @@ CharacterGraph 不授予 Ability，也不拥有 Timeline 数据。玩家图只�
 
 现有资源：
 
-- [Attack Resource](../../../assets/abilities/attack_ability.tres)
-- [Attack Timeline](../../../assets/abilities/attack_timeline.tres)
-- [Dash Resource](../../../assets/abilities/dash_ability.tres)
-- [Dash Timeline](../../../assets/abilities/dash_timeline.tres)
-- [Player Ability Set](../../../assets/abilities/player_ability_set.tres)
+- [Attack Resource](../../../assets/resources/abilities/attack_ability.tres)
+- [Attack Timeline](../../../assets/resources/abilities/attack_timeline.tres)
+- [Dash Resource](../../../assets/resources/abilities/dash_ability.tres)
+- [Dash Timeline](../../../assets/resources/abilities/dash_timeline.tres)
+- [Player Ability Set](../../../assets/resources/abilities/player_ability_set.tres)

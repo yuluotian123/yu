@@ -234,4 +234,4 @@ Save schema 为 2。角色保存稳定 ID、位置、旋转、朝向、自定义
 
 ## 3D 场景与移动模式
 
-当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。当前关卡的自由移动与镜头配置见 [HD-2D 场景镜头](../assets/camera/HD2D.md)。
+当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。当前关卡的自由移动与镜头配置见 [HD-2D 场景镜头](art/hd2d_camera.md)。

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RelinkPostProcessProfile" format=3 uid="uid://cfyh6r7i8r6f8"]
+
+[ext_resource type="Script" uid="uid://d0f0314bclypj" path="res://scripts/gamelogic/rendering/RelinkPostProcessProfile.cs" id="1"]
+[ext_resource type="ImageTexture3D" path="res://assets/textures/rendering/relink_post/g_FarLUT.res" id="far"]
+[ext_resource type="ImageTexture3D" path="res://assets/textures/rendering/relink_post/g_NearLUT.res" id="near"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1")
+NearLut = ExtResource("near")
+FarLut = ExtResource("far")
+GradeSky = true
+BloomIntensity = 0.03999999

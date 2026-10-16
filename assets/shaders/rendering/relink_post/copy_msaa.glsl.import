@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://dq8jvirlkw8ex"
+path="res://.godot/imported/copy_msaa.glsl-6289dfc321e4424be38b3c858158041b.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/relink_post/copy_msaa.glsl"
+dest_files=["res://.godot/imported/copy_msaa.glsl-6289dfc321e4424be38b3c858158041b.res"]
+
+[params]
+

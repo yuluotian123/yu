@@ -4,7 +4,7 @@
 
 ## 编辑构图
 
-选中 `CameraRig/Camera3D`，使用 Inspector 中的 Transform、Projection、Size（正交）或 FOV（透视）、Near/Far 调整；开启 Camera3D 的 Preview 查看实际构图。当前关卡使用透视、30° FOV、4.1° 俯角，详细配置见 [HD-2D 场景镜头](../assets/camera/HD2D.md)。透视取景大小由 FOV 和相机距离决定，Size 不参与透视。
+选中 `CameraRig/Camera3D`，使用 Inspector 中的 Transform、Projection、Size（正交）或 FOV（透视）、Near/Far 调整；开启 Camera3D 的 Preview 查看实际构图。当前关卡使用透视、30° FOV、4.1° 俯角，详细配置见 [HD-2D 场景镜头](art/hd2d_camera.md)。透视取景大小由 FOV 和相机距离决定，Size 不参与透视。
 
 相机启动时记住已编辑的旋转、与目标的相对位移和 Size，跟随时只在该构图基础上平移。代码不强制改为正交，也不重新计算俯角。运行中的 SetViewHeight 只改变正交 Size。
 

@@ -17,6 +17,33 @@
                 "showReuseMessage": true,
                 "clear": false
             }
+        },
+        {
+            "label": "Godot: Build Engine",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/scripts/tools/engine/build_godot.ps1"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Godot: Open Local Editor",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/scripts/tools/engine/launch_godot.ps1"
+            ],
+            "dependsOn": "build",
+            "problemMatcher": []
         }
     ]
 }

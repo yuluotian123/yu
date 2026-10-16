@@ -351,7 +351,7 @@ remedies:
 
 On Godot 4.2, `.import` sidecars for the addon's assets and their compiled
 artifacts ship in exports despite the strip plugin — in practice
-`addons/godot_mcp_toolkit/icon.svg.import` plus its baked `.ctex`, about 8 KB.
+`addons/godot_mcp_toolkit/assets/textures/ui/icon.svg.import` plus its baked `.ctex`, about 8 KB.
 Godot 4.2 never offers import sidecars to `EditorExportPlugin._export_file`, so
 **no** addon can strip them on that version; 4.3+ does offer them and they strip
 normally.

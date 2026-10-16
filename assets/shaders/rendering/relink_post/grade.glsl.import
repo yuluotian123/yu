@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cohpguytom4kt"
+path="res://.godot/imported/grade.glsl-84f5e24b23aefba5087460b9e0171b25.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/relink_post/grade.glsl"
+dest_files=["res://.godot/imported/grade.glsl-84f5e24b23aefba5087460b9e0171b25.res"]
+
+[params]
+

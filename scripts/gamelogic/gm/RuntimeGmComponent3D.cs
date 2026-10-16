@@ -58,6 +58,8 @@ public partial class RuntimeGmComponent3D : Component3D
         tabs.SetTabTitle(0, "时间与天空");
         tabs.SetTabTitle(1, "资源监控");
         tabs.SetTabTitle(2, "存档");
+        tabs.SetTabTitle(3, "渲染与 FPS");
+        tabs.SetTabTitle(4, "天气");
         _panel.Visible = false;
         Owner.SetMeta("runtime_gm", this);
         Try(() => { RefreshSlots(); ReadSlot("default"); });

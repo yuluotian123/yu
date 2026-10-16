@@ -43,15 +43,15 @@ namespace GameLogic
 
             StringName animationName = new(animation);
             bool sameAnimation = CurrentAnimation == animation;
+            _sprite.SpeedScale = speed;
             if (sameAnimation && !restartIfPlaying)
             {
-                _sprite.SpeedScale = speed;
-                if (!_sprite.IsPlaying())
-                    _sprite.Play(animationName, speed, fromEnd);
+                // A completed one-shot holds its last pose until the request changes.
                 return;
             }
 
-            _sprite.Play(animationName, speed, fromEnd);
+            _sprite.Stop();
+            _sprite.Play(animationName, 1f, fromEnd);
         }
 
         public void Stop()

@@ -11,10 +11,10 @@ namespace Framework
     {
         /// <summary>
         /// 运行时 JSON 数据文件所在目录（res:// 格式）。
-        /// 默认：res://assets/config/tables/
+        /// 默认：res://assets/resources/config/tables/
         /// </summary>
         [Export]
-        public string TablePath { get; set; } = "res://assets/config/tables/";
+        public string TablePath { get; set; } = "res://assets/resources/config/tables/";
 
     }
 }

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public abstract partial class Component3D : Resource, IComponent
     {
 
@@ -26,6 +26,11 @@ namespace GameLogic
         public virtual void OnUpdate(double delta) { }
         public virtual void OnPhysicsUpdate(double delta) { }
         public virtual void OnDestroy() { }
+        // 编辑器只预览配置，不初始化模块、克隆运行时组件或推进世界时钟。
+        public virtual void OnEditorUpdate(GameObject3D host) { }
+        public virtual void OnEditorFrameUpdate(GameObject3D host, double delta) { }
+        public virtual void OnEditorPreSave(GameObject3D host) { }
+        public virtual void OnEditorExit(GameObject3D host) { }
 
         public virtual Component3D Clone()
         {

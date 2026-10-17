@@ -10,6 +10,7 @@ namespace GameLogic;
 public partial class WeatherSurfaceComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX - 2;
+    /// <summary>雨雪表面效果的作用范围；配置复用同宿主的天气 Profile，退出时恢复原材质。</summary>
     [Export] public NodePath SurfaceRootPath { get; set; } = new("../RPGTown");
     public float Wetness { get; private set; }
     public float Puddles { get; private set; }

@@ -1,0 +1,91 @@
+diff --git a/SConstruct b/SConstruct
+index cf4beb0..2773767 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -270,6 +270,7 @@ opts.Add(
+ )
+ opts.Add(BoolVariable("werror", "Treat compiler warnings as errors", False))
+ opts.Add("extra_suffix", "Custom extra suffix added to the base filename of all generated binary files", "")
++opts.Add("program_suffix", "Custom suffix for executables only (allows side-by-side test builds)", "")
+ opts.Add("object_prefix", "Custom prefix added to the base filename of all generated object files", "")
+ opts.Add(BoolVariable("vsproj", "Generate a Visual Studio solution", False))
+ opts.Add("vsproj_name", "Name of the Visual Studio solution", "godot")
+@@ -1171,8 +1172,9 @@ if env.editor_build:
+         print_error("Not all modules required by editor builds are enabled.")
+         Exit(255)
+ 
+-env["PROGSUFFIX_WRAP"] = suffix + env.module_version_string + ".console" + env["PROGSUFFIX"]
+-env["PROGSUFFIX"] = suffix + env.module_version_string + env["PROGSUFFIX"]
++program_suffix = "." + env["program_suffix"] if env["program_suffix"] else ""
++env["PROGSUFFIX_WRAP"] = suffix + env.module_version_string + program_suffix + ".console" + env["PROGSUFFIX"]
++env["PROGSUFFIX"] = suffix + env.module_version_string + program_suffix + env["PROGSUFFIX"]
+ env["OBJSUFFIX"] = suffix + env["OBJSUFFIX"]
+ # (SH)LIBSUFFIX will be used for our own built libraries
+ # LIBSUFFIXES contains LIBSUFFIX and SHLIBSUFFIX by default,
+diff --git a/doc/classes/RDAccelerationStructureInstance.xml b/doc/classes/RDAccelerationStructureInstance.xml
+index fab3b77..e8f3e8c 100644
+--- a/doc/classes/RDAccelerationStructureInstance.xml
++++ b/doc/classes/RDAccelerationStructureInstance.xml
+@@ -16,7 +16,7 @@
+ 			Flags for the instance.
+ 		</member>
+ 		<member name="hit_sbt_range" type="int" setter="set_hit_sbt_range" getter="get_hit_sbt_range" default="0">
+-			Hit shader binding table range used for this instance, allocated using the [method RenderingDevice.hit_sbt_range_alloc] method.
++			Hit shader binding table range used for this instance, allocated using the [method RenderingDevice.hit_sbt_range_alloc] method. Can be [code]0[/code] when the TLAS is only used with ray queries, which do not use a hit shader binding table.
+ 		</member>
+ 		<member name="id" type="int" setter="set_id" getter="get_id" default="0">
+ 			Custom instance ID that can be accessed in GLSL using [code]gl_InstanceCustomIndexEXT[/code].
+diff --git a/drivers/vulkan/rendering_device_driver_vulkan.cpp b/drivers/vulkan/rendering_device_driver_vulkan.cpp
+index 92ac08f..a1c7f86 100644
+--- a/drivers/vulkan/rendering_device_driver_vulkan.cpp
++++ b/drivers/vulkan/rendering_device_driver_vulkan.cpp
+@@ -4314,6 +4314,7 @@ RDD::ShaderID RenderingDeviceDriverVulkan::shader_create_from_container(const Re
+ 	// Set bindings.
+ 	Vector<Vector<VkDescriptorSetLayoutBinding>> vk_set_bindings;
+ 	vk_set_bindings.resize(shader_refl.uniform_sets.size());
++	bool has_acceleration_structure = false;
+ 	for (uint32_t i = 0; i < shader_refl.uniform_sets.size(); i++) {
+ 		for (uint32_t j = 0; j < shader_refl.uniform_sets[i].size(); j++) {
+ 			const ShaderUniform &uniform = shader_refl.uniform_sets[i][j];
+@@ -4380,6 +4381,7 @@ RDD::ShaderID RenderingDeviceDriverVulkan::shader_create_from_container(const Re
+ 				} break;
+ 				case UNIFORM_TYPE_ACCELERATION_STRUCTURE: {
+ 					layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
++					has_acceleration_structure = true;
+ 				} break;
+ 				default: {
+ 					DEV_ASSERT(false);
+@@ -4396,7 +4398,9 @@ RDD::ShaderID RenderingDeviceDriverVulkan::shader_create_from_container(const Re
+ 	Vector<uint8_t> decompressed_code;
+ 	VkShaderModule vk_module;
+ 	PackedByteArray decoded_spirv;
+-	const bool use_respv = (RESPV_ENABLED == 1) && !shader_container_format.get_debug_info_enabled();
++	// re-spirv does not support ray query / raytracing instructions yet.
++	// Keep the original SPIR-V and let the Vulkan driver optimize these shaders.
++	const bool use_respv = (RESPV_ENABLED == 1) && !shader_container_format.get_debug_info_enabled() && !has_acceleration_structure;
+ 	const bool store_respv = use_respv && !shader_refl.specialization_constants.is_empty();
+ 	const int64_t stage_count = shader_refl.stages_vector.size();
+ 	shader_info.vk_stages_create_info.reserve(stage_count);
+diff --git a/servers/rendering/rendering_device.cpp b/servers/rendering/rendering_device.cpp
+index e1a166b..bb72e16 100644
+--- a/servers/rendering/rendering_device.cpp
++++ b/servers/rendering/rendering_device.cpp
+@@ -565,7 +565,7 @@ Error RenderingDevice::tlas_build(RID p_tlas, Span<AccelerationStructureInstance
+ 		AccelerationStructure::InstanceBuffer instance_buffer;
+ 		instance_buffer.driver_id = instance_buffer_driver_id;
+ 		instance_buffer.frame_used = frames_drawn;
+-		instance_buffer.used_size = 0;
++		instance_buffer.used_size = instance_buffer_used_size;
+ 		instance_buffer.data_ptr = data_ptr;
+ 
+ 		instance_buffer_index = tlas->instance_buffers.size();
+@@ -590,7 +590,8 @@ Error RenderingDevice::tlas_build(RID p_tlas, Span<AccelerationStructureInstance
+ 		rdd_instance.flags = rd_instance.flags;
+ 
+ 		if (rd_instance.blas.is_valid()) {
+-			ERR_FAIL_COND_V_MSG(!rd_instance.hit_sbt_range, ERR_INVALID_PARAMETER, "Instance " + itos(i) + " has an invalid hit shader binding table range.");
++			// Ray queries have no hit shader binding table. A zero range maps to
++			// offset zero and is valid when the TLAS is only used by ray queries.
+ 
+ 			AccelerationStructure *blas = acceleration_structure_owner.get_or_null(rd_instance.blas);
+ 			ERR_FAIL_NULL_V(blas, ERR_INVALID_PARAMETER);

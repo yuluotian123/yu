@@ -331,7 +331,7 @@ namespace GameLogic
                     if (group.Key == "characters")
                     {
                         int schema = state["schema_version"].GetValue<int>();
-                        if (schema > 3) throw new JsonException("不支持的角色存档版本。");
+                        if (schema > 5) throw new JsonException("不支持的角色存档版本。");
                         ValidateVector(state["position"]);
                         ValidateVector(state["facing_direction"]);
                         if (schema >= 3) ValidateVector(state["rotation"]);
@@ -339,6 +339,19 @@ namespace GameLogic
                         if (state["facing"] != null) _ = state["facing"].GetValue<int>();
                         if (state["flags"] != null)
                             foreach (var flag in state["flags"].AsObject()) _ = flag.Value.GetValue<bool>();
+                        if (state["inventory"] is JsonObject inventory && inventory["weapon_ids"] != null)
+                            foreach (JsonNode id in inventory["weapon_ids"].AsArray()) _ = id.GetValue<string>();
+                        if (state["inventory"]?["positions"] is JsonObject positions)
+                            foreach (var cell in positions)
+                                if (cell.Value.GetValue<int>() < 0) throw new JsonException("背包格子编号必须为非负整数。");
+                        if (state["equipment"] is JsonObject equipment)
+                        {
+                            if (equipment["equipped_weapon_id"] != null) _ = equipment["equipped_weapon_id"].GetValue<string>();
+                            if (equipment["loadout_version"] != null) _ = equipment["loadout_version"].GetValue<int>();
+                            if (equipment["slots"] != null)
+                                foreach (JsonNode id in equipment["slots"].AsArray())
+                                    if (id != null) _ = id.GetValue<string>();
+                        }
                     }
                     if (group.Key == "world" && entry.Key == "time_of_day")
                     {

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" format=3 uid="uid://cfq0gesvgyy03"]
+
+[ext_resource type="Script" uid="uid://ccvmabg8cuile" path="res://scripts/gamelogic/weapons/WeaponDefinition.cs" id="1_script"]
+[ext_resource type="Resource" uid="uid://c7wbi2rkbifw3" path="res://assets/resources/weapons/katana_attack.tres" id="2_attack"]
+[ext_resource type="Resource" uid="uid://bow24ol6ao2wl" path="res://assets/resources/weapons/katana_animation.tres" id="3_animation"]
+[ext_resource type="Texture2D" uid="uid://bmt7shwldemey" path="res://assets/textures/ui/inventory/katana.svg" id="4_icon"]
+[ext_resource type="Texture2D" uid="uid://f3126a3slvx2" path="res://assets/textures/sprites/amber_fox_katana/idle-native.png" id="5_portrait"]
+
+[resource]
+script = ExtResource("1_script")
+WeaponId = "katana"
+DisplayName = "太刀"
+Category = 1
+PrimaryAttack = ExtResource("2_attack")
+AnimationProfile = ExtResource("3_animation")
+Icon = ExtResource("4_icon")
+Portrait = ExtResource("5_portrait")
+Description = "轻巧修长的刀身，出手迅捷。适合灵活移动、快速进攻。"

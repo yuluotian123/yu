@@ -1,9 +1,8 @@
 [gd_resource type="Resource" script_class="AbilitySetResource" format=3 uid="uid://buvhdk15gflcu"]
 
 [ext_resource type="Script" uid="uid://digj62odsswyh" path="res://scripts/gamelogic/abilities/runtime/AbilitySetResource.cs" id="1_set"]
-[ext_resource type="Resource" uid="uid://b3atkskill01" path="res://assets/resources/abilities/attack_ability.tres" id="2_attack"]
 [ext_resource type="Resource" uid="uid://b3dashskill01" path="res://assets/resources/abilities/dash_ability.tres" id="3_dash"]
 
 [resource]
 script = ExtResource("1_set")
-Abilities = Array[Resource]([ExtResource("2_attack"), ExtResource("3_dash")])
+Abilities = Array[Resource]([ExtResource("3_dash")])

@@ -46,7 +46,7 @@ public static class GraphNodeViewBuilder
     {
         foreach (Node child in node.GetChildren())
         {
-            GraphEditorSignalCleanup.DisconnectSubtree(child);
+            GraphEditorSignalCleanup.PrepareForRemoval(child);
             node.RemoveChild(child); child.QueueFree();
         }
         node.ClearAllSlots();

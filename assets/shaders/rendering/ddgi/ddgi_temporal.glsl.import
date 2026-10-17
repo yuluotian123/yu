@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://divda71tf7xl4"
+path="res://.godot/imported/ddgi_temporal.glsl-5fbbb2f4f729ae0284ef1115e5111627.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/ddgi/ddgi_temporal.glsl"
+dest_files=["res://.godot/imported/ddgi_temporal.glsl-5fbbb2f4f729ae0284ef1115e5111627.res"]
+
+[params]
+

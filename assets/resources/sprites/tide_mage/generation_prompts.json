@@ -1,0 +1,23 @@
+{
+  "tool": "Built-in imagegen",
+  "reference": "res://assets/textures/concepts/protagonist/tide_mage/character-design.png",
+  "common": "Create a production game sprite sheet of the EXACT SAME adult female dragon mage as the reference, white bob with a long side braid, blue horns, golden eyes, blue-white short cape and split tunic over navy shorts, blue boots, crescent water-drop staff, and ONE broad pale blue/coral pink tail ending in a white crescent fin. Match all costume colors and features. Very COARSE hand-pixeled retro RPG style: each full character approximately 90-110 logical pixels tall, thick visible square pixels, a 1-logical-pixel dark indigo outline, flat 16-color palette, two shades per material, chunky blocky silhouette. No fine details, no gradients, no painterly shading, no antialiasing. Always keep adult natural proportions. In every cell, body faces right in a consistent three-quarter side view while both eyes are still readable; staff is held toward the right; tail trails left. Same camera, zoom, character size, horn height and body proportions throughout. Fully draw each figure plus all its staff and tail INSIDE its own cell, with LARGE transparent gutters between figures; no figures touching or overlapping. Transparent alpha background. No grid lines, no text, no labels, no numbers, no shadow, no scenery. Arrange in an exact regular grid, every cell exactly equal sized. Think of each cell as a low-res 192x192 game frame with a 112-pixel-high character; leave plenty of transparent space on all four sides. Do not add environmental effects or detached floating sparkles.",
+  "specs": [
+    {
+      "key": "support",
+      "prompt": "Exactly 12 full-body sprites arranged in 4 columns x 3 rows. Read left to right. ROW 1: 4 subtle idle breathing poses forming a loop, feet stay planted, staff upright, tail gently sways, cape lifts slightly. ROW 2: 4 hurt recoil poses, flinch backward with face wincing, staff drawn close, knees bent, gradual recovery; no blood. ROW 3: 4 defeat poses, sequentially knees buckle, kneel, slump to side, lie resting on ground with staff and curled tail; non-graphic, feet/base at same level. Do not repeat idle in defeat row, clearly show the collapse sequence."
+    },
+    {
+      "key": "run",
+      "prompt": "Exactly 8 full-body sprites arranged in 4 columns x 2 rows. Read left to right as one continuous RIGHTWARD run cycle: right leg leading contact, compression, passing, flight; left leg leading contact, compression, passing, flight. Clear different leg and arm positions in each frame, staff carried diagonally forward, cape braid and tail trail left and sway during the stride. Both feet and all equipment inside each cell. Feet align to a common baseline, modest 1-2 logical pixel rise in flight. Do not draw eight standing poses. Design a readable dynamic RUN cycle."
+    },
+    {
+      "key": "attack",
+      "prompt": "Exactly 8 full-body sprites arranged in 4 columns x 2 rows. Read left to right as one continuous right-facing staff strike / water magic casting attack: neutral ready, staff drawn back, strong wind-up with raised staff, step forward, powerful forward staff thrust, follow-through with staff fully extended right, recover, ready again. The staff and arms clearly change angle during the sequence, body leans into the attack, tail counterbalances behind her to the left. Keep body size constant. No projectiles and no detached magic effects; show just the character's attack poses."
+    },
+    {
+      "key": "jump",
+      "prompt": "Exactly 12 full-body sprites arranged in 4 columns x 3 rows. Read left to right. ROW 1: jump anticipation crouch, upward takeoff, rising with legs bent, rising with cape and tail flowing downward. ROW 2: apex legs tucked, apex relaxing legs, descending with knees bent, descending reaching feet down. ROW 3: feet touch down, deep landing crouch, standing recovery, final upright neutral. Keep the torso at a consistent cell height in the airborne poses to avoid introducing a second jump offset; the game moves the body in world space. Staff held close, all gear remains visible. Clearly distinct jump and landing silhouettes, with the same character at consistent scale."
+    }
+  ]
+}

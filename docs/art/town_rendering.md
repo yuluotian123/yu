@@ -1,6 +1,6 @@
 # 小镇卡通渲染
 
-当前 Spacelevel 使用原生 Forward+ 日月直射光、阴影、天空环境光与 SSR，不启用 GI。建筑、水面和植被材质直接接受原生光照。
+当前 Spacelevel 使用 Forward+ 日月直射光、阴影、自研 DDGI、天空镜面反射与 SSR，保留 SSAO。SSIL / SDFGI 由 Environment 独立配置，单独验收 DDGI 时关闭；验证脚本只修改测试实例。建筑、水面和植被通过原生材质路径接收光照；受控城镇 / 植被材质同时贡献 DDGI。探针范围与限制见 [DDGI 接入指南](ddgi_implementation.md)。
 
 建筑、铺装、路缘石、围栏和道具统一使用 `town_toon.gdshader`。基础分支为 `diffuse_burley` + `specular_schlick_ggx`，保留 Forward+ 的天空反射、SSR、环境光、阴影、曝光与 AO；`light()` 负责直接光的 Toon/Burley 漫反射及 GGX 高光。材质保存在 `assets/materials/town/`，通过贴图、粗糙度、金属度和天气参数区分表面。玻璃、水、花草和树叶沿用各自专用材质。
 
@@ -41,7 +41,7 @@ EnvironmentRig → Components → Profile → Cartoon Lighting 可调整：
 | ShadowBias / ShadowNormalBias | 0.05 / 0.5 | 控制深度/法线偏移；过大会脱离接触面或扭曲细结构 |
 | ShadowDistance | 55 m | 阴影覆盖范围，越大越分散贴图精度 |
 | ShadowSplit1/2/3 | 0.2 / 0.4 / 0.7 | 级联边界比例，第一段覆盖角色实际拍摄距离；开启分段混合 |
-| ContactOcclusionEnabled | false | 仅开启 DrivePostEffectsFromProfile 时由 Profile 控制 SSAO |
+| SSAO | Environment.SsaoEnabled | 直接在 Environment 配置，昼夜组件不接管开关 |
 | ColorSaturation | 1.08 | 仅开启 DrivePostEffectsFromProfile 时由 Profile 控制饱和度 |
 
 方向阴影使用 8192 分辨率、32 位深度和 Ultra 过滤，配合 4× MSAA 和树叶覆盖抗锯齿。三维画面按原始视口分辨率渲染。该配置优先保证阴影与轮廓的稳定性，会增加 GPU 和显存开销。编辑器预览和运行时通过同一个 ApplyLighting 方法应用日月、曝光和阴影设置。
@@ -54,4 +54,4 @@ EnvironmentRig → Components → Profile → Cartoon Lighting 可调整：
 
 WorldEnvironment → Environment 中可直接调整雾、SSAO、色调映射和 Adjustment。Profile → Scene Environment Controls 的 DriveFogFromProfile / DrivePostEffectsFromProfile 默认关闭，避免系统持续覆盖 Inspector。
 
-当前 Spacelevel 使用物理光照强度驱动昼夜，日月倍率为 1。相机曝光由昼夜 EV 曲线控制，不随镜头中的亮暗变化，曝光不改变光源。灯罩材质使用 300 cd/m² 自发光，仅显示自身发光与泛光；周围表面由日月和天空照明。`DayExposureEv` / `NightExposureEv` 控制日夜曝光，关闭 `DriveExposureFromProfile` 后可手动编辑 Camera Attributes。天空强度由太阳高度驱动；当前夜间 EV 为 2，`NightSkyIntensity = 8`，维持雨天、新月的道路与建筑可读性，避免暮光结束后快速压黑。关闭 `DriveSkyBrightnessFromProfile` 后可手动编辑 Background Intensity。运行时修改 Profile 后调用环境组件 `RefreshProfile()`。
+当前 Spacelevel 使用物理光照强度驱动昼夜，日月倍率为 1，间接能量为 0.75。相机曝光由昼夜 EV 曲线控制，不随镜头中的亮暗变化，曝光不改变光源。灯罩材质使用 300 cd/m² 自发光，除自身发光与泛光外，也通过 DDGI 向周围贡献低频间接光。`DayExposureEv` / `NightExposureEv` 控制日夜曝光，关闭 `DriveExposureFromProfile` 后可手动编辑 Camera Attributes。天空强度由太阳高度驱动；当前夜间 EV 为 2，`NightSkyIntensity = 8`。关闭 `DriveSkyBrightnessFromProfile` 后可手动编辑 Background Intensity。运行时修改 Profile 后调用环境组件 `RefreshProfile()`。

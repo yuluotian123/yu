@@ -1,0 +1,350 @@
+diff --git a/doc/classes/RenderSceneBuffersRD.xml b/doc/classes/RenderSceneBuffersRD.xml
+index 1d6ebc8..52b7780 100644
+--- a/doc/classes/RenderSceneBuffersRD.xml
++++ b/doc/classes/RenderSceneBuffersRD.xml
+@@ -12,6 +12,28 @@
+ 	<tutorials>
+ 	</tutorials>
+ 	<methods>
++		<method name="clear_ddgi" experimental="Project DDGI integration.">
++			<return type="void" />
++			<description>
++				Clears the current view's DDGI publication without freeing the producer-owned atlas textures. Only call on the rendering thread.
++			</description>
++		</method>
++		<method name="set_ddgi" experimental="Project DDGI integration.">
++			<return type="void" />
++			<param index="0" name="irradiance" type="RID" />
++			<param index="1" name="distance" type="RID" />
++			<param index="2" name="state" type="RID" />
++			<param index="3" name="origin" type="Vector3" />
++			<param index="4" name="spacing" type="float" />
++			<param index="5" name="counts" type="Vector3i" />
++			<param index="6" name="energy" type="float" />
++			<param index="7" name="normal_bias" type="float" />
++			<param index="8" name="view_bias" type="float" />
++			<description>
++				Publishes a fixed-volume DDGI atlas for Forward+ during the current RenderingDevice frame. Call from [constant CompositorEffect.EFFECT_CALLBACK_TYPE_PRE_OPAQUE] on the rendering thread for each view. The producer retains ownership of all textures. Publications expire automatically when the producer stops running.
++				The irradiance atlas uses RGBA16F with 8 by 8 interior texels per probe, the distance-moment atlas uses RG32F with 16 by 16 interior texels, and both include one mirrored border texel. The RGBA32F state texture stores probe offset and validity. Atlas columns pack X then Z, and rows pack Y. Irradiance is linear E / PI without camera exposure. Native reception applies the current camera's exposure normalization.
++			</description>
++		</method>
+ 		<method name="clear_context">
+ 			<return type="void" />
+ 			<param index="0" name="context" type="StringName" />
+diff --git a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
+index db30b77..d57758c 100644
+--- a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
++++ b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
+@@ -3885,6 +3885,27 @@ RID RenderForwardClustered::_setup_render_pass_uniform_set(RenderListType p_rend
+ 	}
+ #endif // MODULE_TEXTURE_STREAMING_ENABLED
+ 
++	const bool use_ddgi = rb_data.is_valid() && rb->has_ddgi();
++	const RID ddgi_textures[] = {
++		use_ddgi ? rb->get_ddgi_irradiance() : texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_BLACK),
++		use_ddgi ? rb->get_ddgi_distance() : texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_BLACK),
++		use_ddgi ? rb->get_ddgi_state() : texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_BLACK)
++	};
++	for (uint32_t i = 0; i < 3; i++) {
++		RD::Uniform u;
++		u.binding = 39 + i;
++		u.uniform_type = RD::UNIFORM_TYPE_TEXTURE;
++		u.append_id(ddgi_textures[i]);
++		uniforms.push_back(u);
++	}
++	{
++		RD::Uniform u;
++		u.binding = 42;
++		u.uniform_type = RD::UNIFORM_TYPE_UNIFORM_BUFFER;
++		u.append_id(use_ddgi ? rb->get_ddgi_uniform_buffer() : default_ddgi_uniform_buffer);
++		uniforms.push_back(u);
++	}
++
+ 	return UniformSetCacheRD::get_singleton()->get_cache_vec(scene_shader.get_default_shader_rd(is_multiview), RENDER_PASS_UNIFORM_SET, uniforms);
+ }
+ 
+@@ -5229,6 +5250,8 @@ void RenderForwardClustered::_update_shader_quality_settings() {
+ 
+ RenderForwardClustered::RenderForwardClustered() {
+ 	singleton = this;
++	RenderSceneBuffersRD::DDGIUniformData default_ddgi;
++	default_ddgi_uniform_buffer = RD::get_singleton()->uniform_buffer_create(sizeof(default_ddgi), { reinterpret_cast<const uint8_t *>(&default_ddgi), sizeof(default_ddgi) });
+ 
+ 	/* SCENE SHADER */
+ 
+@@ -5390,6 +5413,7 @@ RenderForwardClustered::RenderForwardClustered() {
+ }
+ 
+ RenderForwardClustered::~RenderForwardClustered() {
++	RD::get_singleton()->free_rid(default_ddgi_uniform_buffer);
+ 	if (ss_effects != nullptr) {
+ 		memdelete(ss_effects);
+ 		ss_effects = nullptr;
+diff --git a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.h b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.h
+index abe82f4..1132955 100644
+--- a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.h
++++ b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.h
+@@ -172,6 +172,7 @@ private:
+ 	virtual void setup_render_buffer_data(Ref<RenderSceneBuffersRD> p_render_buffers) override;
+ 
+ 	RID render_base_uniform_set;
++	RID default_ddgi_uniform_buffer;
+ 
+ 	uint64_t lightmap_texture_array_version = 0xFFFFFFFF;
+ 
+diff --git a/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered.glsl b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered.glsl
+index de1cb92..b5697f3 100644
+--- a/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered.glsl
++++ b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered.glsl
+@@ -2204,6 +2204,20 @@ void fragment_shader(in SceneData scene_data) {
+ #endif
+ 	}
+ 
++	// Lightmaps retain priority. Inside a published DDGI region, replace the
++	// diffuse ambient result while leaving the existing specular GI untouched.
++#ifndef USE_LIGHTMAP
++	{
++		vec4 ddgi_diffuse = ddgi_sample((inv_view_matrix * vec4(vertex, 1.0)).xyz,
++				normalize(mat3(inv_view_matrix) * indirect_normal), normalize(mat3(inv_view_matrix) * view));
++		ddgi_diffuse.rgb *= scene_data.emissive_exposure_normalization;
++#ifdef CUSTOM_IRRADIANCE_USED
++		ddgi_diffuse.rgb = mix(ddgi_diffuse.rgb, custom_irradiance.rgb, custom_irradiance.a);
++#endif
++		ambient_light = mix(ambient_light, ddgi_diffuse.rgb, ddgi_diffuse.a);
++	}
++#endif
++
+ 	//finalize ambient light here
+ 	{
+ #ifdef MULTI_BOUNCE_OCCLUSION_ENABLED
+diff --git a/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered_inc.glsl b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered_inc.glsl
+index 3342d7c..d8882f1 100644
+--- a/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered_inc.glsl
++++ b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered_inc.glsl
+@@ -525,6 +525,8 @@ material_feedback;
+ 
+ /* Set 2 Skeleton & Instancing (can change per item) */
+ 
++#include "scene_ddgi_inc.glsl"
++
+ layout(set = 2, binding = 0, std430) restrict readonly buffer Transforms {
+ 	vec4 data[];
+ }
+diff --git a/servers/rendering/renderer_rd/storage_rd/light_storage.cpp b/servers/rendering/renderer_rd/storage_rd/light_storage.cpp
+index 45228b2..8a4a86e 100644
+--- a/servers/rendering/renderer_rd/storage_rd/light_storage.cpp
++++ b/servers/rendering/renderer_rd/storage_rd/light_storage.cpp
+@@ -1576,6 +1576,17 @@ void LightStorage::_reflection_atlas_clear(ReflectionAtlas *p_reflection_atlas)
+ 	RD::get_singleton()->free_rid(p_reflection_atlas->reflection);
+ 	p_reflection_atlas->reflection = RID();
+ 
++	// Freeing the parent also releases its six face views and framebuffers.
++	// These are allocated separately from the filtered reflection atlas.
++	if (p_reflection_atlas->color_buffer.is_valid()) {
++		RD::get_singleton()->free_rid(p_reflection_atlas->color_buffer);
++		p_reflection_atlas->color_buffer = RID();
++		for (int i = 0; i < 6; i++) {
++			p_reflection_atlas->color_views[i] = RID();
++			p_reflection_atlas->color_fbs[i] = RID();
++		}
++	}
++
+ 	RD::get_singleton()->free_rid(p_reflection_atlas->depth_fb);
+ 	p_reflection_atlas->depth_fb = RID();
+ 
+diff --git a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
+index f395807..02d25a4 100644
+--- a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
++++ b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
+@@ -49,6 +49,8 @@ RenderSceneBuffersRD::~RenderSceneBuffersRD() {
+ }
+ 
+ void RenderSceneBuffersRD::_bind_methods() {
++	ClassDB::bind_method(D_METHOD("set_ddgi", "irradiance", "distance", "state", "origin", "spacing", "counts", "energy", "normal_bias", "view_bias"), &RenderSceneBuffersRD::set_ddgi);
++	ClassDB::bind_method(D_METHOD("clear_ddgi"), &RenderSceneBuffersRD::clear_ddgi);
+ 	ClassDB::bind_method(D_METHOD("has_texture", "context", "name"), &RenderSceneBuffersRD::has_texture);
+ 	ClassDB::bind_method(D_METHOD("create_texture", "context", "name", "data_format", "usage_bits", "texture_samples", "size", "layers", "mipmaps", "unique", "discardable"), &RenderSceneBuffersRD::create_texture);
+ 	ClassDB::bind_method(D_METHOD("create_texture_from_format", "context", "name", "format", "view", "unique"), &RenderSceneBuffersRD::_create_texture_from_format);
+@@ -125,6 +127,11 @@ void RenderSceneBuffersRD::update_samplers() {
+ }
+ 
+ void RenderSceneBuffersRD::cleanup() {
++	clear_ddgi();
++	if (ddgi_uniform_buffer.is_valid()) {
++		RD::get_singleton()->free_rid(ddgi_uniform_buffer);
++		ddgi_uniform_buffer = RID();
++	}
+ 	// Free our data buffers (but don't destroy them)
+ 	for (KeyValue<StringName, Ref<RenderBufferCustomDataRD>> &E : data_buffers) {
+ 		E.value->free_data();
+@@ -152,6 +159,57 @@ void RenderSceneBuffersRD::cleanup() {
+ #endif
+ }
+ 
++void RenderSceneBuffersRD::set_ddgi(RID p_irradiance, RID p_distance, RID p_state, const Vector3 &p_origin, float p_spacing, const Vector3i &p_counts, float p_energy, float p_normal_bias, float p_view_bias) {
++	RD *rd = RD::get_singleton();
++	ERR_FAIL_COND(!p_origin.is_finite() || !Math::is_finite(p_spacing) || p_spacing <= 0.0f);
++	ERR_FAIL_COND(p_counts.x < 2 || p_counts.y < 2 || p_counts.z < 2 || p_counts.x > 32 || p_counts.y > 16 || p_counts.z > 32);
++	ERR_FAIL_COND(!Math::is_finite(p_energy) || p_energy < 0.0f || !Math::is_finite(p_normal_bias) || p_normal_bias < 0.0f || !Math::is_finite(p_view_bias) || p_view_bias < 0.0f);
++	const RID textures[] = { p_irradiance, p_distance, p_state };
++	const uint32_t tile_sizes[] = { 10, 18, 1 };
++	const RD::DataFormat formats[] = { RD::DATA_FORMAT_R16G16B16A16_SFLOAT, RD::DATA_FORMAT_R32G32_SFLOAT, RD::DATA_FORMAT_R32G32B32A32_SFLOAT };
++	for (uint32_t i = 0; i < 3; i++) {
++		ERR_FAIL_COND(!rd->texture_is_valid(textures[i]));
++		RD::TextureFormat format = rd->texture_get_format(textures[i]);
++		ERR_FAIL_COND(format.texture_type != RD::TEXTURE_TYPE_2D || format.array_layers != 1 || format.format != formats[i]);
++		ERR_FAIL_COND(format.width != uint32_t(p_counts.x * p_counts.z) * tile_sizes[i] || format.height != uint32_t(p_counts.y) * tile_sizes[i]);
++		ERR_FAIL_COND(!(format.usage_bits & RD::TEXTURE_USAGE_SAMPLING_BIT));
++	}
++	DDGIUniformData data;
++	static_assert(sizeof(data) == 48);
++	data.origin_spacing[0] = p_origin.x;
++	data.origin_spacing[1] = p_origin.y;
++	data.origin_spacing[2] = p_origin.z;
++	data.origin_spacing[3] = p_spacing;
++	data.counts_enabled[0] = p_counts.x;
++	data.counts_enabled[1] = p_counts.y;
++	data.counts_enabled[2] = p_counts.z;
++	data.counts_enabled[3] = 1;
++	data.energy_bias[0] = p_energy;
++	data.energy_bias[1] = p_normal_bias;
++	data.energy_bias[2] = p_view_bias;
++	if (ddgi_uniform_buffer.is_null()) {
++		ddgi_uniform_buffer = rd->uniform_buffer_create(sizeof(data), { reinterpret_cast<const uint8_t *>(&data), sizeof(data) });
++	} else {
++		rd->buffer_update(ddgi_uniform_buffer, 0, sizeof(data), &data);
++	}
++	ddgi_irradiance = p_irradiance;
++	ddgi_distance = p_distance;
++	ddgi_state = p_state;
++	ddgi_frame = rd->get_frames_drawn();
++}
++
++void RenderSceneBuffersRD::clear_ddgi() {
++	ddgi_irradiance = RID();
++	ddgi_distance = RID();
++	ddgi_state = RID();
++	ddgi_frame = UINT64_MAX;
++}
++
++bool RenderSceneBuffersRD::has_ddgi() const {
++	RD *rd = RD::get_singleton();
++	return ddgi_frame == rd->get_frames_drawn() && ddgi_uniform_buffer.is_valid() && rd->texture_is_valid(ddgi_irradiance) && rd->texture_is_valid(ddgi_distance) && rd->texture_is_valid(ddgi_state);
++}
++
+ void RenderSceneBuffersRD::configure(const RenderSceneBuffersConfiguration *p_config) {
+ 	RendererRD::TextureStorage *texture_storage = RendererRD::TextureStorage::get_singleton();
+ 
+diff --git a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
+index 77f306b..830e6ce 100644
+--- a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
++++ b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
+@@ -179,12 +179,34 @@ private:
+ 	// Samplers.
+ 	RendererRD::MaterialStorage::Samplers samplers;
+ 
++	// The producer owns the atlas textures. A publication is valid for one RD
++	// frame only, so removing/disabling a compositor cannot leave stale GI bound.
++	RID ddgi_irradiance;
++	RID ddgi_distance;
++	RID ddgi_state;
++	RID ddgi_uniform_buffer;
++	uint64_t ddgi_frame = UINT64_MAX;
++
+ 	void update_samplers();
+ 
+ protected:
+ 	static void _bind_methods();
+ 
+ public:
++	struct DDGIUniformData {
++		float origin_spacing[4] = {};
++		int32_t counts_enabled[4] = {};
++		float energy_bias[4] = {};
++	};
++
++	void set_ddgi(RID p_irradiance, RID p_distance, RID p_state, const Vector3 &p_origin, float p_spacing, const Vector3i &p_counts, float p_energy, float p_normal_bias, float p_view_bias);
++	void clear_ddgi();
++	bool has_ddgi() const;
++	RID get_ddgi_irradiance() const { return ddgi_irradiance; }
++	RID get_ddgi_distance() const { return ddgi_distance; }
++	RID get_ddgi_state() const { return ddgi_state; }
++	RID get_ddgi_uniform_buffer() const { return ddgi_uniform_buffer; }
++
+ 	RenderSceneBuffersRD();
+ 	virtual ~RenderSceneBuffersRD();
+ 
+diff --git a/servers/rendering/renderer_rd/shaders/forward_clustered/scene_ddgi_inc.glsl b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_ddgi_inc.glsl
+new file mode 100644
+index 0000000..31998fc
+--- /dev/null
++++ b/servers/rendering/renderer_rd/shaders/forward_clustered/scene_ddgi_inc.glsl
+@@ -0,0 +1,68 @@
++// Fixed-volume DDGI publication, scoped to the current view's render buffers.
++// Atlas contents are linear irradiance / PI and are never pre-exposed.
++layout(set = 1, binding = 39) uniform texture2D ddgi_irradiance_texture;
++layout(set = 1, binding = 40) uniform texture2D ddgi_distance_texture;
++layout(set = 1, binding = 41) uniform texture2D ddgi_state_texture;
++layout(set = 1, binding = 42, std140) uniform DDGIParameters {
++	vec4 origin_spacing;
++	ivec4 counts_enabled;
++	vec4 energy_bias;
++} ddgi;
++
++vec2 ddgi_oct_encode(vec3 direction) {
++	direction /= max(abs(direction.x) + abs(direction.y) + abs(direction.z), 1e-7);
++	vec2 encoded = direction.xy;
++	if (direction.z < 0.0) {
++		encoded = (1.0 - abs(encoded.yx)) * vec2(encoded.x >= 0.0 ? 1.0 : -1.0, encoded.y >= 0.0 ? 1.0 : -1.0);
++	}
++	return encoded * 0.5 + 0.5;
++}
++
++vec2 ddgi_atlas_uv(ivec3 index, ivec3 counts, vec3 direction, int resolution) {
++	ivec2 tile = ivec2(index.x + index.z * counts.x, index.y);
++	vec2 size = vec2(counts.x * counts.z, counts.y) * float(resolution + 2);
++	return (vec2(tile * (resolution + 2)) + 1.0 + ddgi_oct_encode(direction) * float(resolution)) / size;
++}
++
++vec4 ddgi_sample(vec3 position, vec3 normal, vec3 view_direction) {
++	if (ddgi.counts_enabled.w == 0) {
++		return vec4(0.0);
++	}
++	float spacing = ddgi.origin_spacing.w;
++	ivec3 counts = ddgi.counts_enabled.xyz;
++	vec3 grid = (position - ddgi.origin_spacing.xyz) / spacing;
++	if (any(lessThan(grid, vec3(0.0))) || any(greaterThan(grid, vec3(counts - 1)))) {
++		return vec4(0.0);
++	}
++	ivec3 base = clamp(ivec3(floor(grid)), ivec3(0), counts - 2);
++	vec3 fraction = clamp(grid - vec3(base), vec3(0.0), vec3(1.0));
++	vec3 biased_position = position + normal * ddgi.energy_bias.y + view_direction * ddgi.energy_bias.z;
++	vec3 sum = vec3(0.0);
++	float weight_sum = 0.0;
++	for (int corner = 0; corner < 8; corner++) {
++		ivec3 bit = ivec3(corner & 1, (corner >> 1) & 1, (corner >> 2) & 1);
++		ivec3 index = base + bit;
++		vec4 state = texelFetch(sampler2D(ddgi_state_texture, SAMPLER_NEAREST_CLAMP), ivec2(index.x + index.z * counts.x, index.y), 0);
++		if (state.w < 0.5) {
++			continue;
++		}
++		vec3 probe_position = ddgi.origin_spacing.xyz + vec3(index) * spacing + state.xyz;
++		vec3 delta = biased_position - probe_position;
++		float distance_to_probe = max(length(delta), 1e-5);
++		vec3 direction = delta / distance_to_probe;
++		vec2 moments = textureLod(sampler2D(ddgi_distance_texture, SAMPLER_LINEAR_CLAMP), ddgi_atlas_uv(index, counts, direction, 16), 0.0).rg;
++		float variance = max(moments.y - moments.x * moments.x, spacing * spacing * 0.0001);
++		float difference = max(distance_to_probe - moments.x, 0.0);
++		float visibility = variance / (variance + difference * difference);
++		visibility = visibility * visibility * visibility;
++		vec3 trilinear = mix(vec3(1.0) - fraction, fraction, vec3(bit));
++		float facing = max(0.05, pow(max(0.0, dot(-direction, normal) * 0.5 + 0.5), 2.0));
++		float weight = max(trilinear.x * trilinear.y * trilinear.z, 1e-6) * facing * max(visibility, 1e-5);
++		if (visibility < 0.2) {
++			weight *= visibility * visibility / 0.04;
++		}
++		sum += textureLod(sampler2D(ddgi_irradiance_texture, SAMPLER_LINEAR_CLAMP), ddgi_atlas_uv(index, counts, normal, 8), 0.0).rgb * weight;
++		weight_sum += weight;
++	}
++	return vec4(weight_sum < 1e-7 ? vec3(0.0) : sum / weight_sum * ddgi.energy_bias.x, 1.0);
++}

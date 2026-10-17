@@ -1,41 +1,43 @@
 # 昼夜与月相
 
-当前 Spacelevel 使用 Godot Forward+ 的日月直射光、阴影和天空环境光；不使用自研 GI、SDFGI 或 SSIL。材质保留原生受光、SSR、天气表面和后处理。
+昼夜组件持续更新世界时钟、日月方向、天空配色与云动画。原生 Environment、相机和灯光参数默认由场景资源控制；SSAO、SSIL、SDFGI、SSR、Glow、Adjustment、雾和自动曝光开关均可独立编辑。
 
-`TimeOfDayModule` 管理一个全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期驱动场景环境。当前 `spacelevel.tscn` 保存原生环境和日月节点，Environment / CameraAttributes 引用 `relink_environment.tres` / `day_night_camera_attributes.tres`，内嵌昼夜 Profile。另提供 `res://assets/scenes/environment/day_night_environment.tscn` 作为其他关卡模板；同一个 World3D 使用一套环境。当前关卡在 Godot 原生渲染上接入[Relink HDR LUT、电影曲线与泛光合成器](../../../docs/art/relink_post.md)，启用 SSR，关闭 SSAO、SDFGI 和 SSIL。夜间主要使用天空环境光与月光。独立模板沿用原生后处理，仍默认关闭 SSR、SSIL 和 SDFGI。
+`TimeOfDayModule` 管理全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期更新环境。Spacelevel 引用 `relink_environment.tres` / `day_night_camera_attributes.tres` 和独立 Relink Compositor；模板位于 `res://assets/scenes/environment/day_night_environment.tscn`。这些资源的原生效果设置不会因组件刷新或 Relink 开关而自动改写。
 
 默认 20 分钟一个游戏日、初始满月、29.53059 天一个月相周期。模板及当前关卡默认 12:00，可通过 Profile 的 StartHour 覆盖。时间受游戏速度影响，游戏暂停、时钟暂停或没有环境宿主时停止推进。返回菜单和切换关卡保留日历。旧存档没有时间数据时使用默认值。
 
 编辑器预览逐帧调用 Profile；TonemapMode、FogMode 和 AutoExposureEnabled 只在值改变时写入。原生 setter 对相同值也会发送检查器属性列表更新，重复写入会造成 Environment 选项闪烁。固定时间连续预览 10 帧的验证中，修复后环境和相机的属性列表更新通知均为 0。
 
-NVIDIA 引擎开启 `Environment.PathtracingEnabled` 时，日月的间接光强度为 1，切回光栅恢复为 0。运行时即使时钟暂停，也会响应光追开关变化。云辐照的临时 Texture2DRD 只通过 RenderingServer 绑定；ShaderMaterial 的可序列化参数保持禁用、空纹理，避免保存 Environment 后重新加载出紫色天空。初始化会清除旧资源中遗留的临时纹理绑定。
+`main` 使用官方 Godot 4.8。日月的 LightEnergy、LightIndirectEnergy 和精灵的 GI Mode 保留场景配置，SSIL / SDFGI 不再强制关闭。RTX 版本保存在 `codex/rtx-version`。云纹理仍只通过 RenderingServer 绑定，避免临时 Texture2DRD 写入可序列化资源。
+
+`scripts/gamelogic/rendering/cloud_radiance_copy.gd` 负责渲染线程的云纹理复制，`relink_gpu_cleanup.gd` 负责 Relink 后处理 GPU 资源清理。两者由 C# 渲染类直接加载；GDScript 回调不随 C# 程序集热重载失效，因此这些辅助脚本需要与 C# 调用方一起保留。
 
 ## 配置
 
 在 `spacelevel` 中选中 `EnvironmentRig → Components → DayNightEnvironmentComponent3D → Profile`，直接编辑内嵌配置。独立模板使用 `res://assets/resources/environment/default_time_of_day.tres`，不影响当前场景的内嵌配置。
 
-- Scene Environment Controls：默认直接编辑 WorldEnvironment 的雾、SSAO 和 Adjustment；DriveFogFromProfile / DrivePostEffectsFromProfile 开启后才使用 Profile 对应值。天空亮度和曝光默认随昼夜变化，关闭 DriveSkyBrightnessFromProfile / DriveExposureFromProfile 后可在原生 Environment / Camera Attributes 手动调整。
+- Scene Environment Controls：所有 Drive...FromProfile 开关默认关闭。DriveFogFromProfile 只驱动雾的数值；DrivePostEffectsFromProfile 驱动原生饱和度、对比度与泛光数值；DriveRelinkBloomFromProfile 单独驱动 Relink 泛光；DriveSkyBrightnessFromProfile 驱动背景强度；DriveExposureFromProfile 驱动物理曝光参数；DriveLightSettingsFromProfile 驱动日月照度、颜色和阴影；DriveSkyProjectionFromProfile 驱动天空 FOV/旋转。原生效果开关、Fog Mode、Tonemap、AutoExposure 和灯光能量倍率始终独立。开关默认关闭；当前 Spacelevel 已显式启用这些驱动，F8 手动调节 Relink 泛光后仅退出 Relink 泛光驱动。
 - Calendar Defaults：新会话的日长、初始日期/时刻、朔望月长度、初始月相和暂停状态。已有存档优先。
-- Sun and Moon：正午高度、方位角、直射照度、日月视直径。太阳默认 1.8 度、月亮默认 3 度；两者独立可调，设为约 0.52 度可接近真实视直径。编辑器预览同步更新。
+- Sun and Moon：日月方向随时钟更新；照度、颜色、可见性和阴影参数仅在 DriveLightSettingsFromProfile 开启时应用。天空天体盘大小仍由 SunDiameterDegrees / MoonDiameterDegrees 控制。
 - Sky：日夜天空、地平线与晚霞颜色、天空强度、星光。
-- Day and Night Post Effects：开启 DrivePostEffectsFromProfile 和 BlendNightPostEffects 后，ColorSaturation / NightColorSaturation、DayContrast / NightContrast、DayGlowIntensity / NightGlowIntensity、DayGlowThreshold / NightGlowThreshold 按日照权重平滑插值。NightBloom 只在夜间渐入，GlowEnabled 可关闭泛光。其余泛光层级、色调映射仍直接在 Environment 编辑。当前关卡由天空提供环境光，夜间补光通过 NightSkyIntensity（模板 0.16，Spacelevel 3.2）调整；纯天空环境光下 Ambient Light Energy 不影响天空补光。
-- Exposure and Quality：日夜 EV、曝光补偿和环境更新频率，默认 10 Hz；该频率仅限制天空辐照、雾和曝光，日月投影方向逐帧更新，暂停时保持不变。Sun/Moon 关闭物理插值，避免渲染帧更新方向与物理帧插值冲突。
-- Cartoon Lighting：ShadowSplit1/2/3 控制四级联边界，默认 0.2/0.4/0.7；ShadowBias/ShadowNormalBias 默认 0.05/0.5，ShadowFilterBlur 默认 1.0。开启级联混合，日月、编辑器预览与运行时共用 Profile 的配置。方向阴影使用 8192 分辨率、32 位深度和 Ultra 过滤；画面按视口原始分辨率渲染，启用 4× MSAA 与 TAA，抑制日月移动及镜头移动时的边缘闪烁。该配置增加 GPU 和显存开销，TAA 会轻微柔化画面。
-- Atmosphere and Aerial Perspective：HorizonHaze / HorizonSoftness 控制地平线薄雾，MieStrength / MieAnisotropy 控制太阳方向的散射近似。DriveFogFromProfile 开启时，FogStart / FogEnd / FogCurve / FogOpacity 控制距离雾，FogHeight / FogHeightDensity 控制高度雾；当前关卡已开启该开关。CloudHorizonFade 只控制云的地平线渐隐。运行时与编辑器预览共用 `TimeOfDayProfile.ApplyAtmosphere`。
+- Day and Night Post Effects：DrivePostEffectsFromProfile 开启后可选按昼夜插值饱和度、对比度和泛光强度；原生 Glow / Adjustment 的开关仍由 Environment 决定，Relink 与原生后处理可以同时启用。
+- Camera Exposure (Optional Driver) / Update Quality：日夜 EV 和曝光补偿仅在 DriveExposureFromProfile 开启后应用，AutoExposure 不会被关闭。VisualUpdatesPerSecond 控制环境数值和云辐照的刷新频率，日月方向与云动画继续随世界时钟更新。
+- Cartoon Lighting：阴影角度、过滤、偏移、距离与级联参数仅在 DriveLightSettingsFromProfile 开启后应用；默认直接编辑日月节点。组件不再强制将 LightEnergy 设为 1、LightIndirectEnergy 设为 0 或关闭精灵 GI。精灵是否受光直接编辑各自的 Shaded 属性。
+- Atmosphere and Aerial Perspective：天空散射参数仍驱动自定义天空材质。DriveFogFromProfile 开启时可驱动雾的密度、距离、曲线和高度数值，但 FogEnabled、FogMode、FogAerialPerspective、FogSkyAffect、FogSunScatter 始终保留 Environment 设置。已删除不再生效的 Profile.FogEnabled 字段。
 
-当前关卡参考 Relink 的清透色彩与柔和高光：白天使用 5900K 微暖白光、淡蓝天空，距离雾从 35 米开始，远端 240 米、强度 0.38；夜晚使用蓝紫天空与冷月光，距离雾从 14 米开始，远端 150 米、强度 0.7。开启 BlendNightFog 后，NightFogStart / NightFogEnd / NightFogOpacity / NightFogHeightDensity 与原白天参数平滑插值。当前关卡的白天和夜间 FogHeightDensity 均为 0，保留距离雾，避免以固定世界高度在角色和建筑上叠加水平雾层。日月投影保持开启，SSAO 默认关闭。白天泛光强度 0.04、阈值 1.8，夜晚强度 0.26、阈值 0.9，并叠加 0.025 的低强度柔光。这些参数由 ApplyRelinkPostProcessing 同步到合成器；开启时停止原生 Glow / Adjustment，使用捕获的电影曲线与 3.0 输入补偿，关闭时恢复 AgX 与 0.7 曝光。ColorSaturation / Contrast 只作用于原生后处理对照模式；Relink 模式由提取的 LUT 调色。
+Profile 保留原有关卡的雾、曝光、灯光与泛光参考值；只有显式开启对应驱动后才应用数值。Relink 与原生后处理完全独立，切换 Relink 不再关闭原生 Glow / Adjustment 或改写 Tonemap / Exposure。
 
-昼夜由太阳/月亮的 lux、太阳高度、月相、天气和天空亮度决定，日月 LightEnergy 保持 1。相机曝光由 Profile 的日夜 EV 曲线控制，与光源能量分开。运行时和编辑器使用同一曲线；转动镜头不会改变曝光，暂停时钟后曝光保持固定。
+日月方向和天空动画遵循世界时钟；灯光能量倍率、间接光倍率及相机曝光互不绑定，默认直接编辑场景中的灯光与 CameraAttributes。
 
-关闭 `DriveExposureFromProfile` 后保留手动 Camera Attributes。原生 AutoExposure 默认关闭。灯罩使用 300 cd/m² 自发光材质，只产生可见发光与泛光，不照亮邻近物体。
+DriveExposureFromProfile 默认关闭，保留手动 CameraAttributes；原生 AutoExposure 开关始终独立。灯罩材质和自发光仍由对应资源控制。
 
-太阳落下后，天空亮度依据太阳高度在地平线亮度与夜间亮度之间进行对数插值，完全独立于相机参数。日夜相机 EV 曲线保留对数过渡；它只是可选的摄影方案，不是改变光照强度的方法。
+显式开启 DriveSkyBrightnessFromProfile 后，天空亮度才随太阳高度平滑插值；显式开启 DriveExposureFromProfile 后才使用日夜 EV 曲线。默认两者都由原生资源手动控制。
 
 MoonTint 控制月光的美术染色；MoonHaloStrength 控制背景中的蓝紫月晕，随月相和月亮高度衰减，不参与环境辐照。编辑器与运行时环境组件共用 `ApplySky`，夜空配色、月相和星光也随编辑器的 StartHour / StartLunarPhase 更新。以上昼夜插值开关默认关闭，其他模板沿用原配置。
 
-已移除 `addons/scene_sky_preview` 插件。编辑器预览由 `[Tool] GameObject3D` 分发 `Component3D.OnEditorUpdate`，`DayNightEnvironmentComponent3D` 使用配置的 StartHour / StartLunarPhase 同步天空、日月、云和后处理；不初始化运行时模块、不生成角色行为、不写存档或推进世界时钟。`PreviewInEditor` 可关闭自动预览。只有当前编辑场景参与预览，组件临时绑定编辑器相机的环境和 Compositor，并让曝光继承 WorldEnvironment；切换场景、退出或关闭自动预览时恢复原有相机覆盖，不改变编辑器视角和 FOV。
+已移除 `addons/scene_sky_preview` 插件。编辑器预览由 `[Tool] GameObject3D` 分发 `Component3D.OnEditorUpdate`，`DayNightEnvironmentComponent3D` 使用配置的 StartHour / StartLunarPhase 同步天空、日月、云和后处理；不初始化运行时模块、不生成角色行为、不写存档或推进世界时钟。`PreviewInEditor` 可关闭自动预览。只有当前编辑场景参与预览，组件临时绑定编辑器相机的环境和 Compositor，保留编辑器相机自身的 CameraAttributes；切换场景、退出或关闭自动预览时恢复原有相机覆盖，不改变编辑器视角和 FOV。
 
-环境实例的 `Components → DayNightEnvironmentComponent3D` 提供节点路径、Profile 和 `LightSceneSprites`。后者让本关卡原有 Sprite3D 参与天空光、日月光和投影，退出时恢复原属性。角色仍保留原生受光和原有 Alpha 抗锯齿，未改为自发光或 Unshaded。新会话从第一个进入的环境 Profile 初始化日历；之后切换场景只替换视觉风格，既有日历或已加载存档优先。环境、天空、ShaderMaterial、曝光均勾选 Local To Scene，实例间的资源隔离在场景加载时完成。
+环境实例的 `Components → DayNightEnvironmentComponent3D` 提供节点路径、Profile 和编辑器预览开关。天气组件复用它解析的环境与日月节点，不再保存第二套路径。精灵受光在各自节点的 Shaded 属性中配置。角色仍保留原生受光和原有 Alpha 抗锯齿，未改为自发光或 Unshaded。新会话从第一个进入的环境 Profile 初始化日历；之后切换场景只替换视觉风格，既有日历或已加载存档优先。环境、天空、ShaderMaterial、曝光均勾选 Local To Scene；昼夜 Profile 在运行时另行复制，手动调节不会改写场景定义。
 
 编辑器保存的环境为正午预览；动态循环在运行时由 EC 组件驱动。在 Remote 场景树中可以检查日月、WorldEnvironment 和宿主的 `time_of_day` 元数据。运行时改 Profile 颜色、曝光补偿或天体大小后，调用组件 `RefreshProfile()` 即可刷新，不会重置日历。
 
@@ -43,7 +45,7 @@ MoonTint 控制月光的美术染色；MoonHaloStrength 控制背景中的蓝紫
 
 ### 运行时 GM
 
-进入 `spacelevel` 后按 **F8** 或右上角 **GM** 打开面板，选择「时间与天空」。拖动时间滑条会立即更新太阳、月亮、天空和曝光；拖动期间暂时停表，松开后恢复原来的播放状态。也可输入日期、小时和分钟（回车提交），一键跳到黎明、正午、黄昏或午夜，独立暂停/调整时钟倍率，选择八种月相或拖动月相滑条。
+进入 `spacelevel` 后按 **F8** 或右上角 **GM** 打开面板，选择「时间与天空」。拖动时间滑条会立即更新太阳、月亮和天空；曝光仅在显式开启驱动时变化；拖动期间暂时停表，松开后恢复原来的播放状态。也可输入日期、小时和分钟（回车提交），一键跳到黎明、正午、黄昏或午夜，独立暂停/调整时钟倍率，选择八种月相或拖动月相滑条。
 
 面板打开时暂时关闭项目输入层，避免点击控件触发角色攻击或移动镜头；收起或退出场景后恢复之前的输入状态。世界模拟不会因此暂停。修改的是当前日历，后续正常存档会包含修改；面板本身不主动写盘。即使游戏暂停也可操作面板。
 
@@ -77,9 +79,9 @@ controller.SetLunarPhase(0.5)
 
 全局时间自动写入既有存档的 `sections.world.time_of_day`，保存总小时、月相偏移、日长、月长、速度与暂停状态。恢复先验证完整数据再提交。快进使用绝对累计时间，跨多天不会丢失月相。
 
-调用 `SetDate` / `SetTimeOfDay` / `AdvanceHours` 后，环境立即按目标时刻更新日月、天空与曝光。编辑器修改 StartDay / StartHour 采用相同的配置曲线。
+调用 SetDate / SetTimeOfDay / AdvanceHours 会立即更新日月方向、天空和云动画；其他原生设置仅在显式开启对应驱动后更新。
 
-Spacelevel 的白天 EV 为 14.35，夜间 EV 为 2，夜间天空美术强度为 8；曝光与太阳高度关联。夜间天空底值与当前曝光、天空配色和 Relink 电影曲线配合校准，使日落后天空光衰减到终点时，雨天、新月的道路和建筑仍然可读。天空强度沿原有太阳高度曲线连续变化，不按整点切换。日月、天空和灯罩强度独立由光源控制。关闭 `DriveExposureFromProfile` 时，昼夜变化不会改写手动相机曝光。
+Spacelevel 的 Profile 使用白天 EV 14.35、夜间 EV 2 和夜间天空强度 8。是否更新相机与背景亮度，由各自独立驱动开关决定。
 
 ## 原作者纸片云
 
@@ -99,7 +101,7 @@ Spacelevel 的白天 EV 为 14.35，夜间 EV 为 2，夜间天空美术强度�
 
 `CameraRig → Components → SceneCameraComponent3D` 是唯一的相机行为组件：`TargetPath = ../Player`，`CameraPath = Camera3D`。它在目标准备完成后自动绑定，处理跟随、前瞻、平滑和震动。原来的 LevelCamera / GlobalCamera 两层组件已经合并移除。其 `Profile` 只保留跟随参数；构图以 Camera3D 为准。CameraModule 只路由 Follow、Focus、Shake 等调用，不创建或销毁相机节点。
 
-天空会自动适配相机投影：正交使用 Profile 的 `OrthographicSkyFov = 65` 和 `OrthographicSkyPitchDegrees = -33` 进行横版背景构图；透视/视锥模式关闭这两个覆盖，使用相机真实投影、朝向和 FOV。透视的视野大小取决于 FOV 和距离，正交的 Size 对透视不起作用。该切换在时钟暂停时也生效。
+天空投影默认保留 Environment 的 SkyCustomFov / SkyRotation。显式开启 DriveSkyProjectionFromProfile 后，正交相机才使用 Profile 的 OrthographicSkyFov / OrthographicSkyPitchDegrees，透视相机恢复真实投影；云材质读取实际生效的天空投影参数。
 
 环境组件的 Tool 预览让本地相机切换和天空/日月尺寸参数的修改直接在编辑器中生效，无需额外天空插件。编辑器自由视角仍用于浏览，最终构图请看场景 Camera3D Preview。修改 Compositor 中共享 Profile 的 `LutStrength` 可直接看到调色变化；MSAA 下的结果会写回多采样颜色缓冲，不被透明后的再次解析覆盖。
 
@@ -107,7 +109,7 @@ Spacelevel 的白天 EV 为 14.35，夜间 EV 为 2，夜间天空美术强度�
 
 这是可配置的游戏天球模型，不是现实天文历：日出 06:00、日落 18:00、太阳正午达到设定高度；月球轨道按月相相对太阳偏移，因此上弦月傍晚高悬、满月午夜高悬。月盘通过球面朝向和日照方向计算连续明暗，月光按可见照明比例衰减。尚不模拟季节、经纬度或日食月食；[天气系统](../weather/README.md)通过同宿主组件叠加晴、阴、雨、雪与自动调度。
 
-日夜共用物理光照单位和相机曝光。夜间天空强度是为可玩性设置的美术补光，可在 Profile 中调低；月光本身默认 0.3 lux。星光和天体盘不写入环境辐照贴图，以免与方向灯重复照明。Shader 不使用 TIME；云的噪声与材质曲线由游戏时钟驱动，暂停时保持不变，画面仍正常逐帧绘制。
+日月、天空背景、相机曝光与 Relink 后处理独立配置。世界时钟继续驱动日月方向、月相、星光和云动画，暂停时保持对应时间状态。
 
 参考：[Godot 物理光照与相机单位](https://docs.godotengine.org/en/4.6/tutorials/3d/physical_light_and_camera_units.html)、[天空 Shader](https://docs.godotengine.org/en/4.6/tutorials/shaders/shader_reference/sky_shader.html)。
 
@@ -115,11 +117,32 @@ Spacelevel 的白天 EV 为 14.35，夜间 EV 为 2，夜间天空美术强度�
 
 ```powershell
 dotnet build yu.csproj
-& 'D:/DCC/Godot_v4.6.1-stable_mono_win64/Godot_v4.6.1-stable_mono_win64.exe' --path . res://assets/scenes/spacelevel.tscn
+.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('res://assets/scenes/spacelevel.tscn')
 ```
 
 检查跨日、暂停、速度、月相环绕、非法输入原子恢复、日月位置、存档往返、实例资源隔离、GM、烘焙云资源、相机自动绑定和跟随、保留编辑器构图、正交/透视天空切换以及退出释放。
 
-验收应覆盖白天、黄昏和午夜的跳时曝光，暂停时转动镜头，以及连续移动后的亮度与阴影稳定性；确认运行时 SDFGI / SSIL 关闭，GM 只保留渲染诊断与后处理控制。
+验收覆盖跨昼夜与 Relink 切换后手动参数不变、各原生效果同时开/关、日月方向继续更新、雾模式与自动曝光保持手动设置，以及退出释放。运行 validate_environment_preview.gd 可检查这些行为。
 
 临时验证脚本、截图和性能数据放在忽略目录 `.godot/`，不作为游戏源码或发布资源保留。
+
+## EnvironmentRig 参数整理
+
+当前 EnvironmentRig 有四个 EC 组件：昼夜管理世界时钟与天球，天气管理天气与降水，地表管理含水 / 积雪，DDGI 捕获场景并更新探针。前三者先更新，DDGI 最后捕获；运行时接线见 [DDGI 指南](../../../docs/art/ddgi_implementation.md)。日月间接能量为 0.75，SSIL 等开关由 Environment 独立配置，昼夜组件不额外接管。加速或手动调时导致全局光照快速变化时，DDGI 临时整轮刷新探针，避免旧的白天辐照度被夜间曝光放大；相机曝光曲线与日夜端点保持原配置。
+
+| 整理项 | 处理与原因 |
+| --- | --- |
+| Profile.FogEnabled | 删除；雾开关只有 Environment.FogEnabled 一处有效配置。 |
+| Relink.NativeTonemap / NativeExposure / NativeGlow / NativeAdjustment | 删除四个未使用的参考字段；原生参数直接编辑 Environment。 |
+| LightSceneSprites | 删除全场景精灵受光覆盖；每个 SpriteBase3D 自己配置 Shaded，玩家场景已开启。 |
+| Weather.EnvironmentPath / SunPath / MoonPath | 删除重复路径，复用同宿主昼夜组件已经解析的节点。 |
+| 原生后处理与 Relink 泛光驱动 | 拆为 DrivePostEffectsFromProfile 和 DriveRelinkBloomFromProfile，互不接管对方。 |
+| 泛光昼夜端点 | 保留一组端点，原生 Glow 与 Relink 可分别选择共用；取样和范围限制合并到同一函数。 |
+| WeatherSurface.Profile | 不新增重复配置；湿润、积水、涟漪和积雪统一使用 WeatherComponent3D.Profile。 |
+| 三层云路径、材质时间线及旋转/形变/噪声周期 | 保留；分别控制不同网格、曲线和动画相位，不能用一个值替代。 |
+| StartDay / StartHour / StartLunarPhase 等初始日历值 | 保留；初始化新世界和编辑器预览使用，已加载的世界时钟/存档优先。 |
+| BlendNightFog / BlendNightPostEffects | 保留；决定是否插值夜间端点，与是否接管对应效果是不同选择。 |
+
+所有保留的导出参数补充中文 XML 注释，说明用途、单位及生效条件。曝光与刷新质量分组，后处理饱和度归到后处理组。驱动开关默认关闭；当前关卡已显式启用的配置继续保留。
+
+Relink 运行时调节见 [Runtime GM](../gm/README.md)。直接通过远程 Inspector 或代码修改 Profile 参数同样逐帧生效；启用昼夜泛光时泛光参数会由曲线更新，手动编辑资源前可关闭该独立驱动。

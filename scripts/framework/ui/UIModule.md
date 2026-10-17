@@ -109,3 +109,4 @@ public class MainMenuWindow : UIWindow
 - 需要窗口自动跟场景资源释放联动时，交给 `UIModule + UIWindow + SceneHandle` 这一套默认流程
 - 隐藏后希望保留状态时用 `HideUI()`
 - 明确不再需要窗口时用 `CloseUI()`
+- 直接运行关卡、没有 `Root/UICanvas` 时，CanvasLayer 挂到 SceneTree 根窗口；正常入口继续使用 UICanvas。

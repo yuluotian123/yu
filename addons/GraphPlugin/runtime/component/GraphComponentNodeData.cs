@@ -166,7 +166,7 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
                 context.CurrentGraph?.MarkDirty();
                 foreach (Node child in parameters.GetChildren())
                 {
-                    GraphEditorSignalCleanup.DisconnectSubtree(child);
+                    GraphEditorSignalCleanup.PrepareForRemoval(child);
                     parameters.RemoveChild(child); child.QueueFree();
                 }
                 parameters.AddChild(Action.CreateEditUI(context));

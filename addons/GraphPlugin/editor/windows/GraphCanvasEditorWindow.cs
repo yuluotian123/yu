@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Godot;
 
 [Tool]
-public partial class GraphCanvasEditorWindow : MarginContainer
+public partial class GraphCanvasEditorWindow : MarginContainer, ISerializationListener
 {
     private GraphEdit _graphEdit;
     private GraphAsset _currentGraph;
@@ -33,6 +33,8 @@ public partial class GraphCanvasEditorWindow : MarginContainer
     private bool _initialLayoutApplied;
     private bool _inspectingObject;
     private bool _selectionRefreshQueued;
+    private GraphAsset _reloadGraph;
+    private GodotObject _reloadSource;
     public GraphAsset CurrentGraph => _currentGraph;
 
     public EditorUndoRedoManager _undoRedo { get; set; }
@@ -40,6 +42,33 @@ public partial class GraphCanvasEditorWindow : MarginContainer
     public override void _Ready()
     {
         EnsureInitialized();
+    }
+
+    public void OnBeforeSerialize()
+    {
+        SaveCurrentGraph();
+        _reloadGraph = _subGraphNavigator?.GetRootGraph(_currentGraph) ?? _currentGraph;
+        _reloadSource = _componentPanel?.Source;
+        ResetEditorUi();
+    }
+
+    public void OnAfterDeserialize()
+    {
+        // Also retires UI left by an assembly that did not have the pre-reload hook.
+        GraphEditorSignalCleanup.PrepareForRemoval(_mainContainer);
+        _initialized = false;
+        CallDeferred(nameof(RestoreAfterReload));
+    }
+
+    private void RestoreAfterReload()
+    {
+        if (!IsInsideTree() || IsQueuedForDeletion()) return;
+        GraphAsset graph = GodotObject.IsInstanceValid(_reloadGraph) ? _reloadGraph : _currentGraph;
+        GodotObject source = GodotObject.IsInstanceValid(_reloadSource) ? _reloadSource : null;
+        EnsureInitialized();
+        if (GodotObject.IsInstanceValid(graph)) LoadGraph(graph, source);
+        _reloadGraph = null;
+        _reloadSource = null;
     }
 
     private void EnsureInitialized()
@@ -70,7 +99,7 @@ public partial class GraphCanvasEditorWindow : MarginContainer
         _transitionSourceId = null;
         if (_mainContainer != null && GodotObject.IsInstanceValid(_mainContainer))
         {
-            GraphEditorSignalCleanup.DisconnectSubtree(_mainContainer);
+            GraphEditorSignalCleanup.PrepareForRemoval(_mainContainer);
             RemoveChild(_mainContainer);
             _mainContainer.QueueFree();
         }

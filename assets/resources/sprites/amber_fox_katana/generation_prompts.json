@@ -1,0 +1,27 @@
+{
+  "tool": "Built-in imagegen",
+  "source_identity": "res://assets/textures/concepts/protagonist/amber_fox_greatsword/character-design.png",
+  "native_character_height": 96,
+  "attack_duration": 0.36,
+  "prompts": {
+    "common": "Edit this existing production sprite sheet of the SAME yellow-brown fox-eared teenage girl protagonist. Preserve her identity, youthful build, face, honey-golden hair, ears, single fluffy cream-tipped fox tail, mustard cape, fully covering ivory long-sleeved tunic, brown vest, practical shorts over opaque tights, boots, all colors, layout, figure sizes and coarse square-pixel rendering. Replace EVERY broad greatsword with ONE slender Japanese TACHI / KATANA per figure: long narrow single-edged steel blade with a restrained gentle curvature, dark gray spine and pale edge, small round brass tsuba guard, straight chestnut wrapped two-hand handle and tiny brass pommel. The handle and blade tang share the same axis at the guard; only the blade gently curves farther along its length. No crooked or disconnected handle. Blade width visibly MUCH narrower than the reference greatsword, recognizable as a Japanese curved sword. Brown scabbard attached at the left hip only if it fits cleanly without clutter. One sword per pose, natural two-hand grip. No second weapon, bow, extra limbs, glow or slash effects. Keep full costume coverage and same girl design. Coarse hand-authored low-resolution fantasy game pixel art: character body about 96 logical pixels high, big square pixels, dark plum stepped outline, limited warm palette and 2–3 flat shades per material. No fine details, gradients, smooth outlines, painterly textures, blur or antialiasing. Real transparent alpha background, no colored haze, text, labels, drawn grids or shadow. All complete figures, sword tips and tails stay in their own cells with ample transparent gutters; no touching adjacent poses.",
+    "specs": [
+      {
+        "key": "support",
+        "extra": "Keep EXACTLY 12 full-body poses in 4 columns x 3 rows, same ordering: first row four idle poses, second row four hurt/recovery poses, third row four collapse/defeat poses. Keep feet baseline and body scale. Give the idle poses a relaxed two-handed LOW GUARD holding the narrow curved tachi alongside the body, blade angled down. Keep the same overall silhouettes and size."
+      },
+      {
+        "key": "run",
+        "extra": "Keep EXACTLY 8 full-body rightward run-cycle poses in 4 columns x 2 rows. Same alternating leg sequence and same character scale. Carry the narrow curved tachi in both hands low behind the body, rigid handle and blade tang aligned. Preserve the recognizable running leg positions and baseline."
+      },
+      {
+        "key": "attack",
+        "extra": "Create EXACTLY 8 full-body poses in 4 columns x 2 rows as a FAST TACHI cutting sequence. Replace the heavy greatsword choreography with light, precise two-handed swordplay: low ready, short draw-back, compact raised guard, fast forward diagonal cut, long low follow-through, returning blade, recovery, ready again. Clearly different phases and readable wrist/hand positions on the straight handle. Same body size and camera. Narrow gently curved blade, small round guard, not a broad straight greatsword. Keep every pose fully separated, with transparent gutters and NO sword trails or detached effects."
+      },
+      {
+        "key": "jump",
+        "extra": "Keep EXACTLY 12 full-body poses in 4 columns x 3 rows, same ordering: crouch/takeoff/rise in row 1, apex/descent in row 2, touchdown/crouch/recover/stand in row 3. Preserve the body size and leg positions. Carry the narrow gently curved tachi close to the body in both hands. Airborne frames keep consistent torso position because physical game movement handles the jump."
+      }
+    ]
+  }
+}

@@ -760,7 +760,7 @@ public sealed partial class GraphComponentPanel
 
     private static string GetSafePath(Node node)
     {
-        if (!IsValidObject(node))
+        if (!IsValidObject(node) || !node.IsInsideTree())
             return string.Empty;
         try
         {

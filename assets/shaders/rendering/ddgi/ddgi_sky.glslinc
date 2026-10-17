@@ -1,0 +1,9 @@
+vec3 ddgi_sky_radiance(sampler2D sky_texture, vec3 direction, vec3 fallback,
+		mat3 inverse_rotation, vec4 options) {
+	if (options.x < .5) return fallback;
+	vec3 d = inverse_rotation * direction;
+	d /= max(abs(d.x) + abs(d.y) + abs(d.z), 1e-7);
+	vec2 uv = d.z >= 0.0 ? d.xy : (1.0 - abs(d.yx)) * vec2(d.x >= 0.0 ? 1.0 : -1.0, d.y >= 0.0 ? 1.0 : -1.0);
+	uv = (uv * .5 + .5) * (1.0 - 2.0 * options.z) + options.z;
+	return textureLod(sky_texture, uv, 0.0).rgb * options.y;
+}

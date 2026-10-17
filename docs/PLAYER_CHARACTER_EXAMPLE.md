@@ -2,7 +2,7 @@
 
 推荐先阅读：[角色系统与图使用说明](CHARACTER_GRAPH_USAGE.md)。
 
-本文以 [player.tscn](../assets/scenes/player.tscn) 为例，说明移动、跳跃、Attack 和 Dash 如何从输入进入 CharacterGraph，再分别交给 Movement 或 AbilitySystem。
+本文以 [player.tscn](../assets/scenes/player.tscn) 为例，说明移动、跳跃、武器普攻和冲刺如何从输入进入 CharacterGraph，再交给 Movement、武器装备或 AbilitySystem。
 
 总览见 [角色系统](CHARACTER_SYSTEM.md)，AI 对照见 [AI 角色示例](AI_CHARACTER_EXAMPLE.md)。
 
@@ -10,11 +10,13 @@
 
 | Priority | 组件 | 配置 |
 | ---: | --- | --- |
+| 110 | `InventoryComponent3D` | 初始物品、背包容量与窗口 |
 | 100 | `PlayerCharacterInputComponent3D` | 无 Move/Jump/Ability Action 字段 |
 | 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
 | 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/resources/abilities/player_ability_set.tres) |
 | 50 | `CharacterMovementComponent3D` | 移速、跳跃、重力、Body 路径 |
 | 20 | `CharacterAnimationComponent3D` | `player.tscn` 内嵌 Locomotion HFSM |
+| 10 | `WeaponEquipmentComponent3D` | 初始装备槽、默认武器 |
 | 最后 | `CharacterPersistenceComponent3D` | Save |
 
 输入组件需要暴露在场景中，因为它是玩家与 InputModule 的设备边界；但它不暴露 `MoveAction`、`JumpAction` 或技能数组。所有逻辑 Action 映射都在 CharacterGraph 资源中编辑。
@@ -26,15 +28,17 @@
 ```text
 GameObject3D._Ready
   -> 克隆并按 Priority 排序组件
+  -> Inventory.OnInit: 初始化物品与背包入口
   -> Input.OnInit: 获取 IInputModule
   -> CharacterGraph.OnInit: 查找 ICharacterInputProvider，创建 runtime
-  -> AbilitySystem.OnInit: 从 AbilitySet 显式 Grant
+  -> AbilitySystem.OnInit: 从 AbilitySet 授予冲刺
   -> Movement.OnInit: 绑定 CharacterBody3D
   -> Animation.OnInit: 启动 Locomotion HFSM
+  -> WeaponEquipment.OnInit: 授予武器普攻，应用初始装备与外观
   -> 首次 Update/PhysicsUpdate: CharacterGraph 触发 BeginPlay
 ```
 
-CharacterGraph 不负责 Grant Ability。即使图里有 `ActivateAbility(attack)`，如果 AbilitySet 没有授予 `attack`，AbilitySystem 也会返回 `NotGranted`。
+CharacterGraph 不负责 Grant Ability。基础 AbilitySet 只授予 `dash`；武器装备组件授予 `greatsword_attack` 和 `katana_attack`。请求未授予的 AbilityId 时，AbilitySystem 返回 `NotGranted`。
 
 ## 移动输入
 
@@ -83,47 +87,44 @@ CharacterGraph 只提交“想跳”的意图。是否在地面、是否处于 C
 
 资源：
 
-- [attack_ability.tres](../assets/resources/abilities/attack_ability.tres)
-- [attack_timeline.tres](../assets/resources/abilities/attack_timeline.tres)
+- [大剑普攻](../assets/resources/weapons/greatsword_attack.tres)及其[时间轴](../assets/resources/weapons/greatsword_attack_timeline.tres)
+- [太刀普攻](../assets/resources/weapons/katana_attack.tres)及其[时间轴](../assets/resources/weapons/katana_attack_timeline.tres)
 
 ```text
 Pressed(player_attack)
-  -> CharacterAbilityNode(attack)
-  -> AbilitySystem.TryActivateAbility("attack")
+  -> WeaponEquipment.TryPrimaryAttack()
+  -> AbilitySystem.TryActivateAbility(CurrentWeapon.PrimaryAttack.AbilityId)
   -> Grant / Cooldown / Priority 检查
   -> 注册移动与跳跃锁
   -> Attack Ability Timeline
        |-- Animation Track
-       |-- Slash / Camera / Event Actions
        +-- Complete 或 Cancel 清理
 ```
 
-Ability 节点的 `Activated` 输出在启动成功时执行。节点保持活动直到 Ability 完成或取消，再从 `Completed` 或 `Cancelled` 输出继续；冷却或裁决失败从 `Rejected` 输出继续。
+普攻使用组件方法调用节点，返回值表示是否成功激活能力；攻击时间轴由 AbilitySystem 继续更新。按 Q 调用 `RequestNextWeapon`，攻击或冲刺期间的切换会延迟到能力结束。
 
-## Attack 被 Dash 打断
+## 冲刺与攻击仲裁
 
 资源：
 
 - [dash_ability.tres](../assets/resources/abilities/dash_ability.tres)
 - [dash_timeline.tres](../assets/resources/abilities/dash_timeline.tres)
 
-默认 CharacterGraph 只有：
+冲刺通过独立的 Ability 节点触发：
 
 ```text
-Attack -- Interrupt [window 0..any, request priority 100] --> Dash
+Pressed(player_dash)
+  -> CharacterAbilityNode(dash)
+  -> AbilitySystem.TryActivateAbility("dash")
+  -> Dash Timeline 提交速度覆盖
+  -> Movement 在同一物理帧应用覆盖
 ```
 
-玩家在 Attack 中按 Dash 时：
+当前图不配置攻击与冲刺的 Interrupt 边。攻击期间，CharacterGraph 拒绝冲刺请求；冲刺期间，AbilitySystem 按优先级拒绝普攻请求。
 
-1. CharacterGraph 找到 `Attack -> Dash` Interrupt 边。
-2. 检查时间窗口和边条件。
-3. 把 Dash 请求和边的 request priority 交给 AbilitySystem。
-4. AbilitySystem 再检查 Dash 已授予、未冷却、允许打断且有效优先级不低于 Attack。
-5. Attack 以 `Interrupted` 取消，Timeline 的 Cancel action 清理动画和表现。
-6. Dash Timeline 启动，在 AbilitySystem(55) 更新时提交速度覆盖。
-7. Movement(50) 在同一物理帧应用覆盖，所以 Dash 不多延迟一帧。
+Interrupt/Completion 关系以 `CharacterAbilityNode` 的 AbilityId 匹配源能力，不能从 `TryPrimaryAttack` 这样的组件调用节点建立。未来增加武器普攻打断时，需要先接通武器技能与关系节点的映射。
 
-不存在 `Dash -> Attack` 边，因此 Dash 期间的 Attack 请求会被 CharacterGraph 拒绝。即使未来加上这条边，AbilitySystem 仍保留最终裁决权。
+Ability 节点的 `Activated` 输出在启动成功时执行。节点保持活动直到 Ability 完成或取消，再从 `Completed` 或 `Cancelled` 输出继续；冷却或裁决失败从 `Rejected` 输出继续。
 
 ## 动画恢复
 

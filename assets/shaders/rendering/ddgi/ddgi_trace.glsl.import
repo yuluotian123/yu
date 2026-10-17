@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://bb1fr5u507ndq"
+path="res://.godot/imported/ddgi_trace.glsl-9d5182b197dd9f7f650622f309b35d32.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/ddgi/ddgi_trace.glsl"
+dest_files=["res://.godot/imported/ddgi_trace.glsl-9d5182b197dd9f7f650622f309b35d32.res"]
+
+[params]
+

@@ -57,8 +57,13 @@ void fragment() {
     float cell_mask = 1.0;
     if (bound_atlas_cell) {
         vec2 atlas_cell_origin = floor(source_uv / vec2(0.5, 0.25)) * vec2(0.5, 0.25);
+        // MSAA may extrapolate a border fragment into the neighboring atlas cell.
+        // Keep a pixel-sized transparent guard on the original, undisturbed UV.
+        vec2 source_edge = min(source_uv - atlas_cell_origin, atlas_cell_origin + vec2(0.5, 0.25) - source_uv);
+        vec2 pixel_guard = max(fwidth(source_uv), vec2(0.000001));
+        vec2 source_mask = smoothstep(pixel_guard, pixel_guard * 2.0, source_edge);
         vec2 edge = min(cloud_uv - atlas_cell_origin, atlas_cell_origin + vec2(0.5, 0.25) - cloud_uv);
-        cell_mask = smoothstep(0.0, 0.012, min(edge.x, edge.y));
+        cell_mask = min(source_mask.x, source_mask.y) * smoothstep(0.0, 0.012, min(edge.x, edge.y));
         vec2 half_texel = 0.5 / vec2(textureSize(cloud_map, 0));
         cloud_uv = clamp(cloud_uv, atlas_cell_origin + half_texel, atlas_cell_origin + vec2(0.5, 0.25) - half_texel);
     }

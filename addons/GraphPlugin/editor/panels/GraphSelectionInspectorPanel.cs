@@ -220,7 +220,7 @@ public sealed class GraphSelectionInspectorPanel
         _backButton.Hide();
         foreach (Node child in _content.GetChildren())
         {
-            GraphEditorSignalCleanup.DisconnectSubtree(child);
+            GraphEditorSignalCleanup.PrepareForRemoval(child);
             _content.RemoveChild(child);
             child.QueueFree();
         }

@@ -18,7 +18,7 @@ namespace GameLogic
         public string EntryKey => string.IsNullOrWhiteSpace(PersistentIdOverride)
             ? Owner?.PersistentId ?? string.Empty
             : PersistentIdOverride.Trim();
-        public int SchemaVersion => 3;
+        public int SchemaVersion => 5;
 
         public override void OnInit()
         {
@@ -54,6 +54,12 @@ namespace GameLogic
             AbilitySystemComponent3D abilities = Owner.GetComponent<AbilitySystemComponent3D>();
             if (abilities != null)
                 state["abilities"] = abilities.CaptureDurableState();
+            WeaponEquipmentComponent3D equipment = Owner.GetComponent<WeaponEquipmentComponent3D>();
+            if (equipment != null)
+                state["equipment"] = equipment.CaptureDurableState();
+            InventoryComponent3D inventory = Owner.GetComponent<InventoryComponent3D>();
+            if (inventory != null)
+                state["inventory"] = inventory.CaptureDurableState();
 
             return state;
         }
@@ -84,7 +90,19 @@ namespace GameLogic
             // 位置、旋转与朝向全部恢复后，再重置整棵角色树的插值历史。
             Owner.ResetPhysicsInterpolation();
             RestoreFlags(state["flags"] as JsonObject);
+            Owner.GetComponent<InventoryComponent3D>()?.RestoreDurableState(state["inventory"] as JsonObject);
+            WeaponEquipmentComponent3D equipment = Owner.GetComponent<WeaponEquipmentComponent3D>();
+            equipment?.RestoreDurableState(state["equipment"] as JsonObject);
             JsonObject abilityState = state["abilities"] as JsonObject ?? state["skills"] as JsonObject;
+            if (schemaVersion < 4 && equipment != null && abilityState != null)
+            {
+                abilityState = (JsonObject)abilityState.DeepClone();
+                JsonArray entries = abilityState["abilities"] as JsonArray ?? abilityState["skills"] as JsonArray;
+                if (entries != null)
+                    foreach (JsonNode node in entries)
+                        if (node is JsonObject item && item["id"]?.GetValue<string>() == "attack")
+                            item["id"] = "greatsword_attack";
+            }
             Owner.GetComponent<AbilitySystemComponent3D>()?.RestoreDurableState(abilityState);
         }
 

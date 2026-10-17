@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AbilityResource" format=3 uid="uid://c7wbi2rkbifw3"]
+
+[ext_resource type="Script" uid="uid://cg2ytousxnyt1" path="res://scripts/gamelogic/abilities/runtime/AbilityResource.cs" id="1_script"]
+[ext_resource type="Script" uid="uid://cu4j2jbm2g1tr" path="res://scripts/gamelogic/abilities/runtime/AbilityActivationPolicy.cs" id="2_policy"]
+[ext_resource type="Resource" path="res://assets/resources/weapons/katana_attack_timeline.tres" id="3_timeline"]
+
+[sub_resource type="Resource" id="attack_policy"]
+script = ExtResource("2_policy")
+Priority = 50
+BlocksMovement = true
+BlocksJump = true
+
+[resource]
+script = ExtResource("1_script")
+AbilityId = "katana_attack"
+DisplayName = "太刀斩击"
+Cooldown = 0.42
+ActivationPolicy = SubResource("attack_policy")
+Graph = ExtResource("3_timeline")

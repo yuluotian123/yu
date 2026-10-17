@@ -215,20 +215,9 @@ AI BehaviorTree 直接调用与玩家图相同的 Movement 和 AbilitySystem API
 
 ## 9. 持久化
 
-Save schema 为 2。角色保存稳定 ID、位置、旋转、朝向、自定义标记和 Ability 冷却。字段名为 `abilities`；读取兼容旧 `skills` 字段。输入快照、Jump Sustain、当前图节点、动画、速度和 Ability Timeline 进度不保存。
+存档文件的 `FormatVersion` 为 2，角色分区 schema 为 5。角色保存稳定 ID、位置、旋转、朝向、自定义标记、武器所有权与装备、Ability 冷却。能力字段为 `abilities`，读取兼容旧 `skills` 字段。输入快照、Jump Sustain、当前图节点、动画、速度和 Ability Timeline 进度不保存。格式及迁移规则见[存档系统](../scripts/gamelogic/saves/README.md)。
 
-## 10. Markdown 链接为什么不能点击
-
-反引号表示代码，`res://` 是 Godot 资源协议，所以 `` `res://assets/scenes/player.tscn` `` 和 `` `docs/PLAYER_CHARACTER_EXAMPLE.md` `` 不是 Markdown 链接。应写成标准相对链接：
-
-```markdown
-[玩家场景](../assets/scenes/player.tscn)
-[玩家示例](PLAYER_CHARACTER_EXAMPLE.md)
-```
-
-链接必须相对于当前 `.md` 文件所在目录，而不是相对于仓库根目录。
-
-## 11. 验证
+## 10. 验证
 
 运行 Spacelevel 检查移动、跳跃、技能打断、动画、AI 行为及持久化边界。
 

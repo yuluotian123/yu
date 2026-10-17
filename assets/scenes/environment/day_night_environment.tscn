@@ -18,6 +18,8 @@ Profile = ExtResource("4_profile")
 [sub_resource type="Resource" id="weather"]
 script = ExtResource("weather_controller")
 Profile = ExtResource("weather_profile")
+DriveFogFromWeather = false
+DriveLightsFromWeather = false
 
 [node name="EnvironmentRig" type="Node3D" unique_id=2031481052]
 process_mode = 1

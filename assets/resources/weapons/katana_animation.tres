@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WeaponAnimationProfile" format=3 uid="uid://bow24ol6ao2wl"]
+
+[ext_resource type="Script" uid="uid://jnv4s2cqtvpj" path="res://scripts/gamelogic/weapons/WeaponAnimationProfile.cs" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://cj44a7rgg7gtx" path="res://assets/resources/sprites/amber_fox_katana/sprite_frames.tres" id="2_frames"]
+
+[resource]
+script = ExtResource("1_script")
+Frames = ExtResource("2_frames")
+PixelSize = 0.0075
+VisualScale = 1.3

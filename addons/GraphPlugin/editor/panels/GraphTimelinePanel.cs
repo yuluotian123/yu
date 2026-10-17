@@ -537,7 +537,7 @@ public sealed partial class GraphTimelinePanel : RefCounted
     {
         foreach (Node child in control.GetChildren())
         {
-            GraphEditorSignalCleanup.DisconnectSubtree(child);
+            GraphEditorSignalCleanup.PrepareForRemoval(child);
             control.RemoveChild(child);
             child.QueueFree();
         }

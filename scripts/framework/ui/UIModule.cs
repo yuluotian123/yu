@@ -24,7 +24,8 @@ namespace Framework.UI
             _resource = ModuleSystem.GetModule<IResourceModule>();
             _tree = Engine.GetMainLoop() as SceneTree;
 
-            var root = _tree?.Root.GetNodeOrNull<Node>("Root/UICanvas");
+            // Directly running a gameplay scene has no bootstrap Root/UICanvas.
+            var root = _tree?.Root.GetNodeOrNull<Node>("Root/UICanvas") ?? _tree?.Root;
             foreach (UILayer layer in Enum.GetValues(typeof(UILayer)))
                 CreateCanvasLayer(layer, root);
         }

@@ -3,11 +3,12 @@ using System;
 using Godot;
 
 [Tool]
-public partial class GraphPlugin : EditorPlugin
+public partial class GraphPlugin : EditorPlugin, ISerializationListener
 {
     public static GraphPlugin Instance { get; private set; }
 
     private GraphCanvasEditorWindow _editorWindow;
+    private EditorDock _editorDock;
     private GraphCanvasInspectorPlugin _inspectorPlugin;
 
     public override void _EnterTree()
@@ -28,26 +29,12 @@ public partial class GraphPlugin : EditorPlugin
             GD.PushError($"[GraphPlugin] Node registration failed: {ex}");
         }
 
-        try
-        {
-            _editorWindow = new GraphCanvasEditorWindow();
-            EditorInterface.Singleton.GetEditorMainScreen().AddChild(_editorWindow);
-            _editorWindow.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
-            _editorWindow._undoRedo = GetUndoRedo();
-            _editorWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            GD.PushError($"[GraphPlugin] Editor window initialization failed: {ex}");
-            _editorWindow = null;
-        }
+        EnsureEditorWindow();
 
         GD.Print("GraphCanvas plugin loaded");
     }
 
-    public override bool _HasMainScreen() => true;
     public override string _GetPluginName() => "Graph";
-    public override Texture2D _GetPluginIcon() => EditorInterface.Singleton.GetBaseControl().GetThemeIcon("GraphEdit", "EditorIcons");
     public override bool _Handles(GodotObject obj) => obj is GraphAsset;
     public override void _Edit(GodotObject obj)
     {
@@ -60,7 +47,7 @@ public partial class GraphPlugin : EditorPlugin
     }
     public override void _MakeVisible(bool visible)
     {
-        if (GodotObject.IsInstanceValid(_editorWindow)) _editorWindow.Visible = visible;
+        if (visible && GodotObject.IsInstanceValid(_editorDock)) _editorDock.MakeVisible();
     }
     public override void _SaveExternalData()
     {
@@ -72,10 +59,17 @@ public partial class GraphPlugin : EditorPlugin
         RemoveInspectorPlugin(_inspectorPlugin);
         if (_editorWindow != null)
         {
-            GraphEditorSignalCleanup.DisconnectSubtree(_editorWindow);
-            _editorWindow.QueueFree();
-            _editorWindow = null;
+            GraphEditorSignalCleanup.PrepareForRemoval(_editorWindow);
         }
+        if (GodotObject.IsInstanceValid(_editorDock))
+        {
+            RemoveDock(_editorDock);
+            _editorDock.QueueFree();
+        }
+        else if (GodotObject.IsInstanceValid(_editorWindow))
+            _editorWindow.QueueFree();
+        _editorDock = null;
+        _editorWindow = null;
 
         GD.Print("GraphCanvas plugin unloaded");
         if (ReferenceEquals(Instance, this))
@@ -87,7 +81,15 @@ public partial class GraphPlugin : EditorPlugin
         if (what != NotificationExtensionReloaded)
             return;
 
+        Instance = this;
         GD.Print("[GraphPlugin] C# extension reloaded.");
+    }
+
+    public void OnBeforeSerialize() { }
+
+    public void OnAfterDeserialize()
+    {
+        Instance = this;
     }
 
     public void OpenGraphEditor(GraphAsset graph, GodotObject source = null, string selectNodeId = null)
@@ -144,8 +146,8 @@ public partial class GraphPlugin : EditorPlugin
         _editorWindow.LoadGraph(graph, source);
         if (!string.IsNullOrWhiteSpace(selectNodeId))
             _editorWindow.CallDeferred(nameof(GraphCanvasEditorWindow.SelectNode), selectNodeId);
-        EditorInterface.Singleton.SetMainScreenEditor("Graph");
         _editorWindow.Show();
+        _editorDock.MakeVisible();
     }
 
     private static GodotObject ResolveAnimationGraphSource(GraphAsset graph, GodotObject source)
@@ -183,9 +185,11 @@ public partial class GraphPlugin : EditorPlugin
             // components. Tool scenes are not guaranteed to have run _Ready.
             if (gameObject.Components != null)
             {
-                foreach (GameLogic.Component3D component in gameObject.Components)
+                // Non-tool C# components are placeholder Resources in the editor.
+                // Enumerating the typed array casts every slot before we can filter it.
+                foreach (Variant item in (Godot.Collections.Array)gameObject.Components)
                 {
-                    if (component is GameLogic.CharacterAnimationComponent3D animation &&
+                    if (item.AsGodotObject() is GameLogic.CharacterAnimationComponent3D animation &&
                         SameGraph(animation.LocomotionGraph, graph))
                         return animation;
                 }
@@ -225,20 +229,32 @@ public partial class GraphPlugin : EditorPlugin
 
     private void EnsureEditorWindow()
     {
-        if (_editorWindow != null && GodotObject.IsInstanceValid(_editorWindow))
+        if (GodotObject.IsInstanceValid(_editorWindow) && GodotObject.IsInstanceValid(_editorDock))
             return;
 
         try
         {
             _editorWindow = new GraphCanvasEditorWindow();
-            EditorInterface.Singleton.GetEditorMainScreen().AddChild(_editorWindow);
+            _editorDock = new EditorDock
+            {
+                Name = "Graph",
+                Title = "Graph",
+                IconName = "GraphEdit",
+                DefaultSlot = EditorDock.DockSlot.MainScreen,
+                AvailableLayouts = EditorDock.DockLayout.MainScreen,
+                Global = false
+            };
+            _editorDock.AddChild(_editorWindow);
+            AddDock(_editorDock);
             _editorWindow.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
             _editorWindow._undoRedo = GetUndoRedo();
-            _editorWindow.Hide();
         }
         catch (Exception ex)
         {
             GD.PushError($"[GraphPlugin] Editor window initialization failed: {ex}");
+            if (GodotObject.IsInstanceValid(_editorDock)) _editorDock.QueueFree();
+            else if (GodotObject.IsInstanceValid(_editorWindow)) _editorWindow.QueueFree();
+            _editorDock = null;
             _editorWindow = null;
         }
     }

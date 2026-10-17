@@ -145,6 +145,15 @@ namespace GameLogic
                 _animationRequests.Remove(key.Trim());
         }
 
+        public void RefreshPlayback()
+        {
+            // Same-named clips in a replacement frame set still need an explicit restart.
+            _activeRequestKey = string.Empty;
+            _activeAnimation = string.Empty;
+            _missingAnimationWarnings.Clear();
+            ApplyBestAnimationRequest();
+        }
+
         private void CaptureVariables()
         {
             _variables.Clear();

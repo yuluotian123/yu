@@ -145,7 +145,7 @@ surface_material_override/0 = ExtResource("toon_Town_Structures_0")
 surface_material_override/1 = ExtResource("toon_Town_Structures_9")
 
 [node name="Town_Lamps" parent="Architecture" index="8" unique_id=1715964529]
-editor_description = "灯罩使用物理亮度的自发光材质，只显示自身发光与泛光，不照亮邻近表面。"
+editor_description = "灯罩使用物理亮度自发光与泛光；启用自研 DDGI 后，以稳定的发光面积积分照亮邻近表面。"
 gi_mode = 0
 surface_material_override/0 = ExtResource("toon_Town_Structures_1")
 surface_material_override/1 = ExtResource("toon_Town_Structures_5")
@@ -304,6 +304,11 @@ shape = SubResource("Collision18")
 [node name="Tree19" type="CollisionShape3D" parent="WorldCollision" unique_id=97424282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 1.25, -10.8)
 shape = SubResource("Collision19")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=264566536]
+transform = Transform3D(1, 0, 0, 0, 0.37929168, 0.9252772, 0, -0.9252772, 0.37929168, 0, 1.5481393, 0)
+light_intensity_lumens = 100000.0
+light_color = Color(1, 1, 0, 1)
 
 [editable path="Architecture"]
 [editable path="BlueRoofShop"]

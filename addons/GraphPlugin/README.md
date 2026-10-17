@@ -4,6 +4,10 @@ GraphPlugin 是项目内的通用图编辑与运行时框架，基于 Godot 4 C#
 
 README 用于快速了解和接入插件。架构、扩展规则与工作流细节请查看 [`docs/`](docs/README.md)。
 
+`main` 的编辑器界面使用 Godot 4.8 的 `EditorDock` 主屏幕接口；插件退出时移除并释放 dock，避免旧主屏幕兼容接口遗留孤立的编辑器节点。Godot NVIDIA 4.8-dev 的原实现保存在 `codex/rtx-version` 分支。
+
+C# 热重载时，图窗口先同步图数据、阻止待移除控件发出信号，再重建界面并恢复图和组件上下文。失效委托的断开操作本身也会访问已释放的 GC handle，因此由旧控件的原生析构释放连接；正常使用中的 Tree / Container 连接不受影响。旧控件在脱离父节点之前加入所属 SceneTree 的删除队列，避免编辑器多 SceneTree 环境中排入错误的队列。
+
 ## 主要能力
 
 - **Flow Graph**：从入口节点开始传播，支持顺序/并行连线、条件、Delay、Action、Return 和 Timeline。

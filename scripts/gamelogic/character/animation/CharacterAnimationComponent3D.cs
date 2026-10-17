@@ -5,7 +5,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class CharacterAnimationComponent3D : Component3D
     {
         private HfsmGraphAsset _locomotionGraph;
@@ -100,6 +100,15 @@ namespace GameLogic
         public void ClearAnimationRequest(string key)
         {
             AnimationInstance?.ClearAnimationRequest(key);
+        }
+
+        public void ReplaceSpriteFrames(SpriteFrames frames)
+        {
+            if (_sprite == null || frames == null)
+                return;
+            _sprite.Stop();
+            _sprite.SpriteFrames = frames;
+            AnimationInstance?.RefreshPlayback();
         }
 
         private static bool IsSceneLocalResource(HfsmGraphAsset graph)

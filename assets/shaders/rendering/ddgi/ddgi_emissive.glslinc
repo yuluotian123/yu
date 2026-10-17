@@ -1,0 +1,33 @@
+// Spherical polygon form factors; emission is integrated separately from random rays.
+struct EmissiveTriangle { vec4 a; vec4 b; vec4 c; }; // a.w is the material index
+struct EmissiveSample { vec4 radiance; vec4 a; vec4 b; vec4 c; vec4 integral; };
+
+vec3 ddgi_edge_integral(vec3 a, vec3 b) {
+	vec3 edge = cross(a, b);
+	float sine = length(edge);
+	return sine > 1e-7 ? edge * (0.5 * atan(sine, clamp(dot(a, b), -1.0, 1.0)) / sine) : vec3(0.0);
+}
+
+vec3 ddgi_triangle_integral(vec3 a, vec3 b, vec3 c) {
+	vec3 integral = ddgi_edge_integral(a, b) + ddgi_edge_integral(b, c) + ddgi_edge_integral(c, a);
+	return dot(integral, a + b + c) < 0.0 ? -integral : integral;
+}
+
+float ddgi_emissive_form_factor(EmissiveSample sample_data, vec3 normal) {
+	vec3 vertices[3] = vec3[3](sample_data.a.xyz, sample_data.b.xyz, sample_data.c.xyz);
+	vec3 cosine = vec3(dot(normal, vertices[0]), dot(normal, vertices[1]), dot(normal, vertices[2]));
+	if (all(greaterThanEqual(cosine, vec3(0.0)))) return max(dot(normal, sample_data.integral.xyz), 0.0);
+	if (all(lessThanEqual(cosine, vec3(0.0)))) return 0.0;
+	// Clip to the receiver's hemisphere before integrating the spherical polygon.
+	vec3 polygon[4];
+	int count = 0;
+	for (int i = 0; i < 3; i++) {
+		int j = (i + 1) % 3;
+		bool inside_a = cosine[i] > 0.0, inside_b = cosine[j] > 0.0;
+		if (inside_a) polygon[count++] = vertices[i];
+		if (inside_a != inside_b) polygon[count++] = normalize(mix(vertices[i], vertices[j], cosine[i] / (cosine[i] - cosine[j])));
+	}
+	vec3 integral = vec3(0.0);
+	for (int i = 0; i < count; i++) integral += ddgi_edge_integral(polygon[i], polygon[(i + 1) % count]);
+	return abs(dot(normal, integral));
+}

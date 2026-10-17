@@ -54,4 +54,8 @@ user://saves/{slot}.json
 
 Save V2 writes to `user://saves/{slot}.json` and keeps `res://saves` as a read-only fallback for old slots. The root contains `meta`, `legacy`, and `sections` objects. Character state is registered through `ISaveSection` and stored as `sections.characters/{PersistentId}` with a section schema version.
 
+角色分区 schema 4 增加 `equipment`：保存当前武器 ID 和槽位顺序，恢复装备后再恢复能力冷却。旧档默认大剑，原 `attack` 冷却迁移到 `greatsword_attack`；坐标仍遵循 schema 1/2 的一次性像素转米规则。切换队列和未完成动作不持久化。详见 [武器系统](../weapons/README.md)。
+
+schema 5 增加 `inventory.weapon_ids`；可选 `inventory.positions` 保存拖拽后的行囊格子位置，旧档缺少此字段时按物品顺序排列。装备 `loadout_version = 1` 区分显式空槽与旧档默认装备。恢复顺序为行囊、装备、能力冷却，保留卸下的武器与空槽；禁止全卸下，无效的全空装备恢复一把已有武器。GM JSON 校验接受 schema 1–5。详见 [背包系统](../inventory/README.md)。
+
 Writes use a temporary file followed by a backup and replacement. Character loading is safe before a level scene exists: `SaveModule` keeps pending sections and applies them when `CharacterPersistenceComponent3D` registers during scene initialization.

@@ -13,16 +13,29 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
     public event Action EnvironmentApplying;
     public event Action EnvironmentApplied;
     public override int Priority => ComponentPriority.VFX;
+    /// <summary>昼夜视觉与初始日历配置；世界时钟优先使用已载入存档。</summary>
     [Export] public TimeOfDayProfile Profile { get; set; }
+    /// <summary>相对 EnvironmentRig 的 WorldEnvironment 路径；天气组件共用此节点。</summary>
     [Export] public NodePath EnvironmentPath { get; set; } = new("WorldEnvironment");
+    /// <summary>太阳节点路径；方向随时钟更新，其他光源参数由独立驱动开关决定。</summary>
     [Export] public NodePath SunPath { get; set; } = new("Sun");
+    /// <summary>月亮节点路径；天气组件共用同一光源。</summary>
     [Export] public NodePath MoonPath { get; set; } = new("Moon");
+    /// <summary>底层云网格路径，配对 Profile.CloudTimeline。</summary>
     [Export] public NodePath CloudsPath { get; set; } = new("OriginalClouds/BaseClouds");
+    /// <summary>所有云层的共同旋转父节点，整体旋转只在此处应用。</summary>
     [Export] public NodePath CloudRootPath { get; set; } = new("OriginalClouds");
+    /// <summary>高层云网格路径，配对 Profile.HighCloudTimeline。</summary>
     [Export] public NodePath HighCloudsPath { get; set; } = new("OriginalClouds/HighClouds");
+    /// <summary>第二层云网格路径，配对 Profile.SecondaryCloudTimeline。</summary>
     [Export] public NodePath SecondaryCloudsPath { get; set; } = new("OriginalClouds/SecondaryClouds");
-    [Export] public bool LightSceneSprites { get; set; } = true;
+    /// <summary>按 Profile.StartDay / StartHour 预览天空、日月与云；关闭后不再刷新编辑器预览。</summary>
     [Export] public bool PreviewInEditor { get; set; } = true;
+
+    // 同宿主天气组件复用已解析的节点，避免两套路径指向不同的环境或灯光。
+    internal WorldEnvironment SceneWorld => _world;
+    internal DirectionalLight3D SunLight => _sun;
+    internal DirectionalLight3D MoonLight => _moon;
 
     private ulong _editorHostId;
     private SkyCloudRadiance _editorCloudRadiance;
@@ -43,7 +56,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         var sun = host.GetNodeOrNull<DirectionalLight3D>(SunPath);
         var moon = host.GetNodeOrNull<DirectionalLight3D>(MoonPath);
         if (Profile == null || world?.Environment?.Sky?.SkyMaterial is not ShaderMaterial sky
-            || world.CameraAttributes is not CameraAttributesPhysical exposure || sun == null || moon == null)
+            || sun == null || moon == null)
         {
             RestoreEditorCameras(host.GetInstanceId());
             return;
@@ -52,8 +65,8 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         _editorHostId = host.GetInstanceId();
         double hour = Profile.StartHour;
         Profile.ApplyAtmosphere(world.Environment, sky, hour);
-        Profile.ApplyLighting(world.Environment, sun, moon, exposure, hour, Profile.StartLunarPhase);
-        Profile.ApplyRelinkPostProcessing(world.Compositor, world.Environment, hour);
+        Profile.ApplyLighting(world.Environment, sun, moon, world.CameraAttributes as CameraAttributesPhysical, hour, Profile.StartLunarPhase);
+        Profile.ApplyRelinkPostProcessing(world.Compositor, hour);
         Profile.ApplySky(sky, hour, Profile.StartLunarPhase);
         Camera3D sceneCamera = null;
         var cameras = scene.FindChildren("*", "Camera3D", true, false);
@@ -62,10 +75,15 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
                 if (node is Camera3D camera && camera.GetViewport() == host.GetViewport()
                     && (sceneCamera == null || camera.Current)) sceneCamera = camera;
         bool ortho = sceneCamera?.Projection == Camera3D.ProjectionType.Orthogonal;
-        float fov = ortho ? Mathf.Clamp(Profile.OrthographicSkyFov, 30, 100) : 0;
-        Vector3 rotation = ortho ? new Vector3(Mathf.DegToRad(Profile.OrthographicSkyPitchDegrees), 0, 0) : Vector3.Zero;
-        if (!Mathf.IsEqualApprox(world.Environment.SkyCustomFov, fov)) world.Environment.SkyCustomFov = fov;
-        if (!world.Environment.SkyRotation.IsEqualApprox(rotation)) world.Environment.SkyRotation = rotation;
+        float fov = world.Environment.SkyCustomFov;
+        Vector3 rotation = world.Environment.SkyRotation;
+        if (Profile.DriveSkyProjectionFromProfile)
+        {
+            fov = ortho ? Mathf.Clamp(Profile.OrthographicSkyFov, 30, 100) : 0;
+            rotation = ortho ? new Vector3(Mathf.DegToRad(Profile.OrthographicSkyPitchDegrees), 0, 0) : Vector3.Zero;
+            if (!Mathf.IsEqualApprox(world.Environment.SkyCustomFov, fov)) world.Environment.SkyCustomFov = fov;
+            if (!world.Environment.SkyRotation.IsEqualApprox(rotation)) world.Environment.SkyRotation = rotation;
+        }
         Vector4 cloudTime = Profile.SampleCloudTime(Profile.StartDay * 24d + hour);
         var pivot = host.GetNodeOrNull<Node3D>(CloudRootPath);
         if (pivot != null && Profile.CloudRotationTimeline != null)
@@ -87,14 +105,12 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
             using var metadata = camera.HasMeta(EditorPreviewMeta) ? camera.GetMeta(EditorPreviewMeta) : default;
             using var state = metadata.VariantType == Variant.Type.Dictionary ? metadata.AsGodotDictionary()
                 : new Godot.Collections.Dictionary { ["environment"] = camera.Environment,
-                    ["attributes"] = camera.Attributes, ["compositor"] = camera.Compositor };
+                    ["compositor"] = camera.Compositor };
             state["owner"] = host.GetInstanceId();
             state["preview_environment"] = world.Environment;
             state["preview_compositor"] = world.Compositor;
             camera.SetMeta(EditorPreviewMeta, state);
             if (camera.Environment != world.Environment) camera.Environment = world.Environment;
-            // 继承 WorldEnvironment 的物理曝光，避免将物理相机属性直接绑定后覆盖编辑器 FOV。
-            if (camera.Attributes != null) camera.Attributes = null;
             if (camera.Compositor != world.Compositor) camera.Compositor = world.Compositor;
         }
     }
@@ -125,7 +141,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
             using var state = metadata.AsGodotDictionary();
             if (state["owner"].AsUInt64() != ownerId) continue;
             if (camera.Environment == state["preview_environment"].AsGodotObject()) camera.Environment = state["environment"].As<Godot.Environment>();
-            if (camera.Attributes == null) camera.Attributes = state["attributes"].As<CameraAttributes>();
+            if (state.ContainsKey("attributes") && camera.Attributes == null) camera.Attributes = state["attributes"].As<CameraAttributes>();
             if (camera.Compositor == state["preview_compositor"].AsGodotObject()) camera.Compositor = state["compositor"].As<Compositor>();
             camera.RemoveMeta(EditorPreviewMeta);
         }
@@ -151,42 +167,31 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
     private readonly List<(MeshInstance3D Mesh, ShaderMaterial Material, ReferenceCloudTimeline Timeline)> _cloudLayers = new();
     private Node3D _cloudRoot;
     private TimeOfDayProfile _profile;
-    private readonly Dictionary<SpriteBase3D, (bool Shaded, GeometryInstance3D.GIModeEnum Gi)> _spriteFlags = new();
-    private readonly Dictionary<ulong, bool> _relinkFlags = new();
     private double _lastHours = double.NaN;
     private double _elapsed;
     private double _lastCloudHours = double.NaN;
     private bool _dirty = true;
-    private bool _lastRelinkFilmActive;
-    private bool _lastPathtracingEnabled;
 
     public override void OnInit()
     {
         _world = Owner.GetNodeOrNull<WorldEnvironment>(EnvironmentPath);
         _sun = Owner.GetNodeOrNull<DirectionalLight3D>(SunPath);
         _moon = Owner.GetNodeOrNull<DirectionalLight3D>(MoonPath);
+        // 保持编辑器配置与当前环境的实时调节分离，时间线资源只读共享。
+        Profile = Profile == null ? null : (TimeOfDayProfile)Profile.Duplicate();
         _profile = Profile;
         _cloudRoot = Owner.GetNodeOrNull<Node3D>(CloudRootPath);
-        // OnDestroy 也用于池回收；重新激活时恢复用户原有的阶段开关。
-        if (_relinkFlags.Count > 0 && _world?.Compositor != null)
-        {
-            var effects = _world.Compositor.CompositorEffects;
-            using var effectsOwner = (Godot.Collections.Array)effects;
-            foreach (CompositorEffect effect in effects)
-                if (effect is RelinkPostProcessEffect relink && _relinkFlags.TryGetValue(relink.GetInstanceId(), out bool enabled))
-                    relink.Enabled = enabled;
-        }
-        _relinkFlags.Clear();
         if (_world?.Environment?.Sky?.SkyMaterial is not ShaderMaterial ||
-            _world.CameraAttributes is not CameraAttributesPhysical || _sun == null || _moon == null || _profile == null)
+            _sun == null || _moon == null || _profile == null)
         {
             GD.PushError("[DayNightEnvironment] Missing WorldEnvironment / sky shader / Sun / Moon / Profile.");
             return;
         }
         // 节点与材质均来自场景，资源隔离由场景的 Local To Scene 标记完成。
         _environment = _world.Environment;
+        RelinkPostProcessEffect.MakeProfilesLocal(_world.Compositor);
         _sky = (ShaderMaterial)_environment.Sky.SkyMaterial;
-        _exposure = (CameraAttributesPhysical)_world.CameraAttributes;
+        _exposure = _world.CameraAttributes as CameraAttributesPhysical;
         // 日月方向在渲染帧更新，不能再由物理帧插值，否则阴影会反复回退。
         _sun.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
         _moon.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
@@ -195,16 +200,6 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         _time.Clock.Changed += OnClockChanged;
         Owner.SetMeta("time_of_day", this);
         ConfigureSky();
-        if (LightSceneSprites)
-        {
-            foreach (Node node in (Owner.GetParent() ?? Owner).FindChildren("*", "SpriteBase3D", true, false))
-            {
-                if (node is not SpriteBase3D sprite) continue;
-                _spriteFlags[sprite] = (sprite.Shaded, sprite.GIMode);
-                sprite.Shaded = true;
-                sprite.GIMode = GeometryInstance3D.GIModeEnum.Disabled;
-            }
-        }
         ApplyEnvironment();
     }
 
@@ -225,8 +220,6 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
             _cloudRadianceElapsed = 0;
         }
         _elapsed += delta;
-        if (_lastRelinkFilmActive != RelinkPostProcessEffect.HasActiveFilm(_world.Compositor)) _dirty = true;
-        if (_lastPathtracingEnabled != _environment.PathtracingEnabled) _dirty = true;
         bool timeAdvanced = Math.Abs(_time.Clock.TotalHours - _lastHours) >= .002;
         if (!_dirty && ((_elapsed < 1.0 / Mathf.Clamp(_profile.VisualUpdatesPerSecond, 1, 30) && !timeAdvanced) || _lastHours == _time.Clock.TotalHours)) return;
         ApplyEnvironment();
@@ -241,8 +234,6 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         BindCloudLayer(HighCloudsPath, _profile.HighCloudTimeline);
         BindCloudLayer(SecondaryCloudsPath, _profile.SecondaryCloudTimeline);
         _cloudRadiance.Bind(Owner, _sky, _cloudLayers.ConvertAll(layer => layer.Mesh));
-        _sun.LightAngularDistance = _profile.ShadowAngularDistance;
-        _moon.LightAngularDistance = _profile.ShadowAngularDistance;
         // 曝光统一在 ApplyLighting 中按 DriveExposureFromProfile 开关应用。
     }
 
@@ -251,10 +242,15 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         var camera = Owner.GetViewport().GetCamera3D();
         if (camera == null) return;
         bool ortho = camera.Projection == Camera3D.ProjectionType.Orthogonal;
-        float fov = ortho ? Mathf.Clamp(_profile.OrthographicSkyFov, 30, 100) : 0;
-        Vector3 rotation = ortho ? new Vector3(Mathf.DegToRad(_profile.OrthographicSkyPitchDegrees), 0, 0) : Vector3.Zero;
-        if (!Mathf.IsEqualApprox(_environment.SkyCustomFov, fov)) _environment.SkyCustomFov = fov;
-        if (!_environment.SkyRotation.IsEqualApprox(rotation)) _environment.SkyRotation = rotation;
+        float fov = _environment.SkyCustomFov;
+        Vector3 rotation = _environment.SkyRotation;
+        if (_profile.DriveSkyProjectionFromProfile)
+        {
+            fov = ortho ? Mathf.Clamp(_profile.OrthographicSkyFov, 30, 100) : 0;
+            rotation = ortho ? new Vector3(Mathf.DegToRad(_profile.OrthographicSkyPitchDegrees), 0, 0) : Vector3.Zero;
+            if (!Mathf.IsEqualApprox(_environment.SkyCustomFov, fov)) _environment.SkyCustomFov = fov;
+            if (!_environment.SkyRotation.IsEqualApprox(rotation)) _environment.SkyRotation = rotation;
+        }
         foreach (var layer in _cloudLayers)
         {
             layer.Material.SetShaderParameter("horizon_fade", _profile.CloudHorizonFade);
@@ -273,9 +269,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         Vector3 sun = CelestialMath.Direction(state.Hour, 0, _profile.NoonElevation, _profile.Azimuth);
         Vector3 moon = CelestialMath.Direction(state.Hour, state.LunarPhase, _profile.NoonElevation, _profile.Azimuth);
         _profile.ApplyLighting(_environment, _sun, _moon, _exposure, state.Hour, state.LunarPhase);
-        _profile.ApplyRelinkPostProcessing(_world.Compositor, _environment, state.Hour);
-        _lastRelinkFilmActive = RelinkPostProcessEffect.HasActiveFilm(_world.Compositor);
-        _lastPathtracingEnabled = _environment.PathtracingEnabled;
+        _profile.ApplyRelinkPostProcessing(_world.Compositor, state.Hour);
         _profile.ApplySky(_sky, state.Hour, state.LunarPhase);
         foreach (var layer in _cloudLayers)
         {
@@ -358,8 +352,6 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
             foreach (CompositorEffect effect in effects)
                 if (effect is RelinkPostProcessEffect relink)
                 {
-                    _relinkFlags[relink.GetInstanceId()] = relink.Enabled;
-                    relink.Enabled = false;
                     relink.ReleaseGpuResources();
                 }
         }
@@ -368,13 +360,6 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
             _time.Clock.Changed -= OnClockChanged;
             _time.Detach(Owner);
         }
-        foreach (var entry in _spriteFlags)
-            if (GodotObject.IsInstanceValid(entry.Key))
-            {
-                entry.Key.Shaded = entry.Value.Shaded;
-                entry.Key.GIMode = entry.Value.Gi;
-            }
-        _spriteFlags.Clear();
         if (GodotObject.IsInstanceValid(Owner)) Owner.RemoveMeta("time_of_day");
         _time = null;
         _world = null;

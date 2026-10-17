@@ -47,6 +47,7 @@ public sealed class GraphConnectionEditorService
     {
         foreach (Label label in _connectionLabels.Values)
         {
+            GraphEditorSignalCleanup.PrepareForRemoval(label);
             label.MouseFilter = Control.MouseFilterEnum.Ignore;
             label.QueueFree();
         }
@@ -117,6 +118,7 @@ public sealed class GraphConnectionEditorService
         foreach (string key in new List<string>(_connectionLabels.Keys))
             if (!connections.Contains(key))
             {
+                GraphEditorSignalCleanup.PrepareForRemoval(_connectionLabels[key]);
                 _connectionLabels[key].MouseFilter = Control.MouseFilterEnum.Ignore;
                 _connectionLabels[key].QueueFree();
                 _connectionLabels.Remove(key);

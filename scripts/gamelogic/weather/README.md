@@ -1,6 +1,8 @@
 # 天气系统
 
-`WeatherComponent3D` 是 `EnvironmentRig` 上的 EC 组件，已接入 Spacelevel 和独立昼夜环境模板。晴天、阴天、雨天、雪天共用现有世界时钟，叠加阴云、直射光衰减、雨雪距离雾与跟随角色的 GPU 降水。
+环境与日月节点只在 `DayNightEnvironmentComponent3D` 配置路径；天气组件复用已解析的节点。地表组件不另设 Profile，统一复用天气 Profile。各导出字段有中文注释，标明单位与可选驱动的生效条件。
+
+`WeatherComponent3D` 是 `EnvironmentRig` 上的 EC 组件，已接入 Spacelevel 和独立昼夜环境模板。晴天、阴天、雨天、雪天共用现有世界时钟，叠加阴云与跟随角色的 GPU 降水。直射光衰减和雨雪雾参数均为独立的可选驱动，默认不覆盖场景设置。
 
 ## 使用
 
@@ -31,7 +33,7 @@ GDScript / Graph 可通过宿主 `weather` 元数据调用 `SetWeather`、`SetAu
 
 自动天气根据绝对游戏小时直接取样，在每段开始时从上一段天气平滑过渡。主动快进直接取目标时刻，回退结果可重现。手动过渡也使用游戏小时；暂停停止过渡与粒子模拟。粒子模拟倍率上限为 8，避免高倍快进导致 GPU 开销骤增。
 
-昼夜控制器通过 `EnvironmentApplying` / `EnvironmentApplied` 通知天气层恢复并更新光照与雾基准，天气从基准重新计算，避免反复刷新后越变越暗。独立的天气 Shader 参数不改写天空、云和昼夜 Profile 的原有参数。返回晴天恢复当前时刻的基准环境；回收和退出时退订事件、隐藏降水并恢复基准值。
+天气组件的 DriveFogFromWeather / DriveLightsFromWeather 默认关闭，保留 Environment 雾参数和日月照度。只有显式开启对应开关后，才通过 EnvironmentApplying / EnvironmentApplied 恢复并叠加雾或灯光数值；雾的开关和模式始终由 Environment 决定。阴云、雨雪粒子和天气表面效果独立更新。回收时只恢复主动接管过的参数。
 
 自动天气由已存档的世界时间重建。手动覆盖、运行时强度调整以及表面含水量、积雪量仅在当前环境生命周期有效，尚未加入存档。当前降水与积雪是视觉效果，尚无室内遮挡、雨滴粒子碰撞、可踩踏雪层、雷电或音效。
 

@@ -62,9 +62,8 @@ void fragment() {
     SPECULAR = 0.0;
     METALLIC = 0.0;
     vec3 world_normal = normalize((INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
-    float weather_footprint = WEATHER_PIXEL_FOOTPRINT(weather_position, world_normal);
-    float snow = snow_surface_sample(weather_position, world_normal, weather_footprint);
-    vec4 wet = wet_surface_sample(weather_position, world_normal, weather_footprint) * (1.0 - snow);
+    float snow = snow_surface_sample(weather_position, world_normal);
+    vec4 wet = wet_surface_sample(weather_position, world_normal) * (1.0 - snow);
     weather_surface_wet = wet.x;
     weather_puddle_mask = 0.0;
     ALBEDO *= 1.0 - wet.x * weather_darkening * 0.6;
@@ -95,6 +94,4 @@ void light() {
                           * weather_surface_wet * 0.45;
     }
 }
-
-
 

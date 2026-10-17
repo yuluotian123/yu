@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" format=3 uid="uid://rrv6qmt1y4hu"]
+
+[ext_resource type="Script" uid="uid://ccvmabg8cuile" path="res://scripts/gamelogic/weapons/WeaponDefinition.cs" id="1_script"]
+[ext_resource type="Resource" uid="uid://diehi88p8r2qd" path="res://assets/resources/weapons/greatsword_attack.tres" id="2_attack"]
+[ext_resource type="Resource" uid="uid://11v7tj2mtho3" path="res://assets/resources/weapons/greatsword_animation.tres" id="3_animation"]
+[ext_resource type="Texture2D" uid="uid://cj1tmd8ss1bo8" path="res://assets/textures/ui/inventory/greatsword.svg" id="4_icon"]
+[ext_resource type="Texture2D" uid="uid://kaeip4utmv1g" path="res://assets/textures/sprites/amber_fox_greatsword/idle-native.png" id="5_portrait"]
+
+[resource]
+script = ExtResource("1_script")
+WeaponId = "greatsword"
+DisplayName = "大剑"
+PrimaryAttack = ExtResource("2_attack")
+AnimationProfile = ExtResource("3_animation")
+Icon = ExtResource("4_icon")
+Portrait = ExtResource("5_portrait")
+Description = "宽厚的剑刃带来沉稳的挥砍。适合把握时机、正面迎击。"

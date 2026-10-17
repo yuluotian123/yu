@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DdgiProfile" format=3 uid="uid://dlhdeul3gxk77"]
+
+[ext_resource type="Script" uid="uid://bppx3pknpuhys" path="res://scripts/gamelogic/rendering/ddgi/DdgiProfile.cs" id="profile"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("profile")
+Origin = Vector3(-24, -11.5, -24)
+ProbeCounts = Vector3i(27, 8, 27)
+Spacing = 2.0
+ProbesPerFrame = 256
+MaxRayDistance = 100.0

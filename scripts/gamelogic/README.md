@@ -16,6 +16,8 @@ abilities/
   actions/     Ability Timeline actions
 
 player/input/  玩家 InputModule 适配组件
+weapons/       武器定义、动作配置与装备切换组件
+inventory/     武器行囊、装备卸下和像素风背包窗口
 ai/            BehaviorTree Controller 和 Actions
 hfsm/          通用 HFSM；角色侧仅用于 Locomotion 动画
 ```
@@ -25,7 +27,10 @@ CharacterGraph 是 `FlowGraphAsset` 的业务扩展，不属于 HFSM。AI 不使
 ## 文档
 
 - [角色系统](../../docs/CHARACTER_SYSTEM.md)
+- [SpaceLevel NPC GOAP 实施计划](ai/NPC_GOAP_IMPLEMENTATION_PLAN.md)
 - [Ability](abilities/README.md)
+- [武器与切换](weapons/README.md)
+- [背包与装备](inventory/README.md)
 - [HFSM](hfsm/README.md)
 - [Input](input/README.md)
 - [Camera](../../docs/CAMERA_SYSTEM.md)

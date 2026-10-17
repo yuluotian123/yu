@@ -10,13 +10,19 @@ namespace GameLogic;
 public partial class WeatherComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX - 1;
+    /// <summary>统一的天气、降水和地表效果配置；初始化时复制，GM 调整只影响当前环境。</summary>
     [Export] public WeatherProfile Profile { get; set; }
+    /// <summary>按世界日历选择天气；关闭后使用初始天气或最近一次手动选择。</summary>
     [Export] public bool Automatic { get; set; } = true;
+    /// <summary>显式开启后叠加降水雾参数；Environment 的雾开关和模式保持手动控制。</summary>
+    [Export] public bool DriveFogFromWeather { get; set; } = false;
+    /// <summary>显式开启后按阴云程度衰减日月照度。</summary>
+    [Export] public bool DriveLightsFromWeather { get; set; } = false;
+    /// <summary>关闭自动天气时的初始天气；自动模式由种子和绝对游戏时间决定。</summary>
     [Export] public WeatherKind InitialWeather { get; set; } = WeatherKind.Clear;
-    [Export] public NodePath EnvironmentPath { get; set; } = new("WorldEnvironment");
-    [Export] public NodePath SunPath { get; set; } = new("Sun");
-    [Export] public NodePath MoonPath { get; set; } = new("Moon");
+    /// <summary>包含 Rain / Snow 粒子节点的降水场景路径，相对 EnvironmentRig。</summary>
     [Export] public NodePath PrecipitationPath { get; set; } = new("Precipitation");
+    /// <summary>降水发射区跟随目标；缺失时依次使用当前相机和环境宿主的位置。</summary>
     [Export] public NodePath FollowTargetPath { get; set; } = new("../Player");
 
     public WeatherKind TargetWeather { get; private set; }
@@ -32,7 +38,7 @@ public partial class WeatherComponent3D : Component3D
     private GpuParticles3D _rain, _snow;
     private ParticleProcessMaterial _rainProcess, _snowProcess;
     private readonly List<ShaderMaterial> _cloudMaterials = new();
-    private bool _baseFogEnabled, _hasBaseline;
+    private bool _hasBaseline;
     private float _baseFogDensity, _baseFogBegin, _baseFogEnd, _baseSun, _baseMoon;
     // X=阴云，Y=雨，Z=雪；跨天气切换时对当前混合结果插值。
     private Vector3 _blend, _manualFrom;
@@ -41,9 +47,9 @@ public partial class WeatherComponent3D : Component3D
     public override void OnInit()
     {
         _dayNight = Owner.GetComponent<DayNightEnvironmentComponent3D>();
-        _environment = Owner.GetNodeOrNull<WorldEnvironment>(EnvironmentPath)?.Environment;
-        _sun = Owner.GetNodeOrNull<DirectionalLight3D>(SunPath);
-        _moon = Owner.GetNodeOrNull<DirectionalLight3D>(MoonPath);
+        _environment = _dayNight?.SceneWorld?.Environment;
+        _sun = _dayNight?.SunLight;
+        _moon = _dayNight?.MoonLight;
         _precipitation = Owner.GetNodeOrNull<Node3D>(PrecipitationPath);
         _rain = _precipitation?.GetNodeOrNull<GpuParticles3D>("Rain");
         _snow = _precipitation?.GetNodeOrNull<GpuParticles3D>("Snow");
@@ -161,7 +167,6 @@ public partial class WeatherComponent3D : Component3D
 
     private void CaptureBaseline()
     {
-        _baseFogEnabled = _environment.FogEnabled;
         _baseFogDensity = _environment.FogDensity;
         _baseFogBegin = _environment.FogDepthBegin;
         _baseFogEnd = _environment.FogDepthEnd;
@@ -173,12 +178,17 @@ public partial class WeatherComponent3D : Component3D
     private void RestoreBaseline()
     {
         if (!_hasBaseline || !GodotObject.IsInstanceValid(_environment)) return;
-        _environment.FogEnabled = _baseFogEnabled;
-        _environment.FogDensity = _baseFogDensity;
-        _environment.FogDepthBegin = _baseFogBegin;
-        _environment.FogDepthEnd = _baseFogEnd;
-        if (GodotObject.IsInstanceValid(_sun)) _sun.LightIntensityLux = _baseSun;
-        if (GodotObject.IsInstanceValid(_moon)) _moon.LightIntensityLux = _baseMoon;
+        if (DriveFogFromWeather)
+        {
+            _environment.FogDensity = _baseFogDensity;
+            _environment.FogDepthBegin = _baseFogBegin;
+            _environment.FogDepthEnd = _baseFogEnd;
+        }
+        if (DriveLightsFromWeather)
+        {
+            if (GodotObject.IsInstanceValid(_sun)) _sun.LightIntensityLux = _baseSun;
+            if (GodotObject.IsInstanceValid(_moon)) _moon.LightIntensityLux = _baseMoon;
+        }
     }
 
     private void CaptureAndApply() { CaptureBaseline(); if (IsActive) ApplyVisuals(); }
@@ -187,14 +197,19 @@ public partial class WeatherComponent3D : Component3D
     {
         if (!_hasBaseline) return;
         float precipitation = Mathf.Clamp(_blend.Y + _blend.Z, 0, 1);
-        float light = 1 - _blend.X * Mathf.Clamp(Profile.DirectLightLoss, 0, 1);
-        _sun.LightIntensityLux = _baseSun * light;
-        _moon.LightIntensityLux = _baseMoon * light;
-        _environment.FogEnabled = _baseFogEnabled || precipitation > .001f;
-        _environment.FogDensity = Mathf.Clamp(_baseFogDensity + precipitation * Mathf.Clamp(Profile.PrecipitationFog, 0, 1), 0, 1);
-        float distance = Mathf.Lerp(1, Mathf.Clamp(Profile.FogDistanceScale, .1f, 1), precipitation);
-        _environment.FogDepthBegin = _baseFogBegin * distance;
-        _environment.FogDepthEnd = Mathf.Max(_environment.FogDepthBegin + 1, _baseFogEnd * distance);
+        if (DriveLightsFromWeather)
+        {
+            float light = 1 - _blend.X * Mathf.Clamp(Profile.DirectLightLoss, 0, 1);
+            _sun.LightIntensityLux = _baseSun * light;
+            _moon.LightIntensityLux = _baseMoon * light;
+        }
+        if (DriveFogFromWeather)
+        {
+            _environment.FogDensity = Mathf.Clamp(_baseFogDensity + precipitation * Mathf.Clamp(Profile.PrecipitationFog, 0, 1), 0, 1);
+            float distance = Mathf.Lerp(1, Mathf.Clamp(Profile.FogDistanceScale, .1f, 1), precipitation);
+            _environment.FogDepthBegin = _baseFogBegin * distance;
+            _environment.FogDepthEnd = Mathf.Max(_environment.FogDepthBegin + 1, _baseFogEnd * distance);
+        }
         _sky.SetShaderParameter("weather_overcast", _blend.X);
         _sky.SetShaderParameter("weather_sky_loss", Mathf.Clamp(Profile.SkyLightLoss, 0, 1));
         SetCloudWeather(_blend.X);

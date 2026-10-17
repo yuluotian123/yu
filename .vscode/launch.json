@@ -5,7 +5,7 @@
       "name": "Launch",
       "type": "coreclr",
       "request": "launch",
-      "program": "D:/DCC/Godot_NVIDIA_RTX/bin/godot.windows.editor.x86_64.mono.exe",
+      "program": "D:/DCC/Godot_4.8/bin/ddgi_scene/godot.windows.editor.x86_64.mono.ddgi_scene.exe",
       "preLaunchTask": "build",
       "args": [
         "--path",
@@ -19,7 +19,7 @@
       "name": "Launch Editor",
       "type": "coreclr",
       "request": "launch",
-      "program": "D:/DCC/Godot_NVIDIA_RTX/bin/godot.windows.editor.x86_64.mono.exe",
+      "program": "D:/DCC/Godot_4.8/bin/ddgi_scene/godot.windows.editor.x86_64.mono.ddgi_scene.exe",
       "preLaunchTask": "build",
       "args": [
         "--path",

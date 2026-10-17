@@ -115,7 +115,9 @@ void sky() {
         vec3 sun_up = cross(sun_direction, sun_right);
         vec2 sun_uv = round_disc_uv(vec2(dot(eye, sun_right), dot(eye, sun_up)) / sin(sun_radius));
         float sun_radius2 = dot(sun_uv, sun_uv);
-        float sun_edge = max(fwidth(sun_radius2), 0.002);
+        // The tangent projection is singular far from the disc. Bound the
+        // derivative input so those pixels cannot acquire a huge AA fringe.
+        float sun_edge = max(fwidth(min(sun_radius2, 2.0)), 0.002);
         float disc = (1.0 - smoothstep(1.0 - sun_edge, 1.0 + sun_edge, sun_radius2)) * step(0.0, sun_dot);
         float halo = pow(max(sun_dot, 0.0), 512.0) * 0.15;
         COLOR += vec3(1.0, 0.89, 0.70) * (disc * 16.0 + halo) * daylight * horizon_mask;
@@ -124,7 +126,7 @@ void sky() {
         vec3 moon_up = cross(moon_direction, moon_right);
         vec2 lunar_uv = round_disc_uv(vec2(dot(eye, moon_right), dot(eye, moon_up)) / sin(moon_radius));
         float radius2 = dot(lunar_uv, lunar_uv);
-        float edge = max(fwidth(radius2), 0.002);
+        float edge = max(fwidth(min(radius2, 2.0)), 0.002);
         float moon_mask = (1.0 - smoothstep(1.0 - edge, 1.0 + edge, radius2)) * step(0.0, dot(eye, moon_direction)) * moon_visibility * horizon_mask;
         // 柔和蓝紫月晕只用于背景，不烘入环境光；随月相和高度自然减弱。
         float moon_halo = exp(-max(radius2 - 1.0, 0.0) * 0.28) * step(0.0, dot(eye, moon_direction));

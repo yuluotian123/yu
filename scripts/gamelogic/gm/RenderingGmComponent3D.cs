@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Text;
 using Godot;
 
 namespace GameLogic;
 
-/// <summary>渲染诊断页。</summary>
+/// <summary>渲染诊断和当前合成器的 Relink 实时调节。</summary>
 [GlobalClass]
 public partial class RenderingGmComponent3D : Component3D
 {
@@ -12,14 +14,47 @@ public partial class RenderingGmComponent3D : Component3D
     private Control _page;
     private Label _fps;
     private RichTextLabel _details;
+    private Label _relinkHint;
+    private CheckButton _relinkActive, _relinkBloom, _relinkSky, _relinkAutomatic;
+    private SpinBox _relinkLut, _relinkExposure, _relinkIntensity, _relinkThreshold, _relinkFloor;
     private WorldEnvironment _world;
     private ulong _lastRefresh;
+    private readonly List<(GodotObject Source, StringName Signal, Callable Callback)> _bindings = new();
 
     public override void OnInit()
     {
         _page = Owner.GetNode<Control>("%RenderingPage");
         _fps = Owner.GetNode<Label>("%RenderFps");
         _details = Owner.GetNode<RichTextLabel>("%RenderingText");
+        _relinkHint = Owner.GetNode<Label>("%RelinkHint");
+        _relinkActive = Owner.GetNode<CheckButton>("%RelinkActive");
+        _relinkBloom = Owner.GetNode<CheckButton>("%RelinkBloom");
+        _relinkSky = Owner.GetNode<CheckButton>("%RelinkSky");
+        _relinkAutomatic = Owner.GetNode<CheckButton>("%RelinkAutomatic");
+        _relinkLut = Owner.GetNode<SpinBox>("%RelinkLut");
+        _relinkExposure = Owner.GetNode<SpinBox>("%RelinkExposure");
+        _relinkIntensity = Owner.GetNode<SpinBox>("%RelinkIntensity");
+        _relinkThreshold = Owner.GetNode<SpinBox>("%RelinkThreshold");
+        _relinkFloor = Owner.GetNode<SpinBox>("%RelinkFloor");
+        Bind(_relinkActive, BaseButton.SignalName.Toggled, Callable.From<bool>(value => EditRelink(post => post.Active = value)));
+        Bind(_relinkBloom, BaseButton.SignalName.Toggled, Callable.From<bool>(value => EditRelink(post => post.BloomEnabled = value, manualBloom: true)));
+        Bind(_relinkAutomatic, BaseButton.SignalName.Toggled, Callable.From<bool>(value =>
+        {
+            var controller = ResolveDayNight();
+            if (controller?.Profile != null)
+            {
+                controller.Profile.DriveRelinkBloomFromProfile = value;
+                using var state = controller.GetTimeState();
+                controller.Profile.ApplyRelinkPostProcessing(ResolveCompositor(), state["hour"].AsDouble());
+            }
+            Refresh();
+        }));
+        Bind(_relinkSky, BaseButton.SignalName.Toggled, Callable.From<bool>(value => EditRelink(post => post.GradeSky = value)));
+        Bind(_relinkLut, Godot.Range.SignalName.ValueChanged, Callable.From<double>(value => EditRelink(post => post.LutStrength = (float)value)));
+        Bind(_relinkExposure, Godot.Range.SignalName.ValueChanged, Callable.From<double>(value => EditRelink(post => post.Exposure = (float)value)));
+        Bind(_relinkIntensity, Godot.Range.SignalName.ValueChanged, Callable.From<double>(value => EditRelink(post => post.BloomIntensity = (float)value, manualBloom: true)));
+        Bind(_relinkThreshold, Godot.Range.SignalName.ValueChanged, Callable.From<double>(value => EditRelink(post => post.BloomThreshold = (float)value, manualBloom: true)));
+        Bind(_relinkFloor, Godot.Range.SignalName.ValueChanged, Callable.From<double>(value => EditRelink(post => post.BloomFloor = (float)value, manualBloom: true)));
         _world = Owner.GetNodeOrNull<WorldEnvironment>(WorldEnvironmentPath);
         Owner.SetMeta("rendering_gm", this);
         Refresh();
@@ -38,6 +73,83 @@ public partial class RenderingGmComponent3D : Component3D
         double fps = Engine.GetFramesPerSecond();
         _fps.Text = $"{fps:0} FPS  ·  帧间隔 {(fps > 0 ? 1000.0 / fps : 0):0.00} ms";
         _details.Text = BuildSnapshot();
+        RefreshRelink();
+    }
+
+    private Compositor ResolveCompositor()
+    {
+        _world = Owner.GetNodeOrNull<WorldEnvironment>(WorldEnvironmentPath);
+        var compositor = Owner.GetViewport().GetCamera3D()?.Compositor ?? _world?.Compositor;
+        RelinkPostProcessEffect.MakeProfilesLocal(compositor);
+        return compositor;
+    }
+
+    private static List<RelinkPostProcessProfile> GetRelinkProfiles(Compositor compositor)
+    {
+        var profiles = new List<RelinkPostProcessProfile>();
+        if (compositor == null) return profiles;
+        var ids = new HashSet<ulong>();
+        var effects = compositor.CompositorEffects;
+        using var effectsOwner = (Godot.Collections.Array)effects;
+        foreach (CompositorEffect effect in effects)
+            if (effect is RelinkPostProcessEffect relink && relink.Profile != null && ids.Add(relink.Profile.GetInstanceId()))
+                profiles.Add(relink.Profile);
+        return profiles;
+    }
+
+    private DayNightEnvironmentComponent3D ResolveDayNight()
+    {
+        if (_world?.Compositor == null) return null;
+        var cameraCompositor = Owner.GetViewport().GetCamera3D()?.Compositor;
+        if (cameraCompositor != null && cameraCompositor.GetInstanceId() != _world.Compositor.GetInstanceId()) return null;
+        return (_world.GetParent() as GameObject3D)?.GetComponent<DayNightEnvironmentComponent3D>();
+    }
+
+    private void EditRelink(Action<RelinkPostProcessProfile> edit, bool manualBloom = false)
+    {
+        // 改当前相机实际使用的运行时资源；不写回资源文件，也不改原生 Environment。
+        var profiles = GetRelinkProfiles(ResolveCompositor());
+        if (profiles.Count == 0) return;
+        var dayNight = ResolveDayNight()?.Profile;
+        if (manualBloom && dayNight != null) dayNight.DriveRelinkBloomFromProfile = false;
+        foreach (var profile in profiles) edit(profile);
+        Refresh();
+    }
+
+    private void RefreshRelink()
+    {
+        var profiles = GetRelinkProfiles(ResolveCompositor());
+        bool available = profiles.Count > 0;
+        _relinkActive.Disabled = _relinkBloom.Disabled = _relinkSky.Disabled = !available;
+        _relinkLut.Editable = _relinkExposure.Editable = _relinkIntensity.Editable = _relinkThreshold.Editable = _relinkFloor.Editable = available;
+        _relinkHint.Text = available ? "Relink · 修改立即生效，仅用于本次运行。" : "当前相机 / 关卡没有 Relink 后处理。";
+        var dayNight = ResolveDayNight()?.Profile;
+        _relinkAutomatic.Disabled = !available || dayNight == null;
+        _relinkAutomatic.SetPressedNoSignal(dayNight?.DriveRelinkBloomFromProfile == true);
+        if (available && dayNight?.DriveRelinkBloomFromProfile == true)
+            _relinkHint.Text += " 手动调节泛光将停止昼夜泛光驱动。";
+        if (!available) return;
+        var post = profiles[0];
+        _relinkActive.SetPressedNoSignal(post.Active);
+        _relinkBloom.SetPressedNoSignal(post.BloomEnabled);
+        _relinkSky.SetPressedNoSignal(post.GradeSky);
+        Sync(_relinkLut, post.LutStrength);
+        Sync(_relinkExposure, post.Exposure);
+        Sync(_relinkIntensity, post.BloomIntensity);
+        Sync(_relinkThreshold, post.BloomThreshold);
+        Sync(_relinkFloor, post.BloomFloor);
+    }
+
+    private static void Sync(SpinBox control, float value)
+    {
+        // 刷新诊断时保留尚未提交的键盘输入。
+        if (!control.GetLineEdit().HasFocus()) control.SetValueNoSignal(value);
+    }
+
+    private void Bind(GodotObject source, StringName signal, Callable callback)
+    {
+        source.Connect(signal, callback);
+        _bindings.Add((source, signal, callback));
     }
 
     public string BuildSnapshot()
@@ -46,7 +158,7 @@ public partial class RenderingGmComponent3D : Component3D
         var camera = viewport.GetCamera3D();
         var world3D = viewport.FindWorld3D();
         var environment = camera?.Environment ?? world3D?.Environment ?? world3D?.FallbackEnvironment;
-        var compositor = camera?.Compositor ?? (GodotObject.IsInstanceValid(_world) ? _world.Compositor : null);
+        var compositor = ResolveCompositor();
         var attributes = camera?.Attributes ?? world3D?.CameraAttributes;
         var text = new StringBuilder();
         text.AppendLine($"渲染器  {RenderingServer.GetCurrentRenderingMethod()} / {RenderingServer.GetCurrentRenderingDriverName()}");
@@ -90,6 +202,18 @@ public partial class RenderingGmComponent3D : Component3D
                 if (string.IsNullOrEmpty(name) && effect is RelinkPostProcessEffect named)
                     name = named.Pass == RelinkPostProcessEffect.PassKind.ColorGrade ? "Relink · HDR LUT" : "Relink · Film + Bloom";
                 text.AppendLine($"  {name}  ·  {effect.EffectCallbackType} / {On(effect.Enabled)}");
+                if (effect is DdgiEffect ddgi)
+                {
+                    using var status = ddgi.GetStatus();
+                    text.AppendLine($"    DDGI {status["state"]} · 实例 {status["instances"]} / BLAS {status["blas"]}");
+                    if (status.ContainsKey("sky_source"))
+                        text.AppendLine($"    探针 {status["probes"]} · 射线/更新 {status["rays_per_update"]} · 天空 {status["sky_source"]}");
+                    if (status.ContainsKey("emissive_triangles"))
+                        text.AppendLine($"    发光三角形 {status["emissive_triangles"]} · 发光面遮挡查询预算 {status["emissive_shadow_ray_budget"]}/更新");
+                    if (status.ContainsKey("lighting_catch_up") && status["lighting_catch_up"].AsBool())
+                        text.AppendLine($"    全局光照快速变化：当帧刷新 {status["updated_probes"]} 个探针");
+                    if (status.ContainsKey("error")) text.AppendLine($"    {status["error"]}");
+                }
                 if (effect is not RelinkPostProcessEffect relink || relink.Profile == null) continue;
                 relinkCount++;
                 var post = relink.Profile;
@@ -104,7 +228,7 @@ public partial class RenderingGmComponent3D : Component3D
         {
             bool conflict = environment.TonemapMode != Godot.Environment.ToneMapper.Linear
                 || !Mathf.IsEqualApprox(environment.TonemapExposure, 1) || environment.GlowEnabled || environment.AdjustmentEnabled;
-            text.AppendLine(conflict ? "⚠ 后处理冲突：Relink Film 与原生 Tonemap / Exposure / Glow / Adjustment 叠加。" : "后处理检查：正常；Relink Film → Godot Linear / sRGB 输出。");
+            text.AppendLine(conflict ? "后处理：Relink Film 与原生 Tonemap / Exposure / Glow / Adjustment 同时启用。" : "后处理：Relink Film → Godot Linear / sRGB 输出。");
         }
         if (GodotObject.IsInstanceValid(_world) && camera?.Compositor != null && !ReferenceEquals(camera.Compositor, _world.Compositor))
             text.AppendLine("⚠ 相机覆盖了关卡合成器；检查相机环境与后处理配置。");
@@ -119,10 +243,17 @@ public partial class RenderingGmComponent3D : Component3D
 
     public override void OnDestroy()
     {
+        foreach (var binding in _bindings)
+            if (GodotObject.IsInstanceValid(binding.Source) && binding.Source.IsConnected(binding.Signal, binding.Callback))
+                binding.Source.Disconnect(binding.Signal, binding.Callback);
+        _bindings.Clear();
         if (GodotObject.IsInstanceValid(Owner)) Owner.RemoveMeta("rendering_gm");
         _world = null;
         _page = null;
         _fps = null;
         _details = null;
+        _relinkHint = null;
+        _relinkActive = _relinkBloom = _relinkSky = _relinkAutomatic = null;
+        _relinkLut = _relinkExposure = _relinkIntensity = _relinkThreshold = _relinkFloor = null;
     }
 }

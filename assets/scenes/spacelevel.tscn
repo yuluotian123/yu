@@ -15,6 +15,8 @@
 [ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/resources/environment/clouds/high_timeline.tres" id="cloud_high_timeline"]
 [ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/resources/environment/clouds/rotation_timeline.tres" id="cloud_rotation_timeline"]
 [ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/resources/environment/clouds/secondary_timeline.tres" id="cloud_secondary_timeline"]
+[ext_resource type="Script" uid="uid://comngbdbyfrp5" path="res://scripts/gamelogic/rendering/ddgi/DdgiComponent3D.cs" id="ddgi_controller"]
+[ext_resource type="Resource" uid="uid://dlhdeul3gxk77" path="res://assets/resources/rendering/ddgi/spacelevel.tres" id="ddgi_profile"]
 [ext_resource type="Environment" uid="uid://bav0756llhclb" path="res://assets/resources/environment/relink_environment.tres" id="environment"]
 [ext_resource type="CameraAttributesPhysical" uid="uid://bonkel6lyv08n" path="res://assets/resources/environment/day_night_camera_attributes.tres" id="exposure"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
@@ -29,10 +31,14 @@ script = ExtResource("10_time_profile")
 DayLengthSeconds = 4800.0
 DriveFogFromProfile = true
 DrivePostEffectsFromProfile = true
+DriveRelinkBloomFromProfile = true
+DriveSkyBrightnessFromProfile = true
+DriveExposureFromProfile = true
+DriveLightSettingsFromProfile = true
+DriveSkyProjectionFromProfile = true
 MoonTint = Color(0.78, 0.82, 1, 1)
 NoonTemperature = 5900.0
 NoonSunTint = Color(1, 0.99, 0.97, 1)
-ColorSaturation = 1.12
 BlendNightPostEffects = true
 DayZenith = Color(0.045, 0.24, 0.72, 1)
 DayHorizon = Color(0.34, 0.68, 0.94, 1)
@@ -60,6 +66,7 @@ CloudEvolutionPeriodHours = 4.0
 CloudNoisePeriodHours = 12.0
 DayExposureEv = 14.35
 NightExposureEv = 2.0
+VisualUpdatesPerSecond = 24.0
 
 [sub_resource type="Resource" id="controller"]
 script = ExtResource("9_environment")
@@ -68,9 +75,17 @@ Profile = SubResource("environment_profile")
 [sub_resource type="Resource" id="weather"]
 script = ExtResource("weather_controller")
 Profile = ExtResource("weather_profile")
+Automatic = false
+DriveFogFromWeather = true
+DriveLightsFromWeather = true
 
 [sub_resource type="Resource" id="weather_surfaces"]
 script = ExtResource("weather_surface_controller")
+
+[sub_resource type="Resource" id="ddgi"]
+script = ExtResource("ddgi_controller")
+Profile = ExtResource("ddgi_profile")
+GeometryRoot = NodePath("..")
 
 [sub_resource type="CompositorEffect" id="grade"]
 resource_local_to_scene = true
@@ -120,7 +135,7 @@ script = ExtResource("5_host")
 process_mode = 1
 script = ExtResource("5_host")
 PersistentId = "level_environment"
-Components = Array[ExtResource("6_component")]([SubResource("controller"), SubResource("weather"), SubResource("weather_surfaces")])
+Components = Array[ExtResource("6_component")]([SubResource("controller"), SubResource("weather"), SubResource("weather_surfaces"), SubResource("ddgi")])
 
 [node name="Precipitation" parent="EnvironmentRig" unique_id=1523133243 instance=ExtResource("precipitation")]
 
@@ -135,6 +150,7 @@ transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.96
 light_intensity_lux = 120000.0
 light_temperature = 5900.0
 light_color = Color(1, 0.99, 0.97, 1)
+light_indirect_energy = 0.75
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5
@@ -151,6 +167,7 @@ visible = false
 light_intensity_lux = 0.0
 light_temperature = 8500.0
 light_color = Color(0.78, 0.82, 1, 1)
+light_indirect_energy = 0.75
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5

@@ -3,55 +3,24 @@ using Godot;
 
 public static class GraphEditorSignalCleanup
 {
-    public static void DisconnectSubtree(Node node)
+    public static void PrepareForRemoval(Node node)
     {
-        if (node == null)
+        if (!GodotObject.IsInstanceValid(node))
             return;
-
-        foreach (Node child in node.GetChildren())
-            DisconnectSubtree(child);
-
-        DisconnectSignals(node);
+        MuteSubtree(node);
+        // Queue while the node still belongs to its actual SceneTree. Once detached,
+        // QueueFree falls back to the singleton tree (which can differ in editor tools).
+        node.QueueFree();
     }
 
-    private static void DisconnectSignals(GodotObject obj)
+    private static void MuteSubtree(Node node)
     {
-        if (obj == null)
-            return;
-
-        foreach (Godot.Collections.Dictionary signal in obj.GetSignalList())
-        {
-            if (!signal.ContainsKey("name"))
-                continue;
-
-            StringName signalName = signal["name"].AsStringName();
-            foreach (Godot.Collections.Dictionary connection in obj.GetSignalConnectionList(signalName))
-            {
-                if (!connection.ContainsKey("callable"))
-                    continue;
-
-                Callable callable = connection["callable"].AsCallable();
-                // Native Tree/Container connections maintain internal item and layout state.
-                // Only detach the managed delegates created by the plugin.
-                if (callable.Delegate == null)
-                    continue;
-                GodotObject target = callable.Target;
-                if (target == null && callable.Delegate == null)
-                    continue;
-                if (target != null && !GodotObject.IsInstanceValid(target))
-                    continue;
-
-                try
-                {
-                    if (obj.IsConnected(signalName, callable))
-                        obj.Disconnect(signalName, callable);
-                }
-                catch
-                {
-                    // Editor UI is often rebuilt during tool-script reloads. Best effort cleanup.
-                }
-            }
-        }
+        // Godot releases un-restorable delegates before OnBeforeSerialize. Even
+        // disconnecting them hashes the dead GC handle. Silence retiring controls;
+        // their native destructor drops outgoing connections without hashing them.
+        node.SetBlockSignals(true);
+        foreach (Node child in node.GetChildren())
+            MuteSubtree(child);
     }
 }
 #endif

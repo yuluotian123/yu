@@ -30,7 +30,7 @@ AbilitySetResource
 
 AbilitySystem 负责显式授予、冷却、优先级、并发、激活、取消、Movement 锁和持久化。Ability Timeline 负责能力开始后的动画、位移、判定和事件时序。
 
-CharacterGraph 不授予 Ability，也不拥有 Timeline 数据。玩家图只通过稳定 AbilityId 发起请求并配置 Interrupt/Completion 关系。AI BehaviorTree 可直接调用同一个 AbilitySystem API。
+CharacterGraph 不授予 Ability，也不拥有 Timeline 数据。玩家图通过稳定 AbilityId 请求冲刺；武器普攻由装备组件授予并触发。Interrupt/Completion 关系只匹配 Ability 节点，不能连接组件方法调用节点。AI BehaviorTree 可直接调用同一个 AbilitySystem API。
 
 ## 新增 Ability
 
@@ -42,8 +42,10 @@ CharacterGraph 不授予 Ability，也不拥有 Timeline 数据。玩家图只�
 
 现有资源：
 
-- [Attack Resource](../../../assets/resources/abilities/attack_ability.tres)
-- [Attack Timeline](../../../assets/resources/abilities/attack_timeline.tres)
+- [Greatsword Attack](../../../assets/resources/weapons/greatsword_attack.tres)
+- [Greatsword Attack Timeline](../../../assets/resources/weapons/greatsword_attack_timeline.tres)
+- [Katana Attack](../../../assets/resources/weapons/katana_attack.tres)
+- [Katana Attack Timeline](../../../assets/resources/weapons/katana_attack_timeline.tres)
 - [Dash Resource](../../../assets/resources/abilities/dash_ability.tres)
 - [Dash Timeline](../../../assets/resources/abilities/dash_timeline.tres)
 - [Player Ability Set](../../../assets/resources/abilities/player_ability_set.tres)

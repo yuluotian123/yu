@@ -389,6 +389,105 @@ theme_override_colors/font_color = Color(0.44, 0.86, 0.74, 1)
 theme_override_font_sizes/font_size = 25
 text = "— FPS"
 
+[node name="RelinkHint" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Relink · 修改立即生效，仅用于本次运行。"
+
+[node name="RelinkSwitches" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="RelinkActive" type="CheckButton" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkSwitches"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Relink"
+
+[node name="RelinkBloom" type="CheckButton" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkSwitches"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "泛光"
+
+[node name="RelinkSky" type="CheckButton" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkSwitches"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "天空调色"
+
+[node name="RelinkAutomatic" type="CheckButton" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkSwitches"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "昼夜泛光"
+tooltip_text = "使用昼夜配置中的泛光曲线；手动调整泛光后自动退出此模式。"
+
+[node name="RelinkValues" type="GridContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+columns = 4
+
+[node name="LutLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+layout_mode = 2
+text = "LUT 强度"
+
+[node name="RelinkLut" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="ExposureLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+layout_mode = 2
+text = "电影曝光"
+
+[node name="RelinkExposure" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.01
+max_value = 8.0
+step = 0.01
+value = 3.0
+tooltip_text = "Relink 电影曲线的输入补偿，与相机曝光和 Environment 曝光独立。"
+
+[node name="IntensityLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+layout_mode = 2
+text = "泛光强度"
+
+[node name="RelinkIntensity" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.005
+value = 0.04
+
+[node name="ThresholdLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+layout_mode = 2
+text = "泛光阈值"
+
+[node name="RelinkThreshold" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.1
+max_value = 8.0
+step = 0.05
+value = 1.8
+
+[node name="FloorLabel" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+layout_mode = 2
+text = "泛光底值"
+
+[node name="RelinkFloor" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage/RelinkValues"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 0.2
+step = 0.005
+tooltip_text = "为暗部保留的泛光量；0 表示只从高亮区域提取。"
+
 [node name="RenderingText" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/RenderingPage" unique_id=538700297]
 unique_name_in_owner = true
 layout_mode = 2

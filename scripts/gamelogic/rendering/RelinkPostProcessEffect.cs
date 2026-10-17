@@ -17,6 +17,7 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         {
             _pass = value;
             EffectCallbackType = value == PassKind.ColorGrade ? EffectCallbackTypeEnum.PreTransparent : EffectCallbackTypeEnum.PostTransparent;
+            AccessResolvedDepth = value == PassKind.ColorGrade;
             ResourceName = value == PassKind.ColorGrade ? "Relink · HDR LUT (Before Transparency)" : "Relink · Film + Bloom (After Transparency)";
         }
     }
@@ -34,6 +35,33 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
     public bool HasShaderError => _failed;
     public long GetRenderCount() => System.Threading.Interlocked.Read(ref _renderCount);
     public string GetRenderStatus() => _renderStatus;
+
+    /// <summary>运行时隔离当前合成器的可变参数，同时保留两个阶段对同一 Profile 的共享。</summary>
+    public static void MakeProfilesLocal(Compositor compositor)
+    {
+        if (compositor == null) return;
+        const string ownerKey = "yu_relink_profile_owner";
+        using var owner = compositor.GetMeta(ownerKey, 0UL);
+        ulong id = compositor.GetInstanceId();
+        if (owner.AsUInt64() == id) return;
+        // C# 导出资源在场景实例化后仍可能引用外部 Profile；仅靠 Local To Scene 不足以隔离。
+        var copies = new System.Collections.Generic.Dictionary<ulong, RelinkPostProcessProfile>();
+        var effects = compositor.CompositorEffects;
+        using var effectsOwner = (Godot.Collections.Array)effects;
+        foreach (CompositorEffect effect in effects)
+        {
+            if (effect is not RelinkPostProcessEffect relink || relink.Profile == null) continue;
+            ulong profileId = relink.Profile.GetInstanceId();
+            if (!copies.TryGetValue(profileId, out var copy))
+            {
+                copy = (RelinkPostProcessProfile)relink.Profile.Duplicate();
+                copies.Add(profileId, copy);
+            }
+            relink.Profile = copy;
+        }
+        compositor.SetMeta(ownerKey, id);
+    }
+
     public static bool HasActiveFilm(Compositor compositor)
     {
         if (compositor == null) return false;
@@ -49,7 +77,6 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
     {
         Pass = PassKind.FilmAndBloom;
         AccessResolvedColor = true;
-        AccessResolvedDepth = true;
     }
 
     public override void _RenderCallback(int effectCallbackType, RenderData renderData)

@@ -2,7 +2,7 @@
 
 ## 概览
 
-`yu` 是一个 Godot 4.6 + C# 项目，运行时目标是 `.NET 8`，Android 目标平台使用 `.NET 9`。项目整体采用两层组织：
+`yu` 是一个 Godot 4.8-beta + C# 项目，运行时目标为 `.NET 10`。项目整体采用两层组织：
 
 - `scripts/framework`：可复用框架层，提供模块、状态机、资源、UI、事件、配置、对象池等横向能力。
 - `scripts/gamelogic`：游戏业务层，提供角色组件、输入、HFSM、技能、AI、任务、存档、流程和 UI。

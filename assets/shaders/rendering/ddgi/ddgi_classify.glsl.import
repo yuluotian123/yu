@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cte21habxp7k8"
+path="res://.godot/imported/ddgi_classify.glsl-c86fcadfd155fd0bd27f1ec3019937e6.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/ddgi/ddgi_classify.glsl"
+dest_files=["res://.godot/imported/ddgi_classify.glsl-c86fcadfd155fd0bd27f1ec3019937e6.res"]
+
+[params]
+

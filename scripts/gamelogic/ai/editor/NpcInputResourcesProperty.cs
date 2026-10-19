@@ -17,7 +17,7 @@ public partial class NpcInputResourcesProperty : EditorProperty
     {
         if(!GodotObject.IsInstanceValid(_owner))return;
         var capabilities=NpcBindingAdapters.Find(_owner.Adapter)?.Capabilities??Array.Empty<string>();
-        Visible=_owner.ValueType==NpcValueType.Symbol&&capabilities.Count>0;
+        Visible=_owner.ValueType==CharacterValueType.Symbol&&capabilities.Count>0;
         if(!Visible)return;
         Label="资源要求";
         string stamp=_owner.Adapter+"|"+string.Join("|",_owner.ResourceRequirements)+"|"+string.Join("|",capabilities);

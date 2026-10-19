@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="NpcNeedsDefinition" format=3 uid="uid://fgq17s0sqbby"]
+[gd_resource type="Resource" script_class="CharacterNeedsDefinition" format=3 uid="uid://fgq17s0sqbby"]
 
-[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="1_needs"]
-[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="2_need"]
+[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="1_needs"]
+[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="2_need"]
 
 [sub_resource type="Resource" id="Need_thirst"]
 script = ExtResource("2_need")
@@ -31,5 +31,5 @@ ChangePerHour = 0.1
 resource_name = "通用需求：口渴、饥饿、娱乐、疲劳"
 script = ExtResource("1_needs")
 Needs = Array[ExtResource("2_need")]([SubResource("Need_thirst"), SubResource("Need_hunger"), SubResource("Need_fun"), SubResource("Need_fatigue")])
-DefinitionId = "npc.needs.common"
+DefinitionId = "character.needs.common"
 DisplayName = "通用需求预设"

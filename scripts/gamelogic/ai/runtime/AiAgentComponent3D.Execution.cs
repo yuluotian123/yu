@@ -31,14 +31,14 @@ public partial class AiAgentComponent3D
         }
         return true;
     }
-    bool Meets(NpcExpression expression,GoapWorldState context)=>expression==null||expression.Evaluate(k=>Program.Read(context,k),Program.Parameter).IsTrue;
+    bool Meets(CharacterExpression expression,GoapWorldState context)=>expression==null||expression.Evaluate(k=>Program.Read(context,k),Program.Parameter).IsTrue;
     internal void BeginAction(NpcBoundAction bound)
     {
         if(!Meets(_selectedPlan?.Eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
         var context=LiveContext(bound);
         if(!ValidateInputs(bound,context)){Fail("InputUnavailable",false);return;}
         if(!Meets(bound.Action.Precondition,context)){Fail("PreconditionChanged");return;}
-        var inputs=new ReadOnlyDictionary<string,NpcValue>(bound.Action.Inputs.ToDictionary(i=>i.Name,i=>Program.Read(context,"input."+i.Name),StringComparer.Ordinal));
+        var inputs=new ReadOnlyDictionary<string,CharacterValue>(bound.Action.Inputs.ToDictionary(i=>i.Name,i=>Program.Read(context,"input."+i.Name),StringComparer.Ordinal));
         bound=bound with{Resolved=inputs};
         foreach(var input in bound.Action.Inputs.Where(i=>i.Source==NpcBindingSource.PlanVariable))
         {
@@ -46,7 +46,7 @@ public partial class AiAgentComponent3D
             if(_bindings.TryGetValue(input.Variable,out var old)&&old!=value){Fail("PlanVariableChanged");return;}
             _bindings[input.Variable]=value;
         }
-        var acquired=new HashSet<(string,NpcValue,string)>();
+        var acquired=new HashSet<(string,CharacterValue,string)>();
         foreach(var resource in bound.Action.Resources)
         {
             var input=bound.Action.Inputs.First(i=>i.Name==resource.Input);var value=inputs[input.Name];
@@ -79,7 +79,7 @@ public partial class AiAgentComponent3D
             !Program.TryEffects(context,_current.Action.Results,out var result,_current.Action)){Fail("ResultValidationFailed");return;}
         // Validate the complete transaction and all leases before changing any participant.
         if(_leases.Any(l=>!l.Renew())){Fail("ResourceLost");return;}
-        State.Apply(result,_current.Action.Results.Select(e=>e.Key));
+        State.Apply(_current.Action.Results.Select(e=>e.Key).Distinct().Where(Program.Facts.ContainsKey).Select(key=>new KeyValuePair<string,CharacterValue>(key,Program.Read(result,key))));
         foreach(var effect in _current.Action.Results)
         {
             if(!NpcProgram.SplitInputMember(_current.Action,effect.Key,out var input,out var member))continue;

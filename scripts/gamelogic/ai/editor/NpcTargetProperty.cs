@@ -27,13 +27,13 @@ public partial class NpcTargetProperty : EditorProperty
     public override void _UpdateProperty()
     {
         if(!GodotObject.IsInstanceValid(_owner))return;
-        Choice[] choices=NpcExpressionEditorCatalog.Collect(_graph).Where(s=>s.Parameter&&s.Type==NpcValueType.Symbol).Select(s=>new Choice(s.Key,s.Label)).ToArray();
+        Choice[] choices=NpcExpressionEditorCatalog.Collect(_graph).Where(s=>s.Parameter&&s.Type==CharacterValueType.Symbol).Select(s=>new Choice(s.Key,s.Label)).ToArray();
         string value=_owner.Get(_property).ToString();
         string stamp=value+"\n"+string.Join("\n",choices.Select(c=>c.Id+":"+c.Name));if(stamp==_stamp)return;_stamp=stamp;
         foreach(Node child in _body.GetChildren()){GraphEditorSignalCleanup.PrepareForRemoval(child);_body.RemoveChild(child);}
         Label=_property switch
         {
-            nameof(NpcTargetSelectorDefinition.ParameterKey)=>"目标身份参数",
+            nameof(NpcTargetSelectorDefinition.ParameterKey)=>"目标角色参数",
             nameof(NpcTargetSelectorDefinition.Source)=>"候选来源",
             nameof(NpcTargetSelectorDefinition.Selection)=>"选择策略",
             _=>_property
@@ -48,7 +48,7 @@ public partial class NpcTargetProperty : EditorProperty
             select.ItemSelected+=i=>EmitChanged(_property,(int)i);_body.AddChild(select);return;
         }
         string chosen=choices.FirstOrDefault(c=>c.Id==value)?.Name;
-        var button=new Button{Text=chosen??(value.Length==0?"选择文本身份参数":"引用不可用，请重新选择"),Disabled=choices.Length==0,
+        var button=new Button{Text=chosen??(value.Length==0?"选择文本角色参数":"引用不可用，请重新选择"),Disabled=choices.Length==0,
             ClipText=true,TextOverrunBehavior=TextServer.OverrunBehavior.TrimEllipsis,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill,TooltipText=chosen??"选择已注册项；原引用会保留至重新选择。"};
         button.Pressed+=()=>
         {

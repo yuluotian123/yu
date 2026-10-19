@@ -18,10 +18,10 @@ public partial class NpcTargetSelectorDefinition : NpcDefinitionResource
     [Export] public double MaximumDistance { get; set; }
     [Export] public bool RequireUsable { get; set; } = true;
     [Export] public bool RequireReachable { get; set; } = true;
-    [Export] public NpcExpressionDefinition Filter { get; set; }
+    [Export] public CharacterExpressionDefinition Filter { get; set; }
     NpcTargetSelection _selection;
     [Export] public NpcTargetSelection Selection { get=>_selection; set {if(_selection==value)return;_selection=value;NotifyPropertyListChanged();} }
-    [Export] public NpcExpressionDefinition Score { get; set; }
+    [Export] public CharacterExpressionDefinition Score { get; set; }
     [Export] public int CandidateLimit { get; set; }
     public override string Category => "目标选择器";
     public override void _ValidateProperty(Godot.Collections.Dictionary property)

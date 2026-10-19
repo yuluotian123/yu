@@ -2,6 +2,7 @@ namespace GameLogic
 {
     public static class ComponentPriority
     {
+        public const int CharacterData = 120;
         public const int Input = 100;
         public const int AI = 100;
         public const int State = 90;

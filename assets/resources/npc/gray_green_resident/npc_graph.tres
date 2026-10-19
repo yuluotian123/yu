@@ -1,97 +1,38 @@
 [gd_resource type="Resource" script_class="NpcGraphAsset" format=3 uid="uid://dxkkt6bnrusiu"]
 
 [ext_resource type="Script" uid="uid://b6jbet2ls7i1v" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_22tps"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="2_18gn3"]
-[ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="3_fkmfw"]
-[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/ai/definitions/NpcIdentityDefinition.cs" id="4_o5jls"]
-[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/ai/definitions/NpcPersonalityDefinition.cs" id="5_5en33"]
-[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="6_6l3rr"]
-[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="7_ur46o"]
+
 [ext_resource type="Script" uid="uid://cum2jon2w065s" path="res://scripts/gamelogic/ai/definitions/NpcScheduleWindow.cs" id="8_wbrb3"]
+
 [ext_resource type="Script" uid="uid://0hf07glnkkk4" path="res://scripts/gamelogic/ai/definitions/NpcScheduleDefinition.cs" id="9_1dupl"]
+
 [ext_resource type="Script" uid="uid://by2i0ru4bil4t" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="10_h8a1g"]
-[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/ai/definitions/NpcRelationsDefinition.cs" id="11_cd1og"]
+
 [ext_resource type="Script" uid="uid://dc4l0rkjx1nlf" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="12_iobbq"]
-[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/ai/definitions/NpcAffectDefinition.cs" id="13_r6wi1"]
+
 [ext_resource type="Script" uid="uid://bypjwivu5heys" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="14_bd51a"]
-[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/ai/definitions/NpcFactDefinition.cs" id="15_rvsd2"]
-[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/ai/definitions/NpcFactSchema.cs" id="16_37e1b"]
-[ext_resource type="Script" uid="uid://bqf2cnwcv8uv4" path="res://scripts/gamelogic/ai/definitions/NpcExpressionDefinition.cs" id="17_ax8qb"]
+
+[ext_resource type="Script" uid="uid://bqf2cnwcv8uv4" path="res://scripts/gamelogic/character/data/CharacterExpressionDefinition.cs" id="17_ax8qb"]
+
 [ext_resource type="Script" uid="uid://deu38wi1fx0o6" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="18_2uyvh"]
+
 [ext_resource type="Script" uid="uid://gets5b64b0uu" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="19_f3rrt"]
+
 [ext_resource type="Script" uid="uid://bsde0sq6b1oj7" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="20_furv5"]
+
 [ext_resource type="Script" uid="uid://b6vw5wxuhd1wo" path="res://scripts/gamelogic/ai/definitions/NpcBindingDefinition.cs" id="20_o5jls"]
+
 [ext_resource type="Script" uid="uid://1tlnmln8nspb" path="res://scripts/gamelogic/ai/definitions/NpcActionInputDefinition.cs" id="21_5en33"]
+
 [ext_resource type="Script" uid="uid://tbexx7n6vr3v" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="21_otg0o"]
-[ext_resource type="Script" uid="uid://dfipavmqfeeii" path="res://scripts/gamelogic/ai/definitions/NpcResourceClaimDefinition.cs" id="22_5en33"]
+
 [ext_resource type="Script" uid="uid://bqj6nsxp3iii3" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="22_08fpq"]
+
 [ext_resource type="Script" uid="uid://dhhpywk4q6ktj" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="23_18gn3"]
+
 [ext_resource type="Script" uid="uid://ctfyvmebdqwrh" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="23_lgcrt"]
 
-[sub_resource type="Resource" id="Resource_crg8v"]
-script = ExtResource("2_18gn3")
-Key = "home"
-ValueType = 3
-Symbol = "resident_bed"
-
-[sub_resource type="Resource" id="Resource_ypyfa"]
-script = ExtResource("4_o5jls")
-Tags = PackedStringArray("resident")
-SpriteFrames = ExtResource("3_fkmfw")
-Parameters = Array[ExtResource("2_18gn3")]([SubResource("Resource_crg8v")])
-DefinitionId = "gray_green_resident.NpcIdentityNodeData"
-DisplayName = "灰绿居民"
-
-[sub_resource type="Resource" id="Resource_jyjnv"]
-script = ExtResource("2_18gn3")
-Key = "sociability"
-Number = 0.2
-
-[sub_resource type="Resource" id="Resource_pndyk"]
-script = ExtResource("2_18gn3")
-Key = "caution"
-Number = 0.5
-
-[sub_resource type="Resource" id="Resource_58ow1"]
-script = ExtResource("2_18gn3")
-Key = "activity"
-Number = 0.35
-
-[sub_resource type="Resource" id="Resource_mk1td"]
-script = ExtResource("5_5en33")
-Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_jyjnv"), SubResource("Resource_pndyk")])
-Traits = PackedStringArray("reserved")
-Preferences = Array[ExtResource("2_18gn3")]([SubResource("Resource_58ow1")])
-DefinitionId = "gray_green_resident.NpcPersonalityNodeData"
-
-[sub_resource type="Resource" id="Resource_22tps"]
-script = ExtResource("6_6l3rr")
-NeedId = "thirst"
-DisplayName = "口渴"
-ChangePerHour = 0.18
-
-[sub_resource type="Resource" id="Resource_18gn3"]
-script = ExtResource("6_6l3rr")
-NeedId = "hunger"
-DisplayName = "饥饿"
-ChangePerHour = 0.15
-
-[sub_resource type="Resource" id="Resource_fkmfw"]
-script = ExtResource("6_6l3rr")
-NeedId = "fun"
-DisplayName = "娱乐需求"
-ChangePerHour = 0.08
-
-[sub_resource type="Resource" id="Resource_o5jls"]
-script = ExtResource("6_6l3rr")
-NeedId = "fatigue"
-DisplayName = "疲劳"
-ChangePerHour = 0.1
-
-[sub_resource type="Resource" id="Resource_shu3j"]
-script = ExtResource("7_ur46o")
-Needs = Array[ExtResource("6_6l3rr")]([SubResource("Resource_22tps"), SubResource("Resource_18gn3"), SubResource("Resource_fkmfw"), SubResource("Resource_o5jls")])
-DefinitionId = "gray_green_resident.NpcNeedsNodeData"
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedPolicyDefinition.cs" id="need_policy_script"]
 
 [sub_resource type="Resource" id="Resource_grvd8"]
 script = ExtResource("8_wbrb3")
@@ -118,50 +59,14 @@ ViewRange = 18.0
 KnownPointIds = PackedStringArray("food_shop", "resident_bed", "courier_rest", "courier_delivery_west", "courier_delivery_east", "shelter_west", "town_stroll", "lakeside_stroll")
 DefinitionId = "gray_green_resident.NpcPerceptionNodeData"
 
-[sub_resource type="Resource" id="Resource_4i2na"]
-script = ExtResource("2_18gn3")
-Key = "trust"
-
-[sub_resource type="Resource" id="Resource_aegml"]
-script = ExtResource("2_18gn3")
-Key = "affinity"
-
-[sub_resource type="Resource" id="Resource_woaon"]
-script = ExtResource("11_cd1og")
-Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_4i2na"), SubResource("Resource_aegml")])
-DefinitionId = "gray_green_resident.NpcRelationsNodeData"
-
 [sub_resource type="Resource" id="Resource_tlsna"]
 script = ExtResource("12_iobbq")
 Categories = PackedStringArray("visited", "conversation", "danger")
 DefinitionId = "gray_green_resident.NpcMemoryNodeData"
 
-[sub_resource type="Resource" id="Resource_a0ivl"]
-script = ExtResource("2_18gn3")
-Key = "mood"
-
-[sub_resource type="Resource" id="Resource_lsiff"]
-script = ExtResource("13_r6wi1")
-Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_a0ivl")])
-DefinitionId = "gray_green_resident.NpcAffectNodeData"
-
 [sub_resource type="Resource" id="Resource_2wkfx"]
 script = ExtResource("14_bd51a")
 DefinitionId = "gray_green_resident.NpcPolicyNodeData"
-
-[sub_resource type="Resource" id="Resource_1ey0r"]
-script = ExtResource("2_18gn3")
-
-[sub_resource type="Resource" id="Resource_y4nbf"]
-script = ExtResource("15_rvsd2")
-Key = "private.completed_visits"
-Maximum = 100000.0
-Initial = SubResource("Resource_1ey0r")
-
-[sub_resource type="Resource" id="Resource_bjsdq"]
-script = ExtResource("16_37e1b")
-Facts = Array[ExtResource("15_rvsd2")]([SubResource("Resource_y4nbf")])
-DefinitionId = "gray_green_resident.NpcFactsNodeData"
 
 [sub_resource type="Resource" id="Resource_bp0mv"]
 script = ExtResource("17_ax8qb")
@@ -806,7 +711,31 @@ ActionIds = PackedStringArray("gray_green_resident.action.stroll_in_place")
 DefinitionId = "gray_green_resident.plan.stroll_in_place"
 DisplayName = "下雨 · 原地散步"
 
+[sub_resource type="Resource" id="need_policy_thirst"]
+script = ExtResource("need_policy_script")
+NeedId = "thirst"
+DefinitionId = "gray_green_resident.need_policy.thirst"
+DisplayName = "口渴 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_hunger"]
+script = ExtResource("need_policy_script")
+NeedId = "hunger"
+DefinitionId = "gray_green_resident.need_policy.hunger"
+DisplayName = "饥饿 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_fun"]
+script = ExtResource("need_policy_script")
+NeedId = "fun"
+DefinitionId = "gray_green_resident.need_policy.fun"
+DisplayName = "娱乐需求 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_fatigue"]
+script = ExtResource("need_policy_script")
+NeedId = "fatigue"
+DefinitionId = "gray_green_resident.need_policy.fatigue"
+DisplayName = "疲劳 · 紧迫度"
+
 [resource]
 script = ExtResource("23_lgcrt")
-Definitions = Array[ExtResource("1_22tps")]([SubResource("Resource_ypyfa"), SubResource("Resource_mk1td"), SubResource("Resource_shu3j"), SubResource("Resource_ul6ha"), SubResource("Resource_pos6r"), SubResource("Resource_woaon"), SubResource("Resource_tlsna"), SubResource("Resource_lsiff"), SubResource("Resource_2wkfx"), SubResource("Resource_bjsdq"), SubResource("Resource_xkdqx"), SubResource("Resource_idq3w"), SubResource("Resource_ij2yg"), SubResource("Resource_66i56"), SubResource("Resource_ll5y4"), SubResource("Resource_nx33j"), SubResource("Resource_22t3s"), SubResource("Resource_wgvdj"), SubResource("Resource_md03s"), SubResource("Resource_5en33"), SubResource("Resource_6l3rr"), SubResource("Resource_ur46o"), SubResource("Resource_otg0o"), SubResource("Resource_jc25u"), SubResource("Resource_3ybvr")])
-GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":260},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcIdentityNodeData\",\"DefinitionId\":\"gray_green_resident.NpcIdentityNodeData\",\"Id\":\"gray_green_resident_NpcIdentityNodeData\",\"Position\":{\"x\":320,\"y\":500},\"NodeType\":\"NpcIdentityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPersonalityNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPersonalityNodeData\",\"Id\":\"gray_green_resident_NpcPersonalityNodeData\",\"Position\":{\"x\":320,\"y\":720},\"NodeType\":\"NpcPersonalityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedsNodeData\",\"DefinitionId\":\"gray_green_resident.NpcNeedsNodeData\",\"Id\":\"gray_green_resident_NpcNeedsNodeData\",\"Position\":{\"x\":320,\"y\":960},\"NodeType\":\"NpcNeedsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcScheduleNodeData\",\"DefinitionId\":\"gray_green_resident.NpcScheduleNodeData\",\"Id\":\"gray_green_resident_NpcScheduleNodeData\",\"Position\":{\"x\":320,\"y\":1200},\"NodeType\":\"NpcScheduleNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPerceptionNodeData\",\"Id\":\"gray_green_resident_NpcPerceptionNodeData\",\"Position\":{\"x\":320,\"y\":1420},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcRelationsNodeData\",\"DefinitionId\":\"gray_green_resident.NpcRelationsNodeData\",\"Id\":\"gray_green_resident_NpcRelationsNodeData\",\"Position\":{\"x\":320,\"y\":1660},\"NodeType\":\"NpcRelationsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"gray_green_resident.NpcMemoryNodeData\",\"Id\":\"gray_green_resident_NpcMemoryNodeData\",\"Position\":{\"x\":320,\"y\":1900},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcAffectNodeData\",\"DefinitionId\":\"gray_green_resident.NpcAffectNodeData\",\"Id\":\"gray_green_resident_NpcAffectNodeData\",\"Position\":{\"x\":320,\"y\":2120},\"NodeType\":\"NpcAffectNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPolicyNodeData\",\"Id\":\"gray_green_resident_NpcPolicyNodeData\",\"Position\":{\"x\":320,\"y\":260},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcFactsNodeData\",\"DefinitionId\":\"gray_green_resident.NpcFactsNodeData\",\"Id\":\"gray_green_resident_NpcFactsNodeData\",\"Position\":{\"x\":320,\"y\":2360},\"NodeType\":\"NpcFactsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.eat\",\"Id\":\"eat\",\"Position\":{\"x\":320,\"y\":2600},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.eat\",\"Id\":\"eat_action\",\"Position\":{\"x\":620,\"y\":2820},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.eat\",\"Id\":\"eat_template\",\"Position\":{\"x\":620,\"y\":2620},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.rest\",\"Id\":\"rest\",\"Position\":{\"x\":320,\"y\":3040},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.rest\",\"Id\":\"rest_action\",\"Position\":{\"x\":620,\"y\":3040},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.rest\",\"Id\":\"rest_template\",\"Position\":{\"x\":640,\"y\":3220},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.activity\",\"Id\":\"activity\",\"Position\":{\"x\":320,\"y\":3480},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.activity\",\"Id\":\"activity_action\",\"Position\":{\"x\":620,\"y\":3680},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.activity\",\"Id\":\"activity_template\",\"Position\":{\"x\":620,\"y\":3880},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"8c6e124a2ec2436b8555ecf1a45b0112\",\"Id\":\"targets_f74e8e705065470ca3e7a88425b4791d\",\"Position\":{\"x\":320,\"y\":3700},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"d4320b4bb1f14a81b74db25969b85db9\",\"Id\":\"targets_58a605a946ab4ab588c65bf6d4805190\",\"Position\":{\"x\":320,\"y\":3900},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"92e4bea764294a86bcf8c20fc67bb3ce\",\"Id\":\"targets_6795e3bb8d004d04a485ed1850e3f3cf\",\"Position\":{\"x\":320,\"y\":4100},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.go_stroll\",\"Id\":\"activity_move\",\"Position\":{\"x\":620,\"y\":3360},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.stroll_in_place\",\"Id\":\"activity_in_place\",\"Position\":{\"x\":620,\"y\":3520},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.plan.stroll_in_place\",\"Id\":\"activity_rain_plan\",\"Position\":{\"x\":620,\"y\":4020},\"NodeType\":\"NpcTemplateNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcIdentityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPersonalityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcNeedsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcScheduleNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcRelationsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcAffectNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcFactsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"eat\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":0,\"ToNode\":\"eat_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":1,\"ToNode\":\"eat_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"rest\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":0,\"ToNode\":\"rest_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":1,\"ToNode\":\"rest_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"activity\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_f74e8e705065470ca3e7a88425b4791d\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_58a605a946ab4ab588c65bf6d4805190\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_6795e3bb8d004d04a485ed1850e3f3cf\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_move\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_in_place\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_rain_plan\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":91.38342,\"y\":2232.17},\"Zoom\":0.82644594}}"
+Definitions = Array[ExtResource("1_22tps")]([SubResource("Resource_ul6ha"), SubResource("Resource_pos6r"), SubResource("Resource_tlsna"), SubResource("Resource_2wkfx"), SubResource("Resource_xkdqx"), SubResource("Resource_idq3w"), SubResource("Resource_ij2yg"), SubResource("Resource_66i56"), SubResource("Resource_ll5y4"), SubResource("Resource_nx33j"), SubResource("Resource_22t3s"), SubResource("Resource_wgvdj"), SubResource("Resource_md03s"), SubResource("Resource_5en33"), SubResource("Resource_6l3rr"), SubResource("Resource_ur46o"), SubResource("Resource_otg0o"), SubResource("Resource_jc25u"), SubResource("Resource_3ybvr"), SubResource("need_policy_thirst"), SubResource("need_policy_hunger"), SubResource("need_policy_fun"), SubResource("need_policy_fatigue")])
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":260},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcScheduleNodeData\",\"DefinitionId\":\"gray_green_resident.NpcScheduleNodeData\",\"Id\":\"gray_green_resident_NpcScheduleNodeData\",\"Position\":{\"x\":320,\"y\":1200},\"NodeType\":\"NpcScheduleNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPerceptionNodeData\",\"Id\":\"gray_green_resident_NpcPerceptionNodeData\",\"Position\":{\"x\":320,\"y\":1420},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"gray_green_resident.NpcMemoryNodeData\",\"Id\":\"gray_green_resident_NpcMemoryNodeData\",\"Position\":{\"x\":320,\"y\":1900},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPolicyNodeData\",\"Id\":\"gray_green_resident_NpcPolicyNodeData\",\"Position\":{\"x\":320,\"y\":260},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.eat\",\"Id\":\"eat\",\"Position\":{\"x\":320,\"y\":2600},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.eat\",\"Id\":\"eat_action\",\"Position\":{\"x\":620,\"y\":2820},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.eat\",\"Id\":\"eat_template\",\"Position\":{\"x\":620,\"y\":2620},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.rest\",\"Id\":\"rest\",\"Position\":{\"x\":320,\"y\":3040},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.rest\",\"Id\":\"rest_action\",\"Position\":{\"x\":620,\"y\":3040},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.rest\",\"Id\":\"rest_template\",\"Position\":{\"x\":640,\"y\":3220},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"gray_green_resident.goal.activity\",\"Id\":\"activity\",\"Position\":{\"x\":320,\"y\":3480},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.activity\",\"Id\":\"activity_action\",\"Position\":{\"x\":620,\"y\":3680},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.template.activity\",\"Id\":\"activity_template\",\"Position\":{\"x\":620,\"y\":3880},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"8c6e124a2ec2436b8555ecf1a45b0112\",\"Id\":\"targets_f74e8e705065470ca3e7a88425b4791d\",\"Position\":{\"x\":320,\"y\":3700},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"d4320b4bb1f14a81b74db25969b85db9\",\"Id\":\"targets_58a605a946ab4ab588c65bf6d4805190\",\"Position\":{\"x\":320,\"y\":3900},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"92e4bea764294a86bcf8c20fc67bb3ce\",\"Id\":\"targets_6795e3bb8d004d04a485ed1850e3f3cf\",\"Position\":{\"x\":320,\"y\":4100},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.go_stroll\",\"Id\":\"activity_move\",\"Position\":{\"x\":620,\"y\":3360},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"gray_green_resident.action.stroll_in_place\",\"Id\":\"activity_in_place\",\"Position\":{\"x\":620,\"y\":3520},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"gray_green_resident.plan.stroll_in_place\",\"Id\":\"activity_rain_plan\",\"Position\":{\"x\":620,\"y\":4020},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.need_policy.thirst\",\"Id\":\"need_policy_thirst\",\"Position\":{\"x\":320,\"y\":140},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.need_policy.hunger\",\"Id\":\"need_policy_hunger\",\"Position\":{\"x\":320,\"y\":320},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.need_policy.fun\",\"Id\":\"need_policy_fun\",\"Position\":{\"x\":320,\"y\":500},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.need_policy.fatigue\",\"Id\":\"need_policy_fatigue\",\"Position\":{\"x\":320,\"y\":680},\"NodeType\":\"NpcNeedPolicyNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcScheduleNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"eat\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":0,\"ToNode\":\"eat_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":1,\"ToNode\":\"eat_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"rest\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":0,\"ToNode\":\"rest_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":1,\"ToNode\":\"rest_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"activity\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_f74e8e705065470ca3e7a88425b4791d\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_58a605a946ab4ab588c65bf6d4805190\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_6795e3bb8d004d04a485ed1850e3f3cf\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_move\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_in_place\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_rain_plan\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_thirst\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_hunger\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_fun\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_fatigue\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":91.38342,\"y\":2232.17},\"Zoom\":0.82644594}}"

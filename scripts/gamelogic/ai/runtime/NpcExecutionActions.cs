@@ -79,7 +79,7 @@ public sealed class NpcRememberAction : GraphInstantAction
     protected override bool Run(GraphActionInvocation invocation)
     {
         var c=invocation.Execution.GetUserData<NpcActionContext>();
-        return c!=null&&c.Agent.State.Memory.Remember(new(Category,c.Input(SubjectInput.Name).Symbol??"",c.Agent.World.Clock.TotalHours,Detail));
+        return c!=null&&c.Agent.Decision.Memory.Remember(new(Category,c.Input(SubjectInput.Name).Symbol??"",c.Agent.World.Clock.TotalHours,Detail));
     }
 }
 

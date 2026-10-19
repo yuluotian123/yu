@@ -7,12 +7,21 @@ namespace GameLogic.AI;
 public partial class NpcGraphAsset : GraphAsset
 {
     public override string GraphType { get; set; } = "NPC";
+    // Authoring context comes from the selected host, and is never serialized in the AI graph.
+    public bool IncludeDecisionSymbols {get;set;}=true;
+    public CharacterProfile CharacterContext {get;set;}
+    public NpcGraphAsset ForCharacter(CharacterProfile profile){CharacterContext=profile;return this;}
+    public NpcGraphAsset CloneForCharacter(){var clone=(NpcGraphAsset)Duplicate(true);clone.CharacterContext=CharacterContext==null?null:(CharacterProfile)CharacterContext.Duplicate(true);return clone;}
     public override Type ComponentProviderType => typeof(AiAgentComponent3D);
     public override System.Collections.Generic.List<string> GetAllowedNodeTypes() => new();
     [Export] public Godot.Collections.Array<NpcDefinitionResource> Definitions { get; set; } = new();
     public NpcDefinitionResource Resolve(string id) => Definitions.FirstOrDefault(d => d?.DefinitionId == id);
-    public override string GetEditorTitle() => "NPC 人物与行为";
+    public override string GetEditorTitle() => "AI 决策";
 #if TOOLS
+    public override void BindEditorHost(Node host)
+    {
+        if(host is GameObject3D actor)CharacterContext=actor.Components.OfType<CharacterDataComponent3D>().FirstOrDefault()?.Profile;
+    }
     public override bool HasCustomPropertyEditors(GodotObject target) =>
         target==this||NpcExpressionEditorCatalog.Owns(this, target);
     public override string GetResourceEditorTitle(Resource resource)=>NpcResourcePresentation.Title(this,resource);
@@ -21,16 +30,16 @@ public partial class NpcGraphAsset : GraphAsset
     {
         if (!HasCustomPropertyEditors(target)) return null;
         if(target==this&&property==nameof(Definitions))return new NpcDefinitionsProperty(this);
+        if(target is NpcNeedPolicyDefinition policy&&property==nameof(NpcNeedPolicyDefinition.NeedId))return new NpcNeedPolicyProperty(this,policy);
         if(target is NpcActionDefinition&&property==nameof(NpcActionDefinition.Inputs)||target is NpcPlanTemplateDefinition&&property==nameof(NpcPlanTemplateDefinition.Variables))return new NpcBindingsProperty((Resource)target,property);
         if(target is NpcActionInputDefinition input&&property==nameof(NpcActionInputDefinition.ResourceRequirements))return new NpcInputResourcesProperty(input);
         if(target is NpcBindingDefinition&&property is nameof(NpcBindingDefinition.Source) or nameof(NpcBindingDefinition.ValueType) or nameof(NpcBindingDefinition.Adapter) or nameof(NpcBindingDefinition.SelectorId) or nameof(NpcBindingDefinition.Variable))return new NpcBindingProperty(this,(Resource)target,property);
         if(target is NpcTargetSelectorDefinition&&property==nameof(NpcTargetSelectorDefinition.Adapter))return new NpcBindingProperty(this,(Resource)target,property);
         if(target is NpcTargetSelectorDefinition selector&&property is nameof(NpcTargetSelectorDefinition.Source) or nameof(NpcTargetSelectorDefinition.Selection) or nameof(NpcTargetSelectorDefinition.ParameterKey))return new NpcTargetProperty(this,selector,property);
-        if (target is NpcNeedsDefinition needs && property == nameof(NpcNeedsDefinition.Needs)) return new NpcNeedsProperty(needs);
         if (target is NpcPlanTemplateDefinition plan && property == nameof(NpcPlanTemplateDefinition.ActionIds)) return new NpcPlanActionsProperty(this, plan);
         if (target is NpcEffectDefinition effect && property is nameof(NpcEffectDefinition.Key) or nameof(NpcEffectDefinition.Mode))
             return new NpcEffectProperty(this, effect, property);
-        return NpcExpressionEditorCatalog.ExpectedType(this, target, property) is NpcValueType type
+        return NpcExpressionEditorCatalog.ExpectedType(this, target, property) is CharacterValueType type
             ? new NpcExpressionProperty(this, target, property, type) : null;
     }
 #endif
@@ -43,8 +52,6 @@ public partial class NpcGraphAsset : GraphAsset
         var found = Resolve(node.DefinitionId);
         if (found != null) return found;
         var resource = (NpcDefinitionResource)Activator.CreateInstance(node.DefinitionType);
-        if (resource is NpcNeedsDefinition needs)
-            needs.Needs = needs.MergePreset(GD.Load<NpcNeedsDefinition>(NpcNeedsDefinition.CommonPresetPath));
         resource.DisplayName = node.GetDisplayName();
         Definitions.Add(resource); node.DefinitionId = resource.DefinitionId; MarkDirty();
         return resource;

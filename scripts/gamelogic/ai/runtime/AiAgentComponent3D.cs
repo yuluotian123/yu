@@ -7,14 +7,14 @@ using GameLogic.Goap;
 using Godot;
 namespace GameLogic.AI;
 
-public sealed record NpcBoundAction(NpcActionSpec Action,NpcPlanSpec Plan,IReadOnlyDictionary<string,NpcValue> Candidates,GoapAction Search,IReadOnlyDictionary<string,NpcValue> Resolved=null)
+public sealed record NpcBoundAction(NpcActionSpec Action,NpcPlanSpec Plan,IReadOnlyDictionary<string,CharacterValue> Candidates,GoapAction Search,IReadOnlyDictionary<string,CharacterValue> Resolved=null)
 {
     public string PlanActionKey=>Plan.Id+"::"+Action.Id;
 }
-public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,NpcValue> Inputs)
+public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,CharacterValue> Inputs)
 {
-    public NpcValue Input(string name)=>Inputs.GetValueOrDefault(name??"");
-    public AiInteractionPointComponent3D Point(string name)=>Input(name) is {Type:NpcValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Points.GetValueOrDefault(id):null;
+    public CharacterValue Input(string name)=>Inputs.GetValueOrDefault(name??"");
+    public AiInteractionPointComponent3D Point(string name)=>Input(name) is {Type:CharacterValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Points.GetValueOrDefault(id):null;
 }
 
 [GlobalClass]
@@ -24,11 +24,12 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     [Export] public NpcGraphAsset Graph {get;set;}
     [Export] public bool Running {get;set;}=true;
     [Export] public bool Persist {get;set;}=true;
-    [Export] public Godot.Collections.Array<NpcScalarDefinition> ParameterOverrides {get;set;}=new();
     public string ActorId=>Owner.PersistentId;
     public AiWorldComponent3D World {get;private set;}
     public NpcProgram Program {get;private set;}
-    public NpcCharacterState State {get;private set;}
+    public CharacterDataComponent3D Character {get;private set;}
+    public CharacterState State=>Character?.State;
+    public NpcDecisionState Decision {get;private set;}
     public NpcNavigationComponent3D Navigation {get;private set;}
     public string CurrentGoal=>_goal?.Name??"";
     public string CurrentAction=>_current?.Action.Name??"";
@@ -37,19 +38,19 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public int CompletedActions {get;private set;}
     public IReadOnlyList<string> Trace=>_trace;
     public IReadOnlyList<string> GoalScores=>_scores;
-    public IReadOnlyDictionary<string,NpcValue> PlanBindings=>new System.Collections.ObjectModel.ReadOnlyDictionary<string,NpcValue>(_bindings);
+    public IReadOnlyDictionary<string,CharacterValue> PlanBindings=>new System.Collections.ObjectModel.ReadOnlyDictionary<string,CharacterValue>(_bindings);
     public string SectionKey=>"npc_agent";
     public string EntryKey=>ActorId;
-    public int SchemaVersion=>1;
+    public int SchemaVersion=>2;
     public IEnumerable<Type> GetGraphNodeTypes(GraphAsset graph, GraphAsset root) => graph is NpcGraphAsset
-        ? new[]{typeof(NpcRootNodeData),typeof(NpcIdentityNodeData),typeof(NpcPersonalityNodeData),typeof(NpcNeedsNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcRelationsNodeData),typeof(NpcMemoryNodeData),typeof(NpcAffectNodeData),typeof(NpcFactsNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
+        ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcNeedPolicyNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
     public IEnumerable<Type> GetGraphActionTypes(GraphAsset graph, GraphAsset root) => graph is FlowGraphAsset && (root is NpcGraphAsset || Graph?.Definitions.OfType<NpcActionDefinition>().Any(a=>a.ExecutionGraph==graph)==true)
         ? new[]{typeof(NpcMoveToTargetAction),typeof(NpcWaitAction),typeof(NpcRoamAction),typeof(NpcAbilityAction),typeof(NpcRememberAction),typeof(NpcAdjustRelationAction),typeof(NpcAdjustAffectAction)} : Array.Empty<Type>();
     readonly List<string> _trace=new(),_scores=new();
     readonly Dictionary<string,NpcBoundAction> _grounded=new(StringComparer.Ordinal);
     readonly Queue<NpcBoundAction> _plan=new();
     readonly HashSet<string> _seenPoints=new(StringComparer.Ordinal);
-    readonly Dictionary<string,NpcValue> _bindings=new(StringComparer.Ordinal);
+    readonly Dictionary<string,CharacterValue> _bindings=new(StringComparer.Ordinal);
     readonly List<INpcResourceLease> _leases=new();
     readonly Dictionary<string,double> _goalBlockedUntil=new(StringComparer.Ordinal);
     NpcPlanSearch _search;
@@ -58,18 +59,18 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     NpcBoundAction _current;
     FlowGraphRuntime _execution;
     double _senseAt,_selectAt,_retryAt,_committedAt,_actionElapsed;
-    AnimatedSprite3D _sprite;
     ISaveModule _save;
     bool _registered,_committed;
     public override void OnInit()
     {
         try
         {
-            Program=NpcProgram.Compile(Graph);
-            foreach(var parameter in ParameterOverrides){NpcProgram.Require(parameter!=null&&Program.Parameters.TryGetValue(parameter.Key,out var previous)&&previous.Type==parameter.Value.Type,"Unknown or incorrectly typed instance parameter override.");Program.Parameters[parameter.Key]=parameter.Value;}
-            State=new(Program);Navigation=Owner.GetComponent<NpcNavigationComponent3D>();
-            _sprite=Owner.GetNodeOrNull<AnimatedSprite3D>("VisualRoot/AnimatedSprite3D");
-            if(_sprite!=null&&Program.Frames!=null){_sprite.SpriteFrames=Program.Frames;_sprite.Play(Program.Idle);}
+            Character=Owner.GetComponent<CharacterDataComponent3D>();
+            NpcProgram.Require(Character?.State!=null,"AI 需要已初始化的通用角色数据组件。");
+            Program=NpcProgram.Compile(Graph,Character.Profile);
+            foreach(var parameter in Character.State.Profile.Parameters)Program.Parameters[parameter.Key]=parameter.Value;
+            Decision=new(Program,State);Character.Restored+=CharacterRestored;
+            Navigation=Owner.GetComponent<NpcNavigationComponent3D>();
             _save=ModuleSystem.GetModule<ISaveModule>();if(Persist)_save.RegisterSection(this);
             Register();Record("Initialized");
         }
@@ -85,7 +86,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     {
         if(Program==null||State==null)return;
         if(!_registered)Register();if(World==null)return;
-        State.Advance(World.Clock.TotalHours,Read,Program.Parameter);
+        Decision.Refresh();
         if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_bindings.Count>0)CancelPlan("Stopped");return;}
         var player=Owner.GetTree().CurrentScene?.GetNodeOrNull<Node3D>("Player");
         if(player!=null){float distance=player.GlobalPosition.DistanceTo(Owner.GlobalPosition);bool next=IsAbstract?distance>Program.Policy.Detailed:distance>Program.Policy.Abstract;if(next!=IsAbstract){CancelPlan("LodChanged");IsAbstract=next;}}
@@ -97,11 +98,6 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     void Sense()
     {
-        var position=Owner.GlobalPosition;
-        var previous=World.Points.GetValueOrDefault(State.Location);
-        var location=previous?.ContainsPosition(position)==true?previous:
-            World.Points.Values.Where(p=>p.IsActive&&p.ContainsPosition(position)).OrderBy(p=>position.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal).FirstOrDefault();
-        State.UpdateLocation(location?.PointId??"");
         _seenPoints.Clear();
         foreach(var p in World.Points.Values)
         {
@@ -116,11 +112,11 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         if(Owner.GetNodeOrNull<CollisionObject3D>("PhysicsBody") is {} body)query.Exclude=new(){body.GetRid()};
         return Owner.GetWorld3D().DirectSpaceState.IntersectRay(query).Count==0;
     }
-    public NpcValue Read(string key)=>key switch
+    public CharacterValue Read(string key)=>key switch
     {
-        "world.hour"=>NpcValue.Numeric((World?.Clock.TotalHours??12)%24),
-        "world.rain"=>NpcValue.Numeric(World?.RainAmount??0),
-        _=>State?.Read(key)??default
+        "world.hour"=>CharacterValue.Numeric((World?.Clock.TotalHours??12)%24),
+        "world.rain"=>CharacterValue.Numeric(World?.RainAmount??0),
+        _=>Decision?.Read(key)??default
     };
     void SelectGoal()
     {
@@ -131,8 +127,8 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
             bool done=goal.Completion.Evaluate(Read,Program.Parameter).IsTrue;
             var score=goal.Utility.Evaluate(Read,Program.Parameter);
             bool blocked=_goalBlockedUntil.GetValueOrDefault(goal.Id)>World.RuntimeSeconds;
-            double value=active&&!done&&!blocked&&score.Type==NpcValueType.Number?Math.Max(0,score.Number):0;
-            _scores.Add($"{goal.Name}: {value:0.###} · {(done?"已完成":blocked?"失败冷却":!active?"条件不满足":score.Type!=NpcValueType.Number?"评分未知":"可选")}");
+            double value=active&&!done&&!blocked&&score.Type==CharacterValueType.Number?Math.Max(0,score.Number):0;
+            _scores.Add($"{goal.Name}: {value:0.###} · {(done?"已完成":blocked?"失败冷却":!active?"条件不满足":score.Type!=CharacterValueType.Number?"评分未知":"可选")}");
             if(goal==_goal)currentScore=value;
             if(value>bestScore){best=goal;bestScore=value;}
         }
@@ -185,7 +181,8 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public void Record(string kind,string detail=""){_trace.Add($"{World?.RuntimeSeconds??0:0.0} {kind} {detail}");while(_trace.Count>128)_trace.RemoveAt(0);}
     public string Describe()=>$"{ActorId}  {CurrentGoal} → {CurrentAction}  完成 {CompletedActions}  LOD {(IsAbstract?"抽象":"详细")}\n"+string.Join("\n",_bindings.Select(b=>b.Key+" = "+b.Value))+"\n"+string.Join("\n",_scores)+"\n"+string.Join("\n",_trace.TakeLast(8));
-    public JsonObject Capture()=>State?.Capture()??new();
-    public void Restore(JsonObject data,int version){if(version!=SchemaVersion||State==null)return;State.Restore(data);CancelPlan("Restored");_goal=null;_selectAt=_retryAt=0;}
-    public override void OnDestroy(){CancelPlan("Destroyed");if(_registered&&World?.Actors.GetValueOrDefault(ActorId)==this)World.Actors.Remove(ActorId);if(Persist)_save?.UnregisterSection(this);World=null;_registered=false;}
+    void CharacterRestored(){CancelPlan("CharacterRestored");Decision?.Refresh();_goal=null;_selectAt=_retryAt=0;}
+    public JsonObject Capture()=>Decision?.Capture()??new();
+    public void Restore(JsonObject data,int version){if(version!=SchemaVersion||State==null)return;Decision.Restore(data);CancelPlan("Restored");_goal=null;_selectAt=_retryAt=0;}
+    public override void OnDestroy(){if(Character!=null)Character.Restored-=CharacterRestored;CancelPlan("Destroyed");if(_registered&&World?.Actors.GetValueOrDefault(ActorId)==this)World.Actors.Remove(ActorId);if(Persist)_save?.UnregisterSection(this);World=null;_registered=false;}
 }

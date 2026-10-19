@@ -1,0 +1,130 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3]
+
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="2_18gn3"]
+
+[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="4_o5jls"]
+
+[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/character/data/CharacterPersonalityDefinition.cs" id="5_5en33"]
+
+[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="6_6l3rr"]
+
+[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="7_ur46o"]
+
+[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="11_cd1og"]
+
+[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="13_r6wi1"]
+
+[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="15_rvsd2"]
+
+[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="16_37e1b"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="character_profile"]
+
+[sub_resource type="Resource" id="Resource_crg8v"]
+script = ExtResource("2_18gn3")
+Key = "home"
+ValueType = 3
+Symbol = "resident_bed"
+
+[sub_resource type="Resource" id="Resource_ypyfa"]
+script = ExtResource("4_o5jls")
+Tags = PackedStringArray("resident")
+Parameters = Array[ExtResource("2_18gn3")]([SubResource("Resource_crg8v")])
+DefinitionId = "gray_green_resident.identity"
+DisplayName = "灰绿居民"
+
+[sub_resource type="Resource" id="Resource_jyjnv"]
+script = ExtResource("2_18gn3")
+Key = "sociability"
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_pndyk"]
+script = ExtResource("2_18gn3")
+Key = "caution"
+Number = 0.5
+
+[sub_resource type="Resource" id="Resource_58ow1"]
+script = ExtResource("2_18gn3")
+Key = "activity"
+Number = 0.35
+
+[sub_resource type="Resource" id="Resource_mk1td"]
+script = ExtResource("5_5en33")
+Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_jyjnv"), SubResource("Resource_pndyk")])
+Traits = PackedStringArray("reserved")
+Preferences = Array[ExtResource("2_18gn3")]([SubResource("Resource_58ow1")])
+DefinitionId = "gray_green_resident.personality"
+
+[sub_resource type="Resource" id="Resource_22tps"]
+script = ExtResource("6_6l3rr")
+NeedId = "thirst"
+DisplayName = "口渴"
+ChangePerHour = 0.18
+
+[sub_resource type="Resource" id="Resource_18gn3"]
+script = ExtResource("6_6l3rr")
+NeedId = "hunger"
+DisplayName = "饥饿"
+ChangePerHour = 0.15
+
+[sub_resource type="Resource" id="Resource_fkmfw"]
+script = ExtResource("6_6l3rr")
+NeedId = "fun"
+DisplayName = "娱乐需求"
+ChangePerHour = 0.08
+
+[sub_resource type="Resource" id="Resource_o5jls"]
+script = ExtResource("6_6l3rr")
+NeedId = "fatigue"
+DisplayName = "疲劳"
+ChangePerHour = 0.1
+
+[sub_resource type="Resource" id="Resource_shu3j"]
+script = ExtResource("7_ur46o")
+Needs = Array[ExtResource("6_6l3rr")]([SubResource("Resource_22tps"), SubResource("Resource_18gn3"), SubResource("Resource_fkmfw"), SubResource("Resource_o5jls")])
+DefinitionId = "gray_green_resident.needs"
+
+[sub_resource type="Resource" id="Resource_4i2na"]
+script = ExtResource("2_18gn3")
+Key = "trust"
+
+[sub_resource type="Resource" id="Resource_aegml"]
+script = ExtResource("2_18gn3")
+Key = "affinity"
+
+[sub_resource type="Resource" id="Resource_woaon"]
+script = ExtResource("11_cd1og")
+Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_4i2na"), SubResource("Resource_aegml")])
+DefinitionId = "gray_green_resident.relations"
+
+[sub_resource type="Resource" id="Resource_a0ivl"]
+script = ExtResource("2_18gn3")
+Key = "mood"
+
+[sub_resource type="Resource" id="Resource_lsiff"]
+script = ExtResource("13_r6wi1")
+Dimensions = Array[ExtResource("2_18gn3")]([SubResource("Resource_a0ivl")])
+DefinitionId = "gray_green_resident.affect"
+
+[sub_resource type="Resource" id="Resource_1ey0r"]
+script = ExtResource("2_18gn3")
+
+[sub_resource type="Resource" id="Resource_y4nbf"]
+script = ExtResource("15_rvsd2")
+Key = "private.completed_visits"
+Maximum = 100000.0
+Initial = SubResource("Resource_1ey0r")
+
+[sub_resource type="Resource" id="Resource_bjsdq"]
+script = ExtResource("16_37e1b")
+Facts = Array[ExtResource("15_rvsd2")]([SubResource("Resource_y4nbf")])
+DefinitionId = "gray_green_resident.facts"
+
+[resource]
+script = ExtResource("character_profile")
+Identity = SubResource("Resource_ypyfa")
+Personality = SubResource("Resource_mk1td")
+Needs = SubResource("Resource_shu3j")
+Relations = SubResource("Resource_woaon")
+Affect = SubResource("Resource_lsiff")
+Facts = SubResource("Resource_bjsdq")

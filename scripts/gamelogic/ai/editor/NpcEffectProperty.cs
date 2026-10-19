@@ -52,7 +52,7 @@ public partial class NpcEffectProperty : EditorProperty
             choose.Pressed += () =>
             {
                 var choices = NpcExpressionEditorCatalog.WritableTargets(_graph,_owner)
-                    .Where(s => _owner.Mode != NpcEffectMode.Add || s.Type == NpcValueType.Number).ToArray();
+                    .Where(s => _owner.Mode != NpcEffectMode.Add || s.Type == CharacterValueType.Number).ToArray();
                 var popup = new SearchablePopup<NpcEditorSymbol>(choices,
                     s => s.Label == s.Key ? s.Label : s.Label + "  [" + s.Key + "]",
                     s => s.Group, s => s.Key + " " + s.Label + " " + s.Type);
@@ -65,7 +65,7 @@ public partial class NpcEffectProperty : EditorProperty
         else
         {
             var mode = new OptionButton(); mode.AddItem("设为（Set）"); mode.AddItem("增加/减少（Add）");
-            mode.SetItemDisabled(1, target?.Type != NpcValueType.Number); mode.Select((int)_mode);
+            mode.SetItemDisabled(1, target?.Type != CharacterValueType.Number); mode.Select((int)_mode);
             mode.ItemSelected += index => EmitChanged(nameof(NpcEffectDefinition.Mode), index);
             _body.AddChild(mode);
             _body.AddChild(new Label { Text = "设为：使用效果值替换；增加/减少：正数增加、负数减少。", AutowrapMode = TextServer.AutowrapMode.WordSmart });

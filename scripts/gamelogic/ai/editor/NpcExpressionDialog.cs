@@ -11,8 +11,8 @@ public partial class NpcExpressionDialog : Window
 {
     readonly NpcGraphAsset _graph;
     readonly GodotObject _owner;
-    readonly NpcValueType _expected;
-    readonly Action<NpcExpressionDefinition> _commit;
+    readonly CharacterValueType _expected;
+    readonly Action<CharacterExpressionDefinition> _commit;
     readonly Func<bool> _isCurrent;
     readonly bool _required;
     readonly VBoxContainer _editor=new();
@@ -22,20 +22,20 @@ public partial class NpcExpressionDialog : Window
     readonly LineEdit _search=new(){PlaceholderText="搜索名称、分类或参数 ID"};
     readonly Tree _parameters=new(){HideRoot=true,SizeFlagsVertical=Control.SizeFlags.ExpandFill};
     readonly Button _apply=new(){Text="应用公式"},_undoButton=new(){Text="撤销编辑"},_redoButton=new(){Text="重做编辑"};
-    readonly Stack<NpcExpressionDefinition> _undo=new(),_redo=new();
-    readonly Dictionary<NpcValueType,Button> _constants=new();
+    readonly Stack<CharacterExpressionDefinition> _undo=new(),_redo=new();
+    readonly Dictionary<CharacterValueType,Button> _constants=new();
     Button _calculation;
     IReadOnlyList<NpcEditorSymbol> _symbols=Array.Empty<NpcEditorSymbol>();
-    Action<NpcExpressionDefinition> _insert;
-    NpcValueType _slotType;
+    Action<CharacterExpressionDefinition> _insert;
+    CharacterValueType _slotType;
     bool _anyType,_refreshing,_rebuildQueued;
-    public NpcExpressionDefinition Draft {get;private set;}
+    public CharacterExpressionDefinition Draft {get;private set;}
     public NpcExpressionDialog(){Visible=false;}
-    public NpcExpressionDialog(NpcGraphAsset graph,GodotObject owner,NpcValueType expected,NpcExpressionDefinition value,string title,
-        Action<NpcExpressionDefinition> commit,Func<bool> isCurrent=null,bool required=false)
+    public NpcExpressionDialog(NpcGraphAsset graph,GodotObject owner,CharacterValueType expected,CharacterExpressionDefinition value,string title,
+        Action<CharacterExpressionDefinition> commit,Func<bool> isCurrent=null,bool required=false)
     {
         _graph=graph;_owner=owner;_expected=expected;_commit=commit;_isCurrent=isCurrent;_required=required;
-        Draft=value==null?null:(NpcExpressionDefinition)value.DuplicateDeep(Resource.DeepDuplicateMode.All);
+        Draft=value==null?null:(CharacterExpressionDefinition)value.DuplicateDeep(Resource.DeepDuplicateMode.All);
         Visible=false;Title=title+" · 公式编辑器";MinSize=new(720,460);Unresizable=false;Transient=true;Exclusive=true;
         GraphEditorTranslationService.DisableAutoTranslate(this);
         CloseRequested+=QueueFree;
@@ -50,12 +50,12 @@ public partial class NpcExpressionDialog : Window
         var library=new VBoxContainer{CustomMinimumSize=new(210,0)};split.AddChild(library);
         library.AddChild(new Label{Text="参数库"});library.AddChild(_targetHint);library.AddChild(_search);library.AddChild(_parameters);
         var constants=new HFlowContainer();
-        foreach(var type in new[]{NpcValueType.Number,NpcValueType.Boolean,NpcValueType.Symbol})
+        foreach(var type in new[]{CharacterValueType.Number,CharacterValueType.Boolean,CharacterValueType.Symbol})
         {
-            var button=new Button{Text=type switch{NpcValueType.Number=>"数字",NpcValueType.Boolean=>"真 / 假",_=>"文本"}};
+            var button=new Button{Text=type switch{CharacterValueType.Number=>"数字",CharacterValueType.Boolean=>"真 / 假",_=>"文本"}};
             button.Pressed+=()=>Insert(NpcExpressionEditor.Constant(type));_constants.Add(type,button);constants.AddChild(button);
         }
-        library.AddChild(constants);_calculation=new Button{Text="数值计算"};_calculation.Pressed+=()=>Insert(NpcExpressionEditor.Operation(NpcExpressionKind.Multiply,new(){Number=1},new(){Number=1}));library.AddChild(_calculation);
+        library.AddChild(constants);_calculation=new Button{Text="数值计算"};_calculation.Pressed+=()=>Insert(NpcExpressionEditor.Operation(CharacterExpressionKind.Multiply,new(){Number=1},new(){Number=1}));library.AddChild(_calculation);
         var scroll=new ScrollContainer{CustomMinimumSize=new(390,0),HorizontalScrollMode=ScrollContainer.ScrollMode.Auto,VerticalScrollMode=ScrollContainer.ScrollMode.Auto};split.AddChild(scroll);
         _editor.SizeFlagsHorizontal=Control.SizeFlags.ExpandFill;scroll.AddChild(_editor);
         shell.AddChild(_status);var footer=new HBoxContainer();footer.AddSpacer(false);
@@ -74,7 +74,7 @@ public partial class NpcExpressionDialog : Window
     {
         if(@event is InputEventKey{Pressed:true,Keycode:Key.Escape}){SetInputAsHandled();QueueFree();}
     }
-    void Change(NpcExpressionDefinition value,bool structural)
+    void Change(CharacterExpressionDefinition value,bool structural)
     {
         _undo.Push(Draft);_redo.Clear();Draft=value;RefreshPreview();
         if(structural&&!_rebuildQueued)
@@ -92,13 +92,13 @@ public partial class NpcExpressionDialog : Window
         _editor.AddChild(NpcExpressionEditor.Build(_graph,_owner,_expected,Draft,Change,SelectSlot));
         RefreshPreview();RefreshParameters();
     }
-    void SelectSlot(Control anchor,NpcValueType expected,bool anyType,Action<NpcExpressionDefinition> selected)
+    void SelectSlot(Control anchor,CharacterValueType expected,bool anyType,Action<CharacterExpressionDefinition> selected)
     {
         _slotType=expected;_anyType=anyType;_insert=selected;
         _targetHint.Text="正在替换："+(anchor.TooltipText.Length>0?anchor.TooltipText.Split('\n')[0]:"选中的值");
         RefreshParameters();if(_search.IsVisibleInTree()){_search.GrabFocus();_search.SelectAll();}
     }
-    void Insert(NpcExpressionDefinition expression)
+    void Insert(CharacterExpressionDefinition expression)
     {
         // The operand callback queues a rebuild; do not clear a Tree from inside ItemSelected.
         var insert=_insert;if(insert==null)return;_insert=null;insert(expression);
@@ -116,7 +116,7 @@ public partial class NpcExpressionDialog : Window
             var item=_parameters.CreateItem(group);item.SetText(0,symbol.Label);item.SetTooltipText(0,symbol.Key+" · "+symbol.Type);item.SetMetadata(0,i);
         }
         foreach(var pair in _constants)pair.Value.Disabled=_insert==null||!_anyType&&pair.Key!=_slotType;
-        _calculation.Disabled=_insert==null||!_anyType&&_slotType!=NpcValueType.Number;
+        _calculation.Disabled=_insert==null||!_anyType&&_slotType!=CharacterValueType.Number;
         _refreshing=false;
     }
     void RefreshPreview()

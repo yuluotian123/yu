@@ -8,7 +8,7 @@ using Godot;
 
 namespace GameLogic.AI;
 
-public sealed record NpcEditorSymbol(string Key, string Label, string Group, NpcValueType Type, bool Parameter = false, bool Writable = false);
+public sealed record NpcEditorSymbol(string Key, string Label, string Group, CharacterValueType Type, bool Parameter = false, bool Writable = false);
 
 /// <summary>Authoring symbols come from assembled modules, even while a goal is incomplete.</summary>
 public static class NpcExpressionEditorCatalog
@@ -16,60 +16,61 @@ public static class NpcExpressionEditorCatalog
     public static IReadOnlyList<NpcEditorSymbol> Collect(NpcGraphAsset graph, bool actionContext = false, NpcActionDefinition action = null)
     {
         var symbols = new Dictionary<string, NpcEditorSymbol>(StringComparer.Ordinal);
-        void Add(string key, string label, string group, NpcValueType type, bool parameter = false, bool writable = false)
+        void Add(string key, string label, string group, CharacterValueType type, bool parameter = false, bool writable = false)
         {
-            if (!string.IsNullOrWhiteSpace(key) && type != NpcValueType.Unknown)
+            if (!string.IsNullOrWhiteSpace(key) && type != CharacterValueType.Unknown)
                 symbols[(parameter ? "parameter:" : "fact:") + key] = new(key, label, group, type, parameter, writable);
         }
-        foreach (var root in graph.Nodes.OfType<NpcRootNodeData>())
-        foreach (var edge in graph.GetOutgoingConnections(root.Id, 0).Where(e => e.IsAvailable))
+        var definitions=new List<CharacterDefinitionResource>();
+        if(graph.CharacterContext is {} profile)definitions.AddRange(new CharacterDefinitionResource[]{profile.Identity,profile.Needs,profile.Personality,profile.Relations,profile.Affect,profile.Facts}.Where(d=>d is {Enabled:true}));
+        foreach(var root in graph.Nodes.OfType<NpcRootNodeData>())foreach(var edge in graph.GetOutgoingConnections(root.Id,0).Where(e=>e.IsAvailable))
+            if(graph.FindNodeById(edge.ToNode) is NpcDefinitionNodeData node&&graph.Resolve(node.DefinitionId) is {Enabled:true} d)definitions.Add(d);
+        foreach(var definition in definitions)
         {
-            if (graph.FindNodeById(edge.ToNode) is not NpcDefinitionNodeData node ||
-                graph.Resolve(node.DefinitionId) is not { Enabled: true } definition) continue;
             switch (definition)
             {
-                case NpcIdentityDefinition identity:
-                    foreach (var p in identity.Parameters.Where(p => p != null)) Add(p.Key, p.Key, "身份参数", p.ValueType, true);
-                    foreach (var tag in identity.Tags) Add("tag." + tag, tag, "身份标签", NpcValueType.Boolean, true);
+                case CharacterIdentityDefinition identity:
+                    foreach (var p in identity.Parameters.Where(p => p != null)) Add(p.Key, p.Key, "角色参数", p.ValueType, true);
+                    foreach (var tag in identity.Tags) Add("tag." + tag, tag, "角色标签", CharacterValueType.Boolean, true);
                     break;
-                case NpcNeedsDefinition needs:
+                case CharacterNeedsDefinition needs:
                     foreach (var n in needs.Needs.Where(n => n != null))
                     {
                         string label = string.IsNullOrWhiteSpace(n.DisplayName) ? n.NeedId : n.DisplayName;
-                        Add($"needs.{n.NeedId}.value", label + " · 当前值", "需求", NpcValueType.Number, writable: true);
-                        Add($"needs.{n.NeedId}.urgent", label + " · 是否紧急", "需求", NpcValueType.Boolean);
-                        Add($"needs.{n.NeedId}.urgency", label + " · 紧迫度", "需求", NpcValueType.Number);
+                        Add($"needs.{n.NeedId}.value", label + " · 当前值", "需求", CharacterValueType.Number, writable: true);
+                        if(graph.IncludeDecisionSymbols)Add($"needs.{n.NeedId}.urgent", label + " · 是否紧急", "需求", CharacterValueType.Boolean);
+                        if(graph.IncludeDecisionSymbols)Add($"needs.{n.NeedId}.urgency", label + " · 紧迫度", "需求", CharacterValueType.Number);
                     }
                     break;
-                case NpcPersonalityDefinition personality:
+                case CharacterPersonalityDefinition personality:
                     foreach (var p in personality.Dimensions.Where(p => p != null)) Add("personality." + p.Key, p.Key, "性格", p.ValueType);
                     foreach (var p in personality.Preferences.Where(p => p != null)) Add("preference." + p.Key, p.Key, "偏好", p.ValueType);
-                    foreach (var tag in personality.Traits) Add("trait." + tag, tag, "特质", NpcValueType.Boolean);
+                    foreach (var tag in personality.Traits) Add("trait." + tag, tag, "特质", CharacterValueType.Boolean);
                     break;
                 case NpcScheduleDefinition schedule:
-                    foreach (var tag in schedule.Windows.Where(w => w != null).SelectMany(w => w.Tags)) Add("schedule." + tag, tag, "日程", NpcValueType.Boolean);
+                    foreach (var tag in schedule.Windows.Where(w => w != null).SelectMany(w => w.Tags)) Add("schedule." + tag, tag, "日程", CharacterValueType.Boolean);
                     break;
-                case NpcFactSchema schema:
+                case CharacterFactSchema schema:
                     foreach (var f in schema.Facts.Where(f => f != null)) Add(f.Key, f.Key, "私有事实", f.Type, writable: true);
                     break;
-                case NpcAffectDefinition affect:
-                    foreach (var p in affect.Dimensions.Where(p => p != null)) Add("affect." + p.Key, p.Key, "情绪", NpcValueType.Number);
+                case CharacterAffectDefinition affect:
+                    foreach (var p in affect.Dimensions.Where(p => p != null)) Add("affect." + p.Key, p.Key, "情绪", CharacterValueType.Number);
                     break;
-                case NpcRelationsDefinition relations:
-                    foreach (var p in relations.Dimensions.Where(p => p != null)) Add("relations." + p.Key + ".max", p.Key + " · 最高值", "关系", NpcValueType.Number);
+                case CharacterRelationsDefinition relations:
+                    foreach (var p in relations.Dimensions.Where(p => p != null)) Add("relations." + p.Key + ".max", p.Key + " · 最高值", "关系", CharacterValueType.Number);
                     break;
                 case NpcMemoryDefinition memory:
-                    foreach (var category in memory.Categories) Add("memory." + category + ".count", category + " · 条数", "记忆", NpcValueType.Number);
+                    foreach (var category in memory.Categories) Add("memory." + category + ".count", category + " · 条数", "记忆", CharacterValueType.Number);
                     break;
             }
         }
-        Add("world.hour", "当前小时", "世界", NpcValueType.Number);
-        Add("world.rain", "降雨量", "世界", NpcValueType.Number);
-        Add("self.location", "当前位置 ID", "人物", NpcValueType.Symbol);
+        Add("world.hour", "当前小时", "世界", CharacterValueType.Number);
+        Add("world.rain", "降雨量", "世界", CharacterValueType.Number);
+        Add("self.location", "当前位置 ID", "人物", CharacterValueType.Symbol);
         if (actionContext)
         {
-            Add("self.location", "当前位置（仅用于预测）", "人物", NpcValueType.Symbol, writable:true);
-            Add("action.duration", "行动时长", "行动", NpcValueType.Number);
+            Add("self.location", "当前位置（仅用于预测）", "人物", CharacterValueType.Symbol, writable:true);
+            Add("action.duration", "行动时长", "行动", CharacterValueType.Number);
             foreach(var input in (action!=null?new[]{action}:graph.Definitions.OfType<NpcActionDefinition>()).SelectMany(a=>a.Inputs).Where(i=>i!=null))
             {
                 string prefix="input."+input.Name;
@@ -104,25 +105,25 @@ public static class NpcExpressionEditorCatalog
     public static IReadOnlyList<NpcEditorSymbol> WritableTargets(NpcGraphAsset graph,GodotObject owner=null)=>
         (owner==null?Collect(graph,true):For(graph,owner)).Where(s=>s.Writable&&(s.Key!="self.location"||owner==null||owner is NpcEffectDefinition effect&&ActionOwner(graph,effect)?.Predictions.Contains(effect)==true)).ToArray();
 
-    public static NpcValueType? ExpectedType(NpcGraphAsset graph, GodotObject target, string property) => (target, property) switch
+    public static CharacterValueType? ExpectedType(NpcGraphAsset graph, GodotObject target, string property) => (target, property) switch
     {
-        (NpcGoalDefinition, nameof(NpcGoalDefinition.Activation) or nameof(NpcGoalDefinition.Completion)) => NpcValueType.Boolean,
-        (NpcGoalDefinition, nameof(NpcGoalDefinition.Utility)) => NpcValueType.Number,
-        (NpcActionDefinition, nameof(NpcActionDefinition.Preconditions) or nameof(NpcActionDefinition.SuccessConditions)) => NpcValueType.Boolean,
-        (NpcActionDefinition, nameof(NpcActionDefinition.Cost)) => NpcValueType.Number,
-        (NpcTargetSelectorDefinition, nameof(NpcTargetSelectorDefinition.Filter)) => NpcValueType.Boolean,
-        (NpcTargetSelectorDefinition, nameof(NpcTargetSelectorDefinition.Score)) => NpcValueType.Number,
-        (NpcPlanTemplateDefinition, nameof(NpcPlanTemplateDefinition.Eligibility)) => NpcValueType.Boolean,
-        (NpcNeedDefinition, nameof(NpcNeedDefinition.RateMultiplier)) => NpcValueType.Number,
-        (NpcEffectDefinition effect, nameof(NpcEffectDefinition.Value)) => effect.Mode == NpcEffectMode.Add ? NpcValueType.Number :
-            WritableTargets(graph,effect).FirstOrDefault(s => s.Key == effect.Key)?.Type ?? NpcValueType.Number,
+        (NpcGoalDefinition, nameof(NpcGoalDefinition.Activation) or nameof(NpcGoalDefinition.Completion)) => CharacterValueType.Boolean,
+        (NpcGoalDefinition, nameof(NpcGoalDefinition.Utility)) => CharacterValueType.Number,
+        (NpcActionDefinition, nameof(NpcActionDefinition.Preconditions) or nameof(NpcActionDefinition.SuccessConditions)) => CharacterValueType.Boolean,
+        (NpcActionDefinition, nameof(NpcActionDefinition.Cost)) => CharacterValueType.Number,
+        (NpcTargetSelectorDefinition, nameof(NpcTargetSelectorDefinition.Filter)) => CharacterValueType.Boolean,
+        (NpcTargetSelectorDefinition, nameof(NpcTargetSelectorDefinition.Score)) => CharacterValueType.Number,
+        (NpcPlanTemplateDefinition, nameof(NpcPlanTemplateDefinition.Eligibility)) => CharacterValueType.Boolean,
+        (CharacterNeedDefinition, nameof(CharacterNeedDefinition.RateMultiplier)) => CharacterValueType.Number,
+        (NpcEffectDefinition effect, nameof(NpcEffectDefinition.Value)) => effect.Mode == NpcEffectMode.Add ? CharacterValueType.Number :
+            WritableTargets(graph,effect).FirstOrDefault(s => s.Key == effect.Key)?.Type ?? CharacterValueType.Number,
         (NpcBindingDefinition binding, nameof(NpcBindingDefinition.Value)) => binding.ValueType,
         _ => null
     };
 
     public static bool Owns(NpcGraphAsset graph, GodotObject target)
     {
-        if (target is not (NpcDefinitionResource or NpcNeedDefinition or NpcEffectDefinition or NpcBindingDefinition or NpcResourceClaimDefinition)) return false;
+        if (target is not (CharacterDefinitionResource or CharacterNeedDefinition or NpcEffectDefinition or NpcBindingDefinition or NpcResourceClaimDefinition)) return false;
         var visited = new HashSet<Resource>();
         bool Visit(Resource resource)
         {
@@ -140,15 +141,15 @@ public static class NpcExpressionEditorCatalog
         return graph.Definitions.Any(Visit);
     }
 
-    public static NpcValueType TypeOf(NpcExpressionDefinition expression, IReadOnlyList<NpcEditorSymbol> symbols)
+    public static CharacterValueType TypeOf(CharacterExpressionDefinition expression, IReadOnlyList<NpcEditorSymbol> symbols)
     {
-        if (expression == null) return NpcValueType.Unknown;
-        if (expression.Kind == NpcExpressionKind.Literal) return expression.ValueType;
-        if (expression.Kind is NpcExpressionKind.Fact or NpcExpressionKind.Parameter)
-            return symbols.FirstOrDefault(s => s.Key == expression.Key && s.Parameter == (expression.Kind == NpcExpressionKind.Parameter))?.Type ?? NpcValueType.Unknown;
-        return expression.Kind is NpcExpressionKind.Equal or NpcExpressionKind.NotEqual or NpcExpressionKind.Greater or NpcExpressionKind.AtLeast or
-            NpcExpressionKind.Less or NpcExpressionKind.AtMost or NpcExpressionKind.All or NpcExpressionKind.Any or NpcExpressionKind.Not or NpcExpressionKind.Known
-            ? NpcValueType.Boolean : NpcValueType.Number;
+        if (expression == null) return CharacterValueType.Unknown;
+        if (expression.Kind == CharacterExpressionKind.Literal) return expression.ValueType;
+        if (expression.Kind is CharacterExpressionKind.Fact or CharacterExpressionKind.Parameter)
+            return symbols.FirstOrDefault(s => s.Key == expression.Key && s.Parameter == (expression.Kind == CharacterExpressionKind.Parameter))?.Type ?? CharacterValueType.Unknown;
+        return expression.Kind is CharacterExpressionKind.Equal or CharacterExpressionKind.NotEqual or CharacterExpressionKind.Greater or CharacterExpressionKind.AtLeast or
+            CharacterExpressionKind.Less or CharacterExpressionKind.AtMost or CharacterExpressionKind.All or CharacterExpressionKind.Any or CharacterExpressionKind.Not or CharacterExpressionKind.Known
+            ? CharacterValueType.Boolean : CharacterValueType.Number;
     }
 }
 #endif

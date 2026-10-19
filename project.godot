@@ -30,7 +30,7 @@ project/assembly_name="yu"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ConfigPlugin/plugin.cfg", "res://addons/GraphPlugin/plugin.cfg", "res://addons/godot_mcp_toolkit/plugin.cfg")
+enabled=PackedStringArray("res://addons/ConfigPlugin/plugin.cfg", "res://addons/GraphPlugin/plugin.cfg", "res://addons/CharacterDataEditor/plugin.cfg", "res://addons/godot_mcp_toolkit/plugin.cfg")
 
 [input]
 

@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://d3p2h60ti42j6"]
 
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
+[ext_resource type="Resource" path="res://assets/resources/character/ochre_courier/profile.tres" id="character_profile_ochre_courier"]
+
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_mnvc5"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_mnfcb"]
-[ext_resource type="Resource" uid="uid://cn36k0r1eqduq" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="3_73i30"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="4_jtn6w"]
+[ext_resource type="Resource" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="3_73i30"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="4_jtn6w"]
 [ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="5_s01iw"]
 [ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="6_6c8ne"]
 [ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="7_chvdp"]
@@ -13,6 +16,10 @@
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="11_u0gv3"]
 [ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="12_166pd"]
 [ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="13_20pql"]
+
+[sub_resource type="Resource" id="character_data_ochre_courier"]
+script = ExtResource("character_data_script")
+Profile = ExtResource("character_profile_ochre_courier")
 
 [sub_resource type="Resource" id="ochre_courier_agent"]
 script = ExtResource("5_s01iw")
@@ -47,7 +54,7 @@ size = Vector3(0.4, 0.72, 0.4)
 editor_description = "ochre_courier：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
 script = ExtResource("1_mnvc5")
 PersistentId = "town_courier_01"
-Components = Array[ExtResource("2_mnfcb")]([SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+Components = Array[ExtResource("2_mnfcb")]([SubResource("character_data_ochre_courier"), SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=552428506]
 

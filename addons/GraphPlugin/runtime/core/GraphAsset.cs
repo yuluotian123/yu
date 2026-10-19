@@ -52,6 +52,7 @@ public partial class GraphAsset : Resource
     public virtual GraphActionDependencyMode DefaultActionDependencyMode => GraphActionDependencyMode.HostBound;
     public virtual Type ComponentProviderType => null;
 #if TOOLS
+    public virtual void BindEditorHost(Node host) { }
     public virtual void PrepareForEditing() { }
     public virtual bool HasCustomPropertyEditors(GodotObject target) => false;
     public virtual string GetResourceEditorTitle(Resource resource)=>string.IsNullOrEmpty(resource.ResourceName)?resource.GetClass().ToString():resource.ResourceName;

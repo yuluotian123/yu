@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://jcbmfduqeu6j"]
 
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
+[ext_resource type="Resource" path="res://assets/resources/character/player/profile.tres" id="character_profile_player"]
+
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_gobj"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_0hrit"]
 [ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/input/PlayerCharacterInputComponent3D.cs" id="3_player_input"]
@@ -18,6 +21,10 @@
 [ext_resource type="Resource" uid="uid://cfq0gesvgyy03" path="res://assets/resources/weapons/katana.tres" id="29_katana"]
 [ext_resource type="Script" uid="uid://ccvmabg8cuile" path="res://scripts/gamelogic/weapons/WeaponDefinition.cs" id="30_weapon_definition"]
 [ext_resource type="Script" uid="uid://c1dg3d15qhc1s" path="res://scripts/gamelogic/inventory/InventoryComponent3D.cs" id="31_inventory"]
+
+[sub_resource type="Resource" id="character_data_player"]
+script = ExtResource("character_data_script")
+Profile = ExtResource("character_profile_player")
 
 [sub_resource type="Resource" id="sub_player_input"]
 script = ExtResource("3_player_input")
@@ -74,7 +81,7 @@ size = Vector3(0.468, 0.936, 0.468)
 [node name="Player" type="Node3D" unique_id=587364041]
 script = ExtResource("1_gobj")
 PersistentId = "player"
-Components = Array[ExtResource("2_0hrit")]([SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=817041810]
 

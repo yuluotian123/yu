@@ -1,3 +1,4 @@
+using GameLogic;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -41,10 +42,10 @@ public partial class NpcFrameworkAuthoring
         move.DisplayName="前往散步地点";
         NpcBindingDefinition Input()=>new NpcActionInputDefinition{Name="地点",Adapter="point",Source=NpcBindingSource.PlanVariable,Variable="散步地点",ResourceRequirements=new[]{"capacity"}};
         move.Inputs=new(){Input()};move.Resources.Clear();move.SuccessConditions=Fact("input.地点.at");
-        move.DurationSeconds=0;move.TimeoutSeconds=60;move.Cost=Expr(NpcExpressionKind.Add,Lit(1),Expr(NpcExpressionKind.Multiply,Fact("input.地点.distance"),Lit(.2)));move.Preconditions=Fact("input.地点.open");move.ExecutionGraph=Flow(new NpcMoveToTargetAction());move.Predictions=new(){new(){Key="self.location",Value=Fact("input.地点.id")}};move.Results.Clear();
+        move.DurationSeconds=0;move.TimeoutSeconds=60;move.Cost=Expr(CharacterExpressionKind.Add,Lit(1),Expr(CharacterExpressionKind.Multiply,Fact("input.地点.distance"),Lit(.2)));move.Preconditions=Fact("input.地点.open");move.ExecutionGraph=Flow(new NpcMoveToTargetAction());move.Predictions=new(){new(){Key="self.location",Value=Fact("input.地点.id")}};move.Results.Clear();
         Node(move,new NpcActionNodeData{Id="activity_move"},0,goalNode.Position+new Vector2(780,0));
         stroll.DisplayName="散步";stroll.Inputs=new(){Input()};stroll.Resources.Clear();stroll.SuccessConditions=null;
-        stroll.DurationSeconds=8;stroll.TimeoutSeconds=20;stroll.Cost=Lit(1);stroll.Preconditions=Expr(NpcExpressionKind.All,Fact("input.地点.open"),Fact("input.地点.at"));
+        stroll.DurationSeconds=8;stroll.TimeoutSeconds=20;stroll.Cost=Lit(1);stroll.Preconditions=Expr(CharacterExpressionKind.All,Fact("input.地点.open"),Fact("input.地点.at"));
         stroll.ExecutionGraph=Flow(new NpcRoamAction{Radius=.6});
         stroll.Predictions=new(){Set("needs.fun.value",.15),new(){Key="private.completed_visits",Mode=NpcEffectMode.Add,Value=Lit(1)}};
         stroll.Results=new(stroll.Predictions);
@@ -57,10 +58,10 @@ public partial class NpcFrameworkAuthoring
         Node(inPlace,new NpcActionNodeData{Id="activity_in_place"},0,goalNode.Position+new Vector2(780,440));
         var dry=(NpcPlanTemplateDefinition)graph.Resolve("gray_green_resident.template.activity");
         dry.Variables=new(){new(){Name="散步地点",Adapter="point",Source=NpcBindingSource.Selector,SelectorId=selector.DefinitionId}};
-        dry.DisplayName="无雨 · 镇上或湖边散步";dry.Priority=0;dry.Eligibility=Expr(NpcExpressionKind.AtMost,Fact("world.rain"),Lit(.05));dry.ActionIds=new[]{move.DefinitionId,stroll.DefinitionId};
+        dry.DisplayName="无雨 · 镇上或湖边散步";dry.Priority=0;dry.Eligibility=Expr(CharacterExpressionKind.AtMost,Fact("world.rain"),Lit(.05));dry.ActionIds=new[]{move.DefinitionId,stroll.DefinitionId};
         graph.Nodes.OfType<NpcTemplateNodeData>().Single(n=>n.DefinitionId==dry.DefinitionId).Position=goalNode.Position+new Vector2(390,0);
         var rain=Definition("gray_green_resident.plan.stroll_in_place",()=>new NpcPlanTemplateDefinition());
-        rain.DisplayName="下雨 · 原地散步";rain.Priority=10;rain.Eligibility=Expr(NpcExpressionKind.Greater,Fact("world.rain"),Lit(.05));rain.ActionIds=new[]{inPlace.DefinitionId};
+        rain.DisplayName="下雨 · 原地散步";rain.Priority=10;rain.Eligibility=Expr(CharacterExpressionKind.Greater,Fact("world.rain"),Lit(.05));rain.ActionIds=new[]{inPlace.DefinitionId};
         Node(rain,new NpcTemplateNodeData{Id="activity_rain_plan"},1,goalNode.Position+new Vector2(390,260));
         graph.SaveJsonFields();NpcProgram.Compile(graph);
     }

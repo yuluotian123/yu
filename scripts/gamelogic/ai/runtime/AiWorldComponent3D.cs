@@ -8,7 +8,7 @@ using Godot;
 namespace GameLogic.AI;
 
 [GlobalClass]
-public partial class AiWorldComponent3D : Component3D, ISaveSection
+public partial class AiWorldComponent3D : Component3D, ISaveSection, ICharacterEnvironment
 {
     public const string Group="npc_ai_world";
     public override int Priority=>ComponentPriority.AI+50;
@@ -24,6 +24,13 @@ public partial class AiWorldComponent3D : Component3D, ISaveSection
     public float? RainOverride {get;set;}
     public readonly Dictionary<string,AiAgentComponent3D> Actors=new(StringComparer.Ordinal);
     public readonly Dictionary<string,AiInteractionPointComponent3D> Points=new(StringComparer.Ordinal);
+    public double TotalHours=>Clock.TotalHours;
+    public double Rain=>RainAmount;
+    public string LocationAt(Vector3 position,string previous)
+    {
+        var old=Points.GetValueOrDefault(previous);
+        return (old?.ContainsPosition(position)==true?old:Points.Values.Where(p=>p.IsActive&&p.ContainsPosition(position)).OrderBy(p=>position.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal).FirstOrDefault())?.PointId??"";
+    }
     private int _cursor;
     private ISaveModule _save;
     private JsonObject _restoredPoints=new();
@@ -32,6 +39,7 @@ public partial class AiWorldComponent3D : Component3D, ISaveSection
         if(Owner.GetTree().GetFirstNodeInGroup(Group)!=null)throw new InvalidOperationException("Only one NPC AI world is allowed per scene.");
         Clock=ModuleSystem.GetModule<ITimeOfDayModule>().Clock;
         Owner.AddToGroup(Group);Owner.SetMeta(Group,this);
+        Owner.AddToGroup(CharacterDataComponent3D.EnvironmentGroup);Owner.SetMeta(CharacterDataComponent3D.EnvironmentGroup,this);
         _save=ModuleSystem.GetModule<ISaveModule>();if(Persist)_save.RegisterSection(this);
     }
     public override void OnUpdate(double delta)
@@ -64,5 +72,5 @@ public partial class AiWorldComponent3D : Component3D, ISaveSection
         foreach(var a in Actors.Values)a.CancelPlan("WorldRestored");
         _restoredPoints=(JsonObject)points.DeepClone();foreach(var p in Points.Values)if(points[p.PointId] is JsonObject state)p.Restore(state);
     }
-    public override void OnDestroy(){foreach(var a in Actors.Values.ToArray())a.CancelPlan("WorldDestroyed");Actors.Clear();Points.Clear();if(Persist)_save?.UnregisterSection(this);Owner.RemoveFromGroup(Group);}
+    public override void OnDestroy(){foreach(var a in Actors.Values.ToArray())a.CancelPlan("WorldDestroyed");Actors.Clear();Points.Clear();if(Persist)_save?.UnregisterSection(this);Owner.RemoveFromGroup(Group);Owner.RemoveFromGroup(CharacterDataComponent3D.EnvironmentGroup);Owner.RemoveMeta(CharacterDataComponent3D.EnvironmentGroup);}
 }

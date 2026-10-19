@@ -8,6 +8,9 @@ $ErrorActionPreference = 'Stop'
 $npcProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../../..')).Path
 $npcOutput = Join-Path $npcProjectRoot '.godot/npc'
 New-Item -ItemType Directory -Path $npcOutput -Force | Out-Null
+foreach ($folder in @('appdata', 'action_inputs', 'input_resources')) {
+    New-Item -ItemType Directory -Path (Join-Path $npcOutput $folder) -Force | Out-Null
+}
 if (-not (Test-Path -LiteralPath $EnginePath)) { throw "Godot executable not found: $EnginePath" }
 $priorAppData = $env:APPDATA
 $priorWorkloadResolver = $env:MSBuildEnableWorkloadResolver

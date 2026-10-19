@@ -25,9 +25,9 @@ public static class NpcTargetQuery
         {
             var context=program.TargetContext(state,p.Id,p.Distance,selector.Adapter);
             var score=selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore
-                ?selector.Score?.Evaluate(k=>program.Read(context,k),program.Parameter)??default:NpcValue.Numeric(p.Distance);
+                ?selector.Score?.Evaluate(k=>program.Read(context,k),program.Parameter)??default:CharacterValue.Numeric(p.Distance);
             return(Point:p,Score:score);
-        }).Where(p=>p.Score.Type==NpcValueType.Number);
+        }).Where(p=>p.Score.Type==CharacterValueType.Number);
         candidates=selector.Selection==NpcTargetSelection.HighestScore
             ?candidates.OrderByDescending(p=>p.Score.Number).ThenBy(p=>p.Point.Id,StringComparer.Ordinal)
             :selector.Selection==NpcTargetSelection.LowestScore
@@ -56,8 +56,8 @@ public static class NpcTargetQuery
         {
             NpcBindingSpec Source(NpcBindingSpec input)=>input.Source==NpcBindingSource.PlanVariable?plan.Bindings.First(v=>v.Name==input.Variable):input;
             var slots=action.Inputs.Where(i=>Source(i).Source==NpcBindingSource.Selector).ToArray();
-            var values=new Dictionary<string,NpcValue>(StringComparer.Ordinal);
-            var variables=new Dictionary<string,NpcValue>(StringComparer.Ordinal);
+            var values=new Dictionary<string,CharacterValue>(StringComparer.Ordinal);
+            var variables=new Dictionary<string,CharacterValue>(StringComparer.Ordinal);
             void Expand(int index)
             {
                 if(index<slots.Length)
@@ -66,7 +66,7 @@ public static class NpcTargetQuery
                     if(!candidates.TryGetValue(source.SelectorId,out var choices))candidates[source.SelectorId]=choices=Select(program,program.TargetSelectors[source.SelectorId],initial,points);
                     foreach(var point in choices)
                     {
-                        var value=NpcValue.Text(point.Id);
+                        var value=CharacterValue.Text(point.Id);
                         if(input.Source==NpcBindingSource.PlanVariable&&variables.TryGetValue(input.Variable,out var previous)&&previous!=value)continue;
                         bool added=input.Source==NpcBindingSource.PlanVariable&&variables.TryAdd(input.Variable,value);
                         values[input.Name]=value;Expand(index+1);values.Remove(input.Name);
@@ -75,8 +75,8 @@ public static class NpcTargetQuery
                     return;
                 }
                 if(result.Count>=program.Policy.Expanded)throw new InvalidOperationException("GroundingLimitReached: 请缩小选择器候选或提高搜索预算。");
-                var bound=new NpcBoundAction(action,plan,new System.Collections.ObjectModel.ReadOnlyDictionary<string,NpcValue>(new Dictionary<string,NpcValue>(values)),null);
-                double? Distance(GoapWorldState state,string name,NpcValue value)
+                var bound=new NpcBoundAction(action,plan,new System.Collections.ObjectModel.ReadOnlyDictionary<string,CharacterValue>(new Dictionary<string,CharacterValue>(values)),null);
+                double? Distance(GoapWorldState state,string name,CharacterValue value)
                 {
                     string adapter=action.Inputs.First(i=>i.Name==name).Adapter;
                     string from=program.Read(state,"self.location").Symbol;if(from==value.Symbol)return 0;
@@ -86,8 +86,8 @@ public static class NpcTargetQuery
                 double Cost(GoapWorldState state)
                 {
                     var context=program.Contextual(state,bound,(name,value)=>Distance(state,name,value));if(context==null)return double.PositiveInfinity;
-                    var cost=action.Cost?.Evaluate(k=>program.Read(context,k),program.Parameter)??NpcValue.Numeric(1);
-                    return cost.Type==NpcValueType.Number&&cost.Number>=0?cost.Number:double.PositiveInfinity;
+                    var cost=action.Cost?.Evaluate(k=>program.Read(context,k),program.Parameter)??CharacterValue.Numeric(1);
+                    return cost.Type==CharacterValueType.Number&&cost.Number>=0?cost.Number:double.PositiveInfinity;
                 }
                 string key=plan.Id+"::"+action.Id+"@"+string.Join("+",slots.Select(i=>Uri.EscapeDataString(values[i.Name].ToString())));
                 var search=new GoapAction(key,"",0,s=>program.Predict(s,bound,(name,value)=>Distance(s,name,value)),Cost);

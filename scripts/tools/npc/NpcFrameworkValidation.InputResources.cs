@@ -1,3 +1,4 @@
+using GameLogic;
 using System;
 using System.Linq;
 using GameLogic.AI;
@@ -7,7 +8,7 @@ public partial class NpcFrameworkValidation
 {
     void ValidateInputResourceRequirements(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);NpcProgram.Compile(graph);
+        var graph=source.CloneForCharacter();NpcProgram.Compile(graph);
         var action=graph.Definitions.OfType<NpcActionDefinition>().First(a=>a.Inputs.Count>0);
         var input=(NpcActionInputDefinition)action.Inputs[0];
         Check(action.Resources.Count==0&&input.ResourceRequirements.SequenceEqual(new[]{"capacity"}),"Existing action resources were not moved into their input");
@@ -24,9 +25,9 @@ public partial class NpcFrameworkValidation
         Check(!graph.MigrateActionBindings(),"Moving resource requirements is not idempotent");
         var duplicate=(NpcActionInputDefinition)input.DuplicateDeep(Resource.DeepDuplicateMode.All);duplicate.ResourceRequirements=Array.Empty<string>();
         Check(input.ResourceRequirements.Length==1,"Copied input changed the original requirements");
-        input.ValueType=NpcValueType.Number;Check(!Editable(input,nameof(input.ResourceRequirements)),"Numeric input exposes resource requirements");
-        input.ValueType=NpcValueType.Boolean;Check(!Editable(input,nameof(input.ResourceRequirements)),"Boolean input exposes resource requirements");
-        input.ValueType=NpcValueType.Symbol;input.Adapter="";Check(!Editable(input,nameof(input.ResourceRequirements)),"Plain text input exposes resource requirements");input.Adapter="point";
+        input.ValueType=CharacterValueType.Number;Check(!Editable(input,nameof(input.ResourceRequirements)),"Numeric input exposes resource requirements");
+        input.ValueType=CharacterValueType.Boolean;Check(!Editable(input,nameof(input.ResourceRequirements)),"Boolean input exposes resource requirements");
+        input.ValueType=CharacterValueType.Symbol;input.Adapter="";Check(!Editable(input,nameof(input.ResourceRequirements)),"Plain text input exposes resource requirements");input.Adapter="point";
 #if TOOLS
         Check(graph.CreateCustomPropertyEditor(action,nameof(action.Resources))==null,"The legacy top-level resource editor is still registered");
         var editor=graph.CreateCustomPropertyEditor(input,nameof(input.ResourceRequirements));AddChild(editor);editor._UpdateProperty();
@@ -48,7 +49,7 @@ public partial class NpcFrameworkValidation
         Check(rejected&&input.ResourceRequirements.Contains("removed_capability"),"Invalid requirement was accepted or silently discarded");input.ResourceRequirements=new[]{"capacity"};
         graph.SaveJsonFields();string path="res://.godot/npc/input_resources/roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Could not save input resource requirements");
-        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
         var restored=(NpcActionDefinition)loaded.Resolve(action.DefinitionId);
         Check(restored.Resources.Count==0&&restored.Inputs[0] is NpcActionInputDefinition saved&&saved.ResourceRequirements.SequenceEqual(new[]{"capacity"}),"Input requirements were lost or moved back to the action after reload");
         Check(NpcProgram.Compile(loaded).Goals.SelectMany(g=>g.Actions).First(a=>a.Id==action.DefinitionId).Resources.Single().Input==input.Name,"Reloaded input requirements do not drive runtime resource leases");

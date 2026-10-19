@@ -1,5 +1,9 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
+[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
+[ext_resource type="Resource" path="res://assets/resources/character/ochre_courier/profile.tres" id="character_profile_ochre_courier"]
+
 [ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="5_host"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="6_component"]
@@ -11,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cmhkh18tb7up7" path="res://assets/scenes/town/riverside_town.tscn" id="17_1ukst"]
 [ext_resource type="Resource" uid="uid://cfyh6r7i8r6f8" path="res://assets/resources/rendering/relink_post/profile.tres" id="17_qk2pt"]
 [ext_resource type="Script" uid="uid://xop3p8flwjrs" path="res://scripts/gamelogic/rendering/RelinkPostProcessEffect.cs" id="18_513md"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="27_m0j7p"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="27_m0j7p"]
 [ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/resources/environment/clouds/high_timeline.tres" id="cloud_high_timeline"]
 [ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/resources/environment/clouds/rotation_timeline.tres" id="cloud_rotation_timeline"]
 [ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/resources/environment/clouds/secondary_timeline.tres" id="cloud_secondary_timeline"]
@@ -19,7 +23,7 @@
 [ext_resource type="Resource" uid="uid://dlhdeul3gxk77" path="res://assets/resources/rendering/ddgi/spacelevel.tres" id="ddgi_profile"]
 [ext_resource type="Environment" uid="uid://bav0756llhclb" path="res://assets/resources/environment/relink_environment.tres" id="environment"]
 [ext_resource type="CameraAttributesPhysical" uid="uid://bonkel6lyv08n" path="res://assets/resources/environment/day_night_camera_attributes.tres" id="exposure"]
-[ext_resource type="Resource" uid="uid://ehwq45go0dgg" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="gray_green_resident_npc_graph"]
+[ext_resource type="Resource" uid="uid://dxkkt6bnrusiu" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="gray_green_resident_npc_graph"]
 [ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="gray_green_resident_sprite_frames"]
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="npc_abilities"]
 [ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="npc_agent"]
@@ -30,7 +34,7 @@
 [ext_resource type="Script" uid="uid://pk5ksygkbvbu" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="npc_movement"]
 [ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="npc_move_profile"]
 [ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="npc_navigation"]
-[ext_resource type="Resource" uid="uid://cn36k0r1eqduq" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="ochre_courier_npc_graph"]
+[ext_resource type="Resource" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="ochre_courier_npc_graph"]
 [ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="ochre_courier_sprite_frames"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
 [ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/resources/environment/clouds/base_timeline.tres" id="original_cloud_timeline"]
@@ -38,6 +42,14 @@
 [ext_resource type="Script" uid="uid://8lwsqfyrq2lf" path="res://scripts/gamelogic/weather/WeatherComponent3D.cs" id="weather_controller"]
 [ext_resource type="Resource" uid="uid://bcac25hfauhxt" path="res://assets/resources/weather/default_weather.tres" id="weather_profile"]
 [ext_resource type="Script" uid="uid://cxth0gcfog3yb" path="res://scripts/gamelogic/weather/WeatherSurfaceComponent3D.cs" id="weather_surface_controller"]
+
+[sub_resource type="Resource" id="character_data_gray_green_resident"]
+script = ExtResource("character_data_script")
+Profile = ExtResource("character_profile_gray_green_resident")
+
+[sub_resource type="Resource" id="character_data_ochre_courier"]
+script = ExtResource("character_data_script")
+Profile = ExtResource("character_profile_ochre_courier")
 
 [sub_resource type="Resource" id="environment_profile"]
 script = ExtResource("10_time_profile")
@@ -280,7 +292,7 @@ editor_description = "gray_green_resident：通过 AiAgent.Graph 统一配置人
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5857117, -10.575111, 2.949147)
 script = ExtResource("5_host")
 PersistentId = "town_resident_01"
-Components = Array[ExtResource("6_component")]([SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+Components = Array[ExtResource("6_component")]([SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="Resident" unique_id=1888120704]
 
@@ -313,7 +325,7 @@ editor_description = "ochre_courier：通过 AiAgent.Graph 统一配置人物模
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5857115, -10.575111, 2.549147)
 script = ExtResource("5_host")
 PersistentId = "town_courier_01"
-Components = Array[ExtResource("6_component")]([SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+Components = Array[ExtResource("6_component")]([SubResource("character_data_ochre_courier"), SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="Courier" unique_id=1856785106]
 

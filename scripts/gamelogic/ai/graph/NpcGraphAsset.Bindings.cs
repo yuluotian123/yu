@@ -25,8 +25,8 @@ public partial class NpcGraphAsset
                 if(plans.Length>0){input.Source=NpcBindingSource.PlanVariable;input.Variable=variableName;input.SelectorId="";}
             }
             action.Inputs.Add(input);
-            var visited=new HashSet<NpcExpressionDefinition>();
-            void Rewrite(NpcExpressionDefinition expression)
+            var visited=new HashSet<CharacterExpressionDefinition>();
+            void Rewrite(CharacterExpressionDefinition expression)
             {
                 if(expression==null||!visited.Add(expression))return;
                 if(expression.Key.StartsWith("target.",StringComparison.Ordinal))expression.Key="input.地点."+expression.Key[7..];
@@ -37,8 +37,8 @@ public partial class NpcGraphAsset
             {
                 if(effect.Key.StartsWith("target.",StringComparison.Ordinal))effect.Key="input.地点."+effect.Key[7..];Rewrite(effect.Value);
             }
-            static NpcExpressionDefinition Fact(string key)=>new(){Kind=NpcExpressionKind.Fact,Key=key};
-            static NpcExpressionDefinition All(NpcExpressionDefinition a,NpcExpressionDefinition b)=>a==null?b:new(){Kind=NpcExpressionKind.All,Inputs=new(){a,b}};
+            static CharacterExpressionDefinition Fact(string key)=>new(){Kind=CharacterExpressionKind.Fact,Key=key};
+            static CharacterExpressionDefinition All(CharacterExpressionDefinition a,CharacterExpressionDefinition b)=>a==null?b:new(){Kind=CharacterExpressionKind.All,Inputs=new(){a,b}};
             if(action.RequireAtTarget)action.Preconditions=All(action.Preconditions,Fact("input.地点.at"));
             if(action.ArrivesAtTarget)
             {
@@ -46,8 +46,8 @@ public partial class NpcGraphAsset
                 action.SuccessConditions=All(action.SuccessConditions,Fact("input.地点.at"));
             }
             if(action.ReserveTarget)input.ResourceRequirements=new[]{"capacity"};
-            if(action.DistanceCost>0)action.Cost=new(){Kind=NpcExpressionKind.Add,Inputs=new(){action.Cost??new(){Number=1},
-                new(){Kind=NpcExpressionKind.Multiply,Inputs=new(){Fact("input.地点.distance"),new(){Number=action.DistanceCost}}}}};
+            if(action.DistanceCost>0)action.Cost=new(){Kind=CharacterExpressionKind.Add,Inputs=new(){action.Cost??new(){Number=1},
+                new(){Kind=CharacterExpressionKind.Multiply,Inputs=new(){Fact("input.地点.distance"),new(){Number=action.DistanceCost}}}}};
             action.TargetSelectorId="";action.ShareTargetWithinPlan=false;action.RequireAtTarget=false;action.ArrivesAtTarget=false;action.ReserveTarget=false;action.DistanceCost=0;action.BindingVersion=2;changed=true;
         }
         foreach(var action in Definitions.OfType<NpcActionDefinition>())

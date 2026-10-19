@@ -90,7 +90,7 @@ public partial class NpcBindingsProperty : EditorProperty
         {
             string name="参数";int n=1;while(Items().OfType<NpcBindingDefinition>().Any(b=>b.Name==name))name="参数"+n++;
             NpcBindingDefinition resource=_owner is NpcActionDefinition?new NpcActionInputDefinition():new NpcBindingDefinition();
-            resource.Name=name;resource.Value=new(){ValueType=NpcValueType.Symbol};
+            resource.Name=name;resource.Value=new(){ValueType=CharacterValueType.Symbol};
             Commit(Items().Append(resource).ToArray());
         };_body.AddChild(add);
         _body.AddChild(new Label{Text="点击条目编辑；参数引用从当前已注册项中选择。",AutowrapMode=TextServer.AutowrapMode.WordSmart});

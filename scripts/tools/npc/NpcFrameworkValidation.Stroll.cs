@@ -29,8 +29,8 @@ public partial class NpcFrameworkValidation
         NpcPlanSearch Search(double rain,string location="outside",IReadOnlyList<NpcTargetCandidate> candidates=null)
         {
             var state=new GoapWorldState(program.Facts.Values.Select(f=>new KeyValuePair<string,GoapValue>(f.Key,program.Encode(f.Key,f.Initial))))
-                .With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",NpcValue.Numeric(.8))),GoapEffect.Set("world.rain",program.Encode("world.rain",NpcValue.Numeric(rain))),GoapEffect.Set("self.location",GoapValue.Id(location)));
-            foreach(var point in points)state=state.With(GoapEffect.Set("point."+point.Id+".available",GoapValue.Bool(true)),GoapEffect.Set("point."+point.Id+".open",GoapValue.Bool(true)),GoapEffect.Set("point."+point.Id+".stock",program.Encode("target.stock",NpcValue.Numeric(10000))));
+                .With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",CharacterValue.Numeric(.8))),GoapEffect.Set("world.rain",program.Encode("world.rain",CharacterValue.Numeric(rain))),GoapEffect.Set("self.location",GoapValue.Id(location)));
+            foreach(var point in points)state=state.With(GoapEffect.Set("point."+point.Id+".available",GoapValue.Bool(true)),GoapEffect.Set("point."+point.Id+".open",GoapValue.Bool(true)),GoapEffect.Set("point."+point.Id+".stock",program.Encode("target.stock",CharacterValue.Numeric(10000))));
             var grounded=NpcTargetQuery.Ground(program,goal,state,candidates??points);
             var search=new NpcPlanSearch(program,goal,state,grounded.Select(a=>new KeyValuePair<string,GoapAction>(a.PlanActionKey,a.Search)));
             for(int i=0;i<4096&&search.Status==GoapSearchStatus.Pending;i++)search.Advance(1);

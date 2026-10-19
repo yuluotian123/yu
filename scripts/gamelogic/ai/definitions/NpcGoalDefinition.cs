@@ -4,8 +4,8 @@ namespace GameLogic.AI;
 [Tool, GlobalClass]
 public partial class NpcGoalDefinition : NpcDefinitionResource
 {
-    [Export] public NpcExpressionDefinition Activation { get; set; }
-    [Export] public NpcExpressionDefinition Utility { get; set; }
-    [Export] public NpcExpressionDefinition Completion { get; set; }
+    [Export] public CharacterExpressionDefinition Activation { get; set; }
+    [Export] public CharacterExpressionDefinition Utility { get; set; }
+    [Export] public CharacterExpressionDefinition Completion { get; set; }
     public override string Category => "目标";
 }

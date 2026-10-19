@@ -15,9 +15,9 @@ public partial class NpcActionDefinition : NpcDefinitionResource
     [Export] public int BindingVersion { get; set; } = 2;
     [Export] public Godot.Collections.Array<NpcBindingDefinition> Inputs { get; set; } = new();
     [Export] public Godot.Collections.Array<NpcResourceClaimDefinition> Resources { get; set; } = new();
-    [Export] public NpcExpressionDefinition Preconditions { get; set; }
-    [Export] public NpcExpressionDefinition SuccessConditions { get; set; }
-    [Export] public NpcExpressionDefinition Cost { get; set; }
+    [Export] public CharacterExpressionDefinition Preconditions { get; set; }
+    [Export] public CharacterExpressionDefinition SuccessConditions { get; set; }
+    [Export] public CharacterExpressionDefinition Cost { get; set; }
     [Export] public double DurationSeconds { get; set; } = 2;
     [Export] public double TimeoutSeconds { get; set; } = 30;
     [Export] public double DistanceCost { get; set; } = .2;

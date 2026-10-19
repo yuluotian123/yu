@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://cjn2miybyq1w7"]
 
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
+[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
+
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_cp75n"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_qx57b"]
-[ext_resource type="Resource" uid="uid://tgkcwmko6mwr" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="3_i7in3"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="4_qtaxp"]
+[ext_resource type="Resource" uid="uid://dxkkt6bnrusiu" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="3_i7in3"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="4_qtaxp"]
 [ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="5_0m851"]
 [ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="6_33efu"]
 [ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="7_5ig8p"]
@@ -13,6 +16,10 @@
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="11_5mwig"]
 [ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="12_y5ccx"]
 [ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="13_w04po"]
+
+[sub_resource type="Resource" id="character_data_gray_green_resident"]
+script = ExtResource("character_data_script")
+Profile = ExtResource("character_profile_gray_green_resident")
 
 [sub_resource type="Resource" id="gray_green_resident_agent"]
 script = ExtResource("5_0m851")
@@ -47,7 +54,7 @@ size = Vector3(0.4, 0.72, 0.4)
 editor_description = "gray_green_resident：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
 script = ExtResource("1_cp75n")
 PersistentId = "town_resident_01"
-Components = Array[ExtResource("2_qx57b")]([SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+Components = Array[ExtResource("2_qx57b")]([SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=1870513450]
 

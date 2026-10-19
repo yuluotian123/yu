@@ -9,13 +9,10 @@ namespace GameLogic.AI;
 public class NpcRootNodeData : GraphNodeData
 {
     public override List<string> GetGraphTypes() => new() { "NPC" };
-    public override string GetDisplayName() => "NPC · 人物";
+    public override string GetDisplayName() => "AI · 决策";
     public override string GetDisplayName(GraphAsset graph)
     {
-        if(graph is NpcGraphAsset npc)
-            foreach(var edge in graph.GetOutgoingConnections(Id,0))
-                if(graph.FindNodeById(edge.ToNode) is NpcIdentityNodeData node && npc.Resolve(node.DefinitionId) is NpcIdentityDefinition identity && !string.IsNullOrWhiteSpace(identity.DisplayName))
-                    return "NPC · "+identity.DisplayName;
+        if(graph is NpcGraphAsset {CharacterContext.Identity.DisplayName.Length:>0} npc)return "AI · "+npc.CharacterContext.Identity.DisplayName;
         return GetDisplayName();
     }
     public override string GetCategory() => "NPC";
@@ -23,7 +20,7 @@ public class NpcRootNodeData : GraphNodeData
     public override string GetOutputPortName(int port) => port switch {0=>"模块",1=>"目标",_=>"目标选择器"};
     public override Color GetNodeColor() => new(.3f,.7f,.65f);
     public override GodotObject GetInspectorObject(GraphAsset graph) => graph;
-    public override void CreateNodeUI(GraphEditorContext context) => context.GraphNode.AddChild(new Label { Text="人物模块与行为目标装配",CustomMinimumSize=new(190,28) });
+    public override void CreateNodeUI(GraphEditorContext context) => context.GraphNode.AddChild(new Label { Text="决策规则、目标与计划",CustomMinimumSize=new(190,28) });
     public override void Validate(GraphAsset graph, GraphValidationResult result)
     {
         try { NpcProgram.Compile((NpcGraphAsset)graph); }
@@ -69,16 +66,11 @@ public abstract class NpcDefinitionNodeData : GraphNodeData
         context.GraphNode.AddChild(box);
     }
 }
-public class NpcIdentityNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcIdentityDefinition); public override string GetDisplayName()=>"身份与表现"; }
-public class NpcPersonalityNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcPersonalityDefinition); public override string GetDisplayName()=>"性格"; }
-public class NpcNeedsNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcNeedsDefinition); public override string GetDisplayName()=>"需求"; }
+public class NpcNeedPolicyNodeData : NpcDefinitionNodeData { public override Type DefinitionType=>typeof(NpcNeedPolicyDefinition); public override string GetDisplayName()=>"需求决策规则"; }
 public class NpcScheduleNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcScheduleDefinition); public override string GetDisplayName()=>"日程"; }
 public class NpcPerceptionNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcPerceptionDefinition); public override string GetDisplayName()=>"感知"; }
-public class NpcRelationsNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcRelationsDefinition); public override string GetDisplayName()=>"关系"; }
 public class NpcMemoryNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcMemoryDefinition); public override string GetDisplayName()=>"记忆"; }
-public class NpcAffectNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcAffectDefinition); public override string GetDisplayName()=>"情绪"; }
 public class NpcPolicyNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcPolicyDefinition); public override string GetDisplayName()=>"决策预算"; }
-public class NpcFactsNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcFactSchema); public override string GetDisplayName()=>"私有事实"; }
 public class NpcGoalNodeData : NpcDefinitionNodeData
 {
     public override Type DefinitionType=>typeof(NpcGoalDefinition);

@@ -1,97 +1,38 @@
 [gd_resource type="Resource" script_class="NpcGraphAsset" format=3]
 
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_ipnni"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="2_syaq0"]
-[ext_resource type="SpriteFrames" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="3_e4i8x"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcIdentityDefinition.cs" id="4_oc8bl"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPersonalityDefinition.cs" id="5_2vkhr"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="6_nw4yy"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="7_iud0f"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScheduleWindow.cs" id="8_5qajp"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScheduleDefinition.cs" id="9_2gnct"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="10_d2s6o"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcRelationsDefinition.cs" id="11_2at74"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="12_quajp"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcAffectDefinition.cs" id="13_n3y3y"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="14_k0gex"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcFactDefinition.cs" id="15_qdsoh"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcFactSchema.cs" id="16_q711o"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcExpressionDefinition.cs" id="17_j75hg"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterExpressionDefinition.cs" id="17_j75hg"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="18_6o4up"]
+
 [ext_resource type="Script" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="19_qumhv"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="20_ek2he"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcBindingDefinition.cs" id="20_oc8bl"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionInputDefinition.cs" id="21_2vkhr"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="21_pun7h"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcResourceClaimDefinition.cs" id="22_2vkhr"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="22_xvh6h"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="23_0ftur"]
+
 [ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="23_syaq0"]
 
-[sub_resource type="Resource" id="Resource_l662n"]
-script = ExtResource("2_syaq0")
-Key = "home"
-ValueType = 3
-Symbol = "courier_rest"
-
-[sub_resource type="Resource" id="Resource_u6k8a"]
-script = ExtResource("4_oc8bl")
-Tags = PackedStringArray("courier")
-SpriteFrames = ExtResource("3_e4i8x")
-Parameters = Array[ExtResource("2_syaq0")]([SubResource("Resource_l662n")])
-DefinitionId = "ochre_courier.NpcIdentityNodeData"
-DisplayName = "赭衣跑腿员"
-
-[sub_resource type="Resource" id="Resource_pgcuj"]
-script = ExtResource("2_syaq0")
-Key = "sociability"
-Number = 0.75
-
-[sub_resource type="Resource" id="Resource_i155s"]
-script = ExtResource("2_syaq0")
-Key = "caution"
-Number = 0.65
-
-[sub_resource type="Resource" id="Resource_rr1ws"]
-script = ExtResource("2_syaq0")
-Key = "activity"
-Number = 0.8
-
-[sub_resource type="Resource" id="Resource_kww3k"]
-script = ExtResource("5_2vkhr")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_pgcuj"), SubResource("Resource_i155s")])
-Traits = PackedStringArray("cheerful")
-Preferences = Array[ExtResource("2_syaq0")]([SubResource("Resource_rr1ws")])
-DefinitionId = "ochre_courier.NpcPersonalityNodeData"
-
-[sub_resource type="Resource" id="Resource_syaq0"]
-script = ExtResource("6_nw4yy")
-NeedId = "thirst"
-DisplayName = "口渴"
-ChangePerHour = 0.18
-
-[sub_resource type="Resource" id="Resource_e4i8x"]
-script = ExtResource("6_nw4yy")
-NeedId = "hunger"
-DisplayName = "饥饿"
-ChangePerHour = 0.15
-
-[sub_resource type="Resource" id="Resource_oc8bl"]
-script = ExtResource("6_nw4yy")
-NeedId = "fun"
-DisplayName = "娱乐需求"
-ChangePerHour = 0.08
-
-[sub_resource type="Resource" id="Resource_2vkhr"]
-script = ExtResource("6_nw4yy")
-NeedId = "fatigue"
-DisplayName = "疲劳"
-ChangePerHour = 0.1
-
-[sub_resource type="Resource" id="Resource_buiov"]
-script = ExtResource("7_iud0f")
-Needs = Array[ExtResource("6_nw4yy")]([SubResource("Resource_syaq0"), SubResource("Resource_e4i8x"), SubResource("Resource_oc8bl"), SubResource("Resource_2vkhr")])
-DefinitionId = "ochre_courier.NpcNeedsNodeData"
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedPolicyDefinition.cs" id="need_policy_script"]
 
 [sub_resource type="Resource" id="Resource_cea46"]
 script = ExtResource("8_5qajp")
@@ -118,50 +59,14 @@ ViewRange = 18.0
 KnownPointIds = PackedStringArray("food_shop", "resident_bed", "courier_rest", "courier_delivery_west", "courier_delivery_east", "shelter_west")
 DefinitionId = "ochre_courier.NpcPerceptionNodeData"
 
-[sub_resource type="Resource" id="Resource_trnnu"]
-script = ExtResource("2_syaq0")
-Key = "trust"
-
-[sub_resource type="Resource" id="Resource_up57h"]
-script = ExtResource("2_syaq0")
-Key = "affinity"
-
-[sub_resource type="Resource" id="Resource_5ub16"]
-script = ExtResource("11_2at74")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_trnnu"), SubResource("Resource_up57h")])
-DefinitionId = "ochre_courier.NpcRelationsNodeData"
-
 [sub_resource type="Resource" id="Resource_ms10x"]
 script = ExtResource("12_quajp")
 Categories = PackedStringArray("visited", "conversation", "danger")
 DefinitionId = "ochre_courier.NpcMemoryNodeData"
 
-[sub_resource type="Resource" id="Resource_sr2p3"]
-script = ExtResource("2_syaq0")
-Key = "mood"
-
-[sub_resource type="Resource" id="Resource_454ym"]
-script = ExtResource("13_n3y3y")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_sr2p3")])
-DefinitionId = "ochre_courier.NpcAffectNodeData"
-
 [sub_resource type="Resource" id="Resource_24ujx"]
 script = ExtResource("14_k0gex")
 DefinitionId = "ochre_courier.NpcPolicyNodeData"
-
-[sub_resource type="Resource" id="Resource_ngm8q"]
-script = ExtResource("2_syaq0")
-
-[sub_resource type="Resource" id="Resource_04muu"]
-script = ExtResource("15_qdsoh")
-Key = "private.completed_visits"
-Maximum = 100000.0
-Initial = SubResource("Resource_ngm8q")
-
-[sub_resource type="Resource" id="Resource_hbu3c"]
-script = ExtResource("16_q711o")
-Facts = Array[ExtResource("15_qdsoh")]([SubResource("Resource_04muu")])
-DefinitionId = "ochre_courier.NpcFactsNodeData"
 
 [sub_resource type="Resource" id="Resource_w7352"]
 script = ExtResource("17_j75hg")
@@ -849,7 +754,31 @@ AllTags = PackedStringArray("food")
 DefinitionId = "8d12261b52e640b2ac7678a9fbbd0d8d"
 DisplayName = "补充食物 · 到达并停留2 · 目标"
 
+[sub_resource type="Resource" id="need_policy_thirst"]
+script = ExtResource("need_policy_script")
+NeedId = "thirst"
+DefinitionId = "ochre_courier.need_policy.thirst"
+DisplayName = "口渴 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_hunger"]
+script = ExtResource("need_policy_script")
+NeedId = "hunger"
+DefinitionId = "ochre_courier.need_policy.hunger"
+DisplayName = "饥饿 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_fun"]
+script = ExtResource("need_policy_script")
+NeedId = "fun"
+DefinitionId = "ochre_courier.need_policy.fun"
+DisplayName = "娱乐需求 · 紧迫度"
+
+[sub_resource type="Resource" id="need_policy_fatigue"]
+script = ExtResource("need_policy_script")
+NeedId = "fatigue"
+DefinitionId = "ochre_courier.need_policy.fatigue"
+DisplayName = "疲劳 · 紧迫度"
+
 [resource]
 script = ExtResource("23_0ftur")
-Definitions = Array[ExtResource("1_ipnni")]([SubResource("Resource_u6k8a"), SubResource("Resource_kww3k"), SubResource("Resource_buiov"), SubResource("Resource_gyr80"), SubResource("Resource_c7r2j"), SubResource("Resource_5ub16"), SubResource("Resource_ms10x"), SubResource("Resource_454ym"), SubResource("Resource_24ujx"), SubResource("Resource_hbu3c"), SubResource("Resource_yi78j"), SubResource("Resource_1yqvg"), SubResource("Resource_dyk2u"), SubResource("Resource_hwx7f"), SubResource("Resource_qbqx4"), SubResource("Resource_ouxl4"), SubResource("Resource_mi47v"), SubResource("Resource_u21uk"), SubResource("Resource_3dxht"), SubResource("Resource_ipnni"), SubResource("Resource_nw4yy"), SubResource("Resource_iud0f"), SubResource("Resource_ek2he"), SubResource("Resource_pun7h"), SubResource("Resource_xvh6h"), SubResource("Resource_0ftur"), SubResource("Resource_dyle1")])
-GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":260},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcIdentityNodeData\",\"DefinitionId\":\"ochre_courier.NpcIdentityNodeData\",\"Id\":\"ochre_courier_NpcIdentityNodeData\",\"Position\":{\"x\":1800,\"y\":-380},\"NodeType\":\"NpcIdentityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPersonalityNodeData\",\"DefinitionId\":\"ochre_courier.NpcPersonalityNodeData\",\"Id\":\"ochre_courier_NpcPersonalityNodeData\",\"Position\":{\"x\":1800,\"y\":-140},\"NodeType\":\"NpcPersonalityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedsNodeData\",\"DefinitionId\":\"ochre_courier.NpcNeedsNodeData\",\"Id\":\"ochre_courier_NpcNeedsNodeData\",\"Position\":{\"x\":1800,\"y\":80},\"NodeType\":\"NpcNeedsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcScheduleNodeData\",\"DefinitionId\":\"ochre_courier.NpcScheduleNodeData\",\"Id\":\"ochre_courier_NpcScheduleNodeData\",\"Position\":{\"x\":1800,\"y\":-600},\"NodeType\":\"NpcScheduleNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"ochre_courier.NpcPerceptionNodeData\",\"Id\":\"ochre_courier_NpcPerceptionNodeData\",\"Position\":{\"x\":1800,\"y\":320},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcRelationsNodeData\",\"DefinitionId\":\"ochre_courier.NpcRelationsNodeData\",\"Id\":\"ochre_courier_NpcRelationsNodeData\",\"Position\":{\"x\":1800,\"y\":560},\"NodeType\":\"NpcRelationsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"ochre_courier.NpcMemoryNodeData\",\"Id\":\"ochre_courier_NpcMemoryNodeData\",\"Position\":{\"x\":1800,\"y\":780},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcAffectNodeData\",\"DefinitionId\":\"ochre_courier.NpcAffectNodeData\",\"Id\":\"ochre_courier_NpcAffectNodeData\",\"Position\":{\"x\":1800,\"y\":1020},\"NodeType\":\"NpcAffectNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"ochre_courier.NpcPolicyNodeData\",\"Id\":\"ochre_courier_NpcPolicyNodeData\",\"Position\":{\"x\":1800,\"y\":1260},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcFactsNodeData\",\"DefinitionId\":\"ochre_courier.NpcFactsNodeData\",\"Id\":\"ochre_courier_NpcFactsNodeData\",\"Position\":{\"x\":1800,\"y\":1480},\"NodeType\":\"NpcFactsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.eat\",\"Id\":\"eat\",\"Position\":{\"x\":320,\"y\":2580},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.eat\",\"Id\":\"eat_action\",\"Position\":{\"x\":620,\"y\":2580},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.eat\",\"Id\":\"eat_template\",\"Position\":{\"x\":620,\"y\":2820},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.rest\",\"Id\":\"rest\",\"Position\":{\"x\":320,\"y\":3000},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.rest\",\"Id\":\"rest_action\",\"Position\":{\"x\":620,\"y\":3000},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.rest\",\"Id\":\"rest_template\",\"Position\":{\"x\":620,\"y\":3240},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.activity\",\"Id\":\"activity\",\"Position\":{\"x\":320,\"y\":3440},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.activity\",\"Id\":\"activity_action\",\"Position\":{\"x\":620,\"y\":3440},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.activity\",\"Id\":\"activity_template\",\"Position\":{\"x\":620,\"y\":3680},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"53858956670a4f449c8264c8b23ce570\",\"Id\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"Position\":{\"x\":580,\"y\":1460},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"3818c57837dc4928b323540603228a0b\",\"Id\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"Position\":{\"x\":580,\"y\":1660},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"d85818c63d5d472ea63e8b62988031f0\",\"Id\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"Position\":{\"x\":580,\"y\":1860},\"NodeType\":\"NpcTargetSelectorNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcIdentityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPersonalityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcNeedsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcScheduleNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcRelationsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcAffectNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcFactsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"eat\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":0,\"ToNode\":\"eat_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":1,\"ToNode\":\"eat_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"rest\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":0,\"ToNode\":\"rest_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":1,\"ToNode\":\"rest_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"activity\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-39.595154,\"y\":2095.0364},\"Zoom\":0.88317674}}"
+Definitions = Array[ExtResource("1_ipnni")]([SubResource("Resource_gyr80"), SubResource("Resource_c7r2j"), SubResource("Resource_ms10x"), SubResource("Resource_24ujx"), SubResource("Resource_yi78j"), SubResource("Resource_1yqvg"), SubResource("Resource_dyk2u"), SubResource("Resource_hwx7f"), SubResource("Resource_qbqx4"), SubResource("Resource_ouxl4"), SubResource("Resource_mi47v"), SubResource("Resource_u21uk"), SubResource("Resource_3dxht"), SubResource("Resource_ipnni"), SubResource("Resource_nw4yy"), SubResource("Resource_iud0f"), SubResource("Resource_ek2he"), SubResource("Resource_pun7h"), SubResource("Resource_xvh6h"), SubResource("Resource_0ftur"), SubResource("Resource_dyle1"), SubResource("need_policy_thirst"), SubResource("need_policy_hunger"), SubResource("need_policy_fun"), SubResource("need_policy_fatigue")])
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":260},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcScheduleNodeData\",\"DefinitionId\":\"ochre_courier.NpcScheduleNodeData\",\"Id\":\"ochre_courier_NpcScheduleNodeData\",\"Position\":{\"x\":1800,\"y\":-600},\"NodeType\":\"NpcScheduleNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"ochre_courier.NpcPerceptionNodeData\",\"Id\":\"ochre_courier_NpcPerceptionNodeData\",\"Position\":{\"x\":1800,\"y\":320},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"ochre_courier.NpcMemoryNodeData\",\"Id\":\"ochre_courier_NpcMemoryNodeData\",\"Position\":{\"x\":1800,\"y\":780},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"ochre_courier.NpcPolicyNodeData\",\"Id\":\"ochre_courier_NpcPolicyNodeData\",\"Position\":{\"x\":1800,\"y\":1260},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.eat\",\"Id\":\"eat\",\"Position\":{\"x\":320,\"y\":2580},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.eat\",\"Id\":\"eat_action\",\"Position\":{\"x\":620,\"y\":2580},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.eat\",\"Id\":\"eat_template\",\"Position\":{\"x\":620,\"y\":2820},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.rest\",\"Id\":\"rest\",\"Position\":{\"x\":320,\"y\":3000},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.rest\",\"Id\":\"rest_action\",\"Position\":{\"x\":620,\"y\":3000},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.rest\",\"Id\":\"rest_template\",\"Position\":{\"x\":620,\"y\":3240},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.activity\",\"Id\":\"activity\",\"Position\":{\"x\":320,\"y\":3440},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.activity\",\"Id\":\"activity_action\",\"Position\":{\"x\":620,\"y\":3440},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.activity\",\"Id\":\"activity_template\",\"Position\":{\"x\":620,\"y\":3680},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"53858956670a4f449c8264c8b23ce570\",\"Id\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"Position\":{\"x\":580,\"y\":1460},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"3818c57837dc4928b323540603228a0b\",\"Id\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"Position\":{\"x\":580,\"y\":1660},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"d85818c63d5d472ea63e8b62988031f0\",\"Id\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"Position\":{\"x\":580,\"y\":1860},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"ochre_courier.need_policy.thirst\",\"Id\":\"need_policy_thirst\",\"Position\":{\"x\":320,\"y\":140},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"ochre_courier.need_policy.hunger\",\"Id\":\"need_policy_hunger\",\"Position\":{\"x\":320,\"y\":320},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"ochre_courier.need_policy.fun\",\"Id\":\"need_policy_fun\",\"Position\":{\"x\":320,\"y\":500},\"NodeType\":\"NpcNeedPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedPolicyNodeData\",\"DefinitionId\":\"ochre_courier.need_policy.fatigue\",\"Id\":\"need_policy_fatigue\",\"Position\":{\"x\":320,\"y\":680},\"NodeType\":\"NpcNeedPolicyNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcScheduleNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"eat\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":0,\"ToNode\":\"eat_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":1,\"ToNode\":\"eat_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"rest\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":0,\"ToNode\":\"rest_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":1,\"ToNode\":\"rest_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"activity\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_thirst\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_hunger\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_fun\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"need_policy_fatigue\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-39.595154,\"y\":2095.0364},\"Zoom\":0.88317674}}"

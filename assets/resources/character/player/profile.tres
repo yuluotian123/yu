@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="profile"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="identity"]
+[ext_resource type="Resource" path="res://assets/resources/character/presets/common_needs.tres" id="needs"]
+
+[sub_resource type="Resource" id="player_identity"]
+script = ExtResource("identity")
+DisplayName = "玩家"
+Tags = PackedStringArray("player")
+
+[resource]
+script = ExtResource("profile")
+Identity = SubResource("player_identity")
+Needs = ExtResource("needs")

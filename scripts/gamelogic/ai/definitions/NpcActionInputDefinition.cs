@@ -10,7 +10,7 @@ public partial class NpcActionInputDefinition : NpcBindingDefinition
     {
         base._ValidateProperty(property);
         if(property["name"].AsString()==nameof(ResourceRequirements)&&
-            (ValueType!=NpcValueType.Symbol||NpcBindingAdapters.Find(Adapter)?.Capabilities.Count is not >0))
+            (ValueType!=CharacterValueType.Symbol||NpcBindingAdapters.Find(Adapter)?.Capabilities.Count is not >0))
             property["usage"]=(long)PropertyUsageFlags.Storage;
     }
 }

@@ -279,6 +279,7 @@ public sealed partial class GraphComponentPanel
         }
 
         Node host = GetSelectedHost();
+        _getBindingGraph()?.BindEditorHost(host);
         List<GodotObject> components = GetHostComponents(host);
 
         foreach (GodotObject component in components)

@@ -6,15 +6,15 @@ namespace GameLogic.AI;
 
 public sealed partial class NpcProgram
 {
-    readonly Dictionary<string,NpcValueType> _scope=new(StringComparer.Ordinal);
+    readonly Dictionary<string,CharacterValueType> _scope=new(StringComparer.Ordinal);
     IReadOnlyList<NpcBindingSpec> CompileBindings(IEnumerable<NpcBindingDefinition> source,bool variable)
     {
         var definitions=source.ToArray();
         Require(definitions.All(b=>b!=null&&!string.IsNullOrWhiteSpace(b.Name)&&!b.Name.Contains('.'))&&definitions.Select(b=>b.Name).Distinct().Count()==definitions.Length,"参数名称不能为空、重复或包含句点。");
         return ReadOnly(definitions.Select(b=>
         {
-            Require(Enum.IsDefined(b.Source)&&b.ValueType!=NpcValueType.Unknown&&Enum.IsDefined(b.ValueType),"输入类型或来源无效："+b.Name);
-            Require(b.Adapter.Length==0||b.ValueType==NpcValueType.Symbol&&NpcBindingAdapters.Find(b.Adapter)!=null,"输入对象类型未注册："+b.Name);
+            Require(Enum.IsDefined(b.Source)&&b.ValueType!=CharacterValueType.Unknown&&Enum.IsDefined(b.ValueType),"输入类型或来源无效："+b.Name);
+            Require(b.Adapter.Length==0||b.ValueType==CharacterValueType.Symbol&&NpcBindingAdapters.Find(b.Adapter)!=null,"输入对象类型未注册："+b.Name);
             Require(!variable||b.Source!=NpcBindingSource.PlanVariable,"计划变量不能引用另一个计划变量。");
             Require(!variable||b is not NpcActionInputDefinition,"计划变量只保存值，请使用普通绑定定义；资源要求应配置在行动输入中。");
             Require(b.Source!=NpcBindingSource.Selector||TargetSelectors.TryGetValue(b.SelectorId,out var selector)&&selector.Adapter==b.Adapter,"选择器输入必须引用已连接启用的交互点选择器："+b.Name);
@@ -41,12 +41,12 @@ public sealed partial class NpcProgram
             if(ability is NpcRoamAction roam&&roam.Input?.Name.Length>0)
                 Require(inputs.Any(i=>i.Name==roam.Input.Name&&i.Adapter=="point"),"附近活动能力的地点输入不存在或类型错误："+action.DisplayName);
             if(ability is NpcRememberAction remember&&remember.SubjectInput?.Name.Length>0)
-                Require(inputs.Any(i=>i.Name==remember.SubjectInput.Name&&i.Type==NpcValueType.Symbol),"记忆主题必须选择本行动的文本或对象输入："+action.DisplayName);
+                Require(inputs.Any(i=>i.Name==remember.SubjectInput.Name&&i.Type==CharacterValueType.Symbol),"记忆主题必须选择本行动的文本或对象输入："+action.DisplayName);
         }
         var claims=ReadOnly(action.Inputs.OfType<NpcActionInputDefinition>().SelectMany(input=>input.ResourceRequirements.Select(capability=>
         {
             var adapter=NpcBindingAdapters.Find(input.Adapter);
-            Require(input.ValueType==NpcValueType.Symbol&&adapter!=null&&adapter.Capabilities.Contains(capability),"输入“"+input.Name+"”不支持此资源要求："+capability);
+            Require(input.ValueType==CharacterValueType.Symbol&&adapter!=null&&adapter.Capabilities.Contains(capability),"输入“"+input.Name+"”不支持此资源要求："+capability);
             return new NpcClaimSpec(input.Name,capability);
         })).Distinct());
         return new(action.DefinitionId,action.DisplayName,inputs,claims,action.Preconditions?.Freeze(),action.SuccessConditions?.Freeze(),action.Cost?.Freeze(),action.DurationSeconds,action.TimeoutSeconds,action.ExecutionGraph,Effects(action.Predictions),Effects(action.Results));
@@ -61,14 +61,14 @@ public sealed partial class NpcProgram
         }
         try
         {
-            if(action.Precondition!=null)Expect(action.Precondition,NpcValueType.Boolean);
-            if(action.Success!=null)Expect(action.Success,NpcValueType.Boolean);
-            if(action.Cost!=null)Expect(action.Cost,NpcValueType.Number);
+            if(action.Precondition!=null)Expect(action.Precondition,CharacterValueType.Boolean);
+            if(action.Success!=null)Expect(action.Success,CharacterValueType.Boolean);
+            if(action.Cost!=null)Expect(action.Cost,CharacterValueType.Number);
             foreach(var effect in action.Predictions.Concat(action.Results))
             {
                 var type=EffectType(action,effect.Key);
-                Require(type!=NpcValueType.Unknown,"效果目标未声明或不可写："+effect.Key);
-                Require(Enum.IsDefined(effect.Mode)&&(effect.Mode!=NpcEffectMode.Add||type==NpcValueType.Number),"增加/减少效果只能修改数值。");
+                Require(type!=CharacterValueType.Unknown,"效果目标未声明或不可写："+effect.Key);
+                Require(Enum.IsDefined(effect.Mode)&&(effect.Mode!=NpcEffectMode.Add||type==CharacterValueType.Number),"增加/减少效果只能修改数值。");
                 Expect(effect.Value,type);
             }
             Require(!action.Results.Any(e=>e.Key=="self.location"),"当前位置由实际空间状态观测；请将位置变化配置为预测效果，并配置实际成功条件。");
@@ -87,12 +87,12 @@ public sealed partial class NpcProgram
             Require(variable!=null&&variable.Type==input.Type&&variable.Adapter==input.Adapter,$"计划“{plan.Name}”缺少行动“{action.Name}”所需的同类型变量：{input.Variable}");
         }
     }
-    public NpcValueType EffectType(NpcActionSpec action,string key)
+    public CharacterValueType EffectType(NpcActionSpec action,string key)
     {
         if(Facts.TryGetValue(key,out var fact))return fact.Type;
-        if(key=="self.location")return NpcValueType.Symbol;
-        if(SplitInputMember(action,key,out var input,out var member))return NpcBindingAdapters.Find(input.Adapter)?.Properties.FirstOrDefault(p=>p.Name==member&&p.Writable)?.Type??NpcValueType.Unknown;
-        return NpcValueType.Unknown;
+        if(key=="self.location")return CharacterValueType.Symbol;
+        if(SplitInputMember(action,key,out var input,out var member))return NpcBindingAdapters.Find(input.Adapter)?.Properties.FirstOrDefault(p=>p.Name==member&&p.Writable)?.Type??CharacterValueType.Unknown;
+        return CharacterValueType.Unknown;
     }
     public static bool SplitInputMember(NpcActionSpec action,string key,out NpcBindingSpec input,out string member)
     {
@@ -107,21 +107,21 @@ public sealed partial class NpcProgram
         return SplitInputMember(action,key,out var input,out var member)?NpcBindingAdapters.Find(input.Adapter)?.WriteKey(member,Read(context,"input."+input.Name)):null;
     }
     public NpcBindingSpec Source(NpcBoundAction bound,NpcBindingSpec input)=>input.Source==NpcBindingSource.PlanVariable?bound.Plan.Bindings.First(v=>v.Name==input.Variable):input;
-    public GoapWorldState Contextual(GoapWorldState state,NpcBoundAction bound,Func<string,NpcValue,double?> distance=null,bool physical=false)
+    public GoapWorldState Contextual(GoapWorldState state,NpcBoundAction bound,Func<string,CharacterValue,double?> distance=null,bool physical=false)
     {
-        var context=state.With(GoapEffect.Set("action.duration",Encode("action.duration",NpcValue.Numeric(bound.Action.Duration))));
+        var context=state.With(GoapEffect.Set("action.duration",Encode("action.duration",CharacterValue.Numeric(bound.Action.Duration))));
         foreach(var input in bound.Action.Inputs)
         {
             var source=Source(bound,input);string key=BindingKey(bound.Plan.Id,source.Name);
-            NpcValue value;
+            CharacterValue value;
             if(bound.Resolved?.TryGetValue(input.Name,out value)==true){}
             else if(source.Source==NpcBindingSource.Selector)
             {
                 value=bound.Candidates.GetValueOrDefault(input.Name);
                 var previous=Read(context,key);
-                if(input.Source==NpcBindingSource.PlanVariable&&previous.Type!=NpcValueType.Unknown&&previous!=value)return null;
+                if(input.Source==NpcBindingSource.PlanVariable&&previous.Type!=CharacterValueType.Unknown&&previous!=value)return null;
             }
-            else value=input.Source==NpcBindingSource.PlanVariable&&Read(context,key).Type!=NpcValueType.Unknown?Read(context,key):source.Value.Evaluate(k=>Read(state,k),Parameter);
+            else value=input.Source==NpcBindingSource.PlanVariable&&Read(context,key).Type!=CharacterValueType.Unknown?Read(context,key):source.Value.Evaluate(k=>Read(state,k),Parameter);
             if(value.Type!=input.Type||input.Adapter.Length>0&&string.IsNullOrEmpty(value.Symbol))return null;
             if(input.Source==NpcBindingSource.PlanVariable)context=context.With(GoapEffect.Set(key,Encode(key,value)));
             string prefix="input."+input.Name;context=context.With(GoapEffect.Set(prefix,Encode(prefix,value)));
@@ -129,7 +129,7 @@ public sealed partial class NpcProgram
         }
         return context;
     }
-    public GoapWorldState Predict(GoapWorldState state,NpcBoundAction bound,Func<string,NpcValue,double?> distance=null)
+    public GoapWorldState Predict(GoapWorldState state,NpcBoundAction bound,Func<string,CharacterValue,double?> distance=null)
     {
         var context=Contextual(state,bound,distance);if(context==null)return null;
         foreach(var input in bound.Action.Inputs)

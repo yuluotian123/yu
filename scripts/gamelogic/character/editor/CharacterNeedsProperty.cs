@@ -2,21 +2,21 @@
 using System;
 using Godot;
 
-namespace GameLogic.AI;
+namespace GameLogic;
 
 [Tool]
-public partial class NpcNeedsProperty : EditorProperty
+public partial class CharacterNeedsProperty : EditorProperty
 {
     readonly VBoxContainer _body = new();
-    NpcNeedsDefinition _owner, _preset;
-    Godot.Collections.Array<NpcNeedDefinition> _shown;
+    CharacterNeedsDefinition _owner, _preset;
+    Godot.Collections.Array<CharacterNeedDefinition> _shown;
     bool _built;
 
-    public NpcNeedsProperty() { AddChild(_body); SetBottomEditor(_body); }
-    public NpcNeedsProperty(NpcNeedsDefinition owner) : this()
+    public CharacterNeedsProperty() { AddChild(_body); SetBottomEditor(_body); }
+    public CharacterNeedsProperty(CharacterNeedsDefinition owner) : this()
     {
         _owner = owner;
-        _preset = GD.Load<NpcNeedsDefinition>(NpcNeedsDefinition.CommonPresetPath);
+        _preset = GD.Load<CharacterNeedsDefinition>(CharacterNeedsDefinition.CommonPresetPath);
     }
     public override void _UpdateProperty()
     {
@@ -24,10 +24,10 @@ public partial class NpcNeedsProperty : EditorProperty
         if (_built && ReferenceEquals(_shown, _owner.Needs)) return;
         _shown = _owner.Needs; Rebuild();
     }
-    void Commit(Godot.Collections.Array<NpcNeedDefinition> needs)
+    void Commit(Godot.Collections.Array<CharacterNeedDefinition> needs)
     {
         _shown = needs;
-        EmitChanged(nameof(NpcNeedsDefinition.Needs), Variant.From(needs));
+        EmitChanged(nameof(CharacterNeedsDefinition.Needs), Variant.From(needs));
         Callable.From(Rebuild).CallDeferred();
     }
     void Rebuild()
@@ -38,8 +38,8 @@ public partial class NpcNeedsProperty : EditorProperty
         _built = true;
         var hint = new Label { Text = "预设只补充缺少的需求，保留已有配置。", AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _body.AddChild(hint);
-        var preset = new EditorResourcePicker { BaseType = nameof(NpcNeedsDefinition), EditedResource = _preset };
-        preset.ResourceChanged += resource => _preset = resource as NpcNeedsDefinition;
+        var preset = new EditorResourcePicker { BaseType = nameof(CharacterNeedsDefinition), EditedResource = _preset };
+        preset.ResourceChanged += resource => _preset = resource as CharacterNeedsDefinition;
         preset.ResourceSelected += (resource, _) => EditorInterface.Singleton.EditResource(resource);
         _body.AddChild(preset);
         var buttons = new HFlowContainer();
@@ -61,15 +61,15 @@ public partial class NpcNeedsProperty : EditorProperty
             entry.AddChild(new Label { Text = need == null ? "空需求" : (string.IsNullOrWhiteSpace(need.DisplayName) ? need.NeedId : need.DisplayName) + "  [" + need.NeedId + "]",
                 AutowrapMode = TextServer.AutowrapMode.WordSmart });
             var row = new HBoxContainer();
-            var picker = new EditorResourcePicker { BaseType = nameof(NpcNeedDefinition), EditedResource = need, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+            var picker = new EditorResourcePicker { BaseType = nameof(CharacterNeedDefinition), EditedResource = need, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
             picker.ResourceChanged += resource =>
             {
-                var next = new Godot.Collections.Array<NpcNeedDefinition>(_owner.Needs);
-                next[index] = resource as NpcNeedDefinition; Commit(next);
+                var next = new Godot.Collections.Array<CharacterNeedDefinition>(_owner.Needs);
+                next[index] = resource as CharacterNeedDefinition; Commit(next);
             };
-            picker.ResourceSelected += (resource, _) => EmitSignal(SignalName.ResourceSelected, nameof(NpcNeedsDefinition.Needs), resource);
+            picker.ResourceSelected += (resource, _) => EmitSignal(SignalName.ResourceSelected, nameof(CharacterNeedsDefinition.Needs), resource);
             var remove = new Button { Text = "×", TooltipText = "移除这项需求；相关条件引用需要一并调整。" };
-            remove.Pressed += () => { var next = new Godot.Collections.Array<NpcNeedDefinition>(_owner.Needs); next.RemoveAt(index); Commit(next); };
+            remove.Pressed += () => { var next = new Godot.Collections.Array<CharacterNeedDefinition>(_owner.Needs); next.RemoveAt(index); Commit(next); };
             row.AddChild(picker); row.AddChild(remove); entry.AddChild(row); _body.AddChild(entry);
         }
         _body.AddChild(new Label { Text = "点击需求资源编辑 ID、名称、初值和变化率；\n新增项会自动注册到条件参数选择器。", AutowrapMode = TextServer.AutowrapMode.WordSmart });

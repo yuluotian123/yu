@@ -26,6 +26,7 @@ public partial class NpcFrameworkValidation : Node
             var world=level.GetNode<GameObject3D>("RPGTown/TownContent/NpcLife").GetComponent<AiWorldComponent3D>();
             world.RainOverride=0;world.Clock.Paused=true;
             var resident=level.GetNode<GameObject3D>("Resident").GetComponent<AiAgentComponent3D>();var courier=level.GetNode<GameObject3D>("Courier").GetComponent<AiAgentComponent3D>();
+            await ValidateSharedCharacterRuntime(level,resident,courier,world);
             Check(resident!=null&&courier!=null&&resident.Owner.GetParent()==level&&courier.Owner.GetParent()==level,"Two directly authored NPCs required");
             for(int frame=0;frame<60&&!world.Points.ContainsKey("resident_bed");frame++)await ToSignal(GetTree(),SceneTree.SignalName.PhysicsFrame);
             Check(world.Points.ContainsKey("resident_bed"),"Interaction points did not register");
@@ -57,7 +58,7 @@ public partial class NpcFrameworkValidation : Node
             double visits=courier.State.PrivateFacts["private.completed_visits"].Number;
             courier.CancelPlan("ValidationCancel");for(int i=0;i<60;i++)await ToSignal(GetTree(),SceneTree.SignalName.PhysicsFrame);
             Check(courier.State.PrivateFacts["private.completed_visits"].Number==visits,"Cancelled action committed again");
-            var saved=courier.Capture();courier.State.Needs.Values["hunger"]=.9;courier.Restore(saved,1);
+            var saved=courier.Character.Capture();courier.State.Needs.Values["hunger"]=.9;courier.Character.Restore(saved,1);
             Check(Math.Abs(courier.State.Needs.Values["hunger"]-saved["needs"]["hunger"].GetValue<double>())<1e-8,"Module save restore failed");
             await ValidateResidentStrollRuntime(resident,courier,world);
             resident.Running=false;courier.Running=false;resident.CancelPlan("ValidationStop");courier.CancelPlan("ValidationStop");
@@ -72,7 +73,7 @@ public partial class NpcFrameworkValidation : Node
     }
     void ValidateFrames(AiAgentComponent3D agent)
     {
-        var frames=agent.Program.Frames;
+        var frames=agent.Owner.GetComponent<CharacterAnimationComponent3D>().Sprite.SpriteFrames;
         foreach(string clip in new[]{"idle","walk"})
         {
             int count=frames.GetFrameCount(clip);Check(count>1,"Missing real animation "+clip);
@@ -98,29 +99,30 @@ public partial class NpcFrameworkValidation : Node
     }
     void PureChecks()
     {
-        NpcExpression E(NpcExpressionKind kind,params NpcExpression[] args)=>new(kind,"",default,args);
-        var unknown=new NpcExpression(NpcExpressionKind.Fact,"absent",default,Array.Empty<NpcExpression>());
-        Check(E(NpcExpressionKind.Not,unknown).Evaluate(_=>default).Type==NpcValueType.Unknown,"Not unknown must stay unknown");
-        var truth=new NpcExpression(NpcExpressionKind.Literal,"",NpcValue.Bool(true),Array.Empty<NpcExpression>());
-        Check(E(NpcExpressionKind.Any,unknown,truth).Evaluate(_=>default).IsTrue,"Any true failed");
+        CharacterExpression E(CharacterExpressionKind kind,params CharacterExpression[] args)=>new(kind,"",default,args);
+        var unknown=new CharacterExpression(CharacterExpressionKind.Fact,"absent",default,Array.Empty<CharacterExpression>());
+        Check(E(CharacterExpressionKind.Not,unknown).Evaluate(_=>default).Type==CharacterValueType.Unknown,"Not unknown must stay unknown");
+        var truth=new CharacterExpression(CharacterExpressionKind.Literal,"",CharacterValue.Bool(true),Array.Empty<CharacterExpression>());
+        Check(E(CharacterExpressionKind.Any,unknown,truth).Evaluate(_=>default).IsTrue,"Any true failed");
         foreach(string folder in new[]{"gray_green_resident","ochre_courier"})
         {
-            var graph=GD.Load<NpcGraphAsset>($"res://assets/resources/npc/{folder}/npc_graph.tres");
+            var graph=NpcFrameworkAuthoring.LoadGraph(folder);
             Check(graph.Validate(out var result),result.ToDisplayText());var p=NpcProgram.Compile(graph);
+            ValidateSharedCharacterData(graph,p);
             if(folder=="gray_green_resident")ValidateResidentStrollPlans(p);
-            var a=new NpcCharacterState(p);var b=new NpcCharacterState(p);a.Needs.Values["hunger"]=0;
+            var a=new CharacterState(p.Character);var b=new CharacterState(p.Character);a.Needs.Values["hunger"]=0;
             Check(b.Needs.Values["hunger"]==p.Needs.Single(n=>n.Id=="hunger").Initial&&b.Needs.Values["hunger"]>0,"Shared runtime state");
             Check(a.Relations.Adjust("friend","trust",.5),"Configurable relationship dimension failed");
-            Check(a.Memory.Remember(new("visited","shop",1,"test")),"Configurable memory category failed");
-            var save=a.Capture();var copy=new NpcCharacterState(p);copy.Restore(save);
-            Check(copy.Relations.Contacts["friend"]["trust"]==.5&&copy.Memory.Entries.Count==1,"Social module persistence failed");
+            var decision=new NpcDecisionState(p,a);Check(decision.Memory.Remember(new("visited","shop",1,"test")),"Configurable AI memory category failed");
+            var save=a.Capture();var copy=new CharacterState(p.Character);copy.Restore(save);
+            var restoredDecision=new NpcDecisionState(p,copy);restoredDecision.Restore(decision.Capture());Check(copy.Relations.Contacts["friend"]["trust"]==.5&&restoredDecision.Memory.Entries.Count==1,"Character and AI persistence failed");
             var bad=(JsonObject)save.DeepClone();bad["needs"]["hunger"]=-100;bool rejected=false;
             string beforeInvalid=copy.Capture().ToJsonString();
             try{copy.Restore(bad);}catch(ArgumentException){rejected=true;}
             Check(rejected&&copy.Capture().ToJsonString()==beforeInvalid,"Invalid restore changed live state");
             var goal=p.Goals[0];var action=goal.Actions[0];
             var snapshot=new GoapWorldState(p.Facts.Values.Select(f=>new KeyValuePair<string,GoapValue>(f.Key,p.Encode(f.Key,f.Initial))))
-                .With(GoapEffect.Set("needs.hunger.value",p.Encode("needs.hunger.value",NpcValue.Numeric(.8))),GoapEffect.Set("point.test.available",GoapValue.Bool(true)),GoapEffect.Set("point.test.open",GoapValue.Bool(true)),GoapEffect.Set("point.test.stock",p.Encode("target.stock",NpcValue.Numeric(3))));
+                .With(GoapEffect.Set("needs.hunger.value",p.Encode("needs.hunger.value",CharacterValue.Numeric(.8))),GoapEffect.Set("point.test.available",GoapValue.Bool(true)),GoapEffect.Set("point.test.open",GoapValue.Bool(true)),GoapEffect.Set("point.test.stock",p.Encode("target.stock",CharacterValue.Numeric(3))));
             var search=new GoapPlanner(snapshot,new GoapGoal(goal.Id,s=>goal.Completion.Evaluate(k=>p.Read(s,k),p.Parameter).IsTrue),new[]{new GoapAction("test","test",1,s=>p.Predict(s,BindForTest(p,action,"test")))});
             while(search.Status==GoapSearchStatus.Pending)search.Advance(1);
             Check(search.Status==GoapSearchStatus.Found,"Configured expressions did not plan");
@@ -130,17 +132,17 @@ public partial class NpcFrameworkValidation : Node
             ValidateActionBindings(graph);
             ValidateInputResourceRequirements(graph);
             // A content author can rename a need and its entire behavior without editing any runtime type.
-            var custom=(NpcGraphAsset)graph.Duplicate(true);
-            var customNeed=custom.Definitions.OfType<NpcNeedsDefinition>().Single().Needs.Single(n=>n.NeedId=="hunger");customNeed.NeedId="invented_focus";
-            custom.Definitions.OfType<NpcFactSchema>().Single().Facts.Add(new(){Key="private.unspecified"});
-            void Rename(NpcExpressionDefinition expression){if(expression==null)return;expression.Key=expression.Key.Replace("needs.hunger.","needs.invented_focus.");foreach(var child in expression.Inputs)Rename(child);}
+            var custom=graph.CloneForCharacter();
+            var customNeed=custom.CharacterContext.Needs.Needs.Single(n=>n.NeedId=="hunger");customNeed.NeedId="invented_focus";custom.Definitions.OfType<NpcNeedPolicyDefinition>().Single(n=>n.NeedId=="hunger").NeedId="invented_focus";
+            custom.CharacterContext.Facts.Facts.Add(new(){Key="private.unspecified"});
+            void Rename(CharacterExpressionDefinition expression){if(expression==null)return;expression.Key=expression.Key.Replace("needs.hunger.","needs.invented_focus.");foreach(var child in expression.Inputs)Rename(child);}
             foreach(var g in custom.Definitions.OfType<NpcGoalDefinition>()){Rename(g.Activation);Rename(g.Utility);Rename(g.Completion);}
             foreach(var act in custom.Definitions.OfType<NpcActionDefinition>())foreach(var effect in act.Predictions.Concat(act.Results)){effect.Key=effect.Key.Replace("needs.hunger.","needs.invented_focus.");Rename(effect.Value);}
-            var renamed=NpcProgram.Compile(custom);var renamedState=new NpcCharacterState(renamed);
+            var renamed=NpcProgram.Compile(custom);var renamedState=new CharacterState(renamed.Character);
             renamedState.Restore(renamedState.Capture());
-            Check(renamedState.Read("private.unspecified").Type==NpcValueType.Unknown,"Unknown private fact changed during save restore");
-            Check(renamedState.Read("needs.invented_focus.value").Type==NpcValueType.Number&&renamedState.Read("needs.hunger.value").Type==NpcValueType.Unknown,"Custom need was not isolated from built-in names");
-            var invalid=(NpcGraphAsset)graph.Duplicate(true);invalid.Definitions.OfType<NpcGoalDefinition>().First().Completion=new(){Number=1};rejected=false;
+            Check(renamedState.Read("private.unspecified").Type==CharacterValueType.Unknown,"Unknown private fact changed during save restore");
+            Check(renamedState.Read("needs.invented_focus.value").Type==CharacterValueType.Number&&renamedState.Read("needs.hunger.value").Type==CharacterValueType.Unknown,"Custom need was not isolated from built-in names");
+            var invalid=graph.CloneForCharacter();invalid.Definitions.OfType<NpcGoalDefinition>().First().Completion=new(){Number=1};rejected=false;
             try{NpcProgram.Compile(invalid);}catch(ArgumentException){rejected=true;}
             Check(rejected,"A numeric completion expression was accepted as a boolean");
 #if TOOLS
@@ -159,14 +161,14 @@ public partial class NpcFrameworkValidation : Node
             ValidatePlanEditor(graph);
             ValidateClipboard(graph);
             var ui=GraphCommonActionEditor.Build(new NpcWaitAction{DurationOverride=1.25},childContext);Check(ui.GetChildren().OfType<SpinBox>().Any(s=>Math.Abs(s.Value-1.25)<1e-8),"Double action parameter not displayed");ui.Free();
-            var roundtrip=(NpcGraphAsset)graph.Duplicate(true);
+            var roundtrip=graph.CloneForCharacter();
             string temp="res://.godot/npc/graph_roundtrip.tres";
             roundtrip.SaveJsonFields();Check(ResourceSaver.Save(roundtrip,temp)==Error.Ok,"Could not save NPC graph");
             roundtrip.TakeOverPath(temp);
             var execution=roundtrip.Definitions.OfType<NpcActionDefinition>().First().ExecutionGraph;
             execution.Nodes[0].Position=new(19,37);execution.MarkDirty();GraphSaveService.BindOwner(execution,roundtrip);
             Check(GraphSaveService.SaveGraphResource(this,execution,false),"Nested graph save failed");
-            var reloaded=ResourceLoader.Load<NpcGraphAsset>(temp,cacheMode:ResourceLoader.CacheMode.Ignore);
+            var reloaded=ResourceLoader.Load<NpcGraphAsset>(temp,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
             Check(reloaded.Definitions.OfType<NpcActionDefinition>().First().ExecutionGraph.Nodes[0].Position==new Vector2(19,37),"Nested execution graph edits were lost");
 #endif
         }
@@ -177,18 +179,18 @@ public partial class NpcFrameworkValidation : Node
     }
     void ValidatePlanSearch(NpcProgram program)
     {
-        var completion=new NpcExpressionDefinition{Kind=NpcExpressionKind.AtMost,Inputs=new(){new(){Kind=NpcExpressionKind.Fact,Key="needs.fun.value"},new(){Number=.25}}}.Freeze();
+        var completion=new CharacterExpressionDefinition{Kind=CharacterExpressionKind.AtMost,Inputs=new(){new(){Kind=CharacterExpressionKind.Fact,Key="needs.fun.value"},new(){Number=.25}}}.Freeze();
         NpcPlanSpec Pool(string id,int priority,params string[] ids)=>new(id,id,priority,null,ids);
         var pool=Pool("leisure",0,"play","go_town","go_home");
         var goal=program.Goals.First() with{Completion=completion,Plans=new[]{pool}};
         GoapWorldState Snapshot(string location,double fun=.8)=>new GoapWorldState(new[]{
             new KeyValuePair<string,GoapValue>("self.location",GoapValue.Id(location)),
-            new KeyValuePair<string,GoapValue>("needs.fun.value",program.Encode("needs.fun.value",NpcValue.Numeric(fun)))});
+            new KeyValuePair<string,GoapValue>("needs.fun.value",program.Encode("needs.fun.value",CharacterValue.Numeric(fun)))});
         var actions=new[]{
             new GoapAction("go_town","town",1,s=>s.With(GoapEffect.Set("self.location",GoapValue.Id("town")))),
             new GoapAction("go_home","home",3,s=>s.With(GoapEffect.Set("self.location",GoapValue.Id("home")))),
             new GoapAction("play","",1,s=>program.Read(s,"self.location").Symbol is "home" or "town"
-                ?s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",NpcValue.Numeric(.15)))):null)};
+                ?s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",CharacterValue.Numeric(.15)))):null)};
         NpcPlanSearch Search(string location,IReadOnlyList<NpcPlanSpec> plans=null,IEnumerable<GoapAction> choices=null,NpcProgram policy=null,double fun=.8)=>
             new(policy??program,goal with{Plans=plans??new[]{pool}},Snapshot(location,fun),(choices??actions).Select(a=>new KeyValuePair<string,GoapAction>(a.Operation,a)));
         string[] Finish(NpcPlanSearch search)
@@ -205,19 +207,19 @@ public partial class NpcFrameworkValidation : Node
         Check(Finish(fallback).SequenceEqual(new[]{"go_home","play"})&&fallback.ChosenPlan.Id=="home","Infeasible preferred plan did not fall back to another eligible plan");
         var mixed=Search("outside",new[]{Pool("travel_only",10,"go_home"),Pool("play_only",0,"play")});Finish(mixed);
         Check(mixed.Status==GoapSearchStatus.NoPlan,"Planner combined actions from different plan pools");
-        var blocked=Pool("not_eligible",100,"go_town","play") with{Eligibility=new NpcExpressionDefinition{ValueType=NpcValueType.Boolean,Boolean=false}.Freeze()};
+        var blocked=Pool("not_eligible",100,"go_town","play") with{Eligibility=new CharacterExpressionDefinition{ValueType=CharacterValueType.Boolean,Boolean=false}.Freeze()};
         var ineligible=Search("outside",new[]{blocked});Finish(ineligible);
         Check(ineligible.FailureReason=="NoEligiblePlan","Ineligible plan leaked its actions into search");
-        var repeated=new GoapAction("repeat_play","",1,s=>s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",NpcValue.Numeric(Math.Max(0,program.Read(s,"needs.fun.value").Number-.2))))));
+        var repeated=new GoapAction("repeat_play","",1,s=>s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",CharacterValue.Numeric(Math.Max(0,program.Read(s,"needs.fun.value").Number-.2))))));
         Check(Finish(Search("home",new[]{Pool("repeat",0,"repeat_play")},new[]{repeated},fun:1)).SequenceEqual(Enumerable.Repeat("repeat_play",4)),"Candidate action could not be used repeatedly by GOAP");
         var already=Search("home",fun:.15);Check(already.Status==GoapSearchStatus.AlreadySatisfied&&already.Result.Steps.Count==0,"Already satisfied goal generated actions");
         var pending=Search("outside");Check(pending.Advance(1)==GoapSearchStatus.Pending,"Scoped plan search ignored slice budget");pending.Invalidate();
         Check(pending.Status==GoapSearchStatus.Invalidated&&pending.Result==null,"Cancelled scoped search retained its result");
-        var limitedGraph=GD.Load<NpcGraphAsset>("res://assets/resources/npc/gray_green_resident/npc_graph.tres").Duplicate(true) as NpcGraphAsset;
+        var limitedGraph=NpcFrameworkAuthoring.LoadGraph("gray_green_resident").CloneForCharacter();
         limitedGraph.Definitions.OfType<NpcPolicyDefinition>().Single().MaximumExpanded=1;var limitedProgram=NpcProgram.Compile(limitedGraph);
         var limited=Search("outside",new[]{Pool("limited",0,"go_home","play")},policy:limitedProgram);Finish(limited);
         Check(limited.Status==GoapSearchStatus.LimitReached,"Budget exhaustion was reported as an impossible plan");
-        var finish=new GoapAction("finish","",1,s=>s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",NpcValue.Numeric(.15)))));
+        var finish=new GoapAction("finish","",1,s=>s.With(GoapEffect.Set("needs.fun.value",program.Encode("needs.fun.value",CharacterValue.Numeric(.15)))));
         var recover=Search("outside",new[]{Pool("limited",10,"go_home","play"),Pool("finish",0,"finish")},actions.Append(finish),limitedProgram);
         Check(Finish(recover).SequenceEqual(new[]{"finish"})&&recover.ChosenPlan.Id=="finish","A budget-limited pool prevented searching the next plan");
         Check(typeof(NpcGoalDefinition).GetProperty("PlanMode")==null,"Goal still exports a planning mode");
@@ -228,7 +230,7 @@ public partial class NpcFrameworkValidation : Node
     void UndoClipboardValidation()=>_clipboardUndo();
     void ValidateClipboard(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);
+        var graph=source.CloneForCharacter();
         var goal=graph.Nodes.OfType<NpcGoalNodeData>().First();
         var actionNode=(NpcActionNodeData)graph.FindNodeById(graph.GetOutgoingConnections(goal.Id,0).First().ToNode);
         var planNode=(NpcTemplateNodeData)graph.FindNodeById(graph.GetOutgoingConnections(goal.Id,1).First().ToNode);
@@ -290,7 +292,7 @@ public partial class NpcFrameworkValidation : Node
         action.ExecutionGraph.SaveJsonFields();
         graph.SaveJsonFields();string path="res://.godot/npc/clipboard_roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Pasted definition could not save");
-        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
         var loadedCopy=(NpcActionDefinition)loaded.Resolve(pastedNode.DefinitionId);
         var loadedOriginal=(NpcActionDefinition)loaded.Resolve(actionNode.DefinitionId);
         loadedCopy.DisplayName="Reloaded copy renamed";loadedCopy.Predictions.First().Value.Number=.42;
@@ -314,7 +316,7 @@ public partial class NpcFrameworkValidation : Node
     }
     void ValidatePlanEditor(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);
+        var graph=source.CloneForCharacter();
         var goal=graph.Nodes.OfType<NpcGoalNodeData>().First();
         var planNode=(NpcTemplateNodeData)graph.FindNodeById(graph.GetOutgoingConnections(goal.Id,1).Single().ToNode);
         var plan=(NpcPlanTemplateDefinition)graph.Resolve(planNode.DefinitionId);
@@ -365,7 +367,7 @@ public partial class NpcFrameworkValidation : Node
         plan.ActionIds=new[]{action.DefinitionId,other.DefinitionId,action.DefinitionId};editor._UpdateProperty();
         graph.SaveJsonFields();string path="res://.godot/npc/plan_editor_roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Plan steps failed to save");
-        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
         Check(((NpcPlanTemplateDefinition)loaded.Resolve(plan.DefinitionId)).ActionIds.SequenceEqual(plan.ActionIds),"Available actions lost on reload");
         Check(NpcProgram.Compile(loaded).Goals.First().Plans.First().ActionIds.Count==2,"Repeated legacy references changed candidate set semantics");
         graph.Connections.Remove(graph.Connections.Single(e=>e.FromNode==goal.Id&&e.ToNode==planNode.Id));graph.MarkDirty();editor._UpdateProperty();
@@ -374,50 +376,50 @@ public partial class NpcFrameworkValidation : Node
     }
     void ValidateEffectEditor(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);
+        var graph=source.CloneForCharacter();
         var program=NpcProgram.Compile(graph);
         var targets=NpcExpressionEditorCatalog.WritableTargets(graph);
         Check(targets.Select(s=>s.Key).ToHashSet().SetEquals(program.Facts.Keys.Concat(new[]{"self.location","input.地点.stock"})),"Effect target picker differs from runtime writable facts");
         Check(!targets.Any(s=>s.Parameter||s.Key.EndsWith(".urgency")||s.Key.EndsWith(".urgent")||s.Key.StartsWith("world.")||s.Key.StartsWith("relations.")),"Read-only parameter offered as effect target");
-        var schema=graph.Definitions.OfType<NpcFactSchema>().Single();
-        schema.Facts.Add(new(){Key="private.test_flag",Type=NpcValueType.Boolean,Initial=new(){ValueType=NpcValueType.Boolean}});
-        schema.Facts.Add(new(){Key="private.test_text",Type=NpcValueType.Symbol,Initial=new(){ValueType=NpcValueType.Symbol,Symbol="before"}});
-        Check(NpcExpressionEditorCatalog.WritableTargets(graph).Any(s=>s.Key=="private.test_flag"&&s.Type==NpcValueType.Boolean),"Newly registered boolean missing from effect target picker");
+        var schema=graph.CharacterContext.Facts;
+        schema.Facts.Add(new(){Key="private.test_flag",Type=CharacterValueType.Boolean,Initial=new(){ValueType=CharacterValueType.Boolean}});
+        schema.Facts.Add(new(){Key="private.test_text",Type=CharacterValueType.Symbol,Initial=new(){ValueType=CharacterValueType.Symbol,Symbol="before"}});
+        Check(NpcExpressionEditorCatalog.WritableTargets(graph).Any(s=>s.Key=="private.test_flag"&&s.Type==CharacterValueType.Boolean),"Newly registered boolean missing from effect target picker");
         var action=graph.Definitions.OfType<NpcActionDefinition>().First();
-        var effect=new NpcEffectDefinition{Key="private.test_flag",Value=new(){ValueType=NpcValueType.Boolean,Boolean=true}};
+        var effect=new NpcEffectDefinition{Key="private.test_flag",Value=new(){ValueType=CharacterValueType.Boolean,Boolean=true}};
         action.Results.Add(effect);
-        action.Results.Add(new(){Key="private.test_text",Value=new(){ValueType=NpcValueType.Symbol,Symbol="after"}});
+        action.Results.Add(new(){Key="private.test_text",Value=new(){ValueType=CharacterValueType.Symbol,Symbol="after"}});
         foreach(string field in new[]{nameof(effect.Key),nameof(effect.Mode),nameof(effect.Value)})
         {
             var editor=graph.CreateCustomPropertyEditor(effect,field);
             Check(editor!=null&&(field==nameof(effect.Value)?editor is NpcExpressionProperty:editor is NpcEffectProperty),"Effect field did not receive parameter editor: "+field);
             editor.Free();
         }
-        Check(NpcExpressionEditorCatalog.ExpectedType(graph,effect,nameof(effect.Value))==NpcValueType.Boolean,"Boolean effect uses numeric editor");
+        Check(NpcExpressionEditorCatalog.ExpectedType(graph,effect,nameof(effect.Value))==CharacterValueType.Boolean,"Boolean effect uses numeric editor");
         program=NpcProgram.Compile(graph);
         var snapshot=new GoapWorldState(program.Facts.Values.Select(f=>new KeyValuePair<string,GoapValue>(f.Key,program.Encode(f.Key,f.Initial))))
-            .With(GoapEffect.Set("point.test.available",GoapValue.Bool(true)),GoapEffect.Set("point.test.open",GoapValue.Bool(true)),GoapEffect.Set("point.test.stock",program.Encode("target.stock",NpcValue.Numeric(3))));
+            .With(GoapEffect.Set("point.test.available",GoapValue.Bool(true)),GoapEffect.Set("point.test.open",GoapValue.Bool(true)),GoapEffect.Set("point.test.stock",program.Encode("target.stock",CharacterValue.Numeric(3))));
         var spec=program.Goals.First().Actions.First();
         Check(program.TryEffects(program.Contextual(snapshot,BindForTest(program,spec,"test")),spec.Results,out var result,spec)&&program.Read(result,"private.test_flag").IsTrue&&program.Read(result,"private.test_text").Symbol=="after","Typed effect targets did not commit");
         effect.Mode=NpcEffectMode.Add;effect.Value=new(){Number=1};bool rejected=false;
         try{NpcProgram.Compile(graph);}catch(ArgumentException error){rejected=error.Message.Contains("增加/减少");}
         Check(rejected,"Numeric Add accepted a boolean target");
-        effect.Mode=NpcEffectMode.Set;effect.Value=new(){ValueType=NpcValueType.Boolean,Boolean=true};
+        effect.Mode=NpcEffectMode.Set;effect.Value=new(){ValueType=CharacterValueType.Boolean,Boolean=true};
         schema.Enabled=false;
         Check(!NpcExpressionEditorCatalog.WritableTargets(graph).Any(s=>s.Key=="private.test_flag"),"Disabled module still provides writable targets");
         schema.Enabled=true;graph.SaveJsonFields();string path="res://.godot/npc/effect_editor_roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Typed effects failed to save");
-        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
         var restored=loaded.Definitions.OfType<NpcActionDefinition>().First().Results.Single(e=>e.Key=="private.test_flag");
-        Check(restored.Mode==NpcEffectMode.Set&&restored.Value.ValueType==NpcValueType.Boolean&&restored.Value.Boolean,"Typed effect lost on reload");
+        Check(restored.Mode==NpcEffectMode.Set&&restored.Value.ValueType==CharacterValueType.Boolean&&restored.Value.Boolean,"Typed effect lost on reload");
         NpcProgram.Compile(loaded);
     }
     void ValidateNeedPresets(NpcGraphAsset source)
     {
-        var preset=GD.Load<NpcNeedsDefinition>(NpcNeedsDefinition.CommonPresetPath);
+        var preset=GD.Load<CharacterNeedsDefinition>(CharacterNeedsDefinition.CommonPresetPath);
         Check(preset.Needs.Select(n=>n.NeedId).SequenceEqual(new[]{"thirst","hunger","fun","fatigue"}),"Common needs preset must contain exactly the four requested needs");
-        var graph=(NpcGraphAsset)source.Duplicate(true);
-        var module=graph.Definitions.OfType<NpcNeedsDefinition>().Single();
+        var graph=source.CloneForCharacter();
+        var module=graph.CharacterContext.Needs;
         Check(module.Needs.Select(n=>n.NeedId).SequenceEqual(preset.Needs.Select(n=>n.NeedId))&&module.Needs.Zip(preset.Needs).All(pair=>pair.First.Initial==pair.Second.Initial&&pair.First.ChangePerHour==pair.Second.ChangePerHour),"Scene NPC needs do not match common preset");
         module.Needs.Add(new(){NeedId="custom_business",DisplayName="业务测试需求"});
         var hunger=module.Needs.Single(n=>n.NeedId=="hunger");double oldHunger=hunger.Initial;
@@ -429,44 +431,45 @@ public partial class NpcFrameworkValidation : Node
         Check(module.MergePreset(preset).Count==5,"Applying the same preset duplicated need IDs");
         var thirst=module.Needs.Single(n=>n.NeedId=="thirst");thirst.Initial=.9;
         Check(preset.Needs.Single(n=>n.NeedId=="thirst").Initial==.2,"Preset and character share mutable need resources");
-        var independent=new NpcNeedsDefinition();independent.Needs=independent.MergePreset(preset);
+        var independent=new CharacterNeedsDefinition();independent.Needs=independent.MergePreset(preset);
         Check(independent.Needs.Single(n=>n.NeedId=="thirst").Initial==.2,"One character modified another character's preset copy");
         module.Needs=module.AddCustomNeed();var added=module.Needs.Last();added.NeedId="focus";added.DisplayName="专注需求";
         Check(NpcExpressionEditorCatalog.Collect(graph).Any(s=>s.Key=="needs.focus.value"),"Custom need missing from registered parameter picker");
         module.Needs=module.AddCustomNeed();module.Needs=module.AddCustomNeed();
         Check(module.Needs.Select(n=>n.NeedId).Distinct().Count()==module.Needs.Count,"Custom need creation generated duplicate IDs");
-        var compiled=NpcProgram.Compile(graph);var state=new NpcCharacterState(compiled);state.Advance(12);state.Advance(13);
+        var compiled=NpcProgram.Compile(graph);var state=new CharacterState(compiled.Character);state.Advance(12);state.Advance(13);
         Check(Math.Abs(state.Read("needs.focus.value").Number-.24)<1e-8,"Custom need does not participate in runtime updates");
-        var editor=graph.CreateCustomPropertyEditor(module,nameof(module.Needs));
-        Check(editor is NpcNeedsProperty,"Needs editor does not provide preset/custom authoring");editor.Free();
-        var freshGraph=new NpcGraphAsset();var fresh=(NpcNeedsDefinition)freshGraph.Ensure(new NpcNeedsNodeData());
-        Check(fresh.Needs.Count==4&&fresh.Needs[0]!=preset.Needs[0],"New needs node did not receive independent common preset");
+        var editor=new CharacterNeedsProperty(module);
+        Check(editor is CharacterNeedsProperty,"Needs editor does not provide preset/custom authoring");editor.Free();
+        var fresh=new CharacterNeedsDefinition();fresh.Needs=fresh.MergePreset(preset);
+        Check(fresh.Needs.Count==4&&fresh.Needs[0]!=preset.Needs[0],"New character needs did not receive an independent preset");
+        string profilePath="res://.godot/npc/character_profile_roundtrip.tres";Check(ResourceSaver.Save(graph.CharacterContext,profilePath)==Error.Ok,"Character profile save failed");
         graph.SaveJsonFields();string path="res://.godot/npc/needs_preset_roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Needs preset/custom data failed to save");
-        var reloaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
-        Check(reloaded.Definitions.OfType<NpcNeedsDefinition>().Single().Needs.Any(n=>n.NeedId=="focus"),"Custom need lost on reload");
+        var reloaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
+        Check(ResourceLoader.Load<CharacterProfile>(profilePath,cacheMode:ResourceLoader.CacheMode.Ignore).Needs.Needs.Any(n=>n.NeedId=="focus"),"Custom need lost on reload");
         NpcProgram.Compile(reloaded);
     }
     void ValidateExpressionEditor(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);
+        var graph=source.CloneForCharacter();
         var symbols=NpcExpressionEditorCatalog.Collect(graph,true);
         var program=NpcProgram.Compile(graph);
         Check(symbols.Where(s=>!s.Parameter&&!s.Key.StartsWith("input.")).Select(s=>s.Key).ToHashSet().SetEquals(program.KnownKeys.Where(k=>!k.StartsWith("target."))),"Editor symbol registry differs from runtime facts");
         Check(symbols.Where(s=>s.Parameter).Select(s=>s.Key).ToHashSet().SetEquals(program.Parameters.Keys),"Editor parameter registry differs from runtime");
         Check(!NpcExpressionEditorCatalog.Collect(graph).Any(s=>s.Key.StartsWith("target.")||s.Key=="action.duration"),"Action-only symbols leaked into goal conditions");
-        graph.Definitions.OfType<NpcNeedsDefinition>().Single().Needs.Add(new(){NeedId="custom_test",DisplayName="自定义需求"});
+        graph.CharacterContext.Needs.Needs.Add(new(){NeedId="custom_test",DisplayName="自定义需求"});
         Check(NpcExpressionEditorCatalog.Collect(graph).Any(s=>s.Key=="needs.custom_test.value"),"Newly registered need missing in picker");
         var goal=graph.Definitions.OfType<NpcGoalDefinition>().First();
         var propertyEditor=graph.CreateCustomPropertyEditor(goal,nameof(goal.Activation));
         Check(graph.HasCustomPropertyEditors(goal)&&propertyEditor is NpcExpressionProperty,"Graph did not provide expression editor");propertyEditor.Free();
-        NpcExpressionDefinition Number(double n)=>new(){Number=n};
-        NpcExpressionDefinition Fact(string key)=>new(){Kind=NpcExpressionKind.Fact,Key=key};
-        var a=NpcExpressionEditor.Operation(NpcExpressionKind.AtLeast,Fact("needs.hunger.value"),Number(.65));
-        var b=NpcExpressionEditor.Operation(NpcExpressionKind.AtLeast,Fact("world.hour"),Number(7));
-        var original=NpcExpressionEditor.Operation(NpcExpressionKind.All,a,b);
-        NpcExpressionDefinition edited=null;
-        var ui=NpcExpressionEditor.Build(graph,goal,NpcValueType.Boolean,original,(e,_)=>edited=e);
+        CharacterExpressionDefinition Number(double n)=>new(){Number=n};
+        CharacterExpressionDefinition Fact(string key)=>new(){Kind=CharacterExpressionKind.Fact,Key=key};
+        var a=NpcExpressionEditor.Operation(CharacterExpressionKind.AtLeast,Fact("needs.hunger.value"),Number(.65));
+        var b=NpcExpressionEditor.Operation(CharacterExpressionKind.AtLeast,Fact("world.hour"),Number(7));
+        var original=NpcExpressionEditor.Operation(CharacterExpressionKind.All,a,b);
+        CharacterExpressionDefinition edited=null;
+        var ui=NpcExpressionEditor.Build(graph,goal,CharacterValueType.Boolean,original,(e,_)=>edited=e);
         AddChild(ui);
         static System.Collections.Generic.IEnumerable<T> Descendants<T>(Node node) where T:Node
         {foreach(Node child in node.GetChildren()){if(child is T item)yield return item;foreach(var descendant in Descendants<T>(child))yield return descendant;}}
@@ -475,20 +478,20 @@ public partial class NpcFrameworkValidation : Node
         numbers[0].Value=.9;numbers[1].Value=9;
         Check(Math.Abs(edited.Inputs[0].Inputs[1].Number-.9)<1e-8&&edited.Inputs[1].Inputs[1].Number==9,$"Editing a second row reverted the first row: {edited.Inputs[0].Inputs[1].Number:R}, {edited.Inputs[1].Inputs[1].Number:R}");
         Check(original.Inputs[0].Inputs[1].Number==.65&&original.Inputs[1].Inputs[1].Number==7,"Expression editor mutated undo's previous value");
-        NpcValue Read(string key)=>key=="needs.hunger.value"?NpcValue.Numeric(.95):NpcValue.Numeric(10);
+        CharacterValue Read(string key)=>key=="needs.hunger.value"?CharacterValue.Numeric(.95):CharacterValue.Numeric(10);
         Check(edited.Freeze().Evaluate(Read).IsTrue,"Multiple condition rows did not evaluate together");
         var modes=Descendants<OptionButton>(ui).First();modes.Select(1);modes.EmitSignal(OptionButton.SignalName.ItemSelected,1L);
-        Check(edited.Kind==NpcExpressionKind.Any&&Math.Abs(edited.Inputs[0].Inputs[1].Number-.9)<1e-8,"Changing AND/OR lost row edits");
+        Check(edited.Kind==CharacterExpressionKind.Any&&Math.Abs(edited.Inputs[0].Inputs[1].Number-.9)<1e-8,"Changing AND/OR lost row edits");
         ui.Free();
         goal.Activation=edited;graph.SaveJsonFields();
         string path="res://.godot/npc/expression_editor_roundtrip.tres";
         Check(ResourceSaver.Save(graph,path)==Error.Ok,"Edited conditions could not be saved");
-        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,cacheMode:ResourceLoader.CacheMode.Ignore).ForCharacter(graph.CharacterContext);
         var restored=loaded.Definitions.OfType<NpcGoalDefinition>().First().Activation;
-        Check(restored.Kind==NpcExpressionKind.Any&&Math.Abs(restored.Inputs[0].Inputs[1].Number-.9)<1e-8&&restored.Freeze().Evaluate(Read).IsTrue,"Edited conditions lost on reload");
+        Check(restored.Kind==CharacterExpressionKind.Any&&Math.Abs(restored.Inputs[0].Inputs[1].Number-.9)<1e-8&&restored.Freeze().Evaluate(Read).IsTrue,"Edited conditions lost on reload");
         NpcProgram.Compile(loaded);
-        var math=NpcExpressionEditor.Operation(NpcExpressionKind.Multiply,Number(2),Number(3));
-        var mathUi=NpcExpressionEditor.Build(graph,goal,NpcValueType.Number,math,(e,_)=>edited=e);
+        var math=NpcExpressionEditor.Operation(CharacterExpressionKind.Multiply,Number(2),Number(3));
+        var mathUi=NpcExpressionEditor.Build(graph,goal,CharacterValueType.Number,math,(e,_)=>edited=e);
         AddChild(mathUi);
         var values=Descendants<SpinBox>(mathUi).ToArray();values[0].Value=4;values[1].Value=5;
         Check(edited.Freeze().Evaluate(_=>default).Number==20&&math.Freeze().Evaluate(_=>default).Number==6,"Numeric operands or immutable arithmetic edits failed");
@@ -496,7 +499,7 @@ public partial class NpcFrameworkValidation : Node
     }
     void ValidateEditorTopology(NpcGraphAsset source)
     {
-        var graph=(NpcGraphAsset)source.Duplicate(true);
+        var graph=source.CloneForCharacter();
         var canvas=new GraphEdit();AddChild(canvas);
         var context=new GraphEditorContext{CurrentGraph=graph,RootGraph=graph,GraphEdit=canvas};
         var controller=new GraphEditorController(canvas);
@@ -515,7 +518,7 @@ public partial class NpcFrameworkValidation : Node
         var connectionEditor=new GraphConnectionEditorService(canvas,canvas,()=>graph,_=>{});
         connectionEditor.UpdateConnectionLabels();
         Check(!canvas.GetChildren().OfType<Label>().Any(),"Plain structural connections obscure NPC nodes with redundant labels");
-        var removed=graph.Nodes.OfType<NpcFactsNodeData>().Single();
+        var removed=graph.Nodes.OfType<NpcMemoryNodeData>().Single();
         GraphCommandService.RemoveNode(graph,canvas,removed.Id);
         Check(canvas.GetNodeOrNull<GraphNode>(new NodePath(removed.Id))==null,"Deleted node still attached before next frame");
         Check(canvas.GetConnectionList().Count==graph.Connections.Count,"Deleted node left canvas connections");

@@ -2,7 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class WeaponAnimationProfile : Resource
     {
         private static readonly string[] RequiredAnimations =

@@ -1,0 +1,637 @@
+{
+  "sources": {
+    "apex-a": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/apex-a/1e6eec92_000.mp4"
+    },
+    "apex-b": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/apex-b/5f3beef8_000.mp4"
+    },
+    "dash": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/dash/756cf9e0_000.mp4"
+    },
+    "death": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/death/a55ee4bc_000.mp4"
+    },
+    "follow-a": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/follow-a/2148afb1_000.mp4"
+    },
+    "follow-b": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/follow-b/f213a76b_000.mp4"
+    },
+    "hurt": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/hurt/083b9fdd_000.mp4"
+    },
+    "idle": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/idle/a0bf5675_000.mp4"
+    },
+    "run": {
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/run/057159a3_000.mp4"
+    }
+  },
+  "animations": {
+    "idle": {
+      "frames": [
+        [
+          "idle",
+          0
+        ],
+        [
+          "idle",
+          3
+        ],
+        [
+          "idle",
+          6
+        ],
+        [
+          "idle",
+          9
+        ],
+        [
+          "idle",
+          12
+        ],
+        [
+          "idle",
+          15
+        ],
+        [
+          "idle",
+          18
+        ],
+        [
+          "idle",
+          21
+        ],
+        [
+          "idle",
+          24
+        ],
+        [
+          "idle",
+          27
+        ],
+        [
+          "idle",
+          30
+        ],
+        [
+          "idle",
+          33
+        ],
+        [
+          "idle",
+          36
+        ],
+        [
+          "idle",
+          39
+        ],
+        [
+          "idle",
+          42
+        ],
+        [
+          "idle",
+          45
+        ],
+        [
+          "idle",
+          48
+        ],
+        [
+          "idle",
+          51
+        ],
+        [
+          "idle",
+          54
+        ],
+        [
+          "idle",
+          57
+        ],
+        [
+          "idle",
+          60
+        ],
+        [
+          "idle",
+          63
+        ],
+        [
+          "idle",
+          66
+        ],
+        [
+          "idle",
+          69
+        ]
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "run": {
+      "frames": [
+        [
+          "run",
+          12
+        ],
+        [
+          "run",
+          14
+        ],
+        [
+          "run",
+          16
+        ],
+        [
+          "run",
+          18
+        ],
+        [
+          "run",
+          20
+        ],
+        [
+          "run",
+          22
+        ],
+        [
+          "run",
+          24
+        ],
+        [
+          "run",
+          26
+        ],
+        [
+          "run",
+          28
+        ],
+        [
+          "run",
+          30
+        ],
+        [
+          "run",
+          32
+        ],
+        [
+          "run",
+          34
+        ],
+        [
+          "run",
+          36
+        ],
+        [
+          "run",
+          38
+        ],
+        [
+          "run",
+          40
+        ],
+        [
+          "run",
+          42
+        ],
+        [
+          "run",
+          44
+        ],
+        [
+          "run",
+          46
+        ]
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "attack": {
+      "frames": [
+        [
+          "idle",
+          0
+        ],
+        [
+          "follow-a",
+          3
+        ],
+        [
+          "follow-a",
+          6
+        ],
+        [
+          "follow-a",
+          8
+        ],
+        [
+          "follow-a",
+          9
+        ],
+        [
+          "follow-a",
+          10
+        ],
+        [
+          "follow-a",
+          12
+        ],
+        [
+          "follow-a",
+          14
+        ],
+        [
+          "follow-a",
+          15
+        ],
+        [
+          "follow-a",
+          30
+        ],
+        [
+          "follow-a",
+          32
+        ],
+        [
+          "follow-a",
+          34
+        ],
+        [
+          "follow-a",
+          36
+        ],
+        [
+          "follow-a",
+          37
+        ],
+        [
+          "follow-a",
+          38
+        ],
+        [
+          "follow-b",
+          0
+        ],
+        [
+          "follow-b",
+          2
+        ],
+        [
+          "follow-b",
+          4
+        ],
+        [
+          "follow-b",
+          6
+        ],
+        [
+          "follow-b",
+          8
+        ],
+        [
+          "follow-b",
+          10
+        ],
+        [
+          "follow-b",
+          12
+        ],
+        [
+          "follow-b",
+          15
+        ],
+        [
+          "follow-b",
+          18
+        ],
+        [
+          "follow-b",
+          21
+        ],
+        [
+          "follow-b",
+          24
+        ],
+        [
+          "follow-b",
+          27
+        ],
+        [
+          "follow-b",
+          30
+        ],
+        [
+          "follow-b",
+          36
+        ],
+        [
+          "idle",
+          0
+        ]
+      ],
+      "fps": 25,
+      "loop": false
+    },
+    "jumpup": {
+      "frames": [
+        [
+          "apex-a",
+          0
+        ],
+        [
+          "apex-a",
+          2
+        ],
+        [
+          "apex-a",
+          4
+        ],
+        [
+          "apex-a",
+          6
+        ]
+      ],
+      "fps": 20,
+      "loop": false
+    },
+    "inair": {
+      "frames": [
+        [
+          "apex-a",
+          8
+        ],
+        [
+          "apex-a",
+          12
+        ],
+        [
+          "apex-a",
+          20
+        ],
+        [
+          "apex-a",
+          38
+        ]
+      ],
+      "fps": 12,
+      "loop": false
+    },
+    "isfalling": {
+      "frames": [
+        [
+          "apex-b",
+          0
+        ],
+        [
+          "apex-b",
+          4
+        ],
+        [
+          "apex-b",
+          7
+        ],
+        [
+          "apex-b",
+          9
+        ]
+      ],
+      "fps": 12,
+      "loop": false
+    },
+    "land": {
+      "frames": [
+        [
+          "apex-b",
+          12
+        ],
+        [
+          "apex-b",
+          16
+        ],
+        [
+          "apex-b",
+          24
+        ],
+        [
+          "apex-b",
+          38
+        ]
+      ],
+      "fps": 20,
+      "loop": false
+    },
+    "jump": {
+      "frames": [
+        [
+          "apex-a",
+          0
+        ],
+        [
+          "apex-a",
+          2
+        ],
+        [
+          "apex-a",
+          4
+        ],
+        [
+          "apex-a",
+          6
+        ],
+        [
+          "apex-a",
+          8
+        ],
+        [
+          "apex-a",
+          12
+        ],
+        [
+          "apex-a",
+          20
+        ],
+        [
+          "apex-a",
+          38
+        ],
+        [
+          "apex-b",
+          4
+        ],
+        [
+          "apex-b",
+          7
+        ],
+        [
+          "apex-b",
+          9
+        ],
+        [
+          "apex-b",
+          12
+        ],
+        [
+          "apex-b",
+          16
+        ],
+        [
+          "apex-b",
+          24
+        ],
+        [
+          "apex-b",
+          38
+        ]
+      ],
+      "fps": 18,
+      "loop": false
+    },
+    "dash": {
+      "frames": [
+        [
+          "dash",
+          0
+        ],
+        [
+          "dash",
+          6
+        ],
+        [
+          "dash",
+          9
+        ],
+        [
+          "dash",
+          24
+        ],
+        [
+          "dash",
+          60
+        ],
+        [
+          "dash",
+          72
+        ]
+      ],
+      "fps": 21.818181818181817,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [
+        [
+          "hurt",
+          0
+        ],
+        [
+          "hurt",
+          12
+        ],
+        [
+          "hurt",
+          15
+        ],
+        [
+          "hurt",
+          18
+        ],
+        [
+          "hurt",
+          21
+        ],
+        [
+          "hurt",
+          24
+        ],
+        [
+          "hurt",
+          27
+        ],
+        [
+          "hurt",
+          72
+        ]
+      ],
+      "fps": 20,
+      "loop": false
+    },
+    "death": {
+      "frames": [
+        [
+          "death",
+          18
+        ],
+        [
+          "death",
+          20
+        ],
+        [
+          "death",
+          22
+        ],
+        [
+          "death",
+          24
+        ],
+        [
+          "death",
+          26
+        ],
+        [
+          "death",
+          28
+        ],
+        [
+          "death",
+          29
+        ],
+        [
+          "death",
+          30
+        ],
+        [
+          "death",
+          31
+        ],
+        [
+          "death",
+          32
+        ],
+        [
+          "death",
+          33
+        ],
+        [
+          "death",
+          36
+        ],
+        [
+          "death",
+          42
+        ],
+        [
+          "death",
+          48
+        ],
+        [
+          "death",
+          60
+        ],
+        [
+          "death",
+          72
+        ]
+      ],
+      "fps": 24,
+      "loop": false
+    }
+  },
+  "selection_notes": {
+    "identity": "Current katana_v3 character only; all new static poses are weapon-only edits of corresponding katana masters.",
+    "attack": "Fast cut deliberately jumps from clean load source15 to clean finish source30; excluded source16-29 with unstable blade / generated white fan. Independent runtime trail supplies the fast arc. Endpoints reuse the new shared-character idle0 exactly.",
+    "run": "Three full 12-source-frame stride periods; source12..46 by2, 18 frames at12fps.",
+    "jump": "Retains load, tucked apex, extension, compression and recovery; physics supplies world displacement."
+  }
+}

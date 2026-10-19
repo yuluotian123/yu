@@ -3,7 +3,7 @@ using Godot;
 
 namespace GameLogic;
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class WeatherGmComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX;

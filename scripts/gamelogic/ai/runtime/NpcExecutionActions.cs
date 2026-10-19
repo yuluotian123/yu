@@ -90,6 +90,9 @@ public sealed class NpcAdjustRelationAction : GraphInstantAction
     public string ContactParameter {get;set;}="";
     public string Dimension {get;set;}="";
     public double Amount {get;set;}
+#if TOOLS
+    public override Control CreateEditUI(GraphEditorContext context)=>NpcCharacterFeatureActionEditor.Build(this,context);
+#endif
     protected override bool Run(GraphActionInvocation invocation)
     {
         var c=invocation.Execution.GetUserData<NpcActionContext>();
@@ -103,10 +106,12 @@ public sealed class NpcAdjustAffectAction : GraphInstantAction
 {
     public string Dimension {get;set;}="";
     public double Amount {get;set;}
+#if TOOLS
+    public override Control CreateEditUI(GraphEditorContext context)=>NpcCharacterFeatureActionEditor.Build(this,context);
+#endif
     protected override bool Run(GraphActionInvocation invocation)
     {
         var c=invocation.Execution.GetUserData<NpcActionContext>();
-        if(c==null||!double.IsFinite(Amount)||!c.Agent.State.Affect.Values.TryGetValue(Dimension,out double previous)||!double.IsFinite(previous+Amount))return false;
-        c.Agent.State.Affect.Values[Dimension]=previous+Amount;return true;
+        return c!=null&&c.Agent.State.Affect.Adjust(Dimension,Amount);
     }
 }

@@ -6,7 +6,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>渲染诊断和当前合成器的 Relink 实时调节。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class RenderingGmComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX;

@@ -1,130 +1,118 @@
-[gd_resource type="Resource" script_class="CharacterProfile" format=3]
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://du4opl34fkii6"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="2_syaq0"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="2_syaq0"]
+[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="4_oc8bl"]
+[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/character/data/CharacterPersonalityDefinition.cs" id="5_2vkhr"]
+[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="6_nw4yy"]
+[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="7_iud0f"]
+[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="11_2at74"]
+[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="13_n3y3y"]
+[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="15_qdsoh"]
+[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="16_q711o"]
+[ext_resource type="Script" uid="uid://bmwt0dxhrjulh" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="character_profile"]
+[ext_resource type="Resource" uid="uid://cm7eoq6idfa61" path="res://assets/resources/character/definitions/common_features.tres" id="feature_library"]
+[ext_resource type="Script" uid="uid://dlx02quhx1urt" path="res://scripts/gamelogic/character/data/CharacterFeatureValue.cs" id="feature_value"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="4_oc8bl"]
+[sub_resource type="Resource" id="Resource_sr2p3"]
+script = ExtResource("feature_value")
+DefinitionId = "mood"
+UseDefaultValue = false
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterPersonalityDefinition.cs" id="5_2vkhr"]
+[sub_resource type="Resource" id="Resource_454ym"]
+script = ExtResource("13_n3y3y")
+Dimensions = Array[ExtResource("feature_value")]([SubResource("Resource_sr2p3")])
+DefinitionId = "ochre_courier.affect"
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="6_nw4yy"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="7_iud0f"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="11_2at74"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="13_n3y3y"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="15_qdsoh"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="16_q711o"]
-
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="character_profile"]
-
-[sub_resource type="Resource" id="Resource_l662n"]
-script = ExtResource("2_syaq0")
-Key = "home"
-ValueType = 3
-Symbol = "courier_rest"
+[sub_resource type="Resource" id="Resource_hbu3c"]
+script = ExtResource("16_q711o")
+DefinitionId = "ochre_courier.facts"
 
 [sub_resource type="Resource" id="Resource_u6k8a"]
 script = ExtResource("4_oc8bl")
 Tags = PackedStringArray("courier")
-Parameters = Array[ExtResource("2_syaq0")]([SubResource("Resource_l662n")])
 DefinitionId = "ochre_courier.identity"
 DisplayName = "赭衣跑腿员"
-
-[sub_resource type="Resource" id="Resource_pgcuj"]
-script = ExtResource("2_syaq0")
-Key = "sociability"
-Number = 0.75
-
-[sub_resource type="Resource" id="Resource_i155s"]
-script = ExtResource("2_syaq0")
-Key = "caution"
-Number = 0.65
-
-[sub_resource type="Resource" id="Resource_rr1ws"]
-script = ExtResource("2_syaq0")
-Key = "activity"
-Number = 0.8
-
-[sub_resource type="Resource" id="Resource_kww3k"]
-script = ExtResource("5_2vkhr")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_pgcuj"), SubResource("Resource_i155s")])
-Traits = PackedStringArray("cheerful")
-Preferences = Array[ExtResource("2_syaq0")]([SubResource("Resource_rr1ws")])
-DefinitionId = "ochre_courier.personality"
 
 [sub_resource type="Resource" id="Resource_syaq0"]
 script = ExtResource("6_nw4yy")
 NeedId = "thirst"
 DisplayName = "口渴"
 ChangePerHour = 0.18
+UseDefaultThresholds = false
 
 [sub_resource type="Resource" id="Resource_e4i8x"]
 script = ExtResource("6_nw4yy")
 NeedId = "hunger"
 DisplayName = "饥饿"
 ChangePerHour = 0.15
+UseDefaultThresholds = false
 
 [sub_resource type="Resource" id="Resource_oc8bl"]
 script = ExtResource("6_nw4yy")
 NeedId = "fun"
 DisplayName = "娱乐需求"
+Initial = 0.72
 ChangePerHour = 0.08
+UseDefaultThresholds = false
 
 [sub_resource type="Resource" id="Resource_2vkhr"]
 script = ExtResource("6_nw4yy")
 NeedId = "fatigue"
 DisplayName = "疲劳"
 ChangePerHour = 0.1
+UseDefaultThresholds = false
 
 [sub_resource type="Resource" id="Resource_buiov"]
 script = ExtResource("7_iud0f")
 Needs = Array[ExtResource("6_nw4yy")]([SubResource("Resource_syaq0"), SubResource("Resource_e4i8x"), SubResource("Resource_oc8bl"), SubResource("Resource_2vkhr")])
 DefinitionId = "ochre_courier.needs"
 
+[sub_resource type="Resource" id="Resource_pgcuj"]
+script = ExtResource("feature_value")
+DefinitionId = "sociability"
+UseDefaultValue = false
+Number = 0.75
+
+[sub_resource type="Resource" id="Resource_i155s"]
+script = ExtResource("feature_value")
+DefinitionId = "caution"
+UseDefaultValue = false
+Number = 0.65
+
+[sub_resource type="Resource" id="Resource_rr1ws"]
+script = ExtResource("feature_value")
+DefinitionId = "activity"
+UseDefaultValue = false
+Number = 0.8
+
+[sub_resource type="Resource" id="Resource_kww3k"]
+script = ExtResource("5_2vkhr")
+Dimensions = Array[ExtResource("feature_value")]([SubResource("Resource_pgcuj"), SubResource("Resource_i155s")])
+Traits = PackedStringArray("cheerful")
+Preferences = Array[ExtResource("feature_value")]([SubResource("Resource_rr1ws")])
+DefinitionId = "ochre_courier.personality"
+
 [sub_resource type="Resource" id="Resource_trnnu"]
-script = ExtResource("2_syaq0")
-Key = "trust"
+script = ExtResource("feature_value")
+DefinitionId = "trust"
+UseDefaultValue = false
 
 [sub_resource type="Resource" id="Resource_up57h"]
-script = ExtResource("2_syaq0")
-Key = "affinity"
+script = ExtResource("feature_value")
+DefinitionId = "affinity"
+UseDefaultValue = false
 
 [sub_resource type="Resource" id="Resource_5ub16"]
 script = ExtResource("11_2at74")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_trnnu"), SubResource("Resource_up57h")])
+Dimensions = Array[ExtResource("feature_value")]([SubResource("Resource_trnnu"), SubResource("Resource_up57h")])
 DefinitionId = "ochre_courier.relations"
-
-[sub_resource type="Resource" id="Resource_sr2p3"]
-script = ExtResource("2_syaq0")
-Key = "mood"
-
-[sub_resource type="Resource" id="Resource_454ym"]
-script = ExtResource("13_n3y3y")
-Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_sr2p3")])
-DefinitionId = "ochre_courier.affect"
-
-[sub_resource type="Resource" id="Resource_ngm8q"]
-script = ExtResource("2_syaq0")
-
-[sub_resource type="Resource" id="Resource_04muu"]
-script = ExtResource("15_qdsoh")
-Key = "private.completed_visits"
-Maximum = 100000.0
-Initial = SubResource("Resource_ngm8q")
-
-[sub_resource type="Resource" id="Resource_hbu3c"]
-script = ExtResource("16_q711o")
-Facts = Array[ExtResource("15_qdsoh")]([SubResource("Resource_04muu")])
-DefinitionId = "ochre_courier.facts"
 
 [resource]
 script = ExtResource("character_profile")
+FeatureLibrary = ExtResource("feature_library")
 Identity = SubResource("Resource_u6k8a")
-Personality = SubResource("Resource_kww3k")
 Needs = SubResource("Resource_buiov")
+Personality = SubResource("Resource_kww3k")
 Relations = SubResource("Resource_5ub16")
 Affect = SubResource("Resource_454ym")
 Facts = SubResource("Resource_hbu3c")

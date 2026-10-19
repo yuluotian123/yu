@@ -1,6 +1,0 @@
-{
-  "checks": 155,
-  "errors": [],
-  "scene": "res://assets/scenes/player.tscn",
-  "coverage": "real Player initialization, both weapon profiles, 22 animation requests, input switch, attack timing and queued switch, foot anchor"
-}

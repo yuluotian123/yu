@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace GameLogic
 {
+    [Godot.Tool]
     public partial class SerializationComponent3D : Component3D
     {
         public override int Priority => int.MinValue;

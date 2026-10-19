@@ -1,0 +1,89 @@
+{
+  "model": "Local MiniMax H3 int8 8-step, 512x512 24fps; no partner API",
+  "static_images": "Built-in imagegen: weapon-only edits of katana_v3 guard, follow and apex",
+  "jobs": [
+    {
+      "action": "idle",
+      "prompt_id": "a0bf5675-7541-418d-bf03-a1715513d8e1",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/idle/a0bf5675_000.mp4",
+      "sha256": "f5c03708ea2bcd285e749e9aa17caa56f06f4f41e3b5f2d13c0d7172d7b5f114"
+    },
+    {
+      "action": "run",
+      "prompt_id": "057159a3-0df4-4eda-8ebf-321f57716f23",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/run/057159a3_000.mp4",
+      "sha256": "861ca86dada58308ceabf9f1888d4869cf98e9f248352a8628f306c8dc62b733"
+    },
+    {
+      "action": "follow-a",
+      "prompt_id": "2148afb1-6bbf-4f7b-9a15-ff8e9a79e15a",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/follow-a/2148afb1_000.mp4",
+      "sha256": "93c8be7ce34ba10ab0fad70d86408505ffe7a65cfe06f943991512c038133c3a"
+    },
+    {
+      "action": "follow-b",
+      "prompt_id": "f213a76b-8feb-4f6f-9e92-8ecdaa72e4d0",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/follow-b/f213a76b_000.mp4",
+      "sha256": "d72223c0c613dceeb458d10106f01484f9c3b2d7ad8ab625be1960473f514a1e"
+    },
+    {
+      "action": "apex-a",
+      "prompt_id": "1e6eec92-d02a-49ef-97d8-c51bc451fa4a",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/apex-a/1e6eec92_000.mp4",
+      "sha256": "3f33a46d2f543c09ff7ee1a1a4390ead2543bca3fc967be2d919e26139471512"
+    },
+    {
+      "action": "apex-b",
+      "prompt_id": "5f3beef8-c229-4594-b89b-61a449ca812e",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/apex-b/5f3beef8_000.mp4",
+      "sha256": "93d9e11b985c57b64ca8acbf5a562529fc398ffb238358392c2c2d126e2c6bc1"
+    },
+    {
+      "action": "dash",
+      "prompt_id": "756cf9e0-fa6e-4a29-9cee-9209652995b3",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/dash/756cf9e0_000.mp4",
+      "sha256": "e06b2fb869ed0117d10aada1d9bda2b8286298f42e1330e51f5205d8351e8e1e"
+    },
+    {
+      "action": "hurt",
+      "prompt_id": "083b9fdd-ce06-433c-90a3-93fa7cca3076",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/hurt/083b9fdd_000.mp4",
+      "sha256": "66ee7ce9b37f931a5958b45733d985b491e08ffe6fa256affe5571b969d55533"
+    },
+    {
+      "action": "death",
+      "prompt_id": "a55ee4bc-d8d7-4ade-8415-1c311d19d3b7",
+      "status": "completed",
+      "file": "assets/videos/characters/amber_fox_style_v2/greatsword_v4/death/a55ee4bc_000.mp4",
+      "sha256": "db383adc8b233bce2434f89f28e05547113cc7261027126fd9bae4ac22a18d51"
+    }
+  ],
+  "static_sources": [
+    {
+      "pose": "guard",
+      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/guard-master.png",
+      "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/guard-master.png",
+      "purpose": "weapon-only edit; preserve current katana player identity"
+    },
+    {
+      "pose": "follow",
+      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/follow-master.png",
+      "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/follow-master.png",
+      "purpose": "weapon-only edit; preserve current katana player identity"
+    },
+    {
+      "pose": "apex",
+      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/apex-master.png",
+      "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/apex-master.png",
+      "purpose": "weapon-only edit; preserve current katana player identity"
+    }
+  ]
+}

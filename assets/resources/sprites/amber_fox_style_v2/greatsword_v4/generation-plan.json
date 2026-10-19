@@ -1,0 +1,107 @@
+{
+  "identity": "Current katana_v3 player guard/follow/apex; weapon-only edits, no old greatsword identity",
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    219
+  ],
+  "standing_height": 174,
+  "pixel_size": 0.004137931034482759,
+  "visual_scale": 1.3,
+  "tasks": [
+    {
+      "action": "idle",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\idle-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 3,
+      "seed": 2026101960,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. One lively 3-second seamless ready idle. Same planted staggered boots and up-forward carried greatsword. Natural small breathing and one blink, lively single tail swaying, cape and ponytail overlap. Return exactly to supplied ready stance. Do not swing.",
+      "separate_end_node": false
+    },
+    {
+      "action": "run",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\run-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 3,
+      "seed": 2026101961,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. Run IN PLACE for three alternating full left-right running stride cycles. Both legs swap positions completely, modest head bob and brief flight, long legs and upright torso. Both hands carry rigid greatsword stable up-forward as supplied; tail cape ponytail stream behind. Do not attack, crouch or change size. Briefly settle back to initial guard only in final .3 seconds.",
+      "separate_end_node": false
+    },
+    {
+      "action": "follow-a",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\follow-a-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_follow_input.png",
+      "duration": 1.4,
+      "seed": 2026101962,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. ONE powerful heavy diagonal cleave from supplied middle guard to supplied low forward finishing pose. Brief anticipation: knees load and hips coil, hands draw back slightly but blade stays below ears. Then front boot plants, hips rotate and both hands accelerate SAME rigid sword down-forward through screen-right empty space. Hold supplied final pose. ONE cut, no overhead swing, spin, thrust, white fan or blurred blade.",
+      "separate_end_node": true
+    },
+    {
+      "action": "follow-b",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\follow-b-workflow.json",
+      "input": "greatsword_v4_follow_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 1.4,
+      "seed": 2026101963,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. Controlled recovery from low forward finishing pose to supplied ready middle guard. Both hands draw the SAME rigid straight blade back-up in front of torso, long legs recover staggered stance, tail cape ponytail settle with weight. No further attack, jump or overhead swing.",
+      "separate_end_node": true
+    },
+    {
+      "action": "apex-a",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\apex-a-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_apex_input.png",
+      "duration": 1.4,
+      "seed": 2026101964,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. First half of ONE game jump: knees briefly load then push into supplied airborne apex with both knees bent naturally BELOW waist, original long anatomy. Both hands carry blade gently up-forward BELOW ear height, no swing or overhead lift. Game physics supplies root displacement so head stays near original height. Tail cape ponytail lag. End in supplied airborne pose.",
+      "separate_end_node": true
+    },
+    {
+      "action": "apex-b",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\apex-b-workflow.json",
+      "input": "greatsword_v4_apex_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 1.4,
+      "seed": 2026101965,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. Second half of same jump: extend original long legs downward from supplied airborne pose, boots approach original ground, knees compress briefly to absorb landing then recover supplied exact standing guard. Both hands keep straight blade below ear height, no attack or overhead swing. Tail cape ponytail settle; game physics supplies root motion.",
+      "separate_end_node": true
+    },
+    {
+      "action": "dash",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\dash-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 3,
+      "seed": 2026101966,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. ONE forceful dash burst IN PLACE: lean torso moderately forward, front leg reaches and rear leg drives behind, full original long anatomy, hips only slightly lower. Both hands retain the up-forward rigid greatsword carry. Strong tail cape ponytail lag. Brake and recover supplied guard, no attack, turning or effects.",
+      "separate_end_node": false
+    },
+    {
+      "action": "hurt",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\hurt-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": "greatsword_v4_guard_input.png",
+      "duration": 3,
+      "seed": 2026101967,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. ONE small hurt recoil: shoulders flinch backward, knees absorb, eyes narrow and mouth briefly tightens. Both hands retain rigid sword, original anatomy and identity. Tail and cape overlap, return to exact smiling supplied guard. No falling, repeated hits, blood, extra parts or weapon drop.",
+      "separate_end_node": false
+    },
+    {
+      "action": "death",
+      "workflow": "D:\\Project\\GitHub\\yu\\assets\\resources\\sprites\\amber_fox_style_v2\\greatsword_v4\\death-workflow.json",
+      "input": "greatsword_v4_guard_input.png",
+      "end": null,
+      "duration": 3,
+      "seed": 2026101968,
+      "prompt": "The EXACT CURRENT PLAYER in Picture 1 and Picture 2, identical to her katana version. Lock original face shape, golden amber eyes, tiny pink smiling mouth, golden bob and single side ponytail, tall brown tipped fox ears, slim long torso and original long legs. Same yellow cape with cream trim and square clasp, cream sleeves, brown bodice belt hip pouch, opaque brown stockings and brown boots with gold cuffs, ONE golden tail with cream terminal third. Same pixel density, head size, colors, clothing coverage, connected flat coarse color blocks. No continuous dark outline, gradients, fine hairs or noise. Exactly TWO hands on ONE long brown hilt, gold pommel and broad straight gold crossguard, ONE BROAD STRAIGHT blue-gray GREATSWORD with cream edge. Rigid constant straight blade, same length and width, no bending or shrinking. Fixed square camera and same three-quarter front view facing SCREEN RIGHT; full ears feet tail blade visible inside canvas. Keep exact supplied character scale and center; no zoom or travel. Hands carry blade up-forward close to waist unless cutting. Never lift blade over head. Uniform pure GREEN RGB0 255 0 background, no shadows, effects, trails, particles or text. Silent. ONE non-looping defeat: knees buckle, lower onto knees, gently curl onto her side, then lie STILL until end, eyes closed. Keep covered original outfit and long anatomy, one tail, two hands and one rigid full intact greatsword resting beside body. No revival, shrinking, spinning, blood or injury.",
+      "separate_end_node": false
+    }
+  ],
+  "calibration": "Same uniform high-resolution canvas mapping for all poses, source standing silhouette 174px; scale and foot align world height .936 and collision bottom -.468 to current katana. No per-frame fitting."
+}

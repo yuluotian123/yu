@@ -6,9 +6,13 @@ namespace GameLogic
     {
         public string VisualRootPath { get; set; } = "VisualRoot";
         public string SlashNodeName { get; set; } = "AttackSlash";
-        public Vector2 SlashOffset { get; set; } = new(0.24f, 0.06f);
-        public Vector2 SlashScale { get; set; } = new(1f, 1f);
-        public Color SlashColor { get; set; } = new(1f, 0.42f, 0.18f, 0.72f);
+        public Vector2 SlashOffset { get; set; } = new(0.12f, 0.06f);
+        public Vector2 SlashScale { get; set; } = new(0.6f, 0.6f);
+        public Color SlashColor { get; set; } = new(1f, 0.76f, 0.35f, 0.8f);
+        public float StartAngleDegrees { get; set; } = 130f;
+        public float EndAngleDegrees { get; set; } = -55f;
+        public float TrailAngleDegrees { get; set; } = 80f;
+        public float TrailWidth { get; set; } = 0.14f;
 
         protected MeshInstance3D ResolveSlash(GraphExecutionContext context)
         {
@@ -22,18 +26,13 @@ namespace GameLogic
             if (slash != null)
                 return slash;
 
-            var mesh = new ImmediateMesh();
-            mesh.SurfaceBegin(Mesh.PrimitiveType.Triangles);
-            Vector3[] points = { new(0f, 0.24f, 0f), new(0.52f, 0.14f, 0f),
-                new(0.72f, 0f, 0f), new(0.52f, -0.14f, 0f), new(0f, -0.24f, 0f) };
-            for (int i = 1; i < points.Length - 1; i++)
-            { mesh.SurfaceAddVertex(points[0]); mesh.SurfaceAddVertex(points[i]); mesh.SurfaceAddVertex(points[i + 1]); }
-            mesh.SurfaceEnd();
             slash = new MeshInstance3D
             {
-                Name = SlashNodeName, Mesh = mesh, Visible = false,
+                Name = SlashNodeName, Mesh = new ImmediateMesh(), Visible = false,
+                CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
                 MaterialOverride = new StandardMaterial3D { ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-                    Transparency = BaseMaterial3D.TransparencyEnum.Alpha, CullMode = BaseMaterial3D.CullModeEnum.Disabled }
+                    Transparency = BaseMaterial3D.TransparencyEnum.Alpha, CullMode = BaseMaterial3D.CullModeEnum.Disabled,
+                    VertexColorUseAsAlbedo = true }
             };
 
             visualRoot.AddChild(slash);
@@ -43,11 +42,65 @@ namespace GameLogic
         protected void UpdateSlash(MeshInstance3D slash, float progress)
         {
             progress = Mathf.Clamp(progress, 0f, 1f);
-            float alpha = Mathf.Lerp(0.75f, 0.2f, progress);
-            slash.Position = new Vector3(SlashOffset.X, SlashOffset.Y, 0.01f);
-            slash.Scale = new Vector3(SlashScale.X, SlashScale.Y, 1f) * Mathf.Lerp(0.9f, 1.18f, progress);
-            ((StandardMaterial3D)slash.MaterialOverride).AlbedoColor = new Color(SlashColor.R, SlashColor.G, SlashColor.B, alpha);
+            float alpha = SlashColor.A * Mathf.Lerp(1f, 0.05f, progress);
+            var mesh = (ImmediateMesh)slash.Mesh;
+            mesh.ClearSurfaces();
+            mesh.SurfaceBegin(Mesh.PrimitiveType.Triangles);
+            float angle = Mathf.Lerp(StartAngleDegrees, EndAngleDegrees, progress);
+            float direction = EndAngleDegrees < StartAngleDegrees ? -1f : 1f;
+            float trail = Mathf.Min(Mathf.Abs(EndAngleDegrees - StartAngleDegrees) * progress + 15f,
+                Mathf.Abs(TrailAngleDegrees));
+            const int segments = 24;
+            for (int i = 0; i < segments; i++)
+            {
+                float a = (float)i / segments, b = (float)(i + 1) / segments;
+                Vector3 outerA = ArcPoint(angle - direction * trail * (1f - a), 1f);
+                Vector3 outerB = ArcPoint(angle - direction * trail * (1f - b), 1f);
+                float width = Mathf.Clamp(TrailWidth, 0.01f, 0.5f);
+                Vector3 innerA = outerA * (1f - width * Mathf.Sin(a * Mathf.Pi));
+                Vector3 innerB = outerB * (1f - width * Mathf.Sin(b * Mathf.Pi));
+                Color rim = new(1f, 0.97f, 0.84f, alpha);
+                Color body = new(SlashColor.R, SlashColor.G, SlashColor.B, alpha * 0.32f);
+                AddTriangle(mesh, outerA, outerB, innerB, rim, rim, body);
+                AddTriangle(mesh, outerA, innerB, innerA, rim, body, body);
+            }
+            mesh.SurfaceEnd();
+
+            // Match the character's Y-billboard plane; explicit mirroring survives camera rotation.
+            var visualRoot = (Node3D)slash.GetParent();
+            float facing = visualRoot.Scale.X < 0f ? -1f : 1f;
+            Camera3D camera = slash.GetViewport().GetCamera3D();
+            if (camera != null)
+            {
+                Vector3 right = camera.GlobalBasis.X;
+                right.Y = 0f;
+                right = right.Normalized();
+                Vector3 normal = right.Cross(Vector3.Up);
+                slash.GlobalTransform = new Transform3D(
+                    new Basis(right * (SlashScale.X * facing), Vector3.Up * SlashScale.Y, normal),
+                    visualRoot.GlobalPosition + right * (SlashOffset.X * facing) +
+                    Vector3.Up * SlashOffset.Y + normal * 0.025f);
+            }
+            else
+            {
+                slash.Position = new Vector3(SlashOffset.X, SlashOffset.Y, 0.025f);
+                slash.Scale = new Vector3(SlashScale.X, SlashScale.Y, 1f);
+            }
             slash.Visible = true;
+        }
+
+        private static Vector3 ArcPoint(float degrees, float radius)
+        {
+            float angle = Mathf.DegToRad(degrees);
+            return new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);
+        }
+
+        private static void AddTriangle(ImmediateMesh mesh, Vector3 a, Vector3 b, Vector3 c,
+            Color colorA, Color colorB, Color colorC)
+        {
+            mesh.SurfaceSetColor(colorA); mesh.SurfaceAddVertex(a);
+            mesh.SurfaceSetColor(colorB); mesh.SurfaceAddVertex(b);
+            mesh.SurfaceSetColor(colorC); mesh.SurfaceAddVertex(c);
         }
 
         public override Control CreateEditUI(GraphEditorContext context)
@@ -77,8 +130,20 @@ namespace GameLogic
                 "Color",
                 SlashColor,
                 value => SlashColor = value));
+            root.AddChild(GraphEditorUi.BuildRow("起始角度", BuildAngleSpin(StartAngleDegrees, v => StartAngleDegrees = v)));
+            root.AddChild(GraphEditorUi.BuildRow("结束角度", BuildAngleSpin(EndAngleDegrees, v => EndAngleDegrees = v)));
+            root.AddChild(GraphEditorUi.BuildRow("残影弧长", BuildAngleSpin(TrailAngleDegrees, v => TrailAngleDegrees = v)));
+            root.AddChild(GraphEditorUi.BuildRow("刀光宽度", BuildAngleSpin(TrailWidth, v => TrailWidth = v, .01, .5, .01)));
 
             return root;
+        }
+
+        private static SpinBox BuildAngleSpin(float value, System.Action<float> onChanged,
+            double min = -360, double max = 360, double step = 1)
+        {
+            var spin = new SpinBox { MinValue = min, MaxValue = max, Step = step, Value = value };
+            spin.ValueChanged += changed => onChanged((float)changed);
+            return spin;
         }
 
         private static Control BuildVector2Row(string label, Vector2 value, System.Action<Vector2> onChanged)

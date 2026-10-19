@@ -3,7 +3,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>EC owns scene capture; the compositor owns render-thread DDGI resources.</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class DdgiComponent3D : Component3D, ISerializationListener
 {
     [Export] public DdgiProfile Profile { get; set; }

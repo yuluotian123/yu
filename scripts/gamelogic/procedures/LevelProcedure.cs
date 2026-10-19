@@ -34,11 +34,7 @@ public class LevelProcedure : ProcedureBase
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {
-                var levelNode = tree.Root.GetNode("Root/Spacelevel");
-                if (levelNode != null)
-                {
-                    levelNode.QueueFree();
-                }
+                tree.GetFirstNodeInGroup("gameplay_level")?.QueueFree();
 
                 ChangeState<MainMenuProcedure>(procedureOwner);
             }

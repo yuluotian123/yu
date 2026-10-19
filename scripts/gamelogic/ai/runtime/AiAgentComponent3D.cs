@@ -17,7 +17,7 @@ public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Act
     public AiInteractionPointComponent3D Point(string name)=>Input(name) is {Type:CharacterValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Points.GetValueOrDefault(id):null;
 }
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeProvider
 {
     public override int Priority=>ComponentPriority.AI;
@@ -43,7 +43,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public string EntryKey=>ActorId;
     public int SchemaVersion=>2;
     public IEnumerable<Type> GetGraphNodeTypes(GraphAsset graph, GraphAsset root) => graph is NpcGraphAsset
-        ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcNeedPolicyNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
+        ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
     public IEnumerable<Type> GetGraphActionTypes(GraphAsset graph, GraphAsset root) => graph is FlowGraphAsset && (root is NpcGraphAsset || Graph?.Definitions.OfType<NpcActionDefinition>().Any(a=>a.ExecutionGraph==graph)==true)
         ? new[]{typeof(NpcMoveToTargetAction),typeof(NpcWaitAction),typeof(NpcRoamAction),typeof(NpcAbilityAction),typeof(NpcRememberAction),typeof(NpcAdjustRelationAction),typeof(NpcAdjustAffectAction)} : Array.Empty<Type>();
     readonly List<string> _trace=new(),_scores=new();
@@ -65,6 +65,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     {
         try
         {
+            Register();
             Character=Owner.GetComponent<CharacterDataComponent3D>();
             NpcProgram.Require(Character?.State!=null,"AI 需要已初始化的通用角色数据组件。");
             Program=NpcProgram.Compile(Graph,Character.Profile);
@@ -72,7 +73,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
             Decision=new(Program,State);Character.Restored+=CharacterRestored;
             Navigation=Owner.GetComponent<NpcNavigationComponent3D>();
             _save=ModuleSystem.GetModule<ISaveModule>();if(Persist)_save.RegisterSection(this);
-            Register();Record("Initialized");
+            Record("Initialized");
         }
         catch(Exception error){Running=false;LastFailure=error.Message;GD.PushError($"NPC {ActorId}: {error.Message}");}
     }
@@ -84,8 +85,8 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public override void OnUpdate(double delta)
     {
-        if(Program==null||State==null)return;
-        if(!_registered)Register();if(World==null)return;
+        if(!_registered)Register();
+        if(Program==null||State==null||World==null)return;
         Decision.Refresh();
         if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_bindings.Count>0)CancelPlan("Stopped");return;}
         var player=Owner.GetTree().CurrentScene?.GetNodeOrNull<Node3D>("Player");

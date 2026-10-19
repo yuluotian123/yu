@@ -51,7 +51,7 @@ script = ExtResource("12_166pd")
 size = Vector3(0.4, 0.72, 0.4)
 
 [node name="Courier" type="Node3D" unique_id=998379071]
-editor_description = "ochre_courier：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
+editor_description = "ochre_courier：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
 script = ExtResource("1_mnvc5")
 PersistentId = "town_courier_01"
 Components = Array[ExtResource("2_mnfcb")]([SubResource("character_data_ochre_courier"), SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])

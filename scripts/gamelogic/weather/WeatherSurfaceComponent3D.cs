@@ -6,7 +6,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>管理场景独立的天气表面。湿润、积水、积雪随游戏小时形成和消退。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class WeatherSurfaceComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX - 2;

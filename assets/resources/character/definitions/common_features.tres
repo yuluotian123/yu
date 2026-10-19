@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="CharacterFeatureLibrary" format=3 uid="uid://cm7eoq6idfa61"]
+
+[ext_resource type="Script" uid="uid://diby6inisurbr" path="res://scripts/gamelogic/character/data/CharacterFeatureDefinition.cs" id="definition"]
+[ext_resource type="Script" uid="uid://e6knkkw1170d" path="res://scripts/gamelogic/character/data/CharacterFeatureLibrary.cs" id="library"]
+
+[sub_resource type="Resource" id="sociability"]
+script = ExtResource("definition")
+Description = "社交意愿的强度；可供目标评分与条件使用。"
+DefinitionId = "sociability"
+DisplayName = "社交倾向"
+
+[sub_resource type="Resource" id="caution"]
+script = ExtResource("definition")
+Description = "对风险的谨慎程度；具体行为由条件与评分公式决定。"
+DefinitionId = "caution"
+DisplayName = "谨慎程度"
+
+[sub_resource type="Resource" id="reserved"]
+script = ExtResource("definition")
+Kind = 1
+Description = "角色具有内向特质。"
+DefinitionId = "reserved"
+DisplayName = "内向"
+
+[sub_resource type="Resource" id="cheerful"]
+script = ExtResource("definition")
+Kind = 1
+Description = "角色具有开朗特质。"
+DefinitionId = "cheerful"
+DisplayName = "开朗"
+
+[sub_resource type="Resource" id="activity"]
+script = ExtResource("definition")
+Kind = 2
+Description = "对活动的偏好强度；可供活动目标评分使用。"
+DefinitionId = "activity"
+DisplayName = "活动偏好"
+
+[sub_resource type="Resource" id="mood"]
+script = ExtResource("definition")
+Kind = 3
+Description = "负值表示低落，正值表示愉快；自然恢复到角色基线。"
+Minimum = -1.0
+DefaultValue = 0.0
+DefinitionId = "mood"
+DisplayName = "心情"
+
+[sub_resource type="Resource" id="trust"]
+script = ExtResource("definition")
+Kind = 4
+Description = "角色对某个联系人的信任程度。"
+Minimum = -1.0
+DefaultValue = 0.0
+DefinitionId = "trust"
+DisplayName = "信任"
+
+[sub_resource type="Resource" id="affinity"]
+script = ExtResource("definition")
+Kind = 4
+Description = "角色对某个联系人的好感程度。"
+Minimum = -1.0
+DefaultValue = 0.0
+DefinitionId = "affinity"
+DisplayName = "好感"
+
+[resource]
+resource_name = "通用角色特征定义库"
+script = ExtResource("library")
+Definitions = Array[ExtResource("definition")]([SubResource("sociability"), SubResource("caution"), SubResource("reserved"), SubResource("cheerful"), SubResource("activity"), SubResource("mood"), SubResource("trust"), SubResource("affinity")])

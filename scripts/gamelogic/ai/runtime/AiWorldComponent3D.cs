@@ -7,7 +7,7 @@ using Framework;
 using Godot;
 namespace GameLogic.AI;
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class AiWorldComponent3D : Component3D, ISaveSection, ICharacterEnvironment
 {
     public const string Group="npc_ai_world";

@@ -5,7 +5,7 @@ namespace GameLogic;
 
 public enum NpcNavigationStatus { Idle, Moving, Arrived, Failed }
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class NpcNavigationComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.State;
@@ -37,7 +37,8 @@ public partial class NpcNavigationComponent3D : Component3D
     public bool BeginPosition(Vector3 floorPosition, string targetId, float radius = .5f)
     {
         Stop();
-        if (!MapReady) return false;
+        if (!MapReady) { Fail("NavigationUnavailable"); return false; }
+        Failure = "";
         _positionTarget = floorPosition; TargetId = targetId; _positionRadius = radius;
         _lastProgress = Owner.GlobalPosition; _stuck = _elapsed = 0;
         Status = NpcNavigationStatus.Moving;

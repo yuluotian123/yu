@@ -12,21 +12,24 @@ namespace GameLogic
             Vector3 velocity,
             bool overrideHorizontal = true,
             bool overrideVertical = true,
-            int priority = 0)
+            int priority = 0,
+            bool useMovementInput = false)
         {
             Velocity = velocity;
             OverrideHorizontal = overrideHorizontal;
             OverrideVertical = overrideVertical;
             Priority = priority;
+            UseMovementInput = useMovementInput;
         }
 
         public Vector3 Velocity { get; }
         public bool OverrideHorizontal { get; }
         public bool OverrideVertical { get; }
         public int Priority { get; }
+        public bool UseMovementInput { get; }
     }
 
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class CharacterMovementComponent3D : Component3D, ICharacterAnimationVariableProvider
     {
         public override int Priority => ComponentPriority.Movement;
@@ -335,10 +338,11 @@ namespace GameLogic
         }
 
         private CharacterMovementProfile Settings => _settings ??= Profile ?? new CharacterMovementProfile();
+        private Vector2 TargetHorizontalVelocity => new Vector2(MoveInputX, MoveInputZ).LimitLength() * Settings.MoveSpeed;
 
         private void UpdateHorizontalVelocity(float delta)
         {
-            Vector2 target = new Vector2(MoveInputX, MoveInputZ).LimitLength() * Settings.MoveSpeed;
+            Vector2 target = TargetHorizontalVelocity;
             float control = IsOnFloor ? 1f : Settings.AirControl;
             float rate = target.LengthSquared() > 0.0001f ? Settings.Acceleration * control : Settings.Deceleration;
             Vector2 planar = new Vector2(Velocity.X, Velocity.Z).MoveToward(target, rate * delta);
@@ -402,8 +406,11 @@ namespace GameLogic
             Vector3 velocity = Velocity;
             if (_velocityOverride.OverrideHorizontal)
             {
-                velocity.X = _velocityOverride.Velocity.X;
-                velocity.Z = MovementSpace == CharacterMovementSpace.SideView ? 0f : _velocityOverride.Velocity.Z;
+                Vector2 horizontal = _velocityOverride.UseMovementInput
+                    ? TargetHorizontalVelocity
+                    : new Vector2(_velocityOverride.Velocity.X, _velocityOverride.Velocity.Z);
+                velocity.X = horizontal.X;
+                velocity.Z = MovementSpace == CharacterMovementSpace.SideView ? 0f : horizontal.Y;
             }
             if (_velocityOverride.OverrideVertical)
                 velocity.Y = _velocityOverride.Velocity.Y;

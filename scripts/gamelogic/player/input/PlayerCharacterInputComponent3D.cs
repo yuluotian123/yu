@@ -3,7 +3,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class PlayerCharacterInputComponent3D : Component3D, ICharacterInputProvider
     {
         public override int Priority => ComponentPriority.Input;

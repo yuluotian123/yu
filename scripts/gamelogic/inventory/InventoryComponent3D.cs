@@ -10,7 +10,7 @@ namespace GameLogic;
 
 public enum InventoryDragArea { Bag, Equipment, CurrentWeapon }
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class InventoryComponent3D : Component3D
 {
     [Export] public Godot.Collections.Array<WeaponDefinition> StartingWeapons { get; set; } = new();

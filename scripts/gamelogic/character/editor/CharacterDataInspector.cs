@@ -11,7 +11,7 @@ namespace GameLogic;
 public partial class CharacterDataInspector : EditorInspectorPlugin
 {
     CharacterProfile _profile;
-    public override bool _CanHandle(GodotObject target)=>target is CharacterDataComponent3D or CharacterProfile or CharacterNeedsDefinition or CharacterNeedDefinition;
+    public override bool _CanHandle(GodotObject target)=>target is CharacterDataComponent3D or CharacterProfile or CharacterNeedsDefinition or CharacterNeedDefinition or CharacterFeatureLibrary or CharacterFeatureDefinition or CharacterFeatureValue or CharacterPersonalityDefinition or CharacterAffectDefinition or CharacterRelationsDefinition;
     public override void _ParseBegin(GodotObject target)
     {
         if(target is CharacterDataComponent3D component)_profile=component.Profile;
@@ -19,10 +19,16 @@ public partial class CharacterDataInspector : EditorInspectorPlugin
     }
     public override bool _ParseProperty(GodotObject target,Variant.Type type,string name,PropertyHint hint,string hintString,PropertyUsageFlags usage,bool wide)
     {
+        if(target is CharacterFeatureLibrary library&&name==nameof(CharacterFeatureLibrary.Definitions))
+        {AddPropertyEditor(name,new CharacterFeatureLibraryProperty(library));return true;}
+        if(_profile==null||!Contains(_profile,target))
+            _profile=Engine.IsEditorHint()?FindProfile(EditorInterface.Singleton.GetEditedSceneRoot(),target):null;
+        if(target is CharacterFeatureValue value&&name is nameof(CharacterFeatureValue.UseDefaultRecovery) or nameof(CharacterFeatureValue.RecoveryPerHour)&&CharacterFeatureEditors.Kind(_profile,value)!=CharacterFeatureKind.Affect)return true;
+        var featureEditor=CharacterFeatureEditors.Create(_profile,target,name);
+        if(featureEditor!=null){AddPropertyEditor(name,featureEditor);return true;}
         if(target is CharacterNeedsDefinition needs&&name==nameof(CharacterNeedsDefinition.Needs))
         {AddPropertyEditor(name,new CharacterNeedsProperty(needs));return true;}
         if(target is not CharacterNeedDefinition||name!=nameof(CharacterNeedDefinition.RateMultiplier))return false;
-        if(_profile==null||!Contains(_profile,target))_profile=FindProfile(EditorInterface.Singleton.GetEditedSceneRoot(),target);
         if(_profile==null)return false;
         var context=new NpcGraphAsset{CharacterContext=_profile,IncludeDecisionSymbols=false};
         AddPropertyEditor(name,new NpcExpressionProperty(context,target,name,CharacterValueType.Number));return true;

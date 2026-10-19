@@ -2,7 +2,7 @@ using Godot;
 
 namespace GameLogic;
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class CameraProfile3D : Resource
 {
     [ExportGroup("Follow Framing")]

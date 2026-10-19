@@ -11,6 +11,8 @@ public static class NpcResourcePresentation
     {
         NpcDefinitionResource definition=>string.IsNullOrWhiteSpace(definition.DisplayName)?definition.Category:definition.DisplayName,
         CharacterNeedDefinition need=>string.IsNullOrWhiteSpace(need.DisplayName)?need.NeedId:need.DisplayName,
+        CharacterFeatureDefinition feature=>string.IsNullOrWhiteSpace(feature.DisplayName)?feature.Category:feature.DisplayName,
+        CharacterFeatureValue value=>graph.CharacterContext?.ResolveFeatureLibrary()?.Find(value.DefinitionId)?.DisplayName??"特征引用已失效",
         NpcActionInputDefinition input=>input.Name+" · 行动输入",
         NpcBindingDefinition binding=>binding.Name+" · 计划变量",
         NpcEffectDefinition effect=>"修改 · "+(NpcExpressionEditorCatalog.WritableTargets(graph,effect).FirstOrDefault(s=>s.Key==effect.Key)?.Label??effect.Key),
@@ -23,13 +25,13 @@ public static class NpcResourcePresentation
     public static string Description(NpcGraphAsset graph,Resource resource)=>resource switch
     {
         CharacterIdentityDefinition identity=>$"身份与表现 · {identity.Parameters.Count} 个参数 · {identity.Tags.Length} 个标签",
-        CharacterNeedsDefinition needs=>$"需求 · {needs.Needs.Count} 项 · 点击条目编辑初值、变化率与阈值",
-        CharacterPersonalityDefinition personality=>$"性格 · {personality.Dimensions.Count} 个维度 · {personality.Preferences.Count} 个偏好",
+        CharacterNeedsDefinition needs=>$"需求 · {needs.Needs.Count} 项 · 点击条目编辑基础数值与紧迫度规则",
+        CharacterPersonalityDefinition personality=>$"性格 · {personality.Dimensions.Count} 项覆盖 · {personality.Traits.Length} 项特质 · {personality.Preferences.Count} 项偏好覆盖",
         NpcGoalDefinition=>"目标 · 启用条件、评分、完成条件；通过连线配置候选行动与计划",
         NpcActionDefinition action=>$"行动 · {action.Inputs.Count} 个输入 · {action.Predictions.Count} 个预测效果 · {action.Results.Count} 个结果效果",
         NpcPlanTemplateDefinition plan=>$"计划 · {plan.ActionIds.Length} 个候选行动 · {plan.Variables.Count} 个计划变量",
         NpcTargetSelectorDefinition=>"目标选择器 · 候选来源、筛选条件与选择策略",
-        CharacterNeedDefinition need=>$"需求 · 范围 {need.Minimum:G}～{need.Maximum:G} · 初值 {need.Initial:G} · 每小时变化 {need.ChangePerHour:G}",
+        CharacterNeedDefinition need=>$"需求 · 每小时变化 {need.ChangePerHour:G} · 进入 {(need.HigherIsUrgent?"≥":"≤")} {need.UrgencyEnter:G} · 解除 {(need.HigherIsUrgent?"≤":"≥")} {need.UrgencyExit:G} · 曲线指数 {need.UrgencyExponent:G}",
         NpcActionInputDefinition input=>$"行动输入 · {TypeName(input)} · {Source(input)} · {input.ResourceRequirements.Length} 项资源要求",
         NpcBindingDefinition binding=>$"计划变量 · {TypeName(binding)} · {Source(binding)}",
         NpcEffectDefinition effect=>(effect.Mode==NpcEffectMode.Add?"增加/减少：":"设为：")+NpcExpressionPresentation.Format(effect.Value,NpcExpressionEditorCatalog.For(graph,effect)),

@@ -109,17 +109,8 @@ GetStatus 的 generation 仍表示输入修订，不能据此判断历史被清�
 
 整轮更新复用原有临时缓冲和当帧绑定，低预算配置至少使用 256 个暂存槽，避免大量微小 dispatch。当前关卡的整轮辐射 / 分类预算为 746496 条，发光面遮挡查询上限 1119744 条，GPU 工作量会明显增加；快速调时以画面及时响应为优先，尚未完成性能专项优化。光照平稳后自动恢复 Profile.ProbesPerFrame 与原历史权重。F8 和 GetStatus 的 lighting_catch_up / updated_probes 可确认当前模式；射线状态显示实际更新量。
 
-## 验证
+## 关卡联调
 
-```powershell
-.\scripts\tools\rendering\validate_ddgi.ps1
-.\scripts\tools\rendering\validate_ddgi_native.ps1
-.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('--audio-driver','Dummy','--script','res://scripts/tools/rendering/validate_relink.gd')
-.\scripts\tools\engine\launch_godot.ps1 -RunGame -Headless -GodotArguments @('--script','res://scripts/tools/rendering/validate_environment_preview.gd')
-```
-
-GPU 回归必须使用真实 RenderingDevice，不加 `--headless`。两套 DDGI 验证分别负责探针算法与 Forward+ 原生接收；结果与截图放在忽略目录 `.godot/ddgi-validation/`、`.godot/ddgi-native-validation/`。Relink 和昼夜预览使用各自的验证入口。
-
-关卡联调直接运行 Spacelevel，通过 F8 检查 DDGI 状态，在正午、午夜、连续入夜、跳时及雨雪条件下检查间接光照、材质变化和退出回收。算法及原生接收验证不能替代实际关卡的视觉检查；极暗处仍可能出现低采样数噪声。
+直接运行白盒关卡，通过 F8 检查 DDGI 状态，在正午、午夜、连续入夜、跳时及雨雪条件下观察间接光照、材质变化和退出回收。自动验证脚本与历史实验输出已移除；极暗处仍可能出现低采样数噪声。
 
 下一步优先处理 RendererRD 场景所有权与脏标记、局部几何失效、预算内更新优先级、性能与复杂薄墙；随后分别验收材质图集、探针调试视图、蒙皮 / 风动、多次回弹与世界流送。软件射线或预计算重光照属于后续兼容路线，当前未实现。

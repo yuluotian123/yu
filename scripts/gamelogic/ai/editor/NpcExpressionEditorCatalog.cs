@@ -22,6 +22,8 @@ public static class NpcExpressionEditorCatalog
                 symbols[(parameter ? "parameter:" : "fact:") + key] = new(key, label, group, type, parameter, writable);
         }
         var definitions=new List<CharacterDefinitionResource>();
+        var features=graph.CharacterContext?.ResolveFeatureLibrary()?.Definitions.Where(d=>d is {Enabled:true}).ToArray()??Array.Empty<CharacterFeatureDefinition>();
+        string FeatureName(CharacterFeatureDefinition definition)=>string.IsNullOrWhiteSpace(definition.DisplayName)?definition.Category:definition.DisplayName;
         if(graph.CharacterContext is {} profile)definitions.AddRange(new CharacterDefinitionResource[]{profile.Identity,profile.Needs,profile.Personality,profile.Relations,profile.Affect,profile.Facts}.Where(d=>d is {Enabled:true}));
         foreach(var root in graph.Nodes.OfType<NpcRootNodeData>())foreach(var edge in graph.GetOutgoingConnections(root.Id,0).Where(e=>e.IsAvailable))
             if(graph.FindNodeById(edge.ToNode) is NpcDefinitionNodeData node&&graph.Resolve(node.DefinitionId) is {Enabled:true} d)definitions.Add(d);
@@ -43,9 +45,9 @@ public static class NpcExpressionEditorCatalog
                     }
                     break;
                 case CharacterPersonalityDefinition personality:
-                    foreach (var p in personality.Dimensions.Where(p => p != null)) Add("personality." + p.Key, p.Key, "性格", p.ValueType);
-                    foreach (var p in personality.Preferences.Where(p => p != null)) Add("preference." + p.Key, p.Key, "偏好", p.ValueType);
-                    foreach (var tag in personality.Traits) Add("trait." + tag, tag, "特质", CharacterValueType.Boolean);
+                    foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Personality)) Add("personality." + p.DefinitionId, FeatureName(p), "性格", CharacterValueType.Number);
+                    foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Preference)) Add("preference." + p.DefinitionId, FeatureName(p), "偏好", CharacterValueType.Number);
+                    foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Trait)) Add("trait." + p.DefinitionId, FeatureName(p), "特质", CharacterValueType.Boolean);
                     break;
                 case NpcScheduleDefinition schedule:
                     foreach (var tag in schedule.Windows.Where(w => w != null).SelectMany(w => w.Tags)) Add("schedule." + tag, tag, "日程", CharacterValueType.Boolean);
@@ -54,10 +56,10 @@ public static class NpcExpressionEditorCatalog
                     foreach (var f in schema.Facts.Where(f => f != null)) Add(f.Key, f.Key, "私有事实", f.Type, writable: true);
                     break;
                 case CharacterAffectDefinition affect:
-                    foreach (var p in affect.Dimensions.Where(p => p != null)) Add("affect." + p.Key, p.Key, "情绪", CharacterValueType.Number);
+                    foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Affect)) Add("affect." + p.DefinitionId, FeatureName(p), "情绪", CharacterValueType.Number);
                     break;
                 case CharacterRelationsDefinition relations:
-                    foreach (var p in relations.Dimensions.Where(p => p != null)) Add("relations." + p.Key + ".max", p.Key + " · 最高值", "关系", CharacterValueType.Number);
+                    foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Relation)) Add("relations." + p.DefinitionId + ".max", FeatureName(p) + " · 最高值", "关系", CharacterValueType.Number);
                     break;
                 case NpcMemoryDefinition memory:
                     foreach (var category in memory.Categories) Add("memory." + category + ".count", category + " · 条数", "记忆", CharacterValueType.Number);

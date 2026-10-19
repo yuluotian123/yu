@@ -72,7 +72,7 @@ public partial class CharacterNeedsProperty : EditorProperty
             remove.Pressed += () => { var next = new Godot.Collections.Array<CharacterNeedDefinition>(_owner.Needs); next.RemoveAt(index); Commit(next); };
             row.AddChild(picker); row.AddChild(remove); entry.AddChild(row); _body.AddChild(entry);
         }
-        _body.AddChild(new Label { Text = "点击需求资源编辑 ID、名称、初值和变化率；\n新增项会自动注册到条件参数选择器。", AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        _body.AddChild(new Label { Text = "点击需求资源编辑基础数值与紧迫度规则；\n默认阈值随需求范围缩放，取消 Use Default Thresholds 可自定义。\n新增项会自动注册到条件参数选择器。", AutowrapMode = TextServer.AutowrapMode.WordSmart });
     }
 }
 #endif

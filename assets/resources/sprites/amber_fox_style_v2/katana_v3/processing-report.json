@@ -1,0 +1,161 @@
+{
+  "clips": [
+    {
+      "clip": "idle",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 73,
+      "selected_frames": 24,
+      "source_sha256": "218119728b896f4327e3aff16fc8a7ab42de1d83057b5bcff41e3eaa56ea275f",
+      "contour_pixels_recolored": 7328,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "run",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 73,
+      "selected_frames": 24,
+      "source_sha256": "5a5e6490027dd3c0ddbc3486d56d9cf0dd6abbf5a8547a80d5141e4064f9f967",
+      "contour_pixels_recolored": 7584,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "follow-a",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 39,
+      "selected_frames": 9,
+      "source_sha256": "68272e9c8a4cb487fddd3f68b69592802ffb339e91e862787f9b63362582c0a9",
+      "contour_pixels_recolored": 2972,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "follow-b",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 39,
+      "selected_frames": 9,
+      "source_sha256": "b2e787d5ad3a99ec2e3f1acb65bafb783466e96db648052220f4ac4cddc8d61a",
+      "contour_pixels_recolored": 2550,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "apex-a",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 39,
+      "selected_frames": 12,
+      "source_sha256": "4aee8e89d55d4cb15149b58f78af10848c80a7134c4ae01593f4308a2714e857",
+      "contour_pixels_recolored": 3820,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "apex-b",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 39,
+      "selected_frames": 10,
+      "source_sha256": "6ff8486b1a3d17b86e05039b4f52391211874daea964fab444f9241250cf3b1c",
+      "contour_pixels_recolored": 3115,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "dash",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 73,
+      "selected_frames": 6,
+      "source_sha256": "e28217b630bb1c0fcc5c4ce01b639625b968190de0feb430490ae25a450148ce",
+      "contour_pixels_recolored": 2338,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "hurt",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 73,
+      "selected_frames": 8,
+      "source_sha256": "aa87f9fa812917fe1d636fdf76126c46bc4a09500604e94c5dc474a0c0e72ac2",
+      "contour_pixels_recolored": 2379,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    },
+    {
+      "clip": "death",
+      "source": {
+        "size": [
+          512,
+          512
+        ],
+        "fps": 24.0
+      },
+      "source_frames": 73,
+      "selected_frames": 16,
+      "source_sha256": "2fc40dc060610b0bbb74edaa94592321277d47e2226001225ad3205e87ce3b63",
+      "contour_pixels_recolored": 4477,
+      "interior_rgb_exact": true,
+      "independent_silhouette_reference": false,
+      "status": "needs_visual_review"
+    }
+  ],
+  "global_quantization": false,
+  "source_transform": "whole 512x512 canvas to 256x256, nearest; no per-frame fitting or translation",
+  "alpha": "green chroma key; only isolated <=3px codec specks removed; spill recoloring restricted to outer 3px",
+  "mask_coverage": "No independent full silhouette reference. Numerical checks prove retained interior RGB only; manual region review required."
+}

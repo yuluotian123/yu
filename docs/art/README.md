@@ -5,7 +5,8 @@
 | 文档 | 内容 |
 | --- | --- |
 | [DDGI 接入与维护](ddgi_implementation.md) | Spacelevel 接线、参数、源码归属、支持范围与验证 |
-| [小镇卡通渲染](town_rendering.md) | 直接光、PBR / Toon 材质、植被、阴影与物理强度 |
+| [白盒测试关卡](whitebox_level.md) | 平地、角色、入口与资源清理范围 |
+| [通用场景表面与卡通渲染](town_rendering.md) | 直接光、PBR / Toon 材质、植被、阴影与物理强度 |
 | [Relink 后处理](relink_post.md) | 捕获依据、HDR LUT / Film / Bloom 顺序及参数 |
 | [天空与云](sky_clouds.md) | 原始资源、移植边界、云层与辐照输入 |
 | [HD-2D 相机](hd2d_camera.md) | 场景相机、投影与跟随 |

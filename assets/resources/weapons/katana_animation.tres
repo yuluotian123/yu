@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponAnimationProfile" format=3 uid="uid://bow24ol6ao2wl"]
 
 [ext_resource type="Script" uid="uid://jnv4s2cqtvpj" path="res://scripts/gamelogic/weapons/WeaponAnimationProfile.cs" id="1_script"]
-[ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/full_256/kt/sprite_frames.tres" id="2_frames"]
+[ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/katana_v3/sprite_frames.tres" id="2_frames"]
 
 [resource]
 script = ExtResource("1_script")

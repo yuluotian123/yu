@@ -4,7 +4,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class CharacterGraphComponent3D : Component3D
     {
         private CharacterGraphAsset _characterGraph;

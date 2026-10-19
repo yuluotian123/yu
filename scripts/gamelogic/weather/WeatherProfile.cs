@@ -2,7 +2,7 @@ using Godot;
 
 namespace GameLogic;
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class WeatherProfile : Resource
 {
     [ExportGroup("Schedule (Game Hours)")]

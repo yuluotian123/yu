@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GameLogic
 {
+    // Godot 的工具脚本标记不继承，具体组件也须显式添加 [Tool]。
     [Tool, GlobalClass]
     public abstract partial class Component3D : Resource, IComponent
     {

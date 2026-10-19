@@ -6,7 +6,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>绑定场景内的 GM 控件，直接操作当前环境的世界时钟。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class TimeOfDayGmComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX;

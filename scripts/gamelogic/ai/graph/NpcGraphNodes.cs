@@ -66,7 +66,6 @@ public abstract class NpcDefinitionNodeData : GraphNodeData
         context.GraphNode.AddChild(box);
     }
 }
-public class NpcNeedPolicyNodeData : NpcDefinitionNodeData { public override Type DefinitionType=>typeof(NpcNeedPolicyDefinition); public override string GetDisplayName()=>"需求决策规则"; }
 public class NpcScheduleNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcScheduleDefinition); public override string GetDisplayName()=>"日程"; }
 public class NpcPerceptionNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcPerceptionDefinition); public override string GetDisplayName()=>"感知"; }
 public class NpcMemoryNodeData : NpcDefinitionNodeData { public override Type DefinitionType => typeof(NpcMemoryDefinition); public override string GetDisplayName()=>"记忆"; }

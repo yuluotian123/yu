@@ -7,7 +7,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>统一 GM 外壳。各调试页由场景中的控件和组件组成。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class RuntimeGmComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX + 1;

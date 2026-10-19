@@ -4,7 +4,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class CharacterPersistenceComponent3D : Component3D, ISaveSection
     {
         public override int Priority => int.MinValue + 10;

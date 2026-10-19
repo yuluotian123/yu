@@ -24,6 +24,13 @@ script = ExtResource("6_weather")
 [sub_resource type="Resource" id="npc_gm"]
 script = ExtResource("npc_gm")
 
+[sub_resource type="StyleBoxFlat" id="npc_panel_style"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.045, 0.065, 0.1, 0.96)
+
 [sub_resource type="InputEventKey" id="toggle_key"]
 keycode = 4194339
 
@@ -630,38 +637,187 @@ autowrap_mode = 2
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+theme_override_constants/separation = 10
 metadata/_tab_name = "NPC"
 
-[node name="NpcActions" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
-layout_mode = 2
-
-[node name="NpcReplan" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcActions"]
+[node name="NpcSummary" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "重新规划"
+theme_override_colors/font_color = Color(0.58, 0.88, 1, 1)
+text = "等待 NPC 世界就绪。"
+autowrap_mode = 2
 
-[node name="NpcToggleShop" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcActions"]
+[node name="NpcGlobal" type="HFlowContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+
+[node name="NpcAllRunning" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcGlobal"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "切换交互点开放"
+text = "暂停全部 AI"
 
-[node name="NpcSocialActions" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
-layout_mode = 2
-
-
-[node name="NpcRain" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSocialActions"]
+[node name="NpcAllReplan" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcGlobal"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "AI 降雨：雨/晴/自动"
+text = "全部重新规划"
 
+[node name="NpcRain" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcGlobal"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "仅覆盖 NPC 决策读取的降雨。画面天气请在「天气」页调整。"
+item_count = 3
+selected = 0
+popup/item_0/text = "AI 降雨：跟随天气"
+popup/item_0/id = 0
+popup/item_1/text = "AI 降雨：强制无雨"
+popup/item_1/id = 1
+popup/item_2/text = "AI 降雨：强制下雨"
+popup/item_2/id = 2
 
+[node name="NpcSelection" type="HFlowContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
 
-[node name="NpcDetails" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+[node name="NpcActor" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSelection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(310, 32)
+layout_mode = 2
+
+[node name="NpcRunning" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSelection"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "暂停此 NPC"
+
+[node name="NpcReplan" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSelection"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "此 NPC 重新规划"
+
+[node name="NpcCopy" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSelection"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "复制诊断"
+
+[node name="NpcInspector" type="TabContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("npc_panel_style")
+current_tab = 0
+
+[node name="NpcDetails" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
 text = "等待 NPC 世界就绪。"
+selection_enabled = true
 scroll_following = false
+metadata/_tab_name = "状态"
+
+[node name="NpcGoals" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+selection_enabled = true
+metadata/_tab_name = "目标与计划"
+
+[node name="CharacterState" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+metadata/_tab_name = "角色数据"
+
+[node name="NeedEdit" type="HFlowContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+
+[node name="NpcNeed" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState/NeedEdit"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 32)
+layout_mode = 2
+
+[node name="NpcNeedValue" type="SpinBox" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState/NeedEdit"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 32)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="NpcReadNeed" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState/NeedEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "读取当前值"
+
+[node name="NpcApplyNeed" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState/NeedEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "应用并重规划"
+
+[node name="NpcState" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/CharacterState"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 16
+selection_enabled = true
+
+[node name="InteractionPoints" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+metadata/_tab_name = "交互点"
+
+[node name="PointEdit" type="HFlowContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+
+[node name="NpcPoint" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints/PointEdit"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 32)
+layout_mode = 2
+
+[node name="NpcOpenPoint" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints/PointEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "开放"
+
+[node name="NpcClosePoint" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints/PointEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="NpcAutoPoint" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints/PointEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "恢复日程"
+
+[node name="NpcRestock" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints/PointEdit"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "补至初始库存"
+
+[node name="NpcPoints" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector/InteractionPoints"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 16
+selection_enabled = true
+
+[node name="NpcTrace" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcInspector"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+selection_enabled = true
+metadata/_tab_name = "事件日志"
+
+[node name="NpcFeedback" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.71, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "调试操作修改当前运行状态；保存游戏时会包含需求和交互点修改。AI 降雨仅影响决策。"
+autowrap_mode = 2
 
 [node name="Confirm" type="ConfirmationDialog" parent="CanvasLayer/Root" unique_id=1331549208]
 unique_name_in_owner = true

@@ -6,7 +6,7 @@ using Godot;
 namespace GameLogic.AI;
 
 /// <summary>A tagged world capability endpoint. No food/work/profession enum.</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class AiInteractionPointComponent3D : Component3D
 {
     public override int Priority=>ComponentPriority.Interaction;
@@ -44,6 +44,7 @@ public partial class AiInteractionPointComponent3D : Component3D
     public bool Reserved(string actor){Expire();return _leases.ContainsKey(actor);}
     public void Release(string actor)=>_leases.Remove(actor);
     public void SetOpen(bool open){ManualOpen=open;Revision++;}
+    public void ClearOpenOverride(){ManualOpen=null;Revision++;}
     public void MarkChanged()=>Revision++;
     public JsonObject Capture()=>new(){["stock"]=Stock,["manual_open"]=ManualOpen};
     public void Restore(JsonObject state){Stock=state["stock"]?.GetValue<double>()??StartingStock;ManualOpen=state["manual_open"]?.GetValue<bool>();_leases.Clear();Revision++;}

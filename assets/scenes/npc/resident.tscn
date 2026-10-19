@@ -1,8 +1,5 @@
 [gd_scene format=3 uid="uid://cjn2miybyq1w7"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
-[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
-
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_cp75n"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_qx57b"]
 [ext_resource type="Resource" uid="uid://dxkkt6bnrusiu" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="3_i7in3"]
@@ -16,6 +13,8 @@
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="11_5mwig"]
 [ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="12_y5ccx"]
 [ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="13_w04po"]
+[ext_resource type="Script" uid="uid://8o1dotfiya30" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
+[ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
 
 [sub_resource type="Resource" id="character_data_gray_green_resident"]
 script = ExtResource("character_data_script")
@@ -51,7 +50,7 @@ script = ExtResource("12_y5ccx")
 size = Vector3(0.4, 0.72, 0.4)
 
 [node name="Resident" type="Node3D" unique_id=452096645]
-editor_description = "gray_green_resident：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
+editor_description = "gray_green_resident：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
 script = ExtResource("1_cp75n")
 PersistentId = "town_resident_01"
 Components = Array[ExtResource("2_qx57b")]([SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])

@@ -70,26 +70,9 @@ GPU 清理通过 `relink_gpu_cleanup.gd` 在渲染线程执行。其原生回调
 
 此前 4.6.1 的验证在 D3D12 / RTX 5080 下完成：两套 LUT 字节一致，近/远调色和泛光均有实际像素变化；正午、午夜、黄昏及开关对照已检查，退出时没有新增 GPU RID 泄漏。
 
-### Godot 4.8 / Forward+ 回归
+### Godot 4.8 / Forward+
 
-2026-10-17 使用源码版本 `4d10419`、Windows / Vulkan / RTX 5080 运行：
-
-```powershell
-dotnet build yu.csproj --no-restore
-& 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mono.ddgi_scene.console.exe' --path 'D:/Project/GitHub/yu' --rendering-method forward_plus --rendering-driver vulkan --audio-driver Dummy --script res://scripts/tools/rendering/validate_relink.gd
-& 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mono.ddgi_scene.console.exe' --headless --path 'D:/Project/GitHub/yu' --script res://scripts/tools/rendering/validate_environment_preview.gd
-```
-
-GPU 回归必须使用真实 RenderingDevice，不能加 `--headless`。它读取实际 Spacelevel 资源检查接线，再用已知线性颜色的不透明与半透明色块做数值对照，不实例化整套玩法：
-
-- 原生 Linear 输出、一次 Film / sRGB 转换、Exposure=1 和 3 的 GPU 输出与 CPU 参考最大通道误差低于 0.002（8 位输出量化）。
-- LUT 开启有像素变化；关闭与开启 4× MSAA 后，不透明和透明内部采样点一致，LUT 阶段实际执行 MSAA 写回。
-- Relink Bloom 有独立像素变化；UI 在 Film / Bloom 前后采样一致。
-- 640×360 → 800×450 的缓冲重建、旁路、GPU 资源释放后重新启用全部通过。
-- `RELINK_VALIDATION_COMPLETE failures=0`；正常用户权限运行没有着色器错误或 GPU 清理报错。截图与数值保存在 `.godot/relink-validation/`。
-- 原有 `validate_environment_preview.gd` 验证手动参数保留、开关独立和日月方向更新，全部通过。C# 构建为 0 错误、7 个现有警告。
-
-该回归覆盖后处理顺序、颜色和资源生命周期，不是整关卡美术验收或 GPU 性能基准。
+使用项目引擎运行白盒关卡，通过 F8 检查 Relink 的调色、透明混合、Bloom、分辨率切换及开关。自动回归脚本和历史截图、数值报告已移除。
 
 ## 复现边界
 

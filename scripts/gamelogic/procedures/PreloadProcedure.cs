@@ -31,7 +31,7 @@ public class PreloadProcedure : ProcedureBase
         try
         {
             var resource = ModuleSystem.GetModule<IResourceModule>();
-            handle = resource.LoadSceneAsync("res://assets/scenes/spacelevel.tscn")
+            handle = resource.LoadSceneAsync("res://assets/scenes/levels/whitebox_test.tscn")
                 .WithCancellation(cancellation);
             _pendingScene = handle;
             await handle.Task;

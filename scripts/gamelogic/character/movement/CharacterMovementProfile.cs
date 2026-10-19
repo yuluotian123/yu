@@ -2,7 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class CharacterMovementProfile : Resource
     {
         [Export] public float MoveSpeed { get; set; } = 2.8f;

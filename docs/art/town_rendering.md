@@ -1,8 +1,10 @@
-# 小镇卡通渲染
+# 通用场景表面与卡通渲染
 
-当前 Spacelevel 使用 Forward+ 日月直射光、阴影、自研 DDGI、天空镜面反射与 SSR，保留 SSAO。SSIL / SDFGI 由 Environment 独立配置，单独验收 DDGI 时关闭；验证脚本只修改测试实例。建筑、水面和植被通过原生材质路径接收光照；受控城镇 / 植被材质同时贡献 DDGI。探针范围与限制见 [DDGI 接入指南](ddgi_implementation.md)。
+当前入口为白盒测试关卡，几何只有带碰撞的灰色平地。下面记录保留的通用渲染能力；旧小镇场景与专用素材已删除。
 
-建筑、铺装、路缘石、围栏和道具统一使用 `town_toon.gdshader`。基础分支为 `diffuse_burley` + `specular_schlick_ggx`，保留 Forward+ 的天空反射、SSR、环境光、阴影、曝光与 AO；`light()` 负责直接光的 Toon/Burley 漫反射及 GGX 高光。材质保存在 `assets/materials/town/`，通过贴图、粗糙度、金属度和天气参数区分表面。玻璃、水、花草和树叶沿用各自专用材质。
+环境系统支持 Forward+ 日月直射光、阴影、自研 DDGI、天空镜面反射与 SSR，保留 SSAO。SSIL / SDFGI 由 Environment 独立配置，单独验收 DDGI 时关闭；验证脚本只修改测试实例。建筑、水面和植被通过原生材质路径接收光照；受控城镇 / 植被材质同时贡献 DDGI。探针范围与限制见 [DDGI 接入指南](ddgi_implementation.md)。
+
+通用不透明表面可使用 `town_toon.gdshader`。基础分支为 `diffuse_burley` + `specular_schlick_ggx`，保留 Forward+ 的天空反射、SSR、环境光、阴影、曝光与 AO；`light()` 负责直接光的 Toon/Burley 漫反射及 GGX 高光。白盒地面使用场景内 StandardMaterial3D。通用表面及植被 Shader 保留原路径与 UID，继续供天气和 DDGI 使用。
 
 不使用原生 `diffuse_toon` 开关，因为该分支会按金属度抑制非金属的天空与 SSR 反射。统一 Shader 只对直接漫反射做风格化，不改变这部分反射路径，见 [Forward+ 环境反射源码](https://github.com/godotengine/godot/blob/4.6.1-stable/servers/rendering/renderer_rd/shaders/forward_clustered/scene_forward_clustered.glsl)。
 

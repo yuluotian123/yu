@@ -2,7 +2,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class SimpleAICharacterControllerComponent3D : Component3D
     {
         public override int Priority => ComponentPriority.AI;

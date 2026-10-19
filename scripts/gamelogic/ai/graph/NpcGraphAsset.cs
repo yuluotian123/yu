@@ -30,7 +30,6 @@ public partial class NpcGraphAsset : GraphAsset
     {
         if (!HasCustomPropertyEditors(target)) return null;
         if(target==this&&property==nameof(Definitions))return new NpcDefinitionsProperty(this);
-        if(target is NpcNeedPolicyDefinition policy&&property==nameof(NpcNeedPolicyDefinition.NeedId))return new NpcNeedPolicyProperty(this,policy);
         if(target is NpcActionDefinition&&property==nameof(NpcActionDefinition.Inputs)||target is NpcPlanTemplateDefinition&&property==nameof(NpcPlanTemplateDefinition.Variables))return new NpcBindingsProperty((Resource)target,property);
         if(target is NpcActionInputDefinition input&&property==nameof(NpcActionInputDefinition.ResourceRequirements))return new NpcInputResourcesProperty(input);
         if(target is NpcBindingDefinition&&property is nameof(NpcBindingDefinition.Source) or nameof(NpcBindingDefinition.ValueType) or nameof(NpcBindingDefinition.Adapter) or nameof(NpcBindingDefinition.SelectorId) or nameof(NpcBindingDefinition.Variable))return new NpcBindingProperty(this,(Resource)target,property);

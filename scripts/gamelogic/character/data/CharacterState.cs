@@ -29,7 +29,7 @@ public sealed class CharacterRelationsModel
         if(!_program.RelationDefaults.ContainsKey(dimension)||!double.IsFinite(amount)||string.IsNullOrWhiteSpace(contact))return false;
         if(!Contacts.TryGetValue(contact,out var values))
         {if(Contacts.Count>=_program.MaximumContacts)return false;Contacts[contact]=values=_program.RelationDefaults.ToDictionary(x=>x.Key,x=>x.Value.Number,StringComparer.Ordinal);}
-        values[dimension]=Math.Clamp(values[dimension]+amount,_program.RelationMin,_program.RelationMax);return true;
+        var definition=_program.FeatureDefinitions[dimension];values[dimension]=Math.Clamp(values[dimension]+amount,definition.Minimum,definition.Maximum);return true;
     }
 }
 public sealed class CharacterAffectModel
@@ -37,7 +37,12 @@ public sealed class CharacterAffectModel
     public Dictionary<string,double> Values { get; }
     readonly CharacterProfileSpec _program;
     public CharacterAffectModel(CharacterProfileSpec p){_program=p;Values=p.Affect.ToDictionary(x=>x.Key,x=>x.Value.Number,StringComparer.Ordinal);}
-    public void Tick(double hours){foreach(var key in Values.Keys.ToArray()){double target=_program.Affect[key].Number;Values[key]=Move(Values[key],target,hours*_program.AffectRecovery);}}
+    public bool Adjust(string dimension,double amount)
+    {
+        if(!double.IsFinite(amount)||!Values.TryGetValue(dimension,out double previous)||!double.IsFinite(previous+amount))return false;
+        var definition=_program.FeatureDefinitions[dimension];Values[dimension]=Math.Clamp(previous+amount,definition.Minimum,definition.Maximum);return true;
+    }
+    public void Tick(double hours){foreach(var key in Values.Keys.ToArray()){double target=_program.Affect[key].Number;Values[key]=Move(Values[key],target,hours*_program.AffectRecovery[key]);}}
     static double Move(double a,double b,double step)=>a<b?Math.Min(b,a+step):Math.Max(b,a-step);
 }
 /// <summary>Module-owned state can be used without an AI component or a scene host.</summary>
@@ -107,10 +112,11 @@ public sealed class CharacterState
         var contacts=data["relations"]?.Deserialize<Dictionary<string,Dictionary<string,double>>>()??new();
         var affect=data["affect"]?.Deserialize<Dictionary<string,double>>()??new();
         string location=data["location"]?.GetValue<string>()??"";
-        CharacterProfileSpec.Require(contacts.Count<=Profile.MaximumContacts&&contacts.Values.All(c=>c!=null&&c.Count==Profile.RelationDefaults.Count&&c.All(x=>Profile.RelationDefaults.ContainsKey(x.Key)&&double.IsFinite(x.Value)&&x.Value>=Profile.RelationMin&&x.Value<=Profile.RelationMax))&&affect.All(x=>Profile.Affect.ContainsKey(x.Key)&&double.IsFinite(x.Value)),"社会模块存档无效。");
+        bool InRange(string id,double value)=>double.IsFinite(value)&&Profile.FeatureDefinitions.TryGetValue(id,out var d)&&value>=d.Minimum&&value<=d.Maximum;
+        CharacterProfileSpec.Require(contacts.Count<=Profile.MaximumContacts&&contacts.All(c=>!string.IsNullOrWhiteSpace(c.Key)&&c.Value!=null&&c.Value.All(x=>Profile.RelationDefaults.ContainsKey(x.Key)&&InRange(x.Key,x.Value)))&&affect.All(x=>Profile.Affect.ContainsKey(x.Key)&&InRange(x.Key,x.Value)),"社会模块存档无效。");
         foreach(var n in Profile.Needs)if(needs.ContainsKey(n.Id))Needs.Values[n.Id]=needs[n.Id];
         foreach(var key in PrivateFacts.Keys.ToArray())if(priv.ContainsKey(key))PrivateFacts[key]=priv[key];
-        Relations.Contacts.Clear();foreach(var e in contacts)Relations.Contacts[e.Key]=e.Value;
+        Relations.Contacts.Clear();foreach(var e in contacts){var restored=Profile.RelationDefaults.ToDictionary(x=>x.Key,x=>x.Value.Number,StringComparer.Ordinal);foreach(var value in e.Value)restored[value.Key]=value.Value;Relations.Contacts[e.Key]=restored;}
         foreach(var e in affect)Affect.Values[e.Key]=e.Value;
         Location=location;LastHours=hours;Needs.Refresh();Revision++;
     }

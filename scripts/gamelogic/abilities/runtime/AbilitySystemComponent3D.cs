@@ -5,7 +5,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class AbilitySystemComponent3D : Component3D
     {
         [Export] public AbilitySetResource AbilitySet { get; set; }

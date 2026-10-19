@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://sc8ejs76weoo" path="res://scripts/gamelogic/player/input/PlayerCharacterInputComponent3D.cs" id="3_player_input"]
 [ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="10_ability_system"]
 [ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs" id="15_animation"]
-[ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/full_256/gs/sprite_frames.tres" id="16_player_frames"]
+[ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_v4/sprite_frames.tres" id="16_player_frames"]
 [ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="19_movement_profile"]
 [ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="20_persistence"]
 [ext_resource type="Script" uid="uid://byf7a5t7ses07" path="res://scripts/gamelogic/character/graph/CharacterGraphAsset.cs" id="21_character_graph_asset"]
@@ -91,9 +91,9 @@ shape = SubResource("shape_body")
 [node name="VisualRoot" type="Node3D" parent="." unique_id=162378665]
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="VisualRoot" unique_id=982452909]
-editor_description = "主角：大色块狐耳剑士。大剑 idle 原样复用已认可的 256×256 / 224px 原版24帧，脚底 (128,240)；其余动作按各自动画密度对齐同一世界高度与脚底，不缩小重画原版五官。最近邻、无损、无 mipmap、二值 alpha。"
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
-pixel_size = 0.003214285714
+editor_description = "同一个狐耳剑士换武器：大剑 v4 以太刀 v3 人物为唯一造型基准，11 个状态统一人物形象。256×256，174px 站立参考、脚底 (128,219)，显示高度 0.936 与碰撞下缘 -0.468 对齐。最近邻、无损、无 mipmap、二值 alpha。"
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.021517241, 0)
+pixel_size = 0.004137931034
 billboard = 2
 shaded = true
 alpha_cut = 1

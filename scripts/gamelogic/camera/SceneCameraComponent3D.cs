@@ -4,7 +4,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>场景 CameraRig 上的镜头行为；保留场景中的镜头构图和投影。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
 {
     public override int Priority => ComponentPriority.VFX;

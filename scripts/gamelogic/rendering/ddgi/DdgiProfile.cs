@@ -3,7 +3,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>固定世界区域的实验 DDGI 配置；缓存使用未曝光的线性 HDR。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class DdgiProfile : Resource
 {
     [Export] public bool Enabled { get; set; } = true;

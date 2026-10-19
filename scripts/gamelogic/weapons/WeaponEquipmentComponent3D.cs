@@ -6,7 +6,7 @@ using Godot;
 
 namespace GameLogic
 {
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class WeaponEquipmentComponent3D : Component3D
     {
         [Export] public Godot.Collections.Array<WeaponDefinition> Weapons { get; set; } = new();

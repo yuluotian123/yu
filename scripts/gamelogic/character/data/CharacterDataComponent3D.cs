@@ -18,7 +18,9 @@ public partial class CharacterDataComponent3D : Component3D, ISaveSection
 {
     public const string EnvironmentGroup="character_environment";
     public override int Priority=>ComponentPriority.CharacterData;
-    [Export] public CharacterProfile Profile {get;set;}=new();
+    // Default-value queries must not construct the profile's resource graph during registration.
+    public CharacterDataComponent3D(){Profile=new();}
+    [Export] public CharacterProfile Profile {get;set;}
     [Export] public Godot.Collections.Array<CharacterScalarDefinition> ParameterOverrides {get;set;}=new();
     [Export] public bool Persist {get;set;}=true;
     public CharacterState State {get;private set;}

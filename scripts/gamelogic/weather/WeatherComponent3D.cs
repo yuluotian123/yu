@@ -6,7 +6,7 @@ using Godot;
 namespace GameLogic;
 
 /// <summary>环境宿主上的天气层；使用昼夜基准值，避免乘法和雾强度逐帧累积。</summary>
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class WeatherComponent3D : Component3D
 {
     public override int Priority => ComponentPriority.VFX - 1;

@@ -18,8 +18,6 @@ namespace GameLogic
 
         public override void Execute(GraphActionInvocation invocation)
         {
-            if (invocation.Execution?.GetUserData<FlowTimelineContext>()?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
-                return;
             CharacterMovementComponent3D movement = null;
             string error = string.Empty;
             bool hasInput = invocation.Execution?.ActionDependencyMode == GraphActionDependencyMode.HostBound &&
@@ -28,6 +26,18 @@ namespace GameLogic
                 !GraphActionComponentResolver.TryResolve(invocation.Execution, Movement, nameof(AbilityApplyDashVelocityAction), out movement, out error))
             {
                 GD.PushError($"[AbilityApplyDashVelocityAction] {error}");
+                return;
+            }
+
+            if (invocation.Execution?.GetUserData<FlowTimelineContext>()?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
+            {
+                // 等移动组件解析本帧输入和控制锁后，直接衔接普通移速，避免归零后重新加速。
+                movement.RequestVelocityOverride(new CharacterMovementOverride3D(
+                    Vector3.Zero,
+                    overrideHorizontal: true,
+                    overrideVertical: false,
+                    priority: 100,
+                    useMovementInput: true));
                 return;
             }
 

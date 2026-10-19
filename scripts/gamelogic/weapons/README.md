@@ -5,9 +5,11 @@ Player 使用 `WeaponEquipmentComponent3D` 管理两个武器槽，新角色默�
 | 武器 | 能力 ID | 动作时长 | 冷却 |
 | --- | --- | --- | --- |
 | 大剑 | `greatsword_attack` | 1.20 秒 | 1.35 秒 |
-| 太刀 | `katana_attack` | 0.36 秒 | 0.42 秒 |
+| 太刀 | `katana_attack` | 0.60 秒 | 0.66 秒 |
 
 当前区分持械动作、攻击动作和节奏；伤害、命中判定与连招尚未接入。
+
+两套攻击均带独立弧形刀光，由 Ability Timeline 的 `Blade Trail` 轨控制：大剑 0.34–0.42 秒，太刀 0.13–0.30 秒。刀光与角色的 Y billboard 对齐并镜像左右朝向，动画结束或取消时隐藏；颜色 alpha、偏移、范围、起止角与弧长均可在图编辑器调整。
 
 ## 资源与组件
 
@@ -16,7 +18,7 @@ Player 使用 `WeaponEquipmentComponent3D` 管理两个武器槽，新角色默�
 - `WeaponEquipmentComponent3D : Component3D` 在 Animation 初始化后、Persistence 注册前初始化。场景配置定义可用武器，运行实例持有独立槽位顺序、当前槽位和待切换槽位。
 - CharacterGraph 把 `player_attack` 路由到 `TryPrimaryAttack`，把 `player_switch_weapon` 路由到 `RequestNextWeapon`。移动、跳跃和冲刺仍用原有输入链路。
 - 基础 AbilitySet 只保留冲刺。装备组件初始化时授予两个唯一 ID 的普攻能力；切换不撤销能力、不重建 AbilityRuntime，因此不会刷新冷却。
-- 切换整体更新武器动作配置；`CharacterAnimationInstance.RefreshPlayback` 强制重新播放同名动画，保留 Locomotion 状态机。所有帧为 256×256，大剑 idle 原样复用已认可的 224px 原版，新版 run 和 attack 以它为基准生成并沿用同密度，三者 `PixelSize=0.003214285714`、脚底 (128,240)；其余动作默认 179px 密度、`PixelSize=0.00402234637`、脚底 (128,224)。`AnimationPixelSizes` / `AnimationFootAnchors` 配置按动画覆盖，装备组件监听动画切换并更新显示参数。缩放均为 1.3，世界参考高度保持 0.936，脚底 -0.468，不移动物理碰撞体。
+- 切换整体更新武器动作配置，强制刷新同名动画并保留 Locomotion 状态机。当前大剑 v4 以太刀 v3 人物为唯一造型基准，关键稿只改剑刃与护手，统一脸、发型、服装、身材和单条尾巴。两套均为 256×256；大剑 174px 站立参考、`PixelSize=0.004137931034`、脚底 (128,219)，太刀 179px、`PixelSize=0.00402234637`、脚底 (128,224)。缩放均为 1.3，对齐世界高度 0.936 和脚底 -0.468；大剑全部状态统一密度，不再使用旧动画尺寸覆盖。
 - 两套普攻沿用现有 Ability Timeline，阻止移动和跳跃；新武器的动作时长与时间轴必须一致。
 
 ## 存档
@@ -29,6 +31,4 @@ Player 使用 `WeaponEquipmentComponent3D` 管理两个武器槽，新角色默�
 
 运行 Spacelevel，使用 Q 检查切换、左键检查两把武器的攻击与独立冷却；攻击期间按 Q 检查延迟切换和取消队列。按 B 检查装备、卸下及当前武器外观，确认脚底对齐、攻击时长与存档恢复。
 
-当前大剑 / 太刀图集位于 [full_256](../../../assets/textures/sprites/amber_fox_style_v2/full_256/)，全部 11 个动画状态、源帧映射、提示词和 ComfyUI 工作流在 [资源目录](../../../assets/resources/sprites/amber_fox_style_v2/full_256/)。旧 `amber_fox_greatsword` / `amber_fox_katana` 作为历史素材保留。
-
-构建后可运行 `godot --headless --path . res://assets/scenes/tests/character_visual_smoke.tscn`，验证真实 Player 的两套外观、全部动画请求、脚底、攻击时长、延迟切换与输入切换。大剑跑步还逐帧检查纹理中耳尖相对原版 idle 的高度，避免仅凭相同 `PixelSize` 和锚点漏掉重心过低的问题；该检查不替代躯干、腿长、握剑与画风的目视核对。大剑 attack 还检查首尾完整 RGBA 与原版 idle 一致，30 帧 / 25 fps 为 1.20 秒，并检查 0.8 秒时攻击仍活动、完成后再换武器。检查结果写入上述资源目录的 `runtime-validation.json`。
+当前大剑使用 [greatsword_v4](../../../assets/textures/sprites/amber_fox_style_v2/greatsword_v4/) 的 116 张独立透明帧、133 个帧引用，太刀使用 [katana_v3](../../../assets/textures/sprites/amber_fox_style_v2/katana_v3/) 的 118 张透明帧，两套均覆盖 11 个状态。大剑攻击 30 帧 / 25 fps，太刀 18 帧 / 30 fps。源视频、关键姿势、帧映射、提示词、种子、工作流及审核报告保存在各自资源目录。同一人物并排动画 按共同世界高度与脚底显示。

@@ -1,354 +1,86 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
-[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
-[ext_resource type="Resource" path="res://assets/resources/character/ochre_courier/profile.tres" id="character_profile_ochre_courier"]
+[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/shaders/environment/day_night_sky.gdshader" id="2_qbpkg"]
+[ext_resource type="PackedScene" uid="uid://cxfmq4nlwci8j" path="res://assets/scenes/levels/whitebox_test.tscn" id="whitebox"]
 
-[ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
-[ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="5_host"]
-[ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="6_component"]
-[ext_resource type="Resource" uid="uid://d3j7g4vybewnk" path="res://assets/resources/camera/hd2d_free_3d.tres" id="8_camera_profile"]
-[ext_resource type="Script" uid="uid://b8lm4oftf5a3i" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="9_environment"]
-[ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="10_time_profile"]
-[ext_resource type="PackedScene" uid="uid://b66h2k1q55477" path="res://assets/scenes/ui/runtime_gm.tscn" id="12_time_gm"]
-[ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="14_camera_controller"]
-[ext_resource type="PackedScene" uid="uid://cmhkh18tb7up7" path="res://assets/scenes/town/riverside_town.tscn" id="17_1ukst"]
-[ext_resource type="Resource" uid="uid://cfyh6r7i8r6f8" path="res://assets/resources/rendering/relink_post/profile.tres" id="17_qk2pt"]
-[ext_resource type="Script" uid="uid://xop3p8flwjrs" path="res://scripts/gamelogic/rendering/RelinkPostProcessEffect.cs" id="18_513md"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="27_m0j7p"]
-[ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/resources/environment/clouds/high_timeline.tres" id="cloud_high_timeline"]
-[ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/resources/environment/clouds/rotation_timeline.tres" id="cloud_rotation_timeline"]
-[ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/resources/environment/clouds/secondary_timeline.tres" id="cloud_secondary_timeline"]
-[ext_resource type="Script" uid="uid://comngbdbyfrp5" path="res://scripts/gamelogic/rendering/ddgi/DdgiComponent3D.cs" id="ddgi_controller"]
-[ext_resource type="Resource" uid="uid://dlhdeul3gxk77" path="res://assets/resources/rendering/ddgi/spacelevel.tres" id="ddgi_profile"]
-[ext_resource type="Environment" uid="uid://bav0756llhclb" path="res://assets/resources/environment/relink_environment.tres" id="environment"]
-[ext_resource type="CameraAttributesPhysical" uid="uid://bonkel6lyv08n" path="res://assets/resources/environment/day_night_camera_attributes.tres" id="exposure"]
-[ext_resource type="Resource" uid="uid://dxkkt6bnrusiu" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="gray_green_resident_npc_graph"]
-[ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="gray_green_resident_sprite_frames"]
-[ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="npc_abilities"]
-[ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="npc_agent"]
-[ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs" id="npc_animation"]
-[ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="npc_character_save"]
-[ext_resource type="PackedScene" uid="uid://hip1f4mbon1s" path="res://assets/scenes/npc/riverside_life.tscn" id="npc_life"]
-[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/locomotion.tres" id="npc_locomotion"]
-[ext_resource type="Script" uid="uid://pk5ksygkbvbu" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="npc_movement"]
-[ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="npc_move_profile"]
-[ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="npc_navigation"]
-[ext_resource type="Resource" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="ochre_courier_npc_graph"]
-[ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="ochre_courier_sprite_frames"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="original_clouds"]
-[ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/resources/environment/clouds/base_timeline.tres" id="original_cloud_timeline"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/precipitation.tscn" id="precipitation"]
-[ext_resource type="Script" uid="uid://8lwsqfyrq2lf" path="res://scripts/gamelogic/weather/WeatherComponent3D.cs" id="weather_controller"]
-[ext_resource type="Resource" uid="uid://bcac25hfauhxt" path="res://assets/resources/weather/default_weather.tres" id="weather_profile"]
-[ext_resource type="Script" uid="uid://cxth0gcfog3yb" path="res://scripts/gamelogic/weather/WeatherSurfaceComponent3D.cs" id="weather_surface_controller"]
-
-[sub_resource type="Resource" id="character_data_gray_green_resident"]
-script = ExtResource("character_data_script")
-Profile = ExtResource("character_profile_gray_green_resident")
-
-[sub_resource type="Resource" id="character_data_ochre_courier"]
-script = ExtResource("character_data_script")
-Profile = ExtResource("character_profile_ochre_courier")
-
-[sub_resource type="Resource" id="environment_profile"]
-script = ExtResource("10_time_profile")
-DayLengthSeconds = 4800.0
-DriveFogFromProfile = true
-DrivePostEffectsFromProfile = true
-DriveRelinkBloomFromProfile = true
-DriveSkyBrightnessFromProfile = true
-DriveExposureFromProfile = true
-DriveLightSettingsFromProfile = true
-DriveSkyProjectionFromProfile = true
-MoonTint = Color(0.78, 0.82, 1, 1)
-NoonTemperature = 5900.0
-NoonSunTint = Color(1, 0.99, 0.97, 1)
-BlendNightPostEffects = true
-DayZenith = Color(0.045, 0.24, 0.72, 1)
-DayHorizon = Color(0.34, 0.68, 0.94, 1)
-DayGround = Color(0.48, 0.7, 0.88, 1)
-NightZenith = Color(0.09, 0.075, 0.24, 1)
-NightHorizon = Color(0.24, 0.23, 0.46, 1)
-NightSkyIntensity = 8.0
-StarIntensity = 1.25
-MoonHaloStrength = 0.18
-HorizonHaze = 0.22
-HorizonSoftness = 0.24
-MieStrength = 0.1
-FogStart = 35.0
-FogEnd = 240.0
-FogOpacity = 0.38
-FogHeightDensity = 0.0
-BlendNightFog = true
-NightFogHeightDensity = 0.0
-CloudTimeline = ExtResource("original_cloud_timeline")
-HighCloudTimeline = ExtResource("cloud_high_timeline")
-SecondaryCloudTimeline = ExtResource("cloud_secondary_timeline")
-CloudRotationTimeline = ExtResource("cloud_rotation_timeline")
-CloudRotationPeriodHours = 20.0
-CloudEvolutionPeriodHours = 4.0
-CloudNoisePeriodHours = 12.0
-DayExposureEv = 14.35
-NightExposureEv = 2.0
-VisualUpdatesPerSecond = 24.0
-
-[sub_resource type="Resource" id="controller"]
-script = ExtResource("9_environment")
-Profile = SubResource("environment_profile")
-
-[sub_resource type="Resource" id="weather"]
-script = ExtResource("weather_controller")
-Profile = ExtResource("weather_profile")
-Automatic = false
-DriveFogFromWeather = true
-DriveLightsFromWeather = true
-
-[sub_resource type="Resource" id="weather_surfaces"]
-script = ExtResource("weather_surface_controller")
-
-[sub_resource type="Resource" id="ddgi"]
-script = ExtResource("ddgi_controller")
-Profile = ExtResource("ddgi_profile")
-GeometryRoot = NodePath("..")
-
-[sub_resource type="CompositorEffect" id="grade"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sodt5"]
 resource_local_to_scene = true
-resource_name = "Relink · HDR LUT (Before Transparency)"
-enabled = true
-effect_callback_type = 3
-access_resolved_color = true
-access_resolved_depth = true
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("18_513md")
-Pass = 0
-Profile = ExtResource("17_qk2pt")
+shader = ExtResource("2_qbpkg")
+shader_parameter/ibl_strength = 1.0
+shader_parameter/weather_overcast = 0.0
+shader_parameter/weather_sky_loss = 0.35
+shader_parameter/cloud_radiance_enabled = false
+shader_parameter/cloud_radiance_revision = 0.0
+shader_parameter/day_zenith = Color(0.045, 0.24, 0.72, 1)
+shader_parameter/day_horizon = Color(0.34, 0.68, 0.94, 1)
+shader_parameter/day_ground = Color(0.48, 0.7, 0.88, 1)
+shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
+shader_parameter/night_zenith = Color(0.09, 0.075, 0.24, 1)
+shader_parameter/night_horizon = Color(0.24, 0.23, 0.46, 1)
+shader_parameter/sun_direction = Vector3(-0.109381706, 0.9659258, 0.23456971)
+shader_parameter/moon_direction = Vector3(0.10938164, -0.9659259, -0.23456976)
+shader_parameter/daylight = 1.0
+shader_parameter/twilight = 0.0
+shader_parameter/sun_radius = 0.015707962
+shader_parameter/moon_radius = 0.02617994
+shader_parameter/moon_visibility = 0.0
+shader_parameter/stars_visibility = 0.0
+shader_parameter/star_intensity = 1.25
+shader_parameter/star_rotation = 3.1415927
+shader_parameter/moon_light = 0.0
+shader_parameter/moon_halo_strength = 0.18
+shader_parameter/horizon_haze = 0.22
+shader_parameter/horizon_softness = 0.24
+shader_parameter/mie_strength = 0.1
+shader_parameter/mie_anisotropy = 0.76
 
-[sub_resource type="CompositorEffect" id="film"]
+[sub_resource type="Sky" id="Sky_filij"]
 resource_local_to_scene = true
-resource_name = "Relink · Film + Bloom (After Transparency)"
-enabled = true
-effect_callback_type = 4
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("18_513md")
-Profile = ExtResource("17_qk2pt")
+sky_material = SubResource("ShaderMaterial_sodt5")
+process_mode = 3
 
-[sub_resource type="Compositor" id="Compositor_qk2pt"]
-compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource("film")])
+[sub_resource type="Environment" id="Environment_wiwca"]
+resource_local_to_scene = true
+background_mode = 2
+background_intensity = 26000.0
+sky = SubResource("Sky_filij")
+ambient_light_source = 3
+ambient_light_energy = 0.35000002
+reflected_light_source = 2
+ssr_enabled = true
+ssr_max_steps = 96
+ssr_depth_tolerance = 0.2
+ssao_enabled = true
+ssil_enabled = true
+glow_levels/2 = 0.6
+glow_levels/3 = 0.2
+glow_levels/4 = 0.05
+glow_normalized = true
+glow_intensity = 0.03999999
+glow_strength = 0.85
+glow_blend_mode = 0
+glow_hdr_threshold = 1.8
+fog_enabled = true
+fog_mode = 1
+fog_density = 0.38
+fog_aerial_perspective = 1.0
+fog_sky_affect = 0.0
+fog_height = -9.0
+fog_depth_curve = 1.15
+fog_depth_begin = 35.0
+fog_depth_end = 240.0
+adjustment_contrast = 1.04
+adjustment_saturation = 1.08
 
-[sub_resource type="Resource" id="camera_controller"]
-script = ExtResource("14_camera_controller")
-Profile = ExtResource("8_camera_profile")
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_61a5g"]
+resource_local_to_scene = true
+exposure_multiplier = 1.2
+frustum_focus_distance = 9.0
+frustum_focal_length = 20.0
+exposure_shutter_speed = 81.5719
 
-[sub_resource type="StandardMaterial3D" id="material_Ground"]
-albedo_color = Color(0.192157, 0.223529, 0.290196, 1)
-roughness = 0.85
+[node name="Spacelevel" unique_id=1400882544 instance=ExtResource("whitebox")]
 
-[sub_resource type="BoxMesh" id="mesh_Ground"]
-material = SubResource("material_Ground")
-size = Vector3(44, 1.2, 32)
-
-[sub_resource type="BoxShape3D" id="shape_Ground"]
-size = Vector3(44, 1.2, 32)
-
-[sub_resource type="Resource" id="gray_green_resident_agent"]
-script = ExtResource("npc_agent")
-Graph = ExtResource("gray_green_resident_npc_graph")
-
-[sub_resource type="Resource" id="npc_navigation"]
-script = ExtResource("npc_navigation")
-
-[sub_resource type="Resource" id="npc_move_profile"]
-script = ExtResource("npc_move_profile")
-MoveSpeed = 2.2
-
-[sub_resource type="Resource" id="npc_movement"]
-script = ExtResource("npc_movement")
-Profile = SubResource("npc_move_profile")
-MovementSpace = 1
-
-[sub_resource type="Resource" id="npc_animation"]
-script = ExtResource("npc_animation")
-LocomotionGraph = ExtResource("npc_locomotion")
-
-[sub_resource type="Resource" id="npc_abilities"]
-script = ExtResource("npc_abilities")
-
-[sub_resource type="Resource" id="npc_character_save"]
-script = ExtResource("npc_character_save")
-
-[sub_resource type="BoxShape3D" id="npc_body"]
-size = Vector3(0.4, 0.72, 0.4)
-
-[sub_resource type="Resource" id="ochre_courier_agent"]
-script = ExtResource("npc_agent")
-Graph = ExtResource("ochre_courier_npc_graph")
-
-[node name="Spacelevel" type="Node3D" unique_id=1907641290]
-script = ExtResource("5_host")
-
-[node name="EnvironmentRig" type="Node3D" parent="." unique_id=660897677]
-process_mode = 1
-script = ExtResource("5_host")
-PersistentId = "level_environment"
-Components = Array[ExtResource("6_component")]([SubResource("controller"), SubResource("weather"), SubResource("weather_surfaces"), SubResource("ddgi")])
-
-[node name="Precipitation" parent="EnvironmentRig" unique_id=1523133243 instance=ExtResource("precipitation")]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=594835174]
-environment = ExtResource("environment")
-camera_attributes = ExtResource("exposure")
-compositor = SubResource("Compositor_qk2pt")
-
-[node name="Sun" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1850925047]
-physics_interpolation_mode = 2
-transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.9659258, 0.42261842, -0.875426, 0.23456971, 0, 0, 0)
-light_intensity_lux = 120000.0
-light_temperature = 5900.0
-light_color = Color(1, 0.99, 0.97, 1)
-light_indirect_energy = 0.75
-shadow_enabled = true
-shadow_bias = 0.05
-shadow_normal_bias = 0.5
-directional_shadow_split_1 = 0.2
-directional_shadow_split_2 = 0.4
-directional_shadow_split_3 = 0.7
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 55.0
-
-[node name="Moon" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=310034368]
-physics_interpolation_mode = 2
-transform = Transform3D(-0.9063079, 0.40821782, 0.10938164, 0, 0.2588191, -0.9659259, -0.42261815, -0.87542623, -0.23456976, 0, 0, 0)
-visible = false
-light_intensity_lux = 0.0
-light_temperature = 8500.0
-light_color = Color(0.78, 0.82, 1, 1)
-light_indirect_energy = 0.75
-shadow_enabled = true
-shadow_bias = 0.05
-shadow_normal_bias = 0.5
-directional_shadow_split_1 = 0.2
-directional_shadow_split_2 = 0.4
-directional_shadow_split_3 = 0.7
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 55.0
-
-[node name="OriginalClouds" parent="EnvironmentRig" unique_id=1997370813 instance=ExtResource("original_clouds")]
-transform = Transform3D(-0.79863536, 0, 0.601815, 0, 1, 0, -0.601815, 0, -0.79863536, 0, 0, 0)
-
-[node name="CameraRig" type="Node3D" parent="." unique_id=1603033638]
-process_priority = 100
-physics_interpolation_mode = 2
-editor_description = "场景镜头控制器。展开 Components > SceneCameraComponent3D > Profile 调整跟随参数。X/Y/Z 对应世界左右/上下/前后，距离单位为米。DeadZone 越大越允许角色自由移动；FollowSmooth 越大跟随越快，0 表示直接到位。距离、俯角、FOV 请在子节点 Camera3D 调整。详见 res://docs/art/hd2d_camera.md。"
-script = ExtResource("5_host")
-Components = Array[ExtResource("6_component")]([SubResource("camera_controller")])
-
-[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=106388751]
-editor_description = "偏横版近景镜头：透视 FOV=30°，Rotation Degrees.X=-4.1°（轻微俯视），拍摄距离约 9 米。人物位于屏幕中心下方，天空和云保留在上半部。
-Transform/Position：沿镜头局部 Z 轴向负方向移动可拉近，向正方向移动可拉远；这是实际拍摄距离。Rotation Degrees.X 越接近 0 越平视，越负越俯视。
-FOV：仅透视生效，越小人物越大、视野越窄；越大视野越广。默认 Keep Aspect=Keep Height 时表示竖直视角。
-Size=7：仅正交/视锥投影生效，越小人物越大；不影响透视。Far=500：最远可见距离（米），减小可能裁掉远处天空或云。
-构图位置为 (1.6, -7.15, 8.8033)，视线高于角色中心，人物约在画面高度的三分之二处。保持角度和 Z 距离时，提高 Position.Y 会让人物更靠下，降低则让人物上移。运行时保留场景镜头角度和相对偏移，随角色平移；请在停止游戏时编辑。跟随死区、平滑及前视在 CameraRig 的 Profile 中调整。"
-transform = Transform3D(1, 0, 0, 0, 0.99744076, 0.07149744, 0, -0.07149744, 0.99744076, 1.6, -7.15, 8.8033285)
-current = true
-fov = 30.0
-size = 7.0
-far = 500.0
-
-[node name="Ground" type="Node3D" parent="." unique_id=1104172541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6, -9.8, 0)
-script = ExtResource("5_host")
-
-[node name="Visual" type="MeshInstance3D" parent="Ground" unique_id=1118407196]
-visible = false
-mesh = SubResource("mesh_Ground")
-
-[node name="GameplayBody" type="StaticBody3D" parent="Ground" unique_id=1042351921 groups=["player_ground"]]
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
-shape = SubResource("shape_Ground")
-disabled = true
-
-[node name="Player" parent="." unique_id=1448143200 instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -8.603256, 0)
-
-[node name="RuntimeGm" parent="." unique_id=1779226142 instance=ExtResource("12_time_gm")]
-
-[node name="RPGTown" type="Node3D" parent="." unique_id=1157839552]
-editor_description = "参考图河畔街区：B01 商店及红瓦变体、石桥、河道、花坛和树木。"
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -9.2, 0)
-
-[node name="TownContent" parent="RPGTown" unique_id=2000440359 instance=ExtResource("17_1ukst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0142884, -1.7751112, 0.549147)
-
-[node name="NpcLife" parent="RPGTown/TownContent" unique_id=888971507 instance=ExtResource("npc_life")]
-editor_description = "NPC 世界与导航；两个 NPC 直接位于 SpaceLevel 根节点，可各自编辑 NPC 图。"
-
-[node name="Resident" type="Node3D" parent="." unique_id=1331650095]
-editor_description = "gray_green_resident：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5857117, -10.575111, 2.949147)
-script = ExtResource("5_host")
-PersistentId = "town_resident_01"
-Components = Array[ExtResource("6_component")]([SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
-
-[node name="PhysicsBody" type="CharacterBody3D" parent="Resident" unique_id=1888120704]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Resident/PhysicsBody" unique_id=1951845494]
-shape = SubResource("npc_body")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Resident/PhysicsBody" unique_id=95934908]
-path_desired_distance = 0.2
-target_desired_distance = 0.25
-height = 0.72
-radius = 0.23
-neighbor_distance = 2.0
-max_neighbors = 6
-
-[node name="VisualRoot" type="Node3D" parent="Resident" unique_id=1801187863]
-
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Resident/VisualRoot" unique_id=1749183551]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
-pixel_size = 0.0032142857
-billboard = 2
-shaded = true
-alpha_cut = 1
-texture_filter = 0
-sprite_frames = ExtResource("gray_green_resident_sprite_frames")
-animation = &"idle"
-autoplay = "idle"
-
-[node name="Courier" type="Node3D" parent="." unique_id=411204691]
-editor_description = "ochre_courier：通过 AiAgent.Graph 统一配置人物模块、目标、行动和计划。"
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5857115, -10.575111, 2.549147)
-script = ExtResource("5_host")
-PersistentId = "town_courier_01"
-Components = Array[ExtResource("6_component")]([SubResource("character_data_ochre_courier"), SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
-
-[node name="PhysicsBody" type="CharacterBody3D" parent="Courier" unique_id=1856785106]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Courier/PhysicsBody" unique_id=7092250]
-shape = SubResource("npc_body")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Courier/PhysicsBody" unique_id=1066667449]
-path_desired_distance = 0.2
-target_desired_distance = 0.25
-height = 0.72
-radius = 0.23
-neighbor_distance = 2.0
-max_neighbors = 6
-
-[node name="VisualRoot" type="Node3D" parent="Courier" unique_id=922947840]
-
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Courier/VisualRoot" unique_id=1444253915]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
-pixel_size = 0.0032142857
-billboard = 2
-shaded = true
-alpha_cut = 1
-texture_filter = 0
-sprite_frames = ExtResource("ochre_courier_sprite_frames")
-animation = &"idle"
-autoplay = "idle"
+[node name="WorldEnvironment" parent="EnvironmentRig" parent_id_path=PackedInt32Array(660897677) index="1" unique_id=594835174]
+environment = SubResource("Environment_wiwca")
+camera_attributes = SubResource("CameraAttributesPhysical_61a5g")

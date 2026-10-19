@@ -1,15 +1,45 @@
-[gd_resource type="Resource" script_class="CharacterProfile" format=3]
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://b7dyeq2jcvjxl"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="profile"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="identity"]
-[ext_resource type="Resource" path="res://assets/resources/character/presets/common_needs.tres" id="needs"]
+[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="2_6lb03"]
+[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="3_xukyl"]
+[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="4_4fek5"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="6_4dlm2"]
+[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/character/data/CharacterPersonalityDefinition.cs" id="9_o6jgp"]
+[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="10_1dp8m"]
+[ext_resource type="Resource" uid="uid://cm7eoq6idfa61" path="res://assets/resources/character/definitions/common_features.tres" id="feature_library"]
+[ext_resource type="Script" uid="uid://dlx02quhx1urt" path="res://scripts/gamelogic/character/data/CharacterFeatureValue.cs" id="feature_value"]
+[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/character/data/CharacterIdentityDefinition.cs" id="identity"]
+[ext_resource type="Resource" uid="uid://fgq17s0sqbby" path="res://assets/resources/character/presets/common_needs.tres" id="needs"]
+[ext_resource type="Script" uid="uid://bmwt0dxhrjulh" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="profile"]
+
+[sub_resource type="Resource" id="Resource_3augq"]
+script = ExtResource("2_6lb03")
+DefinitionId = "373471a5b3c248668e1bdeddf4ba4b52"
+
+[sub_resource type="Resource" id="Resource_oevog"]
+script = ExtResource("4_4fek5")
+DefinitionId = "550e1debc3514f7188bd64afe954c7a8"
 
 [sub_resource type="Resource" id="player_identity"]
 script = ExtResource("identity")
-DisplayName = "玩家"
 Tags = PackedStringArray("player")
+DefinitionId = "f7b07ff4e1ee4e088f56e303385232de"
+DisplayName = "玩家"
+
+[sub_resource type="Resource" id="Resource_pjfdv"]
+script = ExtResource("9_o6jgp")
+DefinitionId = "2869515b0415441982e6e049158ab92b"
+
+[sub_resource type="Resource" id="Resource_bgusk"]
+script = ExtResource("10_1dp8m")
+DefinitionId = "e9d10f81d33248dbb35a730d7f39f806"
 
 [resource]
 script = ExtResource("profile")
+FeatureLibrary = ExtResource("feature_library")
 Identity = SubResource("player_identity")
 Needs = ExtResource("needs")
+Personality = SubResource("Resource_pjfdv")
+Relations = SubResource("Resource_bgusk")
+Affect = SubResource("Resource_3augq")
+Facts = SubResource("Resource_oevog")

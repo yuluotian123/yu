@@ -4,7 +4,7 @@ namespace GameLogic
 {
     public enum WeaponCategory { Greatsword, Katana }
 
-    [GlobalClass]
+    [Tool, GlobalClass]
     public partial class WeaponDefinition : Resource
     {
         [Export] public string WeaponId { get; set; } = string.Empty;

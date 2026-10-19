@@ -53,15 +53,9 @@ public sealed partial class NpcProgram
         foreach(var x in p.Character.Parameters)p.Parameters.Add(x.Key,x.Value);
         p.KnownKeys.UnionWith(p.Character.KnownKeys);
         foreach(var f in p.Character.Facts.Values)p.AddFact(new(f.Key,f.Type,f.Minimum,f.Maximum,f.Step,f.Initial,f.Writable));
-        var policies=graph.Nodes.OfType<NpcRootNodeData>().SelectMany(root=>graph.GetOutgoingConnections(root.Id,0)).Where(e=>e.IsAvailable).Select(e=>graph.FindNodeById(e.ToNode)).OfType<NpcNeedPolicyNodeData>().Select(n=>graph.Resolve(n.DefinitionId)).OfType<NpcNeedPolicyDefinition>().Where(x=>x.Enabled).ToArray();
-        Require(policies.Select(x=>x.NeedId).Distinct().Count()==policies.Length&&policies.All(x=>p.Character.Needs.Any(n=>n.Id==x.NeedId)),"需求决策规则重复或引用未知角色需求。");
         foreach(var n in p.Character.Needs)
         {
-            var rule=policies.FirstOrDefault(x=>x.NeedId==n.Id);
-            double enter=rule?.EnterThreshold??n.Min+(n.Max-n.Min)*.65,exit=rule?.ExitThreshold??n.Min+(n.Max-n.Min)*.25,exponent=rule?.UrgencyExponent??1;
-            bool higher=rule?.HigherIsUrgent??true;
-            Require(double.IsFinite(enter)&&double.IsFinite(exit)&&double.IsFinite(exponent)&&exponent>0&&enter>=n.Min&&enter<=n.Max&&exit>=n.Min&&exit<=n.Max&&(higher?exit<enter:exit>enter),"需求决策规则阈值或曲线无效。");
-            p.Needs.Add(new(n.Id,n.Min,n.Max,n.Initial,higher,enter,exit,exponent));
+            p.Needs.Add(new(n.Id,n.Min,n.Max,n.Initial,n.Higher,n.Enter,n.Exit,n.Exponent));
             p.KnownKeys.Add("needs."+n.Id+".urgent");p.KnownKeys.Add("needs."+n.Id+".urgency");
         }
         var roots = graph.Nodes.OfType<NpcRootNodeData>().ToArray();
@@ -81,7 +75,7 @@ public sealed partial class NpcProgram
             var d=graph.Resolve(node.DefinitionId);Require(d!=null&&node.DefinitionType.IsInstanceOfType(d),$"节点 {node.Id} 的定义未绑定或类型错误。");return d;
         }
         var modules=active.Where(c=>c.FromNode==root.Id&&c.FromPort==0).Select(c=>Resolve((NpcDefinitionNodeData)graph.FindNodeById(c.ToNode))).Where(d=>d.Enabled).ToArray();
-        Require(modules.Where(d=>d is not NpcNeedPolicyDefinition).GroupBy(d=>d.GetType()).All(g=>g.Count()==1),"同类模块只能装配一次。");
+        Require(modules.GroupBy(d=>d.GetType()).All(g=>g.Count()==1),"同类 AI 模块只能装配一次。");
         foreach(var d in modules)
         {
             switch(d)
@@ -124,7 +118,7 @@ public sealed partial class NpcProgram
             Require(plans.All(t=>t.ActionIds.Count>0&&t.ActionIds.All(id=>actions.Any(a=>a.Id==id))),"计划必须选择可用行动，且只能引用所属目标中已启用的候选行动。");
             p.Goals.Add(new(g.DefinitionId,g.DisplayName,g.Activation?.Freeze(),g.Utility.Freeze(),g.Completion.Freeze(),ReadOnly(actions),ReadOnly(plans)));
         }
-        Require(p.Goals.Count>0,"人物至少需要一个启用目标。");
+        // An authoring scaffold may contain only modules; no goals means normal idle.
         foreach(var g in p.Goals)
         {
             if(g.Activation!=null)p.Expect(g.Activation,CharacterValueType.Boolean);p.Expect(g.Utility,CharacterValueType.Number);p.Expect(g.Completion,CharacterValueType.Boolean);

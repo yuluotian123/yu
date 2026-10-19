@@ -1,0 +1,1952 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    219
+  ],
+  "unique_frames": 116,
+  "animations": {
+    "idle": {
+      "fps": 8,
+      "loop": true,
+      "duration_seconds": 3.0,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_000.png",
+          "source": "idle",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10639,
+          "contour_pixels_recolored": 244,
+          "sha256": "955a93be7f2e419b30586e232667bd5cce7044d6f78c68ad3cfbde466a05311d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_003.png",
+          "source": "idle",
+          "source_index": 3,
+          "bounds": [
+            48,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10607,
+          "contour_pixels_recolored": 249,
+          "sha256": "d828ae04c861b678f761df31dea710d8d25de5e747b600faa0aa67622045058a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_006.png",
+          "source": "idle",
+          "source_index": 6,
+          "bounds": [
+            41,
+            45,
+            217,
+            219
+          ],
+          "opaque_pixels": 10665,
+          "contour_pixels_recolored": 250,
+          "sha256": "baaab92dbf4541d6eb2391221c23a9b658bdea5e87937027bc71e885de4e3eec"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_009.png",
+          "source": "idle",
+          "source_index": 9,
+          "bounds": [
+            36,
+            44,
+            216,
+            219
+          ],
+          "opaque_pixels": 10643,
+          "contour_pixels_recolored": 276,
+          "sha256": "8b6dc9abcf2767e857ebb565aa033837c7630015c40d9aff1f68228cbcdb0c6a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_012.png",
+          "source": "idle",
+          "source_index": 12,
+          "bounds": [
+            31,
+            44,
+            215,
+            219
+          ],
+          "opaque_pixels": 10677,
+          "contour_pixels_recolored": 291,
+          "sha256": "892e84c498c483aa93cf74d33ae7c5c6c8cbbd71ff1613f07426a627c953bd32"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_015.png",
+          "source": "idle",
+          "source_index": 15,
+          "bounds": [
+            28,
+            43,
+            214,
+            219
+          ],
+          "opaque_pixels": 10726,
+          "contour_pixels_recolored": 259,
+          "sha256": "6b810881d2f3c9b411ed442126a3fca205c753cb50bd10bed9f1c883c9315e5c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_018.png",
+          "source": "idle",
+          "source_index": 18,
+          "bounds": [
+            37,
+            42,
+            214,
+            219
+          ],
+          "opaque_pixels": 10750,
+          "contour_pixels_recolored": 248,
+          "sha256": "c6b4c576f28795110fd7ef466e6aa9fb82463de9123234c3987c2c1915996e7b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_021.png",
+          "source": "idle",
+          "source_index": 21,
+          "bounds": [
+            37,
+            42,
+            214,
+            219
+          ],
+          "opaque_pixels": 10760,
+          "contour_pixels_recolored": 236,
+          "sha256": "a6125074aeb929b2a54c261dd93d994f65d54ecbb62fbbddaa9d1c4e24b6248d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_024.png",
+          "source": "idle",
+          "source_index": 24,
+          "bounds": [
+            34,
+            43,
+            216,
+            219
+          ],
+          "opaque_pixels": 10608,
+          "contour_pixels_recolored": 261,
+          "sha256": "76b447a26570f09fff34a21233a0a8177f81b057b22b41cebdfb668f585d6f7a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_027.png",
+          "source": "idle",
+          "source_index": 27,
+          "bounds": [
+            37,
+            44,
+            217,
+            219
+          ],
+          "opaque_pixels": 10402,
+          "contour_pixels_recolored": 256,
+          "sha256": "aaf8536eb967ce59342498de3bbaf496c3ab7ead74c0d616cd64eb7eb3c07e99"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_030.png",
+          "source": "idle",
+          "source_index": 30,
+          "bounds": [
+            56,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10357,
+          "contour_pixels_recolored": 202,
+          "sha256": "930840bea14b000ad124724f8286b8784d6d2c22a27357804f35ed9c2fc81dec"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_033.png",
+          "source": "idle",
+          "source_index": 33,
+          "bounds": [
+            62,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10397,
+          "contour_pixels_recolored": 218,
+          "sha256": "739f5e8a6c5910884d50fa2cc3187bf30d68fe50ca142b9fe765bf97f5a10523"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_036.png",
+          "source": "idle",
+          "source_index": 36,
+          "bounds": [
+            52,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10573,
+          "contour_pixels_recolored": 247,
+          "sha256": "2fd2d8ac768883dac51eaf429fc86bb7326f2cf172f05143f81eb3d506ff0229"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_039.png",
+          "source": "idle",
+          "source_index": 39,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10584,
+          "contour_pixels_recolored": 263,
+          "sha256": "2917a07a1ef1e14c3b94be8f8b82ec5c0af198c13ac4cb837eccbf75d6324e9c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_042.png",
+          "source": "idle",
+          "source_index": 42,
+          "bounds": [
+            40,
+            45,
+            217,
+            219
+          ],
+          "opaque_pixels": 10646,
+          "contour_pixels_recolored": 245,
+          "sha256": "edbfd8b3544f7f9e7cbb4dca41c5271e40d510e69600bb8c69573d74c99a45ae"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_045.png",
+          "source": "idle",
+          "source_index": 45,
+          "bounds": [
+            36,
+            44,
+            216,
+            219
+          ],
+          "opaque_pixels": 10677,
+          "contour_pixels_recolored": 286,
+          "sha256": "04c49ca4caf145ae23d2857bc68cf725c35dca3bef3507b1743e0b87661e8b8b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_048.png",
+          "source": "idle",
+          "source_index": 48,
+          "bounds": [
+            30,
+            43,
+            215,
+            219
+          ],
+          "opaque_pixels": 10772,
+          "contour_pixels_recolored": 270,
+          "sha256": "1de86275454f32841e22fbe7468ccbe931151c32e191f35ea00fa66b0ec8e847"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_051.png",
+          "source": "idle",
+          "source_index": 51,
+          "bounds": [
+            28,
+            43,
+            214,
+            219
+          ],
+          "opaque_pixels": 10776,
+          "contour_pixels_recolored": 239,
+          "sha256": "fbdceb5299b8e778995ae6275d1846fdfc3ccd3b14c3d622b33ebe86f1b46428"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_054.png",
+          "source": "idle",
+          "source_index": 54,
+          "bounds": [
+            38,
+            42,
+            214,
+            219
+          ],
+          "opaque_pixels": 10754,
+          "contour_pixels_recolored": 243,
+          "sha256": "b350d21662583fb2224d19b41d1cb1d4023cf878380e9fc07aa507dace04edeb"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_057.png",
+          "source": "idle",
+          "source_index": 57,
+          "bounds": [
+            36,
+            42,
+            214,
+            219
+          ],
+          "opaque_pixels": 10750,
+          "contour_pixels_recolored": 257,
+          "sha256": "c99edc58224ad14da3e0b7642cf5e49edc7081b42885e4a131fae3339b67a08d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_060.png",
+          "source": "idle",
+          "source_index": 60,
+          "bounds": [
+            37,
+            44,
+            216,
+            219
+          ],
+          "opaque_pixels": 10379,
+          "contour_pixels_recolored": 274,
+          "sha256": "61b49d5b9ad9269532a5454e65ce468be14c82e8dce6a9dbf0cb6dba842077df"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_063.png",
+          "source": "idle",
+          "source_index": 63,
+          "bounds": [
+            40,
+            44,
+            218,
+            219
+          ],
+          "opaque_pixels": 10318,
+          "contour_pixels_recolored": 260,
+          "sha256": "ccba294dfb9a23d90e7453d64f52035394434a63b2270de5478fb6956bc64094"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_066.png",
+          "source": "idle",
+          "source_index": 66,
+          "bounds": [
+            60,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10334,
+          "contour_pixels_recolored": 245,
+          "sha256": "2d2928992d39a3fcccbd446704cf0fff0c93c5cb9053cb5ec245a0fc9c11cddb"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_069.png",
+          "source": "idle",
+          "source_index": 69,
+          "bounds": [
+            56,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10572,
+          "contour_pixels_recolored": 258,
+          "sha256": "48ccdb7ec424d1d13f7d02c63e22173e631a87a972566d816bed1167c6a66fed"
+        }
+      ]
+    },
+    "run": {
+      "fps": 12,
+      "loop": true,
+      "duration_seconds": 1.5,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_012.png",
+          "source": "run",
+          "source_index": 12,
+          "bounds": [
+            48,
+            40,
+            215,
+            210
+          ],
+          "opaque_pixels": 10243,
+          "contour_pixels_recolored": 276,
+          "sha256": "06b27e0a3a10daad5e84b9f0c6962c45afabeb11ee09fbc25ea9c3e4fa2a6f1e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_014.png",
+          "source": "run",
+          "source_index": 14,
+          "bounds": [
+            45,
+            48,
+            223,
+            220
+          ],
+          "opaque_pixels": 9999,
+          "contour_pixels_recolored": 297,
+          "sha256": "a1939abeae489d45131b94fae92191c9befc43eae69e1fa5566526ddde97a623"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_016.png",
+          "source": "run",
+          "source_index": 16,
+          "bounds": [
+            36,
+            44,
+            225,
+            219
+          ],
+          "opaque_pixels": 10513,
+          "contour_pixels_recolored": 300,
+          "sha256": "b14c73e01ca9db56fde2ff2cb466ccff29ff9cc800d00346bde480863e0b1634"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_018.png",
+          "source": "run",
+          "source_index": 18,
+          "bounds": [
+            42,
+            36,
+            223,
+            219
+          ],
+          "opaque_pixels": 10674,
+          "contour_pixels_recolored": 308,
+          "sha256": "352cdc669d0d39d6d0b0d83f6b07bb737f54861fa67f82b8c4300189b2ae92b2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_020.png",
+          "source": "run",
+          "source_index": 20,
+          "bounds": [
+            35,
+            35,
+            220,
+            202
+          ],
+          "opaque_pixels": 10841,
+          "contour_pixels_recolored": 281,
+          "sha256": "d4bcb6e0bae18e46f08543bfee18208edf26ec01bb43f611cea199eabe20f459"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_022.png",
+          "source": "run",
+          "source_index": 22,
+          "bounds": [
+            43,
+            38,
+            217,
+            193
+          ],
+          "opaque_pixels": 10402,
+          "contour_pixels_recolored": 300,
+          "sha256": "7850b6c18084794239545c3f048f6b881f7f8a5f0030d08a0b5036aa6c710459"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_024.png",
+          "source": "run",
+          "source_index": 24,
+          "bounds": [
+            47,
+            42,
+            216,
+            219
+          ],
+          "opaque_pixels": 10174,
+          "contour_pixels_recolored": 284,
+          "sha256": "a9a98a6f8973c663a8d7904446143ed91828af82366153bb028c73d88d412bdf"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_026.png",
+          "source": "run",
+          "source_index": 26,
+          "bounds": [
+            37,
+            48,
+            226,
+            219
+          ],
+          "opaque_pixels": 10734,
+          "contour_pixels_recolored": 300,
+          "sha256": "dd9aa042e036fd3b9e774851ca5f6460ab67ddb6962071dc73533c4c227d364c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_028.png",
+          "source": "run",
+          "source_index": 28,
+          "bounds": [
+            36,
+            42,
+            224,
+            218
+          ],
+          "opaque_pixels": 10536,
+          "contour_pixels_recolored": 252,
+          "sha256": "2ec7aa09e49dcc6ffeb6a08e8a4527004c0d732efd022d998c353fcf27a95ade"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_030.png",
+          "source": "run",
+          "source_index": 30,
+          "bounds": [
+            34,
+            35,
+            221,
+            216
+          ],
+          "opaque_pixels": 10644,
+          "contour_pixels_recolored": 297,
+          "sha256": "bbdafd234093588c5c9b4544765e3957b0d635b43e59ea926823df82eda33dc9"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_032.png",
+          "source": "run",
+          "source_index": 32,
+          "bounds": [
+            42,
+            35,
+            218,
+            199
+          ],
+          "opaque_pixels": 10430,
+          "contour_pixels_recolored": 296,
+          "sha256": "92711d274b1de49a7a0bf6b19c723b9f7c2712c09c4476e668e3b08b91d4d7e7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_034.png",
+          "source": "run",
+          "source_index": 34,
+          "bounds": [
+            48,
+            40,
+            215,
+            210
+          ],
+          "opaque_pixels": 10299,
+          "contour_pixels_recolored": 221,
+          "sha256": "a18b1a363423fd140e02fcd5ab78155ad9db80f09426498b9f73be0e14d4b700"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_036.png",
+          "source": "run",
+          "source_index": 36,
+          "bounds": [
+            44,
+            48,
+            222,
+            220
+          ],
+          "opaque_pixels": 10040,
+          "contour_pixels_recolored": 297,
+          "sha256": "ec38bcc8b9f63edee8d05f394ff8935e453c14f3c0167bb6eee0713ce2b2a55e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_038.png",
+          "source": "run",
+          "source_index": 38,
+          "bounds": [
+            36,
+            44,
+            225,
+            219
+          ],
+          "opaque_pixels": 10521,
+          "contour_pixels_recolored": 259,
+          "sha256": "45870094b241d1e803cf223b1c587998a26e5f2867359d13ce0e7282887b04db"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_040.png",
+          "source": "run",
+          "source_index": 40,
+          "bounds": [
+            42,
+            36,
+            223,
+            219
+          ],
+          "opaque_pixels": 10681,
+          "contour_pixels_recolored": 301,
+          "sha256": "6191711c4b91f1d365096f4986f845cbb874e8c2eaf14553a83b60b196635943"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_042.png",
+          "source": "run",
+          "source_index": 42,
+          "bounds": [
+            35,
+            35,
+            220,
+            202
+          ],
+          "opaque_pixels": 10857,
+          "contour_pixels_recolored": 305,
+          "sha256": "a79eb51490e7bafdd9d0d3d3fc3082c340aededac74a09df15135e159093692e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_044.png",
+          "source": "run",
+          "source_index": 44,
+          "bounds": [
+            45,
+            39,
+            216,
+            193
+          ],
+          "opaque_pixels": 10387,
+          "contour_pixels_recolored": 291,
+          "sha256": "db64d73f0148538506435f488ca77b0e121c88c565fa8e731d2fc13add1a6b75"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/run/run_046.png",
+          "source": "run",
+          "source_index": 46,
+          "bounds": [
+            47,
+            42,
+            216,
+            219
+          ],
+          "opaque_pixels": 10143,
+          "contour_pixels_recolored": 298,
+          "sha256": "b7a316f5a6308cc7e4751338737c5cc5e93bfc488a25e7e99eb10bd374981551"
+        }
+      ]
+    },
+    "attack": {
+      "fps": 25,
+      "loop": false,
+      "duration_seconds": 1.2,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_000.png",
+          "source": "idle",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10639,
+          "contour_pixels_recolored": 244,
+          "sha256": "955a93be7f2e419b30586e232667bd5cce7044d6f78c68ad3cfbde466a05311d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_003.png",
+          "source": "follow-a",
+          "source_index": 3,
+          "bounds": [
+            49,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10626,
+          "contour_pixels_recolored": 254,
+          "sha256": "01116281fc1d9a7a9feccd241bc0bc266478f0352450988fe4c7db4227db2d06"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_006.png",
+          "source": "follow-a",
+          "source_index": 6,
+          "bounds": [
+            46,
+            46,
+            206,
+            219
+          ],
+          "opaque_pixels": 10614,
+          "contour_pixels_recolored": 344,
+          "sha256": "77806b2e120d14150bc4d3445bb14e4d0a1af364791e2fd06911f5001601aa3f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_008.png",
+          "source": "follow-a",
+          "source_index": 8,
+          "bounds": [
+            42,
+            17,
+            180,
+            219
+          ],
+          "opaque_pixels": 9783,
+          "contour_pixels_recolored": 219,
+          "sha256": "d7b0da4205a6dc32a35b79d0b95df9b79757d16c766eb938a46b38b0691850d7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_009.png",
+          "source": "follow-a",
+          "source_index": 9,
+          "bounds": [
+            40,
+            7,
+            180,
+            219
+          ],
+          "opaque_pixels": 9813,
+          "contour_pixels_recolored": 299,
+          "sha256": "a64d6f8564c60f648cb1ebec1f0488ecae640ef8e2a724d0c8177f522cbffab6"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_010.png",
+          "source": "follow-a",
+          "source_index": 10,
+          "bounds": [
+            31,
+            2,
+            180,
+            219
+          ],
+          "opaque_pixels": 9903,
+          "contour_pixels_recolored": 330,
+          "sha256": "c4c8f31738e0c01e90b1b7c3759f6f2ac438b7a6b34bd662c40372f982a0cf27"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_012.png",
+          "source": "follow-a",
+          "source_index": 12,
+          "bounds": [
+            18,
+            6,
+            175,
+            219
+          ],
+          "opaque_pixels": 10028,
+          "contour_pixels_recolored": 300,
+          "sha256": "86526119518ba646336b4a5130b9d1a1d50d8698677d96042b07a20f96dd5847"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_014.png",
+          "source": "follow-a",
+          "source_index": 14,
+          "bounds": [
+            28,
+            23,
+            165,
+            219
+          ],
+          "opaque_pixels": 10003,
+          "contour_pixels_recolored": 258,
+          "sha256": "d219ebe4f248d603bc50c09f74209ecfb46e387a4bce2b6c53d5deab3048e2cf"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_015.png",
+          "source": "follow-a",
+          "source_index": 15,
+          "bounds": [
+            35,
+            32,
+            164,
+            219
+          ],
+          "opaque_pixels": 9901,
+          "contour_pixels_recolored": 258,
+          "sha256": "4630546514a32c75e9bfe10940c0736195436109b4d48f6ce58e1e86f2e9d8a6"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_030.png",
+          "source": "follow-a",
+          "source_index": 30,
+          "bounds": [
+            41,
+            46,
+            219,
+            218
+          ],
+          "opaque_pixels": 10854,
+          "contour_pixels_recolored": 291,
+          "sha256": "acd6fe43d5447d4b9d84f3d899e2604dce99906e532db550b559424d4b81ddf9"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_032.png",
+          "source": "follow-a",
+          "source_index": 32,
+          "bounds": [
+            40,
+            46,
+            219,
+            218
+          ],
+          "opaque_pixels": 10904,
+          "contour_pixels_recolored": 280,
+          "sha256": "0b9a0b80ac8741d16a46692aa3d991c5366dc155f52ee235f59aa4acb008ea3e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_034.png",
+          "source": "follow-a",
+          "source_index": 34,
+          "bounds": [
+            41,
+            46,
+            219,
+            218
+          ],
+          "opaque_pixels": 10947,
+          "contour_pixels_recolored": 267,
+          "sha256": "5c59ca12e37b96c6ffb6b736a0b7c6c6b28953182b8bfad7bd4eacb3393af624"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_036.png",
+          "source": "follow-a",
+          "source_index": 36,
+          "bounds": [
+            42,
+            46,
+            220,
+            218
+          ],
+          "opaque_pixels": 10989,
+          "contour_pixels_recolored": 276,
+          "sha256": "9fc4a1470b98efb5a727f746cdcb0db3854a088f31f5116c118c0fb008890658"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_037.png",
+          "source": "follow-a",
+          "source_index": 37,
+          "bounds": [
+            42,
+            46,
+            220,
+            218
+          ],
+          "opaque_pixels": 10981,
+          "contour_pixels_recolored": 266,
+          "sha256": "dcafeaca929d323f986531610cf16f481e6ef9e3205be04dda19273599604169"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-a/follow-a_038.png",
+          "source": "follow-a",
+          "source_index": 38,
+          "bounds": [
+            42,
+            46,
+            220,
+            218
+          ],
+          "opaque_pixels": 10991,
+          "contour_pixels_recolored": 271,
+          "sha256": "a935681ba6a82f2ca47f7d2fbcce839f2617daaa940912d32ed1ebaac451758b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_000.png",
+          "source": "follow-b",
+          "source_index": 0,
+          "bounds": [
+            42,
+            46,
+            220,
+            218
+          ],
+          "opaque_pixels": 10971,
+          "contour_pixels_recolored": 240,
+          "sha256": "b0e41ea56e80ca691c1ba3fd1fa4c4020b1a70055609017e1ae3bb192cf0f7fa"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_002.png",
+          "source": "follow-b",
+          "source_index": 2,
+          "bounds": [
+            33,
+            46,
+            220,
+            218
+          ],
+          "opaque_pixels": 10926,
+          "contour_pixels_recolored": 264,
+          "sha256": "dc15068395ff66bfe05f0dccba61c89304ae88aabfa79fd725317469af595bbd"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_004.png",
+          "source": "follow-b",
+          "source_index": 4,
+          "bounds": [
+            33,
+            46,
+            233,
+            218
+          ],
+          "opaque_pixels": 10904,
+          "contour_pixels_recolored": 251,
+          "sha256": "1fe8330c53339c78ccf5bebf7a8832363b328decbfba161e590eba57b4826400"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_006.png",
+          "source": "follow-b",
+          "source_index": 6,
+          "bounds": [
+            28,
+            45,
+            243,
+            218
+          ],
+          "opaque_pixels": 11027,
+          "contour_pixels_recolored": 302,
+          "sha256": "e8439f0da4ce21570085f414c68c7c9dc090499afe372a1d7fdb62dd8ccb3207"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_008.png",
+          "source": "follow-b",
+          "source_index": 8,
+          "bounds": [
+            24,
+            45,
+            244,
+            218
+          ],
+          "opaque_pixels": 10910,
+          "contour_pixels_recolored": 287,
+          "sha256": "fd8412905147cf0743b41cddc31f3239da378182a2003d91494e5618363e5bcc"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_010.png",
+          "source": "follow-b",
+          "source_index": 10,
+          "bounds": [
+            24,
+            45,
+            232,
+            219
+          ],
+          "opaque_pixels": 10920,
+          "contour_pixels_recolored": 394,
+          "sha256": "59cd472dcccdf39f8b80660c64c7556d3b7c3fcd7306471ad98d83084832d029"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_012.png",
+          "source": "follow-b",
+          "source_index": 12,
+          "bounds": [
+            23,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10896,
+          "contour_pixels_recolored": 263,
+          "sha256": "03a3bab6c0f74219e9a9e4c30f2f2f03b7a4784323f567612157036c2eb85d39"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_015.png",
+          "source": "follow-b",
+          "source_index": 15,
+          "bounds": [
+            22,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 11086,
+          "contour_pixels_recolored": 244,
+          "sha256": "e87c6b66aeade22ac6c962619cea6cd78a45bcd7fd1c2f8007c8b7068b0f9aca"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_018.png",
+          "source": "follow-b",
+          "source_index": 18,
+          "bounds": [
+            30,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 11209,
+          "contour_pixels_recolored": 262,
+          "sha256": "eea5cd6553addd74abdf7c0082fe664a7444aedb1f6063ee55efe185ba916a50"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_021.png",
+          "source": "follow-b",
+          "source_index": 21,
+          "bounds": [
+            30,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 11248,
+          "contour_pixels_recolored": 261,
+          "sha256": "fa9cd4f36b40cb6a714852a86e9db90be4a920ac829046ae1634aa9426a26878"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_024.png",
+          "source": "follow-b",
+          "source_index": 24,
+          "bounds": [
+            30,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 11180,
+          "contour_pixels_recolored": 259,
+          "sha256": "84ee0e65a85385f58161c43fca687e8653abbb54a8fa3f4600e5308eb7fad4b1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_027.png",
+          "source": "follow-b",
+          "source_index": 27,
+          "bounds": [
+            29,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10933,
+          "contour_pixels_recolored": 247,
+          "sha256": "1e64033d59b0c2040707288fe643813501195d6a212c516aa90090d99b8300df"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_030.png",
+          "source": "follow-b",
+          "source_index": 30,
+          "bounds": [
+            32,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10770,
+          "contour_pixels_recolored": 255,
+          "sha256": "588f417731ba004fa9d4366f908db8dbaaa2985e555bf3bfbe7742f164ac5c1a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/follow-b/follow-b_036.png",
+          "source": "follow-b",
+          "source_index": 36,
+          "bounds": [
+            60,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10555,
+          "contour_pixels_recolored": 249,
+          "sha256": "6f86cc08836b54f622a6d3c3fe5159d41790a974b55e70f55f12291529fd70e1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/idle/idle_000.png",
+          "source": "idle",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10639,
+          "contour_pixels_recolored": 244,
+          "sha256": "955a93be7f2e419b30586e232667bd5cce7044d6f78c68ad3cfbde466a05311d"
+        }
+      ]
+    },
+    "jumpup": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_000.png",
+          "source": "apex-a",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10645,
+          "contour_pixels_recolored": 250,
+          "sha256": "a2d5486843c10d66b70148cdb136030f9e13d484302641b85beb04ae536862ed"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_002.png",
+          "source": "apex-a",
+          "source_index": 2,
+          "bounds": [
+            40,
+            48,
+            199,
+            218
+          ],
+          "opaque_pixels": 10651,
+          "contour_pixels_recolored": 381,
+          "sha256": "0a49389631b21b0c9bec5330a1939b3a6f9b9fcd8d8411f6845abe520586777e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_004.png",
+          "source": "apex-a",
+          "source_index": 4,
+          "bounds": [
+            36,
+            46,
+            181,
+            218
+          ],
+          "opaque_pixels": 10104,
+          "contour_pixels_recolored": 301,
+          "sha256": "e81cd7b9a65cc015c7b5fe621d88e4b158c40073a0a17cec18843a9b052cf235"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_006.png",
+          "source": "apex-a",
+          "source_index": 6,
+          "bounds": [
+            36,
+            65,
+            208,
+            218
+          ],
+          "opaque_pixels": 10536,
+          "contour_pixels_recolored": 363,
+          "sha256": "e01caa40c3eaddec4f647db0674ee998660b7c2decee30247cbe485ea1928349"
+        }
+      ]
+    },
+    "inair": {
+      "fps": 12,
+      "loop": false,
+      "duration_seconds": 0.3333333333333333,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_008.png",
+          "source": "apex-a",
+          "source_index": 8,
+          "bounds": [
+            46,
+            35,
+            216,
+            204
+          ],
+          "opaque_pixels": 9577,
+          "contour_pixels_recolored": 256,
+          "sha256": "72d351a07c64d78234a134b06bf769165d96e313332f5f21ab26d2000e0768a2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_012.png",
+          "source": "apex-a",
+          "source_index": 12,
+          "bounds": [
+            40,
+            32,
+            220,
+            174
+          ],
+          "opaque_pixels": 9593,
+          "contour_pixels_recolored": 260,
+          "sha256": "19b2b66a0c116158aa73a79d8acd2a65fd8d9d92dd000273499b9b69133fec7b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_020.png",
+          "source": "apex-a",
+          "source_index": 20,
+          "bounds": [
+            34,
+            43,
+            220,
+            186
+          ],
+          "opaque_pixels": 9824,
+          "contour_pixels_recolored": 277,
+          "sha256": "8eb4f59946951cbdfc30c779f42df5ad5ad4072d9d2517d1e79d814694d206ed"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_038.png",
+          "source": "apex-a",
+          "source_index": 38,
+          "bounds": [
+            43,
+            53,
+            220,
+            196
+          ],
+          "opaque_pixels": 9514,
+          "contour_pixels_recolored": 273,
+          "sha256": "927ffc72d633947b98ab6373c6df39df4f606857d4c07b1674187ef324154871"
+        }
+      ]
+    },
+    "isfalling": {
+      "fps": 12,
+      "loop": false,
+      "duration_seconds": 0.3333333333333333,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_000.png",
+          "source": "apex-b",
+          "source_index": 0,
+          "bounds": [
+            42,
+            53,
+            220,
+            196
+          ],
+          "opaque_pixels": 9559,
+          "contour_pixels_recolored": 228,
+          "sha256": "f705f1fcd5a5864ddd0aec58fa0bff64b3c4e6f661414c0610fc508e8d308752"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_004.png",
+          "source": "apex-b",
+          "source_index": 4,
+          "bounds": [
+            39,
+            23,
+            223,
+            171
+          ],
+          "opaque_pixels": 10403,
+          "contour_pixels_recolored": 298,
+          "sha256": "78e932bccf0261ea47489261a49af12611ee42133cef4c772d18522ff3d4ca3c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_007.png",
+          "source": "apex-b",
+          "source_index": 7,
+          "bounds": [
+            39,
+            19,
+            228,
+            171
+          ],
+          "opaque_pixels": 11093,
+          "contour_pixels_recolored": 355,
+          "sha256": "301af725bdee6101b43a43e354fd169164a96acae928cbcbfe469459ab8379ac"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_009.png",
+          "source": "apex-b",
+          "source_index": 9,
+          "bounds": [
+            38,
+            25,
+            224,
+            188
+          ],
+          "opaque_pixels": 11383,
+          "contour_pixels_recolored": 414,
+          "sha256": "be00934c05bc31738fdb745ef31c2a8f16f0b005f111a4bb3b021b99cdb74cd8"
+        }
+      ]
+    },
+    "land": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_012.png",
+          "source": "apex-b",
+          "source_index": 12,
+          "bounds": [
+            30,
+            65,
+            226,
+            220
+          ],
+          "opaque_pixels": 11121,
+          "contour_pixels_recolored": 346,
+          "sha256": "7f815e284c948db0cb7965a0dd4b60af158fdf62f371cef731d573296d73bb98"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_016.png",
+          "source": "apex-b",
+          "source_index": 16,
+          "bounds": [
+            51,
+            71,
+            232,
+            219
+          ],
+          "opaque_pixels": 10235,
+          "contour_pixels_recolored": 270,
+          "sha256": "acf4be7869e004a663eee8dbb0afe39a1031918b1557fa16df68abb09aaf24d7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_024.png",
+          "source": "apex-b",
+          "source_index": 24,
+          "bounds": [
+            57,
+            44,
+            216,
+            219
+          ],
+          "opaque_pixels": 10541,
+          "contour_pixels_recolored": 244,
+          "sha256": "330a2d33c5cb473de2ee8bf40a189955541983819669b3f6e370f7da77749a8e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_038.png",
+          "source": "apex-b",
+          "source_index": 38,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10614,
+          "contour_pixels_recolored": 256,
+          "sha256": "7d7b38cadf0f95b19c0dd6505175fe7dad110072503b6b8ca326c1ca020c5e75"
+        }
+      ]
+    },
+    "jump": {
+      "fps": 18,
+      "loop": false,
+      "duration_seconds": 0.8333333333333334,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_000.png",
+          "source": "apex-a",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10645,
+          "contour_pixels_recolored": 250,
+          "sha256": "a2d5486843c10d66b70148cdb136030f9e13d484302641b85beb04ae536862ed"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_002.png",
+          "source": "apex-a",
+          "source_index": 2,
+          "bounds": [
+            40,
+            48,
+            199,
+            218
+          ],
+          "opaque_pixels": 10651,
+          "contour_pixels_recolored": 381,
+          "sha256": "0a49389631b21b0c9bec5330a1939b3a6f9b9fcd8d8411f6845abe520586777e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_004.png",
+          "source": "apex-a",
+          "source_index": 4,
+          "bounds": [
+            36,
+            46,
+            181,
+            218
+          ],
+          "opaque_pixels": 10104,
+          "contour_pixels_recolored": 301,
+          "sha256": "e81cd7b9a65cc015c7b5fe621d88e4b158c40073a0a17cec18843a9b052cf235"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_006.png",
+          "source": "apex-a",
+          "source_index": 6,
+          "bounds": [
+            36,
+            65,
+            208,
+            218
+          ],
+          "opaque_pixels": 10536,
+          "contour_pixels_recolored": 363,
+          "sha256": "e01caa40c3eaddec4f647db0674ee998660b7c2decee30247cbe485ea1928349"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_008.png",
+          "source": "apex-a",
+          "source_index": 8,
+          "bounds": [
+            46,
+            35,
+            216,
+            204
+          ],
+          "opaque_pixels": 9577,
+          "contour_pixels_recolored": 256,
+          "sha256": "72d351a07c64d78234a134b06bf769165d96e313332f5f21ab26d2000e0768a2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_012.png",
+          "source": "apex-a",
+          "source_index": 12,
+          "bounds": [
+            40,
+            32,
+            220,
+            174
+          ],
+          "opaque_pixels": 9593,
+          "contour_pixels_recolored": 260,
+          "sha256": "19b2b66a0c116158aa73a79d8acd2a65fd8d9d92dd000273499b9b69133fec7b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_020.png",
+          "source": "apex-a",
+          "source_index": 20,
+          "bounds": [
+            34,
+            43,
+            220,
+            186
+          ],
+          "opaque_pixels": 9824,
+          "contour_pixels_recolored": 277,
+          "sha256": "8eb4f59946951cbdfc30c779f42df5ad5ad4072d9d2517d1e79d814694d206ed"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-a/apex-a_038.png",
+          "source": "apex-a",
+          "source_index": 38,
+          "bounds": [
+            43,
+            53,
+            220,
+            196
+          ],
+          "opaque_pixels": 9514,
+          "contour_pixels_recolored": 273,
+          "sha256": "927ffc72d633947b98ab6373c6df39df4f606857d4c07b1674187ef324154871"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_004.png",
+          "source": "apex-b",
+          "source_index": 4,
+          "bounds": [
+            39,
+            23,
+            223,
+            171
+          ],
+          "opaque_pixels": 10403,
+          "contour_pixels_recolored": 298,
+          "sha256": "78e932bccf0261ea47489261a49af12611ee42133cef4c772d18522ff3d4ca3c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_007.png",
+          "source": "apex-b",
+          "source_index": 7,
+          "bounds": [
+            39,
+            19,
+            228,
+            171
+          ],
+          "opaque_pixels": 11093,
+          "contour_pixels_recolored": 355,
+          "sha256": "301af725bdee6101b43a43e354fd169164a96acae928cbcbfe469459ab8379ac"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_009.png",
+          "source": "apex-b",
+          "source_index": 9,
+          "bounds": [
+            38,
+            25,
+            224,
+            188
+          ],
+          "opaque_pixels": 11383,
+          "contour_pixels_recolored": 414,
+          "sha256": "be00934c05bc31738fdb745ef31c2a8f16f0b005f111a4bb3b021b99cdb74cd8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_012.png",
+          "source": "apex-b",
+          "source_index": 12,
+          "bounds": [
+            30,
+            65,
+            226,
+            220
+          ],
+          "opaque_pixels": 11121,
+          "contour_pixels_recolored": 346,
+          "sha256": "7f815e284c948db0cb7965a0dd4b60af158fdf62f371cef731d573296d73bb98"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_016.png",
+          "source": "apex-b",
+          "source_index": 16,
+          "bounds": [
+            51,
+            71,
+            232,
+            219
+          ],
+          "opaque_pixels": 10235,
+          "contour_pixels_recolored": 270,
+          "sha256": "acf4be7869e004a663eee8dbb0afe39a1031918b1557fa16df68abb09aaf24d7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_024.png",
+          "source": "apex-b",
+          "source_index": 24,
+          "bounds": [
+            57,
+            44,
+            216,
+            219
+          ],
+          "opaque_pixels": 10541,
+          "contour_pixels_recolored": 244,
+          "sha256": "330a2d33c5cb473de2ee8bf40a189955541983819669b3f6e370f7da77749a8e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/apex-b/apex-b_038.png",
+          "source": "apex-b",
+          "source_index": 38,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10614,
+          "contour_pixels_recolored": 256,
+          "sha256": "7d7b38cadf0f95b19c0dd6505175fe7dad110072503b6b8ca326c1ca020c5e75"
+        }
+      ]
+    },
+    "dash": {
+      "fps": 21.818181818181817,
+      "loop": false,
+      "duration_seconds": 0.275,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_000.png",
+          "source": "dash",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10625,
+          "contour_pixels_recolored": 233,
+          "sha256": "93268c127bef982b95a1a4fad7129970eb0ec6926e96f34ae0bae2801cf1a465"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_006.png",
+          "source": "dash",
+          "source_index": 6,
+          "bounds": [
+            24,
+            24,
+            208,
+            220
+          ],
+          "opaque_pixels": 11830,
+          "contour_pixels_recolored": 368,
+          "sha256": "ab868d266413fa79be027b96f7401345669a30565febecd85ff74add9ee260ce"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_009.png",
+          "source": "dash",
+          "source_index": 9,
+          "bounds": [
+            27,
+            26,
+            219,
+            219
+          ],
+          "opaque_pixels": 11705,
+          "contour_pixels_recolored": 421,
+          "sha256": "40a1e9b9ba537c1343d8652a7cd5a1864cf231eb95ece3cddd6629fed0f51684"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_024.png",
+          "source": "dash",
+          "source_index": 24,
+          "bounds": [
+            25,
+            23,
+            207,
+            220
+          ],
+          "opaque_pixels": 11558,
+          "contour_pixels_recolored": 470,
+          "sha256": "90c055bd7e0a053d2a78cab8477822f57237da5d89e159906a8718aff06eb74c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_060.png",
+          "source": "dash",
+          "source_index": 60,
+          "bounds": [
+            24,
+            22,
+            208,
+            220
+          ],
+          "opaque_pixels": 11535,
+          "contour_pixels_recolored": 439,
+          "sha256": "e90c4218c966530d1a7b29da0608d5cef6b9c04463425728a927278c7eb067b2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/dash/dash_072.png",
+          "source": "dash",
+          "source_index": 72,
+          "bounds": [
+            49,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10637,
+          "contour_pixels_recolored": 262,
+          "sha256": "854e5d5d959cd459c2894266350374cbd2932be576a0ec2d4ab5f3e1949663cd"
+        }
+      ]
+    },
+    "hurt": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.4,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_000.png",
+          "source": "hurt",
+          "source_index": 0,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10648,
+          "contour_pixels_recolored": 251,
+          "sha256": "f0254380b9efa9b897309b5de3b1c6558d1cf602bb835be327eb4cff4d1a1f41"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_012.png",
+          "source": "hurt",
+          "source_index": 12,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10630,
+          "contour_pixels_recolored": 240,
+          "sha256": "40e5a71fded694eccb1eac8a80a4a6cfd9aaf6663773d33f5de09487d74b1bc8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_015.png",
+          "source": "hurt",
+          "source_index": 15,
+          "bounds": [
+            29,
+            27,
+            180,
+            219
+          ],
+          "opaque_pixels": 10921,
+          "contour_pixels_recolored": 295,
+          "sha256": "2a0bedb91ab11bdefbe4a51b486c5a50db56cf1a2e6a015e2eae835dab77b2b9"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_018.png",
+          "source": "hurt",
+          "source_index": 18,
+          "bounds": [
+            41,
+            39,
+            196,
+            219
+          ],
+          "opaque_pixels": 10801,
+          "contour_pixels_recolored": 285,
+          "sha256": "84e46fe99a5ea564d58b1d10bbab9962fa0ae73cdd502ce46c54b966f01ba9b7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_021.png",
+          "source": "hurt",
+          "source_index": 21,
+          "bounds": [
+            36,
+            45,
+            206,
+            219
+          ],
+          "opaque_pixels": 10655,
+          "contour_pixels_recolored": 301,
+          "sha256": "4db33bdb9e294d30861c78b1c300124bf28d55fad3cdb97b511c1ce149aaa5cc"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_024.png",
+          "source": "hurt",
+          "source_index": 24,
+          "bounds": [
+            52,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10641,
+          "contour_pixels_recolored": 273,
+          "sha256": "d43157695c882ca4c6e7231855aafda31d4c9d1fd2083aaaa787eb237c866846"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_027.png",
+          "source": "hurt",
+          "source_index": 27,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10714,
+          "contour_pixels_recolored": 308,
+          "sha256": "439fda44c0c5d465d4197ce92b255d9f79f6a1ea234a2444efb8ac7070d305d2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/hurt/hurt_072.png",
+          "source": "hurt",
+          "source_index": 72,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10642,
+          "contour_pixels_recolored": 286,
+          "sha256": "847c7811cc6fad88ad2bdcbb57b8499cef65fe304283fbed2ebc730c73467480"
+        }
+      ]
+    },
+    "death": {
+      "fps": 24,
+      "loop": false,
+      "duration_seconds": 0.6666666666666666,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_018.png",
+          "source": "death",
+          "source_index": 18,
+          "bounds": [
+            49,
+            45,
+            218,
+            219
+          ],
+          "opaque_pixels": 10621,
+          "contour_pixels_recolored": 317,
+          "sha256": "c86efddd4e5b91c9e33d1407fe261feb57b35cda4338adaccac01077b82b0c10"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_020.png",
+          "source": "death",
+          "source_index": 20,
+          "bounds": [
+            49,
+            45,
+            219,
+            219
+          ],
+          "opaque_pixels": 10591,
+          "contour_pixels_recolored": 305,
+          "sha256": "74c55e695bf05dcba63940d3ed70c1712bfaeeabe53061e1b1d3088c6427b304"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_022.png",
+          "source": "death",
+          "source_index": 22,
+          "bounds": [
+            42,
+            62,
+            219,
+            220
+          ],
+          "opaque_pixels": 10634,
+          "contour_pixels_recolored": 315,
+          "sha256": "009f6b47c8b9f63798f0c6c277203d8b0197893831ae01c326d1c4d4e136080d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_024.png",
+          "source": "death",
+          "source_index": 24,
+          "bounds": [
+            51,
+            88,
+            217,
+            224
+          ],
+          "opaque_pixels": 10395,
+          "contour_pixels_recolored": 287,
+          "sha256": "fe5fb819424b45c5d9acae1d6077ec2194cbf9a4d3947c907be185ea6a165e3f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_026.png",
+          "source": "death",
+          "source_index": 26,
+          "bounds": [
+            54,
+            89,
+            231,
+            224
+          ],
+          "opaque_pixels": 10532,
+          "contour_pixels_recolored": 316,
+          "sha256": "fcb03b3d290de95a8e83b7b72a2ce1463d1d2a01e01a92e8b5075dc0ab5ac45a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_028.png",
+          "source": "death",
+          "source_index": 28,
+          "bounds": [
+            56,
+            89,
+            212,
+            224
+          ],
+          "opaque_pixels": 9812,
+          "contour_pixels_recolored": 235,
+          "sha256": "32432a5f12e7beab78df0e990017ac620bbe3d2a22013b56f7dc1b18833ab40a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_029.png",
+          "source": "death",
+          "source_index": 29,
+          "bounds": [
+            56,
+            89,
+            212,
+            224
+          ],
+          "opaque_pixels": 9819,
+          "contour_pixels_recolored": 234,
+          "sha256": "f1dffc98da09543a4ebea34ccb3c3e6e0eca4deb15043de25799d61648a6dc5b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_030.png",
+          "source": "death",
+          "source_index": 30,
+          "bounds": [
+            22,
+            116,
+            210,
+            232
+          ],
+          "opaque_pixels": 9828,
+          "contour_pixels_recolored": 279,
+          "sha256": "8fc0ddf7b39bd2802af1994b561c2411df2905d2474c4f45ff8aa80b21b23499"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_031.png",
+          "source": "death",
+          "source_index": 31,
+          "bounds": [
+            22,
+            116,
+            210,
+            232
+          ],
+          "opaque_pixels": 9753,
+          "contour_pixels_recolored": 302,
+          "sha256": "b91a8e9fdbc96c4618353206a96a5323850edf57506aeb0805a6822833fa9750"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_032.png",
+          "source": "death",
+          "source_index": 32,
+          "bounds": [
+            23,
+            109,
+            212,
+            222
+          ],
+          "opaque_pixels": 9350,
+          "contour_pixels_recolored": 371,
+          "sha256": "bd98a21d609944b9557e3ff2a38e8dafedcac95e5c102ccfdeaeb49e192b68f8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_033.png",
+          "source": "death",
+          "source_index": 33,
+          "bounds": [
+            23,
+            120,
+            235,
+            237
+          ],
+          "opaque_pixels": 9633,
+          "contour_pixels_recolored": 246,
+          "sha256": "1e6a61f0354c0dd6fa9c4ec8fbd19b2fa5c9c97147f910f5cffbe9589ba7501c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_036.png",
+          "source": "death",
+          "source_index": 36,
+          "bounds": [
+            24,
+            131,
+            234,
+            227
+          ],
+          "opaque_pixels": 9464,
+          "contour_pixels_recolored": 240,
+          "sha256": "2c43ddafdce8beb48c2123342d0e102f3e18c8137d440bebaaaecf59b848ec7a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_042.png",
+          "source": "death",
+          "source_index": 42,
+          "bounds": [
+            23,
+            138,
+            235,
+            232
+          ],
+          "opaque_pixels": 9330,
+          "contour_pixels_recolored": 138,
+          "sha256": "e6490d8769c775aa5187870259be1be8278b7347b055b6da31a9f4797cd63c02"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_048.png",
+          "source": "death",
+          "source_index": 48,
+          "bounds": [
+            23,
+            138,
+            235,
+            232
+          ],
+          "opaque_pixels": 9327,
+          "contour_pixels_recolored": 131,
+          "sha256": "b7806d38459565db062a3e9d22b78f0acd3ae40f6f0555802b239ee113280cd5"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_060.png",
+          "source": "death",
+          "source_index": 60,
+          "bounds": [
+            23,
+            138,
+            235,
+            232
+          ],
+          "opaque_pixels": 9322,
+          "contour_pixels_recolored": 151,
+          "sha256": "479f5749fc8dbb417d55a542de268011e54e21c9328ba758e464b6799d797197"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/frames/death/death_072.png",
+          "source": "death",
+          "source_index": 72,
+          "bounds": [
+            23,
+            138,
+            235,
+            232
+          ],
+          "opaque_pixels": 9328,
+          "contour_pixels_recolored": 152,
+          "sha256": "97fe047796ca77353be3d00d63fcbeb7c33abbbfa32059098e38c00016d32284"
+        }
+      ]
+    }
+  }
+}

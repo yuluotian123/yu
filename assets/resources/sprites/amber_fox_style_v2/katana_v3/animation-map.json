@@ -1,0 +1,1840 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "unique_frames": 118,
+  "animations": {
+    "idle": {
+      "fps": 8,
+      "loop": true,
+      "duration_seconds": 3.0,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_000.png",
+          "source": "idle",
+          "source_index": 0,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10399,
+          "contour_pixels_recolored": 289,
+          "sha256": "fc16eac5c52ccc2faf290ed52fbc0038cef633d59b31f7d03058816690d7038b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_003.png",
+          "source": "idle",
+          "source_index": 3,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10370,
+          "contour_pixels_recolored": 313,
+          "sha256": "21b918d93c10189baf99ea890d743e424670d9645014abdf44ab3fe1b1ca216d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_006.png",
+          "source": "idle",
+          "source_index": 6,
+          "bounds": [
+            29,
+            46,
+            219,
+            224
+          ],
+          "opaque_pixels": 10638,
+          "contour_pixels_recolored": 328,
+          "sha256": "6aadd916a5137bed3550964d770186bd8bcf7afdc98bdd73ac75817a4279aad1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_009.png",
+          "source": "idle",
+          "source_index": 9,
+          "bounds": [
+            28,
+            47,
+            219,
+            224
+          ],
+          "opaque_pixels": 10634,
+          "contour_pixels_recolored": 326,
+          "sha256": "b7b8711a4ae963d68f07aee4e593dfd541d3cb9a296f806dcee9c4a4c87671ba"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_012.png",
+          "source": "idle",
+          "source_index": 12,
+          "bounds": [
+            21,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10812,
+          "contour_pixels_recolored": 311,
+          "sha256": "426e818a0a3cb875a6124d222d9b7a9803af199f47f68d38ccb4082136f9194b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_015.png",
+          "source": "idle",
+          "source_index": 15,
+          "bounds": [
+            30,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10850,
+          "contour_pixels_recolored": 306,
+          "sha256": "6803c566c2cc4290342578333579fc4158ab52aba3a06b75bf2db18113d5fcd6"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_018.png",
+          "source": "idle",
+          "source_index": 18,
+          "bounds": [
+            30,
+            46,
+            219,
+            224
+          ],
+          "opaque_pixels": 10834,
+          "contour_pixels_recolored": 310,
+          "sha256": "b3e5d16406b56791671e4b9f78631f68f2fd092c89331cf7405bf59531b0fa16"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_021.png",
+          "source": "idle",
+          "source_index": 21,
+          "bounds": [
+            31,
+            46,
+            220,
+            224
+          ],
+          "opaque_pixels": 10771,
+          "contour_pixels_recolored": 293,
+          "sha256": "8febae58b08d6f165b3c515d7027d1d3cbb5a454b2601e43f7672dfa12ea3b93"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_024.png",
+          "source": "idle",
+          "source_index": 24,
+          "bounds": [
+            48,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10465,
+          "contour_pixels_recolored": 263,
+          "sha256": "29fae4c85868316cf7aaf956b432024e43d2856b8fa58a2eb7584c9df613d25b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_027.png",
+          "source": "idle",
+          "source_index": 27,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10376,
+          "contour_pixels_recolored": 295,
+          "sha256": "897d22f36fb03bdaf87f8d197158704503fb82a15ceb853c7c74b7875e4dc922"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_030.png",
+          "source": "idle",
+          "source_index": 30,
+          "bounds": [
+            29,
+            47,
+            219,
+            224
+          ],
+          "opaque_pixels": 10603,
+          "contour_pixels_recolored": 302,
+          "sha256": "d6fd04c74ce9afc793fef491d21bb7164de11e668c95227a5f7bf229367ff9bd"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_033.png",
+          "source": "idle",
+          "source_index": 33,
+          "bounds": [
+            28,
+            47,
+            219,
+            224
+          ],
+          "opaque_pixels": 10696,
+          "contour_pixels_recolored": 315,
+          "sha256": "20226e580535ea984d96ccc19966c3eeb5edb1743da9cbdb789ad2faf0f63264"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_036.png",
+          "source": "idle",
+          "source_index": 36,
+          "bounds": [
+            21,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10822,
+          "contour_pixels_recolored": 311,
+          "sha256": "8022cdf950b58b0b2617327890bbbcdc4487c9a1061ffeaf391ed0cba5ee0055"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_039.png",
+          "source": "idle",
+          "source_index": 39,
+          "bounds": [
+            29,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10890,
+          "contour_pixels_recolored": 307,
+          "sha256": "ad289b327a62144eb60d0c4deba680e717f9a9a1dee075c33e185ca742784b6b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_042.png",
+          "source": "idle",
+          "source_index": 42,
+          "bounds": [
+            30,
+            46,
+            219,
+            224
+          ],
+          "opaque_pixels": 10803,
+          "contour_pixels_recolored": 309,
+          "sha256": "fcee0a829960686696171980c75aff1484882d9159e6497e20b245ec666ebaa2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_045.png",
+          "source": "idle",
+          "source_index": 45,
+          "bounds": [
+            31,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10713,
+          "contour_pixels_recolored": 306,
+          "sha256": "da49df448357ea2e3fd2619bf20e6dd951830908bd40ae41f769662bbcd7edf7"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_048.png",
+          "source": "idle",
+          "source_index": 48,
+          "bounds": [
+            48,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10425,
+          "contour_pixels_recolored": 276,
+          "sha256": "cbe2df381ab5a0396e3ba119ba454224f031057b615ee854be0c461ed321a659"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_051.png",
+          "source": "idle",
+          "source_index": 51,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10383,
+          "contour_pixels_recolored": 269,
+          "sha256": "6e992a84da203cf4c5eb52321e32edc112d3f49670406b59e0c90bc09325d4c1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_054.png",
+          "source": "idle",
+          "source_index": 54,
+          "bounds": [
+            29,
+            46,
+            219,
+            224
+          ],
+          "opaque_pixels": 10627,
+          "contour_pixels_recolored": 323,
+          "sha256": "462cc1e456566a09b095a31c8d71a822c339f6883e690fee5e635c31007c5865"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_057.png",
+          "source": "idle",
+          "source_index": 57,
+          "bounds": [
+            28,
+            47,
+            219,
+            224
+          ],
+          "opaque_pixels": 10708,
+          "contour_pixels_recolored": 321,
+          "sha256": "3fe66ffc981902902199456e151f83b46ba7311a6565907d4390a62a51c04e94"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_060.png",
+          "source": "idle",
+          "source_index": 60,
+          "bounds": [
+            21,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10822,
+          "contour_pixels_recolored": 306,
+          "sha256": "48bb06d9b0da45c23c1294a7e25bab6e91f603092ba79eecf70c859d750b451c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_063.png",
+          "source": "idle",
+          "source_index": 63,
+          "bounds": [
+            28,
+            48,
+            219,
+            224
+          ],
+          "opaque_pixels": 10872,
+          "contour_pixels_recolored": 321,
+          "sha256": "76c5d596987914eeb6967dcccdd09907c46323130259c4fc246a78fe5943dfcc"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_066.png",
+          "source": "idle",
+          "source_index": 66,
+          "bounds": [
+            30,
+            46,
+            219,
+            224
+          ],
+          "opaque_pixels": 10807,
+          "contour_pixels_recolored": 336,
+          "sha256": "c1ab741c8f7321448c175201576501c0a611c16050ddb5e341692713be397fe5"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/idle/idle_069.png",
+          "source": "idle",
+          "source_index": 69,
+          "bounds": [
+            31,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10755,
+          "contour_pixels_recolored": 292,
+          "sha256": "3e18c5e90a12f479105ef8cba572924b69a765ee78ca12caa342e308f66a8c3d"
+        }
+      ]
+    },
+    "run": {
+      "fps": 12,
+      "loop": true,
+      "duration_seconds": 2.0,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_012.png",
+          "source": "run",
+          "source_index": 12,
+          "bounds": [
+            40,
+            38,
+            220,
+            223
+          ],
+          "opaque_pixels": 10215,
+          "contour_pixels_recolored": 308,
+          "sha256": "718b5a676643676083b1e5de6e137995fb2e605c742fa8b6e5f15a9343dc3aef"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_014.png",
+          "source": "run",
+          "source_index": 14,
+          "bounds": [
+            34,
+            46,
+            220,
+            228
+          ],
+          "opaque_pixels": 10402,
+          "contour_pixels_recolored": 343,
+          "sha256": "5a3037b4b29f3c05cd2ade76ee82bb37abd68b2f53a76e2f563f2557f0b14537"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_016.png",
+          "source": "run",
+          "source_index": 16,
+          "bounds": [
+            42,
+            50,
+            220,
+            229
+          ],
+          "opaque_pixels": 10309,
+          "contour_pixels_recolored": 350,
+          "sha256": "fb9b2f770b632c890991fc5ee239c025529fbd532125368fb582d7fe17e83788"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_018.png",
+          "source": "run",
+          "source_index": 18,
+          "bounds": [
+            36,
+            51,
+            220,
+            229
+          ],
+          "opaque_pixels": 10211,
+          "contour_pixels_recolored": 300,
+          "sha256": "9bccec1e83b795f5ab9fab7f3174c537961c12aa05781fa3e312c918334aa14b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_020.png",
+          "source": "run",
+          "source_index": 20,
+          "bounds": [
+            33,
+            44,
+            220,
+            229
+          ],
+          "opaque_pixels": 10001,
+          "contour_pixels_recolored": 314,
+          "sha256": "604f55c81f99a4c32ca1d08745b37c41b0770af8f967e39476c56b94393c070f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_022.png",
+          "source": "run",
+          "source_index": 22,
+          "bounds": [
+            40,
+            38,
+            219,
+            229
+          ],
+          "opaque_pixels": 10207,
+          "contour_pixels_recolored": 258,
+          "sha256": "136ea5ad0a02fc247e30cd0b04e1aea2f18bd4fa726bf8b69242646a72b389d1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_024.png",
+          "source": "run",
+          "source_index": 24,
+          "bounds": [
+            40,
+            38,
+            220,
+            228
+          ],
+          "opaque_pixels": 10232,
+          "contour_pixels_recolored": 268,
+          "sha256": "e1ff4642707ef3eee5f2c40a729a07460ea6b903558724321f0bcd5e5dcdf206"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_026.png",
+          "source": "run",
+          "source_index": 26,
+          "bounds": [
+            45,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10381,
+          "contour_pixels_recolored": 308,
+          "sha256": "1e2e20fc8fa277db70f8c9e747b10de8d9478b58177d75a9603689d9a715f8de"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_028.png",
+          "source": "run",
+          "source_index": 28,
+          "bounds": [
+            42,
+            50,
+            220,
+            224
+          ],
+          "opaque_pixels": 10372,
+          "contour_pixels_recolored": 349,
+          "sha256": "89837d5281af535b33340b8cd7003ced4fe36314a98e2d14d883a53ca8911f60"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_030.png",
+          "source": "run",
+          "source_index": 30,
+          "bounds": [
+            36,
+            51,
+            220,
+            224
+          ],
+          "opaque_pixels": 10360,
+          "contour_pixels_recolored": 341,
+          "sha256": "2e4fa707f198de727bb7c3215e5260563ef894e691e6f007651f4fd569f474a8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_032.png",
+          "source": "run",
+          "source_index": 32,
+          "bounds": [
+            33,
+            44,
+            220,
+            224
+          ],
+          "opaque_pixels": 10166,
+          "contour_pixels_recolored": 358,
+          "sha256": "794e6adfb5e1924666ff7a2ecc28322a8a5d74da02dde7b31ba87b42d6118938"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_034.png",
+          "source": "run",
+          "source_index": 34,
+          "bounds": [
+            40,
+            38,
+            220,
+            223
+          ],
+          "opaque_pixels": 9704,
+          "contour_pixels_recolored": 213,
+          "sha256": "884c75d4f13a7155feccdb30c2d572a46d8bed8baf7addf4ec6933ce9419eab1"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_036.png",
+          "source": "run",
+          "source_index": 36,
+          "bounds": [
+            40,
+            37,
+            220,
+            224
+          ],
+          "opaque_pixels": 10274,
+          "contour_pixels_recolored": 289,
+          "sha256": "2217e1d260a1ad13e3f2dd7154cd49621aafa652691cdf9d211171034fd45f7c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_038.png",
+          "source": "run",
+          "source_index": 38,
+          "bounds": [
+            34,
+            45,
+            220,
+            227
+          ],
+          "opaque_pixels": 10406,
+          "contour_pixels_recolored": 402,
+          "sha256": "b0272c914873334935d5aad0d490657cc96e2eb9d8efeb8ac1ce50c7e758573c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_040.png",
+          "source": "run",
+          "source_index": 40,
+          "bounds": [
+            42,
+            51,
+            220,
+            229
+          ],
+          "opaque_pixels": 10373,
+          "contour_pixels_recolored": 310,
+          "sha256": "780d62d7b8828e49f50c10d8a8713b8d75be4afd1716d706e214cf495b6331df"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_042.png",
+          "source": "run",
+          "source_index": 42,
+          "bounds": [
+            36,
+            51,
+            220,
+            229
+          ],
+          "opaque_pixels": 10246,
+          "contour_pixels_recolored": 302,
+          "sha256": "83cdb13c4413b6a095d9823fd473324c7fba25577eda68e849bd9b0d23b0256f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_044.png",
+          "source": "run",
+          "source_index": 44,
+          "bounds": [
+            33,
+            43,
+            220,
+            229
+          ],
+          "opaque_pixels": 10168,
+          "contour_pixels_recolored": 317,
+          "sha256": "4cd26386c70ece045c255190f911cc79306e5476065cc0b24f5954a49ebe12a8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_046.png",
+          "source": "run",
+          "source_index": 46,
+          "bounds": [
+            40,
+            39,
+            220,
+            229
+          ],
+          "opaque_pixels": 10175,
+          "contour_pixels_recolored": 343,
+          "sha256": "47bf4dad8c044e3955625bb55931accc2ba541d5c3c2db0e7b3ff9f058cbe66c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_048.png",
+          "source": "run",
+          "source_index": 48,
+          "bounds": [
+            40,
+            37,
+            220,
+            228
+          ],
+          "opaque_pixels": 10149,
+          "contour_pixels_recolored": 282,
+          "sha256": "c2a96d951a08a9104ec2757caedc37b27a704fc9c310ab7c2324f386bbb4aea2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_050.png",
+          "source": "run",
+          "source_index": 50,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10375,
+          "contour_pixels_recolored": 424,
+          "sha256": "8e4557cde866274467f024c46fa6fe8352f562d31c509e3748a76bf431c7fb87"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_052.png",
+          "source": "run",
+          "source_index": 52,
+          "bounds": [
+            42,
+            50,
+            220,
+            224
+          ],
+          "opaque_pixels": 10382,
+          "contour_pixels_recolored": 288,
+          "sha256": "79d210ab2e0692f17710af92ed1bb9dfaa34b9e3868348fba6aa3b18a49efb1e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_054.png",
+          "source": "run",
+          "source_index": 54,
+          "bounds": [
+            36,
+            51,
+            220,
+            224
+          ],
+          "opaque_pixels": 10350,
+          "contour_pixels_recolored": 301,
+          "sha256": "3f5ad795296820303f9c1b8c8f87e55f3a407afd00b6f53cc332b73811f8e40b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_056.png",
+          "source": "run",
+          "source_index": 56,
+          "bounds": [
+            33,
+            44,
+            220,
+            224
+          ],
+          "opaque_pixels": 10247,
+          "contour_pixels_recolored": 327,
+          "sha256": "f89b35e159730e912d5dd2073ee68e653bcadde98c5f57f3f1996e6ba6047a24"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/run/run_058.png",
+          "source": "run",
+          "source_index": 58,
+          "bounds": [
+            40,
+            39,
+            219,
+            224
+          ],
+          "opaque_pixels": 9700,
+          "contour_pixels_recolored": 289,
+          "sha256": "66b5271b5bc1b1043633ff538e1f547d97da9e87f8401d2356a7f4469a6b7f8b"
+        }
+      ]
+    },
+    "attack": {
+      "fps": 30,
+      "loop": false,
+      "duration_seconds": 0.6,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_000.png",
+          "source": "follow-a",
+          "source_index": 0,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10386,
+          "contour_pixels_recolored": 270,
+          "sha256": "c62f89f6c4d34bb1deff6eb8b12d4879691498b0dfc9347995d39dfd2e521548"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_003.png",
+          "source": "follow-a",
+          "source_index": 3,
+          "bounds": [
+            45,
+            45,
+            212,
+            224
+          ],
+          "opaque_pixels": 10364,
+          "contour_pixels_recolored": 341,
+          "sha256": "0b2ae0c704a9bf66de0faa75ea7ee8ea68d593d0e57038b829e37d7783b3950e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_006.png",
+          "source": "follow-a",
+          "source_index": 6,
+          "bounds": [
+            42,
+            26,
+            185,
+            224
+          ],
+          "opaque_pixels": 10480,
+          "contour_pixels_recolored": 311,
+          "sha256": "984ee72a2d107ec8f463f8ba3afad4f18add004a88e4ec67ff68cd984eb25682"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_008.png",
+          "source": "follow-a",
+          "source_index": 8,
+          "bounds": [
+            40,
+            20,
+            183,
+            224
+          ],
+          "opaque_pixels": 10448,
+          "contour_pixels_recolored": 323,
+          "sha256": "e1016f1b461c8e3cbb186f07dddfc931b4ecf5b3751e72753ffb1cbfb511ee34"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_009.png",
+          "source": "follow-a",
+          "source_index": 9,
+          "bounds": [
+            40,
+            20,
+            183,
+            224
+          ],
+          "opaque_pixels": 10402,
+          "contour_pixels_recolored": 369,
+          "sha256": "d99f2c58aeb7f7555c18d6dc4b8ee16763493891ef4504bd36dbc655ad466c9e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_010.png",
+          "source": "follow-a",
+          "source_index": 10,
+          "bounds": [
+            37,
+            51,
+            230,
+            224
+          ],
+          "opaque_pixels": 10192,
+          "contour_pixels_recolored": 341,
+          "sha256": "0778ad9d70ec251b87d9967c77183e64791de7557e9d7ed36c9efcf70b4584c4"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_011.png",
+          "source": "follow-a",
+          "source_index": 11,
+          "bounds": [
+            37,
+            51,
+            230,
+            224
+          ],
+          "opaque_pixels": 10201,
+          "contour_pixels_recolored": 358,
+          "sha256": "57b880b646e99e493288c0ed98b608b0e23fc547aca39bafbd3b5b8318bcacbf"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_012.png",
+          "source": "follow-a",
+          "source_index": 12,
+          "bounds": [
+            32,
+            54,
+            227,
+            224
+          ],
+          "opaque_pixels": 9855,
+          "contour_pixels_recolored": 359,
+          "sha256": "a3e5034224e5e7bddd0df9d9fff3eaf562cb843a124d9cdd67b9616e85e91bcf"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-a/follow-a_016.png",
+          "source": "follow-a",
+          "source_index": 16,
+          "bounds": [
+            46,
+            54,
+            216,
+            224
+          ],
+          "opaque_pixels": 9942,
+          "contour_pixels_recolored": 300,
+          "sha256": "f067a9e22574b64497596fbe676d5f9b2e20c8435b130f06087fd1c14d8b37b8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_000.png",
+          "source": "follow-b",
+          "source_index": 0,
+          "bounds": [
+            43,
+            52,
+            218,
+            224
+          ],
+          "opaque_pixels": 9928,
+          "contour_pixels_recolored": 255,
+          "sha256": "f87cac7b9c4ae67616a7a7d5a43239217cb562821aeecac09ff3e37d54f8e855"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_006.png",
+          "source": "follow-b",
+          "source_index": 6,
+          "bounds": [
+            43,
+            52,
+            218,
+            224
+          ],
+          "opaque_pixels": 9951,
+          "contour_pixels_recolored": 256,
+          "sha256": "124f22d56f92f12e3d07928237ab00fc75c54a1d5bfa097854671407bff93755"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_012.png",
+          "source": "follow-b",
+          "source_index": 12,
+          "bounds": [
+            46,
+            52,
+            218,
+            224
+          ],
+          "opaque_pixels": 9984,
+          "contour_pixels_recolored": 261,
+          "sha256": "3b1bdbac9fc4b045c8ff5464e934104acb9fb0090810210422baf0a9bf817e13"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_018.png",
+          "source": "follow-b",
+          "source_index": 18,
+          "bounds": [
+            42,
+            52,
+            225,
+            224
+          ],
+          "opaque_pixels": 9911,
+          "contour_pixels_recolored": 307,
+          "sha256": "9669b3e461cf8e19660ff72b35f20dd72c9a9413fc0b3d60dc634030412be4a8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_021.png",
+          "source": "follow-b",
+          "source_index": 21,
+          "bounds": [
+            41,
+            51,
+            234,
+            224
+          ],
+          "opaque_pixels": 9997,
+          "contour_pixels_recolored": 300,
+          "sha256": "6e0f0fd099117e262c5eb68859a8a793df857ccadcdfdac60b917cc6f205211f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_024.png",
+          "source": "follow-b",
+          "source_index": 24,
+          "bounds": [
+            39,
+            49,
+            241,
+            224
+          ],
+          "opaque_pixels": 10140,
+          "contour_pixels_recolored": 287,
+          "sha256": "6353e7c78d96ebd9e4c80135d3bf7419d4ab243a797c2c79602435c99c6013dc"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_027.png",
+          "source": "follow-b",
+          "source_index": 27,
+          "bounds": [
+            40,
+            47,
+            236,
+            224
+          ],
+          "opaque_pixels": 10275,
+          "contour_pixels_recolored": 345,
+          "sha256": "0d8dd41b4ac93a86c536b5e0681fd043aac2ec63c9e3a55b48bc84c1cc6f835e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_033.png",
+          "source": "follow-b",
+          "source_index": 33,
+          "bounds": [
+            44,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10331,
+          "contour_pixels_recolored": 272,
+          "sha256": "012d16e70ace7414c6f9c73205288a67b508289354c3156fd77b5ff68efbabc3"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/follow-b/follow-b_038.png",
+          "source": "follow-b",
+          "source_index": 38,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10349,
+          "contour_pixels_recolored": 267,
+          "sha256": "2a6ab4993d8a06e88894f21afd33d184096b3367d15bc9bdb80d6b86858d4e4a"
+        }
+      ]
+    },
+    "jumpup": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_000.png",
+          "source": "apex-a",
+          "source_index": 0,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10383,
+          "contour_pixels_recolored": 279,
+          "sha256": "449ba14df97bbef11c5c8672c479f075542a6888abeccacd1bbe617ea7ee5f35"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_004.png",
+          "source": "apex-a",
+          "source_index": 4,
+          "bounds": [
+            43,
+            47,
+            217,
+            224
+          ],
+          "opaque_pixels": 10354,
+          "contour_pixels_recolored": 295,
+          "sha256": "1ef0955379e6cd4db2412cae9439531995432455e3c0cedf449edf023a615309"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_008.png",
+          "source": "apex-a",
+          "source_index": 8,
+          "bounds": [
+            30,
+            56,
+            209,
+            224
+          ],
+          "opaque_pixels": 10388,
+          "contour_pixels_recolored": 347,
+          "sha256": "1bd1e88a782089419fd8635a5472d2698fe359da5f30a1838add424ac9f5d90b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_012.png",
+          "source": "apex-a",
+          "source_index": 12,
+          "bounds": [
+            30,
+            66,
+            215,
+            220
+          ],
+          "opaque_pixels": 10097,
+          "contour_pixels_recolored": 402,
+          "sha256": "79423483e40246d77ecb2ece2ef76057ef9bc7ed357ad20740225f33cc6e2654"
+        }
+      ]
+    },
+    "inair": {
+      "fps": 12,
+      "loop": false,
+      "duration_seconds": 0.3333333333333333,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_015.png",
+          "source": "apex-a",
+          "source_index": 15,
+          "bounds": [
+            36,
+            64,
+            217,
+            212
+          ],
+          "opaque_pixels": 9812,
+          "contour_pixels_recolored": 293,
+          "sha256": "72942f2821ac422d459889cdc528b894df6b81a754ba14cd2807a7d51a5105dc"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_020.png",
+          "source": "apex-a",
+          "source_index": 20,
+          "bounds": [
+            43,
+            58,
+            218,
+            200
+          ],
+          "opaque_pixels": 9028,
+          "contour_pixels_recolored": 306,
+          "sha256": "d27e1ce6e6d28f8103722a6831d4969f4bdd3df0203a5bb23a745a8c4aab3c64"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_026.png",
+          "source": "apex-a",
+          "source_index": 26,
+          "bounds": [
+            30,
+            56,
+            219,
+            198
+          ],
+          "opaque_pixels": 9150,
+          "contour_pixels_recolored": 315,
+          "sha256": "317271743f0ff672adf9b5577e835e17c7858eb79c5aa2973326e7526a0ad979"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_038.png",
+          "source": "apex-a",
+          "source_index": 38,
+          "bounds": [
+            42,
+            54,
+            219,
+            195
+          ],
+          "opaque_pixels": 8901,
+          "contour_pixels_recolored": 277,
+          "sha256": "08ee20efc73781a9ad84d952c4149a346af3190c6d2b01edb1ad6170aaac9214"
+        }
+      ]
+    },
+    "isfalling": {
+      "fps": 12,
+      "loop": false,
+      "duration_seconds": 0.3333333333333333,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_000.png",
+          "source": "apex-b",
+          "source_index": 0,
+          "bounds": [
+            42,
+            54,
+            219,
+            195
+          ],
+          "opaque_pixels": 8959,
+          "contour_pixels_recolored": 241,
+          "sha256": "63e698d7687d5cbef5bd51acd9f1ea374a7640f4cfb5de8b03bff88411c4b01e"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_010.png",
+          "source": "apex-b",
+          "source_index": 10,
+          "bounds": [
+            35,
+            54,
+            218,
+            197
+          ],
+          "opaque_pixels": 9065,
+          "contour_pixels_recolored": 273,
+          "sha256": "532dde341f90c9a2b361b4db5460de9cba475c9f03f57e82a9eb8eac0722aa19"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_014.png",
+          "source": "apex-b",
+          "source_index": 14,
+          "bounds": [
+            24,
+            54,
+            215,
+            241
+          ],
+          "opaque_pixels": 10589,
+          "contour_pixels_recolored": 405,
+          "sha256": "3b3a041ef9c6ac6de669685ae0b99c3d4a78cf187ad09315d644214d184eeb62"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_016.png",
+          "source": "apex-b",
+          "source_index": 16,
+          "bounds": [
+            23,
+            63,
+            215,
+            237
+          ],
+          "opaque_pixels": 10475,
+          "contour_pixels_recolored": 483,
+          "sha256": "3a847f69676c976541514410ff0d3713fa325ee342041fe406c93fea914e2c2d"
+        }
+      ]
+    },
+    "land": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_017.png",
+          "source": "apex-b",
+          "source_index": 17,
+          "bounds": [
+            23,
+            65,
+            220,
+            232
+          ],
+          "opaque_pixels": 10419,
+          "contour_pixels_recolored": 292,
+          "sha256": "8df65b7ae5aa61096b9fd6ea903cfab86a1df32e4668928b3a8f682ddc2a55a8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_021.png",
+          "source": "apex-b",
+          "source_index": 21,
+          "bounds": [
+            28,
+            51,
+            220,
+            224
+          ],
+          "opaque_pixels": 10065,
+          "contour_pixels_recolored": 317,
+          "sha256": "1981f14d645f67da106676ea7d1c691aeb873fb1ae3faa7db83851bb9a702b4b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_028.png",
+          "source": "apex-b",
+          "source_index": 28,
+          "bounds": [
+            51,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10138,
+          "contour_pixels_recolored": 260,
+          "sha256": "7d450bebd0da3e31a93e1679de7dd6d980ea74c11767a1db1040fbfdd7445ca3"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_038.png",
+          "source": "apex-b",
+          "source_index": 38,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10387,
+          "contour_pixels_recolored": 277,
+          "sha256": "5bcf9221fcb244edbe2dd2cbca0a0f0e3f1e93daef8e5f9db4f3d69d28feb404"
+        }
+      ]
+    },
+    "jump": {
+      "fps": 18,
+      "loop": false,
+      "duration_seconds": 0.7222222222222222,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_000.png",
+          "source": "apex-a",
+          "source_index": 0,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10383,
+          "contour_pixels_recolored": 279,
+          "sha256": "449ba14df97bbef11c5c8672c479f075542a6888abeccacd1bbe617ea7ee5f35"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_006.png",
+          "source": "apex-a",
+          "source_index": 6,
+          "bounds": [
+            39,
+            48,
+            214,
+            224
+          ],
+          "opaque_pixels": 10366,
+          "contour_pixels_recolored": 298,
+          "sha256": "05ba1385ec7f67e6b8e1666d844bbb777a95e9d674326ea16fd8df7dd079e27a"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_010.png",
+          "source": "apex-a",
+          "source_index": 10,
+          "bounds": [
+            24,
+            69,
+            208,
+            226
+          ],
+          "opaque_pixels": 10066,
+          "contour_pixels_recolored": 398,
+          "sha256": "99dea1a5278f5ed5e0f8be479eaf5780a3141238d82ac99447f9c563b72c4a5c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_014.png",
+          "source": "apex-a",
+          "source_index": 14,
+          "bounds": [
+            36,
+            64,
+            217,
+            212
+          ],
+          "opaque_pixels": 9805,
+          "contour_pixels_recolored": 290,
+          "sha256": "f525c7c4ad0715cb3280c04ef229063a73b2badca8eb6509c72c01eed2aa3956"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_020.png",
+          "source": "apex-a",
+          "source_index": 20,
+          "bounds": [
+            43,
+            58,
+            218,
+            200
+          ],
+          "opaque_pixels": 9028,
+          "contour_pixels_recolored": 306,
+          "sha256": "d27e1ce6e6d28f8103722a6831d4969f4bdd3df0203a5bb23a745a8c4aab3c64"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_028.png",
+          "source": "apex-a",
+          "source_index": 28,
+          "bounds": [
+            30,
+            56,
+            219,
+            197
+          ],
+          "opaque_pixels": 9324,
+          "contour_pixels_recolored": 320,
+          "sha256": "3d72eda81056118510f8dd8515ad480856c4c129d35e20d68daed468a95feadf"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-a/apex-a_038.png",
+          "source": "apex-a",
+          "source_index": 38,
+          "bounds": [
+            42,
+            54,
+            219,
+            195
+          ],
+          "opaque_pixels": 8901,
+          "contour_pixels_recolored": 277,
+          "sha256": "08ee20efc73781a9ad84d952c4149a346af3190c6d2b01edb1ad6170aaac9214"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_010.png",
+          "source": "apex-b",
+          "source_index": 10,
+          "bounds": [
+            35,
+            54,
+            218,
+            197
+          ],
+          "opaque_pixels": 9065,
+          "contour_pixels_recolored": 273,
+          "sha256": "532dde341f90c9a2b361b4db5460de9cba475c9f03f57e82a9eb8eac0722aa19"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_014.png",
+          "source": "apex-b",
+          "source_index": 14,
+          "bounds": [
+            24,
+            54,
+            215,
+            241
+          ],
+          "opaque_pixels": 10589,
+          "contour_pixels_recolored": 405,
+          "sha256": "3b3a041ef9c6ac6de669685ae0b99c3d4a78cf187ad09315d644214d184eeb62"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_017.png",
+          "source": "apex-b",
+          "source_index": 17,
+          "bounds": [
+            23,
+            65,
+            220,
+            232
+          ],
+          "opaque_pixels": 10419,
+          "contour_pixels_recolored": 292,
+          "sha256": "8df65b7ae5aa61096b9fd6ea903cfab86a1df32e4668928b3a8f682ddc2a55a8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_022.png",
+          "source": "apex-b",
+          "source_index": 22,
+          "bounds": [
+            33,
+            48,
+            220,
+            224
+          ],
+          "opaque_pixels": 10097,
+          "contour_pixels_recolored": 280,
+          "sha256": "3e5a1aef9a9ca1a4303e7e896ec1ac64149f3a2f970eb817b1cd519408c7aaab"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_030.png",
+          "source": "apex-b",
+          "source_index": 30,
+          "bounds": [
+            57,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10270,
+          "contour_pixels_recolored": 287,
+          "sha256": "ec4f09a2b30a7a22b17eaa5753f8df11476943673911c9cd60de1b60b306cad8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/apex-b/apex-b_038.png",
+          "source": "apex-b",
+          "source_index": 38,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10387,
+          "contour_pixels_recolored": 277,
+          "sha256": "5bcf9221fcb244edbe2dd2cbca0a0f0e3f1e93daef8e5f9db4f3d69d28feb404"
+        }
+      ]
+    },
+    "dash": {
+      "fps": 21.818181818181817,
+      "loop": false,
+      "duration_seconds": 0.275,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_009.png",
+          "source": "dash",
+          "source_index": 9,
+          "bounds": [
+            47,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10297,
+          "contour_pixels_recolored": 371,
+          "sha256": "1a1914e1a69d5e410b7db0c992162cd63802e1acda2cca48c5df2f5e2fba4a61"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_012.png",
+          "source": "dash",
+          "source_index": 12,
+          "bounds": [
+            29,
+            50,
+            226,
+            224
+          ],
+          "opaque_pixels": 11835,
+          "contour_pixels_recolored": 429,
+          "sha256": "0dcf56ca40fb44f36045be0533831383f8c9045f5af7cf19f2ccbc74a0dca947"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_015.png",
+          "source": "dash",
+          "source_index": 15,
+          "bounds": [
+            18,
+            52,
+            231,
+            224
+          ],
+          "opaque_pixels": 11984,
+          "contour_pixels_recolored": 465,
+          "sha256": "22773c60787be88c5a188494d8640b62522a662a205efb524d51521ce525ba42"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_024.png",
+          "source": "dash",
+          "source_index": 24,
+          "bounds": [
+            21,
+            50,
+            224,
+            224
+          ],
+          "opaque_pixels": 11908,
+          "contour_pixels_recolored": 403,
+          "sha256": "7afc9ef2a034b9c309768bb20aaf1c061866b2fc7f02ccd4849370beb084de45"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_048.png",
+          "source": "dash",
+          "source_index": 48,
+          "bounds": [
+            19,
+            50,
+            222,
+            225
+          ],
+          "opaque_pixels": 11780,
+          "contour_pixels_recolored": 404,
+          "sha256": "d598a13ce0334f5583226287d02c7bbdc41f62c38776dc9e9ae8e4df1187da89"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/dash/dash_066.png",
+          "source": "dash",
+          "source_index": 66,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10370,
+          "contour_pixels_recolored": 266,
+          "sha256": "03010b406daff29255cb97887097bc4611f468e9ff24721f3e1c2daf5204cfea"
+        }
+      ]
+    },
+    "hurt": {
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.4,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_000.png",
+          "source": "hurt",
+          "source_index": 0,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10376,
+          "contour_pixels_recolored": 272,
+          "sha256": "01e4680021211207565e99365ca5147bbdf335221cf5c7abe7491d1f76c9dca3"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_006.png",
+          "source": "hurt",
+          "source_index": 6,
+          "bounds": [
+            35,
+            48,
+            205,
+            224
+          ],
+          "opaque_pixels": 10417,
+          "contour_pixels_recolored": 324,
+          "sha256": "fefce51c6c03f9679d15540390d03cbef1dffa983659887dbe8153d6728e203d"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_012.png",
+          "source": "hurt",
+          "source_index": 12,
+          "bounds": [
+            28,
+            47,
+            205,
+            224
+          ],
+          "opaque_pixels": 10555,
+          "contour_pixels_recolored": 305,
+          "sha256": "8e6d23b50f90b89e1fa0f31fd9c89cefed59739966dbbb0de762575cd05ede39"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_018.png",
+          "source": "hurt",
+          "source_index": 18,
+          "bounds": [
+            17,
+            47,
+            205,
+            224
+          ],
+          "opaque_pixels": 10546,
+          "contour_pixels_recolored": 292,
+          "sha256": "a46c3fd92983a7a7f807606a30f0565a23fcce0dbc3a26aa79b0018ed5c5d829"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_027.png",
+          "source": "hurt",
+          "source_index": 27,
+          "bounds": [
+            20,
+            47,
+            205,
+            224
+          ],
+          "opaque_pixels": 10440,
+          "contour_pixels_recolored": 273,
+          "sha256": "dfeac7de7d88f4badad769aafc447f69c70eb665c9d2cfea434fb5815aca49cd"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_039.png",
+          "source": "hurt",
+          "source_index": 39,
+          "bounds": [
+            17,
+            47,
+            205,
+            224
+          ],
+          "opaque_pixels": 10526,
+          "contour_pixels_recolored": 304,
+          "sha256": "ca1b250aff1ea81f786108571f5f3e90338f56c21822371ada3973683e0240d2"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_054.png",
+          "source": "hurt",
+          "source_index": 54,
+          "bounds": [
+            48,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10398,
+          "contour_pixels_recolored": 299,
+          "sha256": "d5b9812080aa443e0f0f917931c0190eea1c7de083c6e2076c7b677d90c4981b"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/hurt/hurt_072.png",
+          "source": "hurt",
+          "source_index": 72,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10372,
+          "contour_pixels_recolored": 310,
+          "sha256": "f0b2867949e12e91295c59cc8ec0a302686a81f364f76ba1079b1f9b4719f0ad"
+        }
+      ]
+    },
+    "death": {
+      "fps": 24,
+      "loop": false,
+      "duration_seconds": 0.6666666666666666,
+      "frames": [
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_012.png",
+          "source": "death",
+          "source_index": 12,
+          "bounds": [
+            46,
+            45,
+            220,
+            224
+          ],
+          "opaque_pixels": 10369,
+          "contour_pixels_recolored": 280,
+          "sha256": "830f6c2964ccaf0fea5cc2a01d8d0755a0e964229457d3616b190de83f3e0cb8"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_018.png",
+          "source": "death",
+          "source_index": 18,
+          "bounds": [
+            39,
+            48,
+            217,
+            224
+          ],
+          "opaque_pixels": 10449,
+          "contour_pixels_recolored": 315,
+          "sha256": "df144411cba68757eb1e5368195d51b37420153d6355ea9964dfa77e67969db3"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_021.png",
+          "source": "death",
+          "source_index": 21,
+          "bounds": [
+            32,
+            49,
+            216,
+            224
+          ],
+          "opaque_pixels": 10594,
+          "contour_pixels_recolored": 294,
+          "sha256": "6f0768c9c25baa02eb48bca1f4633ba642e39b2a5298d12f1cb9645bebf29549"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_024.png",
+          "source": "death",
+          "source_index": 24,
+          "bounds": [
+            29,
+            55,
+            212,
+            225
+          ],
+          "opaque_pixels": 10810,
+          "contour_pixels_recolored": 365,
+          "sha256": "2ac4d0cb2fd591c48126886e362f9aa63a20e09c4bea53cdc025a6e74ed68487"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_026.png",
+          "source": "death",
+          "source_index": 26,
+          "bounds": [
+            19,
+            71,
+            206,
+            224
+          ],
+          "opaque_pixels": 10589,
+          "contour_pixels_recolored": 357,
+          "sha256": "c1c9c53513a3d7b3504267c906f6bda9ab8431dbe5741757ab8e43eb025ebf11"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_028.png",
+          "source": "death",
+          "source_index": 28,
+          "bounds": [
+            29,
+            84,
+            203,
+            224
+          ],
+          "opaque_pixels": 10709,
+          "contour_pixels_recolored": 326,
+          "sha256": "7909255a5b668c2ad448064f6a1180900036fd0b0f59c9fa445f769f61899e11"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_030.png",
+          "source": "death",
+          "source_index": 30,
+          "bounds": [
+            32,
+            93,
+            213,
+            224
+          ],
+          "opaque_pixels": 10410,
+          "contour_pixels_recolored": 359,
+          "sha256": "70624c426fa1c7c74f8e3fad992f37b55a255cc7ff06f8aed377066bb91a3d3f"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_033.png",
+          "source": "death",
+          "source_index": 33,
+          "bounds": [
+            24,
+            94,
+            233,
+            224
+          ],
+          "opaque_pixels": 10020,
+          "contour_pixels_recolored": 311,
+          "sha256": "36ef861c6a9b12a1cb732539643f2f1334cbc125b58187a566dfe5bbb3251fd4"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_035.png",
+          "source": "death",
+          "source_index": 35,
+          "bounds": [
+            22,
+            100,
+            244,
+            224
+          ],
+          "opaque_pixels": 9836,
+          "contour_pixels_recolored": 336,
+          "sha256": "f02260e6bcb1a5283640c4ec2a4d72e452509c4bbbbf0b470799c63b012175b3"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_037.png",
+          "source": "death",
+          "source_index": 37,
+          "bounds": [
+            19,
+            122,
+            241,
+            224
+          ],
+          "opaque_pixels": 9055,
+          "contour_pixels_recolored": 318,
+          "sha256": "875a206a82b4447be66f24b552c2bc337de258d3e2e024f1698d68706903b426"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_039.png",
+          "source": "death",
+          "source_index": 39,
+          "bounds": [
+            17,
+            153,
+            241,
+            226
+          ],
+          "opaque_pixels": 8106,
+          "contour_pixels_recolored": 261,
+          "sha256": "8917bef598085072071c8f3183581a4e2cd26517e59785b399d0d26fdc991de4"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_042.png",
+          "source": "death",
+          "source_index": 42,
+          "bounds": [
+            21,
+            163,
+            250,
+            227
+          ],
+          "opaque_pixels": 7807,
+          "contour_pixels_recolored": 274,
+          "sha256": "3908c6104b2ccbef14843a02962000e363b52b310aeab32f7b34c5e81e2a0b42"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_045.png",
+          "source": "death",
+          "source_index": 45,
+          "bounds": [
+            24,
+            164,
+            250,
+            227
+          ],
+          "opaque_pixels": 7808,
+          "contour_pixels_recolored": 177,
+          "sha256": "5d84b7cb38dd6c4721228e1686837212bb5479c070dac168e07461668c98346c"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_048.png",
+          "source": "death",
+          "source_index": 48,
+          "bounds": [
+            22,
+            164,
+            251,
+            227
+          ],
+          "opaque_pixels": 7821,
+          "contour_pixels_recolored": 164,
+          "sha256": "7c3da1595f2693e72bdb04643c2cd3aa72f6c4dfe8e90a86864f3ec3bad10b01"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_060.png",
+          "source": "death",
+          "source_index": 60,
+          "bounds": [
+            22,
+            164,
+            251,
+            227
+          ],
+          "opaque_pixels": 7818,
+          "contour_pixels_recolored": 177,
+          "sha256": "883fb59c24ebb94a99260d66c6eaea3b735072790f354fe6d656925ddd1280da"
+        },
+        {
+          "file": "assets/textures/sprites/amber_fox_style_v2/katana_v3/frames/death/death_072.png",
+          "source": "death",
+          "source_index": 72,
+          "bounds": [
+            22,
+            164,
+            251,
+            227
+          ],
+          "opaque_pixels": 7813,
+          "contour_pixels_recolored": 163,
+          "sha256": "cce1c1d50081e4553e5b271cc6a727f8dd9a53f07ff3265541cac99d7886e56f"
+        }
+      ]
+    }
+  }
+}

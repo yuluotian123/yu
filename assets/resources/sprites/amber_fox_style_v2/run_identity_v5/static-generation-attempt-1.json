@@ -1,0 +1,28 @@
+{
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_ear_top": 164,
+  "source_ground": 1207,
+  "uniform_static_scale": 0.20325982742090123,
+  "offset": [
+    -6,
+    -5
+  ],
+  "target_ear_top": 28,
+  "target_ground": 240,
+  "frame_size": [
+    256,
+    256
+  ],
+  "bounding_box": [
+    27,
+    4,
+    227,
+    241
+  ],
+  "imagegen_source": "exec-5b2260a9-7a63-4863-8217-44eed9f007ce.png",
+  "reference_idle": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "normalization": "One uniform static similarity transform; no per-frame transformation."
+}

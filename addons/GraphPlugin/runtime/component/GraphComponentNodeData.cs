@@ -157,7 +157,7 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
         var parameters = new VBoxContainer();
         selector.Pressed += () =>
         {
-            var popup = new SearchablePopup<Type>(GraphCallableCatalog.ActionsForGraph(context.CurrentGraph),
+            var popup = new SearchablePopup<Type>(GraphCallableCatalog.ActionsForGraph(context.CurrentGraph, context),
                 GraphCallableCatalog.Name, GraphCallableCatalog.Category, GraphCallableCatalog.SearchText);
             popup.OnItemSelected += type =>
             {

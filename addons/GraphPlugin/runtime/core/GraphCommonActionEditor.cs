@@ -18,7 +18,8 @@ public static class GraphCommonActionEditor
             object value = property.GetValue(definition);
             Action<object> set = next => { property.SetValue(definition, next); context?.CurrentGraph?.MarkDirty(); };
             Control field = null;
-            if (value is GraphActionValue parameter) field = parameter.CreateEditUI(context);
+            if (value is IGraphParameterEditor custom) field = custom.CreateEditUI(context);
+            else if (value is GraphActionValue parameter) field = parameter.CreateEditUI(context);
             else if (value is GraphBlackboardKeyReference key) field = key.CreateEditUI(context, label);
             else if (value is GraphActionComponentReference component)
                 field = component.CreateEditUI(label, context, () => context?.CurrentGraph?.MarkDirty());
@@ -40,7 +41,7 @@ public static class GraphCommonActionEditor
                 option.Selected = Array.IndexOf(values.Cast<object>().ToArray(), value);
                 option.ItemSelected += index => set(values.GetValue((int)index)); field = option;
             }
-            else if (property.PropertyType == typeof(float) || property.PropertyType == typeof(int))
+            else if (property.PropertyType == typeof(float) || property.PropertyType == typeof(double) || property.PropertyType == typeof(int))
             {
                 var spin = new SpinBox { MinValue = -1000000, MaxValue = 1000000,
                     Step = property.PropertyType == typeof(int) ? 1 : 0.05, Value = Convert.ToDouble(value) };

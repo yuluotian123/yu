@@ -1,0 +1,11 @@
+{
+  "gs_unique_frames": 114,
+  "all_weapons_unique_frames": 225,
+  "attack_frames": 18,
+  "all_non_attack_pngs_byte_exact": 96,
+  "approved_idle_frames_byte_exact": 24,
+  "runtime_sprite_frames": "res://assets/resources/sprites/amber_fox_style_v2/full_256/gs/sprite_frames.tres",
+  "runtime_attack_density_matches_idle": true,
+  "runtime_attack_duration": 0.6,
+  "historical_frames": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime"
+}

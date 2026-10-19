@@ -1,0 +1,15 @@
+{
+  "alpha_mismatches": 0,
+  "engine": "4.8-beta (custom_build)",
+  "errors": [],
+  "fps": 12,
+  "frame_count": 24,
+  "frame_size": [
+    256,
+    256
+  ],
+  "loop": true,
+  "opaque_pixels_checked": 277625,
+  "opaque_rgb_mismatches": 0,
+  "validation_environment": "isolated clean Godot import with identical resource paths"
+}

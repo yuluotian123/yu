@@ -1,0 +1,18 @@
+{
+  "tool": "built-in imagegen",
+  "mode": "edit existing approved artwork, weapon-only",
+  "selected": {
+    "katana_idle": {
+      "prompt": "Precise equipment-only edit of the approved idle sprite. KEEP THE CHARACTER AND POSE UNCHANGED. Replace only the broad greatsword with a recognizably slender KATANA: a long narrow steel single-edged blade with a gentle continuous curve, a simple small gold oval guard, one continuous brown two-hand hilt and a small gold pommel. Keep exactly the existing two hands on the SAME hilt; adapt the grip minimally only where needed for the narrower handle, with natural wrists and opposed thumbs. The katana is carried nearly vertically downward at the same screen side, its pointed tip a little above the boot ground line; preserve a clean continuous weapon axis/curve without disconnected hilt segments. It must look distinctly thin and lightly curved, never another broad straight greatsword. Do not add a scabbard or any new accessories. Preserve pixel-for-pixel as much as possible the exact original head-to-body ratio, face shape, eye and mouth positions, cheerful amber eyes and small pink smile, hair, ears, original slender torso and long legs, standing feet, clothes, yellow/cream/brown palette, cape, hip pouch and ONE bushy golden tail with cream tip. Change no anatomy or clothing structure and do not chibify or thicken the limbs. The original large flat color-block pixel style stays identical, with a few solid tones per material and clean stepped filled edges. NO continuous black/dark contour outline, gradients, extra detail, fine hair, fur texture, blur, glow or shadows. One complete full-body idle character with the whole katana uncropped, true transparent background, no text, color swatches, extra views or floor.",
+      "source": "kt/sources/idle-source.png"
+    },
+    "katana_run": {
+      "prompt": "Equipment-only local edit of image 1, the approved running keyframe. Replace ONLY the broad greatsword with the slender, gently curved single-edged KATANA from image 2. Keep exactly the running character's face, expression, head-to-body ratio, anatomy, hair, cape, tail shape and volume, outfit, torso, legs, running stride and positions of both hands. Use one slim steel blade with a continuous subtle curve, small gold oval guard, one brown two-hand hilt and a small gold pommel. Both existing hands still wrap the SAME continuous hilt with natural wrists; no extra fingers or arms. The katana points diagonally up-right along the current carried direction and is fully off the ground and uncropped. Its hilt, guard and blade connect coherently, never a broken axis or a thick greatsword. Do not add a sheath, ribbon, ornaments or weapon effects. Image 2 supplies ONLY the katana design and original character identity, not the standing pose. Preserve LARGE CONNECTED FLAT COLOR BLOCKS, same few solid shades and coarse pixel grid, and the original yellow/cream/brown palette. NO continuous black or dark brown outer outline, gradients, texture, fine fur, scattered highlights, smoothing, glow, shadow or motion blur. Preserve every facial color and original clothing coverage. One complete running sprite on the same transparent square canvas. No background, checkerboard artwork, text, swatches, extra poses or extra characters.",
+      "source": "kt/sources/run-source.png"
+    }
+  },
+  "greatsword": "reuse approved idle and run masters; no character redesign",
+  "palette_reduction": false,
+  "source_root": "assets/textures/sprites/amber_fox_style_v2/full_256",
+  "quality_baseline": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/idle-no-outline-preview.png"
+}

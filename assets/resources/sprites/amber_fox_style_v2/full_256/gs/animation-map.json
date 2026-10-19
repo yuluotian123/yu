@@ -1,0 +1,450 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "pixel_size": 0.004022346368715084,
+  "visual_scale": 1.3,
+  "unique_frames": 126,
+  "animations": {
+    "idle": {
+      "action": "idle",
+      "indices": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        33,
+        36,
+        39,
+        42,
+        45,
+        48,
+        51,
+        54,
+        57,
+        60,
+        63,
+        66,
+        69
+      ],
+      "fps": 8,
+      "loop": true,
+      "duration_seconds": 3.0,
+      "pixel_size": 0.003214285714,
+      "foot_anchor": [
+        128,
+        240
+      ],
+      "reference_height": 224,
+      "source": "approved idle_256, exact existing RGBA; no new generation or resize",
+      "frames": [
+        {
+          "frame": 0,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_00.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_000.png",
+          "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+          "rgba_exact": true,
+          "opaque_pixels": 13671
+        },
+        {
+          "frame": 1,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_01.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_003.png",
+          "sha256": "17522dbfc06b3a6b4eefa6a16253aab0a29090acdc643833e3974da45735a2c2",
+          "rgba_exact": true,
+          "opaque_pixels": 13757
+        },
+        {
+          "frame": 2,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_02.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_006.png",
+          "sha256": "06831d38ef58a1298f508f2f37c04408db8f0c716b37b4b4a3c0efd7ee23b2b0",
+          "rgba_exact": true,
+          "opaque_pixels": 13992
+        },
+        {
+          "frame": 3,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_03.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_009.png",
+          "sha256": "afadc038e16dc20a3aa72d6d893f12c5339092c048d86c733c4d7ad4086acdb2",
+          "rgba_exact": true,
+          "opaque_pixels": 14022
+        },
+        {
+          "frame": 4,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_04.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_012.png",
+          "sha256": "25d63e6a20798cd5c61515bb6777263af6b77d0a829b65a097a9a7945215d4f3",
+          "rgba_exact": true,
+          "opaque_pixels": 14061
+        },
+        {
+          "frame": 5,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_05.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_015.png",
+          "sha256": "95820fd299b194e8dd7bbcb91e77e78b8718416c6affcf8cb570c3f89cc1761d",
+          "rgba_exact": true,
+          "opaque_pixels": 13912
+        },
+        {
+          "frame": 6,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_06.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_018.png",
+          "sha256": "6f620205c89bd79b9a98edf93cdb4be50d798f0f60fe5bc38a994909c859a5e2",
+          "rgba_exact": true,
+          "opaque_pixels": 13714
+        },
+        {
+          "frame": 7,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_07.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_021.png",
+          "sha256": "b18fe63ae7925cf9a7259130bec753ea5746e67d7e48825bf343cfd932870d07",
+          "rgba_exact": true,
+          "opaque_pixels": 13659
+        },
+        {
+          "frame": 8,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_08.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_024.png",
+          "sha256": "91cfcb26fa28bb7d52b7954f6a6913390a041fff778909e7bb637e971dbbcdc8",
+          "rgba_exact": true,
+          "opaque_pixels": 13980
+        },
+        {
+          "frame": 9,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_09.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_027.png",
+          "sha256": "f2891aad988b5be8121bc962ebb6cc2e64c612a51e06119213188f8bfaeb7acf",
+          "rgba_exact": true,
+          "opaque_pixels": 14074
+        },
+        {
+          "frame": 10,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_10.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_030.png",
+          "sha256": "2e2e50224ed0aa3fd6fd4b15c8b3b30e6194f4cfb28318c69044c62f331cdf99",
+          "rgba_exact": true,
+          "opaque_pixels": 14105
+        },
+        {
+          "frame": 11,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_11.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_033.png",
+          "sha256": "8903916441698e24af2dc552fcce3c8f0c40110d419f1029331482e64470157e",
+          "rgba_exact": true,
+          "opaque_pixels": 13903
+        },
+        {
+          "frame": 12,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_12.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_036.png",
+          "sha256": "86d5fa5b9dea84c00f7fc0c28cfb3dbb92330e7ccbde531a4f68379e596ab06b",
+          "rgba_exact": true,
+          "opaque_pixels": 13773
+        },
+        {
+          "frame": 13,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_13.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_039.png",
+          "sha256": "20e210ce2b6ee874e6d78f0b10949eea613401c4457fc01033af23d4b5cb1722",
+          "rgba_exact": true,
+          "opaque_pixels": 13763
+        },
+        {
+          "frame": 14,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_14.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_042.png",
+          "sha256": "34874573a6f9d5d913255aec2f712ed1a4550aabfe92572c317297acf8d6c4b7",
+          "rgba_exact": true,
+          "opaque_pixels": 14024
+        },
+        {
+          "frame": 15,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_15.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_045.png",
+          "sha256": "cae678d7768d6713eef03a2b67103a3d733e53597628b649ba1676bab28439f7",
+          "rgba_exact": true,
+          "opaque_pixels": 14044
+        },
+        {
+          "frame": 16,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_16.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_048.png",
+          "sha256": "279fcf460698a2c9e3438d8a57b0b5e9a35459e41f884a96958285bb69c71c00",
+          "rgba_exact": true,
+          "opaque_pixels": 14021
+        },
+        {
+          "frame": 17,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_17.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_051.png",
+          "sha256": "7d6f204ae7045ed94dd4c0efe4ee8217a87e37d317bb5c3afa0d2d8dbc34d3c5",
+          "rgba_exact": true,
+          "opaque_pixels": 13855
+        },
+        {
+          "frame": 18,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_18.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_054.png",
+          "sha256": "ba19e00d2ddea6dd814a3dab410d330afc347fa7c5b9f6658a02cf0a66e08ae5",
+          "rgba_exact": true,
+          "opaque_pixels": 13618
+        },
+        {
+          "frame": 19,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_19.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_057.png",
+          "sha256": "7176a6799764ac3c1485f2c79c51df9e5a7cc13bacd09676e1e4dff3834d7d76",
+          "rgba_exact": true,
+          "opaque_pixels": 13757
+        },
+        {
+          "frame": 20,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_20.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_060.png",
+          "sha256": "e10b3d74658efd261ccbb52747c7c94d4d18b4b634a04a42e14cb3e4f3ca0f28",
+          "rgba_exact": true,
+          "opaque_pixels": 14014
+        },
+        {
+          "frame": 21,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_21.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_063.png",
+          "sha256": "795d1ebad99b2a44b51772cc9e36eef1e65c45d695f5625bd310673520e1204d",
+          "rgba_exact": true,
+          "opaque_pixels": 14086
+        },
+        {
+          "frame": 22,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_22.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_066.png",
+          "sha256": "cec8339f5651f380fd384331e2c54a16237c02c9aa1e15beb76e5cefb2237555",
+          "rgba_exact": true,
+          "opaque_pixels": 13996
+        },
+        {
+          "frame": 23,
+          "source": "assets\\textures\\sprites\\amber_fox_style_v2\\idle_256\\frames\\idle_23.png",
+          "runtime_frame": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_069.png",
+          "sha256": "d1353c5bc48dff328b233e0a4d62d43631cf09bbb84b749c873dbb3e4bef7619",
+          "rgba_exact": true,
+          "opaque_pixels": 13847
+        }
+      ]
+    },
+    "run": {
+      "action": "run",
+      "indices": [
+        24,
+        26,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38,
+        40,
+        42,
+        44,
+        46,
+        48,
+        50,
+        52,
+        54,
+        56,
+        58,
+        60,
+        62
+      ],
+      "fps": 12,
+      "loop": true,
+      "duration_seconds": 1.6666666666666667,
+      "pixel_size": 0.003214285714,
+      "foot_anchor": [
+        128,
+        240
+      ],
+      "standing_reference_height": 224,
+      "runtime_source": "res://assets/resources/sprites/amber_fox_style_v2/run_height_v4/generation.json"
+    },
+    "attack": {
+      "action": "attack",
+      "indices": [
+        0,
+        12,
+        13,
+        15,
+        17,
+        25,
+        30,
+        38,
+        40,
+        42,
+        22,
+        53,
+        54,
+        58,
+        62,
+        67,
+        72,
+        77,
+        80,
+        82,
+        84,
+        86,
+        88,
+        90,
+        92,
+        93,
+        96,
+        100,
+        106,
+        116
+      ],
+      "fps": 25,
+      "loop": false,
+      "duration_seconds": 1.2,
+      "pixel_size": 0.003214285714,
+      "foot_anchor": [
+        128,
+        240
+      ],
+      "standing_reference_height": 224,
+      "runtime_source": "res://assets/resources/sprites/amber_fox_style_v2/attack_front_v3/generation.json"
+    },
+    "jumpup": {
+      "action": "jump",
+      "indices": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2
+    },
+    "inair": {
+      "action": "jump",
+      "indices": [
+        18,
+        22,
+        26,
+        30
+      ],
+      "fps": 8,
+      "loop": false,
+      "duration_seconds": 0.5
+    },
+    "isfalling": {
+      "action": "jump",
+      "indices": [
+        31,
+        34,
+        37,
+        40
+      ],
+      "fps": 8,
+      "loop": false,
+      "duration_seconds": 0.5
+    },
+    "land": {
+      "action": "jump",
+      "indices": [
+        41,
+        46,
+        60,
+        72
+      ],
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.2
+    },
+    "jump": {
+      "action": "jump",
+      "indices": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        46,
+        60,
+        72
+      ],
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.6
+    },
+    "dash": {
+      "action": "dash",
+      "indices": [
+        0,
+        14,
+        29,
+        43,
+        58,
+        72
+      ],
+      "fps": 21.818181818181817,
+      "loop": false,
+      "duration_seconds": 0.275
+    },
+    "hurt": {
+      "action": "hurt",
+      "indices": [
+        0,
+        10,
+        21,
+        31,
+        41,
+        51,
+        62,
+        72
+      ],
+      "fps": 20,
+      "loop": false,
+      "duration_seconds": 0.4
+    },
+    "death": {
+      "action": "death",
+      "indices": [
+        0,
+        5,
+        10,
+        14,
+        19,
+        24,
+        29,
+        34,
+        38,
+        43,
+        48,
+        53,
+        58,
+        62,
+        67,
+        72
+      ],
+      "fps": 24,
+      "loop": false,
+      "duration_seconds": 0.6666666666666666
+    }
+  }
+}

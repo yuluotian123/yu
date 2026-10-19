@@ -1,0 +1,353 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "gs_run",
+    "prompt_id": "79189a54-0914-4c74-8e13-e05f6b3c6dee",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_run\\video-workflow.json",
+    "status": "completed",
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_run\\selected-video\\79189a54_000.mp4"
+  },
+  "task": {
+    "id": "gs_run",
+    "weapon": "gs",
+    "action": "run",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\sources\\amber_full_gs_run.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\gs\\gs_run\\video-workflow.json",
+    "seed": 2026101821,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. RUN IN PLACE. Fixed horizontal hip position, no travel across the canvas. THREE full alternating left-and-right running gait cycles in 3 seconds, six alternating footfalls. The near leg swings forward while the far leg folds behind, then they SWAP completely; boots pass beneath the hips. Clear alternating support and brief airborne phases, small body bounce, hair/cape/single tail bounce behind. Carry the sword diagonally up-forward continuously in BOTH hands with bent elbows, no attack swing or planted blade. End at the same running phase, with no stop or idle pause.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "d00bca6b4f578781206142a9ad7a6bdd4c5a84b51b738ad57d45f663254d1d44",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_000.png",
+      "opaque_pixels": 7566,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        74,
+        202,
+        224
+      ]
+    },
+    {
+      "source_index": 3,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_003.png",
+      "opaque_pixels": 7599,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        77,
+        202,
+        230
+      ]
+    },
+    {
+      "source_index": 6,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_006.png",
+      "opaque_pixels": 7823,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        73,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 9,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_009.png",
+      "opaque_pixels": 7573,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        68,
+        202,
+        215
+      ]
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_012.png",
+      "opaque_pixels": 7635,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        77,
+        202,
+        226
+      ]
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_015.png",
+      "opaque_pixels": 7813,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        49,
+        78,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 18,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_018.png",
+      "opaque_pixels": 7747,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        68,
+        202,
+        218
+      ]
+    },
+    {
+      "source_index": 21,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_021.png",
+      "opaque_pixels": 7492,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        73,
+        202,
+        224
+      ]
+    },
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_024.png",
+      "opaque_pixels": 7614,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        79,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 27,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_027.png",
+      "opaque_pixels": 7736,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        72,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_030.png",
+      "opaque_pixels": 7509,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        72,
+        202,
+        220
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_033.png",
+      "opaque_pixels": 7600,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        77,
+        202,
+        226
+      ]
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_036.png",
+      "opaque_pixels": 7528,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        72,
+        202,
+        226
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_039.png",
+      "opaque_pixels": 7730,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        68,
+        202,
+        218
+      ]
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_042.png",
+      "opaque_pixels": 7524,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        76,
+        202,
+        230
+      ]
+    },
+    {
+      "source_index": 45,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_045.png",
+      "opaque_pixels": 7648,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        78,
+        202,
+        228
+      ]
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_048.png",
+      "opaque_pixels": 7605,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        69,
+        202,
+        216
+      ]
+    },
+    {
+      "source_index": 51,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_051.png",
+      "opaque_pixels": 7410,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        57,
+        72,
+        202,
+        219
+      ]
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_054.png",
+      "opaque_pixels": 7494,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        79,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 57,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_057.png",
+      "opaque_pixels": 7694,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        73,
+        202,
+        227
+      ]
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_060.png",
+      "opaque_pixels": 7565,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        72,
+        202,
+        220
+      ]
+    },
+    {
+      "source_index": 63,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_063.png",
+      "opaque_pixels": 7593,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        77,
+        202,
+        226
+      ]
+    },
+    {
+      "source_index": 66,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_066.png",
+      "opaque_pixels": 7409,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        74,
+        202,
+        226
+      ]
+    },
+    {
+      "source_index": 69,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime\\run_069.png",
+      "opaque_pixels": 7753,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        69,
+        202,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84",
+  "runtime_selected": false,
+  "replaced_by": "res://assets/resources/sprites/amber_fox_style_v2/run_idle_baseline_v3/generation.json"
+}

@@ -1,0 +1,747 @@
+{
+  "source_video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\full_256\\gs_dash-minimax-source.mp4",
+  "source_fps": 24.0,
+  "declared_output_fps": 21.818181818181817,
+  "declared_duration_seconds": 0.275,
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_count": 6,
+  "independent_masks_declared": false,
+  "expected_mask_source": null,
+  "errors": [],
+  "review_items": [
+    "Whole-silhouette retention has no independent expected mask",
+    "frame 0: face: incomplete_retention_coverage",
+    "frame 0: hair: incomplete_retention_coverage",
+    "frame 0: torso: incomplete_retention_coverage",
+    "frame 0: hands: incomplete_retention_coverage",
+    "frame 0: weapon: incomplete_retention_coverage",
+    "frame 0: legs: incomplete_retention_coverage",
+    "frame 0: tail: incomplete_retention_coverage",
+    "frame 1: face: incomplete_retention_coverage",
+    "frame 1: hair: incomplete_retention_coverage",
+    "frame 1: torso: incomplete_retention_coverage",
+    "frame 1: hands: incomplete_retention_coverage",
+    "frame 1: weapon: incomplete_retention_coverage",
+    "frame 1: legs: incomplete_retention_coverage",
+    "frame 1: tail: incomplete_retention_coverage",
+    "frame 2: face: incomplete_retention_coverage",
+    "frame 2: hair: incomplete_retention_coverage",
+    "frame 2: torso: incomplete_retention_coverage",
+    "frame 2: hands: incomplete_retention_coverage",
+    "frame 2: weapon: incomplete_retention_coverage",
+    "frame 2: legs: incomplete_retention_coverage",
+    "frame 2: tail: incomplete_retention_coverage",
+    "frame 3: face: incomplete_retention_coverage",
+    "frame 3: hair: incomplete_retention_coverage",
+    "frame 3: torso: incomplete_retention_coverage",
+    "frame 3: hands: incomplete_retention_coverage",
+    "frame 3: weapon: incomplete_retention_coverage",
+    "frame 3: legs: incomplete_retention_coverage",
+    "frame 3: tail: incomplete_retention_coverage",
+    "frame 4: face: incomplete_retention_coverage",
+    "frame 4: hair: incomplete_retention_coverage",
+    "frame 4: torso: incomplete_retention_coverage",
+    "frame 4: hands: incomplete_retention_coverage",
+    "frame 4: weapon: incomplete_retention_coverage",
+    "frame 4: legs: incomplete_retention_coverage",
+    "frame 4: tail: incomplete_retention_coverage",
+    "frame 5: face: incomplete_retention_coverage",
+    "frame 5: hair: incomplete_retention_coverage",
+    "frame 5: torso: incomplete_retention_coverage",
+    "frame 5: hands: incomplete_retention_coverage",
+    "frame 5: weapon: incomplete_retention_coverage",
+    "frame 5: legs: incomplete_retention_coverage",
+    "frame 5: tail: incomplete_retention_coverage"
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source_frame": 0,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_000.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            118,
+            86,
+            159,
+            127
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 986,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            139,
+            103,
+            140,
+            104
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 1,
+      "source_frame": 14,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_014.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            138,
+            106,
+            179,
+            147
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1029,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            159,
+            122,
+            160,
+            123
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4605,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 2,
+      "source_frame": 29,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_029.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            139,
+            98,
+            180,
+            139
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1035,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            164,
+            118,
+            165,
+            119
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4356,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 3,
+      "source_frame": 43,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_043.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            137,
+            105,
+            178,
+            146
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1086,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            159,
+            123,
+            160,
+            124
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 4,
+      "source_frame": 58,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_058.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            138,
+            100,
+            179,
+            141
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1010,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            155,
+            119,
+            156,
+            120
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4277,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 5,
+      "source_frame": 72,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\dash_072.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            119,
+            86,
+            160,
+            127
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1002,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            104,
+            142,
+            105
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    }
+  ],
+  "status": "needs_visual_review",
+  "visual_review_required": true
+}

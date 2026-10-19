@@ -114,7 +114,10 @@ public sealed class GraphConnectionEditorService
         if (graph == null) return;
         if (_selectedConnection != null && !graph.Connections.Contains(_selectedConnection)) SelectConnection(null);
         if (_hoveredConnection != null && !graph.Connections.Contains(_hoveredConnection)) _hoveredConnection = null;
-        var connections = new HashSet<string>(graph.Connections.Select(GetConnectionKey));
+        // Plain structural edges have no settings to summarize. Repeating "Connection"
+        // on every edge obscures dense module graphs, especially when zoomed out.
+        var labeledConnections = graph.Connections.Where(c => c.GetType() != typeof(GraphConnection)).ToArray();
+        var connections = new HashSet<string>(labeledConnections.Select(GetConnectionKey));
         foreach (string key in new List<string>(_connectionLabels.Keys))
             if (!connections.Contains(key))
             {
@@ -123,7 +126,7 @@ public sealed class GraphConnectionEditorService
                 _connectionLabels[key].QueueFree();
                 _connectionLabels.Remove(key);
             }
-        foreach (GraphConnection connection in graph.Connections)
+        foreach (GraphConnection connection in labeledConnections)
         {
             string key = GetConnectionKey(connection);
             if (!_connectionLabels.TryGetValue(key, out Label label)) label = CreateConnectionLabel(connection);
@@ -131,7 +134,7 @@ public sealed class GraphConnectionEditorService
             label.Text = text.Length > 32 ? text[..31] + "…" : text;
             float textWidth = label.GetThemeFont("font").GetStringSize(label.Text, fontSize: label.GetThemeFontSize("font_size")).X;
             label.Size = new Vector2(Mathf.Min(220, textWidth + 12), label.GetCombinedMinimumSize().Y);
-            label.TooltipText = $"{graph.FindNodeById(connection.FromNode)?.GetDisplayName()} → {graph.FindNodeById(connection.ToNode)?.GetDisplayName()}\n{text}\n单击编辑 · Delete 删除";
+            label.TooltipText = $"{graph.FindNodeById(connection.FromNode)?.GetDisplayName(graph)} → {graph.FindNodeById(connection.ToNode)?.GetDisplayName(graph)}\n{text}\n单击编辑 · Delete 删除";
             label.Modulate = connection == _selectedConnection ? Accent : Colors.White;
             Vector2[] points = GetConnectionPoints(connection);
             label.Visible = points.Length >= 2;

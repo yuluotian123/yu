@@ -32,6 +32,7 @@ public static class GraphNodeSearchService
 
         var allowedNodes = graph.GetAllowedNodeTypes()
             .Where(nodeType => !IsGenericComponentNode(nodeType))
+            .Where(nodeType => !GraphTypeRegistry.TryGetNodeDefinition(nodeType, out var definition) || !GraphProviderCatalog.IsProvided(definition.NodeDataType))
             .ToList();
         if (allowedNodes.Count == 0 && (dynamicEntries == null || dynamicEntries.Count == 0))
             return;

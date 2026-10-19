@@ -50,6 +50,19 @@ public partial class GraphAsset : Resource
     public virtual string GraphType { get; set; } = string.Empty;
 
     public virtual GraphActionDependencyMode DefaultActionDependencyMode => GraphActionDependencyMode.HostBound;
+    public virtual Type ComponentProviderType => null;
+#if TOOLS
+    public virtual void PrepareForEditing() { }
+    public virtual bool HasCustomPropertyEditors(GodotObject target) => false;
+    public virtual EditorProperty CreateCustomPropertyEditor(GodotObject target, string property) => null;
+    /// <summary>Capture node-owned resources at copy time, independently of the live graph.</summary>
+    public virtual Godot.Collections.Array<Resource> CopyNodeResources(IReadOnlyList<GraphNodeData> nodes) => new();
+    /// <summary>Create resources for one paste and remap references in its new nodes.</summary>
+    public virtual Godot.Collections.Array<Resource> PreparePasteResources(IReadOnlyList<GraphNodeData> nodes,
+        Godot.Collections.Array<Resource> copiedResources) => new();
+    public virtual void AddNodeResources(Godot.Collections.Array<Resource> resources) { }
+    public virtual void RemoveNodeResources(Godot.Collections.Array<Resource> resources) { }
+#endif
 
     /// <summary>How actions in this graph resolve component dependencies.</summary>
     public GraphActionDependencyMode ActionDependencyMode

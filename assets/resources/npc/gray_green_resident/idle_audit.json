@@ -1,0 +1,108 @@
+{
+  "video": "../../../videos/npc/gray_green_resident/5b7f9bac_000.mp4",
+  "frames": "../../../textures/sprites/npc/gray_green_resident/idle/idle_*.png",
+  "source_indices": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69
+  ],
+  "source": {
+    "size": [
+      800,
+      800
+    ],
+    "fps": 24.0
+  },
+  "source_frame_count": 73,
+  "frame_size": [
+    256,
+    256
+  ],
+  "output_fps": 8,
+  "binary_alpha": true,
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "transform": "entire source frame to 256x256, nearest; no per-frame crop, translation or palette quantization",
+  "rgb_tolerance": 0,
+  "preserve_inset": 3,
+  "alpha_method": "pink r-g>18 and b-g>12; largest connected foreground; hidden RGB zeroed, visible RGB untouched",
+  "regions": [
+    {
+      "name": "face",
+      "bounds": [
+        118,
+        30,
+        154,
+        69
+      ]
+    },
+    {
+      "name": "hair",
+      "bounds": [
+        85,
+        12,
+        160,
+        78
+      ]
+    },
+    {
+      "name": "torso",
+      "bounds": [
+        82,
+        64,
+        168,
+        169
+      ]
+    },
+    {
+      "name": "hands",
+      "bounds": [
+        70,
+        101,
+        177,
+        179
+      ]
+    },
+    {
+      "name": "bag",
+      "bounds": [
+        137,
+        108,
+        182,
+        167
+      ]
+    },
+    {
+      "name": "legs",
+      "bounds": [
+        70,
+        155,
+        195,
+        246
+      ]
+    }
+  ]
+}

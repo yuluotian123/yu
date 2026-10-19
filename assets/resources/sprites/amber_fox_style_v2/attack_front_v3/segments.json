@@ -1,0 +1,44 @@
+[
+  {
+    "segment": "a",
+    "prompt_id": "65efbeb4-5166-4ca1-bd4f-e3f954e1fbe0",
+    "seed": 2026101875,
+    "reused_from_v2": true,
+    "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-a.mp4",
+    "sha256": "8c4e7705101434802c5a707ceb93d2af438aa0987a3fc67210029615b7b57c74",
+    "source_size": [
+      512,
+      512
+    ],
+    "source_fps": 24,
+    "source_frames": 39
+  },
+  {
+    "segment": "b",
+    "prompt_id": "51ad030f-0f2e-45a4-91be-96ee422f67c2",
+    "seed": 2026101882,
+    "reused_from_v2": false,
+    "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-b.mp4",
+    "sha256": "cdc67ea1e03b05d0f820f4c486f496688b34cca92e33bcbd057a9933b67dce36",
+    "source_size": [
+      512,
+      512
+    ],
+    "source_fps": 24,
+    "source_frames": 39
+  },
+  {
+    "segment": "c",
+    "prompt_id": "a94cd761-bff4-4297-a1e0-2757bf3c63c6",
+    "seed": 2026101883,
+    "reused_from_v2": false,
+    "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-c.mp4",
+    "sha256": "6d0428f6e052d07feecc7e25f3e7607a9c861a2e4459065f38c659d2e588b559",
+    "source_size": [
+      512,
+      512
+    ],
+    "source_fps": 24,
+    "source_frames": 39
+  }
+]

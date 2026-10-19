@@ -1,0 +1,124 @@
+{
+  "model": "video_minimax_h3_i2v",
+  "local": true,
+  "spends_credits": false,
+  "segments": [
+    {
+      "segment": "a",
+      "prompt_id": "65efbeb4-5166-4ca1-bd4f-e3f954e1fbe0",
+      "seed": 2026101875,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_power_v2\\minimax-segment-a.mp4",
+      "sha256": "8c4e7705101434802c5a707ceb93d2af438aa0987a3fc67210029615b7b57c74",
+      "source_frames": 39,
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24
+    },
+    {
+      "segment": "b",
+      "prompt_id": "5e564a64-8e47-4ecd-ac3a-cd5d9571d36c",
+      "seed": 2026101876,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_power_v2\\minimax-segment-b.mp4",
+      "sha256": "77fec27047c28d08b120ffb950af2fa644311e0438471c6a260bf6e762f80b03",
+      "source_frames": 39,
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24
+    },
+    {
+      "segment": "c",
+      "prompt_id": "33c7c2f7-c9b3-4eec-ace5-eb5a350e2a8f",
+      "seed": 2026101877,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_power_v2\\minimax-segment-c.mp4",
+      "sha256": "3b50e775308430b86458928a80ac8d9dbc73fe9685847e1a302ab38cede56ce7",
+      "source_frames": 39,
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24
+    }
+  ],
+  "matting_prompt_id": "30c25cbe-8510-4ddc-9b43-4425765a8a3f",
+  "steps": 20,
+  "turbo": false,
+  "source_size": [
+    512,
+    512
+  ],
+  "source_fps": 24,
+  "source_frames": 117,
+  "source_segments": 3,
+  "first_last_approved_idle": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "reference_video": "res://assets/videos/characters/amber_fox_style_v2/attack_power_v2/source-reference.mkv",
+  "reference_description": "Lossless FFV1 concatenation of decoded original segments, uniformly nearest resized512to256 once. Decoded RGB equality verified; original3MP4s retained. Not a single raw model video.",
+  "reference_sha256": "0b7b2c62203ec3e99b22f13db2df6b980b155191defeee86429af1eeaa369f52",
+  "action": "anticipation, fast two-handed downward cleave, brief landing hold, recovery to original idle",
+  "frame_size": [
+    256,
+    256
+  ],
+  "frames": 15,
+  "fps": 25,
+  "duration_seconds": 0.6,
+  "loop": false,
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_pixels": 224,
+  "pixel_size": 0.003214285714,
+  "visual_scale": 1.3,
+  "source_indices": [
+    0,
+    13,
+    15,
+    17,
+    22,
+    25,
+    38,
+    43,
+    44,
+    107,
+    108,
+    110,
+    112,
+    114,
+    116
+  ],
+  "temporal_retiming": "Nonuniform source sampling with failed intermediates excluded;15frames at25fps retains existing0.6s gameplay timing.",
+  "new_static_art_generation": true,
+  "static_art_tool": "built-in image_gen",
+  "static_art": [
+    "windup-generation.json",
+    "follow-generation.json"
+  ],
+  "global_palette_reduction": false,
+  "static_face_overlay": false,
+  "per_frame_transform": false,
+  "approved_idle_endpoints_byte_exact": true,
+  "video_interior_rgb_exact": true,
+  "visual_review_completed": true,
+  "runtime_selected": false,
+  "weapon_length_review": "weapon-length-review.json",
+  "rejected_previous_version": {
+    "resource": "res://assets/resources/sprites/amber_fox_style_v2/attack_idle_v1/generation.json",
+    "reason": "User rejected weak thrust and shortened blade"
+  },
+  "rejected_direct_video_attempts": [
+    {
+      "prompt_id": "692bf4bf-cd87-4c2a-8ec9-79ae375633ac",
+      "reason": "clipped sword and white effects"
+    },
+    {
+      "prompt_id": "1e76656e-1179-4cd1-ad86-14497dae8d89",
+      "reason": "bent, clipped and shortened sword"
+    }
+  ],
+  "quality_status": "User requested longer duration and full cut into space in front before recovery",
+  "replaced_by": "res://assets/resources/sprites/amber_fox_style_v2/attack_front_v3/generation.json"
+}

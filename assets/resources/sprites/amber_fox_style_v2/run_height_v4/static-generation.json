@@ -1,0 +1,33 @@
+{
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_ear_top": 91,
+  "source_ground": 1212,
+  "uniform_static_scale": 0.1926851025869759,
+  "offset": [
+    1,
+    6
+  ],
+  "target_ear_top": 24,
+  "target_ground": 240,
+  "frame_size": [
+    256,
+    256
+  ],
+  "idle_ear_top": 16,
+  "rejected_run_ear_top_range": [
+    44,
+    57
+  ],
+  "baseline_standing_reference_height": 224,
+  "no_per_frame_transform": true,
+  "body_correction": "Regenerated high-hip upright pose with long torso, thighs and shins; no vertical-only stretch or runtime scale compensation.",
+  "imagegen_source": "exec-e89d13e9-eba2-43b7-a66b-3ecdbedb13d0.png",
+  "static_prompt": "static-prompt.txt",
+  "reference_idle": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "pose_guide": "res://assets/textures/sprites/amber_fox_style_v2/run_height_v4/sources/pose-guide.png",
+  "video_job": "1f10bcef-bfbd-472e-b9b9-202c17a01e82",
+  "video_prompt": "video-prompt.txt"
+}

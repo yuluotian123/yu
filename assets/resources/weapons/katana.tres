@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://c7wbi2rkbifw3" path="res://assets/resources/weapons/katana_attack.tres" id="2_attack"]
 [ext_resource type="Resource" uid="uid://bow24ol6ao2wl" path="res://assets/resources/weapons/katana_animation.tres" id="3_animation"]
 [ext_resource type="Texture2D" uid="uid://bmt7shwldemey" path="res://assets/textures/ui/inventory/katana.svg" id="4_icon"]
-[ext_resource type="Texture2D" uid="uid://f3126a3slvx2" path="res://assets/textures/sprites/amber_fox_katana/idle-native.png" id="5_portrait"]
+[ext_resource type="Texture2D" path="res://assets/textures/sprites/amber_fox_style_v2/full_256/kt/portrait.png" id="5_portrait"]
 
 [resource]
 script = ExtResource("1_script")

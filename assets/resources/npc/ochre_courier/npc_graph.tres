@@ -1,0 +1,870 @@
+[gd_resource type="Resource" script_class="NpcGraphAsset" format=3 uid="uid://c2fl71f1os0rs"]
+
+[ext_resource type="Script" uid="uid://b6jbet2ls7i1v" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_ipnni"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="2_syaq0"]
+[ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="3_e4i8x"]
+[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/ai/definitions/NpcIdentityDefinition.cs" id="4_oc8bl"]
+[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/ai/definitions/NpcPersonalityDefinition.cs" id="5_2vkhr"]
+[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="6_nw4yy"]
+[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="7_iud0f"]
+[ext_resource type="Script" uid="uid://cum2jon2w065s" path="res://scripts/gamelogic/ai/definitions/NpcScheduleWindow.cs" id="8_5qajp"]
+[ext_resource type="Script" uid="uid://0hf07glnkkk4" path="res://scripts/gamelogic/ai/definitions/NpcScheduleDefinition.cs" id="9_2gnct"]
+[ext_resource type="Script" uid="uid://by2i0ru4bil4t" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="10_d2s6o"]
+[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/ai/definitions/NpcRelationsDefinition.cs" id="11_2at74"]
+[ext_resource type="Script" uid="uid://dc4l0rkjx1nlf" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="12_quajp"]
+[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/ai/definitions/NpcAffectDefinition.cs" id="13_n3y3y"]
+[ext_resource type="Script" uid="uid://bypjwivu5heys" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="14_k0gex"]
+[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/ai/definitions/NpcFactDefinition.cs" id="15_qdsoh"]
+[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/ai/definitions/NpcFactSchema.cs" id="16_q711o"]
+[ext_resource type="Script" uid="uid://bqf2cnwcv8uv4" path="res://scripts/gamelogic/ai/definitions/NpcExpressionDefinition.cs" id="17_j75hg"]
+[ext_resource type="Script" uid="uid://deu38wi1fx0o6" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="18_6o4up"]
+[ext_resource type="Script" uid="uid://gets5b64b0uu" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="19_qumhv"]
+[ext_resource type="Script" uid="uid://bsde0sq6b1oj7" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="20_ek2he"]
+[ext_resource type="Script" uid="uid://b6vw5wxuhd1wo" path="res://scripts/gamelogic/ai/definitions/NpcBindingDefinition.cs" id="20_oc8bl"]
+[ext_resource type="Script" uid="uid://tbexx7n6vr3v" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="21_pun7h"]
+[ext_resource type="Script" uid="uid://dfipavmqfeeii" path="res://scripts/gamelogic/ai/definitions/NpcResourceClaimDefinition.cs" id="22_2vkhr"]
+[ext_resource type="Script" uid="uid://bqj6nsxp3iii3" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="22_xvh6h"]
+[ext_resource type="Script" uid="uid://ctfyvmebdqwrh" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="23_0ftur"]
+[ext_resource type="Script" uid="uid://dhhpywk4q6ktj" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="23_syaq0"]
+
+[sub_resource type="Resource" id="Resource_l662n"]
+script = ExtResource("2_syaq0")
+Key = "home"
+ValueType = 3
+Symbol = "courier_rest"
+
+[sub_resource type="Resource" id="Resource_u6k8a"]
+script = ExtResource("4_oc8bl")
+Tags = PackedStringArray("courier")
+SpriteFrames = ExtResource("3_e4i8x")
+Parameters = Array[ExtResource("2_syaq0")]([SubResource("Resource_l662n")])
+DefinitionId = "ochre_courier.NpcIdentityNodeData"
+DisplayName = "赭衣跑腿员"
+
+[sub_resource type="Resource" id="Resource_pgcuj"]
+script = ExtResource("2_syaq0")
+Key = "sociability"
+Number = 0.75
+
+[sub_resource type="Resource" id="Resource_i155s"]
+script = ExtResource("2_syaq0")
+Key = "caution"
+Number = 0.65
+
+[sub_resource type="Resource" id="Resource_rr1ws"]
+script = ExtResource("2_syaq0")
+Key = "activity"
+Number = 0.8
+
+[sub_resource type="Resource" id="Resource_kww3k"]
+script = ExtResource("5_2vkhr")
+Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_pgcuj"), SubResource("Resource_i155s")])
+Traits = PackedStringArray("cheerful")
+Preferences = Array[ExtResource("2_syaq0")]([SubResource("Resource_rr1ws")])
+DefinitionId = "ochre_courier.NpcPersonalityNodeData"
+
+[sub_resource type="Resource" id="Resource_syaq0"]
+script = ExtResource("6_nw4yy")
+NeedId = "thirst"
+DisplayName = "口渴"
+ChangePerHour = 0.18
+
+[sub_resource type="Resource" id="Resource_e4i8x"]
+script = ExtResource("6_nw4yy")
+NeedId = "hunger"
+DisplayName = "饥饿"
+ChangePerHour = 0.15
+
+[sub_resource type="Resource" id="Resource_oc8bl"]
+script = ExtResource("6_nw4yy")
+NeedId = "fun"
+DisplayName = "娱乐需求"
+ChangePerHour = 0.08
+
+[sub_resource type="Resource" id="Resource_2vkhr"]
+script = ExtResource("6_nw4yy")
+NeedId = "fatigue"
+DisplayName = "疲劳"
+ChangePerHour = 0.1
+
+[sub_resource type="Resource" id="Resource_buiov"]
+script = ExtResource("7_iud0f")
+Needs = Array[ExtResource("6_nw4yy")]([SubResource("Resource_syaq0"), SubResource("Resource_e4i8x"), SubResource("Resource_oc8bl"), SubResource("Resource_2vkhr")])
+DefinitionId = "ochre_courier.NpcNeedsNodeData"
+
+[sub_resource type="Resource" id="Resource_cea46"]
+script = ExtResource("8_5qajp")
+WindowId = "day"
+StartHour = 7.0
+EndHour = 21.0
+Tags = PackedStringArray("daytime")
+
+[sub_resource type="Resource" id="Resource_qpm5k"]
+script = ExtResource("8_5qajp")
+WindowId = "night"
+StartHour = 21.0
+EndHour = 7.0
+Tags = PackedStringArray("night")
+
+[sub_resource type="Resource" id="Resource_gyr80"]
+script = ExtResource("9_2gnct")
+Windows = Array[ExtResource("8_5qajp")]([SubResource("Resource_cea46"), SubResource("Resource_qpm5k")])
+DefinitionId = "ochre_courier.NpcScheduleNodeData"
+
+[sub_resource type="Resource" id="Resource_c7r2j"]
+script = ExtResource("10_d2s6o")
+ViewRange = 18.0
+KnownPointIds = PackedStringArray("food_shop", "resident_bed", "courier_rest", "courier_delivery_west", "courier_delivery_east", "shelter_west")
+DefinitionId = "ochre_courier.NpcPerceptionNodeData"
+
+[sub_resource type="Resource" id="Resource_trnnu"]
+script = ExtResource("2_syaq0")
+Key = "trust"
+
+[sub_resource type="Resource" id="Resource_up57h"]
+script = ExtResource("2_syaq0")
+Key = "affinity"
+
+[sub_resource type="Resource" id="Resource_5ub16"]
+script = ExtResource("11_2at74")
+Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_trnnu"), SubResource("Resource_up57h")])
+DefinitionId = "ochre_courier.NpcRelationsNodeData"
+
+[sub_resource type="Resource" id="Resource_ms10x"]
+script = ExtResource("12_quajp")
+Categories = PackedStringArray("visited", "conversation", "danger")
+DefinitionId = "ochre_courier.NpcMemoryNodeData"
+
+[sub_resource type="Resource" id="Resource_sr2p3"]
+script = ExtResource("2_syaq0")
+Key = "mood"
+
+[sub_resource type="Resource" id="Resource_454ym"]
+script = ExtResource("13_n3y3y")
+Dimensions = Array[ExtResource("2_syaq0")]([SubResource("Resource_sr2p3")])
+DefinitionId = "ochre_courier.NpcAffectNodeData"
+
+[sub_resource type="Resource" id="Resource_24ujx"]
+script = ExtResource("14_k0gex")
+DefinitionId = "ochre_courier.NpcPolicyNodeData"
+
+[sub_resource type="Resource" id="Resource_ngm8q"]
+script = ExtResource("2_syaq0")
+
+[sub_resource type="Resource" id="Resource_04muu"]
+script = ExtResource("15_qdsoh")
+Key = "private.completed_visits"
+Maximum = 100000.0
+Initial = SubResource("Resource_ngm8q")
+
+[sub_resource type="Resource" id="Resource_hbu3c"]
+script = ExtResource("16_q711o")
+Facts = Array[ExtResource("15_qdsoh")]([SubResource("Resource_04muu")])
+DefinitionId = "ochre_courier.NpcFactsNodeData"
+
+[sub_resource type="Resource" id="Resource_w7352"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.hunger.value"
+
+[sub_resource type="Resource" id="Resource_1hx8p"]
+script = ExtResource("17_j75hg")
+Number = 0.65
+
+[sub_resource type="Resource" id="Resource_ya1l5"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_w7352"), SubResource("Resource_1hx8p")])
+
+[sub_resource type="Resource" id="Resource_7hvm2"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.hunger.value"
+
+[sub_resource type="Resource" id="Resource_cfkn0"]
+script = ExtResource("17_j75hg")
+Number = 0.25
+
+[sub_resource type="Resource" id="Resource_e6yta"]
+script = ExtResource("17_j75hg")
+Kind = 15
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_7hvm2"), SubResource("Resource_cfkn0")])
+
+[sub_resource type="Resource" id="Resource_tnrx3"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.hunger.value"
+
+[sub_resource type="Resource" id="Resource_tlskb"]
+script = ExtResource("17_j75hg")
+Number = 1.8
+
+[sub_resource type="Resource" id="Resource_gwfn1"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_tnrx3"), SubResource("Resource_tlskb")])
+
+[sub_resource type="Resource" id="Resource_yi78j"]
+script = ExtResource("18_6o4up")
+Activation = SubResource("Resource_ya1l5")
+Utility = SubResource("Resource_gwfn1")
+Completion = SubResource("Resource_e6yta")
+DefinitionId = "ochre_courier.goal.eat"
+DisplayName = "补充食物"
+
+[sub_resource type="Resource" id="Resource_swp0e"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_jwm8n"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.distance"
+
+[sub_resource type="Resource" id="Resource_lpjan"]
+script = ExtResource("17_j75hg")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_jq7vx"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_jwm8n"), SubResource("Resource_lpjan")])
+
+[sub_resource type="Resource" id="Resource_x1ih3"]
+script = ExtResource("17_j75hg")
+Kind = 3
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_swp0e"), SubResource("Resource_jq7vx")])
+
+[sub_resource type="Resource" id="Resource_8uo12"]
+script = ExtResource("19_qumhv")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":840,\"y\":40},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":860,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-5.7025146,\"y\":-395.61984},\"Zoom\":0.82644624}}"
+
+[sub_resource type="Resource" id="Resource_xfl26"]
+script = ExtResource("20_oc8bl")
+Name = "地点"
+Adapter = "point"
+Source = 1
+SelectorId = "53858956670a4f449c8264c8b23ce570"
+
+[sub_resource type="Resource" id="Resource_6glmg"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.open"
+
+[sub_resource type="Resource" id="Resource_qp7gh"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.stock"
+
+[sub_resource type="Resource" id="Resource_wmeiw"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_b3j61"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_qp7gh"), SubResource("Resource_wmeiw")])
+
+[sub_resource type="Resource" id="Resource_40s38"]
+script = ExtResource("17_j75hg")
+Kind = 16
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_6glmg"), SubResource("Resource_b3j61")])
+
+[sub_resource type="Resource" id="Resource_ifirq"]
+script = ExtResource("17_j75hg")
+Number = 0.15
+
+[sub_resource type="Resource" id="Resource_4dfhg"]
+script = ExtResource("20_ek2he")
+Key = "needs.hunger.value"
+Value = SubResource("Resource_ifirq")
+
+[sub_resource type="Resource" id="Resource_prtfj"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_kvw8c"]
+script = ExtResource("20_ek2he")
+Key = "private.completed_visits"
+Mode = 1
+Value = SubResource("Resource_prtfj")
+
+[sub_resource type="Resource" id="Resource_vin1i"]
+script = ExtResource("17_j75hg")
+Number = -1.0
+
+[sub_resource type="Resource" id="Resource_qdlgw"]
+script = ExtResource("20_ek2he")
+Key = "input.地点.stock"
+Mode = 1
+Value = SubResource("Resource_vin1i")
+
+[sub_resource type="Resource" id="Resource_dha2b"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.id"
+
+[sub_resource type="Resource" id="Resource_j5883"]
+script = ExtResource("20_ek2he")
+Key = "self.location"
+Value = SubResource("Resource_dha2b")
+
+[sub_resource type="Resource" id="Resource_yxd6a"]
+script = ExtResource("22_2vkhr")
+Input = "地点"
+
+[sub_resource type="Resource" id="Resource_xvd2u"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.at"
+
+[sub_resource type="Resource" id="Resource_1yqvg"]
+script = ExtResource("21_pun7h")
+ShareTargetWithinPlan = false
+ReserveTarget = false
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_xfl26")])
+Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_yxd6a")])
+Preconditions = SubResource("Resource_40s38")
+SuccessConditions = SubResource("Resource_xvd2u")
+Cost = SubResource("Resource_x1ih3")
+TimeoutSeconds = 60.0
+DistanceCost = 0.0
+ExecutionGraph = SubResource("Resource_8uo12")
+Predictions = Array[ExtResource("20_ek2he")]([SubResource("Resource_4dfhg"), SubResource("Resource_kvw8c"), SubResource("Resource_qdlgw"), SubResource("Resource_j5883")])
+Results = Array[ExtResource("20_ek2he")]([SubResource("Resource_4dfhg"), SubResource("Resource_kvw8c"), SubResource("Resource_qdlgw")])
+DefinitionId = "ochre_courier.action.eat"
+DisplayName = "补充食物 · 到达并停留"
+
+[sub_resource type="Resource" id="Resource_dyk2u"]
+script = ExtResource("22_xvh6h")
+ActionIds = PackedStringArray("ochre_courier.action.eat")
+DefinitionId = "ochre_courier.template.eat"
+DisplayName = "补充食物 · 首选计划"
+
+[sub_resource type="Resource" id="Resource_5fdhp"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fatigue.value"
+
+[sub_resource type="Resource" id="Resource_prrh5"]
+script = ExtResource("17_j75hg")
+Number = 0.65
+
+[sub_resource type="Resource" id="Resource_0gatr"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_5fdhp"), SubResource("Resource_prrh5")])
+
+[sub_resource type="Resource" id="Resource_ylgup"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fatigue.value"
+
+[sub_resource type="Resource" id="Resource_ai3or"]
+script = ExtResource("17_j75hg")
+Number = 0.25
+
+[sub_resource type="Resource" id="Resource_ft5sn"]
+script = ExtResource("17_j75hg")
+Kind = 15
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_ylgup"), SubResource("Resource_ai3or")])
+
+[sub_resource type="Resource" id="Resource_416s7"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fatigue.value"
+
+[sub_resource type="Resource" id="Resource_cbh04"]
+script = ExtResource("17_j75hg")
+Number = 1.3
+
+[sub_resource type="Resource" id="Resource_32tjp"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_416s7"), SubResource("Resource_cbh04")])
+
+[sub_resource type="Resource" id="Resource_hwx7f"]
+script = ExtResource("18_6o4up")
+Activation = SubResource("Resource_0gatr")
+Utility = SubResource("Resource_32tjp")
+Completion = SubResource("Resource_ft5sn")
+DefinitionId = "ochre_courier.goal.rest"
+DisplayName = "回家休息"
+
+[sub_resource type="Resource" id="Resource_mjjdg"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_8i316"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.distance"
+
+[sub_resource type="Resource" id="Resource_suwy4"]
+script = ExtResource("17_j75hg")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_k8116"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_8i316"), SubResource("Resource_suwy4")])
+
+[sub_resource type="Resource" id="Resource_7axck"]
+script = ExtResource("17_j75hg")
+Kind = 3
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_mjjdg"), SubResource("Resource_k8116")])
+
+[sub_resource type="Resource" id="Resource_vn3ju"]
+script = ExtResource("19_qumhv")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":500,\"y\":0},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":500,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_giqge"]
+script = ExtResource("20_oc8bl")
+Name = "地点"
+Adapter = "point"
+Source = 1
+SelectorId = "3818c57837dc4928b323540603228a0b"
+
+[sub_resource type="Resource" id="Resource_40c06"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.open"
+
+[sub_resource type="Resource" id="Resource_ryhdx"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.stock"
+
+[sub_resource type="Resource" id="Resource_vskce"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_5xx6v"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_ryhdx"), SubResource("Resource_vskce")])
+
+[sub_resource type="Resource" id="Resource_miky8"]
+script = ExtResource("17_j75hg")
+Kind = 16
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_40c06"), SubResource("Resource_5xx6v")])
+
+[sub_resource type="Resource" id="Resource_5x6a6"]
+script = ExtResource("17_j75hg")
+Number = 0.15
+
+[sub_resource type="Resource" id="Resource_a1x0d"]
+script = ExtResource("20_ek2he")
+Key = "needs.fatigue.value"
+Value = SubResource("Resource_5x6a6")
+
+[sub_resource type="Resource" id="Resource_lvnhu"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_jl46h"]
+script = ExtResource("20_ek2he")
+Key = "private.completed_visits"
+Mode = 1
+Value = SubResource("Resource_lvnhu")
+
+[sub_resource type="Resource" id="Resource_dl1xk"]
+script = ExtResource("17_j75hg")
+Number = -1.0
+
+[sub_resource type="Resource" id="Resource_td12e"]
+script = ExtResource("20_ek2he")
+Key = "input.地点.stock"
+Mode = 1
+Value = SubResource("Resource_dl1xk")
+
+[sub_resource type="Resource" id="Resource_xmt06"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.id"
+
+[sub_resource type="Resource" id="Resource_dw83v"]
+script = ExtResource("20_ek2he")
+Key = "self.location"
+Value = SubResource("Resource_xmt06")
+
+[sub_resource type="Resource" id="Resource_y86qc"]
+script = ExtResource("22_2vkhr")
+Input = "地点"
+
+[sub_resource type="Resource" id="Resource_fjddu"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.at"
+
+[sub_resource type="Resource" id="Resource_qbqx4"]
+script = ExtResource("21_pun7h")
+ShareTargetWithinPlan = false
+ReserveTarget = false
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_giqge")])
+Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_y86qc")])
+Preconditions = SubResource("Resource_miky8")
+SuccessConditions = SubResource("Resource_fjddu")
+Cost = SubResource("Resource_7axck")
+DurationSeconds = 4.0
+TimeoutSeconds = 60.0
+DistanceCost = 0.0
+ExecutionGraph = SubResource("Resource_vn3ju")
+Predictions = Array[ExtResource("20_ek2he")]([SubResource("Resource_a1x0d"), SubResource("Resource_jl46h"), SubResource("Resource_td12e"), SubResource("Resource_dw83v")])
+Results = Array[ExtResource("20_ek2he")]([SubResource("Resource_a1x0d"), SubResource("Resource_jl46h"), SubResource("Resource_td12e")])
+DefinitionId = "ochre_courier.action.rest"
+DisplayName = "回家休息 · 到达并停留"
+
+[sub_resource type="Resource" id="Resource_ouxl4"]
+script = ExtResource("22_xvh6h")
+ActionIds = PackedStringArray("ochre_courier.action.rest")
+DefinitionId = "ochre_courier.template.rest"
+DisplayName = "回家休息 · 首选计划"
+
+[sub_resource type="Resource" id="Resource_883cu"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fun.value"
+
+[sub_resource type="Resource" id="Resource_rtrpy"]
+script = ExtResource("17_j75hg")
+Number = 0.65
+
+[sub_resource type="Resource" id="Resource_oa51k"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_883cu"), SubResource("Resource_rtrpy")])
+
+[sub_resource type="Resource" id="Resource_e1lx1"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fun.value"
+
+[sub_resource type="Resource" id="Resource_ourpv"]
+script = ExtResource("17_j75hg")
+Number = 0.25
+
+[sub_resource type="Resource" id="Resource_yiowx"]
+script = ExtResource("17_j75hg")
+Kind = 15
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_e1lx1"), SubResource("Resource_ourpv")])
+
+[sub_resource type="Resource" id="Resource_jhp3y"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "needs.fun.value"
+
+[sub_resource type="Resource" id="Resource_ate33"]
+script = ExtResource("17_j75hg")
+Number = 1.5
+
+[sub_resource type="Resource" id="Resource_heupr"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_jhp3y"), SubResource("Resource_ate33")])
+
+[sub_resource type="Resource" id="Resource_mi47v"]
+script = ExtResource("18_6o4up")
+Activation = SubResource("Resource_oa51k")
+Utility = SubResource("Resource_heupr")
+Completion = SubResource("Resource_yiowx")
+DefinitionId = "ochre_courier.goal.activity"
+DisplayName = "投递跑腿"
+
+[sub_resource type="Resource" id="Resource_lywub"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_626fd"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.distance"
+
+[sub_resource type="Resource" id="Resource_cix6u"]
+script = ExtResource("17_j75hg")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_ql26e"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_626fd"), SubResource("Resource_cix6u")])
+
+[sub_resource type="Resource" id="Resource_8lia7"]
+script = ExtResource("17_j75hg")
+Kind = 3
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_lywub"), SubResource("Resource_ql26e")])
+
+[sub_resource type="Resource" id="Resource_shxq1"]
+script = ExtResource("19_qumhv")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":500,\"y\":0},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":500,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_70wfa"]
+script = ExtResource("20_oc8bl")
+Name = "地点"
+Adapter = "point"
+Source = 1
+SelectorId = "d85818c63d5d472ea63e8b62988031f0"
+
+[sub_resource type="Resource" id="Resource_ftkaw"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.open"
+
+[sub_resource type="Resource" id="Resource_805bg"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.stock"
+
+[sub_resource type="Resource" id="Resource_1vxxe"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_emrtv"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_805bg"), SubResource("Resource_1vxxe")])
+
+[sub_resource type="Resource" id="Resource_j6ff1"]
+script = ExtResource("17_j75hg")
+Kind = 16
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_ftkaw"), SubResource("Resource_emrtv")])
+
+[sub_resource type="Resource" id="Resource_yy60o"]
+script = ExtResource("17_j75hg")
+Number = 0.15
+
+[sub_resource type="Resource" id="Resource_6pssb"]
+script = ExtResource("20_ek2he")
+Key = "needs.fun.value"
+Value = SubResource("Resource_yy60o")
+
+[sub_resource type="Resource" id="Resource_6dp15"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_knbxx"]
+script = ExtResource("20_ek2he")
+Key = "private.completed_visits"
+Mode = 1
+Value = SubResource("Resource_6dp15")
+
+[sub_resource type="Resource" id="Resource_hqqbu"]
+script = ExtResource("17_j75hg")
+Number = -1.0
+
+[sub_resource type="Resource" id="Resource_3aiwy"]
+script = ExtResource("20_ek2he")
+Key = "input.地点.stock"
+Mode = 1
+Value = SubResource("Resource_hqqbu")
+
+[sub_resource type="Resource" id="Resource_t02sp"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.id"
+
+[sub_resource type="Resource" id="Resource_vorln"]
+script = ExtResource("20_ek2he")
+Key = "self.location"
+Value = SubResource("Resource_t02sp")
+
+[sub_resource type="Resource" id="Resource_pu4jw"]
+script = ExtResource("22_2vkhr")
+Input = "地点"
+
+[sub_resource type="Resource" id="Resource_bskxe"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.at"
+
+[sub_resource type="Resource" id="Resource_u21uk"]
+script = ExtResource("21_pun7h")
+ShareTargetWithinPlan = false
+ReserveTarget = false
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_70wfa")])
+Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_pu4jw")])
+Preconditions = SubResource("Resource_j6ff1")
+SuccessConditions = SubResource("Resource_bskxe")
+Cost = SubResource("Resource_8lia7")
+TimeoutSeconds = 60.0
+DistanceCost = 0.0
+ExecutionGraph = SubResource("Resource_shxq1")
+Predictions = Array[ExtResource("20_ek2he")]([SubResource("Resource_6pssb"), SubResource("Resource_knbxx"), SubResource("Resource_3aiwy"), SubResource("Resource_vorln")])
+Results = Array[ExtResource("20_ek2he")]([SubResource("Resource_6pssb"), SubResource("Resource_knbxx"), SubResource("Resource_3aiwy")])
+DefinitionId = "ochre_courier.action.activity"
+DisplayName = "投递跑腿 · 到达并停留"
+
+[sub_resource type="Resource" id="Resource_3dxht"]
+script = ExtResource("22_xvh6h")
+ActionIds = PackedStringArray("ochre_courier.action.activity")
+DefinitionId = "ochre_courier.template.activity"
+DisplayName = "投递跑腿 · 首选计划"
+
+[sub_resource type="Resource" id="Resource_ipnni"]
+script = ExtResource("18_6o4up")
+DefinitionId = "f3bcc48e57884de48805960135d989ef"
+DisplayName = "目标"
+
+[sub_resource type="Resource" id="Resource_nw4yy"]
+script = ExtResource("21_pun7h")
+DefinitionId = "ecc847ff6eba4088b53c11a9dcd8c4b1"
+DisplayName = "行动"
+
+[sub_resource type="Resource" id="Resource_iud0f"]
+script = ExtResource("22_xvh6h")
+DefinitionId = "995b44f86df04e49af6160179e7a4250"
+DisplayName = "计划模板"
+
+[sub_resource type="Resource" id="Resource_jbwr2"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_5ig8k"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.distance"
+
+[sub_resource type="Resource" id="Resource_gtg5j"]
+script = ExtResource("17_j75hg")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_wisus"]
+script = ExtResource("17_j75hg")
+Kind = 5
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_5ig8k"), SubResource("Resource_gtg5j")])
+
+[sub_resource type="Resource" id="Resource_5qslp"]
+script = ExtResource("17_j75hg")
+Kind = 3
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_jbwr2"), SubResource("Resource_wisus")])
+
+[sub_resource type="Resource" id="Resource_5qajp"]
+script = ExtResource("19_qumhv")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":840,\"y\":40},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":860,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-5.7025146,\"y\":-395.61984},\"Zoom\":0.82644624}}"
+
+[sub_resource type="Resource" id="Resource_fjtcf"]
+script = ExtResource("20_oc8bl")
+Name = "地点"
+Adapter = "point"
+Source = 1
+SelectorId = "8d12261b52e640b2ac7678a9fbbd0d8d"
+
+[sub_resource type="Resource" id="Resource_2gnct"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.open"
+
+[sub_resource type="Resource" id="Resource_d2s6o"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.stock"
+
+[sub_resource type="Resource" id="Resource_2at74"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_quajp"]
+script = ExtResource("17_j75hg")
+Kind = 13
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_d2s6o"), SubResource("Resource_2at74")])
+
+[sub_resource type="Resource" id="Resource_n3y3y"]
+script = ExtResource("17_j75hg")
+Kind = 16
+Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_2gnct"), SubResource("Resource_quajp")])
+
+[sub_resource type="Resource" id="Resource_k0gex"]
+script = ExtResource("17_j75hg")
+Number = 0.15
+
+[sub_resource type="Resource" id="Resource_qdsoh"]
+script = ExtResource("20_ek2he")
+Key = "needs.hunger.value"
+Value = SubResource("Resource_k0gex")
+
+[sub_resource type="Resource" id="Resource_q711o"]
+script = ExtResource("17_j75hg")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_j75hg"]
+script = ExtResource("20_ek2he")
+Key = "private.completed_visits"
+Mode = 1
+Value = SubResource("Resource_q711o")
+
+[sub_resource type="Resource" id="Resource_6o4up"]
+script = ExtResource("17_j75hg")
+Number = -1.0
+
+[sub_resource type="Resource" id="Resource_qumhv"]
+script = ExtResource("20_ek2he")
+Key = "input.地点.stock"
+Mode = 1
+Value = SubResource("Resource_6o4up")
+
+[sub_resource type="Resource" id="Resource_7w3b2"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.id"
+
+[sub_resource type="Resource" id="Resource_udayg"]
+script = ExtResource("20_ek2he")
+Key = "self.location"
+Value = SubResource("Resource_7w3b2")
+
+[sub_resource type="Resource" id="Resource_t6ejt"]
+script = ExtResource("22_2vkhr")
+Input = "地点"
+
+[sub_resource type="Resource" id="Resource_ai78b"]
+script = ExtResource("17_j75hg")
+Kind = 1
+Key = "input.地点.at"
+
+[sub_resource type="Resource" id="Resource_ek2he"]
+script = ExtResource("21_pun7h")
+ShareTargetWithinPlan = false
+ReserveTarget = false
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_fjtcf")])
+Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_t6ejt")])
+Preconditions = SubResource("Resource_n3y3y")
+SuccessConditions = SubResource("Resource_ai78b")
+Cost = SubResource("Resource_5qslp")
+TimeoutSeconds = 60.0
+DistanceCost = 0.0
+ExecutionGraph = SubResource("Resource_5qajp")
+Predictions = Array[ExtResource("20_ek2he")]([SubResource("Resource_qdsoh"), SubResource("Resource_j75hg"), SubResource("Resource_qumhv"), SubResource("Resource_udayg")])
+Results = Array[ExtResource("20_ek2he")]([SubResource("Resource_qdsoh"), SubResource("Resource_j75hg"), SubResource("Resource_qumhv")])
+DefinitionId = "8cd35550f9ab4595adacaf2b3a3539e9"
+DisplayName = "补充食物 · 到达并停留2"
+
+[sub_resource type="Resource" id="Resource_pun7h"]
+script = ExtResource("23_syaq0")
+AllTags = PackedStringArray("food")
+DefinitionId = "53858956670a4f449c8264c8b23ce570"
+DisplayName = "补充食物 · 到达并停留 · 目标"
+
+[sub_resource type="Resource" id="Resource_xvh6h"]
+script = ExtResource("23_syaq0")
+Source = 2
+ParameterKey = "home"
+AllTags = PackedStringArray("rest")
+DefinitionId = "3818c57837dc4928b323540603228a0b"
+DisplayName = "回家休息 · 到达并停留 · 目标"
+
+[sub_resource type="Resource" id="Resource_0ftur"]
+script = ExtResource("23_syaq0")
+AllTags = PackedStringArray("delivery")
+DefinitionId = "d85818c63d5d472ea63e8b62988031f0"
+DisplayName = "投递跑腿 · 到达并停留 · 目标"
+
+[sub_resource type="Resource" id="Resource_dyle1"]
+script = ExtResource("23_syaq0")
+AllTags = PackedStringArray("food")
+DefinitionId = "8d12261b52e640b2ac7678a9fbbd0d8d"
+DisplayName = "补充食物 · 到达并停留2 · 目标"
+
+[resource]
+script = ExtResource("23_0ftur")
+Definitions = Array[ExtResource("1_ipnni")]([SubResource("Resource_u6k8a"), SubResource("Resource_kww3k"), SubResource("Resource_buiov"), SubResource("Resource_gyr80"), SubResource("Resource_c7r2j"), SubResource("Resource_5ub16"), SubResource("Resource_ms10x"), SubResource("Resource_454ym"), SubResource("Resource_24ujx"), SubResource("Resource_hbu3c"), SubResource("Resource_yi78j"), SubResource("Resource_1yqvg"), SubResource("Resource_dyk2u"), SubResource("Resource_hwx7f"), SubResource("Resource_qbqx4"), SubResource("Resource_ouxl4"), SubResource("Resource_mi47v"), SubResource("Resource_u21uk"), SubResource("Resource_3dxht"), SubResource("Resource_ipnni"), SubResource("Resource_nw4yy"), SubResource("Resource_iud0f"), SubResource("Resource_ek2he"), SubResource("Resource_pun7h"), SubResource("Resource_xvh6h"), SubResource("Resource_0ftur"), SubResource("Resource_dyle1")])
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":260},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcIdentityNodeData\",\"DefinitionId\":\"ochre_courier.NpcIdentityNodeData\",\"Id\":\"ochre_courier_NpcIdentityNodeData\",\"Position\":{\"x\":1800,\"y\":-380},\"NodeType\":\"NpcIdentityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPersonalityNodeData\",\"DefinitionId\":\"ochre_courier.NpcPersonalityNodeData\",\"Id\":\"ochre_courier_NpcPersonalityNodeData\",\"Position\":{\"x\":1800,\"y\":-140},\"NodeType\":\"NpcPersonalityNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcNeedsNodeData\",\"DefinitionId\":\"ochre_courier.NpcNeedsNodeData\",\"Id\":\"ochre_courier_NpcNeedsNodeData\",\"Position\":{\"x\":1800,\"y\":80},\"NodeType\":\"NpcNeedsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcScheduleNodeData\",\"DefinitionId\":\"ochre_courier.NpcScheduleNodeData\",\"Id\":\"ochre_courier_NpcScheduleNodeData\",\"Position\":{\"x\":1800,\"y\":-600},\"NodeType\":\"NpcScheduleNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"ochre_courier.NpcPerceptionNodeData\",\"Id\":\"ochre_courier_NpcPerceptionNodeData\",\"Position\":{\"x\":1800,\"y\":320},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcRelationsNodeData\",\"DefinitionId\":\"ochre_courier.NpcRelationsNodeData\",\"Id\":\"ochre_courier_NpcRelationsNodeData\",\"Position\":{\"x\":1800,\"y\":560},\"NodeType\":\"NpcRelationsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"ochre_courier.NpcMemoryNodeData\",\"Id\":\"ochre_courier_NpcMemoryNodeData\",\"Position\":{\"x\":1800,\"y\":780},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcAffectNodeData\",\"DefinitionId\":\"ochre_courier.NpcAffectNodeData\",\"Id\":\"ochre_courier_NpcAffectNodeData\",\"Position\":{\"x\":1800,\"y\":1020},\"NodeType\":\"NpcAffectNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"ochre_courier.NpcPolicyNodeData\",\"Id\":\"ochre_courier_NpcPolicyNodeData\",\"Position\":{\"x\":1800,\"y\":1260},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcFactsNodeData\",\"DefinitionId\":\"ochre_courier.NpcFactsNodeData\",\"Id\":\"ochre_courier_NpcFactsNodeData\",\"Position\":{\"x\":1800,\"y\":1480},\"NodeType\":\"NpcFactsNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.eat\",\"Id\":\"eat\",\"Position\":{\"x\":320,\"y\":2580},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.eat\",\"Id\":\"eat_action\",\"Position\":{\"x\":620,\"y\":2580},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.eat\",\"Id\":\"eat_template\",\"Position\":{\"x\":620,\"y\":2820},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.rest\",\"Id\":\"rest\",\"Position\":{\"x\":320,\"y\":3000},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.rest\",\"Id\":\"rest_action\",\"Position\":{\"x\":620,\"y\":3000},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.rest\",\"Id\":\"rest_template\",\"Position\":{\"x\":620,\"y\":3240},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"ochre_courier.goal.activity\",\"Id\":\"activity\",\"Position\":{\"x\":320,\"y\":3440},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"DefinitionId\":\"ochre_courier.action.activity\",\"Id\":\"activity_action\",\"Position\":{\"x\":620,\"y\":3440},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"ochre_courier.template.activity\",\"Id\":\"activity_template\",\"Position\":{\"x\":620,\"y\":3680},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"53858956670a4f449c8264c8b23ce570\",\"Id\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"Position\":{\"x\":580,\"y\":1460},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"3818c57837dc4928b323540603228a0b\",\"Id\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"Position\":{\"x\":580,\"y\":1660},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"d85818c63d5d472ea63e8b62988031f0\",\"Id\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"Position\":{\"x\":580,\"y\":1860},\"NodeType\":\"NpcTargetSelectorNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcIdentityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPersonalityNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcNeedsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcScheduleNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcRelationsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcAffectNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"ochre_courier_NpcFactsNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"eat\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":0,\"ToNode\":\"eat_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"eat\",\"FromPort\":1,\"ToNode\":\"eat_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"rest\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":0,\"ToNode\":\"rest_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"rest\",\"FromPort\":1,\"ToNode\":\"rest_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"activity\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":0,\"ToNode\":\"activity_action\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"activity\",\"FromPort\":1,\"ToNode\":\"activity_template\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_28100dd9e1144985abd5af832d7ddd35\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_b896cb85497c46eb828fc43b8b42ff0c\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"targets_08599483645d450ca05ebcf5a18c1778\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-39.595154,\"y\":2095.0364},\"Zoom\":0.88317674}}"

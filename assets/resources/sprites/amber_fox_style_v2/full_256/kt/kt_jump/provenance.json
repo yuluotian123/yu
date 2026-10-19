@@ -1,0 +1,352 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "kt_jump",
+    "prompt_id": "4fd294e0-8b58-4ff2-8014-6ed78ed5207d",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_jump\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101830,
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_jump\\selected-video\\4fd294e0_000.mp4"
+  },
+  "task": {
+    "id": "kt_jump",
+    "weapon": "kt",
+    "action": "jump",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\amber_full_kt_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\kt\\kt_jump\\video-workflow.json",
+    "seed": 2026101830,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. ONE staged JUMP-and-LAND action over 3 seconds for a game whose physics supplies world displacement. 0-0.6s small anticipatory knee bend then push off with both feet; 0.6-1.5s tuck the knees slightly into a readable airborne apex; 1.5-2.2s extend legs downward into a falling pose; 2.2-3s both boots touch the original ground line, knees compress briefly and recover the exact initial stance. Allow natural vertical bounce and pose movement, but keep the sprite root near the same screen position with no large leap across the image. Carry the weapon securely in both hands with its complete silhouette visible; move the blade with the wrists so the tip does not collide with the ground or clip above the canvas. Hair/cape/tail lag naturally. One coherent takeoff, apex, descent and landing, never multiple hops.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "c6b10a6f93f03de5d1c7a9b5fefe50f753830d049a45eeb3c0b7058d4b7ec279",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_000.png",
+      "opaque_pixels": 7477,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 4,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_004.png",
+      "opaque_pixels": 7545,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        64,
+        48,
+        161,
+        224
+      ]
+    },
+    {
+      "source_index": 5,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_005.png",
+      "opaque_pixels": 7605,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        52,
+        172,
+        224
+      ]
+    },
+    {
+      "source_index": 8,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_008.png",
+      "opaque_pixels": 7616,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        69,
+        204,
+        224
+      ]
+    },
+    {
+      "source_index": 10,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_010.png",
+      "opaque_pixels": 7466,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        59,
+        71,
+        213,
+        224
+      ]
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_012.png",
+      "opaque_pixels": 7232,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        49,
+        187,
+        223
+      ]
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_015.png",
+      "opaque_pixels": 7568,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        61,
+        17,
+        181,
+        181
+      ]
+    },
+    {
+      "source_index": 18,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_018.png",
+      "opaque_pixels": 7660,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        7,
+        184,
+        166
+      ]
+    },
+    {
+      "source_index": 20,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_020.png",
+      "opaque_pixels": 7664,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        5,
+        184,
+        164
+      ]
+    },
+    {
+      "source_index": 22,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_022.png",
+      "opaque_pixels": 7698,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        5,
+        185,
+        164
+      ]
+    },
+    {
+      "source_index": 25,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_025.png",
+      "opaque_pixels": 7765,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        8,
+        185,
+        168
+      ]
+    },
+    {
+      "source_index": 26,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_026.png",
+      "opaque_pixels": 7789,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        11,
+        185,
+        172
+      ]
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_030.png",
+      "opaque_pixels": 8022,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        62,
+        33,
+        187,
+        205
+      ]
+    },
+    {
+      "source_index": 31,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_031.png",
+      "opaque_pixels": 8012,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        63,
+        44,
+        188,
+        222
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_033.png",
+      "opaque_pixels": 7869,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        64,
+        193,
+        223
+      ]
+    },
+    {
+      "source_index": 35,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_035.png",
+      "opaque_pixels": 7590,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        69,
+        198,
+        223
+      ]
+    },
+    {
+      "source_index": 37,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_037.png",
+      "opaque_pixels": 7344,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        55,
+        67,
+        193,
+        223
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_039.png",
+      "opaque_pixels": 7258,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        59,
+        178,
+        223
+      ]
+    },
+    {
+      "source_index": 40,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_040.png",
+      "opaque_pixels": 7214,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        62,
+        55,
+        169,
+        223
+      ]
+    },
+    {
+      "source_index": 44,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_044.png",
+      "opaque_pixels": 7428,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        71,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 46,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_046.png",
+      "opaque_pixels": 7587,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_060.png",
+      "opaque_pixels": 7405,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        57,
+        60,
+        188,
+        223
+      ]
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_062.png",
+      "opaque_pixels": 7348,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        59,
+        54,
+        173,
+        223
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\jump_072.png",
+      "opaque_pixels": 7476,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "4e8c9053-d65b-40d0-b31a-4a890b5ff6da"
+}

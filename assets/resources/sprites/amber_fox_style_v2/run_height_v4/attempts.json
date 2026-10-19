@@ -1,0 +1,19 @@
+{
+  "interrupted_attempt": "ef222a66-23b0-4aa4-ad15-9a12ca2b9271",
+  "reason": "Sampling took over28minutes versus119/211second preceding runs. No progress event received in a sustained5minute sampler monitor, no output and no reported exception. Cancel own job and request model/cache unload before a clean retry.",
+  "same_keyframe": true,
+  "seed": 2026101863,
+  "steps": 8,
+  "source_size": [
+    512,
+    512
+  ],
+  "duration_seconds": 3,
+  "selected_retry_job": "1f10bcef-bfbd-472e-b9b9-202c17a01e82",
+  "clean_cache_ram_free_bytes": 24149069824,
+  "earlier_attempt_status": "cancelled, no video output",
+  "restart_attempt_succeeded": false,
+  "recovery": "Cancellation completed and model/executor caches were released without restarting the server.",
+  "slowdown_cause": "GPU memory/compute contention with Valor Mortis, verified through Windows GPU counters.",
+  "resolution": "User chose to exit the game normally. Process exited; retry sampling completed8steps in21seconds and video output succeeded."
+}

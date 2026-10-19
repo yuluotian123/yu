@@ -17,7 +17,7 @@ public static class GraphNodeViewBuilder
         var node = new GraphNode
         {
             Name = data.Id,
-            Title = data.GetDisplayName(),
+            Title = data.GetDisplayName(context.CurrentGraph),
             PositionOffset = data.Position,
             Draggable = true,
             Resizable = true
@@ -50,7 +50,7 @@ public static class GraphNodeViewBuilder
             node.RemoveChild(child); child.QueueFree();
         }
         node.ClearAllSlots();
-        node.Title = data.GetDisplayName();
+        node.Title = data.GetDisplayName(context.CurrentGraph);
         int inputCount = data.GetInputCount();
         int outputCount = data.GetOutputCount();
         int maxSlots = Math.Max(inputCount, outputCount);

@@ -1,0 +1,10 @@
+{
+  "runtime_sprite_frames": "res://assets/resources/sprites/amber_fox_style_v2/full_256/gs/sprite_frames.tres",
+  "run_frames": 24,
+  "gs_unique_frames": 112,
+  "all_weapons_unique_frames": 223,
+  "approved_idle_png_byte_exact": true,
+  "all_non_run_png_byte_exact": true,
+  "all_repacked_atlas_rgba_exact": true,
+  "previous_run_retained": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\sources\\previous-runtime"
+}

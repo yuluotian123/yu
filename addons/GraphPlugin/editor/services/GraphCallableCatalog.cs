@@ -44,10 +44,11 @@ public static class GraphCallableCatalog
         if (typeof(BehaviorTreeActionBase).IsAssignableFrom(type)) return usage == GraphCallableUsage.BehaviorTree;
         return usage == GraphCallableUsage.Flow;
     }
-    public static IReadOnlyList<Type> Actions(GraphCallableUsage usage) => Sort(SubTypeCache.GetSubTypes<GraphActionBase>().Where(type => Supports(type, usage)));
+    public static IReadOnlyList<Type> Actions(GraphCallableUsage usage, GraphEditorContext context = null) => Sort(SubTypeCache.GetSubTypes<GraphActionBase>().Where(type => Supports(type, usage) && !GraphProviderCatalog.IsProvided(type))
+        .Concat(GraphProviderCatalog.Actions(context).Where(type => Supports(type, usage))));
     public static IReadOnlyList<Type> TimelineActions(GraphTimelineActionKind kind) => Actions(GraphCallableUsage.Timeline)
         .Where(type => GraphTimelineActionRules.Supports(type, kind)).ToList();
-    public static IReadOnlyList<Type> ActionsForGraph(GraphAsset graph) => Actions(GraphCallableUsage.Flow)
+    public static IReadOnlyList<Type> ActionsForGraph(GraphAsset graph, GraphEditorContext context = null) => Actions(GraphCallableUsage.Flow, context)
         .Where(type => graph is not GameLogic.CharacterGraphAsset ||
             (type != typeof(GraphComponentCallAction) && type != typeof(GraphComponentGetAction) &&
              type != typeof(GraphComponentSetAction) && type != typeof(GameLogic.UseAbilityAction))).ToList();

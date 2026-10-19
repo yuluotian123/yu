@@ -577,7 +577,7 @@ public sealed partial class GraphComponentPanel
         return IsValidObject(host) ? host : null;
     }
 
-    private static List<GodotObject> GetHostComponents(Node host)
+    public static List<GodotObject> GetHostComponents(Node host)
     {
         var components = new List<GodotObject>();
         var componentKeys = new HashSet<string>(StringComparer.Ordinal);

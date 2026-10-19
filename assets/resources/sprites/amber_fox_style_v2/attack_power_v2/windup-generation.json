@@ -1,0 +1,19 @@
+{
+  "imagegen_source": "exec-6b850e0b-2717-4534-94f1-1c863c08ee66.png",
+  "uniform_scale": 0.18,
+  "offset": [
+    4,
+    26
+  ],
+  "basis": "Match head/weapon density, not ear-to-ground bbox. Attack anticipation bends knees and spreads stance, lowering height without scaling bones per frame.",
+  "frame_size": [
+    256,
+    256
+  ],
+  "bounds": [
+    20,
+    40,
+    194,
+    240
+  ]
+}

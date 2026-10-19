@@ -1,0 +1,12 @@
+{
+  "alpha_mismatches": 0,
+  "errors": [],
+  "fps": 25.0,
+  "frame_size": [
+    256,
+    256
+  ],
+  "frames": 15,
+  "loop": false,
+  "opaque_rgb_mismatches": 0
+}

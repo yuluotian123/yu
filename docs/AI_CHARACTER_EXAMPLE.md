@@ -4,6 +4,8 @@
 
 总览见 [角色系统](CHARACTER_SYSTEM.md)，玩家对照见 [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)。
 
+SpaceLevel 的 NPC 通过 AiAgent 组件提供的 NPC 图配置模块、目标、行动和计划，复用相同 Movement 与动作任务执行层。配置和验证入口见 [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)。本文的 AIRunner 仍是简单行为树巡逻示例。
+
 ## 简单 AI 场景
 
 当前 AIRunner 只有：

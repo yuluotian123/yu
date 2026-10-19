@@ -1,0 +1,277 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_height": 224,
+  "pixel_size": 0.003214285714,
+  "fps": 12,
+  "duration_seconds": 1.6666666666666667,
+  "loop": true,
+  "frames": [
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_024.png",
+      "sha256": "115e449c9ddfadca333d46b3a87e9b9d1d8832aaec645706e7c6b35121abfefc",
+      "bounds": [
+        28,
+        26,
+        230,
+        242
+      ],
+      "opaque_pixels": 13607,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 26,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_026.png",
+      "sha256": "bd4a825cdf3d3e0340cc895852569903ea113076949d5077fe3718a4ccac0bbb",
+      "bounds": [
+        40,
+        19,
+        230,
+        242
+      ],
+      "opaque_pixels": 13610,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 28,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_028.png",
+      "sha256": "7bcec4896e2803999aa0b51467abadf7133537caf4b1628f1f277e6f52d1c17a",
+      "bounds": [
+        31,
+        13,
+        230,
+        236
+      ],
+      "opaque_pixels": 13674,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_030.png",
+      "sha256": "134227cbbdb366b7033dbe3f8c6e2f59a9f3b8fb56ce471c8a08c3f86468bda6",
+      "bounds": [
+        37,
+        13,
+        230,
+        227
+      ],
+      "opaque_pixels": 13712,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 32,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_032.png",
+      "sha256": "fe7b0be683e6f70b29c0268fcc686c8aae4f85a4900ea44784e5be9c95b2c2e1",
+      "bounds": [
+        34,
+        20,
+        230,
+        242
+      ],
+      "opaque_pixels": 13851,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 34,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_034.png",
+      "sha256": "49c7ce6b06a4e3fa3fae341ebab8483a828af35b8dd8e76bad5eb943d211813e",
+      "bounds": [
+        28,
+        26,
+        230,
+        243
+      ],
+      "opaque_pixels": 13550,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_036.png",
+      "sha256": "717c2be07ed83a8494e198c259155dbe6d338e491b923d50c83bd85913475518",
+      "bounds": [
+        40,
+        20,
+        230,
+        243
+      ],
+      "opaque_pixels": 13593,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 38,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_038.png",
+      "sha256": "e1ee41a6d4ea4febee4dc57e3e193e0f5f04725c3b50db7dc9c0f0d00c6ff19c",
+      "bounds": [
+        32,
+        13,
+        230,
+        236
+      ],
+      "opaque_pixels": 13688,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 40,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_040.png",
+      "sha256": "86a5d464fa1aae863bdd321a5390ee672511aac521377ad58a9b033a1c28bc8c",
+      "bounds": [
+        34,
+        13,
+        230,
+        228
+      ],
+      "opaque_pixels": 14015,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_042.png",
+      "sha256": "6f1932127913accfd8f8b648b1e539c67729489415c34874907636bc1c4e8e56",
+      "bounds": [
+        35,
+        19,
+        230,
+        240
+      ],
+      "opaque_pixels": 14092,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 44,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_044.png",
+      "sha256": "917df60315da9f086b25fc7cdf4963e15588e2e082e6fcdb8bda5efc92a2d284",
+      "bounds": [
+        28,
+        26,
+        230,
+        240
+      ],
+      "opaque_pixels": 13781,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 46,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_046.png",
+      "sha256": "08b5b849b95e2501068b7382b8c0e8afc374f2e35d23db09886d8609bb9d1072",
+      "bounds": [
+        40,
+        20,
+        230,
+        238
+      ],
+      "opaque_pixels": 13364,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_048.png",
+      "sha256": "3e084fbc304dad76c03cf23fb3ce953c406964df7a29ced1543429bb09014f46",
+      "bounds": [
+        31,
+        14,
+        230,
+        236
+      ],
+      "opaque_pixels": 13664,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 50,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_050.png",
+      "sha256": "f9ea37d98962fe063354e567504c9a6cec6897a2ee214072e30fbe99eec65486",
+      "bounds": [
+        36,
+        14,
+        230,
+        237
+      ],
+      "opaque_pixels": 13697,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 52,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_052.png",
+      "sha256": "a44142ff516a22fe07f6ce17760526555fbb3d89233d76d881b3bf7cf11dc2b4",
+      "bounds": [
+        34,
+        20,
+        230,
+        243
+      ],
+      "opaque_pixels": 13917,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_054.png",
+      "sha256": "5c14ff106d583ce482721c7471a00cfeab03941c93376e420d023c601ca13a69",
+      "bounds": [
+        28,
+        26,
+        230,
+        242
+      ],
+      "opaque_pixels": 13567,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 56,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_056.png",
+      "sha256": "5e9b779cfb41048cf3134b7c9c0014881330e20936f98dc52da790635d4ebd07",
+      "bounds": [
+        40,
+        19,
+        230,
+        242
+      ],
+      "opaque_pixels": 13656,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_058.png",
+      "sha256": "40261891c22a1d5e67a3531f5449fed6f67e87a13be89fa14ea6463571c49d17",
+      "bounds": [
+        31,
+        13,
+        230,
+        236
+      ],
+      "opaque_pixels": 13715,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_060.png",
+      "sha256": "76526e6d3acf84a6c6f5098314a6e7408a87fe4adfd7d36106e7f0a001202a16",
+      "bounds": [
+        34,
+        13,
+        230,
+        226
+      ],
+      "opaque_pixels": 13930,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_height_v4\\frames\\run_062.png",
+      "sha256": "f4842d8f9adac852f4e5918f80d829fe73587575b7a3febeb77d39bc6066c34a",
+      "bounds": [
+        34,
+        19,
+        230,
+        240
+      ],
+      "opaque_pixels": 14119,
+      "face_and_core_rgb_exact": true
+    }
+  ]
+}

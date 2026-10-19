@@ -1,0 +1,203 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "gs_attack",
+    "prompt_id": "4d843cc1-fe14-4d79-9300-1af4b99de1b4",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_attack\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101857,
+    "previous_prompt_ids": [
+      "f8ffbf00-4c56-4269-9164-59b7293a0876",
+      "be409365-3d7d-4765-9ae5-e0c274895711"
+    ],
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_attack\\source.mp4",
+    "actual_prompt": "A small controlled TWO-HANDED FORWARD SWORD THRUST, ONE thrust only. Slowly move the sword from vertical into a LOW HORIZONTAL position at belly height, push the tip toward screen right, then pull it back and return to the original vertical stance. BOTH hands stay together on the brown handle. All movement is below chin height. Never raise the blade overhead. There is NO SLASH and NO SWING; ONLY the solid physical sword. Plain rigid sword motion with zero visual effects, zero white lines, zero arcs, zero streaks. Keep the whole blade tip inside the right border. The body stays upright with both boots planted and one slight knee bend. Complete one slow thrust and recovery in 3 seconds. The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. "
+  },
+  "task": {
+    "id": "gs_attack",
+    "weapon": "gs",
+    "action": "attack",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\sources\\amber_full_gs_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\gs\\gs_attack\\video-workflow.json",
+    "seed": 2026101857,
+    "prompt": "A small controlled TWO-HANDED FORWARD SWORD THRUST, ONE thrust only. Slowly move the sword from vertical into a LOW HORIZONTAL position at belly height, push the tip toward screen right, then pull it back and return to the original vertical stance. BOTH hands stay together on the brown handle. All movement is below chin height. Never raise the blade overhead. There is NO SLASH and NO SWING; ONLY the solid physical sword. Plain rigid sword motion with zero visual effects, zero white lines, zero arcs, zero streaks. Keep the whole blade tip inside the right border. The body stays upright with both boots planted and one slight knee bend. Complete one slow thrust and recovery in 3 seconds. The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. ",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "05a2e7e940141685164213308ccba5e44b3768f4bbe0ec3dd9d23f25a1c10f52",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_000.png",
+      "opaque_pixels": 8275,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 7,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_007.png",
+      "opaque_pixels": 8195,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        186,
+        224
+      ]
+    },
+    {
+      "source_index": 13,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_013.png",
+      "opaque_pixels": 8480,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 20,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_020.png",
+      "opaque_pixels": 8486,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 26,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_026.png",
+      "opaque_pixels": 8460,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_033.png",
+      "opaque_pixels": 8462,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_039.png",
+      "opaque_pixels": 8457,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 46,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_046.png",
+      "opaque_pixels": 8458,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 52,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_052.png",
+      "opaque_pixels": 8463,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        251,
+        224
+      ]
+    },
+    {
+      "source_index": 59,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_059.png",
+      "opaque_pixels": 8357,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        66,
+        45,
+        209,
+        224
+      ]
+    },
+    {
+      "source_index": 65,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_065.png",
+      "opaque_pixels": 8249,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\sources\\previous-runtime\\attack_072.png",
+      "opaque_pixels": 8248,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "62ec60e3-c8bc-4759-98a1-e477253d6943",
+  "runtime_selected": false,
+  "replaced_by": "res://assets/resources/sprites/amber_fox_style_v2/attack_idle_v1/generation.json"
+}

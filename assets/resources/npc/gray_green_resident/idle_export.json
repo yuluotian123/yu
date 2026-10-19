@@ -1,0 +1,41 @@
+{
+  "source": "source/keyframe_rgb_v6.png",
+  "source_size": [
+    1024,
+    1536
+  ],
+  "source_crop": [
+    282,
+    53,
+    773,
+    1451
+  ],
+  "canvas_size": [
+    256,
+    256
+  ],
+  "character_height": 224,
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "crop_position": [
+    89,
+    16
+  ],
+  "resize": "nearest",
+  "palette_quantization": false,
+  "alpha_threshold": 128,
+  "alpha_method": "pink chroma, largest connected foreground",
+  "model_input": "source/life_input_v6.png",
+  "model_size": [
+    768,
+    768
+  ],
+  "background": [
+    216,
+    164,
+    204
+  ],
+  "model_transform": "native canvas scaled by 3; no recentering"
+}

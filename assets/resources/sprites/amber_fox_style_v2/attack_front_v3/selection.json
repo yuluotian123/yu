@@ -1,0 +1,66 @@
+{
+  "indices": [
+    0,
+    12,
+    13,
+    15,
+    17,
+    25,
+    30,
+    38,
+    40,
+    42,
+    22,
+    53,
+    54,
+    58,
+    62,
+    67,
+    72,
+    77,
+    80,
+    82,
+    84,
+    86,
+    88,
+    90,
+    92,
+    93,
+    96,
+    100,
+    106,
+    116
+  ],
+  "fps": 25,
+  "duration_seconds": 1.2,
+  "rationale": "0.4s wind-up, fast two-pose0.08s swing,0.24s full forward cut hold,0.48s controlled recovery. Reuse sourceA22 raised-blade pose as stroke bridge AFTER the coiled pose. This is explicit nonchronological key-pose assembly; original117-frame reference remains unchanged. No frame crop/scale/warp/paint.",
+  "rejected_source_intermediates": {
+    "a": [
+      18,
+      19,
+      20,
+      21
+    ],
+    "b": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ]
+  },
+  "full_forward_strike_global_frames": [
+    53,
+    54,
+    58,
+    62,
+    67,
+    72,
+    77
+  ],
+  "endpoints": "full approved idle PNG bytes"
+}

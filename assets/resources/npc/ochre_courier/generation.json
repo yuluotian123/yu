@@ -1,0 +1,45 @@
+{
+  "character": "human female courier",
+  "colors": [
+    "chestnut",
+    "ochre",
+    "ivory",
+    "blue gray"
+  ],
+  "style": "broad pixel color planes; no continuous outline",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "crop": [
+    413,
+    36,
+    852,
+    1227
+  ],
+  "native_size": [
+    256,
+    256
+  ],
+  "character_height": 224,
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "native_position": [
+    87,
+    16
+  ],
+  "transform": "binary native alpha and nearest neighbor; source RGBA retained, no palette quantization or repainting",
+  "status": "approved keyframe; idle and walk videos and transparent frames generated and visually checked",
+  "alpha_threshold": 128,
+  "approved_by_user": true,
+  "animation_jobs": {
+    "idle": "12fe9143-5f55-4625-a2f0-f3cdbe633baf",
+    "walk": "13acf32f-4a5f-48f0-8980-d9b790ef95ac"
+  }
+}

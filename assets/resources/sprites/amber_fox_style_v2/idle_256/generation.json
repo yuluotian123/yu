@@ -1,0 +1,93 @@
+{
+  "workflow": "video_minimax_h3_i2v",
+  "workflow_file": "minimax-workflow.json",
+  "prompt_id": "ea885716-6ddb-4a99-9e93-e3475c73ecd7",
+  "status": "completed",
+  "source": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/sources/idle-original.png",
+  "design_reference": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/sources/character-design.png",
+  "keyframe": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/sources/amber-fox-idle-256-input.png",
+  "prompt": "A perfectly seamless looping idle animation of the EXACT golden fox swordswoman shown in <Picture 1>. Static orthographic full-body game sprite, centered on a fixed square canvas. Keep the character's original three-quarter view, cheerful open-mouth smile, golden fox ears, short golden side ponytail, yellow cape, cream sleeves, brown outfit and boots, one fluffy yellow tail with a cream tip, and the same large straight sword. The two feet and the entire sword are firmly planted and absolutely stationary throughout. Exactly two hands hold the same sword handle at the same positions. One gentle breathing cycle: the chest and shoulders rise and fall by only one or two pixels on the 256x256 logical pixel grid. Hair ends, cape hem and the single tail softly sway by two to four logical pixels and return to their exact initial positions. A single brief natural blink near the middle; keep both amber eyes and the same happy face. End at the exact starting pose. LARGE CONNECTED FLAT COLOR BLOCKS, simplified clean stepped pixel clusters, 2-3 solid tones per material, original golden yellow, caramel brown and cream palette, no continuous black or dark contour outlines, no extra surface details. Crisp coherent 256x256 pixel-art style in EVERY frame. Uniform solid neutral mid-grey background, absolutely unchanged. No camera movement, zoom, perspective change, walk, turn, attack, sword swing, sliding feet, extra limbs, duplicate tails, costume change, gradient, texture, fine hair, anti-aliasing, motion blur, glow, shadow, particles or scenery. Silent, no speech, music or sound effects.",
+  "seed": 2026101801,
+  "requested_duration_seconds": 3,
+  "generation_canvas": [
+    512,
+    512
+  ],
+  "delivery_canvas": [
+    256,
+    256
+  ],
+  "generation_fps": 24,
+  "steps": 8,
+  "turbo": true,
+  "first_and_last_frame_same": true,
+  "local_generation": true,
+  "spends_credits": false,
+  "source_palette_colors": 22,
+  "frame_size": 256,
+  "foot_origin": [
+    128,
+    240
+  ],
+  "source_frame_count": 73,
+  "runtime_frame_count": 24,
+  "runtime_fps": 8,
+  "duration_seconds": 3,
+  "runtime_sprite_frames": "res://assets/resources/sprites/amber_fox_style_v2/idle_256/sprite_frames.tres",
+  "video": "res://assets/videos/characters/amber_fox_style_v2/idle_256/idle.mp4",
+  "postprocessing": [
+    "nearest-neighbor 512 to 256",
+    "ComfyUI grey-background alpha key",
+    "remove only neutral contour fringes and spikes; use original keyframe blade silhouette to avoid key holes and halos",
+    "protect original face and weapon pixels",
+    "no global quantization, smoothing, static overlays or face repaint",
+    "24 frames sampled at 8 fps from the selected first generation",
+    "Remove dark exterior outlines using adjacent interior material colors; preserve facial pixels, interior pixels and alpha exactly."
+  ],
+  "iterations": [
+    {
+      "prompt_id": "ea885716-6ddb-4a99-9e93-e3475c73ecd7",
+      "result": "selected by user: lively first version"
+    },
+    {
+      "prompt_id": "babb4da5-8bad-45a8-9a32-3f2082a6d11c",
+      "result": "calmer second version retained in ignored review folder"
+    }
+  ],
+  "validation": {
+    "engine": "Godot 4.8.beta mono",
+    "resource_load": "passed after outline removal reimport",
+    "frame_textures": "24 of 24 at 256x256",
+    "loop": true,
+    "fps": 8,
+    "alpha": "binary 0 or 255",
+    "import": "lossless, no mipmaps, no 3D recompression",
+    "imported_rgba_matches_source_png": true,
+    "opaque_pixels_checked": 333648
+  },
+  "selected_version": "first generation, user preferred lively tail motion",
+  "matting": {
+    "prompt_id": "22f4e11f-3cfd-4653-9cfb-bbb396904fff",
+    "workflow": "matting-workflow.json",
+    "validation": "matting-validation.json",
+    "regions_per_frame": 7,
+    "frames_checked": 24,
+    "maximum_interior_rgb_difference": 0,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "original_video_sha256": "e04e739ca55fea9d151998c19a54cab2a5b3a3c5dc424f1ce5555a416ef66c32",
+    "lossless_preview": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/idle-no-outline-preview.png"
+  },
+  "outline_removal": {
+    "prompt_id": "0fe7ff32-3915-4c3b-a6fa-f8975b4fae3e",
+    "workflow": "outline-removal-workflow.json",
+    "validation": "outline-validation.json",
+    "frames": 24,
+    "changed_contour_pixels": 15415,
+    "face_pixels_exact": true,
+    "interior_pixels_exact": true,
+    "alpha_exact": true
+  }
+}

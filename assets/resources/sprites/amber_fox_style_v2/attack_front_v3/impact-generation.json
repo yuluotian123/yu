@@ -1,0 +1,19 @@
+{
+  "source": "exec-3eac3d58-ff0a-49be-b091-04f9e9582508.png",
+  "uniform_scale": 0.207,
+  "offset": [
+    -7,
+    -6
+  ],
+  "frame_size": [
+    256,
+    256
+  ],
+  "bounds": [
+    44,
+    30,
+    242,
+    241
+  ],
+  "note": "One uniform static density mapping from full source, no per-frame scaling. Original head/face and111px blade compared at native size."
+}

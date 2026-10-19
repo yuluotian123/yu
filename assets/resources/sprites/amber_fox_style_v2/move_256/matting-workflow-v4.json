@@ -1,0 +1,203 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "run-native-reference.png"
+    }
+  },
+  "2": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "3": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "green"
+    }
+  },
+  "4": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "blue"
+    }
+  },
+  "5": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "3",
+        0
+      ],
+      "source": [
+        "2",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "operation": "subtract"
+    }
+  },
+  "6": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "3",
+        0
+      ],
+      "source": [
+        "4",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "operation": "subtract"
+    }
+  },
+  "7": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "5",
+        0
+      ],
+      "value": 0.02
+    }
+  },
+  "8": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "6",
+        0
+      ],
+      "value": 0.02
+    }
+  },
+  "9": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "7",
+        0
+      ],
+      "source": [
+        "8",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "operation": "multiply"
+    }
+  },
+  "12": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "contour-donor-atlas.png"
+    }
+  },
+  "13": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "contour-edit-mask.png"
+    }
+  },
+  "14": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "13",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "15": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "1",
+        0
+      ],
+      "source": [
+        "12",
+        0
+      ],
+      "mask": [
+        "14",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false
+    }
+  },
+  "16": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "alpha-noise-mask.png"
+    }
+  },
+  "17": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "16",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "18": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "9",
+        0
+      ],
+      "source": [
+        "17",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "operation": "add"
+    }
+  },
+  "19": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": [
+        "15",
+        0
+      ],
+      "alpha": [
+        "18",
+        0
+      ]
+    }
+  },
+  "20": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "19",
+        0
+      ],
+      "filename_prefix": "amber_fox_run_256_v4_clean"
+    }
+  }
+}

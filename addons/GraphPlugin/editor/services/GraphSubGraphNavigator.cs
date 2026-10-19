@@ -1,6 +1,7 @@
 #if TOOLS
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -151,11 +152,14 @@ public sealed class GraphSubGraphNavigator
         PushSubGraph(subGraph);
     }
 
-    private void PushSubGraph(GraphAsset subGraph)
+    public void PushSubGraph(GraphAsset subGraph)
     {
         GraphAsset current = _getCurrentGraph();
         if (current == null || subGraph == null)
             return;
+
+        if (subGraph == current || _graphStack.Any(x => x.graph == subGraph)) return;
+        GraphSaveService.BindOwner(subGraph, current);
 
         _saveCurrentGraph?.Invoke();
         _graphStack.Push((current, current.GetEditorTitle()));

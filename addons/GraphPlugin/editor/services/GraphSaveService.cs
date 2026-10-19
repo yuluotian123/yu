@@ -8,6 +8,12 @@ using Godot;
 /// </summary>
 public static class GraphSaveService
 {
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<GraphAsset, GraphAsset> Owners = new();
+    public static void BindOwner(GraphAsset child, GraphAsset owner)
+    {
+        if (child == null || owner == null || child == owner) return;
+        Owners.Remove(child); Owners.Add(child, owner);
+    }
     // Called while Godot is already saving: never call SaveScene recursively here.
     public static void SyncForEditorSave(GraphAsset graph, GraphEdit graphEdit)
     {
@@ -17,7 +23,7 @@ public static class GraphSaveService
         graph.SaveJsonFields();
         if (!IsInlineResource(graph) && !string.IsNullOrWhiteSpace(graph.ResourcePath))
         {
-            Error error = ResourceSaver.Save(graph, graph.ResourcePath);
+            Error error = SaveResource(graph);
             if (error != Error.Ok)
             {
                 graph.MarkDirty();
@@ -89,6 +95,18 @@ public static class GraphSaveService
 
     private static Error SaveResource(GraphAsset graph)
     {
+        if (Owners.TryGetValue(graph, out GraphAsset owner) && GodotObject.IsInstanceValid(owner))
+        {
+            owner.SaveJsonFields();
+            return SaveResource(owner);
+        }
+        int separator = graph.ResourcePath?.IndexOf("::", StringComparison.Ordinal) ?? -1;
+        if (separator >= 0)
+        {
+            string containerPath = graph.ResourcePath.Substring(0, separator);
+            if (containerPath.EndsWith(".tres", StringComparison.Ordinal) && ResourceLoader.Load<Resource>(containerPath) is Resource container)
+                return ResourceSaver.Save(container, containerPath);
+        }
         if (!IsInlineResource(graph))
         {
             if (string.IsNullOrWhiteSpace(graph.ResourcePath))
@@ -138,8 +156,11 @@ public static class GraphSaveService
 
     private static string GetSaveTarget(GraphAsset graph)
     {
+        if (Owners.TryGetValue(graph, out GraphAsset owner) && GodotObject.IsInstanceValid(owner))
+            return GetSaveTarget(owner);
         if (!IsInlineResource(graph))
             return graph.ResourcePath;
+        if (!Engine.IsEditorHint()) return graph.ResourcePath;
         try
         {
             return EditorInterface.Singleton.GetEditedSceneRoot()?.SceneFilePath ?? graph.ResourcePath;

@@ -1,0 +1,437 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_height": 224,
+  "pixel_size": 0.003214285714,
+  "fps": 25,
+  "duration_seconds": 1.2,
+  "loop": false,
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_000.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_012.png",
+      "sha256": "6cf88dae3d4474e05d4f02c665c3b58c9d5305d619d79379151c0b07f6ff207a",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13403,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 13,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_013.png",
+      "sha256": "b69221c739c71171030ced516f5a80b52bc05f2cd93c0e5eeea9f94486b79b18",
+      "bounds": [
+        61,
+        16,
+        186,
+        240
+      ],
+      "opaque_pixels": 12872,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_015.png",
+      "sha256": "562e8f6a8d1b03f29252ec2d9e08e826771628566a23d21f89d63c0bac028385",
+      "bounds": [
+        47,
+        22,
+        237,
+        240
+      ],
+      "opaque_pixels": 12846,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 17,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_017.png",
+      "sha256": "7bea5c377a665e976c4bffcdaffbc5a5202f6b41ecd2f7f10eee5d0acc395417",
+      "bounds": [
+        47,
+        22,
+        237,
+        240
+      ],
+      "opaque_pixels": 12836,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 25,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_025.png",
+      "sha256": "69bc74644d38af2d0d44894ff1b4b6b95100563086756a24497144f7deb56ba5",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 10926,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_030.png",
+      "sha256": "6d4fda8222279053592b54ee681f0e1450e61f33ef57788176bde0c1008bb8a8",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 11264,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 38,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_038.png",
+      "sha256": "016de1782475fbd831e94ceadeeaf78580d61d8aa816f905fbf0cb32da49d9ce",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 11374,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 40,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_040.png",
+      "sha256": "1a39b29bf6eec367e497d52444c7b9ff78a86a03bac8a4503b087372333c0ec8",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 11465,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_042.png",
+      "sha256": "4fcca67656d2abad46343252b3041814a04915342285c57d29f294d6c49907a2",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 11517,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 22,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_022.png",
+      "sha256": "0df56a1f64bc7ccd505246f1ba6e925b7fdf132638a85f980553cb20fbe0fef2",
+      "bounds": [
+        28,
+        10,
+        194,
+        240
+      ],
+      "opaque_pixels": 10446,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 53,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_053.png",
+      "sha256": "16fbee2306994ac0a57f97df93e9fde9019af872b37c99904f43d53ecda8928d",
+      "bounds": [
+        48,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13893,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_054.png",
+      "sha256": "af3746387fbcc5c1ad15f3654ad1d552bd4dbf39d03208999097c04cc66eb2a0",
+      "bounds": [
+        47,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13902,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_058.png",
+      "sha256": "b51ba8da05bf4b1597282a61d24d7914d9ee64d13d685b49de256fb1265f8106",
+      "bounds": [
+        44,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13866,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_062.png",
+      "sha256": "0b5ad5b4656977c90e87d30b3ff5e4eccf94610fcfd3ecf370fa54b24a51eba3",
+      "bounds": [
+        44,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13851,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 67,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_067.png",
+      "sha256": "c68396f2f642f038957ba9e9f995239543c90291ad1cd2d6a6931ef4c75866d3",
+      "bounds": [
+        44,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13855,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_072.png",
+      "sha256": "7bac634269c232257ff4a4bbafd0a32175a7e76c398724ca0fc0251ac7b6b5aa",
+      "bounds": [
+        44,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13847,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 77,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_077.png",
+      "sha256": "0505cd2f504d880c72900e9816b203bdc86819c1e63c8d87881eb55ee3bb4a25",
+      "bounds": [
+        44,
+        30,
+        242,
+        241
+      ],
+      "opaque_pixels": 13855,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 80,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_080.png",
+      "sha256": "a9840e912ff367c09512fbbbec8c42ba4531452f9bdc1fcb3464d4f8bcbda5e7",
+      "bounds": [
+        45,
+        30,
+        232,
+        241
+      ],
+      "opaque_pixels": 13791,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 82,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_082.png",
+      "sha256": "18bfcabda26730c3408c1cf04c4567203e0757c0922a9d064da162ee04a60400",
+      "bounds": [
+        42,
+        30,
+        232,
+        241
+      ],
+      "opaque_pixels": 13977,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 84,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_084.png",
+      "sha256": "4fddbb574f860938a0b64c2ceefc9b7a00c26fab3780c91db49eae0e2f5cca3a",
+      "bounds": [
+        40,
+        29,
+        219,
+        241
+      ],
+      "opaque_pixels": 14062,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 86,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_086.png",
+      "sha256": "62e53022fa48e321f61f52b8e1fb249cf4c79411bbd2a633c4ba803ea02f066d",
+      "bounds": [
+        40,
+        28,
+        219,
+        241
+      ],
+      "opaque_pixels": 14132,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 88,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_088.png",
+      "sha256": "1094da60a54b2e6b152e7533bcc6925142e3fa423e8ad317354d921d8d58174f",
+      "bounds": [
+        36,
+        25,
+        212,
+        243
+      ],
+      "opaque_pixels": 14195,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 90,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_090.png",
+      "sha256": "7b02c102b087ac788546663a43648ae2b3fbfc5f3bb7c1bc41afe06c69dc5323",
+      "bounds": [
+        36,
+        25,
+        212,
+        243
+      ],
+      "opaque_pixels": 14194,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 92,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_092.png",
+      "sha256": "dd81014e430ae36a99c92fadd53a06e98dbcbba6e9fea5df843944b680afa55a",
+      "bounds": [
+        42,
+        20,
+        185,
+        242
+      ],
+      "opaque_pixels": 13140,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 93,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_093.png",
+      "sha256": "6e24560e2e8d2638b15d01bb56e81406ba1a6a922b802681fa06be08e9379cba",
+      "bounds": [
+        45,
+        17,
+        172,
+        241
+      ],
+      "opaque_pixels": 12801,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 96,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_096.png",
+      "sha256": "42d5b062e2ea0c99929af2b5b299088ae10b19ee719316b886df1aef9dcd2497",
+      "bounds": [
+        55,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 12681,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 100,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_100.png",
+      "sha256": "e5d8c679fc6ea33ccb9d00c6051df28661482c4129bafbf2b410e4adec0596f7",
+      "bounds": [
+        60,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 12731,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 106,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_106.png",
+      "sha256": "b703e6d78816de3a19354046e7bfaa3b1d58dd44f2170e1486e651b14a94bcc5",
+      "bounds": [
+        65,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13271,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 116,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_front_v3\\frames\\attack_116.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    }
+  ]
+}

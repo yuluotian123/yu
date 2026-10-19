@@ -1,0 +1,26 @@
+{
+  "id": "gs_death",
+  "model": "video_minimax_h3_i2v",
+  "local": true,
+  "spends_credits": false,
+  "prompt_id": "7745325b-fc61-4aa1-b22d-05046dfeae66",
+  "matting_prompt_id": "4e8c9053-d65b-40d0-b31a-4a890b5ff6da",
+  "prompt": "Slowly kneel down and lie on her side, with continuous gentle motion. Start lowering immediately: first bend knees deeply for 0.8 seconds, then kneel and bring the torso close to the ground during 0.8-1.6 seconds, then gently recline onto her side by 2.2 seconds. Close the eyes and remain lying quietly to the end at 3 seconds. Keep both hands holding the hilt while lowering the sword until the blade rests horizontally along the front of the body. Every intermediate kneeling and reclining pose is visible. Ordinary slow physical motion ONLY, with zero effects or white marks. No sudden drop, no hard impact, no bounce. One normal body and tail, no shrinking. Remain lying at the end, never stand back up. The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. ",
+  "seed": 2026101858,
+  "duration_seconds": 3,
+  "source_fps": 24,
+  "source_frame_count": 73,
+  "source_size": [
+    512,
+    512
+  ],
+  "output_size": [
+    256,
+    256
+  ],
+  "steps": 8,
+  "turbo": true,
+  "loop_end_constraint": false,
+  "source_video": "assets\\videos\\characters\\amber_fox_style_v2\\full_256\\gs_death-minimax-source.mp4",
+  "frame_map": "animation-map.json"
+}

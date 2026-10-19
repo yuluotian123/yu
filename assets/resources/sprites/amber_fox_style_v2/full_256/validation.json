@@ -1,0 +1,109 @@
+{
+  "actions": [
+    {
+      "id": "gs_idle",
+      "frames": 24,
+      "opaque_pixels": 333648,
+      "face_and_core_exact": true,
+      "source": "approved idle_256 original",
+      "comparison_reference": "approved final RGBA"
+    },
+    {
+      "id": "gs_run",
+      "frames": 20,
+      "opaque_pixels": 274802,
+      "face_and_core_exact": true,
+      "source": "run_height_v4"
+    },
+    {
+      "id": "gs_attack",
+      "frames": 30,
+      "opaque_pixels": 392335,
+      "face_and_core_exact": true,
+      "source": "attack_front_v3",
+      "comparison_reference": "lossless decoded segment reference for28 interiors; approved idle RGBA for2 endpoints"
+    },
+    {
+      "id": "gs_jump",
+      "frames": 22,
+      "opaque_pixels": 180352,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "gs_dash",
+      "frames": 6,
+      "opaque_pixels": 47619,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "gs_hurt",
+      "frames": 8,
+      "opaque_pixels": 66010,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "gs_death",
+      "frames": 16,
+      "opaque_pixels": 111378,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_idle",
+      "frames": 24,
+      "opaque_pixels": 180207,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_run",
+      "frames": 24,
+      "opaque_pixels": 173997,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_attack",
+      "frames": 9,
+      "opaque_pixels": 67959,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_jump",
+      "frames": 24,
+      "opaque_pixels": 181638,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_dash",
+      "frames": 6,
+      "opaque_pixels": 43573,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_hurt",
+      "frames": 8,
+      "opaque_pixels": 59715,
+      "face_and_core_exact": true
+    },
+    {
+      "id": "kt_death",
+      "frames": 16,
+      "opaque_pixels": 108804,
+      "face_and_core_exact": true
+    }
+  ],
+  "unique_frame_count": 237,
+  "global_palette_reduction": false,
+  "max_core_rgb_difference": 0,
+  "protected_face_alpha_exact_against_base": true,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed; explicit per-action records",
+  "engine_validation": "passed: actual project import,22 animations,247 references,2301928 opaque pixels, RGB and all alpha exact",
+  "automatic_audit_status": "needs_visual_review: independent silhouette unavailable",
+  "runtime_validation": "passed:155 real Player checks, including1.2s attack playback remaining active at0.8s and deferred weapon switch after completion",
+  "build": "passed:0 errors,7 existing warnings",
+  "color_policy": "No global palette reduction, smoothing, static face overlay or moving-weapon static mask.",
+  "approved_idle_restored": true,
+  "approved_idle_rgba_exact": true,
+  "approved_idle_reference": "gs/approved-idle-reuse.json",
+  "run_idle_baseline": "res://assets/resources/sprites/amber_fox_style_v2/run_height_v4/generation.json",
+  "attack_idle_reference": "res://assets/resources/sprites/amber_fox_style_v2/attack_front_v3/generation.json"
+}

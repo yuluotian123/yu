@@ -1,0 +1,23 @@
+[
+  {
+    "name": "a",
+    "first": "amber_attack_power_v2_input.png",
+    "last": "amber_attack_power_v2_windup.png",
+    "seed": 2026101875,
+    "prompt": "Animate ONLY the controlled transition from <Picture 1> to <Picture 2>, keeping the EXACT narrow face, head/limb pixel scale, costume, original flat coarse pixel clusters, and single long gold/cream fox tail. Both hands stay on the SAME continuous hilt in fixed order next to guard/pommel; two connected wrists/forearms flex naturally. A single rigid straight greatsword keeps the SAME full blade LENGTH and WIDTH as both reference images, flat face parallel to image plane, no foreshortening or rubber bending. No camera movement, zoom, character resizing, new outline, smears, trails or effects. Entire solid sword and complete character inside fixed square. Pure uniformRGB0,255,0 green background. Silent. One anticipation transition ONLY: from the exact standing idle, widen and plant feet, bend knees modestly, coil hips/shoulders toward rear and draw the SAME long sword across the waist until the exact left-pointing wind-up inPicture2. Both elbows and hands remain below the chin. Show controlled wrist rotation with the whole single grip, never release hands. Do not attack or swing forward yet. Finish precisely inPicture2, one continuous motion."
+  },
+  {
+    "name": "b",
+    "first": "amber_attack_power_v2_windup.png",
+    "last": "amber_attack_power_v2_follow.png",
+    "seed": 2026101876,
+    "prompt": "Animate ONLY the controlled transition from <Picture 1> to <Picture 2>, keeping the EXACT narrow face, head/limb pixel scale, costume, original flat coarse pixel clusters, and single long gold/cream fox tail. Both hands stay on the SAME continuous hilt in fixed order next to guard/pommel; two connected wrists/forearms flex naturally. A single rigid straight greatsword keeps the SAME full blade LENGTH and WIDTH as both reference images, flat face parallel to image plane, no foreshortening or rubber bending. No camera movement, zoom, character resizing, new outline, smears, trails or effects. Entire solid sword and complete character inside fixed square. Pure uniformRGB0,255,0 green background. Silent. ONE POWERFUL diagonal CUT only, from the exact left-pointing wind-up to the exact low-right follow-through. Rear foot drives ground, hips lead shoulders, both arms follow, lead knee accepts body weight. The original full-length rigid blade rotates through the IMAGE PLANE around the waist-level grip and ends exactly inPicture2. Preserve its full long straight solid blade surface in every frame. Hands stay near waist, NOT raised overhead. Snappy acceleration and committed weight transfer, no extra attack, thrust, full spin or recovery. Clear sharp weapon shapes, no visual effects."
+  },
+  {
+    "name": "c",
+    "first": "amber_attack_power_v2_follow.png",
+    "last": "amber_attack_power_v2_input.png",
+    "seed": 2026101877,
+    "prompt": "Animate ONLY the controlled transition from <Picture 1> to <Picture 2>, keeping the EXACT narrow face, head/limb pixel scale, costume, original flat coarse pixel clusters, and single long gold/cream fox tail. Both hands stay on the SAME continuous hilt in fixed order next to guard/pommel; two connected wrists/forearms flex naturally. A single rigid straight greatsword keeps the SAME full blade LENGTH and WIDTH as both reference images, flat face parallel to image plane, no foreshortening or rubber bending. No camera movement, zoom, character resizing, new outline, smears, trails or effects. Entire solid sword and complete character inside fixed square. Pure uniformRGB0,255,0 green background. Silent. One weighted RECOVERY only: decelerate in the low-right follow-through, then both elbows bend and wrists rotate the full-length SAME rigid blade back beside right leg pointing DOWN. Hips and feet re-center, plume tail settles down-left. Return exactly to the original idle inPicture2 with original two hands, sword, face, body size and foot placement. No second attack or flourish."
+  }
+]

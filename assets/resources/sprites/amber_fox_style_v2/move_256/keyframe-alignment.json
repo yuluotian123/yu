@@ -1,0 +1,47 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "generation_size": [
+    512,
+    512
+  ],
+  "source": "sources/run-idle-locked-v4.png",
+  "new_keyframe": true,
+  "references": [
+    "approved idle original",
+    "approved 256 idle",
+    "anatomical joint guide"
+  ],
+  "revisions": [
+    "new pose",
+    "restore idle proportions",
+    "correct two-hand grip",
+    "attach and reshape single tail",
+    "restart from approved idle to restore torso and tail volume"
+  ],
+  "source_bounds": [
+    38,
+    66,
+    1215,
+    1208
+  ],
+  "source_scale": 0.165,
+  "position": [
+    27,
+    52
+  ],
+  "root_anchor": [
+    128,
+    240
+  ],
+  "scale_basis": "uniform scale matched to approved idle facial width and head size, with natural running flexion; no per-part stretch",
+  "background_rgb": [
+    0,
+    255,
+    0
+  ],
+  "palette_reduction": false,
+  "resize": "nearest"
+}

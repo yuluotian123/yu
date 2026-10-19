@@ -13,6 +13,7 @@ public sealed class GraphClipboardService
 {
     private readonly List<string> _nodeJson = new();
     private readonly List<string> _connectionJson = new();
+    private Godot.Collections.Array<Resource> _resources = new();
 
     /// <summary>剪贴板是否为空。</summary>
     public bool IsEmpty => _nodeJson.Count == 0;
@@ -22,6 +23,7 @@ public sealed class GraphClipboardService
     {
         _nodeJson.Clear();
         _connectionJson.Clear();
+        _resources.Clear();
 
         if (graph == null || graphEdit == null)
             return;
@@ -33,11 +35,16 @@ public sealed class GraphClipboardService
                 selectedIds.Add(graphNode.Name);
         }
 
+        var selectedNodes = new List<GraphNodeData>();
         foreach (GraphNodeData node in graph.Nodes)
         {
             if (selectedIds.Contains(node.Id))
+            {
                 _nodeJson.Add(GraphJsonHelper.Serialize(node));
+                selectedNodes.Add(node);
+            }
         }
+        _resources = graph.CopyNodeResources(selectedNodes);
 
         foreach (GraphConnection connection in graph.Connections)
         {
@@ -47,7 +54,7 @@ public sealed class GraphClipboardService
     }
 
     /// <summary>创建粘贴数据。</summary>
-    public GraphClipboardPasteData CreatePasteData(Vector2 offset)
+    public GraphClipboardPasteData CreatePasteData(GraphAsset destination, Vector2 offset)
     {
         var paste = new GraphClipboardPasteData();
         var idMap = new Dictionary<string, string>(System.StringComparer.Ordinal);
@@ -82,6 +89,7 @@ public sealed class GraphClipboardService
             paste.Connections.Add(connection);
         }
 
+        paste.Resources = destination.PreparePasteResources(paste.Nodes, _resources);
         return paste;
     }
 
@@ -101,5 +109,8 @@ public sealed class GraphClipboardPasteData
 
     /// <summary>新连线。</summary>
     public List<GraphConnection> Connections { get; } = new();
+
+    /// <summary>Independent node resources, retained for the same paste's undo/redo.</summary>
+    public Godot.Collections.Array<Resource> Resources { get; set; } = new();
 }
 #endif

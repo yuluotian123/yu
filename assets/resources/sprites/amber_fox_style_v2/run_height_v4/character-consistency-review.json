@@ -1,0 +1,64 @@
+{
+  "reference": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "current_run": "res://assets/resources/sprites/amber_fox_style_v2/run_height_v4/generation.json",
+  "reviewed_run_indices": [
+    24,
+    26,
+    28,
+    30,
+    32,
+    34,
+    36,
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56,
+    58,
+    60,
+    62
+  ],
+  "comparison_examples": [
+    24,
+    28,
+    30
+  ],
+  "overall": "needs_revision",
+  "apparent_height": "Improved: ear-top y20-33 across73 source frames vs approved idle16 and rejected v3 y44-57. Same runtime density. This measures head drop, not exact skeleton lengths.",
+  "identity_retained": [
+    "gold/cream/brown palette",
+    "fox ears and side ponytail",
+    "travel outfit, dark stockings and gold boot cuffs",
+    "single bushy tail",
+    "two hands on one rigid greatsword"
+  ],
+  "remaining_differences": [
+    {
+      "region": "head/face",
+      "finding": "Run face appears broader; eyes are darker/flatter with less distinct golden iris. Bangs, cheek outline and ear proportions drift from approved idle."
+    },
+    {
+      "region": "torso/proportions",
+      "finding": "Run shoulders/cape are wider and upper-body blocks heavier, changing the slim long-body impression. Matching pixel density and ear height does not prove matching anatomy."
+    },
+    {
+      "region": "tail",
+      "finding": "Mid-tail appears rounder and cream-tip distribution changes across poses. Swing direction is expected, but material proportion and shape need stronger identity locking."
+    },
+    {
+      "region": "materials/weapon",
+      "finding": "Run adds softer small transition colors; blade is warmer/less blue-gray and guard/hilt block shapes are not inherited exactly from idle."
+    }
+  ],
+  "next_correction": "Keep approved idle as the sole identity/proportion/style reference; use run only as motion/pose reference. Redraw the run keyframe to match face width, eye/iris blocks, shoulders, limb segment lengths, tail construction and original blade colors before new video generation.",
+  "evidence": [
+    "res://assets/textures/sprites/amber_fox_style_v2/run_height_v4/sources/idle-run-consistency-v4.png",
+    "res://assets/textures/sprites/amber_fox_style_v2/run_height_v4/sources/idle-run-head-consistency-v4.png"
+  ],
+  "technical_tests": "20 frames at256x256, native transparency review complete; imported opaque RGB and all alpha exact; Player152 runtime checks pass. These checks do not establish visual identity consistency."
+}

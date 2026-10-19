@@ -1,0 +1,329 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_height": 224,
+  "pixel_size": 0.003214285714,
+  "fps": 12,
+  "duration_seconds": 2.0,
+  "loop": true,
+  "frames": [
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_024.png",
+      "sha256": "90a77dc76b23e7eba8f7cf8d9bc9ed15fd81d458a5ff43c190fe371fde2b3b80",
+      "bounds": [
+        17,
+        34,
+        234,
+        241
+      ],
+      "opaque_pixels": 13764,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 26,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_026.png",
+      "sha256": "26ec40b883bc7d975f29479d820113afb0008ec34eb7dc6b0e557f576a8e5e68",
+      "bounds": [
+        13,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13852,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 28,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_028.png",
+      "sha256": "7b0a4cd665201a0bffac6b76a76ad86dadbdbdcea61110852bbcea71f6f85ee3",
+      "bounds": [
+        14,
+        40,
+        235,
+        240
+      ],
+      "opaque_pixels": 13550,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_030.png",
+      "sha256": "6c675625ff34bf4ca3ed14acb10c470f764742db8c4d97e779c7c0e9b6aac330",
+      "bounds": [
+        27,
+        31,
+        234,
+        240
+      ],
+      "opaque_pixels": 14207,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 32,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_032.png",
+      "sha256": "9bba1525d3cb3ac6c0844387f9edba8fc9819938431a4aa448fd4ef64bd40dcf",
+      "bounds": [
+        20,
+        34,
+        234,
+        241
+      ],
+      "opaque_pixels": 13887,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 34,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_034.png",
+      "sha256": "273a9f13f860861c277050887e5111a09e8673285e59bc7b7c3c42ea42f159fe",
+      "bounds": [
+        15,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13995,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_036.png",
+      "sha256": "65f6acefc753a52e22c48d38509a7c54ea73b0da628590adf6c1f513d34ac4ea",
+      "bounds": [
+        14,
+        40,
+        236,
+        241
+      ],
+      "opaque_pixels": 13440,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 38,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_038.png",
+      "sha256": "c74272dd3ea998cdb66d371afc38384eef3a7730313db50d6d0dccae81dad7ae",
+      "bounds": [
+        22,
+        31,
+        234,
+        240
+      ],
+      "opaque_pixels": 14041,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 40,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_040.png",
+      "sha256": "fd9ca1be9678abc2d53bd873e5cfb1685a4d9e86c1c697de7a6c51dd8da4cd71",
+      "bounds": [
+        14,
+        35,
+        234,
+        242
+      ],
+      "opaque_pixels": 13955,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_042.png",
+      "sha256": "1f8fe1834f6edb4f5f699045f51cda6543ddfc1e372ff592ee7f535153bca37a",
+      "bounds": [
+        14,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13773,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 44,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_044.png",
+      "sha256": "6a7c675d33cae8e83297f9bba074b2619401f61d555613f67ef0bf2919d510ed",
+      "bounds": [
+        26,
+        40,
+        236,
+        241
+      ],
+      "opaque_pixels": 13650,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 46,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_046.png",
+      "sha256": "1ea645e5e9c4b066aa055b44d96bb24028ec41c6fc9a3115bc175ffaec39c65d",
+      "bounds": [
+        20,
+        31,
+        234,
+        240
+      ],
+      "opaque_pixels": 14053,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_048.png",
+      "sha256": "87a56783f31e7c99c67c68635bd17a1a806bec30fe2d387b028c60183c521ec8",
+      "bounds": [
+        17,
+        35,
+        234,
+        241
+      ],
+      "opaque_pixels": 14137,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 50,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_050.png",
+      "sha256": "727bb374612e5e266b4d70287ea30ee4a8f7c2cd6fdc37fa6b688af1d684fb0a",
+      "bounds": [
+        14,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13908,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 52,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_052.png",
+      "sha256": "856e8cc40581047f6227873e08238c202120ecc685de3137bcbe3862dc20f346",
+      "bounds": [
+        14,
+        39,
+        236,
+        241
+      ],
+      "opaque_pixels": 13398,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_054.png",
+      "sha256": "8ebc360d37a74e3c72f0e23afb86a4de0e09405b539c2d7b6dde7a9ae4f99cd0",
+      "bounds": [
+        27,
+        31,
+        234,
+        240
+      ],
+      "opaque_pixels": 13981,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 56,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_056.png",
+      "sha256": "104b221fa8e468422d8c9b3cc352c3166182104c0216a3956712102abd2b783c",
+      "bounds": [
+        20,
+        35,
+        234,
+        241
+      ],
+      "opaque_pixels": 13803,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_058.png",
+      "sha256": "4e3252c0ae7980441e06b586c0c1e54488677960c45460d1a6338911f044f5d7",
+      "bounds": [
+        15,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13832,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_060.png",
+      "sha256": "84bd21b6ee6d57a8cf966cd4aab480d240410294862a8668811fca17594ba45d",
+      "bounds": [
+        13,
+        39,
+        236,
+        241
+      ],
+      "opaque_pixels": 13768,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_062.png",
+      "sha256": "52ec9e5e5150d0d82496f280d43d1953ed5816cb6835b607df0c51e894c5b3ff",
+      "bounds": [
+        22,
+        31,
+        234,
+        240
+      ],
+      "opaque_pixels": 14201,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 64,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_064.png",
+      "sha256": "d6b4589723efc992241b84e949b2f35632e19b8eda3928f033d6b712e2651861",
+      "bounds": [
+        14,
+        35,
+        234,
+        241
+      ],
+      "opaque_pixels": 14046,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 66,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_066.png",
+      "sha256": "57d838c9c42b5417c068495e72e41f590f8d30d19f0383cd49bf9a0e76d190ca",
+      "bounds": [
+        14,
+        46,
+        237,
+        241
+      ],
+      "opaque_pixels": 13947,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 68,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_068.png",
+      "sha256": "84a6a4ac3d284b71718861f1170272a5088f1e16b25b3cffb380b31302421c66",
+      "bounds": [
+        27,
+        40,
+        236,
+        241
+      ],
+      "opaque_pixels": 13248,
+      "face_and_core_rgb_exact": true
+    },
+    {
+      "source_index": 70,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_070.png",
+      "sha256": "6c57feb1c1b5934d57ae13f381593ef060e76275084a214027a0fcc49c52dd12",
+      "bounds": [
+        20,
+        30,
+        234,
+        240
+      ],
+      "opaque_pixels": 14020,
+      "face_and_core_rgb_exact": true
+    }
+  ]
+}

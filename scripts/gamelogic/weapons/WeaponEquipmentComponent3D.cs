@@ -20,6 +20,7 @@ namespace GameLogic
         private CharacterAnimationComponent3D _animation;
         private CharacterMovementComponent3D _movement;
         private InventoryComponent3D _inventory;
+        private AnimatedSprite3D _profileSprite;
         private readonly Dictionary<string, WeaponDefinition> _catalog = new(StringComparer.Ordinal);
         private int _currentSlot = -1;
         private int _pendingSlot = -1;
@@ -50,6 +51,9 @@ namespace GameLogic
                 return;
             }
 
+            _profileSprite = _animation.Sprite;
+            _profileSprite.AnimationChanged += RefreshVisualGeometry;
+
             var ids = new HashSet<string>(StringComparer.Ordinal);
             foreach (WeaponDefinition weapon in Weapons.Concat(_inventory?.Items ?? Array.Empty<WeaponDefinition>()))
             {
@@ -77,6 +81,9 @@ namespace GameLogic
 
         public override void OnDestroy()
         {
+            if (GodotObject.IsInstanceValid(_profileSprite))
+                _profileSprite.AnimationChanged -= RefreshVisualGeometry;
+            _profileSprite = null;
             WeaponChanged = null;
             LoadoutChanged = null;
             _slots.Clear();
@@ -234,19 +241,27 @@ namespace GameLogic
                 return false;
             WeaponAnimationProfile profile = _slots[slot]?.AnimationProfile;
             if (profile?.IsValid() != true) return false;
-            AnimatedSprite3D sprite = _animation.Sprite;
-            float halfHeight = _movement?.HalfHeight ?? 0.468f;
-            sprite.PixelSize = profile.PixelSize;
-            sprite.Scale = Vector3.One * profile.VisualScale;
-            sprite.Position = new Vector3(
-                (profile.FrameSize.X * 0.5f - profile.FootAnchor.X) * profile.PixelSize * profile.VisualScale,
-                (profile.FootAnchor.Y - profile.FrameSize.Y * 0.5f) * profile.PixelSize * profile.VisualScale - halfHeight, 0f);
-            _animation.ReplaceSpriteFrames(profile.Frames);
             _currentSlot = slot;
             _pendingSlot = -1;
+            _animation.ReplaceSpriteFrames(profile.Frames);
+            RefreshVisualGeometry();
             WeaponChanged?.Invoke(CurrentWeapon);
             LoadoutChanged?.Invoke();
             return true;
+        }
+
+        private void RefreshVisualGeometry()
+        {
+            WeaponAnimationProfile profile = CurrentWeapon?.AnimationProfile;
+            if (profile == null || !GodotObject.IsInstanceValid(_profileSprite)) return;
+            float pixelSize = profile.PixelSizeFor(_profileSprite.Animation);
+            Vector2I anchor = profile.FootAnchorFor(_profileSprite.Animation);
+            float halfHeight = _movement?.HalfHeight ?? 0.468f;
+            _profileSprite.PixelSize = pixelSize;
+            _profileSprite.Scale = Vector3.One * profile.VisualScale;
+            _profileSprite.Position = new Vector3(
+                (profile.FrameSize.X * 0.5f - anchor.X) * pixelSize * profile.VisualScale,
+                (anchor.Y - profile.FrameSize.Y * 0.5f) * pixelSize * profile.VisualScale - halfHeight, 0f);
         }
     }
 }

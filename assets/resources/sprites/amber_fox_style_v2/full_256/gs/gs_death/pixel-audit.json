@@ -1,0 +1,1957 @@
+{
+  "source_video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\full_256\\gs_death-minimax-source.mp4",
+  "source_fps": 24.0,
+  "declared_output_fps": 24.0,
+  "declared_duration_seconds": 0.6666666666666666,
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_count": 16,
+  "independent_masks_declared": false,
+  "expected_mask_source": null,
+  "errors": [],
+  "review_items": [
+    "Whole-silhouette retention has no independent expected mask",
+    "frame 0: face: incomplete_retention_coverage",
+    "frame 0: hair: incomplete_retention_coverage",
+    "frame 0: torso: incomplete_retention_coverage",
+    "frame 0: hands: incomplete_retention_coverage",
+    "frame 0: weapon: incomplete_retention_coverage",
+    "frame 0: legs: incomplete_retention_coverage",
+    "frame 0: tail: incomplete_retention_coverage",
+    "frame 1: face: incomplete_retention_coverage",
+    "frame 1: hair: incomplete_retention_coverage",
+    "frame 1: torso: incomplete_retention_coverage",
+    "frame 1: hands: incomplete_retention_coverage",
+    "frame 1: weapon: incomplete_retention_coverage",
+    "frame 1: legs: incomplete_retention_coverage",
+    "frame 1: tail: incomplete_retention_coverage",
+    "frame 2: face: incomplete_retention_coverage",
+    "frame 2: hair: incomplete_retention_coverage",
+    "frame 2: torso: incomplete_retention_coverage",
+    "frame 2: hands: incomplete_retention_coverage",
+    "frame 2: weapon: incomplete_retention_coverage",
+    "frame 2: legs: incomplete_retention_coverage",
+    "frame 2: tail: incomplete_retention_coverage",
+    "frame 3: face: incomplete_retention_coverage",
+    "frame 3: hair: incomplete_retention_coverage",
+    "frame 3: torso: incomplete_retention_coverage",
+    "frame 3: hands: incomplete_retention_coverage",
+    "frame 3: weapon: incomplete_retention_coverage",
+    "frame 3: legs: incomplete_retention_coverage",
+    "frame 3: tail: incomplete_retention_coverage",
+    "frame 4: face: incomplete_retention_coverage",
+    "frame 4: hair: incomplete_retention_coverage",
+    "frame 4: torso: incomplete_retention_coverage",
+    "frame 4: hands: incomplete_retention_coverage",
+    "frame 4: weapon: incomplete_retention_coverage",
+    "frame 4: legs: incomplete_retention_coverage",
+    "frame 4: tail: incomplete_retention_coverage",
+    "frame 5: face: incomplete_retention_coverage",
+    "frame 5: hair: incomplete_retention_coverage",
+    "frame 5: torso: incomplete_retention_coverage",
+    "frame 5: hands: incomplete_retention_coverage",
+    "frame 5: weapon: incomplete_retention_coverage",
+    "frame 5: legs: incomplete_retention_coverage",
+    "frame 5: tail: incomplete_retention_coverage",
+    "frame 6: face: incomplete_retention_coverage",
+    "frame 6: hair: incomplete_retention_coverage",
+    "frame 6: torso: incomplete_retention_coverage",
+    "frame 6: hands: incomplete_retention_coverage",
+    "frame 6: weapon: incomplete_retention_coverage",
+    "frame 6: legs: incomplete_retention_coverage",
+    "frame 6: tail: incomplete_retention_coverage",
+    "frame 7: face: incomplete_retention_coverage",
+    "frame 7: hair: incomplete_retention_coverage",
+    "frame 7: torso: incomplete_retention_coverage",
+    "frame 7: hands: incomplete_retention_coverage",
+    "frame 7: weapon: incomplete_retention_coverage",
+    "frame 7: legs: incomplete_retention_coverage",
+    "frame 7: tail: incomplete_retention_coverage",
+    "frame 8: face: incomplete_retention_coverage",
+    "frame 8: hair: incomplete_retention_coverage",
+    "frame 8: torso: incomplete_retention_coverage",
+    "frame 8: hands: incomplete_retention_coverage",
+    "frame 8: weapon: incomplete_retention_coverage",
+    "frame 8: legs: incomplete_retention_coverage",
+    "frame 8: tail: incomplete_retention_coverage",
+    "frame 9: face: incomplete_retention_coverage",
+    "frame 9: hair: incomplete_retention_coverage",
+    "frame 9: torso: incomplete_retention_coverage",
+    "frame 9: hands: incomplete_retention_coverage",
+    "frame 9: weapon: incomplete_retention_coverage",
+    "frame 9: legs: incomplete_retention_coverage",
+    "frame 9: tail: incomplete_retention_coverage",
+    "frame 10: face: incomplete_retention_coverage",
+    "frame 10: hair: incomplete_retention_coverage",
+    "frame 10: torso: incomplete_retention_coverage",
+    "frame 10: hands: incomplete_retention_coverage",
+    "frame 10: weapon: incomplete_retention_coverage",
+    "frame 10: legs: incomplete_retention_coverage",
+    "frame 10: tail: incomplete_retention_coverage",
+    "frame 11: face: incomplete_retention_coverage",
+    "frame 11: hair: incomplete_retention_coverage",
+    "frame 11: torso: incomplete_retention_coverage",
+    "frame 11: hands: incomplete_retention_coverage",
+    "frame 11: weapon: incomplete_retention_coverage",
+    "frame 11: legs: incomplete_retention_coverage",
+    "frame 11: tail: incomplete_retention_coverage",
+    "frame 12: face: incomplete_retention_coverage",
+    "frame 12: hair: incomplete_retention_coverage",
+    "frame 12: torso: incomplete_retention_coverage",
+    "frame 12: hands: incomplete_retention_coverage",
+    "frame 12: weapon: incomplete_retention_coverage",
+    "frame 12: legs: incomplete_retention_coverage",
+    "frame 12: tail: incomplete_retention_coverage",
+    "frame 13: face: incomplete_retention_coverage",
+    "frame 13: hair: incomplete_retention_coverage",
+    "frame 13: torso: incomplete_retention_coverage",
+    "frame 13: hands: incomplete_retention_coverage",
+    "frame 13: weapon: incomplete_retention_coverage",
+    "frame 13: legs: incomplete_retention_coverage",
+    "frame 13: tail: incomplete_retention_coverage",
+    "frame 14: face: incomplete_retention_coverage",
+    "frame 14: hair: incomplete_retention_coverage",
+    "frame 14: torso: incomplete_retention_coverage",
+    "frame 14: hands: incomplete_retention_coverage",
+    "frame 14: weapon: incomplete_retention_coverage",
+    "frame 14: legs: incomplete_retention_coverage",
+    "frame 14: tail: incomplete_retention_coverage",
+    "frame 15: face: incomplete_retention_coverage",
+    "frame 15: hair: incomplete_retention_coverage",
+    "frame 15: torso: incomplete_retention_coverage",
+    "frame 15: hands: incomplete_retention_coverage",
+    "frame 15: weapon: incomplete_retention_coverage",
+    "frame 15: legs: incomplete_retention_coverage",
+    "frame 15: tail: incomplete_retention_coverage"
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source_frame": 0,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_000.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            108,
+            62,
+            149,
+            103
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 977,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            127,
+            80,
+            128,
+            81
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5004,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 1,
+      "source_frame": 5,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_005.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            108,
+            65,
+            149,
+            106
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1045,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            128,
+            85,
+            129,
+            86
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5303,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 2,
+      "source_frame": 10,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_010.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            108,
+            113,
+            149,
+            154
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1305,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            129,
+            132,
+            130,
+            133
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5300,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 3,
+      "source_frame": 14,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_014.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            108,
+            114,
+            149,
+            155
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            129,
+            133,
+            130,
+            134
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5260,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 4,
+      "source_frame": 19,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_019.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            108,
+            115,
+            149,
+            156
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1264,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            128,
+            133,
+            129,
+            134
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5060,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 5,
+      "source_frame": 24,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_024.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            110,
+            114,
+            151,
+            155
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1238,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            130,
+            133,
+            131,
+            134
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 6,
+      "source_frame": 29,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_029.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            118,
+            114,
+            159,
+            155
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1273,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            135,
+            134,
+            136,
+            135
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4965,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 7,
+      "source_frame": 34,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_034.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            140,
+            123,
+            181,
+            164
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1053,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            158,
+            141,
+            159,
+            142
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 8,
+      "source_frame": 38,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_038.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            174,
+            173,
+            215,
+            214
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 958,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            193,
+            195,
+            194,
+            196
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 9,
+      "source_frame": 43,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_043.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1038,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4523,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 10,
+      "source_frame": 48,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_048.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1059,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4467,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 11,
+      "source_frame": 53,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_053.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1057,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4381,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 12,
+      "source_frame": 58,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_058.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1049,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4447,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 13,
+      "source_frame": 62,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_062.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1050,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 14,
+      "source_frame": 67,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_067.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1049,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 15,
+      "source_frame": 72,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_072.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            172,
+            189,
+            213,
+            230
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1049,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            190,
+            209,
+            191,
+            210
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4357,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    }
+  ],
+  "status": "needs_visual_review",
+  "visual_review_required": true
+}

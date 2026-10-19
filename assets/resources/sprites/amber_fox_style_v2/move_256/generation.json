@@ -1,0 +1,80 @@
+{
+  "workflow": "video_minimax_h3_i2v",
+  "workflow_file": "minimax-workflow-v4.json",
+  "prompt_id": "804a4c53-4e9c-4212-a9d6-5abd55e5d251",
+  "status": "completed",
+  "source_keyframe": "res://assets/textures/sprites/amber_fox_style_v2/move_256/run-keyframe-v4.png",
+  "keyframe_source": "res://assets/textures/sprites/amber_fox_style_v2/move_256/sources/run-idle-locked-v4.png",
+  "input": "res://assets/textures/sprites/amber_fox_style_v2/move_256/sources/amber-fox-move-256-idle-locked-v4.png",
+  "prompt": "A seamless looping RUN-IN-PLACE animation of the EXACT golden fox swordswoman in <Picture 1>, for a 256x256 pixel-art game sprite. Preserve the same three-quarter view facing screen right and the same character scale. Fixed orthographic camera and fixed horizontal hip position. She jogs energetically with THREE full alternating left-right gait cycles in three seconds, six alternating footfalls: the near leg swings forward while the far leg folds back, then the far leg swings forward while the near leg folds back. Both boots pass beneath the hips between opposite strides. Clear alternating contact and short airborne phases, natural modest body bounce. The feet are free to move; there is no walking across the frame. Exactly TWO connected arms and TWO hands continuously hold the SAME sword handle in front of the torso, relaxed bent elbows. The same rigid straight greatsword stays carried diagonally upward toward screen right, gently following the shoulders; the pommel, hilt, guard center and blade share one straight axis. Never plant the sword on the ground, never swing it to attack. The single large golden tail with cream tip bounces and sways behind her with lively overlapping movement, together with the side ponytail and yellow cape. Keep the cheerful small open-mouth smile, both amber eyes, golden fox ears with brown tips, golden hair, cream long sleeves, brown bodice, opaque brown stockings, yellow-trimmed brown boots, original outfit and proportions. LARGE CONNECTED FLAT COLOR BLOCKS, simple deliberate stepped pixel clusters, 2-3 solid tones per material. Preserve every small facial color and the coarse consistent logical pixel grid. Material colors directly meet the background: ABSOLUTELY NO continuous black or dark-brown contour outlines, no added outline strokes. Keep the WHOLE character, tail, sword and all feet inside the fixed square canvas with margin. Finish in the exact same stride phase as the first frame for a continuous loop; keep running through the end with no pause. Uniform pure bright GREEN chroma-key background, RGB 0 255 0, unchanging and completely flat, no floor, horizon, shadow or green lighting on the character. No camera motion, zoom, turning, duplicate tails, extra hands, extra legs, costume changes, gradients, texture, fine hair strands, shiny highlights, blur, anti-aliasing, glow, dust, particles, scenery or text. Silent, no speech, music or sound effects. Lock the input head-to-body ratio, shoulder width, torso length and anatomical thigh/shin lengths in every frame; motion must not turn her into a shorter chibi figure. One continuous tail grows from behind the pelvis, with its narrow root below the belt and a tapering cream terminal tip; preserve the input's tail volume, never a detached ball or fan.",
+  "seed": 2026101811,
+  "requested_duration_seconds": 3,
+  "generation_canvas": [
+    512,
+    512
+  ],
+  "generation_fps": 24,
+  "source_frame_count": 73,
+  "steps": 8,
+  "turbo": true,
+  "first_and_last_frame_same": true,
+  "local_generation": true,
+  "spends_credits": false,
+  "delivery_canvas": [
+    256,
+    256
+  ],
+  "runtime_frame_count": 24,
+  "runtime_fps": 12,
+  "duration_seconds": 2,
+  "loop": true,
+  "playback_speed": 1.5,
+  "source_indices": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69
+  ],
+  "origin": [
+    128,
+    240
+  ],
+  "uniform_translation": [
+    0,
+    -8
+  ],
+  "video": "res://assets/videos/characters/amber_fox_style_v2/move_256/minimax-source-v4.mp4",
+  "preview": "res://assets/textures/sprites/amber_fox_style_v2/move_256/run-preview-v4.png",
+  "transparent_apng": "res://assets/textures/sprites/amber_fox_style_v2/move_256/run-transparent-v4.png",
+  "runtime_sprite_frames": "res://assets/resources/sprites/amber_fox_style_v2/move_256/sprite_frames.tres",
+  "matting": {
+    "prompt_id": "1ff5b419-e540-44d8-b7be-68968fc53769",
+    "workflow": "matting-workflow-v4.json",
+    "required_inputs": "res://assets/textures/sprites/amber_fox_style_v2/move_256/sources/matting/",
+    "method": "ComfyUI green channel chroma key; binary alpha; local contour-only original-video donor repair; keep face and interior RGB; no global quantization, static face/weapon overlays or per-frame stretch"
+  },
+  "validation": "validation.json",
+  "engine_validation": "engine-validation.json",
+  "pixel_audit": "pixel-audit.json",
+  "visual_review": "visual-review.json"
+}

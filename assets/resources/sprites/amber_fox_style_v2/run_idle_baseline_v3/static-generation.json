@@ -1,0 +1,47 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "standing_reference_pixels": 224,
+  "ground_line": 240,
+  "pelvis_anchor_x": 128,
+  "static_uniform_scale": 0.18,
+  "static_offset": [
+    11,
+    25
+  ],
+  "source_size": [
+    1254,
+    1254
+  ],
+  "original_idle_unchanged": true,
+  "per_frame_rescale": false,
+  "global_quantization": false,
+  "alpha_threshold": 128,
+  "isolated_source_alpha_pixels_removed": 0,
+  "native_bounds": [
+    17,
+    34,
+    234,
+    241
+  ],
+  "calibration_basis": "same ear span, face, torso and limb lengths; pose bbox height is allowed to change with joint bending",
+  "pose_references": [
+    {
+      "title": "Female running sword pose",
+      "url": "https://posemy.art/sword-fight-poses/female-running-sword-pose/3405/",
+      "use": "two continuous hands on hilt, running weight and bent rear leg; no appearance transfer"
+    },
+    {
+      "title": "Great Sword Run",
+      "url": "https://charios.com/animations/great-sword-run",
+      "use": "looping sword-run gait reference; no artwork transfer"
+    }
+  ],
+  "imagegen_source": "exec-f4f05526-f34e-44dd-82ab-347465d63e6c.png",
+  "static_prompt": "static-prompt.txt",
+  "identity_reference": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "video_job": "cbdd8db4-1a47-4d6c-b09e-74c51c88283a",
+  "video_prompt": "video-prompt-lively.txt"
+}

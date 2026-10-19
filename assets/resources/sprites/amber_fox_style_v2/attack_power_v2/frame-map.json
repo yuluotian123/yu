@@ -1,0 +1,227 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_height": 224,
+  "pixel_size": 0.003214285714,
+  "fps": 25,
+  "duration_seconds": 0.6,
+  "loop": false,
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_000.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    },
+    {
+      "source_index": 13,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_013.png",
+      "sha256": "b69221c739c71171030ced516f5a80b52bc05f2cd93c0e5eeea9f94486b79b18",
+      "bounds": [
+        61,
+        16,
+        186,
+        240
+      ],
+      "opaque_pixels": 12872,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_015.png",
+      "sha256": "562e8f6a8d1b03f29252ec2d9e08e826771628566a23d21f89d63c0bac028385",
+      "bounds": [
+        47,
+        22,
+        237,
+        240
+      ],
+      "opaque_pixels": 12846,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 17,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_017.png",
+      "sha256": "7bea5c377a665e976c4bffcdaffbc5a5202f6b41ecd2f7f10eee5d0acc395417",
+      "bounds": [
+        47,
+        22,
+        237,
+        240
+      ],
+      "opaque_pixels": 12836,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 22,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_022.png",
+      "sha256": "0df56a1f64bc7ccd505246f1ba6e925b7fdf132638a85f980553cb20fbe0fef2",
+      "bounds": [
+        28,
+        10,
+        194,
+        240
+      ],
+      "opaque_pixels": 10446,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 25,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_025.png",
+      "sha256": "69bc74644d38af2d0d44894ff1b4b6b95100563086756a24497144f7deb56ba5",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 10926,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 38,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_038.png",
+      "sha256": "016de1782475fbd831e94ceadeeaf78580d61d8aa816f905fbf0cb32da49d9ce",
+      "bounds": [
+        20,
+        40,
+        194,
+        240
+      ],
+      "opaque_pixels": 11374,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 43,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_043.png",
+      "sha256": "30947274ebc93a040723083fa69b9e50bdeb61417b6a27f9f72f2e9863b5c43c",
+      "bounds": [
+        41,
+        44,
+        180,
+        240
+      ],
+      "opaque_pixels": 10996,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 44,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_044.png",
+      "sha256": "8bcaba02354245c3075f5ef98e6a1a198fae569f114ac83376e5cb145933e0d3",
+      "bounds": [
+        41,
+        44,
+        180,
+        240
+      ],
+      "opaque_pixels": 11009,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 107,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_107.png",
+      "sha256": "63d797598b775daec777743136dcea50418decee8a84a07f9552304ecd1a3477",
+      "bounds": [
+        36,
+        21,
+        174,
+        253
+      ],
+      "opaque_pixels": 12672,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 108,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_108.png",
+      "sha256": "3f4f6dbb5f6c32d22ed8b41733428a49a0906cc6ac057f1d58b0a99aa9203faf",
+      "bounds": [
+        37,
+        18,
+        168,
+        250
+      ],
+      "opaque_pixels": 12578,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 110,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_110.png",
+      "sha256": "39a5296a5ffdd0600bae4e538826d41215ceddf374228895b4426f84ef5589b0",
+      "bounds": [
+        37,
+        16,
+        168,
+        242
+      ],
+      "opaque_pixels": 12732,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 112,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_112.png",
+      "sha256": "2ae231f70ce2858f6f4948bddbc1755a686a41fdd8a74717755552338cce4d7b",
+      "bounds": [
+        54,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13102,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 114,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_114.png",
+      "sha256": "c36f921fea65b002c1212f518c8e5764d5983a2e016eeab88696d396a0ae2c9e",
+      "bounds": [
+        60,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13242,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 116,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_116.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "kt_dash",
+    "prompt_id": "f2b1c404-aeda-4cb7-be7b-24f95c407754",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_dash\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101831,
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_dash\\selected-video\\f2b1c404_000.mp4"
+  },
+  "task": {
+    "id": "kt_dash",
+    "weapon": "kt",
+    "action": "dash",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\amber_full_kt_run.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\kt\\kt_dash\\video-workflow.json",
+    "seed": 2026101831,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. ONE forward DASH BURST IN PLACE over 3 seconds, for game code to supply actual travel. Lean the torso forward with a low aerodynamic posture, bend both knees, kick the rear boot back and extend the leading boot, then return to the initial running-stride pose. Keep a strong readable sense of acceleration through hip/shoulder motion, hair, cape and the single tail streaming behind; horizontal root stays fixed. Both hands carry the same weapon close to the body, blade angled safely up-forward. No camera motion, attack swing, teleport, trail, dust, afterimages or duplicate limbs. Exact initial pose at end.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "d27fa1e0cfbbca67e4f05f1fd2dbba26bfa0a077df755945781bdef0da5199cd",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_000.png",
+      "opaque_pixels": 7290,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        74,
+        204,
+        224
+      ]
+    },
+    {
+      "source_index": 14,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_014.png",
+      "opaque_pixels": 7228,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        72,
+        204,
+        222
+      ]
+    },
+    {
+      "source_index": 29,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_029.png",
+      "opaque_pixels": 7248,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        80,
+        208,
+        230
+      ]
+    },
+    {
+      "source_index": 43,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_043.png",
+      "opaque_pixels": 7183,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        89,
+        210,
+        230
+      ]
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_058.png",
+      "opaque_pixels": 7399,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        85,
+        207,
+        230
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\dash_072.png",
+      "opaque_pixels": 7225,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        74,
+        204,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84"
+}

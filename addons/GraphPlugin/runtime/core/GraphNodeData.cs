@@ -52,6 +52,7 @@ public class GraphNodeData : GraphStructuralData
 
     /// <summary>节点标题。</summary>
     public virtual string GetDisplayName() => NodeType;
+    public virtual string GetDisplayName(GraphAsset graph) => GetDisplayName();
 
     /// <summary>右键创建菜单中的稳定名称。动态标题请继续放在 GetDisplayName。</summary>
     public virtual string GetMenuName() => GetDisplayName();
@@ -90,6 +91,8 @@ public class GraphNodeData : GraphStructuralData
     public virtual void Validate(GraphAsset graph, GraphValidationResult result)
     {
     }
+
+    public virtual GodotObject GetInspectorObject(GraphAsset graph) => null;
 
     /// <summary>指定输出端口允许的最大连接数。-1 表示不限制。</summary>
     public virtual int GetOutputMaxConnections(int port) => -1;

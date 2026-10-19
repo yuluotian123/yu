@@ -10,6 +10,7 @@ public partial class GraphPlugin : EditorPlugin, ISerializationListener
     private GraphCanvasEditorWindow _editorWindow;
     private EditorDock _editorDock;
     private GraphCanvasInspectorPlugin _inspectorPlugin;
+    public GraphAsset InspectorGraph => _editorWindow?.RootGraph;
 
     public override void _EnterTree()
     {

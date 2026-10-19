@@ -1,0 +1,2925 @@
+{
+  "source_video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\run_idle_baseline_v3\\minimax-source.mp4",
+  "source_fps": 24.0,
+  "declared_output_fps": 12.0,
+  "declared_duration_seconds": 2.0,
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_count": 24,
+  "independent_masks_declared": false,
+  "expected_mask_source": null,
+  "errors": [],
+  "review_items": [
+    "Whole-silhouette retention has no independent expected mask",
+    "frame 0: face: incomplete_retention_coverage",
+    "frame 0: hair: incomplete_retention_coverage",
+    "frame 0: torso: incomplete_retention_coverage",
+    "frame 0: hands: incomplete_retention_coverage",
+    "frame 0: weapon: incomplete_retention_coverage",
+    "frame 0: legs: incomplete_retention_coverage",
+    "frame 0: tail: incomplete_retention_coverage",
+    "frame 1: face: incomplete_retention_coverage",
+    "frame 1: hair: incomplete_retention_coverage",
+    "frame 1: torso: incomplete_retention_coverage",
+    "frame 1: hands: incomplete_retention_coverage",
+    "frame 1: weapon: incomplete_retention_coverage",
+    "frame 1: legs: incomplete_retention_coverage",
+    "frame 1: tail: incomplete_retention_coverage",
+    "frame 2: face: incomplete_retention_coverage",
+    "frame 2: hair: incomplete_retention_coverage",
+    "frame 2: torso: incomplete_retention_coverage",
+    "frame 2: hands: incomplete_retention_coverage",
+    "frame 2: weapon: incomplete_retention_coverage",
+    "frame 2: legs: incomplete_retention_coverage",
+    "frame 2: tail: incomplete_retention_coverage",
+    "frame 3: face: incomplete_retention_coverage",
+    "frame 3: hair: incomplete_retention_coverage",
+    "frame 3: torso: incomplete_retention_coverage",
+    "frame 3: hands: incomplete_retention_coverage",
+    "frame 3: weapon: incomplete_retention_coverage",
+    "frame 3: legs: incomplete_retention_coverage",
+    "frame 3: tail: incomplete_retention_coverage",
+    "frame 4: face: incomplete_retention_coverage",
+    "frame 4: hair: incomplete_retention_coverage",
+    "frame 4: torso: incomplete_retention_coverage",
+    "frame 4: hands: incomplete_retention_coverage",
+    "frame 4: weapon: incomplete_retention_coverage",
+    "frame 4: legs: incomplete_retention_coverage",
+    "frame 4: tail: incomplete_retention_coverage",
+    "frame 5: face: incomplete_retention_coverage",
+    "frame 5: hair: incomplete_retention_coverage",
+    "frame 5: torso: incomplete_retention_coverage",
+    "frame 5: hands: incomplete_retention_coverage",
+    "frame 5: weapon: incomplete_retention_coverage",
+    "frame 5: legs: incomplete_retention_coverage",
+    "frame 5: tail: incomplete_retention_coverage",
+    "frame 6: face: incomplete_retention_coverage",
+    "frame 6: hair: incomplete_retention_coverage",
+    "frame 6: torso: incomplete_retention_coverage",
+    "frame 6: hands: incomplete_retention_coverage",
+    "frame 6: weapon: incomplete_retention_coverage",
+    "frame 6: legs: incomplete_retention_coverage",
+    "frame 6: tail: incomplete_retention_coverage",
+    "frame 7: face: incomplete_retention_coverage",
+    "frame 7: hair: incomplete_retention_coverage",
+    "frame 7: torso: incomplete_retention_coverage",
+    "frame 7: hands: incomplete_retention_coverage",
+    "frame 7: weapon: incomplete_retention_coverage",
+    "frame 7: legs: incomplete_retention_coverage",
+    "frame 7: tail: incomplete_retention_coverage",
+    "frame 8: face: incomplete_retention_coverage",
+    "frame 8: hair: incomplete_retention_coverage",
+    "frame 8: torso: incomplete_retention_coverage",
+    "frame 8: hands: incomplete_retention_coverage",
+    "frame 8: weapon: incomplete_retention_coverage",
+    "frame 8: legs: incomplete_retention_coverage",
+    "frame 8: tail: incomplete_retention_coverage",
+    "frame 9: face: incomplete_retention_coverage",
+    "frame 9: hair: incomplete_retention_coverage",
+    "frame 9: torso: incomplete_retention_coverage",
+    "frame 9: hands: incomplete_retention_coverage",
+    "frame 9: weapon: incomplete_retention_coverage",
+    "frame 9: legs: incomplete_retention_coverage",
+    "frame 9: tail: incomplete_retention_coverage",
+    "frame 10: face: incomplete_retention_coverage",
+    "frame 10: hair: incomplete_retention_coverage",
+    "frame 10: torso: incomplete_retention_coverage",
+    "frame 10: hands: incomplete_retention_coverage",
+    "frame 10: weapon: incomplete_retention_coverage",
+    "frame 10: legs: incomplete_retention_coverage",
+    "frame 10: tail: incomplete_retention_coverage",
+    "frame 11: face: incomplete_retention_coverage",
+    "frame 11: hair: incomplete_retention_coverage",
+    "frame 11: torso: incomplete_retention_coverage",
+    "frame 11: hands: incomplete_retention_coverage",
+    "frame 11: weapon: incomplete_retention_coverage",
+    "frame 11: legs: incomplete_retention_coverage",
+    "frame 11: tail: incomplete_retention_coverage",
+    "frame 12: face: incomplete_retention_coverage",
+    "frame 12: hair: incomplete_retention_coverage",
+    "frame 12: torso: incomplete_retention_coverage",
+    "frame 12: hands: incomplete_retention_coverage",
+    "frame 12: weapon: incomplete_retention_coverage",
+    "frame 12: legs: incomplete_retention_coverage",
+    "frame 12: tail: incomplete_retention_coverage",
+    "frame 13: face: incomplete_retention_coverage",
+    "frame 13: hair: incomplete_retention_coverage",
+    "frame 13: torso: incomplete_retention_coverage",
+    "frame 13: hands: incomplete_retention_coverage",
+    "frame 13: weapon: incomplete_retention_coverage",
+    "frame 13: legs: incomplete_retention_coverage",
+    "frame 13: tail: incomplete_retention_coverage",
+    "frame 14: face: incomplete_retention_coverage",
+    "frame 14: hair: incomplete_retention_coverage",
+    "frame 14: torso: incomplete_retention_coverage",
+    "frame 14: hands: incomplete_retention_coverage",
+    "frame 14: weapon: incomplete_retention_coverage",
+    "frame 14: legs: incomplete_retention_coverage",
+    "frame 14: tail: incomplete_retention_coverage",
+    "frame 15: face: incomplete_retention_coverage",
+    "frame 15: hair: incomplete_retention_coverage",
+    "frame 15: torso: incomplete_retention_coverage",
+    "frame 15: hands: incomplete_retention_coverage",
+    "frame 15: weapon: incomplete_retention_coverage",
+    "frame 15: legs: incomplete_retention_coverage",
+    "frame 15: tail: incomplete_retention_coverage",
+    "frame 16: face: incomplete_retention_coverage",
+    "frame 16: hair: incomplete_retention_coverage",
+    "frame 16: torso: incomplete_retention_coverage",
+    "frame 16: hands: incomplete_retention_coverage",
+    "frame 16: weapon: incomplete_retention_coverage",
+    "frame 16: legs: incomplete_retention_coverage",
+    "frame 16: tail: incomplete_retention_coverage",
+    "frame 17: face: incomplete_retention_coverage",
+    "frame 17: hair: incomplete_retention_coverage",
+    "frame 17: torso: incomplete_retention_coverage",
+    "frame 17: hands: incomplete_retention_coverage",
+    "frame 17: weapon: incomplete_retention_coverage",
+    "frame 17: legs: incomplete_retention_coverage",
+    "frame 17: tail: incomplete_retention_coverage",
+    "frame 18: face: incomplete_retention_coverage",
+    "frame 18: hair: incomplete_retention_coverage",
+    "frame 18: torso: incomplete_retention_coverage",
+    "frame 18: hands: incomplete_retention_coverage",
+    "frame 18: weapon: incomplete_retention_coverage",
+    "frame 18: legs: incomplete_retention_coverage",
+    "frame 18: tail: incomplete_retention_coverage",
+    "frame 19: face: incomplete_retention_coverage",
+    "frame 19: hair: incomplete_retention_coverage",
+    "frame 19: torso: incomplete_retention_coverage",
+    "frame 19: hands: incomplete_retention_coverage",
+    "frame 19: weapon: incomplete_retention_coverage",
+    "frame 19: legs: incomplete_retention_coverage",
+    "frame 19: tail: incomplete_retention_coverage",
+    "frame 20: face: incomplete_retention_coverage",
+    "frame 20: hair: incomplete_retention_coverage",
+    "frame 20: torso: incomplete_retention_coverage",
+    "frame 20: hands: incomplete_retention_coverage",
+    "frame 20: weapon: incomplete_retention_coverage",
+    "frame 20: legs: incomplete_retention_coverage",
+    "frame 20: tail: incomplete_retention_coverage",
+    "frame 21: face: incomplete_retention_coverage",
+    "frame 21: hair: incomplete_retention_coverage",
+    "frame 21: torso: incomplete_retention_coverage",
+    "frame 21: hands: incomplete_retention_coverage",
+    "frame 21: weapon: incomplete_retention_coverage",
+    "frame 21: legs: incomplete_retention_coverage",
+    "frame 21: tail: incomplete_retention_coverage",
+    "frame 22: face: incomplete_retention_coverage",
+    "frame 22: hair: incomplete_retention_coverage",
+    "frame 22: torso: incomplete_retention_coverage",
+    "frame 22: hands: incomplete_retention_coverage",
+    "frame 22: weapon: incomplete_retention_coverage",
+    "frame 22: legs: incomplete_retention_coverage",
+    "frame 22: tail: incomplete_retention_coverage",
+    "frame 23: face: incomplete_retention_coverage",
+    "frame 23: hair: incomplete_retention_coverage",
+    "frame 23: torso: incomplete_retention_coverage",
+    "frame 23: hands: incomplete_retention_coverage",
+    "frame 23: weapon: incomplete_retention_coverage",
+    "frame 23: legs: incomplete_retention_coverage",
+    "frame 23: tail: incomplete_retention_coverage"
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source_frame": 24,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_024.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            71,
+            159,
+            110
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1185,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            140,
+            88,
+            141,
+            89
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8774,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 1,
+      "source_frame": 26,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_026.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            79,
+            159,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1180,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            96,
+            142,
+            97
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8990,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 2,
+      "source_frame": 28,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_028.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            75,
+            158,
+            114
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1182,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            142,
+            91,
+            143,
+            92
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8999,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 3,
+      "source_frame": 30,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_030.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            69,
+            159,
+            108
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1179,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            142,
+            84,
+            143,
+            85
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 4,
+      "source_frame": 32,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_032.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            72,
+            159,
+            111
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1183,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            140,
+            88,
+            141,
+            89
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9242,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 5,
+      "source_frame": 34,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_034.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            79,
+            159,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1175,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            143,
+            96,
+            144,
+            97
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9203,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 6,
+      "source_frame": 36,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_036.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            74,
+            158,
+            113
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1224,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            90,
+            142,
+            91
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9088,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 7,
+      "source_frame": 38,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_038.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            68,
+            158,
+            107
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1190,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            142,
+            83,
+            143,
+            84
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9068,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 8,
+      "source_frame": 40,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_040.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            72,
+            159,
+            111
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1193,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            143,
+            89,
+            144,
+            90
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9187,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 9,
+      "source_frame": 42,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_042.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            79,
+            159,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1189,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            144,
+            97,
+            145,
+            98
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9064,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 10,
+      "source_frame": 44,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_044.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            116,
+            79,
+            153,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1281,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            133,
+            96,
+            134,
+            97
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9211,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 11,
+      "source_frame": 46,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_046.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            68,
+            159,
+            107
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1163,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            142,
+            83,
+            143,
+            84
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 12,
+      "source_frame": 48,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_048.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            73,
+            159,
+            112
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1180,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            143,
+            89,
+            144,
+            90
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9348,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 13,
+      "source_frame": 50,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_050.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            79,
+            159,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1184,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            137,
+            97,
+            138,
+            98
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 14,
+      "source_frame": 52,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_052.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            75,
+            158,
+            114
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1204,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            140,
+            90,
+            141,
+            91
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8953,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 15,
+      "source_frame": 54,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_054.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            69,
+            159,
+            108
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1124,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            136,
+            86,
+            137,
+            87
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9014,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 16,
+      "source_frame": 56,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_056.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            72,
+            158,
+            111
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1205,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            89,
+            142,
+            90
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9198,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 17,
+      "source_frame": 58,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_058.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            79,
+            158,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1224,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            96,
+            142,
+            97
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9105,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 18,
+      "source_frame": 60,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_060.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            74,
+            159,
+            113
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1152,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            139,
+            90,
+            140,
+            91
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9234,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 19,
+      "source_frame": 62,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_062.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            68,
+            159,
+            107
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1132,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            140,
+            84,
+            141,
+            85
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9269,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 20,
+      "source_frame": 64,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_064.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            73,
+            158,
+            112
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1213,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            141,
+            89,
+            142,
+            90
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9202,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 21,
+      "source_frame": 66,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_066.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            121,
+            79,
+            158,
+            118
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1217,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            139,
+            96,
+            140,
+            97
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9106,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 22,
+      "source_frame": 68,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_068.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            122,
+            75,
+            159,
+            114
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1131,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            139,
+            91,
+            140,
+            92
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 8868,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 23,
+      "source_frame": 70,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\run_idle_baseline_v3\\frames\\run_070.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            119,
+            69,
+            156,
+            108
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1245,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "face_skin_point": {
+          "bounds": [
+            137,
+            85,
+            138,
+            86
+          ],
+          "coverage": "confirmed_opaque_roi",
+          "checked_pixels": 1,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            0,
+            0,
+            256,
+            256
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 9168,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage"
+      ]
+    }
+  ],
+  "status": "needs_visual_review",
+  "visual_review_required": true
+}

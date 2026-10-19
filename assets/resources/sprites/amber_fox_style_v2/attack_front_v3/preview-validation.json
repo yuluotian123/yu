@@ -1,0 +1,9 @@
+{
+  "lossless_rgb": true,
+  "duration_ms": 2700,
+  "encoded_frames": 41,
+  "logical_frames_before_identical_frame_coalescing": 42,
+  "attack_frames": 30,
+  "attack_duration_ms": 1200,
+  "note": "Adjacent identical whole frames coalesced by PNG encoder; pixels and full timeline verified."
+}

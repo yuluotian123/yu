@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-18",
+  "user_requirements": {
+    "role": "普通居民",
+    "identity": "人类少女，神情有点冷漠，灰色和绿色色调",
+    "deliverables": ["角色设定", "透明 idle 循环动画", "行走循环动画"],
+    "correction": "用户指出首版与主角画风不同，有描边和过多细节；明确保留第一版人设，否定重新设计的 v2。"
+  },
+  "style_skills": ["generate-pixel-block-characters", "pixel-character-animation-workflow"],
+  "design": "res://assets/textures/sprites/npc/gray_green_resident/source/character_design_v1.png",
+  "original_idle": "res://assets/textures/sprites/npc/gray_green_resident/source/idle_source_v1.png",
+  "selected_keyframe": "res://assets/textures/sprites/npc/gray_green_resident/source/keyframe_native_v6.png",
+  "keyframe_rgb_source": "res://assets/textures/sprites/npc/gray_green_resident/source/keyframe_rgb_v6.png",
+  "v6_scope": "以用户要求保留的第一版造型为准，仅调整画法：保留脸、发型、身材、冷淡表情、灰绿配色、披肩长外套、灰袜、靴子和挎包；合并发亮块与小褶皱，使用与主角参考一致的大色块和局部材质轮廓。v4/v5 生成的光晕稿不用于运行。",
+  "rejected_revision": {"revision": "v2 (obsolete files deleted)", "reason": "用户否定改动后的造型，要求沿用第一版人设", "runtime_reference": false},
+  "static_generator": "built-in imagegen; no model version or seed returned",
+  "static_prompt": "keyframe_prompt_v6.txt",
+  "idle": {
+    "template": "video_minimax_h3_i2v",
+    "prompt_id": "5b7f9bac-ee8a-483d-b6e7-4ddbac26e64c",
+    "seed": 1810202611,
+    "steps": 8,
+    "requested_duration_seconds": 3,
+    "prompt": "idle_motion_prompt_v6.txt",
+    "workflow": "idle_workflow_v6.json",
+    "source_video": "res://assets/videos/npc/gray_green_resident/5b7f9bac_000.mp4",
+    "first_and_last_input": "res://assets/textures/sprites/npc/gray_green_resident/source/life_input_v6.png",
+    "same_model_and_local_environment_as_walk": true,
+    "motion": "轻微呼吸、发梢与披肩跟随，原地站立；眼睑变化以实际视频和逐帧检查为准，不用重复静帧代替动作"
+  },
+  "walk": {
+    "template": "video_minimax_h3_i2v",
+    "endpoint": "local 127.0.0.1:8000",
+    "paid_nodes": [],
+    "prompt_id": "5aa63960-37a2-4205-8e7c-c0bf5185b82b",
+    "model": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+    "text_encoder": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "video_vae": "minimax_h3_video_vae_int8_convrot.safetensors",
+    "lora": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+    "turbo": true,
+    "steps": 8,
+    "seed": 1810202612,
+    "requested_duration_seconds": 3,
+    "prompt": "walk_prompt_v6.txt",
+    "workflow": "walk_workflow_v6.json",
+    "first_and_last_input": "res://assets/textures/sprites/npc/gray_green_resident/source/life_input_v6.png",
+    "source_video": "res://assets/videos/npc/gray_green_resident/5aa63960_000.mp4"
+  },
+  "export": "idle_export.json, idle_audit.json and walk_audit.json",
+  "verification_limit": "引擎像素一致和透明化的数值检查不能证明美术风格合格；风格与轮廓另做目视对照。"
+}

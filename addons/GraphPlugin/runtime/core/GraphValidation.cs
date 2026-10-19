@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 /// <summary>
 /// 图验证问题严重级别。
@@ -137,6 +138,9 @@ public static class GraphValidationService
 
             if (!ids.Add(node.Id))
                 result.AddError($"节点 Id 重复：{node.Id}。", node.Id);
+
+            if (node.Id.ValidateNodeName() != node.Id)
+                result.AddError($"节点 Id 含有 Godot 节点名不允许的字符：{node.Id}。", node.Id);
 
             if (!GraphTypeRegistry.TryGetNodeDefinition(node.NodeType, out _))
                 result.AddError($"未知节点类型：{node.NodeType}。", node.Id);

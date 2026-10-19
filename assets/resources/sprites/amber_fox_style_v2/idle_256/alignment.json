@@ -1,0 +1,307 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_count": 24,
+  "fps": 8,
+  "duration_seconds": 3,
+  "loop": true,
+  "character_height": 224,
+  "foot_origin": [
+    128,
+    240
+  ],
+  "alpha_values": [
+    0,
+    255
+  ],
+  "palette_colors": 64608,
+  "filter": "nearest",
+  "mipmaps": false,
+  "foot_contact_stable": false,
+  "weapon_stable": false,
+  "unique_frames": 24,
+  "loop_seam_changed_pixels": 22178,
+  "adjacent_changed_pixels": [
+    19058,
+    15931,
+    16301,
+    14212,
+    16021,
+    16616,
+    10506,
+    16420,
+    16185,
+    16041,
+    12196,
+    15672,
+    15009,
+    12709,
+    16577,
+    15600,
+    20321,
+    19952,
+    15663,
+    16376,
+    13343,
+    15712,
+    13989
+  ],
+  "recommended_animated_sprite_3d": {
+    "pixel_size": 0.0032142857142857142,
+    "scale": [
+      1.3,
+      1.3,
+      1.3
+    ],
+    "position_y": 0.0,
+    "ground_y": -0.468
+  },
+  "frames": [
+    {
+      "frame": 0,
+      "source_frame": 0,
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 1,
+      "source_frame": 3,
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 2,
+      "source_frame": 6,
+      "bounds": [
+        47,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 3,
+      "source_frame": 9,
+      "bounds": [
+        39,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 4,
+      "source_frame": 12,
+      "bounds": [
+        30,
+        18,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 5,
+      "source_frame": 15,
+      "bounds": [
+        38,
+        18,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 6,
+      "source_frame": 18,
+      "bounds": [
+        64,
+        19,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 7,
+      "source_frame": 21,
+      "bounds": [
+        62,
+        19,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 8,
+      "source_frame": 24,
+      "bounds": [
+        45,
+        18,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 9,
+      "source_frame": 27,
+      "bounds": [
+        38,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 10,
+      "source_frame": 30,
+      "bounds": [
+        32,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 11,
+      "source_frame": 33,
+      "bounds": [
+        40,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 12,
+      "source_frame": 36,
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 13,
+      "source_frame": 39,
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 14,
+      "source_frame": 42,
+      "bounds": [
+        45,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 15,
+      "source_frame": 45,
+      "bounds": [
+        38,
+        17,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 16,
+      "source_frame": 48,
+      "bounds": [
+        32,
+        18,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 17,
+      "source_frame": 51,
+      "bounds": [
+        40,
+        19,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 18,
+      "source_frame": 54,
+      "bounds": [
+        62,
+        19,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 19,
+      "source_frame": 57,
+      "bounds": [
+        57,
+        18,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 20,
+      "source_frame": 60,
+      "bounds": [
+        40,
+        17,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 21,
+      "source_frame": 63,
+      "bounds": [
+        31,
+        17,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 22,
+      "source_frame": 66,
+      "bounds": [
+        35,
+        16,
+        168,
+        241
+      ]
+    },
+    {
+      "frame": 23,
+      "source_frame": 69,
+      "bounds": [
+        42,
+        16,
+        168,
+        241
+      ]
+    }
+  ],
+  "color_policy": "Original video RGB preserved; no global palette reduction.",
+  "contact_policy": "Preserve each source video frame, including original contact-point pixels.",
+  "matting_validation": "matting-validation.json",
+  "blade_alpha_uses_source_keyframe": true
+}

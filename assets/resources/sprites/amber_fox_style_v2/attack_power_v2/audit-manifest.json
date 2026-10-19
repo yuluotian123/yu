@@ -1,0 +1,270 @@
+{
+  "video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\attack_power_v2\\source-reference.mkv",
+  "frames": [
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_013.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_015.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_017.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_022.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_025.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_038.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_043.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_044.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_107.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_108.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_110.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_112.png",
+    "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\attack_power_v2\\frames\\attack_114.png"
+  ],
+  "source_indices": [
+    13,
+    15,
+    17,
+    22,
+    25,
+    38,
+    43,
+    44,
+    107,
+    108,
+    110,
+    112,
+    114
+  ],
+  "frame_size": [
+    256,
+    256
+  ],
+  "output_fps": 25,
+  "binary_alpha": true,
+  "preserve_inset": 3,
+  "rgb_tolerance": 0,
+  "regions": [
+    {
+      "name": "face",
+      "bounds_by_frame": [
+        [
+          114,
+          40,
+          151,
+          79
+        ],
+        [
+          118,
+          48,
+          155,
+          87
+        ],
+        [
+          119,
+          46,
+          156,
+          85
+        ],
+        [
+          121,
+          63,
+          158,
+          102
+        ],
+        [
+          121,
+          62,
+          158,
+          101
+        ],
+        [
+          121,
+          62,
+          158,
+          101
+        ],
+        [
+          116,
+          66,
+          153,
+          105
+        ],
+        [
+          116,
+          66,
+          153,
+          105
+        ],
+        [
+          113,
+          76,
+          150,
+          115
+        ],
+        [
+          113,
+          76,
+          150,
+          115
+        ],
+        [
+          129,
+          83,
+          166,
+          122
+        ],
+        [
+          136,
+          88,
+          173,
+          127
+        ],
+        [
+          133,
+          84,
+          170,
+          123
+        ]
+      ]
+    },
+    {
+      "name": "face_skin_point",
+      "bounds_by_frame": [
+        [
+          134,
+          59,
+          135,
+          60
+        ],
+        [
+          136,
+          67,
+          137,
+          68
+        ],
+        [
+          136,
+          64,
+          137,
+          65
+        ],
+        [
+          142,
+          80,
+          143,
+          81
+        ],
+        [
+          142,
+          80,
+          143,
+          81
+        ],
+        [
+          142,
+          80,
+          143,
+          81
+        ],
+        [
+          136,
+          85,
+          137,
+          86
+        ],
+        [
+          136,
+          85,
+          137,
+          86
+        ],
+        [
+          132,
+          98,
+          133,
+          99
+        ],
+        [
+          129,
+          92,
+          130,
+          93
+        ],
+        [
+          151,
+          103,
+          152,
+          104
+        ],
+        [
+          153,
+          110,
+          154,
+          111
+        ],
+        [
+          154,
+          102,
+          155,
+          103
+        ]
+      ],
+      "opaque": true
+    },
+    {
+      "name": "hair",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    },
+    {
+      "name": "torso",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    },
+    {
+      "name": "hands",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    },
+    {
+      "name": "weapon",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    },
+    {
+      "name": "legs",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    },
+    {
+      "name": "tail",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-body paired source and sprite coverage; moving parts reviewed visually, no independent automatic silhouette mask."
+    }
+  ]
+}

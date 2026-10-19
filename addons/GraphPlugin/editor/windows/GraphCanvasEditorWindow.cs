@@ -36,6 +36,7 @@ public partial class GraphCanvasEditorWindow : MarginContainer, ISerializationLi
     private GraphAsset _reloadGraph;
     private GodotObject _reloadSource;
     public GraphAsset CurrentGraph => _currentGraph;
+    public GraphAsset RootGraph => _subGraphNavigator?.GetRootGraph(_currentGraph) ?? _currentGraph;
 
     public EditorUndoRedoManager _undoRedo { get; set; }
 
@@ -462,6 +463,7 @@ public partial class GraphCanvasEditorWindow : MarginContainer, ISerializationLi
             dialog.PopupCentered();
             return;
         }
+        graph.PrepareForEditing();
         _currentGraph = graph;
         if (_dependencyModeOption != null)
         {
@@ -566,6 +568,8 @@ public partial class GraphCanvasEditorWindow : MarginContainer, ISerializationLi
             GlobalBlackboard = globalBlackboard,
             ResolveHost = () => _componentPanel?.SelectedHost,
             ResolveSource = () => _componentPanel?.Source,
+            OpenSubGraph = graph => _subGraphNavigator?.PushSubGraph(graph),
+            InspectNode = node => _selectionInspector?.ShowNode(node),
             AvailableComponentTypes = _componentPanel?.GetAvailableDescriptors()
         };
     }

@@ -1,0 +1,352 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "kt_run",
+    "prompt_id": "148d364c-3425-4da5-bf08-933b01cd9ac2",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_run\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101828,
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_run\\selected-video\\148d364c_000.mp4"
+  },
+  "task": {
+    "id": "kt_run",
+    "weapon": "kt",
+    "action": "run",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\amber_full_kt_run.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\kt\\kt_run\\video-workflow.json",
+    "seed": 2026101828,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. RUN IN PLACE. Fixed horizontal hip position, no travel across the canvas. THREE full alternating left-and-right running gait cycles in 3 seconds, six alternating footfalls. The near leg swings forward while the far leg folds behind, then they SWAP completely; boots pass beneath the hips. Clear alternating support and brief airborne phases, small body bounce, hair/cape/single tail bounce behind. Carry the sword diagonally up-forward continuously in BOTH hands with bent elbows, no attack swing or planted blade. End at the same running phase, with no stop or idle pause.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "63399b75c0e4a3d247711d436821e82838694b973ede99ef082b221cf9fc4ead",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_000.png",
+      "opaque_pixels": 7274,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        74,
+        204,
+        224
+      ]
+    },
+    {
+      "source_index": 3,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_003.png",
+      "opaque_pixels": 7153,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        49,
+        80,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 6,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_006.png",
+      "opaque_pixels": 7350,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        55,
+        76,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 9,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_009.png",
+      "opaque_pixels": 7151,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        71,
+        203,
+        222
+      ]
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_012.png",
+      "opaque_pixels": 7393,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        49,
+        80,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_015.png",
+      "opaque_pixels": 7212,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        59,
+        77,
+        204,
+        233
+      ]
+    },
+    {
+      "source_index": 18,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_018.png",
+      "opaque_pixels": 7098,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        49,
+        71,
+        204,
+        215
+      ]
+    },
+    {
+      "source_index": 21,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_021.png",
+      "opaque_pixels": 7206,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        78,
+        204,
+        235
+      ]
+    },
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_024.png",
+      "opaque_pixels": 7272,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        78,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 27,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_027.png",
+      "opaque_pixels": 7111,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        72,
+        204,
+        219
+      ]
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_030.png",
+      "opaque_pixels": 7410,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        80,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_033.png",
+      "opaque_pixels": 7185,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        78,
+        204,
+        233
+      ]
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_036.png",
+      "opaque_pixels": 7071,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        72,
+        204,
+        220
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_039.png",
+      "opaque_pixels": 7373,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        48,
+        79,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_042.png",
+      "opaque_pixels": 7328,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        77,
+        204,
+        233
+      ]
+    },
+    {
+      "source_index": 45,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_045.png",
+      "opaque_pixels": 7077,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        72,
+        204,
+        220
+      ]
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_048.png",
+      "opaque_pixels": 7218,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        82,
+        205,
+        234
+      ]
+    },
+    {
+      "source_index": 51,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_051.png",
+      "opaque_pixels": 7238,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        75,
+        204,
+        233
+      ]
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_054.png",
+      "opaque_pixels": 7215,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        46,
+        72,
+        204,
+        219
+      ]
+    },
+    {
+      "source_index": 57,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_057.png",
+      "opaque_pixels": 7157,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        82,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_060.png",
+      "opaque_pixels": 7601,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        73,
+        204,
+        232
+      ]
+    },
+    {
+      "source_index": 63,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_063.png",
+      "opaque_pixels": 7232,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        45,
+        73,
+        203,
+        224
+      ]
+    },
+    {
+      "source_index": 66,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_066.png",
+      "opaque_pixels": 7185,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        82,
+        204,
+        234
+      ]
+    },
+    {
+      "source_index": 69,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\run_069.png",
+      "opaque_pixels": 7487,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        51,
+        72,
+        204,
+        232
+      ]
+    }
+  ],
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84"
+}

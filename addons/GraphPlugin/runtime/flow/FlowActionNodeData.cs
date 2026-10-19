@@ -77,7 +77,7 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
             items: Actions,
             buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.Description,
-            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.Flow),
+            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.Flow, context),
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
     }

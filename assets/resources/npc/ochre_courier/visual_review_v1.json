@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "keyframe": "User approved 2026-10-18",
+  "idle": {
+    "source": "12fe9143_000.mp4",
+    "frames": 24,
+    "fps": 8,
+    "duration": 3
+  },
+  "walk": {
+    "source": "13acf32f_000.mp4",
+    "frames": 13,
+    "fps": 12,
+    "duration": 1.0833333333333333,
+    "cycle": "source frames 32..57, two-frame stride; contact pose returns after 26 source frames"
+  },
+  "visual_checks": {
+    "all_body_frames": true,
+    "all_face_comparisons": true,
+    "hands_and_satchel": true,
+    "light_and_dark_background": true,
+    "RGB": "source RGB retained, no palette quantization",
+    "numeric_errors": 0,
+    "independent_whole_silhouette_masks": false,
+    "coverage": "Retained interior RGB verified by script. Whole silhouette, face and equipment reviewed visually for all 37 exported frames; no independent full-mask proof."
+  },
+  "engine": "Passed actual SpaceLevel Vulkan idle/walk/scene captures; imported opaque RGB and full alpha match all exported frames",
+  "import": "lossless, no mipmaps, detect_3d/compress_to=0, nearest sampling"
+}

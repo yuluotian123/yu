@@ -31,9 +31,16 @@ public static class GraphCommandService
     /// <summary>删除节点及相关视图。</summary>
     public static void RemoveNode(GraphAsset graph, GraphEdit graphEdit, string nodeId)
     {
+        foreach (var edge in graph.Connections)
+            if (edge.FromNode == nodeId || edge.ToNode == nodeId)
+                graphEdit.DisconnectNode(edge.FromNode, edge.FromPort, edge.ToNode, edge.ToPort);
         graph.RemoveNode(nodeId);
         var node = graphEdit.GetNodeOrNull<GraphNode>(new NodePath(nodeId));
-        node?.QueueFree();
+        if (node != null)
+        {
+            GraphEditorSignalCleanup.PrepareForRemoval(node);
+            graphEdit.RemoveChild(node);
+        }
     }
 
     /// <summary>添加连线。</summary>

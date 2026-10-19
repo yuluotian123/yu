@@ -1,0 +1,16 @@
+{
+  "source": "exec-b8b5a05d-c7ac-4db7-a2c3-ab57965ac398.png",
+  "scale": 0.19,
+  "offset": [
+    8,
+    20
+  ],
+  "foot_source_y": 1157,
+  "bounds": [
+    49,
+    35,
+    231,
+    241
+  ],
+  "note": "Uniform static normalization; scale differs from windup. Early selected slash poses used; elongated final follow-through itself omitted. No per-frame transformation."
+}

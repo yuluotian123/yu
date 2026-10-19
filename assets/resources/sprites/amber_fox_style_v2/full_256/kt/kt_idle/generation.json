@@ -1,0 +1,26 @@
+{
+  "id": "kt_idle",
+  "model": "video_minimax_h3_i2v",
+  "local": true,
+  "spends_credits": false,
+  "prompt_id": "96030f53-c6bc-4504-b884-fb18d874d176",
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84",
+  "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. One seamless 3-second IDLE loop: feet stay planted, same relaxed nearly vertical sword carry, soft breathing, one brief blink, lively but coherent overlapping sway of the single tail, hair tips and cape. Return to the exact starting pose without pause or costume/face changes.",
+  "seed": 2026101827,
+  "duration_seconds": 3,
+  "source_fps": 24,
+  "source_frame_count": 73,
+  "source_size": [
+    512,
+    512
+  ],
+  "output_size": [
+    256,
+    256
+  ],
+  "steps": 8,
+  "turbo": true,
+  "loop_end_constraint": true,
+  "source_video": "assets\\videos\\characters\\amber_fox_style_v2\\full_256\\kt_idle-minimax-source.mp4",
+  "frame_map": "animation-map.json"
+}

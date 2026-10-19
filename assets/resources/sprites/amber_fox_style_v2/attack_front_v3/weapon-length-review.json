@@ -1,0 +1,98 @@
+{
+  "method": "Manual root/tip landmarks on seven key poses, about2px landmark uncertainty. Remaining delivered poses visually compared with source. No claim of exact rigid length or independent skeletal ground truth.",
+  "measured_key_poses": [
+    {
+      "source_index": 0,
+      "blade_root": [
+        154,
+        128
+      ],
+      "tip": [
+        155,
+        239
+      ],
+      "length_pixels_approx": 111.00450441310929
+    },
+    {
+      "source_index": 22,
+      "blade_root": [
+        122,
+        104
+      ],
+      "tip": [
+        73,
+        9
+      ],
+      "length_pixels_approx": 106.89246933250256
+    },
+    {
+      "source_index": 53,
+      "blade_root": [
+        155,
+        148
+      ],
+      "tip": [
+        241,
+        226
+      ],
+      "length_pixels_approx": 116.10340218959993
+    },
+    {
+      "source_index": 77,
+      "blade_root": [
+        155,
+        148
+      ],
+      "tip": [
+        241,
+        226
+      ],
+      "length_pixels_approx": 116.10340218959993
+    },
+    {
+      "source_index": 88,
+      "blade_root": [
+        145,
+        150
+      ],
+      "tip": [
+        209,
+        240
+      ],
+      "length_pixels_approx": 110.43550153822818
+    },
+    {
+      "source_index": 92,
+      "blade_root": [
+        154,
+        136
+      ],
+      "tip": [
+        178,
+        241
+      ],
+      "length_pixels_approx": 107.70793842609746
+    },
+    {
+      "source_index": 116,
+      "blade_root": [
+        154,
+        128
+      ],
+      "tip": [
+        155,
+        239
+      ],
+      "length_pixels_approx": 111.00450441310929
+    }
+  ],
+  "approved_idle_blade_approx": 111,
+  "forward_strike_blade_approx": 116,
+  "forward_strike_tip_x": 241,
+  "idle_tip_x": 155,
+  "forward_reach_added_pixels_approx": 86,
+  "all_delivered_frames_inside_canvas": true,
+  "exact_rigid_length": false,
+  "all_source_video_frames_passed": false,
+  "rejected_intermediates": "selection.json"
+}

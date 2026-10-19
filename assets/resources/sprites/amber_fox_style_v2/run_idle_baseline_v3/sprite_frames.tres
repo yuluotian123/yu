@@ -1,0 +1,149 @@
+[gd_resource type="SpriteFrames" load_steps=26 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/sprites/amber_fox_style_v2/run_idle_baseline_v3/run-atlas.png" id="1_atlas"]
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(256, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(512, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(768, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_4"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1024, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_5"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1280, 0, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_6"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_7"]
+atlas = ExtResource("1_atlas")
+region = Rect2(256, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_8"]
+atlas = ExtResource("1_atlas")
+region = Rect2(512, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_9"]
+atlas = ExtResource("1_atlas")
+region = Rect2(768, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_10"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1024, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_11"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1280, 256, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_12"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_13"]
+atlas = ExtResource("1_atlas")
+region = Rect2(256, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_14"]
+atlas = ExtResource("1_atlas")
+region = Rect2(512, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_15"]
+atlas = ExtResource("1_atlas")
+region = Rect2(768, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_16"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1024, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_17"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1280, 512, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_18"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 768, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_19"]
+atlas = ExtResource("1_atlas")
+region = Rect2(256, 768, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_20"]
+atlas = ExtResource("1_atlas")
+region = Rect2(512, 768, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_21"]
+atlas = ExtResource("1_atlas")
+region = Rect2(768, 768, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_22"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1024, 768, 256, 256)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_23"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1280, 768, 256, 256)
+filter_clip = true
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("run_0")},
+{"duration": 1.0, "texture": SubResource("run_1")},
+{"duration": 1.0, "texture": SubResource("run_2")},
+{"duration": 1.0, "texture": SubResource("run_3")},
+{"duration": 1.0, "texture": SubResource("run_4")},
+{"duration": 1.0, "texture": SubResource("run_5")},
+{"duration": 1.0, "texture": SubResource("run_6")},
+{"duration": 1.0, "texture": SubResource("run_7")},
+{"duration": 1.0, "texture": SubResource("run_8")},
+{"duration": 1.0, "texture": SubResource("run_9")},
+{"duration": 1.0, "texture": SubResource("run_10")},
+{"duration": 1.0, "texture": SubResource("run_11")},
+{"duration": 1.0, "texture": SubResource("run_12")},
+{"duration": 1.0, "texture": SubResource("run_13")},
+{"duration": 1.0, "texture": SubResource("run_14")},
+{"duration": 1.0, "texture": SubResource("run_15")},
+{"duration": 1.0, "texture": SubResource("run_16")},
+{"duration": 1.0, "texture": SubResource("run_17")},
+{"duration": 1.0, "texture": SubResource("run_18")},
+{"duration": 1.0, "texture": SubResource("run_19")},
+{"duration": 1.0, "texture": SubResource("run_20")},
+{"duration": 1.0, "texture": SubResource("run_21")},
+{"duration": 1.0, "texture": SubResource("run_22")},
+{"duration": 1.0, "texture": SubResource("run_23")}], "loop": true, "name": &"run", "speed": 12}]

@@ -1,0 +1,254 @@
+{
+  "reference": "approved idle_256 at native256, standing reference224, anchor128/240",
+  "same_runtime_pixel_size": 0.003214285714,
+  "no_per_frame_rescale_translation_or_crop": true,
+  "preserved_bone_lengths_check": "manual comparison of approved idle, run keyframe, source extremes and all selected frames; bent poses have different vertical bounding boxes",
+  "skin_region_metrics_note": "Segmentation diagnostic, not independent skeleton or scale proof. Pixel contours and occlusion affect boxes.",
+  "face_regions": [
+    {
+      "source_frame": 24,
+      "skin_region_width": 18,
+      "skin_region_height": 26,
+      "skin_center": [
+        139.57954545454547,
+        90.27272727272727
+      ]
+    },
+    {
+      "source_frame": 26,
+      "skin_region_width": 19,
+      "skin_region_height": 26,
+      "skin_center": [
+        139.94767441860466,
+        98.21511627906976
+      ]
+    },
+    {
+      "source_frame": 28,
+      "skin_region_width": 19,
+      "skin_region_height": 27,
+      "skin_center": [
+        139.2674418604651,
+        93.59883720930233
+      ]
+    },
+    {
+      "source_frame": 30,
+      "skin_region_width": 19,
+      "skin_region_height": 20,
+      "skin_center": [
+        139.69411764705882,
+        87.58235294117647
+      ]
+    },
+    {
+      "source_frame": 32,
+      "skin_region_width": 19,
+      "skin_region_height": 25,
+      "skin_center": [
+        139.61827956989248,
+        90.5752688172043
+      ]
+    },
+    {
+      "source_frame": 34,
+      "skin_region_width": 19,
+      "skin_region_height": 28,
+      "skin_center": [
+        139.752688172043,
+        98.35483870967742
+      ]
+    },
+    {
+      "source_frame": 36,
+      "skin_region_width": 19,
+      "skin_region_height": 28,
+      "skin_center": [
+        139.34931506849315,
+        93.4931506849315
+      ]
+    },
+    {
+      "source_frame": 38,
+      "skin_region_width": 19,
+      "skin_region_height": 28,
+      "skin_center": [
+        138.67088607594937,
+        86.66455696202532
+      ]
+    },
+    {
+      "source_frame": 40,
+      "skin_region_width": 17,
+      "skin_region_height": 25,
+      "skin_center": [
+        140.4223602484472,
+        91.44099378881988
+      ]
+    },
+    {
+      "source_frame": 42,
+      "skin_region_width": 18,
+      "skin_region_height": 29,
+      "skin_center": [
+        140.31788079470198,
+        98.47019867549669
+      ]
+    },
+    {
+      "source_frame": 44,
+      "skin_region_width": 11,
+      "skin_region_height": 16,
+      "skin_center": [
+        143.94871794871796,
+        92.21794871794872
+      ]
+    },
+    {
+      "source_frame": 46,
+      "skin_region_width": 19,
+      "skin_region_height": 27,
+      "skin_center": [
+        139.75776397515529,
+        87.17391304347827
+      ]
+    },
+    {
+      "source_frame": 48,
+      "skin_region_width": 17,
+      "skin_region_height": 26,
+      "skin_center": [
+        140.44970414201183,
+        91.67455621301775
+      ]
+    },
+    {
+      "source_frame": 50,
+      "skin_region_width": 18,
+      "skin_region_height": 28,
+      "skin_center": [
+        140.4527027027027,
+        97.87837837837837
+      ]
+    },
+    {
+      "source_frame": 52,
+      "skin_region_width": 19,
+      "skin_region_height": 25,
+      "skin_center": [
+        139.46583850931677,
+        93.527950310559
+      ]
+    },
+    {
+      "source_frame": 54,
+      "skin_region_width": 19,
+      "skin_region_height": 22,
+      "skin_center": [
+        139.72727272727272,
+        87.67132867132867
+      ]
+    },
+    {
+      "source_frame": 56,
+      "skin_region_width": 19,
+      "skin_region_height": 28,
+      "skin_center": [
+        139.10256410256412,
+        91.25
+      ]
+    },
+    {
+      "source_frame": 58,
+      "skin_region_width": 19,
+      "skin_region_height": 25,
+      "skin_center": [
+        138.75524475524475,
+        97.84615384615384
+      ]
+    },
+    {
+      "source_frame": 60,
+      "skin_region_width": 19,
+      "skin_region_height": 19,
+      "skin_center": [
+        139.6953125,
+        93.15625
+      ]
+    },
+    {
+      "source_frame": 62,
+      "skin_region_width": 19,
+      "skin_region_height": 22,
+      "skin_center": [
+        139.73648648648648,
+        87.41216216216216
+      ]
+    },
+    {
+      "source_frame": 64,
+      "skin_region_width": 19,
+      "skin_region_height": 26,
+      "skin_center": [
+        138.69480519480518,
+        91.84415584415585
+      ]
+    },
+    {
+      "source_frame": 66,
+      "skin_region_width": 19,
+      "skin_region_height": 20,
+      "skin_center": [
+        138.70289855072463,
+        98.42028985507247
+      ]
+    },
+    {
+      "source_frame": 68,
+      "skin_region_width": 18,
+      "skin_region_height": 22,
+      "skin_center": [
+        140.1014492753623,
+        94.28985507246377
+      ]
+    },
+    {
+      "source_frame": 70,
+      "skin_region_width": 14,
+      "skin_region_height": 21,
+      "skin_center": [
+        136.78571428571428,
+        88.36734693877551
+      ]
+    }
+  ],
+  "face_center_vertical_range": 11.805641713471374,
+  "adjacent_silhouette_changed_pixels": [
+    7976,
+    6278,
+    8197,
+    5200,
+    6866,
+    5795,
+    7285,
+    8358,
+    7428,
+    6263,
+    7907,
+    5962,
+    7577,
+    6676,
+    7473,
+    5874,
+    6729,
+    5490,
+    7931,
+    7663,
+    7273,
+    6415,
+    7614
+  ],
+  "loop_seam_silhouette_changed_pixels": 6408,
+  "max_adjacent_silhouette_changed_pixels": 8358,
+  "loop_seam_within_adjacent_range": true
+}

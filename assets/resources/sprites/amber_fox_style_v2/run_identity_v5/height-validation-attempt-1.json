@@ -1,0 +1,311 @@
+{
+  "reference_idle_ear_top": 16,
+  "previous_rejected_ear_top_range": [
+    44,
+    57
+  ],
+  "new_ear_top_range": [
+    25,
+    41
+  ],
+  "new_ear_top_mean": 31.767123287671232,
+  "max_allowed_ear_top": 36,
+  "mean_allowed_ear_top": 30,
+  "all_source_frames_measured": 73,
+  "passed": false,
+  "note": "Ear-tip material bounds in fixed head window; no frame transform. This detects excessive head drop, not exact limb skeleton lengths. Torso/limbs require visual comparison.",
+  "frames": [
+    {
+      "source_frame": 0,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 1,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 2,
+      "ear_top": 36
+    },
+    {
+      "source_frame": 3,
+      "ear_top": 36
+    },
+    {
+      "source_frame": 4,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 5,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 6,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 7,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 8,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 9,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 10,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 11,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 12,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 13,
+      "ear_top": 36
+    },
+    {
+      "source_frame": 14,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 15,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 16,
+      "ear_top": 33
+    },
+    {
+      "source_frame": 17,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 18,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 19,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 20,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 21,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 22,
+      "ear_top": 38
+    },
+    {
+      "source_frame": 23,
+      "ear_top": 38
+    },
+    {
+      "source_frame": 24,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 25,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 26,
+      "ear_top": 34
+    },
+    {
+      "source_frame": 27,
+      "ear_top": 30
+    },
+    {
+      "source_frame": 28,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 29,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 30,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 31,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 32,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 33,
+      "ear_top": 38
+    },
+    {
+      "source_frame": 34,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 35,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 36,
+      "ear_top": 31
+    },
+    {
+      "source_frame": 37,
+      "ear_top": 31
+    },
+    {
+      "source_frame": 38,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 39,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 40,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 41,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 42,
+      "ear_top": 34
+    },
+    {
+      "source_frame": 43,
+      "ear_top": 36
+    },
+    {
+      "source_frame": 44,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 45,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 46,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 47,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 48,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 49,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 50,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 51,
+      "ear_top": 28
+    },
+    {
+      "source_frame": 52,
+      "ear_top": 38
+    },
+    {
+      "source_frame": 53,
+      "ear_top": 38
+    },
+    {
+      "source_frame": 54,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 55,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 56,
+      "ear_top": 30
+    },
+    {
+      "source_frame": 57,
+      "ear_top": 29
+    },
+    {
+      "source_frame": 58,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 59,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 60,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 61,
+      "ear_top": 29
+    },
+    {
+      "source_frame": 62,
+      "ear_top": 35
+    },
+    {
+      "source_frame": 63,
+      "ear_top": 39
+    },
+    {
+      "source_frame": 64,
+      "ear_top": 40
+    },
+    {
+      "source_frame": 65,
+      "ear_top": 41
+    },
+    {
+      "source_frame": 66,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 67,
+      "ear_top": 32
+    },
+    {
+      "source_frame": 68,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 69,
+      "ear_top": 25
+    },
+    {
+      "source_frame": 70,
+      "ear_top": 26
+    },
+    {
+      "source_frame": 71,
+      "ear_top": 27
+    },
+    {
+      "source_frame": 72,
+      "ear_top": 28
+    }
+  ]
+}

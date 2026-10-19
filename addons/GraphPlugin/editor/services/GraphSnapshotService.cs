@@ -89,7 +89,6 @@ public static class GraphSnapshotService
                     continue;
 
                 graph.Nodes.Add(node);
-                createNodeView?.Invoke(node);
             }
         }
 
@@ -101,11 +100,17 @@ public static class GraphSnapshotService
                     continue;
 
                 graph.Connections.Add(connection);
-                graphEdit?.ConnectNode(connection.FromNode, connection.FromPort, connection.ToNode, connection.ToPort);
             }
         }
 
         graph.MarkDirty();
+        // Views and inspectors can query the graph index while they are being built.
+        if (nodes != null)
+            foreach (GraphNodeData node in nodes)
+                if (node != null) createNodeView?.Invoke(node);
+        if (connections != null)
+            foreach (GraphConnection connection in connections)
+                if (connection != null) graphEdit?.ConnectNode(connection.FromNode, connection.FromPort, connection.ToNode, connection.ToPort);
     }
 }
 #endif

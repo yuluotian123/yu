@@ -1,0 +1,248 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "kt_death",
+    "prompt_id": "1b38ebdb-8b9b-427d-bec5-d80b2c60589b",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_death\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101833,
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_death\\selected-video\\1b38ebdb_000.mp4"
+  },
+  "task": {
+    "id": "kt_death",
+    "weapon": "kt",
+    "action": "death",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\amber_full_kt_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\kt\\kt_death\\video-workflow.json",
+    "seed": 2026101833,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. ONE DEFEAT / COLLAPSE over 3 seconds, non-looping. Start in the supplied standing pose. Knees buckle, the torso lowers, and she falls gently onto her side facing the viewer, ending curled on the ground with eyes closed. The whole body and one tail remain visible and recognizable; original proportions and clothes stay unchanged. Keep the ONE weapon in her hands through the fall, then let it rest visibly along the front of the curled body, fully inside frame. By 2.4 seconds she is down and STILL, and she remains down through the final frame. Absolutely NO standing back up, recovery, revival, loop back to the start, disappearing body, blood, wound, dismemberment or graphic injury. Keep ground contact fixed; don't crop boots, tail, head or blade.",
+    "loop_end_constraint": false
+  },
+  "source_sha256": "d3e47dd74873cb0c0ffed4b33e012239458e04db6458554f69a9e749a291a4c1",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_000.png",
+      "opaque_pixels": 7502,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 9,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_009.png",
+      "opaque_pixels": 7487,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 18,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_018.png",
+      "opaque_pixels": 7508,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        68,
+        45,
+        157,
+        224
+      ]
+    },
+    {
+      "source_index": 23,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_023.png",
+      "opaque_pixels": 7631,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        64,
+        49,
+        162,
+        225
+      ]
+    },
+    {
+      "source_index": 27,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_027.png",
+      "opaque_pixels": 7486,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        81,
+        172,
+        225
+      ]
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_030.png",
+      "opaque_pixels": 7224,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        75,
+        116,
+        187,
+        229
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_033.png",
+      "opaque_pixels": 7191,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        68,
+        128,
+        199,
+        226
+      ]
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_036.png",
+      "opaque_pixels": 7117,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        63,
+        141,
+        208,
+        225
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_039.png",
+      "opaque_pixels": 6865,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        147,
+        210,
+        226
+      ]
+    },
+    {
+      "source_index": 43,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_043.png",
+      "opaque_pixels": 6522,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        161,
+        210,
+        226
+      ]
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_048.png",
+      "opaque_pixels": 6038,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        169,
+        210,
+        226
+      ]
+    },
+    {
+      "source_index": 53,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_053.png",
+      "opaque_pixels": 6045,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        169,
+        210,
+        225
+      ]
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_058.png",
+      "opaque_pixels": 6044,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        169,
+        210,
+        225
+      ]
+    },
+    {
+      "source_index": 63,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_063.png",
+      "opaque_pixels": 6043,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        169,
+        210,
+        225
+      ]
+    },
+    {
+      "source_index": 68,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_068.png",
+      "opaque_pixels": 6053,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        169,
+        210,
+        226
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\death_072.png",
+      "opaque_pixels": 6048,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        169,
+        210,
+        226
+      ]
+    }
+  ],
+  "matting_prompt_id": "4e8c9053-d65b-40d0-b31a-4a890b5ff6da"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "source_index": 0,
+    "silhouette_iou": 0.9742934346016212,
+    "source_to_idle_rgba_note": "Model decode/compression may change RGB. Both delivered full-frame endpoints intentionally reuse approved idle bytes."
+  },
+  {
+    "source_index": 72,
+    "silhouette_iou": 0.9761869978086194,
+    "source_to_idle_rgba_note": "Model decode/compression may change RGB. Both delivered full-frame endpoints intentionally reuse approved idle bytes."
+  }
+]

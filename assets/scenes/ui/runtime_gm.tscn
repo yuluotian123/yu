@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://ddvtsomeofpgl" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="4_shell"]
 [ext_resource type="Script" uid="uid://rfn8rtrhsg6d" path="res://scripts/gamelogic/gm/RenderingGmComponent3D.cs" id="5_render"]
 [ext_resource type="Script" uid="uid://buchr6vfhgrk5" path="res://scripts/gamelogic/weather/WeatherGmComponent3D.cs" id="6_weather"]
+[ext_resource type="Script" path="res://scripts/gamelogic/npc/gm/NpcGmComponent3D.cs" id="npc_gm"]
 
 [sub_resource type="Resource" id="shell"]
 script = ExtResource("4_shell")
@@ -19,6 +20,9 @@ script = ExtResource("5_render")
 
 [sub_resource type="Resource" id="weather_gm"]
 script = ExtResource("6_weather")
+
+[sub_resource type="Resource" id="npc_gm"]
+script = ExtResource("npc_gm")
 
 [sub_resource type="InputEventKey" id="toggle_key"]
 keycode = 4194339
@@ -45,7 +49,7 @@ corner_radius_bottom_left = 12
 [node name="RuntimeGm" type="Node3D" unique_id=1210845066]
 process_mode = 3
 script = ExtResource("1_host")
-Components = Array[ExtResource("2_base")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm")])
+Components = Array[ExtResource("2_base")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm")])
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=856679333]
 layer = 100
@@ -621,6 +625,43 @@ text = "手动选择天气会关闭自动调度。重新打开自动天气可回
 天气过渡、云运动与雨雪随时钟暂停；暂停期间手动选择天气会立即生效。
 可在「时间与天空」页快进观察变化；自动抽取可能连续得到相同天气。"
 autowrap_mode = 2
+
+[node name="NpcPage" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_name = "NPC"
+
+[node name="NpcActions" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+layout_mode = 2
+
+[node name="NpcReplan" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "重新规划"
+
+[node name="NpcToggleShop" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "切换交互点开放"
+
+[node name="NpcSocialActions" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+layout_mode = 2
+
+
+[node name="NpcRain" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage/NpcSocialActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "AI 降雨：雨/晴/自动"
+
+
+
+[node name="NpcDetails" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/NpcPage"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "等待 NPC 世界就绪。"
+scroll_following = false
 
 [node name="Confirm" type="ConfirmationDialog" parent="CanvasLayer/Root" unique_id=1331549208]
 unique_name_in_owner = true

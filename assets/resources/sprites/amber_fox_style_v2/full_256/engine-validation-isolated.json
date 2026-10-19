@@ -1,0 +1,10 @@
+{
+  "alpha_mismatches": 0,
+  "animations_checked": 22,
+  "engine": "4.8-beta (custom_build)",
+  "environment": "clean isolated import with identical resource paths",
+  "errors": [],
+  "frames_checked": 233,
+  "opaque_pixels_checked": 1783988,
+  "opaque_rgb_mismatches": 0
+}

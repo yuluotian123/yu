@@ -1,0 +1,125 @@
+{
+  "model": "video_minimax_h3_i2v",
+  "local": true,
+  "spends_credits": false,
+  "segments": [
+    {
+      "segment": "a",
+      "prompt_id": "65efbeb4-5166-4ca1-bd4f-e3f954e1fbe0",
+      "seed": 2026101875,
+      "reused_from_v2": true,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-a.mp4",
+      "sha256": "8c4e7705101434802c5a707ceb93d2af438aa0987a3fc67210029615b7b57c74",
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24,
+      "source_frames": 39
+    },
+    {
+      "segment": "b",
+      "prompt_id": "51ad030f-0f2e-45a4-91be-96ee422f67c2",
+      "seed": 2026101882,
+      "reused_from_v2": false,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-b.mp4",
+      "sha256": "cdc67ea1e03b05d0f820f4c486f496688b34cca92e33bcbd057a9933b67dce36",
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24,
+      "source_frames": 39
+    },
+    {
+      "segment": "c",
+      "prompt_id": "a94cd761-bff4-4297-a1e0-2757bf3c63c6",
+      "seed": 2026101883,
+      "reused_from_v2": false,
+      "original_video": "assets\\videos\\characters\\amber_fox_style_v2\\attack_front_v3\\minimax-segment-c.mp4",
+      "sha256": "6d0428f6e052d07feecc7e25f3e7607a9c861a2e4459065f38c659d2e588b559",
+      "source_size": [
+        512,
+        512
+      ],
+      "source_fps": 24,
+      "source_frames": 39
+    }
+  ],
+  "matting_prompt_id": "eee3ad50-8405-4286-877c-4b32ddf3ae88",
+  "steps": 20,
+  "turbo": false,
+  "source_frames": 117,
+  "source_size": [
+    512,
+    512
+  ],
+  "source_fps": 24,
+  "reference_video": "res://assets/videos/characters/amber_fox_style_v2/attack_front_v3/source-reference.mkv",
+  "reference_sha256": "41eb93efcb2231bd7fd0c66c24b0b031dbd0ebe4b63ca3bf1da19d02b1dfa5bb",
+  "reference_description": "Lossless FFV1 concatenation of original decoded segments, nearest resized512to256 once and decoded RGB verified. Raw3MP4s retained.",
+  "action": "full forward-right downward cleave, extended hold and recovery",
+  "duration_seconds": 1.2,
+  "frames": 30,
+  "fps": 25,
+  "loop": false,
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_pixels": 224,
+  "pixel_size": 0.003214285714,
+  "visual_scale": 1.3,
+  "source_indices": [
+    0,
+    12,
+    13,
+    15,
+    17,
+    25,
+    30,
+    38,
+    40,
+    42,
+    22,
+    53,
+    54,
+    58,
+    62,
+    67,
+    72,
+    77,
+    80,
+    82,
+    84,
+    86,
+    88,
+    90,
+    92,
+    93,
+    96,
+    100,
+    106,
+    116
+  ],
+  "nonchronological_pose_assembly": true,
+  "temporal_retiming": "SourceA22 raised-blade pose inserted after coiled pose, then new full forward strike.0.4s anticipation,0.08s rapid stroke,0.24s forward hold,0.48s recovery. No per-frame transforms.",
+  "new_static_art_generation": true,
+  "static_art_tool": "built-in image_gen",
+  "impact_art": "impact-generation.json",
+  "impact_prompt": "impact-prompt.txt",
+  "global_palette_reduction": false,
+  "static_face_overlay": false,
+  "per_frame_transform": false,
+  "approved_idle_endpoints_byte_exact": true,
+  "video_interior_rgb_exact": true,
+  "visual_review_completed": true,
+  "runtime_selected": true,
+  "weapon_review": "weapon-length-review.json",
+  "replaces": "res://assets/resources/sprites/amber_fox_style_v2/attack_power_v2/generation.json",
+  "reason": "User requested longer attack, completion in front before recovering to idle."
+}

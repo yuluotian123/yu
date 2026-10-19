@@ -1,6 +1,7 @@
 #if TOOLS
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public sealed class GraphSelectionInspectorPanel
@@ -16,7 +17,7 @@ public sealed class GraphSelectionInspectorPanel
     private readonly EditorInspector _nativeInspector;
     private readonly Button _backButton;
     private readonly Dictionary<GraphAsset, GraphSettingsInspectorObject> _settings = new();
-    private readonly HashSet<Resource> _resourcesToSave = new();
+    private readonly HashSet<Resource> _editedResources = new();
     private readonly Stack<(GodotObject target, string title, string context)> _navigation = new();
     private GodotObject _target;
     private Node _sceneContext;
@@ -24,6 +25,7 @@ public sealed class GraphSelectionInspectorPanel
     private string _objectContext;
     private int _selectionVersion;
     private bool _sceneMayHaveEdits;
+    private GraphAsset _resourceOwner;
     public GodotObject InspectedObject => _nativeInspector.GetEditedObject();
 
     public GraphSelectionInspectorPanel(
@@ -74,7 +76,9 @@ public sealed class GraphSelectionInspectorPanel
         {
             if (_navigation.Count == 0) return;
             var previous = _navigation.Pop();
+            var owner = _resourceOwner;
             ShowObject(previous.target, previous.title, previous.context, false);
+            _resourceOwner = owner;
         };
         layout.AddChild(_backButton);
         layout.AddChild(new HSeparator());
@@ -109,12 +113,16 @@ public sealed class GraphSelectionInspectorPanel
                     || version != _selectionVersion || !GodotObject.IsInstanceValid(resource)) return;
                 if (resource is GraphAsset graph)
                 {
-                    GraphPlugin.Instance?.OpenGraphEditor(graph);
+                    var context = _createContext();
+                    if (context.OpenSubGraph != null) context.OpenSubGraph(graph);
+                    else GraphPlugin.Instance?.OpenGraphEditor(graph);
                     return;
                 }
+                var resourceOwner = _resourceOwner;
                 _navigation.Push((_target, _objectTitle, _objectContext));
                 ShowObject(resource, string.IsNullOrEmpty(resource.ResourceName) ? resource.GetClass().ToString() : resource.ResourceName,
                     "Resource properties · changes are saved with the graph or scene", false);
+                _resourceOwner = resourceOwner;
             }).CallDeferred();
         };
 
@@ -162,7 +170,15 @@ public sealed class GraphSelectionInspectorPanel
             return;
         }
 
-        _titleLabel.Text = nodeData.GetDisplayName();
+        var inspectorObject = nodeData.GetInspectorObject(graph);
+        if (inspectorObject != null)
+        {
+            ShowObject(inspectorObject, nodeData.GetDisplayName(graph), "资源定义 · 随图保存");
+            _resourceOwner = graph;
+            return;
+        }
+
+        _titleLabel.Text = nodeData.GetDisplayName(graph);
         _subtitleLabel.Text = nodeData.NodeType;
         ClearContent();
 
@@ -195,7 +211,7 @@ public sealed class GraphSelectionInspectorPanel
 
         _titleLabel.Text = connection.GetDisplayName();
         GraphAsset graph = _getCurrentGraph();
-        _subtitleLabel.Text = $"{graph?.FindNodeById(connection.FromNode)?.GetDisplayName() ?? connection.FromNode} → {graph?.FindNodeById(connection.ToNode)?.GetDisplayName() ?? connection.ToNode}";
+        _subtitleLabel.Text = $"{graph?.FindNodeById(connection.FromNode)?.GetDisplayName(graph) ?? connection.FromNode} → {graph?.FindNodeById(connection.ToNode)?.GetDisplayName(graph) ?? connection.ToNode}";
         ClearContent();
 
         Control ui = connection.CreateInspectorUI(_createContext().WithConnection(connection));
@@ -211,6 +227,7 @@ public sealed class GraphSelectionInspectorPanel
 
     private void ClearContent()
     {
+        _resourceOwner = null;
         _selectionVersion++;
         _nativeInspector.Edit(null);
         _nativeInspector.Hide();
@@ -257,7 +274,6 @@ public sealed class GraphSelectionInspectorPanel
         _subtitleLabel.Text = context;
         _backButton.Visible = _navigation.Count > 0;
         _customScroll.Hide();
-        TrackResources(target, new HashSet<ulong>());
         _nativeInspector.Show();
         _nativeInspector.Edit(target);
     }
@@ -265,7 +281,24 @@ public sealed class GraphSelectionInspectorPanel
     private void OnNativePropertyEdited(string property)
     {
         if (!GodotObject.IsInstanceValid(_target)) return;
-        TrackResources(_target, new HashSet<ulong>());
+        if (_target is Resource edited && !string.IsNullOrEmpty(edited.ResourcePath))
+        {
+            string containerPath = edited.ResourcePath.Split("::", StringSplitOptions.None)[0];
+            if (FileAccess.FileExists(containerPath) && ResourceLoader.Load<Resource>(containerPath) is Resource container && container is not (GraphAsset or PackedScene))
+                _editedResources.Add(container);
+        }
+        if (_resourceOwner != null)
+        {
+            _resourceOwner.MarkDirty();
+            var context = _createContext();
+            if (context.GraphEdit != null)
+                foreach (Node child in context.GraphEdit.GetChildren())
+                    if (child is GraphNode view && context.CurrentGraph.FindNodeById(view.Name) is GraphNodeData data)
+                        GraphNodeViewBuilder.RefreshNodeUI(data, view, context);
+            if (_target is Resource named && named.GetPropertyList().Cast<Godot.Collections.Dictionary>().Any(p=>p["name"].AsString()=="DisplayName"))
+                _titleLabel.Text = named.Get("DisplayName").AsString();
+            return;
+        }
         if (_target is GraphSettingsInspectorObject settings) settings.Graph.MarkDirty();
         // Node/embedded component edits belong to the edited scene, not to a runtime clone.
         if (_target is Node || _target is Resource resource && resource.IsBuiltIn())
@@ -276,33 +309,13 @@ public sealed class GraphSelectionInspectorPanel
         }
     }
 
-    private void TrackResources(GodotObject target, HashSet<ulong> visited)
-    {
-        if (!GodotObject.IsInstanceValid(target) || target is Script || !visited.Add(target.GetInstanceId())) return;
-        if (target is Resource resource && !resource.IsBuiltIn() && !string.IsNullOrEmpty(resource.ResourcePath))
-            _resourcesToSave.Add(resource);
-        foreach (Godot.Collections.Dictionary property in target.GetPropertyList())
-        {
-            if (((PropertyUsageFlags)property["usage"].AsInt64() & PropertyUsageFlags.Storage) == 0) continue;
-            Variant value = target.Get(property["name"].AsStringName());
-            TrackValue(value, visited);
-        }
-    }
-
-    private void TrackValue(Variant value, HashSet<ulong> visited)
-    {
-        if (value.VariantType == Variant.Type.Object && value.AsGodotObject() is Resource resource) TrackResources(resource, visited);
-        else if (value.VariantType == Variant.Type.Array)
-            foreach (Variant item in value.AsGodotArray()) TrackValue(item, visited);
-        else if (value.VariantType == Variant.Type.Dictionary)
-            foreach (Variant item in value.AsGodotDictionary().Values) TrackValue(item, visited);
-    }
-
     public void SaveChanges(bool saveScene)
     {
-        foreach (Resource resource in _resourcesToSave)
+        foreach (Resource resource in _editedResources)
         {
             if (!GodotObject.IsInstanceValid(resource) || resource is GraphAsset || resource.IsBuiltIn()) continue;
+            // Saving a visited graph must not recreate dependencies deliberately removed on disk.
+            if (!FileAccess.FileExists(resource.ResourcePath)) continue;
             Error error = ResourceSaver.Save(resource, resource.ResourcePath);
             if (error != Error.Ok) GD.PushError($"[Graph Details] Failed to save {resource.ResourcePath}: {error}");
         }

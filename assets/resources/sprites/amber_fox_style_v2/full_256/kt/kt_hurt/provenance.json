@@ -1,0 +1,144 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "kt_hurt",
+    "prompt_id": "cf355e53-d5f7-4faa-a01b-f50a128dd964",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_hurt\\video-workflow.json",
+    "status": "completed",
+    "seed": 2026101832,
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\kt_hurt\\selected-video\\cf355e53_000.mp4"
+  },
+  "task": {
+    "id": "kt_hurt",
+    "weapon": "kt",
+    "action": "hurt",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\amber_full_kt_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\kt\\kt_hurt\\video-workflow.json",
+    "seed": 2026101832,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME slender gently curved single-edged KATANA with a small gold guard and long brown two-hand hilt. Its blade stays narrow with one coherent subtle curve and a continuous hilt-to-blade connection. Never turn it into a broad greatsword or add a scabbard. ONE readable HURT RECOIL and recovery over 3 seconds. Briefly flinch the shoulders backward, tighten the eyelids and mouth naturally, knees absorb the recoil, cape and single tail follow, then recover the exact initial stance. Keep both boots near the same ground contacts, one coherent body, and both hands on the same weapon. Preserve all facial features while the expression changes. No blood, wound, particles, flash, extra character, weapon loss, falling down or multiple hits.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "ee9b3f946c1d80c941f5d9931b358470fd0b12f5e1c1cccabd6104f107e9673a",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_000.png",
+      "opaque_pixels": 7490,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 10,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_010.png",
+      "opaque_pixels": 7491,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 21,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_021.png",
+      "opaque_pixels": 7355,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        52,
+        178,
+        224
+      ]
+    },
+    {
+      "source_index": 31,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_031.png",
+      "opaque_pixels": 7510,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        48,
+        166,
+        224
+      ]
+    },
+    {
+      "source_index": 41,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_041.png",
+      "opaque_pixels": 7501,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    },
+    {
+      "source_index": 51,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_051.png",
+      "opaque_pixels": 7446,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        51,
+        174,
+        224
+      ]
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_062.png",
+      "opaque_pixels": 7413,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        53,
+        48,
+        168,
+        224
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_072.png",
+      "opaque_pixels": 7509,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        155,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84"
+}

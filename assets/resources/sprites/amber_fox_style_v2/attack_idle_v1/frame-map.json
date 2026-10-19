@@ -1,0 +1,269 @@
+{
+  "frame_size": [
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    240
+  ],
+  "standing_reference_height": 224,
+  "pixel_size": 0.003214285714,
+  "fps": 30,
+  "duration_seconds": 0.6,
+  "loop": false,
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_000.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    },
+    {
+      "source_index": 4,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_004.png",
+      "sha256": "ef7a39e434934c7155c753de05f2649365fe6aa371717280030961ee035621f3",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13389,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 6,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_006.png",
+      "sha256": "6ceb21b6b4f1b3c5af1492ae6e9e9523b5a18a4034339b21790ed1e38d14f60a",
+      "bounds": [
+        59,
+        17,
+        200,
+        241
+      ],
+      "opaque_pixels": 12777,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 8,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_008.png",
+      "sha256": "af20a834692725a10a309fc3fea80ec2d4942173514dd65730136ff9767eac5c",
+      "bounds": [
+        49,
+        19,
+        219,
+        241
+      ],
+      "opaque_pixels": 12800,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 9,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_009.png",
+      "sha256": "42e1d96fcfb08b94abd14a6771dac6f2361236f185b4a354ea6d233943925f55",
+      "bounds": [
+        48,
+        20,
+        208,
+        241
+      ],
+      "opaque_pixels": 12878,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_012.png",
+      "sha256": "bb4e0ef9edc7d2a58396067777f91b3acb29906d3929bc24c757f9ed168e448e",
+      "bounds": [
+        40,
+        20,
+        208,
+        241
+      ],
+      "opaque_pixels": 12776,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 26,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_026.png",
+      "sha256": "006111c337f216c6256dfb0fca59a720224b4f5961444ee63bf78d68685d048d",
+      "bounds": [
+        46,
+        20,
+        208,
+        241
+      ],
+      "opaque_pixels": 12672,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 28,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_028.png",
+      "sha256": "1c5eccd55ba11f15a9faa7a08b8a972b2c14dfa081d4d12d97916766732028f1",
+      "bounds": [
+        45,
+        20,
+        223,
+        241
+      ],
+      "opaque_pixels": 12478,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_030.png",
+      "sha256": "d84eea7b1c60ac1b514577100cc2f9a6124fc8e53629ece6c7e4acbb1e776aa0",
+      "bounds": [
+        44,
+        21,
+        233,
+        241
+      ],
+      "opaque_pixels": 12145,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 32,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_032.png",
+      "sha256": "6fcf4ed0e38fa10dcba16542b1cb2d07c4ca345eedc299670c961b5d572facf7",
+      "bounds": [
+        43,
+        21,
+        232,
+        241
+      ],
+      "opaque_pixels": 12568,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 40,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_040.png",
+      "sha256": "8fdd035d6983d127da84fe5d1d6fac76de9f1b057a0af9784425c71a0c96fc26",
+      "bounds": [
+        41,
+        21,
+        232,
+        241
+      ],
+      "opaque_pixels": 12678,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 50,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_050.png",
+      "sha256": "64140d151930c821a3a116683eefbbfc50ac8ea43855631fdb6ba73961de8821",
+      "bounds": [
+        41,
+        20,
+        232,
+        241
+      ],
+      "opaque_pixels": 12676,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 52,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_052.png",
+      "sha256": "294718ad57f0ca5ee4e9a30193eed700df16008ceb2f73e4823d76a59559495a",
+      "bounds": [
+        41,
+        20,
+        240,
+        241
+      ],
+      "opaque_pixels": 12842,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_054.png",
+      "sha256": "9d0fdb130f4cd4ff7abec441f605ca328c6f9e2fcf54aa31e98783a7f4316d74",
+      "bounds": [
+        46,
+        18,
+        201,
+        241
+      ],
+      "opaque_pixels": 13104,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 56,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_056.png",
+      "sha256": "0e6f037e7bcf2b0b946b8779ba9209e230be5ad7a20f6fe17306c32a0232d641",
+      "bounds": [
+        64,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13370,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_060.png",
+      "sha256": "9b51b6a098ae68578626dc06c349a5f64550d08d8c4b1e511b3fd76015584632",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13381,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 68,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_068.png",
+      "sha256": "6703b25a57a95de34b14a9fd6fdb60188fcc663f590637ce45ba456e048ddd6a",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13352,
+      "face_and_core_rgb_exact": true,
+      "reference_type": "source_video"
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\attack_idle_v1\\frames\\attack_072.png",
+      "sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+      "bounds": [
+        62,
+        16,
+        168,
+        241
+      ],
+      "opaque_pixels": 13671,
+      "face_and_core_rgb_exact": false,
+      "reference_type": "approved_idle"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "attempts": [
+    {
+      "job": "fa5d8360-ffed-433d-ade7-4320d5c2970a",
+      "seed": 2026101864,
+      "selected": false,
+      "reason": "Ear top25-41, mean31.77 fails maintained max36/mean30 gate; tail curls into a rounded shape. Keyframe sword lowered to allow original near-standing body height and stronger tail construction constraint for retry."
+    }
+  ]
+}

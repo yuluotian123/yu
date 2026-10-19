@@ -39,6 +39,8 @@ public sealed class GraphEditorContext
     /// <summary>Resolve the currently selected scene host, including after host switching.</summary>
     public System.Func<Node> ResolveHost { get; set; }
     public System.Func<GodotObject> ResolveSource { get; set; }
+    public System.Action<GraphAsset> OpenSubGraph { get; set; }
+    public System.Action<GraphNode> InspectNode { get; set; }
 
     /// <summary>当前黑板条目。仅在黑板值 UI 构建时有值。</summary>
     public GraphBlackboardEntry BlackboardEntry { get; set; }
@@ -81,6 +83,8 @@ public sealed class GraphEditorContext
         target.AvailableComponentTypes = AvailableComponentTypes;
         target.ResolveHost = ResolveHost;
         target.ResolveSource = ResolveSource;
+        target.OpenSubGraph = OpenSubGraph;
+        target.InspectNode = InspectNode;
         return target;
     }
 }

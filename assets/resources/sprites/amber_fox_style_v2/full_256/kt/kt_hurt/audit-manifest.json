@@ -1,0 +1,201 @@
+{
+  "video": "..\\..\\..\\..\\..\\..\\videos\\characters\\amber_fox_style_v2\\full_256\\kt_hurt-minimax-source.mp4",
+  "original_video": "..\\..\\..\\..\\..\\..\\videos\\characters\\amber_fox_style_v2\\full_256\\kt_hurt-minimax-source.mp4",
+  "frames": [
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_000.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_010.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_021.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_031.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_041.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_051.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_062.png",
+    "..\\..\\..\\..\\..\\..\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\frames\\hurt_072.png"
+  ],
+  "source_indices": [
+    0,
+    10,
+    21,
+    31,
+    41,
+    51,
+    62,
+    72
+  ],
+  "frame_size": [
+    256,
+    256
+  ],
+  "output_fps": 20,
+  "binary_alpha": true,
+  "preserve_inset": 3,
+  "rgb_tolerance": 0,
+  "regions": [
+    {
+      "name": "face",
+      "bounds_by_frame": [
+        [
+          111,
+          65,
+          144,
+          98
+        ],
+        [
+          112,
+          64,
+          145,
+          97
+        ],
+        [
+          102,
+          73,
+          135,
+          106
+        ],
+        [
+          109,
+          68,
+          142,
+          101
+        ],
+        [
+          111,
+          65,
+          144,
+          98
+        ],
+        [
+          102,
+          73,
+          135,
+          106
+        ],
+        [
+          109,
+          70,
+          142,
+          103
+        ],
+        [
+          111,
+          65,
+          144,
+          98
+        ]
+      ]
+    },
+    {
+      "name": "face_skin_point",
+      "bounds_by_frame": [
+        [
+          128,
+          78,
+          129,
+          79
+        ],
+        [
+          129,
+          80,
+          130,
+          81
+        ],
+        [
+          117,
+          90,
+          118,
+          91
+        ],
+        [
+          124,
+          84,
+          125,
+          85
+        ],
+        [
+          128,
+          80,
+          129,
+          81
+        ],
+        [
+          119,
+          88,
+          120,
+          89
+        ],
+        [
+          126,
+          84,
+          127,
+          85
+        ],
+        [
+          128,
+          80,
+          129,
+          81
+        ]
+      ],
+      "opaque": true
+    },
+    {
+      "name": "hair",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    },
+    {
+      "name": "torso",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    },
+    {
+      "name": "hands",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    },
+    {
+      "name": "weapon",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    },
+    {
+      "name": "legs",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    },
+    {
+      "name": "tail",
+      "bounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "note": "Whole-frame paired visual coverage; moving anatomy, no static geometry mask."
+    }
+  ]
+}

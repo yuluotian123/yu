@@ -1,0 +1,48 @@
+{
+  "frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "regions": [
+    "face",
+    "hair",
+    "torso",
+    "hands",
+    "weapon",
+    "legs",
+    "tail"
+  ],
+  "checks": [
+    "source video versus output in every region and frame",
+    "light and dark background outlines",
+    "face and interior colours",
+    "single tail and consistent grip",
+    "alternating gait, airborne phase, loop seam and unclipped feet",
+    "no continuous black outline; real brown ear tips, clothing and eyelids retained"
+  ],
+  "evidence_directory": "D:\\Project\\GitHub\\yu\\.godot\\move-256-comfy",
+  "whole_silhouette_numeric_mask_available": false,
+  "conclusion": "visual review completed; numeric and engine results stored separately"
+}

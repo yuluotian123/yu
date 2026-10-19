@@ -1,0 +1,53 @@
+{
+  "frames_reviewed": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69
+  ],
+  "regions": [
+    "face",
+    "hair",
+    "torso",
+    "two hands",
+    "moving weapon",
+    "legs and feet",
+    "single tail"
+  ],
+  "source_vs_output_whole_body": true,
+  "face_crops_checked": true,
+  "dark_background_all_frames": true,
+  "light_background_all_frames": true,
+  "checker_face_crops": true,
+  "independent_full_silhouette_mask": false,
+  "automatic_audit_status": "needs_visual_review",
+  "automatic_limit": "No independent whole-foreground mask; retained-pixel comparison alone does not prove absence of erasure.",
+  "manual_review": "completed",
+  "observations": [
+    "Face, iris, pink mouth and skin retained against source video; closed eyes and arm occlusion are present in source.",
+    "No continuous black outline; brown ear tips, clothing and boots retained as material colors.",
+    "Moving blades, hands and tail reviewed; no static weapon or face overlay.",
+    "Katana attack omits out-of-frame blade poses. Greatsword attack and death use regenerated clips without white effects."
+  ],
+  "evidence": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\kt\\sources\\reviews\\kt_run"
+}

@@ -1,0 +1,354 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "gs_idle",
+    "prompt_id": "4ffe9b58-2453-41b5-a6fd-70fc0cab978e",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_idle\\video-workflow.json",
+    "status": "completed",
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_idle\\selected-video\\4ffe9b58_000.mp4"
+  },
+  "task": {
+    "id": "gs_idle",
+    "weapon": "gs",
+    "action": "idle",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\sources\\amber_full_gs_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\gs\\gs_idle\\video-workflow.json",
+    "seed": 2026101820,
+    "prompt": "The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. One seamless 3-second IDLE loop: feet stay planted, same relaxed nearly vertical sword carry, soft breathing, one brief blink, lively but coherent overlapping sway of the single tail, hair tips and cape. Return to the exact starting pose without pause or costume/face changes.",
+    "loop_end_constraint": true
+  },
+  "source_sha256": "8a4ece86b734169fcd4acd38e5e79010fed19c2e1073bd178384c772eecf56dc",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_000.png",
+      "opaque_pixels": 8243,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 3,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_003.png",
+      "opaque_pixels": 8217,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 6,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_006.png",
+      "opaque_pixels": 8314,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        69,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 9,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_009.png",
+      "opaque_pixels": 8366,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        66,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 12,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_012.png",
+      "opaque_pixels": 8389,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        61,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 15,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_015.png",
+      "opaque_pixels": 8353,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        59,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 18,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_018.png",
+      "opaque_pixels": 8368,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 21,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_021.png",
+      "opaque_pixels": 8372,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_024.png",
+      "opaque_pixels": 8334,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        60,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 27,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_027.png",
+      "opaque_pixels": 8337,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        63,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 30,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_030.png",
+      "opaque_pixels": 8273,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 33,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_033.png",
+      "opaque_pixels": 8247,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        80,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 36,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_036.png",
+      "opaque_pixels": 8224,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        77,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 39,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_039.png",
+      "opaque_pixels": 8257,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        74,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 42,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_042.png",
+      "opaque_pixels": 8341,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        67,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 45,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_045.png",
+      "opaque_pixels": 8355,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        64,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_048.png",
+      "opaque_pixels": 8351,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        59,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 51,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_051.png",
+      "opaque_pixels": 8349,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 54,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_054.png",
+      "opaque_pixels": 8376,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 57,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_057.png",
+      "opaque_pixels": 8386,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        56,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 60,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_060.png",
+      "opaque_pixels": 8332,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        62,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 63,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_063.png",
+      "opaque_pixels": 8316,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        63,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 66,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_066.png",
+      "opaque_pixels": 8255,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        78,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 69,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\idle_069.png",
+      "opaque_pixels": 8240,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        80,
+        45,
+        160,
+        224
+      ]
+    }
+  ],
+  "matting_prompt_id": "4daa4c0d-5a7f-452a-8542-fa98f6a79d84",
+  "runtime_selected": false,
+  "replaced_by": "../approved-idle-reuse.json",
+  "rejection_reason": "Regeneration lost approved face, proportions and coherent color blocks."
+}

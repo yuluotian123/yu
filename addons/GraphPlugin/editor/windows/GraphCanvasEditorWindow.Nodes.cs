@@ -21,6 +21,17 @@ public partial class GraphCanvasEditorWindow
         Vector2 graphPosition = ToGraphPosition(position);
         _componentPanel?.Refresh();
         var dynamicEntries = new System.Collections.Generic.List<GraphNodeSearchService.GraphNodeSearchEntry>();
+        foreach (System.Type type in GraphProviderCatalog.Nodes(CreateEditorContext()))
+        {
+            var definition = GraphTypeRegistry.RegisterNode(type);
+            string nodeType = definition.NodeType;
+            dynamicEntries.Add(new GraphNodeSearchService.GraphNodeSearchEntry
+            {
+                Label = definition.MenuName, Group = "Component / " + GraphProviderCatalog.ProviderName(type) + " / " + definition.Category,
+                SearchText = definition.DisplayName + " " + type.Name,
+                DynamicAction = () => CreateNewNode(nodeType, graphPosition)
+            });
+        }
         foreach (GraphComponentTypeDescriptor descriptor in _componentPanel?.GetAvailableDescriptors() ??
                  System.Array.Empty<GraphComponentTypeDescriptor>())
         {

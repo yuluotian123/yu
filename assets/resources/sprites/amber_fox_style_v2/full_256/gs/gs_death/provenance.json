@@ -1,0 +1,252 @@
+{
+  "model": "video_minimax_h3_i2v local turbo 8-step",
+  "job": {
+    "id": "gs_death",
+    "prompt_id": "7745325b-fc61-4aa1-b22d-05046dfeae66",
+    "workflow": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_death\\video-workflow.json",
+    "status": "completed",
+    "video_path": "D:\\Project\\GitHub\\yu\\.godot\\full-character-256\\gs_death\\source.mp4",
+    "previous_prompt_ids": [
+      "6ba6d16c-e11e-4e03-97ec-dfac7b9b07d0"
+    ],
+    "seed": 2026101858,
+    "actual_prompt": "Slowly kneel down and lie on her side, with continuous gentle motion. Start lowering immediately: first bend knees deeply for 0.8 seconds, then kneel and bring the torso close to the ground during 0.8-1.6 seconds, then gently recline onto her side by 2.2 seconds. Close the eyes and remain lying quietly to the end at 3 seconds. Keep both hands holding the hilt while lowering the sword until the blade rests horizontally along the front of the body. Every intermediate kneeling and reclining pose is visible. Ordinary slow physical motion ONLY, with zero effects or white marks. No sudden drop, no hard impact, no bounce. One normal body and tail, no shrinking. Remain lying at the end, never stand back up. The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. "
+  },
+  "task": {
+    "id": "gs_death",
+    "weapon": "gs",
+    "action": "death",
+    "input": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\sources\\amber_full_gs_idle.png",
+    "workflow": "assets\\resources\\sprites\\amber_fox_style_v2\\full_256\\gs\\gs_death\\video-workflow.json",
+    "seed": 2026101858,
+    "prompt": "Slowly kneel down and lie on her side, with continuous gentle motion. Start lowering immediately: first bend knees deeply for 0.8 seconds, then kneel and bring the torso close to the ground during 0.8-1.6 seconds, then gently recline onto her side by 2.2 seconds. Close the eyes and remain lying quietly to the end at 3 seconds. Keep both hands holding the hilt while lowering the sword until the blade rests horizontally along the front of the body. Every intermediate kneeling and reclining pose is visible. Ordinary slow physical motion ONLY, with zero effects or white marks. No sudden drop, no hard impact, no bounce. One normal body and tail, no shrinking. Remain lying at the end, never stand back up. The EXACT golden fox swordswoman in <Picture 1>, a full-body three-quarter game sprite facing screen right on a fixed square canvas. LOCK the input face, head-to-body ratio, shoulder width, neck-to-hip length, anatomical thigh/shin lengths, small hands, outfit coverage and character scale in EVERY frame. Preserve amber eyes and all small pink mouth/skin/iris color blocks, golden short hair with one side ponytail, brown-tipped fox ears, yellow short cape with cream trim and square clasp, cream long sleeves, brown bodice and belt, one hip pouch, opaque brown stockings and yellow-trimmed brown boots. Exactly TWO connected arms and TWO hands continuously grip ONE weapon hilt with natural wrists, opposed thumbs and relaxed elbows. One continuous bushy golden tail with a broad cream terminal third grows from behind the pelvis; keep its volume, never a detached ball, thin cat tail, duplicate tail or extra cape. LARGE CONNECTED FLAT COLOR BLOCKS, a few deliberately designed solid shades per material, coarse clean stepped pixel clusters. NO continuous black or dark outer contour stroke; local material colors directly meet the background. No gradients, fine fur, texture, tiny new highlights, shiny rendering, blur, anti-aliasing, glow, particles or added detail. Full character, tail, all limbs and the ENTIRE weapon always stay UNCROPPED inside the square with margin. Do not zoom, change perspective, turn the character, shrink/grow the body, squash limbs or move the camera. Fixed pure bright GREEN background RGB 0 255 0, perfectly uniform and static; no floor, horizon, cast shadow, green lighting, scenery or text. No audio, speech, music or sound effects. The SAME broad rigid straight GREATSWORD: keep blade length, width and construction relative to the head, and pommel, hilt, guard center and blade on ONE straight axis. Never change it into a thin curved sword. ",
+    "loop_end_constraint": false
+  },
+  "source_sha256": "ce9c0f5de959a31fddad0cdaafd9941efe2c6debd0771d2ddf2230f7740d7b77",
+  "source_frames": 73,
+  "source_fps": 24,
+  "nearest_resize": [
+    512,
+    512,
+    256,
+    256
+  ],
+  "foot_anchor": [
+    128,
+    224
+  ],
+  "global_palette_reduction": false,
+  "independent_full_silhouette_mask": false,
+  "visual_review": "completed",
+  "frames": [
+    {
+      "source_index": 0,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_000.png",
+      "opaque_pixels": 8232,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        76,
+        45,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 5,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_005.png",
+      "opaque_pixels": 8292,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        49,
+        160,
+        224
+      ]
+    },
+    {
+      "source_index": 10,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_010.png",
+      "opaque_pixels": 7911,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        52,
+        96,
+        162,
+        224
+      ]
+    },
+    {
+      "source_index": 14,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_014.png",
+      "opaque_pixels": 7840,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        67,
+        98,
+        162,
+        224
+      ]
+    },
+    {
+      "source_index": 19,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_019.png",
+      "opaque_pixels": 7485,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        54,
+        97,
+        162,
+        224
+      ]
+    },
+    {
+      "source_index": 24,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_024.png",
+      "opaque_pixels": 7349,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        47,
+        97,
+        165,
+        224
+      ]
+    },
+    {
+      "source_index": 29,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_029.png",
+      "opaque_pixels": 7374,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        50,
+        97,
+        175,
+        224
+      ]
+    },
+    {
+      "source_index": 34,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_034.png",
+      "opaque_pixels": 7444,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        62,
+        103,
+        214,
+        224
+      ]
+    },
+    {
+      "source_index": 38,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_038.png",
+      "opaque_pixels": 6990,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        63,
+        130,
+        228,
+        230
+      ]
+    },
+    {
+      "source_index": 43,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_043.png",
+      "opaque_pixels": 6539,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        138,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 48,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_048.png",
+      "opaque_pixels": 6213,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        168,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 53,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_053.png",
+      "opaque_pixels": 5953,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        175,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 58,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_058.png",
+      "opaque_pixels": 6011,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        175,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 62,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_062.png",
+      "opaque_pixels": 5899,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        175,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 67,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_067.png",
+      "opaque_pixels": 5917,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        175,
+        227,
+        229
+      ]
+    },
+    {
+      "source_index": 72,
+      "file": "assets\\textures\\sprites\\amber_fox_style_v2\\full_256\\gs\\frames\\death_072.png",
+      "opaque_pixels": 5929,
+      "core_rgb_exact": true,
+      "face_rgb_and_base_alpha_exact": true,
+      "bounds": [
+        58,
+        175,
+        227,
+        229
+      ]
+    }
+  ],
+  "matting_prompt_id": "4e8c9053-d65b-40d0-b31a-4a890b5ff6da"
+}

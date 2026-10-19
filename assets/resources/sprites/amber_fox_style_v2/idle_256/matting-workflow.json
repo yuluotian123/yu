@@ -1,0 +1,2166 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "video-native-reference.png"
+    }
+  },
+  "2": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "3": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "green"
+    }
+  },
+  "4": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "channel": "blue"
+    }
+  },
+  "5": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 0.48627450980392156,
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "6": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "2",
+        0
+      ],
+      "source": [
+        "5",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "7": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "5",
+        0
+      ],
+      "source": [
+        "2",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "8": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "6",
+        0
+      ],
+      "source": [
+        "7",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "9": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "3",
+        0
+      ],
+      "source": [
+        "5",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "10": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "5",
+        0
+      ],
+      "source": [
+        "3",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "11": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "9",
+        0
+      ],
+      "source": [
+        "10",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "12": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "4",
+        0
+      ],
+      "source": [
+        "5",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "13": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "5",
+        0
+      ],
+      "source": [
+        "4",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "14": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "12",
+        0
+      ],
+      "source": [
+        "13",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "15": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "8",
+        0
+      ],
+      "source": [
+        "11",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "16": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "15",
+        0
+      ],
+      "source": [
+        "14",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "17": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "16",
+        0
+      ],
+      "value": 0.07058823529411765
+    }
+  },
+  "18": {
+    "class_type": "GrowMask",
+    "inputs": {
+      "mask": [
+        "17",
+        0
+      ],
+      "expand": -2,
+      "tapered_corners": true
+    }
+  },
+  "19": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "17",
+        0
+      ],
+      "source": [
+        "18",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "20": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "2",
+        0
+      ],
+      "source": [
+        "4",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "21": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "20",
+        0
+      ],
+      "value": 0.12156862745098039
+    }
+  },
+  "22": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "21",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "19",
+        0
+      ],
+      "source": [
+        "22",
+        0
+      ],
+      "operation": "multiply",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "24": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 0,
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "25": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 1,
+      "width": 25,
+      "height": 160
+    }
+  },
+  "26": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 1,
+      "width": 36,
+      "height": 32
+    }
+  },
+  "27": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "24",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 80
+    }
+  },
+  "28": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "27",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 112,
+      "y": 42
+    }
+  },
+  "29": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "28",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 80
+    }
+  },
+  "30": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "29",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 368,
+      "y": 42
+    }
+  },
+  "31": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "30",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 80
+    }
+  },
+  "32": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "31",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 624,
+      "y": 42
+    }
+  },
+  "33": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "32",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 80
+    }
+  },
+  "34": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "33",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 880,
+      "y": 43
+    }
+  },
+  "35": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "34",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 80
+    }
+  },
+  "36": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "35",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1136,
+      "y": 44
+    }
+  },
+  "37": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "36",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 80
+    }
+  },
+  "38": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "37",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1392,
+      "y": 45
+    }
+  },
+  "39": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "38",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 336
+    }
+  },
+  "40": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "39",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 113,
+      "y": 302
+    }
+  },
+  "41": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "40",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 336
+    }
+  },
+  "42": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "41",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 368,
+      "y": 302
+    }
+  },
+  "43": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "42",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 336
+    }
+  },
+  "44": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "43",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 625,
+      "y": 300
+    }
+  },
+  "45": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "44",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 336
+    }
+  },
+  "46": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "45",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 880,
+      "y": 299
+    }
+  },
+  "47": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "46",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 336
+    }
+  },
+  "48": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "47",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1136,
+      "y": 298
+    }
+  },
+  "49": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "48",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 336
+    }
+  },
+  "50": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "49",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1392,
+      "y": 298
+    }
+  },
+  "51": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "50",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 592
+    }
+  },
+  "52": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "51",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 112,
+      "y": 554
+    }
+  },
+  "53": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "52",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 592
+    }
+  },
+  "54": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "53",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 368,
+      "y": 554
+    }
+  },
+  "55": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "54",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 592
+    }
+  },
+  "56": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "55",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 624,
+      "y": 554
+    }
+  },
+  "57": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "56",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 592
+    }
+  },
+  "58": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "57",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 880,
+      "y": 555
+    }
+  },
+  "59": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "58",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 592
+    }
+  },
+  "60": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "59",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1136,
+      "y": 557
+    }
+  },
+  "61": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "60",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 592
+    }
+  },
+  "62": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "61",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1393,
+      "y": 557
+    }
+  },
+  "63": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "62",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 848
+    }
+  },
+  "64": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "63",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 112,
+      "y": 814
+    }
+  },
+  "65": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "64",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 848
+    }
+  },
+  "66": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "65",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 369,
+      "y": 813
+    }
+  },
+  "67": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "66",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 848
+    }
+  },
+  "68": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "67",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 624,
+      "y": 812
+    }
+  },
+  "69": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "68",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 848
+    }
+  },
+  "70": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "69",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 880,
+      "y": 811
+    }
+  },
+  "71": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "70",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 848
+    }
+  },
+  "72": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "71",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1136,
+      "y": 810
+    }
+  },
+  "73": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "72",
+        0
+      ],
+      "source": [
+        "25",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 848
+    }
+  },
+  "74": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "73",
+        0
+      ],
+      "source": [
+        "26",
+        0
+      ],
+      "operation": "add",
+      "x": 1392,
+      "y": 810
+    }
+  },
+  "75": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "23",
+        0
+      ],
+      "source": [
+        "74",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "76": {
+    "class_type": "Morphology",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "operation": "dilate",
+      "kernel_size": 5
+    }
+  },
+  "77": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "1",
+        0
+      ],
+      "source": [
+        "76",
+        0
+      ],
+      "mask": [
+        "75",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false
+    }
+  },
+  "78": {
+    "class_type": "MaskToImage",
+    "inputs": {
+      "mask": [
+        "17",
+        0
+      ]
+    }
+  },
+  "79": {
+    "class_type": "Morphology",
+    "inputs": {
+      "image": [
+        "78",
+        0
+      ],
+      "operation": "open",
+      "kernel_size": 3
+    }
+  },
+  "80": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "79",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "81": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "17",
+        0
+      ],
+      "source": [
+        "80",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "82": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "81",
+        0
+      ],
+      "source": [
+        "75",
+        0
+      ],
+      "operation": "multiply",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "83": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "17",
+        0
+      ],
+      "source": [
+        "82",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "84": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "221",
+        0
+      ]
+    }
+  },
+  "85": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": [
+        "77",
+        0
+      ],
+      "alpha": [
+        "84",
+        0
+      ]
+    }
+  },
+  "86": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "85",
+        0
+      ],
+      "filename_prefix": "amber_fox_idle_256_video_faithful_reference_blade"
+    }
+  },
+  "161": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "idle-original.png"
+    }
+  },
+  "162": {
+    "class_type": "CropMask",
+    "inputs": {
+      "mask": [
+        "161",
+        1
+      ],
+      "x": 51,
+      "y": 53,
+      "width": 793,
+      "height": 1695
+    }
+  },
+  "163": {
+    "class_type": "MaskToImage",
+    "inputs": {
+      "mask": [
+        "162",
+        0
+      ]
+    }
+  },
+  "164": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "163",
+        0
+      ],
+      "upscale_method": "nearest-exact",
+      "width": 105,
+      "height": 224,
+      "crop": "disabled"
+    }
+  },
+  "165": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "164",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "166": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "165",
+        0
+      ]
+    }
+  },
+  "167": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "166",
+        0
+      ],
+      "value": 0.6274509803921569
+    }
+  },
+  "168": {
+    "class_type": "CropMask",
+    "inputs": {
+      "mask": [
+        "167",
+        0
+      ],
+      "x": 85,
+      "y": 107,
+      "width": 20,
+      "height": 117
+    }
+  },
+  "169": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 0,
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "170": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 0,
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "171": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 1,
+      "width": 25,
+      "height": 118
+    }
+  },
+  "172": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "169",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 123
+    }
+  },
+  "173": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "170",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 123
+    }
+  },
+  "174": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "172",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 123
+    }
+  },
+  "175": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "173",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 123
+    }
+  },
+  "176": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "174",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 123
+    }
+  },
+  "177": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "175",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 123
+    }
+  },
+  "178": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "176",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 123
+    }
+  },
+  "179": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "177",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 123
+    }
+  },
+  "180": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "178",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 123
+    }
+  },
+  "181": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "179",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 123
+    }
+  },
+  "182": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "180",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 123
+    }
+  },
+  "183": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "181",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 123
+    }
+  },
+  "184": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "182",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 379
+    }
+  },
+  "185": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "183",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 379
+    }
+  },
+  "186": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "184",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 379
+    }
+  },
+  "187": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "185",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 379
+    }
+  },
+  "188": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "186",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 379
+    }
+  },
+  "189": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "187",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 379
+    }
+  },
+  "190": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "188",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 379
+    }
+  },
+  "191": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "189",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 379
+    }
+  },
+  "192": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "190",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 379
+    }
+  },
+  "193": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "191",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 379
+    }
+  },
+  "194": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "192",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 379
+    }
+  },
+  "195": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "193",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 379
+    }
+  },
+  "196": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "194",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 635
+    }
+  },
+  "197": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "195",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 635
+    }
+  },
+  "198": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "196",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 635
+    }
+  },
+  "199": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "197",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 635
+    }
+  },
+  "200": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "198",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 635
+    }
+  },
+  "201": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "199",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 635
+    }
+  },
+  "202": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "200",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 635
+    }
+  },
+  "203": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "201",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 635
+    }
+  },
+  "204": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "202",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 635
+    }
+  },
+  "205": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "203",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 635
+    }
+  },
+  "206": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "204",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 635
+    }
+  },
+  "207": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "205",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 635
+    }
+  },
+  "208": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "206",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 891
+    }
+  },
+  "209": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "207",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 148,
+      "y": 891
+    }
+  },
+  "210": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "208",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 891
+    }
+  },
+  "211": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "209",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 404,
+      "y": 891
+    }
+  },
+  "212": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "210",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 891
+    }
+  },
+  "213": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "211",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 660,
+      "y": 891
+    }
+  },
+  "214": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "212",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 891
+    }
+  },
+  "215": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "213",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 916,
+      "y": 891
+    }
+  },
+  "216": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "214",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 891
+    }
+  },
+  "217": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "215",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1172,
+      "y": 891
+    }
+  },
+  "218": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "216",
+        0
+      ],
+      "source": [
+        "171",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 891
+    }
+  },
+  "219": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "217",
+        0
+      ],
+      "source": [
+        "168",
+        0
+      ],
+      "operation": "add",
+      "x": 1428,
+      "y": 891
+    }
+  },
+  "220": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "83",
+        0
+      ],
+      "source": [
+        "218",
+        0
+      ],
+      "operation": "subtract",
+      "x": 0,
+      "y": 0
+    }
+  },
+  "221": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "220",
+        0
+      ],
+      "source": [
+        "219",
+        0
+      ],
+      "operation": "add",
+      "x": 0,
+      "y": 0
+    }
+  }
+}

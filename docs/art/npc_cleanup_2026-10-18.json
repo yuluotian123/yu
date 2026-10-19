@@ -1,0 +1,922 @@
+[
+  {
+    "path": ".godot/npc/bake_engine.log",
+    "bytes": 805,
+    "sha256": "104eba435cdcb0bb3ee07be6092f112014eb228058302810c54d6343500edaf7"
+  },
+  {
+    "path": ".godot/npc/bake.log",
+    "bytes": 794,
+    "sha256": "cbff597ae82135e295488c47cab954ae7d31d46f7b8b5adc940726a697203786"
+  },
+  {
+    "path": ".godot/npc/build_life.log",
+    "bytes": 3178,
+    "sha256": "724c16e200889928ac682f235597174fcd527fe08935a32768dd6c125992dc18"
+  },
+  {
+    "path": ".godot/npc/build_population_assets.py",
+    "bytes": 6568,
+    "sha256": "f36b4aa367bffaae092032ce8a7ceae6e8541e75af02dc50d2b01a140fbd30da"
+  },
+  {
+    "path": ".godot/npc/import_life_engine.log",
+    "bytes": 2917,
+    "sha256": "4a683b6dc23edb4e1c35fa05ad2610fbb01f14fa366770dae75288397f88f7e3"
+  },
+  {
+    "path": ".godot/npc/import_life.log",
+    "bytes": 2509,
+    "sha256": "db8b88691b8c37c5648b2a4e61da9b9f4abe36c3c55e46a7de9a849d20bee1a7"
+  },
+  {
+    "path": ".godot/npc/navigation_probe.tres",
+    "bytes": 9210,
+    "sha256": "49d65bc100ad00649d1afbb184c779fe2c3a7fa3a2c9f3ba2ade234e219224b3"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/idle_prompt_v2.txt",
+    "bytes": 2502,
+    "sha256": "1760754ad2b776f22a444271ace189de6d8e2c6202ea491a5628a17b86d1c9ed"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/idle_prompt_v3.txt",
+    "bytes": 2415,
+    "sha256": "d46601a1ab388b478111b9ef0bd35b2f84194257b6e00c13d76a62d7d3ddb277"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/idle_prompt_v4.txt",
+    "bytes": 2398,
+    "sha256": "f3e45ca60c0f5468c87b3a771a02bef7c24616b194ae180dcc458fbbe9fef554"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/idle_prompt_v5.txt",
+    "bytes": 1140,
+    "sha256": "e06575ecca8a33676f60292f3cfc19ed2fc403acf92e87c611bc4ed9dade82df"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/walk_prompt_v1.txt",
+    "bytes": 1448,
+    "sha256": "ced645754a022f73868596a403955d279060f3c3f661e15c28ebcb564b4cc409"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/walk_prompt_v3.txt",
+    "bytes": 1322,
+    "sha256": "6e1ea97fa5e163bee71b4d0f0bf1c993361cc5b264b7b60800180338f2820ce3"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/walk_workflow_v1.json",
+    "bytes": 74731,
+    "sha256": "c046126b6060fa6f1ceeb25de54e239b6d59c7ef3044d75329472b2653293113"
+  },
+  {
+    "path": "assets/resources/npc/gray_green_resident/walk_workflow_v3.json",
+    "bytes": 72249,
+    "sha256": "e35d41a5b5b6d2f3d69ed22e965cd0b31367c952a8dea277e1057b0ceacca8c4"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/candidate_input_v4.png",
+    "bytes": 33195,
+    "sha256": "d23c42ad5e6d912317c417fceef4daa166680110bf57d4cbc9b59490dbb74a0a"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/candidate_input_v4.png.import",
+    "bytes": 1118,
+    "sha256": "caa64068df2bb4f99d6c5c56473af9433f3360bf9d422f88c12d27a9a57bfcef"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v2.png",
+    "bytes": 600563,
+    "sha256": "1a267283435e78eee7f78d4dd756807146f9cc43e705a34d3b425ac4c5ac2a73"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v2.png.import",
+    "bytes": 1105,
+    "sha256": "93a2055c447171f2fd0d4947fc8613d581f6122aae2bfbcbfdf2fb897a99ac86"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v3.png",
+    "bytes": 468618,
+    "sha256": "7dc82dc0d7dcc9d95ba1090d8a15bd6f2ffcba2b40d544537c93fc0b46bd5f8d"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v3.png.import",
+    "bytes": 1106,
+    "sha256": "722725267c6b9c898731cad99410fa75a9c5e3d4e6ba2bc27e3030a1b695e63e"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v4.png",
+    "bytes": 1107109,
+    "sha256": "38a5f1af2f570a7b82e241a41107a429506c5020510347bf85ef7b75cae8a722"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v4.png.import",
+    "bytes": 1106,
+    "sha256": "fcc8180ea3ab7d5b2a34eeb6dcf55ab343a541ccd3797950fc3489abe0dc1a41"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v5_rejected_halo.png",
+    "bytes": 1100328,
+    "sha256": "4a4f1ec5b57a376ea461ce049a24cf2808bc387fddd8c90590dbce3636d01fe2"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/idle_source_v5_rejected_halo.png.import",
+    "bytes": 1147,
+    "sha256": "c0d3e70f39fa5286fa15916f73da4ca61dfd57093e32de13e80cb23e29344982"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/review/all-frames-dark.png",
+    "bytes": 279569,
+    "sha256": "7e2b25bdd9536670c5c9a11d7e77c7f7586fe8b46e403147c74313d17dabaeda"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/review/all-frames-dark.png.import",
+    "bytes": 1115,
+    "sha256": "1fd863105f291cf0f56bb9598e32cf356686d4ede476948deba2463a611710bb"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/review/all-frames-light.png",
+    "bytes": 280203,
+    "sha256": "b00a1641385eb2e432f7733c8364f3754352cda76b8e22e78ce1aa9678c1350b"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/review/all-frames-light.png.import",
+    "bytes": 1119,
+    "sha256": "a9c6a37f33dc7219d52eb8675c0f1c057158324209dcbc7b6865620f4d07e97b"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v1.png",
+    "bytes": 36691,
+    "sha256": "6849dd935609df39ea17b48ebb2866941d89b76b954349b0e9731c31c5c9e59d"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v1.png.import",
+    "bytes": 1103,
+    "sha256": "717ed60acdf3954e4dc172f1bcc0013055bf20d10c0bc484447a7b544ec27964"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v2.png",
+    "bytes": 27984,
+    "sha256": "c8f0b5e87810d6f27858a990fca207ad4cb75411b790252144fb90c3d261dc3a"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v2.png.import",
+    "bytes": 1103,
+    "sha256": "9d2e71d0f7dbe58cb5111290743ddc40e2c97d6eebc5827c19ba45555151354f"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v3.png",
+    "bytes": 35334,
+    "sha256": "bb89b16e5d719e16c09ae79779042245837abc58fe050c2671a4363081afe284"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_input_v3.png.import",
+    "bytes": 1102,
+    "sha256": "c418ce55a1d51889b0cce5a9d1e66ea07d7e787bd2d57b760b412c62265da256"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_00_source_010.png",
+    "bytes": 31686,
+    "sha256": "4ebd486f388f599e0330a272529045bbbddbd70066753effc698398eefbbe124"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_00_source_010.png.import",
+    "bytes": 1126,
+    "sha256": "935374be3005cfe6fdd0652593c34a010b5c4c70263a854a68b1f8b1ebe4e150"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_00_source_012.png",
+    "bytes": 29207,
+    "sha256": "99972127d32955262351b21d410ac3767ea3f741a785208941c7400ce80dfb6c"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_00_source_012.png.import",
+    "bytes": 1126,
+    "sha256": "70b350b7ec6faffae17887296fd6673a2ba24375383b2a83e08f0c53b919c307"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_01_source_012.png",
+    "bytes": 30862,
+    "sha256": "4b869e16121e6c68278ba8fb6a2cde2f527ef1e34dfbc7abf06d10f220aae402"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_01_source_012.png.import",
+    "bytes": 1127,
+    "sha256": "fcc49aed37177a9c65ec276d36759f4cb1c82fb8523a4f5bf6e3911d4f9290b0"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_01_source_014.png",
+    "bytes": 28524,
+    "sha256": "914af2ed27d256f8aeb38835374ab4b160b5254e0f953f3a37b5c2306f43aadc"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_01_source_014.png.import",
+    "bytes": 1126,
+    "sha256": "6a42114c27f75c6e2db1a3e9c4435b7f7d0227b69fc322fc9490e155d19e8151"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_02_source_014.png",
+    "bytes": 29748,
+    "sha256": "021c8d36d393f7ee2b2483ca09f537c8f6832796362814abc8bdbc2f1bbd9fca"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_02_source_014.png.import",
+    "bytes": 1127,
+    "sha256": "9638c014dd82fda6e57e5bd1e116c284f04e4f7c19458d9790f126ee3503a94b"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_02_source_017.png",
+    "bytes": 26771,
+    "sha256": "a644f20266114cebba63dabe5bd00d1f0d227b3da8bc5b206ff7a57e90e7f3b1"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_02_source_017.png.import",
+    "bytes": 1126,
+    "sha256": "dc7294a75b37507e58d1d879c2d2d59df7b501180423a05c853d2e9ddd483fa9"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_03_source_016.png",
+    "bytes": 29551,
+    "sha256": "1dbea2a0016190db57d2eddae8ad0b1ea885f29d336701af0a2980876ddcf282"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_03_source_016.png.import",
+    "bytes": 1127,
+    "sha256": "bb57ddbb2b120c8a2af6097c4cfaedcb9081659dc7c023db29908d7e7bf543f0"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_03_source_019.png",
+    "bytes": 27049,
+    "sha256": "536daa55df5fcefd792870b5cb53fb82e75269d0aa47ed05d5fc02149dd45dd9"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_03_source_019.png.import",
+    "bytes": 1127,
+    "sha256": "84561cc59348e4e60c3377deec1724926f81d4d370e418e32b1733deccae4653"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_04_source_018.png",
+    "bytes": 29444,
+    "sha256": "db332776e244cdfaf56dd9f2ff955dc234b1efc6be93d565c3de0208f8b76d08"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_04_source_018.png.import",
+    "bytes": 1126,
+    "sha256": "aca50b794bd2884344a6f070ebc673da651284aea6c258356debab152e1d9ca6"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_04_source_022.png",
+    "bytes": 25643,
+    "sha256": "ec3620a647821235b992c815ac77437c5e349fa03e2ad4a7a435ee884385ddde"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_04_source_022.png.import",
+    "bytes": 1126,
+    "sha256": "51c3662444b56da5416de8ed7938852a52663a5e6ea9a7a0a1fac7f7d8d3a58b"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_05_source_020.png",
+    "bytes": 29596,
+    "sha256": "a5785901b61b48a0cea242db278424fd555324f9846ae2ca57032eb4fb667cc7"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_05_source_020.png.import",
+    "bytes": 1126,
+    "sha256": "a8fc63170a3e3073221d59c25d0f2673689d0af431c99146826fd326df4e4d86"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_05_source_024.png",
+    "bytes": 26709,
+    "sha256": "6ea1b1005fa38a4ffcb5dd2d2b2bb2831d9989c161c016ab5d7cee2b2c08fac7"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_05_source_024.png.import",
+    "bytes": 1127,
+    "sha256": "041e0420745b0b37cbaf11a094f0c4ba7631a2bd0f5700e0a711b0e5405e5fe3"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_06_source_022.png",
+    "bytes": 30796,
+    "sha256": "cab013755d9c61ce275f22e81d43628b79926c098d6b8c1d7090fed9da87befd"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_06_source_022.png.import",
+    "bytes": 1126,
+    "sha256": "e8256bab154251bbc24e6f0c6eaf349438619142a283059eadaf206449b8ca7e"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_06_source_027.png",
+    "bytes": 29219,
+    "sha256": "36c8d2a135c68f427ca2ead82180cb940c190fc85dc889f5e49b294e6d60db24"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_06_source_027.png.import",
+    "bytes": 1127,
+    "sha256": "2109b41637d9434b2183b86ff8b5a1c9053634bbc624476371ddf53e1f703850"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_07_source_024.png",
+    "bytes": 29707,
+    "sha256": "ced6a46d55301d84dcafa96cf9eb4f71a78bea27b66aaa1d0a57d6a4dc431788"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_07_source_024.png.import",
+    "bytes": 1127,
+    "sha256": "67e227ae763de84cd0b7ccae49776dac45f4ce1b1df78902bfaf4e0c35def3f9"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_07_source_029.png",
+    "bytes": 29225,
+    "sha256": "6cdd0df18b8b644fa9da8ba99cd54f6c9a5765307df31014a3c6895fc91846c5"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_07_source_029.png.import",
+    "bytes": 1127,
+    "sha256": "f0fde7a50ee3c08a6d186aed361eb86c02232111be9f463c224801362dfa3a25"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_08_source_026.png",
+    "bytes": 30815,
+    "sha256": "4460ea327541a9ebc4e5ff11692503813d9f06917b5b9bee13f15970c076fc7f"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_08_source_026.png.import",
+    "bytes": 1127,
+    "sha256": "4d6bdff3b5a60203c98e6f80e3bde802479bdb4a40c5ad9a03f4f52d4c077599"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_08_source_032.png",
+    "bytes": 28129,
+    "sha256": "5c72273ba89cc07ccd0e9d4765ee9e027c9727300c4dbd0506345adcfc8c086e"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_08_source_032.png.import",
+    "bytes": 1127,
+    "sha256": "aaa0d0bada8d33241e0c6e2ed3e7f4a7a59cb41dd889ea219972d23763e67b66"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_09_source_028.png",
+    "bytes": 30177,
+    "sha256": "50c02e0bb7ef6700cc09de659260332e8d840dee5776923ac2a4290e6cb5df68"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_09_source_028.png.import",
+    "bytes": 1127,
+    "sha256": "352ad00dedf3a0cc345d84aaa44e0b0d887c147729f8bfc8b3c44792e045797c"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_09_source_034.png",
+    "bytes": 26186,
+    "sha256": "e2d40d55d514aa1b4ac98f2461ca1db8a3cee9f87599487b555f864839098e12"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_09_source_034.png.import",
+    "bytes": 1126,
+    "sha256": "21e20d4b0d584d79430583a868aa50d017613a185b452dabe5fa8c2b340b805f"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_10_source_030.png",
+    "bytes": 29947,
+    "sha256": "5749963332d80ddbbcf0a7b49a423d5be7dd792af69baede135cfb817748fbaf"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_10_source_030.png.import",
+    "bytes": 1127,
+    "sha256": "b8eabe9c645e9beb9c2e3b7a1df884441aaaeb68c3c7549bde027b47ed4782a5"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_10_source_037.png",
+    "bytes": 25862,
+    "sha256": "e5e5b3eb45b0aa2c50a772e9bdeb037da7250fede5c2bd4be782e835360a10c4"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_10_source_037.png.import",
+    "bytes": 1127,
+    "sha256": "ca6366925adf0a5a298d7907b972d9325f13b79f24de7b58b80f04044a9526e0"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_11_source_032.png",
+    "bytes": 29295,
+    "sha256": "d52e7393b7c225ca7a444b36ff20f8042e7b3f3cf8b9336aa1da0784491471da"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_11_source_032.png.import",
+    "bytes": 1127,
+    "sha256": "54c249d0c040ad7adf3f52443d6496ee0e7874aef9aa0b7a2bf16adb23a80387"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_11_source_039.png",
+    "bytes": 27583,
+    "sha256": "e5974e6b7633b9359c9170b65553bfd4cf92e551821dfbe14f7550b47ef6fb19"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_11_source_039.png.import",
+    "bytes": 1127,
+    "sha256": "888ad7c24156874d6fc8e49291a16775621a288689833c006ab9a4a77dfdd371"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_12_source_034.png",
+    "bytes": 32130,
+    "sha256": "431a25a47c87334dbf9433031f55361eb1f4ce96069fdda8c3d44b3d5e68073c"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_12_source_034.png.import",
+    "bytes": 1125,
+    "sha256": "9a3e0bea5b6525f25c79e64d78a48135d7b35c421ce61cc75dff2ff9c594ef6d"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_12_source_042.png",
+    "bytes": 28737,
+    "sha256": "b2f585b3990302c8243b634875709440166a97908e0906c50c5010ba2f0d1a1f"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/source/walk_rgb/walk_12_source_042.png.import",
+    "bytes": 1127,
+    "sha256": "edf1cda09b7f3fe6c8cb9f98c364081691e8819c1338ff401359cbe4624a3d25"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/walk_atlas.png",
+    "bytes": 380783,
+    "sha256": "0d5d94815b715e57d7160e4174fc6b0322899b0ee9f1de1b4e5ac3e5defd1a55"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/walk_atlas.png.import",
+    "bytes": 1086,
+    "sha256": "4c21bcdd9f7b07dc51a274f6f9dbbf77b0188f09c89ae8a6c929430cad2a559f"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/walk_preview_v1.apng",
+    "bytes": 438761,
+    "sha256": "1914713cd138ddabd9b00cbbbd4c8680fd246e429bb9478e09d8a5cb8a55ac3b"
+  },
+  {
+    "path": "assets/textures/sprites/npc/gray_green_resident/walk_preview_v3.apng",
+    "bytes": 399066,
+    "sha256": "4d06cf99a38afd9a75853cff2561e15ee5ad5de5e81cb5bbc0ac5d05ea665186"
+  },
+  {
+    "path": "assets/videos/npc/gray_green_resident/7d142049_000.mp4",
+    "bytes": 498063,
+    "sha256": "bba6b0cff9da036641b420e92f8a5dd31347f9eec9ba4bd5746a3a31544bf96e"
+  },
+  {
+    "path": "assets/videos/npc/gray_green_resident/bc70bcfd_000.mp4",
+    "bytes": 424476,
+    "sha256": "d3710647a6ed282ded5e77bc71d1b110ed07cd4cc4d671359a5f42b23e01dd3b"
+  },
+  {
+    "path": "scripts/tools/art/export_gray_green_walk.py",
+    "bytes": 4485,
+    "sha256": "1bfb17c9129d4c4b1c3f1703fdfa4f9a6d117b3048b849e9e2ccc02852610138"
+  },
+  {
+    "path": ".godot/imported/candidate_input_v4.png-d0fe6eebdeb8cfde18dd89a153aee5e2.ctex",
+    "bytes": 23722,
+    "sha256": "86f45d6dd5f4e4d801ea9e5a165f04df23c51e379f89efa7b92f324841bf3218",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/candidate_input_v4.png-d0fe6eebdeb8cfde18dd89a153aee5e2.md5",
+    "bytes": 91,
+    "sha256": "a9a7f9c3d508cfcbbac25b71d5c3d3adf58ad195f95e6a85546124641044b21c",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v2.png-1fb17cf7ea5d238eb1aa33c9805a81a1.ctex",
+    "bytes": 413542,
+    "sha256": "1f6e9eb43a7ee7d3e6655e4007dced891f1e856a7bb7ff9184dcdce632f76a57",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v2.png-1fb17cf7ea5d238eb1aa33c9805a81a1.md5",
+    "bytes": 91,
+    "sha256": "056b36b775f47afd55a037b0ab7f917d87cac918069d5bca57948887a5623d00",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v3.png-a6149193e9ca98e8655a3ebe496ea9bd.ctex",
+    "bytes": 315816,
+    "sha256": "90ef6a2bfd9c6d53847d608f35a0f68c34f66fe9a86e4f5f3fd2d28f8662c2bb",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v3.png-a6149193e9ca98e8655a3ebe496ea9bd.md5",
+    "bytes": 91,
+    "sha256": "f5a35a5667e93236f8e05f66944ec76d5f78b8d9b0fd81418af90d79ff30b6ba",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v4.png-713cd993461ef99d6bc5e66695615888.ctex",
+    "bytes": 860192,
+    "sha256": "1c05a03d6b0c7de17d04b77899842e26762ee1a6a20bfc5c82e9291db35b6560",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v4.png-713cd993461ef99d6bc5e66695615888.md5",
+    "bytes": 91,
+    "sha256": "aa072d5d2980f57d180937f282f35d14fda7ec2f76be31b0bd3fb87e9bf92123",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v5_rejected_halo.png-5b8d7e3db1e0089cc76c63a2220fb6bf.ctex",
+    "bytes": 853874,
+    "sha256": "77f8e8ec3781c557c0fd660a971caf6d7d24e0762aaf4a38924f9e3d2c84eb24",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/idle_source_v5_rejected_halo.png-5b8d7e3db1e0089cc76c63a2220fb6bf.md5",
+    "bytes": 91,
+    "sha256": "8bfdedb4e35f3d8424ccce407886a7fb787dee8f4d31ddddafe650f302fe7254",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/all-frames-dark.png-bbe5b158dc6d96452273ed9f998503bf.ctex",
+    "bytes": 187772,
+    "sha256": "451fb47d0d4fed45abd82ad96262ebd2d05ace741fb9b9a654f6916f0e86aee6",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/all-frames-dark.png-bbe5b158dc6d96452273ed9f998503bf.md5",
+    "bytes": 91,
+    "sha256": "7b7b0003883cd382c399307be7a9fb2632a77ee0fd19e76b9f20727a4ae96052",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/all-frames-light.png-694c87be68488a6ce8e356a0614ecf85.ctex",
+    "bytes": 188104,
+    "sha256": "0d615aa2768af51c58c1bad71f6697d1e93949a263eb37fff07f4d2dbc1698a3",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/all-frames-light.png-694c87be68488a6ce8e356a0614ecf85.md5",
+    "bytes": 91,
+    "sha256": "679677a7d63dc48e59623a1afe86911d04eac9ab9e00f334b0ba9db95a595404",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v1.png-801e30502b543998bdf3a780ea8d892d.ctex",
+    "bytes": 25546,
+    "sha256": "fbebb8e81c3709924ea2e2549865e5abe816a0f22bc3d5881a4799fe2c34995e",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v1.png-801e30502b543998bdf3a780ea8d892d.md5",
+    "bytes": 91,
+    "sha256": "a3071274493f8de20b2a08ad7b6d58520298c8a4b244157ea8536b2e58cba5dc",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v2.png-aabfcac7609451c79b57df2816e3838d.ctex",
+    "bytes": 19504,
+    "sha256": "af0d4123182b2e960af8ed19dc4f959bb9db0033ca56bd4cecef68e629979daa",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v2.png-aabfcac7609451c79b57df2816e3838d.md5",
+    "bytes": 91,
+    "sha256": "009b9d6af48d5b7518fd6ac204a3864f191c55dbd04e64ed6c9a86e85946daac",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v3.png-83ad71956358bfa3472563f5c9b8dce9.ctex",
+    "bytes": 24990,
+    "sha256": "f56f57783dbcea0252786210740f4f5bb1baebedea4c7ab08527fdcd26323acc",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_input_v3.png-83ad71956358bfa3472563f5c9b8dce9.md5",
+    "bytes": 91,
+    "sha256": "52df311d9b135a47919a03189860acee31ced78b985af4492e308a6fa1a7d70b",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_00_source_010.png-1aefdb401202b30381ff8e2c65a718ba.ctex",
+    "bytes": 22658,
+    "sha256": "dd28190e039c90bb113a55e1d5e80201acaf435d4a767e69727d764a6dd63222",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_00_source_010.png-1aefdb401202b30381ff8e2c65a718ba.md5",
+    "bytes": 91,
+    "sha256": "43cf45448a1fd7112545e67ee3a800df1982bf132b3c6d6ec2ee2e909c143d7b",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_00_source_012.png-3c29ee1412f76d816fb94f2e53e4dbf7.ctex",
+    "bytes": 20684,
+    "sha256": "ecd3bebed33a6dcf5ad21d5edd0e370b6403697b41c9d22be93cdf0c66960edb",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_00_source_012.png-3c29ee1412f76d816fb94f2e53e4dbf7.md5",
+    "bytes": 91,
+    "sha256": "a254bdcd56afe8898be5316b3985300a57b5d155ea38aa458a8848fba362cd06",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_01_source_012.png-547dceb1c6be3c39a0ece643bba093fe.ctex",
+    "bytes": 22092,
+    "sha256": "8613f4e84151d0a1dfd96ca18671f806ee8350ecaab102e483057d1c00e9ca79",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_01_source_012.png-547dceb1c6be3c39a0ece643bba093fe.md5",
+    "bytes": 91,
+    "sha256": "b1d93994fac9f20252db16169e7e4b6a0c70f67553493a55bf10525940f2f946",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_01_source_014.png-e9cb1d28b40458ffd2892616805184d4.ctex",
+    "bytes": 20432,
+    "sha256": "8124a4a9e65b5a099fbf9f4c86af718ea3bf801d5cdd2be509d758c9056659f8",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_01_source_014.png-e9cb1d28b40458ffd2892616805184d4.md5",
+    "bytes": 91,
+    "sha256": "0f571e9fad42dd30df31cbbf3428761f77867f6726c3de580f3d0bf5ee528943",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_02_source_014.png-86db2972ad9e658afa2c098b617eaf25.ctex",
+    "bytes": 21214,
+    "sha256": "af5336e15cdfa151a679b1b8cb6f9df4a10c1650f30cba5cd37b1169d9deb0c5",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_02_source_014.png-86db2972ad9e658afa2c098b617eaf25.md5",
+    "bytes": 91,
+    "sha256": "c97ff4d22f131a9bd153a2b5d03ca0f5be6bbe1f2ff97fc1013e2a459059c8be",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_02_source_017.png-653f33a49d4d9907ece117d7afe9a1d5.ctex",
+    "bytes": 19168,
+    "sha256": "6428aa96d89eac50e83993215a5ca9e772a670eff745a15e2628ca876490e333",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_02_source_017.png-653f33a49d4d9907ece117d7afe9a1d5.md5",
+    "bytes": 91,
+    "sha256": "fbda4c08d7cd968d713e66abefd2c544960c6830bb415a183b3b354ed5597ee4",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_03_source_016.png-47c1c3048fcc99a9cd22f73d26ae8c0e.ctex",
+    "bytes": 21058,
+    "sha256": "af25fb5b4165bd69506732b3bf81c5e1a9a44075cfa316594b3e063e4b772d07",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_03_source_016.png-47c1c3048fcc99a9cd22f73d26ae8c0e.md5",
+    "bytes": 91,
+    "sha256": "1de8ff2c953800127fb8ac8fe8323da4be896dd7293ba9940261cd0e453f8e1e",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_03_source_019.png-b34167f68c428eb4e0d3c9fe68409814.ctex",
+    "bytes": 19258,
+    "sha256": "8f4cf80edbab9de8096c5eb46acffb2eeb04526113c73debdffcc7c93aeaa55e",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_03_source_019.png-b34167f68c428eb4e0d3c9fe68409814.md5",
+    "bytes": 91,
+    "sha256": "8925991921ed237984c1c1d1698a488e4ef1416734612b53fa887cd25afb844d",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_04_source_018.png-2541054948f8a1adbfef646117ac3f95.ctex",
+    "bytes": 20820,
+    "sha256": "997fc3a85480660d7bf3fe15c94d01a70815d44f33773b45d475a207227cde1d",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_04_source_018.png-2541054948f8a1adbfef646117ac3f95.md5",
+    "bytes": 91,
+    "sha256": "c1969230a5f30a81d83404361975badb0f3264c60a8b1cb39f18557213f37196",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_04_source_022.png-faea453f99882fb782f93953404d3a7d.ctex",
+    "bytes": 18128,
+    "sha256": "770389694b02e7c0336d0403f9a5db08f39455baa13b16032b91385921fd4c7e",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_04_source_022.png-faea453f99882fb782f93953404d3a7d.md5",
+    "bytes": 91,
+    "sha256": "a34a6fc8ddb7fe4b386d7ff9dde93769d7591f19333ac04ffef10d1b5ba75d6a",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_05_source_020.png-7e3516b57aa7e9345e364a27b940f6c2.ctex",
+    "bytes": 21094,
+    "sha256": "a00cab89ab59646390cc8781f83cf08e49a08a51665461504f23ea1965129a17",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_05_source_020.png-7e3516b57aa7e9345e364a27b940f6c2.md5",
+    "bytes": 91,
+    "sha256": "b551748952803846fe398d4ab119db8e24b2425d5f385b90f3c4bafbaa39b90d",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_05_source_024.png-74837ae9972caf6a9ae9b9409f35d28a.ctex",
+    "bytes": 18974,
+    "sha256": "cead265a5e68be1ee8e5fe573527d4fa379dabfd164979be060ddce1691dea3f",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_05_source_024.png-74837ae9972caf6a9ae9b9409f35d28a.md5",
+    "bytes": 91,
+    "sha256": "d710e0949232fedfd2b826ed5036464b65629af914fae03c28606388e561f38a",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_06_source_022.png-0af27d319053bb12df8352140277ffda.ctex",
+    "bytes": 21948,
+    "sha256": "f4e0c74ae1db1079c93926f3ec2ed5c2c66097f40f3ed9765ed86248dad8739a",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_06_source_022.png-0af27d319053bb12df8352140277ffda.md5",
+    "bytes": 91,
+    "sha256": "1c14bcb83b04ca50046d057b33d854af8a59ef9955d13089089b38dc4395b55f",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_06_source_027.png-1863eb45a4ee4b86ca32b050b4a39bf0.ctex",
+    "bytes": 20980,
+    "sha256": "dd3fa895234b7a1c1dd0144f78a6a891bb8510d6b5189c313f2d6b7a2d8a2a11",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_06_source_027.png-1863eb45a4ee4b86ca32b050b4a39bf0.md5",
+    "bytes": 91,
+    "sha256": "83b408b6287a9b26c5ca5733b6dc176a0bbd0ed50cd3287b9972cbdb2f12eb5a",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_07_source_024.png-3e9f2b3fcca4524d8dcfd5172b849d5e.ctex",
+    "bytes": 21162,
+    "sha256": "fb1443150308a68f539b7130e1c27db16c2d47b52ff63d7f74c6e869e1fccb58",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_07_source_024.png-3e9f2b3fcca4524d8dcfd5172b849d5e.md5",
+    "bytes": 91,
+    "sha256": "09ca6dcbd4827702c2d6fdb5adabf7170cc7e403f883073a2772d24439277c5c",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_07_source_029.png-d6530d30e6826788e549e5060db61996.ctex",
+    "bytes": 20936,
+    "sha256": "bf51b95bd9e132e4483f5f6d3b50d20ddb0da0c138bd2485539cf14580375138",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_07_source_029.png-d6530d30e6826788e549e5060db61996.md5",
+    "bytes": 91,
+    "sha256": "db29438ad7620a755b6db0a770299ba4037127490898599b8a717a7085eb5efb",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_08_source_026.png-afba4a940f8a7d0406c1021f33a6e8f4.ctex",
+    "bytes": 21966,
+    "sha256": "c91e92ef3e9d9e2dc1c9e628d607c073fb87a238915d1cb7daea0f8087728bda",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_08_source_026.png-afba4a940f8a7d0406c1021f33a6e8f4.md5",
+    "bytes": 91,
+    "sha256": "f6057685a101e9477eb05c403268dc69257908d257efd7fb063c2b82bbf92fb0",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_08_source_032.png-b8004a0865d821e50ffabeb18f71642a.ctex",
+    "bytes": 20122,
+    "sha256": "34935ad61613065ab3ca6dc0ea7c7cb8f9a8b5dcad70150edf5681fc46d747a5",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_08_source_032.png-b8004a0865d821e50ffabeb18f71642a.md5",
+    "bytes": 91,
+    "sha256": "969da311efb61e5355d27fb8a4bd3971dad7491d6d4a9f8e99c86d3bfa6594fe",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_09_source_028.png-11df8be7c37fc259b57aea2e34bd93bc.ctex",
+    "bytes": 21532,
+    "sha256": "0c990b685fee68c3a4b64900073d7101e53f448cb887f3dc57f2da8e97da3b0e",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_09_source_028.png-11df8be7c37fc259b57aea2e34bd93bc.md5",
+    "bytes": 91,
+    "sha256": "ca77d467183c8a54e81287a0c2a60ddd5fbe617d5b22494bf9d0ebfaabf6ef48",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_09_source_034.png-2aa607b35d2d4631b75da0fa5eb88e34.ctex",
+    "bytes": 18890,
+    "sha256": "8dd8994454473a6c54e9ba953037a9946f3e842e9de7a6b74f8517339bf9729c",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_09_source_034.png-2aa607b35d2d4631b75da0fa5eb88e34.md5",
+    "bytes": 91,
+    "sha256": "71305b7863f5a18c53c84ff6ea7916e7229c6514d718c2b33d315d59145f7e70",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_10_source_030.png-30d3b0e1708a49b193ec61c00c691489.ctex",
+    "bytes": 20948,
+    "sha256": "f1671565758e32cf4620a740201907e5d8f2672ef4bba1a5b9c74cbd70a9f709",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_10_source_030.png-30d3b0e1708a49b193ec61c00c691489.md5",
+    "bytes": 91,
+    "sha256": "09021d8c8d3c0fd00b482cb3a8ce263c93ac0e16bd5eef08386e7a2861d463dc",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_10_source_037.png-11516470da017c74e64df1a849f81097.ctex",
+    "bytes": 18308,
+    "sha256": "b5538a1f0255204fc37f530def00c0a7b197d1500bdf9f1a9bde9b6d0d2ee849",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_10_source_037.png-11516470da017c74e64df1a849f81097.md5",
+    "bytes": 91,
+    "sha256": "01c2893c41737469af441d569137ed4d9864506178b3d34c212bd3f9c9d7b025",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_11_source_032.png-3828dda2fa7e64b6551b278dac23a629.ctex",
+    "bytes": 20502,
+    "sha256": "f632d37ba7503e1b3332a90a2a0c2fb647751bc07a1c7de184368c6823ce7d49",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_11_source_032.png-3828dda2fa7e64b6551b278dac23a629.md5",
+    "bytes": 91,
+    "sha256": "59bf12506cf8852c390fcffceeb9ac90f6f50d32ffece08f89136bd344618a81",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_11_source_039.png-25a30288adaf895d4c407db457a52eb7.ctex",
+    "bytes": 19660,
+    "sha256": "f4c306328be19ac8a47d4e6c8faa6db5f9fd59af5b242387c9641f4e2795b8e3",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_11_source_039.png-25a30288adaf895d4c407db457a52eb7.md5",
+    "bytes": 91,
+    "sha256": "f9784e99eb7728b89cada91814f925449a1ff81349f2d3560b1ab945209001b2",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_12_source_034.png-84edeceb572177c837f6bc02598b77cb.ctex",
+    "bytes": 22916,
+    "sha256": "8d497d0c420bcf9b052e6308c223f7849e8ef0b23c4b0918ef64b9f497adeb50",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_12_source_034.png-84edeceb572177c837f6bc02598b77cb.md5",
+    "bytes": 91,
+    "sha256": "9c2aaa77bb6b60a04a439e61e8ff130c3d9821024d7f6880c3105c591d42eae3",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_12_source_042.png-6f92630dcc4ae53564c7cec4921a0187.ctex",
+    "bytes": 20494,
+    "sha256": "776061045043572f7e606269354836f23ff045700e70739a25d381ddfe1e47ec",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_12_source_042.png-6f92630dcc4ae53564c7cec4921a0187.md5",
+    "bytes": 91,
+    "sha256": "fe8cb71326bee7b69362d40b3873ef6359a5563ee7e7414f8bc56a2336879096",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_atlas.png-ede0ce15a9031b6727b98d7fbc4837d9.ctex",
+    "bytes": 260118,
+    "sha256": "9252d20e942a6ce79d2d983d129781f0573965ad29735f52abc7f2900d95c97b",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/imported/walk_atlas.png-ede0ce15a9031b6727b98d7fbc4837d9.md5",
+    "bytes": 91,
+    "sha256": "175f15819f951a3679f2fdb072bdc3c29980f38ea71e8fefa4fb26f0c260edb0",
+    "category": "obsolete import cache or one-off cleanup script"
+  },
+  {
+    "path": ".godot/npc/cleanup_obsolete.ps1",
+    "bytes": 3171,
+    "sha256": "b3618d384312a4593e40adcfe6105f7a4c4f04f88f005250c52f6dfb1f284c5a",
+    "category": "obsolete import cache or one-off cleanup script"
+  }
+]

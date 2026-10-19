@@ -70,6 +70,7 @@ public sealed class GraphEditorController
         if (_graphEdit == null)
             return;
 
+        _graphEdit.ClearConnections();
         foreach (Node child in _graphEdit.GetChildren())
         {
             if (child is GraphNode or Label)

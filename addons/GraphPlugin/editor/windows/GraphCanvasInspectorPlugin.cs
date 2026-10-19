@@ -12,7 +12,17 @@ public partial class GraphCanvasInspectorPlugin : EditorInspectorPlugin
     public override bool _CanHandle(GodotObject @object)
     {
         return GodotObject.IsInstanceValid(@object) &&
-               (@object is GraphAsset || FindGraphProperties(@object).Count > 0);
+               (@object is GraphAsset || FindGraphProperties(@object).Count > 0 ||
+                (Plugin as GraphPlugin)?.InspectorGraph?.HasCustomPropertyEditors(@object) == true);
+    }
+
+    public override bool _ParseProperty(GodotObject @object, Variant.Type type, string name,
+        PropertyHint hintType, string hintString, PropertyUsageFlags usageFlags, bool wide)
+    {
+        var editor = (Plugin as GraphPlugin)?.InspectorGraph?.CreateCustomPropertyEditor(@object, name);
+        if (editor == null) return false;
+        AddPropertyEditor(name, editor);
+        return true;
     }
 
     public override void _ParseBegin(GodotObject @object)

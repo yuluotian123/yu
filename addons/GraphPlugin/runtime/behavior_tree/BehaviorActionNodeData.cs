@@ -53,7 +53,7 @@ public class BehaviorActionNodeData : BehaviorTreeNodeData
             items: Actions,
             buildItemUi: action => action.CreateEditUI(context),
             getItemLabel: action => action.Description,
-            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.BehaviorTree),
+            availableTypes: GraphCallableCatalog.Actions(GraphCallableUsage.BehaviorTree, context),
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
         root.AddChild(listControl.Build());

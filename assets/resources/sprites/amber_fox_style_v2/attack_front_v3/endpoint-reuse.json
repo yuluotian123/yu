@@ -1,0 +1,6 @@
+{
+  "source": "res://assets/textures/sprites/amber_fox_style_v2/idle_256/frames/idle_00.png",
+  "source_sha256": "3f84b060fc97e8506a7dfda70d57e44736975712718cfa8d2b0fa7d32680f266",
+  "first_last_png_byte_exact": true,
+  "note": "Whole approved idle PNG reused at ends. No static face overlay on moving frames."
+}

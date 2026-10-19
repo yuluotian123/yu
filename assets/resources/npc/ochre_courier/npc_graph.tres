@@ -1,31 +1,32 @@
-[gd_resource type="Resource" script_class="NpcGraphAsset" format=3 uid="uid://c2fl71f1os0rs"]
+[gd_resource type="Resource" script_class="NpcGraphAsset" format=3]
 
-[ext_resource type="Script" uid="uid://b6jbet2ls7i1v" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_ipnni"]
-[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="2_syaq0"]
-[ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="3_e4i8x"]
-[ext_resource type="Script" uid="uid://ciqrt8wwdlcb6" path="res://scripts/gamelogic/ai/definitions/NpcIdentityDefinition.cs" id="4_oc8bl"]
-[ext_resource type="Script" uid="uid://dudee4ee06pj1" path="res://scripts/gamelogic/ai/definitions/NpcPersonalityDefinition.cs" id="5_2vkhr"]
-[ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="6_nw4yy"]
-[ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="7_iud0f"]
-[ext_resource type="Script" uid="uid://cum2jon2w065s" path="res://scripts/gamelogic/ai/definitions/NpcScheduleWindow.cs" id="8_5qajp"]
-[ext_resource type="Script" uid="uid://0hf07glnkkk4" path="res://scripts/gamelogic/ai/definitions/NpcScheduleDefinition.cs" id="9_2gnct"]
-[ext_resource type="Script" uid="uid://by2i0ru4bil4t" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="10_d2s6o"]
-[ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/ai/definitions/NpcRelationsDefinition.cs" id="11_2at74"]
-[ext_resource type="Script" uid="uid://dc4l0rkjx1nlf" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="12_quajp"]
-[ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/ai/definitions/NpcAffectDefinition.cs" id="13_n3y3y"]
-[ext_resource type="Script" uid="uid://bypjwivu5heys" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="14_k0gex"]
-[ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/ai/definitions/NpcFactDefinition.cs" id="15_qdsoh"]
-[ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/ai/definitions/NpcFactSchema.cs" id="16_q711o"]
-[ext_resource type="Script" uid="uid://bqf2cnwcv8uv4" path="res://scripts/gamelogic/ai/definitions/NpcExpressionDefinition.cs" id="17_j75hg"]
-[ext_resource type="Script" uid="uid://deu38wi1fx0o6" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="18_6o4up"]
-[ext_resource type="Script" uid="uid://gets5b64b0uu" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="19_qumhv"]
-[ext_resource type="Script" uid="uid://bsde0sq6b1oj7" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="20_ek2he"]
-[ext_resource type="Script" uid="uid://b6vw5wxuhd1wo" path="res://scripts/gamelogic/ai/definitions/NpcBindingDefinition.cs" id="20_oc8bl"]
-[ext_resource type="Script" uid="uid://tbexx7n6vr3v" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="21_pun7h"]
-[ext_resource type="Script" uid="uid://dfipavmqfeeii" path="res://scripts/gamelogic/ai/definitions/NpcResourceClaimDefinition.cs" id="22_2vkhr"]
-[ext_resource type="Script" uid="uid://bqj6nsxp3iii3" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="22_xvh6h"]
-[ext_resource type="Script" uid="uid://ctfyvmebdqwrh" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="23_0ftur"]
-[ext_resource type="Script" uid="uid://dhhpywk4q6ktj" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="23_syaq0"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_ipnni"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScalarDefinition.cs" id="2_syaq0"]
+[ext_resource type="SpriteFrames" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="3_e4i8x"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcIdentityDefinition.cs" id="4_oc8bl"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPersonalityDefinition.cs" id="5_2vkhr"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedDefinition.cs" id="6_nw4yy"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcNeedsDefinition.cs" id="7_iud0f"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScheduleWindow.cs" id="8_5qajp"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcScheduleDefinition.cs" id="9_2gnct"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="10_d2s6o"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcRelationsDefinition.cs" id="11_2at74"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="12_quajp"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcAffectDefinition.cs" id="13_n3y3y"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="14_k0gex"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcFactDefinition.cs" id="15_qdsoh"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcFactSchema.cs" id="16_q711o"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcExpressionDefinition.cs" id="17_j75hg"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="18_6o4up"]
+[ext_resource type="Script" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="19_qumhv"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="20_ek2he"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcBindingDefinition.cs" id="20_oc8bl"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionInputDefinition.cs" id="21_2vkhr"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="21_pun7h"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcResourceClaimDefinition.cs" id="22_2vkhr"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="22_xvh6h"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="23_0ftur"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="23_syaq0"]
 
 [sub_resource type="Resource" id="Resource_l662n"]
 script = ExtResource("2_syaq0")
@@ -240,7 +241,8 @@ script = ExtResource("19_qumhv")
 GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":840,\"y\":40},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":860,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-5.7025146,\"y\":-395.61984},\"Zoom\":0.82644624}}"
 
 [sub_resource type="Resource" id="Resource_xfl26"]
-script = ExtResource("20_oc8bl")
+script = ExtResource("21_2vkhr")
+ResourceRequirements = PackedStringArray("capacity")
 Name = "地点"
 Adapter = "point"
 Source = 1
@@ -309,10 +311,6 @@ script = ExtResource("20_ek2he")
 Key = "self.location"
 Value = SubResource("Resource_dha2b")
 
-[sub_resource type="Resource" id="Resource_yxd6a"]
-script = ExtResource("22_2vkhr")
-Input = "地点"
-
 [sub_resource type="Resource" id="Resource_xvd2u"]
 script = ExtResource("17_j75hg")
 Kind = 1
@@ -323,7 +321,6 @@ script = ExtResource("21_pun7h")
 ShareTargetWithinPlan = false
 ReserveTarget = false
 Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_xfl26")])
-Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_yxd6a")])
 Preconditions = SubResource("Resource_40s38")
 SuccessConditions = SubResource("Resource_xvd2u")
 Cost = SubResource("Resource_x1ih3")
@@ -418,8 +415,9 @@ Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_mjjdg"), SubResou
 script = ExtResource("19_qumhv")
 GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":500,\"y\":0},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":500,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
 
-[sub_resource type="Resource" id="Resource_giqge"]
-script = ExtResource("20_oc8bl")
+[sub_resource type="Resource" id="Resource_yxd6a"]
+script = ExtResource("21_2vkhr")
+ResourceRequirements = PackedStringArray("capacity")
 Name = "地点"
 Adapter = "point"
 Source = 1
@@ -488,10 +486,6 @@ script = ExtResource("20_ek2he")
 Key = "self.location"
 Value = SubResource("Resource_xmt06")
 
-[sub_resource type="Resource" id="Resource_y86qc"]
-script = ExtResource("22_2vkhr")
-Input = "地点"
-
 [sub_resource type="Resource" id="Resource_fjddu"]
 script = ExtResource("17_j75hg")
 Kind = 1
@@ -501,8 +495,7 @@ Key = "input.地点.at"
 script = ExtResource("21_pun7h")
 ShareTargetWithinPlan = false
 ReserveTarget = false
-Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_giqge")])
-Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_y86qc")])
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_yxd6a")])
 Preconditions = SubResource("Resource_miky8")
 SuccessConditions = SubResource("Resource_fjddu")
 Cost = SubResource("Resource_7axck")
@@ -598,8 +591,9 @@ Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_lywub"), SubResou
 script = ExtResource("19_qumhv")
 GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":500,\"y\":0},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":500,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
 
-[sub_resource type="Resource" id="Resource_70wfa"]
-script = ExtResource("20_oc8bl")
+[sub_resource type="Resource" id="Resource_giqge"]
+script = ExtResource("21_2vkhr")
+ResourceRequirements = PackedStringArray("capacity")
 Name = "地点"
 Adapter = "point"
 Source = 1
@@ -668,10 +662,6 @@ script = ExtResource("20_ek2he")
 Key = "self.location"
 Value = SubResource("Resource_t02sp")
 
-[sub_resource type="Resource" id="Resource_pu4jw"]
-script = ExtResource("22_2vkhr")
-Input = "地点"
-
 [sub_resource type="Resource" id="Resource_bskxe"]
 script = ExtResource("17_j75hg")
 Kind = 1
@@ -681,8 +671,7 @@ Key = "input.地点.at"
 script = ExtResource("21_pun7h")
 ShareTargetWithinPlan = false
 ReserveTarget = false
-Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_70wfa")])
-Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_pu4jw")])
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_giqge")])
 Preconditions = SubResource("Resource_j6ff1")
 SuccessConditions = SubResource("Resource_bskxe")
 Cost = SubResource("Resource_8lia7")
@@ -742,8 +731,9 @@ Inputs = Array[ExtResource("17_j75hg")]([SubResource("Resource_jbwr2"), SubResou
 script = ExtResource("19_qumhv")
 GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":0},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Description\":\"NpcMoveToTargetAction\"},{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"DurationOverride\":-1,\"Description\":\"NpcWaitAction\"}],\"Id\":\"steps\",\"Position\":{\"x\":240,\"y\":0},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":840,\"y\":40},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure\",\"Position\":{\"x\":860,\"y\":200},\"NodeType\":\"FlowReturnNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"steps\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"steps\",\"FromPort\":1,\"ToNode\":\"failure\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-5.7025146,\"y\":-395.61984},\"Zoom\":0.82644624}}"
 
-[sub_resource type="Resource" id="Resource_fjtcf"]
-script = ExtResource("20_oc8bl")
+[sub_resource type="Resource" id="Resource_y86qc"]
+script = ExtResource("21_2vkhr")
+ResourceRequirements = PackedStringArray("capacity")
 Name = "地点"
 Adapter = "point"
 Source = 1
@@ -812,10 +802,6 @@ script = ExtResource("20_ek2he")
 Key = "self.location"
 Value = SubResource("Resource_7w3b2")
 
-[sub_resource type="Resource" id="Resource_t6ejt"]
-script = ExtResource("22_2vkhr")
-Input = "地点"
-
 [sub_resource type="Resource" id="Resource_ai78b"]
 script = ExtResource("17_j75hg")
 Kind = 1
@@ -825,8 +811,7 @@ Key = "input.地点.at"
 script = ExtResource("21_pun7h")
 ShareTargetWithinPlan = false
 ReserveTarget = false
-Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_fjtcf")])
-Resources = Array[ExtResource("22_2vkhr")]([SubResource("Resource_t6ejt")])
+Inputs = Array[ExtResource("20_oc8bl")]([SubResource("Resource_y86qc")])
 Preconditions = SubResource("Resource_n3y3y")
 SuccessConditions = SubResource("Resource_ai78b")
 Cost = SubResource("Resource_5qslp")

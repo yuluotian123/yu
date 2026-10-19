@@ -13,7 +13,7 @@ public partial class NpcGraphAsset
         {
             if(action.TargetSelectorId.Length==0){if(action.BindingVersion<2){action.BindingVersion=2;changed=true;}continue;}
             string selectorId=action.TargetSelectorId;
-            var input=new NpcBindingDefinition{Name="地点",Adapter="point",Source=NpcBindingSource.Selector,SelectorId=selectorId};
+            var input=new NpcActionInputDefinition{Name="地点",Adapter="point",Source=NpcBindingSource.Selector,SelectorId=selectorId};
             if(action.ShareTargetWithinPlan)
             {
                 string variableName=(Resolve(selectorId)?.DisplayName??"地点").Replace(".","·");
@@ -45,10 +45,26 @@ public partial class NpcGraphAsset
                 action.Predictions.Add(new(){Key="self.location",Value=Fact("input.地点.id")});
                 action.SuccessConditions=All(action.SuccessConditions,Fact("input.地点.at"));
             }
-            if(action.ReserveTarget)action.Resources.Add(new(){Input="地点",Capability="capacity"});
+            if(action.ReserveTarget)input.ResourceRequirements=new[]{"capacity"};
             if(action.DistanceCost>0)action.Cost=new(){Kind=NpcExpressionKind.Add,Inputs=new(){action.Cost??new(){Number=1},
                 new(){Kind=NpcExpressionKind.Multiply,Inputs=new(){Fact("input.地点.distance"),new(){Number=action.DistanceCost}}}}};
             action.TargetSelectorId="";action.ShareTargetWithinPlan=false;action.RequireAtTarget=false;action.ArrivesAtTarget=false;action.ReserveTarget=false;action.DistanceCost=0;action.BindingVersion=2;changed=true;
+        }
+        foreach(var action in Definitions.OfType<NpcActionDefinition>())
+        {
+            for(int i=0;i<action.Inputs.Count;i++)
+            {
+                var old=action.Inputs[i];if(old==null||old is NpcActionInputDefinition)continue;
+                action.Inputs[i]=new NpcActionInputDefinition{Name=old.Name,ValueType=old.ValueType,Adapter=old.Adapter,Source=old.Source,
+                    SelectorId=old.SelectorId,Variable=old.Variable,Value=old.Value,ResourceName=old.ResourceName,ResourceLocalToScene=old.ResourceLocalToScene};changed=true;
+            }
+            foreach(var claim in action.Resources)
+            {
+                var input=action.Inputs.OfType<NpcActionInputDefinition>().FirstOrDefault(i=>i.Name==claim?.Input);
+                NpcProgram.Require(input!=null&&!string.IsNullOrWhiteSpace(claim.Capability),"旧资源占用配置缺少有效输入或能力："+action.DisplayName);
+                input.ResourceRequirements=input.ResourceRequirements.Append(claim.Capability).Distinct(StringComparer.Ordinal).ToArray();
+            }
+            if(action.Resources.Count>0){action.Resources.Clear();changed=true;}
         }
         foreach(var action in Definitions.OfType<NpcActionDefinition>().Where(a=>a.Inputs.Count==0&&a.ExecutionGraph!=null))
         {

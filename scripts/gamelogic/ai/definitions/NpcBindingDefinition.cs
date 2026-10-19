@@ -10,7 +10,8 @@ public partial class NpcBindingDefinition : Resource
     [Export] public string Name { get; set; } = "参数";
     NpcValueType _valueType=NpcValueType.Symbol;
     [Export] public NpcValueType ValueType { get=>_valueType;set{if(_valueType==value)return;_valueType=value;NotifyPropertyListChanged();} }
-    [Export] public string Adapter { get; set; } = "";
+    string _adapter="";
+    [Export] public string Adapter { get=>_adapter;set{if(_adapter==value)return;_adapter=value;NotifyPropertyListChanged();} }
     NpcBindingSource _source;
     [Export] public NpcBindingSource Source { get=>_source;set{if(_source==value)return;_source=value;NotifyPropertyListChanged();} }
     [Export] public string SelectorId { get; set; } = "";

@@ -28,9 +28,9 @@ public partial class NpcFrameworkValidation
         var variable=originalInput.Source==NpcBindingSource.PlanVariable?originalInput.Variable:"验证地点";
         originalInput.Source=NpcBindingSource.PlanVariable;originalInput.Variable=variable;originalInput.SelectorId="";
         var movement=new NpcActionDefinition{DisplayName="Validation movement",BindingVersion=2,TimeoutSeconds=60,ExecutionGraph=Execution(new NpcMoveToTargetAction()),
-            Inputs=new(){new(){Name="地点",Adapter="point",Source=NpcBindingSource.PlanVariable,Variable=variable}},
+            Inputs=new(){new NpcActionInputDefinition{Name="地点",Adapter="point",Source=NpcBindingSource.PlanVariable,Variable=variable,ResourceRequirements=new[]{"capacity"}}},
             SuccessConditions=new(){Kind=NpcExpressionKind.Fact,Key="input.地点.at"},
-            Predictions=new(){new(){Key="self.location",Value=new(){Kind=NpcExpressionKind.Fact,Key="input.地点.id"}}},Resources=new(){new(){Input="地点"}}};
+            Predictions=new(){new(){Key="self.location",Value=new(){Kind=NpcExpressionKind.Fact,Key="input.地点.id"}}}};
         var movementNode=new NpcActionNodeData{Id="validation_move",DefinitionId=movement.DefinitionId};graph.Definitions.Add(movement);graph.Nodes.Add(movementNode);graph.MarkDirty();graph.ConnectNodes(goal.Id,0,movementNode.Id,0);
         foreach(var edge in graph.GetOutgoingConnections(goal.Id,1))
         {

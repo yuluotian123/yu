@@ -16,6 +16,7 @@ public sealed partial class NpcProgram
             Require(Enum.IsDefined(b.Source)&&b.ValueType!=NpcValueType.Unknown&&Enum.IsDefined(b.ValueType),"输入类型或来源无效："+b.Name);
             Require(b.Adapter.Length==0||b.ValueType==NpcValueType.Symbol&&NpcBindingAdapters.Find(b.Adapter)!=null,"输入对象类型未注册："+b.Name);
             Require(!variable||b.Source!=NpcBindingSource.PlanVariable,"计划变量不能引用另一个计划变量。");
+            Require(!variable||b is not NpcActionInputDefinition,"计划变量只保存值，请使用普通绑定定义；资源要求应配置在行动输入中。");
             Require(b.Source!=NpcBindingSource.Selector||TargetSelectors.TryGetValue(b.SelectorId,out var selector)&&selector.Adapter==b.Adapter,"选择器输入必须引用已连接启用的交互点选择器："+b.Name);
             Require(b.Source!=NpcBindingSource.PlanVariable||!string.IsNullOrWhiteSpace(b.Variable),"请选择计划变量："+b.Name);
             if(b.Source==NpcBindingSource.Expression)
@@ -42,12 +43,12 @@ public sealed partial class NpcProgram
             if(ability is NpcRememberAction remember&&remember.SubjectInput?.Name.Length>0)
                 Require(inputs.Any(i=>i.Name==remember.SubjectInput.Name&&i.Type==NpcValueType.Symbol),"记忆主题必须选择本行动的文本或对象输入："+action.DisplayName);
         }
-        var claims=ReadOnly(action.Resources.Select(r=>
+        var claims=ReadOnly(action.Inputs.OfType<NpcActionInputDefinition>().SelectMany(input=>input.ResourceRequirements.Select(capability=>
         {
-            var input=inputs.FirstOrDefault(i=>i.Name==r?.Input);var adapter=NpcBindingAdapters.Find(input?.Adapter);
-            Require(adapter!=null&&adapter.Capabilities.Contains(r.Capability),"占用资源必须选择具有此能力的行动输入。");
-            return new NpcClaimSpec(r.Input,r.Capability);
-        }).Distinct());
+            var adapter=NpcBindingAdapters.Find(input.Adapter);
+            Require(input.ValueType==NpcValueType.Symbol&&adapter!=null&&adapter.Capabilities.Contains(capability),"输入“"+input.Name+"”不支持此资源要求："+capability);
+            return new NpcClaimSpec(input.Name,capability);
+        })).Distinct());
         return new(action.DefinitionId,action.DisplayName,inputs,claims,action.Preconditions?.Freeze(),action.SuccessConditions?.Freeze(),action.Cost?.Freeze(),action.DurationSeconds,action.TimeoutSeconds,action.ExecutionGraph,Effects(action.Predictions),Effects(action.Results));
     }
     void ValidateAction(NpcActionSpec action)

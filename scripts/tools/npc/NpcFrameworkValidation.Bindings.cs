@@ -102,9 +102,10 @@ public partial class NpcFrameworkValidation
         Check(Rejects(()=>definition.Inputs[0].Variable="missing",()=>definition.Inputs[0].Variable="来源"),"Missing plan variable was accepted");
         Check(Rejects(()=>definition.Inputs[2].ValueType=NpcValueType.Boolean,()=>definition.Inputs[2].ValueType=NpcValueType.Number),"An input with a mismatched expression type was accepted");
         Check(Rejects(()=>definition.Preconditions=Fact("input.别人的参数.at"),()=>definition.Preconditions=null),"Another action's input was visible in this action");
-        Check(Rejects(()=>definition.Resources.Add(new(){Input="数量"}),()=>definition.Resources.Clear()),"A scalar input could be claimed as an object resource");
+        var amount=(NpcActionInputDefinition)definition.Inputs[2];
+        Check(Rejects(()=>amount.ResourceRequirements=new[]{"capacity"},()=>amount.ResourceRequirements=Array.Empty<string>()),"A scalar input could be claimed as an object resource");
         if(NpcBindingAdapters.Find("validation_object")==null)NpcBindingAdapters.Register(new ProbeBindingAdapter());
-        var extraInput=new NpcBindingDefinition{Name="物品",Adapter="validation_object",Value=new(){ValueType=NpcValueType.Symbol,Symbol="token"}};
+        var extraInput=new NpcActionInputDefinition{Name="物品",Adapter="validation_object",Value=new(){ValueType=NpcValueType.Symbol,Symbol="token"}};
         var extraEffect=new NpcEffectDefinition{Key="input.物品.flag",Value=new(){ValueType=NpcValueType.Boolean,Boolean=true}};
         definition.Inputs.Add(extraInput);definition.Results.Add(extraEffect);
         var extended=NpcProgram.Compile(graph);var extraAction=extended.Goals.SelectMany(g=>g.Actions).First(a=>a.Id==action.Id);

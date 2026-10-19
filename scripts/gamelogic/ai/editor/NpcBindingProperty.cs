@@ -7,7 +7,7 @@ namespace GameLogic.AI;
 public static class NpcBindingCatalog
 {
     public static NpcActionDefinition Action(NpcGraphAsset graph,GodotObject resource)=>graph.Definitions.OfType<NpcActionDefinition>()
-        .FirstOrDefault(a=>a==resource||a.Inputs.Contains(resource as NpcBindingDefinition)||a.Resources.Contains(resource as NpcResourceClaimDefinition));
+        .FirstOrDefault(a=>a==resource||a.Inputs.Contains(resource as NpcBindingDefinition));
     public static bool IsVariable(NpcGraphAsset graph,NpcBindingDefinition binding)=>graph.Definitions.OfType<NpcPlanTemplateDefinition>().Any(p=>p.Variables.Contains(binding));
     public static NpcBindingDefinition[] Variables(NpcGraphAsset graph,NpcBindingDefinition binding)
     {
@@ -31,14 +31,11 @@ public partial class NpcBindingProperty : EditorProperty
     {
         if(!GodotObject.IsInstanceValid(_owner))return;
         var binding=_owner as NpcBindingDefinition;
-        var action=NpcBindingCatalog.Action(_graph,_owner);
         Choice[] choices=_property switch
         {
             nameof(NpcBindingDefinition.SelectorId)=>NpcTargetCatalog.Available(_graph).Select(s=>new Choice(s.DefinitionId,s.DisplayName)).ToArray(),
             nameof(NpcBindingDefinition.Variable)=>NpcBindingCatalog.Variables(_graph,binding).Select(v=>new Choice(v.Name,v.Name)).ToArray(),
             nameof(NpcBindingDefinition.Adapter)=>(_owner is NpcTargetSelectorDefinition?Array.Empty<Choice>():new[]{new Choice("","普通文本")}).Concat(NpcBindingAdapters.All.Select(a=>new Choice(a.Id,a.Label))).ToArray(),
-            nameof(NpcResourceClaimDefinition.Input)=>action?.Inputs.Where(i=>NpcBindingAdapters.Find(i.Adapter)?.Capabilities.Count>0).Select(i=>new Choice(i.Name,i.Name)).ToArray()??Array.Empty<Choice>(),
-            nameof(NpcResourceClaimDefinition.Capability)=>NpcBindingAdapters.Find(action?.Inputs.FirstOrDefault(i=>i.Name==(_owner as NpcResourceClaimDefinition)?.Input)?.Adapter)?.Capabilities.Select(c=>new Choice(c,c=="capacity"?"使用容量":c)).ToArray()??Array.Empty<Choice>(),
             _=>Array.Empty<Choice>()
         };
         string value=_owner.Get(_property).ToString();string stamp=value+"|"+string.Join("|",choices.Select(c=>c.Id+":"+c.Label));
@@ -47,7 +44,7 @@ public partial class NpcBindingProperty : EditorProperty
         Label=_property switch
         {
             nameof(NpcBindingDefinition.ValueType)=>"数据类型",nameof(NpcBindingDefinition.Source)=>"值的来源",nameof(NpcBindingDefinition.Adapter)=>"对象类型",
-            nameof(NpcBindingDefinition.SelectorId)=>"候选选择器",nameof(NpcBindingDefinition.Variable)=>"计划变量",nameof(NpcResourceClaimDefinition.Input)=>"占用哪个输入",_=>"资源能力"
+            nameof(NpcBindingDefinition.SelectorId)=>"候选选择器",nameof(NpcBindingDefinition.Variable)=>"计划变量",_=>_property
         };
         if(_property is nameof(NpcBindingDefinition.Source) or nameof(NpcBindingDefinition.ValueType))
         {
@@ -78,34 +75,29 @@ public partial class NpcBindingsProperty : EditorProperty
     public override void _UpdateProperty()
     {
         if(!GodotObject.IsInstanceValid(_owner))return;var items=Items();
-        string stamp=string.Join("|",items.Select(r=>r.GetInstanceId()+":"+(r is NpcBindingDefinition b?b.Name:(r as NpcResourceClaimDefinition)?.Input)));
+        string stamp=string.Join("|",items.Select(r=>r.GetInstanceId()+":"+(r as NpcBindingDefinition)?.Name));
         if(stamp==_stamp)return;_stamp=stamp;
         foreach(Node child in _body.GetChildren()){GraphEditorSignalCleanup.PrepareForRemoval(child);_body.RemoveChild(child);}
-        Label=_owner is NpcPlanTemplateDefinition?"计划变量":_property==nameof(NpcActionDefinition.Inputs)?"行动输入":"资源占用";
+        Label=_owner is NpcPlanTemplateDefinition?"计划变量":"行动输入";
         for(int i=0;i<items.Length;i++)
         {
             int index=i;var item=items[i];var row=new HBoxContainer();
-            var edit=new Button{Text=item is NpcBindingDefinition b?b.Name:((NpcResourceClaimDefinition)item).Input+" · 占用资源",ClipText=true,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
+            var edit=new Button{Text=((NpcBindingDefinition)item).Name,ClipText=true,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
             edit.Pressed+=()=>EmitSignal(SignalName.ResourceSelected,_property,item);row.AddChild(edit);
             var remove=new Button{Text="×"};remove.Pressed+=()=>Commit(Items().Where((_,n)=>n!=index).ToArray());row.AddChild(remove);_body.AddChild(row);
         }
         var add=new Button{Text="+ 添加"+Label};add.Pressed+=()=>
         {
-            Resource resource;
-            if(_property==nameof(NpcActionDefinition.Resources))resource=new NpcResourceClaimDefinition();
-            else
-            {
-                string name="参数";int n=1;while(Items().OfType<NpcBindingDefinition>().Any(b=>b.Name==name))name="参数"+n++;
-                resource=new NpcBindingDefinition{Name=name,Value=new(){ValueType=NpcValueType.Symbol}};
-            }
+            string name="参数";int n=1;while(Items().OfType<NpcBindingDefinition>().Any(b=>b.Name==name))name="参数"+n++;
+            NpcBindingDefinition resource=_owner is NpcActionDefinition?new NpcActionInputDefinition():new NpcBindingDefinition();
+            resource.Name=name;resource.Value=new(){ValueType=NpcValueType.Symbol};
             Commit(Items().Append(resource).ToArray());
         };_body.AddChild(add);
         _body.AddChild(new Label{Text="点击条目编辑；参数引用从当前已注册项中选择。",AutowrapMode=TextServer.AutowrapMode.WordSmart});
     }
     void Commit(Resource[] resources)
     {
-        Variant value=_property==nameof(NpcActionDefinition.Resources)?Variant.From(new Godot.Collections.Array<NpcResourceClaimDefinition>(resources.Cast<NpcResourceClaimDefinition>())):
-            Variant.From(new Godot.Collections.Array<NpcBindingDefinition>(resources.Cast<NpcBindingDefinition>()));
+        Variant value=Variant.From(new Godot.Collections.Array<NpcBindingDefinition>(resources.Cast<NpcBindingDefinition>()));
         EmitChanged(_property,value);_stamp=null;Callable.From(_UpdateProperty).CallDeferred();
     }
 }

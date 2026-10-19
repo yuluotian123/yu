@@ -6,6 +6,8 @@ using Godot;
 
 namespace GameLogic.AI;
 
+public delegate void NpcExpressionPick(Control anchor,NpcValueType expected,bool anyType,Action<NpcExpressionDefinition> selected);
+
 [Tool]
 public partial class NpcExpressionProperty : EditorProperty
 {
@@ -15,6 +17,7 @@ public partial class NpcExpressionProperty : EditorProperty
     NpcValueType _type;
     readonly VBoxContainer _body = new();
     NpcExpressionDefinition _shown;
+    string _catalog;
     bool _built;
 
     public NpcExpressionProperty()
@@ -24,16 +27,32 @@ public partial class NpcExpressionProperty : EditorProperty
     public NpcExpressionProperty(NpcGraphAsset graph, GodotObject owner, string property, NpcValueType type) : this()
     {
         _graph = graph; _owner = owner; _property = property; _type = type;
-        if (owner is NpcEffectDefinition) Label = "效果值";
+        Label = FieldLabel;
     }
+    string FieldLabel=>_property switch
+    {
+        nameof(NpcGoalDefinition.Activation)=>"启用条件",nameof(NpcGoalDefinition.Completion)=>"完成条件",nameof(NpcGoalDefinition.Utility)=>"评分公式",
+        nameof(NpcActionDefinition.Preconditions)=>"前置条件",nameof(NpcActionDefinition.SuccessConditions)=>"成功条件",nameof(NpcActionDefinition.Cost)=>"行动成本",
+        nameof(NpcTargetSelectorDefinition.Filter)=>"候选筛选",nameof(NpcTargetSelectorDefinition.Score)=>"候选评分",nameof(NpcNeedDefinition.RateMultiplier)=>"变化倍率",
+        nameof(NpcEffectDefinition.Value)=>_owner is NpcEffectDefinition?"效果值":"输入值",_=>_property
+    };
+    bool Required=>_owner switch
+    {
+        NpcGoalDefinition=>_property is nameof(NpcGoalDefinition.Utility) or nameof(NpcGoalDefinition.Completion),
+        NpcEffectDefinition=>true,NpcBindingDefinition binding=>binding.Source==NpcBindingSource.Expression,
+        NpcTargetSelectorDefinition selector=>_property==nameof(NpcTargetSelectorDefinition.Score)&&selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore,
+        NpcActionDefinition action=>_property==nameof(NpcActionDefinition.SuccessConditions)&&action.Predictions.Any(e=>e.Key=="self.location"),_=>false
+    };
 
     public override void _UpdateProperty()
     {
         if (!GodotObject.IsInstanceValid(_owner)) return;
-        if (_owner is NpcEffectDefinition) Label = "效果值";
+        Label = FieldLabel;
         var value = _owner.Get(_property).AsGodotObject() as NpcExpressionDefinition;
         var type = NpcExpressionEditorCatalog.ExpectedType(_graph, _owner, _property) ?? _type;
-        if (_built && value == _shown && type == _type) return;
+        string catalog=string.Join("|",NpcExpressionEditorCatalog.For(_graph,_owner).Select(s=>s.Key+":"+s.Label+":"+s.Type));
+        if (_built && value == _shown && type == _type&&catalog==_catalog) return;
+        _catalog=catalog;
         _type = type;
         _shown = value; Rebuild();
     }
@@ -46,16 +65,25 @@ public partial class NpcExpressionProperty : EditorProperty
             GraphEditorSignalCleanup.PrepareForRemoval(child); _body.RemoveChild(child);
         }
         _built = true;
-        if (_owner is NpcEffectDefinition or NpcBindingDefinition && _shown != null &&
-            NpcExpressionEditorCatalog.TypeOf(_shown, NpcExpressionEditorCatalog.For(_graph,_owner)) is var actual &&
-            actual != NpcValueType.Unknown && actual != _type)
-            _body.AddChild(new Label { Text = "值的类型不匹配，请清空后重新配置。", AutowrapMode = TextServer.AutowrapMode.WordSmart });
-        _body.AddChild(NpcExpressionEditor.Build(_graph, _owner, _type, _shown, (value, structural) =>
+        var symbols=NpcExpressionEditorCatalog.For(_graph,_owner);
+        string text=NpcExpressionPresentation.Format(_shown,symbols);
+        var preview=new Label{Text=text.Length>180?text[..180]+"…":text,TooltipText=text,AutowrapMode=TextServer.AutowrapMode.WordSmart,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
+        _body.AddChild(preview);
+        var edit=new Button{Text=_shown==null?"添加公式…":"编辑公式…",SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
+        edit.Pressed+=()=>CreateEditor().PopupCenteredClamped(new Vector2I(1040,700),.9f);
+        _body.AddChild(edit);
+        string error=_shown==null&&Required?"此处必须配置公式。":NpcExpressionPresentation.Validate(_shown,_type,symbols);
+        if(error.Length>0)_body.AddChild(new Label{Text=error,AutowrapMode=TextServer.AutowrapMode.WordSmart,TooltipText=error});
+    }
+    internal NpcExpressionDialog CreateEditor()
+    {
+        var original=_owner.Get(_property).AsGodotObject() as NpcExpressionDefinition;
+        var dialog=new NpcExpressionDialog(_graph,_owner,_type,original,FieldLabel,value=>
         {
-            _shown = value;
-            EmitChanged(_property, value);
-            if (structural) Callable.From(Rebuild).CallDeferred();
-        }));
+            if(!GodotObject.IsInstanceValid(_owner))return;
+            _shown=value;EmitChanged(_property,value);Callable.From(Rebuild).CallDeferred();
+        },()=>GodotObject.IsInstanceValid(_owner)&&_owner.Get(_property).AsGodotObject()==original,Required);
+        AddChild(dialog);return dialog;
     }
 }
 
@@ -66,14 +94,7 @@ public static class NpcExpressionEditor
         NpcExpressionKind.Greater, NpcExpressionKind.AtLeast, NpcExpressionKind.Less, NpcExpressionKind.AtMost };
     static readonly NpcExpressionKind[] Arithmetic = { NpcExpressionKind.Add, NpcExpressionKind.Subtract,
         NpcExpressionKind.Multiply, NpcExpressionKind.Divide, NpcExpressionKind.Minimum, NpcExpressionKind.Maximum, NpcExpressionKind.Clamp01 };
-    static string Op(NpcExpressionKind kind) => kind switch
-    {
-        NpcExpressionKind.Equal => "=", NpcExpressionKind.NotEqual => "≠", NpcExpressionKind.Greater => ">",
-        NpcExpressionKind.AtLeast => "≥", NpcExpressionKind.Less => "<", NpcExpressionKind.AtMost => "≤",
-        NpcExpressionKind.Add => "+", NpcExpressionKind.Subtract => "−", NpcExpressionKind.Multiply => "×",
-        NpcExpressionKind.Divide => "÷", NpcExpressionKind.Minimum => "最小值", NpcExpressionKind.Maximum => "最大值",
-        NpcExpressionKind.Clamp01 => "限制到 0～1", _ => kind.ToString()
-    };
+    static string Op(NpcExpressionKind kind)=>NpcExpressionPresentation.Operator(kind);
     public static NpcExpressionDefinition Constant(NpcValueType type) => new() { ValueType = type, Boolean = true };
     public static NpcExpressionDefinition Operation(NpcExpressionKind kind, params NpcExpressionDefinition[] inputs) =>
         new() { Kind = kind, Inputs = new(inputs) };
@@ -81,14 +102,13 @@ public static class NpcExpressionEditor
         { Kind = symbol.Parameter ? NpcExpressionKind.Parameter : NpcExpressionKind.Fact, Key = symbol.Key };
 
     public static Control Build(NpcGraphAsset graph, GodotObject owner, NpcValueType expected,
-        NpcExpressionDefinition value, Action<NpcExpressionDefinition, bool> changed)
+        NpcExpressionDefinition value, Action<NpcExpressionDefinition, bool> changed,NpcExpressionPick picker=null)
     {
-        bool action = owner is NpcActionDefinition or NpcEffectDefinition or NpcTargetSelectorDefinition;
-        var view = new Builder(() => NpcExpressionEditorCatalog.For(graph,owner));
+        var view = new Builder(() => NpcExpressionEditorCatalog.For(graph,owner),picker);
         var root = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
         if (value == null)
         {
-            var create = new Button { Text = expected == NpcValueType.Boolean ? "添加条件" : "添加数值表达式" };
+            var create = new Button { Text = expected == NpcValueType.Boolean ? "添加条件" : expected==NpcValueType.Symbol?"添加文本或参数":"添加数值公式" };
             create.Pressed += () => changed(expected == NpcValueType.Boolean ? view.DefaultCondition() : Constant(expected), true);
             root.AddChild(create);
         }
@@ -97,8 +117,11 @@ public static class NpcExpressionEditor
             root.AddChild(expected == NpcValueType.Boolean
                 ? view.Group(value.Kind is NpcExpressionKind.All or NpcExpressionKind.Any ? value : Operation(NpcExpressionKind.All, value), changed, 0)
                 : view.Value(value, expected, changed, 0));
-            var clear = new Button { Text = "清空表达式", Flat = true, TooltipText = "必填字段清空后，需要重新配置才能通过图验证。" };
-            clear.Pressed += () => changed(null, true); root.AddChild(clear);
+            if(picker==null)
+            {
+                var clear = new Button { Text = "清空表达式", Flat = true, TooltipText = "必填字段清空后，需要重新配置才能通过图验证。" };
+                clear.Pressed += () => changed(null, true); root.AddChild(clear);
+            }
         }
         return root;
     }
@@ -107,7 +130,8 @@ public static class NpcExpressionEditor
     sealed class Builder
     {
         readonly Func<IReadOnlyList<NpcEditorSymbol>> _collect;
-        public Builder(Func<IReadOnlyList<NpcEditorSymbol>> collect) => _collect = collect;
+        readonly NpcExpressionPick _picker;
+        public Builder(Func<IReadOnlyList<NpcEditorSymbol>> collect,NpcExpressionPick picker) => (_collect,_picker)=(collect,picker);
         NpcValueType Type(NpcExpressionDefinition value) => NpcExpressionEditorCatalog.TypeOf(value, _collect());
         public NpcExpressionDefinition DefaultCondition()
         {
@@ -117,27 +141,31 @@ public static class NpcExpressionEditor
         static NpcExpressionDefinition Replace(NpcExpressionDefinition source, int index, NpcExpressionDefinition value) =>
             Operation(source.Kind, source.Inputs.Select((x, i) => i == index ? value : x).ToArray());
         static HFlowContainer Row() => new() { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
-        static Button Button(string text) => new() { Text = text, CustomMinimumSize = new(92, 0),
+        static Button Button(string text) => new() { Text = text, CustomMinimumSize = new(116, 0),
             ClipText = true, TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
 
         public Control Group(NpcExpressionDefinition group, Action<NpcExpressionDefinition, bool> set, int depth)
         {
-            var root = new VBoxContainer();
+            var root = new VBoxContainer{SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};root.AddThemeConstantOverride("separation",8);
             if (depth > 24) { root.AddChild(new Label { Text = "条件嵌套过深" }); return root; }
             var header = Row();
             var mode = new OptionButton(); mode.AddItem("全部满足（AND）"); mode.AddItem("任一满足（OR）");
             mode.Select(group.Kind == NpcExpressionKind.Any ? 1 : 0);
             mode.ItemSelected += i => set(Operation(i == 0 ? NpcExpressionKind.All : NpcExpressionKind.Any, group.Inputs.ToArray()), true);
-            header.AddChild(mode); root.AddChild(header);
+            header.AddChild(mode);root.AddChild(header);
+            var panel=new PanelContainer();var style=new StyleBoxFlat{BgColor=new Color(.12f,.14f,.17f,.55f),BorderColor=new Color(.34f,.44f,.52f,.8f),BorderWidthLeft=2,ContentMarginLeft=10,ContentMarginRight=8,ContentMarginTop=8,ContentMarginBottom=8};
+            panel.AddThemeStyleboxOverride("panel",style);var lines=new VBoxContainer();lines.AddThemeConstantOverride("separation",10);panel.AddChild(lines);root.AddChild(panel);
             for (int i = 0; i < group.Inputs.Count; i++)
             {
                 int index = i;
                 var line = new HBoxContainer();
+                line.AddThemeConstantOverride("separation",8);
+                line.AddChild(new Label{Text=(i+1).ToString(),SizeFlagsVertical=Control.SizeFlags.ShrinkBegin});
                 var content = Condition(group.Inputs[i], (e, rebuild) => { group = Replace(group, index, e); set(group, rebuild); }, depth + 1);
                 content.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill; line.AddChild(content);
                 var remove = new Button { Text = "×", TooltipText = "删除条件", SizeFlagsVertical = Control.SizeFlags.ShrinkBegin };
                 remove.Pressed += () => set(Operation(group.Kind, group.Inputs.Where((_, n) => n != index).ToArray()), true);
-                line.AddChild(remove); root.AddChild(line);
+                line.AddChild(remove); lines.AddChild(line);
             }
             if (group.Inputs.Count == 0) root.AddChild(new Label { Text = group.Kind == NpcExpressionKind.All ? "空条件组：始终满足" : "空条件组：始终不满足" });
             var footer = Row(); var add = new Button { Text = "+ 条件" }; var nested = new Button { Text = "+ 条件组" };
@@ -187,63 +215,77 @@ public static class NpcExpressionEditor
         {
             var box = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
             if (depth > 24) { box.AddChild(new Label { Text = "表达式嵌套过深" }); return box; }
-            Container row = expression.Kind == NpcExpressionKind.Literal ? new HBoxContainer() : Row();
-            var symbol = _collect().FirstOrDefault(s => s.Key == expression.Key && s.Parameter == (expression.Kind == NpcExpressionKind.Parameter));
-            string label = expression.Kind switch
+            if(Arithmetic.Contains(expression.Kind))
             {
-                NpcExpressionKind.Literal => expression.ValueType switch { NpcValueType.Number => "数字", NpcValueType.Boolean => "布尔值", _ => "文本" },
-                NpcExpressionKind.Fact or NpcExpressionKind.Parameter => symbol?.Label ?? "未注册：" + expression.Key,
-                _ => "计算"
-            };
-            var choose = Button(label); choose.TooltipText = expression.Key;
-            if (expression.Kind == NpcExpressionKind.Literal)
-            {
-                choose.Text = "⋯"; choose.CustomMinimumSize = new(24, 0);
-                choose.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
-                choose.TooltipText = label + "常量；点击切换为已注册参数或其他常量";
-            }
-            choose.Pressed += () => Pick(choose, expected, anyType, e => set(e, true)); row.AddChild(choose);
-            if (expression.Kind == NpcExpressionKind.Literal)
-            {
-                if (expression.ValueType == NpcValueType.Number)
-                {
-                    var number = new SpinBox { MinValue = 0, MaxValue = 100, AllowGreater = true, AllowLesser = true, Step = .001, Value = expression.Number, CustomMinimumSize = new(78, 0) };
-                    number.ValueChanged += n => set(new() { Number = n }, false); row.AddChild(number);
-                }
-                else if (expression.ValueType == NpcValueType.Boolean)
-                {
-                    var boolean = new CheckBox { Text = "真", ButtonPressed = expression.Boolean };
-                    boolean.Toggled += b => set(new() { ValueType = NpcValueType.Boolean, Boolean = b }, false); row.AddChild(boolean);
-                }
-                else
-                {
-                    var text = new LineEdit { Text = expression.Symbol, CustomMinimumSize = new(110, 0), PlaceholderText = "文本常量" };
-                    text.TextChanged += s => set(new() { ValueType = NpcValueType.Symbol, Symbol = s }, false); row.AddChild(text);
-                }
-            }
-            box.AddChild(row);
-            if (Arithmetic.Contains(expression.Kind))
-            {
-                var math = Row();
+                var math=Row();math.AddThemeConstantOverride("h_separation",6);math.AddThemeConstantOverride("v_separation",6);
+                if(depth>0)math.AddChild(new Label{Text="("});
                 var operation = Operator(Arithmetic, expression.Kind, op =>
                 {
-                    int count = op == NpcExpressionKind.Clamp01 ? 1 : 2;
+                    if(op==NpcExpressionKind.Clamp01&&expression.Kind!=NpcExpressionKind.Clamp01){set(Operation(op,expression),true);return;}
+                    if(op is NpcExpressionKind.Subtract or NpcExpressionKind.Divide&&expression.Inputs.Count>2)
+                    {
+                        var folded=Operation(op,expression.Inputs[0],expression.Inputs[1]);
+                        foreach(var operand in expression.Inputs.Skip(2))folded=Operation(op,folded,operand);
+                        set(folded,true);return;
+                    }
+                    bool variadic=op is NpcExpressionKind.Add or NpcExpressionKind.Multiply or NpcExpressionKind.Minimum or NpcExpressionKind.Maximum;
+                    int count = op == NpcExpressionKind.Clamp01 ? 1 : variadic?Math.Max(2,expression.Inputs.Count):2;
                     set(Operation(op, Enumerable.Range(0, count).Select(i => i < expression.Inputs.Count ? expression.Inputs[i] : Constant(NpcValueType.Number)).ToArray()), true);
                 });
-                for (int i = 0; i < expression.Inputs.Count; i++)
+                if(expression.Inputs.Count<2)math.AddChild(operation);
+                for(int i=0;i<expression.Inputs.Count;i++)
                 {
-                    int index = i;
-                    if (i == 1 || expression.Inputs.Count == 1) math.AddChild(operation);
-                    else if (i > 1) math.AddChild(new Label { Text = Op(expression.Kind) });
-                    math.AddChild(Value(expression.Inputs[i], NpcValueType.Number, (e, b) => { expression = Replace(expression, index, e); set(expression, b); }, depth + 1));
+                    int index=i;
+                    if(i==1)math.AddChild(operation);else if(i>1)math.AddChild(new Label{Text=Op(expression.Kind)});
+                    var operand=Value(expression.Inputs[i],NpcValueType.Number,(e,b)=>{expression=Replace(expression,index,e);set(expression,b);},depth+1);
+                    if(expression.Inputs.Count>2&&expression.Kind is NpcExpressionKind.Add or NpcExpressionKind.Multiply or NpcExpressionKind.Minimum or NpcExpressionKind.Maximum)
+                    {
+                        var term=new HBoxContainer();term.AddChild(operand);var remove=new Button{Text="×",TooltipText="删除此运算项"};
+                        remove.Pressed+=()=>set(Operation(expression.Kind,expression.Inputs.Where((_,n)=>n!=index).ToArray()),true);term.AddChild(remove);math.AddChild(term);
+                    }
+                    else math.AddChild(operand);
                 }
+                if(depth>0)math.AddChild(new Label{Text=")"});
+                var replace=new Button{Text="⋯",TooltipText="将此计算替换成参数、常量或新的计算"};
+                replace.Pressed+=()=>Pick(replace,expected,anyType,e=>set(e,true));math.AddChild(replace);
                 box.AddChild(math);
+                if(expression.Kind is NpcExpressionKind.Add or NpcExpressionKind.Multiply or NpcExpressionKind.Minimum or NpcExpressionKind.Maximum)
+                {
+                    var add=new Button{Text="＋ 运算项",Flat=true,SizeFlagsHorizontal=Control.SizeFlags.ShrinkBegin};
+                    add.Pressed+=()=>set(Operation(expression.Kind,expression.Inputs.Append(Constant(NpcValueType.Number)).ToArray()),true);box.AddChild(add);
+                }
+                return box;
             }
-            return box;
+            var row=new HBoxContainer();
+            var symbol = _collect().FirstOrDefault(s => s.Key == expression.Key && s.Parameter == (expression.Kind == NpcExpressionKind.Parameter));
+            if(expression.Kind!=NpcExpressionKind.Literal)
+            {
+                var choose=Button(symbol?.Label??"未注册："+expression.Key);
+                choose.TooltipText=symbol==null?expression.Key:symbol.Group+" / "+symbol.Label+"\n"+symbol.Key;
+                choose.Pressed+=()=>Pick(choose,expected,anyType,e=>set(e,true));row.AddChild(choose);box.AddChild(row);return box;
+            }
+            if(expression.ValueType==NpcValueType.Number)
+            {
+                var number=new SpinBox{MinValue=-1000000,MaxValue=1000000,AllowGreater=true,AllowLesser=true,Step=.001,Value=expression.Number,CustomMinimumSize=new(96,0),SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
+                number.ValueChanged+=n=>set(new(){Number=n},false);row.AddChild(number);
+            }
+            else if(expression.ValueType==NpcValueType.Boolean)
+            {
+                var boolean=new OptionButton();boolean.AddItem("真");boolean.AddItem("假");boolean.Select(expression.Boolean?0:1);
+                boolean.ItemSelected+=i=>set(new(){ValueType=NpcValueType.Boolean,Boolean=i==0},false);row.AddChild(boolean);
+            }
+            else
+            {
+                var text=new LineEdit{Text=expression.Symbol,CustomMinimumSize=new(120,0),SizeFlagsHorizontal=Control.SizeFlags.ExpandFill,PlaceholderText="文本常量"};
+                text.TextChanged+=v=>set(new(){ValueType=NpcValueType.Symbol,Symbol=v},false);row.AddChild(text);
+            }
+            var source=new Button{Text="⋯",TooltipText="改用参数、其他常量或计算"};
+            source.Pressed+=()=>Pick(source,expected,anyType,e=>set(e,true));row.AddChild(source);box.AddChild(row);return box;
         }
 
         void Pick(Control anchor, NpcValueType expected, bool anyType, Action<NpcExpressionDefinition> selected)
         {
+            if(_picker!=null){_picker(anchor,expected,anyType,selected);return;}
             var choices = _collect().Where(s => anyType || s.Type == expected)
                 .Select(s => new Choice(s.Label == s.Key ? s.Label : s.Label + "  [" + s.Key + "]", s.Group, s.Key + " " + s.Label + " " + s.Type, () => Reference(s))).ToList();
             foreach (var type in new[] { NpcValueType.Number, NpcValueType.Boolean, NpcValueType.Symbol }.Where(t => anyType || t == expected))

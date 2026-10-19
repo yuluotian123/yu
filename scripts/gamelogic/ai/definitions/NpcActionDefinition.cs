@@ -28,7 +28,7 @@ public partial class NpcActionDefinition : NpcDefinitionResource
     public override void _ValidateProperty(Godot.Collections.Dictionary property)
     {
         base._ValidateProperty(property);
-        if(property["name"].AsString() is nameof(TargetTags) or nameof(TargetIdParameter) or nameof(TargetSelectorId) or nameof(ShareTargetWithinPlan) or nameof(RequireAtTarget) or nameof(ArrivesAtTarget) or nameof(ReserveTarget) or nameof(DistanceCost) or nameof(BindingVersion))
+        if(property["name"].AsString() is nameof(TargetTags) or nameof(TargetIdParameter) or nameof(TargetSelectorId) or nameof(ShareTargetWithinPlan) or nameof(RequireAtTarget) or nameof(ArrivesAtTarget) or nameof(ReserveTarget) or nameof(DistanceCost) or nameof(BindingVersion) or nameof(Resources))
             property["usage"]=(long)PropertyUsageFlags.Storage;
     }
 }

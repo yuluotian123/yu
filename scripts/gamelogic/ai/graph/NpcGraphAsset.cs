@@ -14,12 +14,16 @@ public partial class NpcGraphAsset : GraphAsset
     public override string GetEditorTitle() => "NPC 人物与行为";
 #if TOOLS
     public override bool HasCustomPropertyEditors(GodotObject target) =>
-        NpcExpressionEditorCatalog.Owns(this, target);
+        target==this||NpcExpressionEditorCatalog.Owns(this, target);
+    public override string GetResourceEditorTitle(Resource resource)=>NpcResourcePresentation.Title(this,resource);
+    public override string GetResourceEditorDescription(Resource resource)=>NpcResourcePresentation.Description(this,resource);
     public override EditorProperty CreateCustomPropertyEditor(GodotObject target, string property)
     {
         if (!HasCustomPropertyEditors(target)) return null;
-        if(target is NpcActionDefinition&&property is nameof(NpcActionDefinition.Inputs) or nameof(NpcActionDefinition.Resources)||target is NpcPlanTemplateDefinition&&property==nameof(NpcPlanTemplateDefinition.Variables))return new NpcBindingsProperty((Resource)target,property);
-        if(target is NpcBindingDefinition&&property is nameof(NpcBindingDefinition.Source) or nameof(NpcBindingDefinition.ValueType) or nameof(NpcBindingDefinition.Adapter) or nameof(NpcBindingDefinition.SelectorId) or nameof(NpcBindingDefinition.Variable)||target is NpcResourceClaimDefinition)return new NpcBindingProperty(this,(Resource)target,property);
+        if(target==this&&property==nameof(Definitions))return new NpcDefinitionsProperty(this);
+        if(target is NpcActionDefinition&&property==nameof(NpcActionDefinition.Inputs)||target is NpcPlanTemplateDefinition&&property==nameof(NpcPlanTemplateDefinition.Variables))return new NpcBindingsProperty((Resource)target,property);
+        if(target is NpcActionInputDefinition input&&property==nameof(NpcActionInputDefinition.ResourceRequirements))return new NpcInputResourcesProperty(input);
+        if(target is NpcBindingDefinition&&property is nameof(NpcBindingDefinition.Source) or nameof(NpcBindingDefinition.ValueType) or nameof(NpcBindingDefinition.Adapter) or nameof(NpcBindingDefinition.SelectorId) or nameof(NpcBindingDefinition.Variable))return new NpcBindingProperty(this,(Resource)target,property);
         if(target is NpcTargetSelectorDefinition&&property==nameof(NpcTargetSelectorDefinition.Adapter))return new NpcBindingProperty(this,(Resource)target,property);
         if(target is NpcTargetSelectorDefinition selector&&property is nameof(NpcTargetSelectorDefinition.Source) or nameof(NpcTargetSelectorDefinition.Selection) or nameof(NpcTargetSelectorDefinition.ParameterKey))return new NpcTargetProperty(this,selector,property);
         if (target is NpcNeedsDefinition needs && property == nameof(NpcNeedsDefinition.Needs)) return new NpcNeedsProperty(needs);

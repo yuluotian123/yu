@@ -120,8 +120,9 @@ public sealed class GraphSelectionInspectorPanel
                 }
                 var resourceOwner = _resourceOwner;
                 _navigation.Push((_target, _objectTitle, _objectContext));
-                ShowObject(resource, string.IsNullOrEmpty(resource.ResourceName) ? resource.GetClass().ToString() : resource.ResourceName,
-                    "Resource properties · changes are saved with the graph or scene", false);
+                var graphOwner=_getCurrentGraph();
+                if(graphOwner==null)return;
+                ShowObject(resource,graphOwner.GetResourceEditorTitle(resource),graphOwner.GetResourceEditorDescription(resource),false);
                 _resourceOwner = resourceOwner;
             }).CallDeferred();
         };
@@ -173,7 +174,7 @@ public sealed class GraphSelectionInspectorPanel
         var inspectorObject = nodeData.GetInspectorObject(graph);
         if (inspectorObject != null)
         {
-            ShowObject(inspectorObject, nodeData.GetDisplayName(graph), "资源定义 · 随图保存");
+            ShowObject(inspectorObject, nodeData.GetDisplayName(graph), inspectorObject is Resource definition?graph.GetResourceEditorDescription(definition):"资源定义 · 随图保存");
             _resourceOwner = graph;
             return;
         }

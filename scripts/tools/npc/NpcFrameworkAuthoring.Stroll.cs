@@ -39,11 +39,11 @@ public partial class NpcFrameworkAuthoring
         }
         var move=Definition("gray_green_resident.action.go_stroll",()=>new NpcActionDefinition());
         move.DisplayName="前往散步地点";
-        NpcBindingDefinition Input()=>new(){Name="地点",Adapter="point",Source=NpcBindingSource.PlanVariable,Variable="散步地点"};
-        move.Inputs=new(){Input()};move.Resources=new(){new(){Input="地点"}};move.SuccessConditions=Fact("input.地点.at");
+        NpcBindingDefinition Input()=>new NpcActionInputDefinition{Name="地点",Adapter="point",Source=NpcBindingSource.PlanVariable,Variable="散步地点",ResourceRequirements=new[]{"capacity"}};
+        move.Inputs=new(){Input()};move.Resources.Clear();move.SuccessConditions=Fact("input.地点.at");
         move.DurationSeconds=0;move.TimeoutSeconds=60;move.Cost=Expr(NpcExpressionKind.Add,Lit(1),Expr(NpcExpressionKind.Multiply,Fact("input.地点.distance"),Lit(.2)));move.Preconditions=Fact("input.地点.open");move.ExecutionGraph=Flow(new NpcMoveToTargetAction());move.Predictions=new(){new(){Key="self.location",Value=Fact("input.地点.id")}};move.Results.Clear();
         Node(move,new NpcActionNodeData{Id="activity_move"},0,goalNode.Position+new Vector2(780,0));
-        stroll.DisplayName="散步";stroll.Inputs=new(){Input()};stroll.Resources=new(){new(){Input="地点"}};stroll.SuccessConditions=null;
+        stroll.DisplayName="散步";stroll.Inputs=new(){Input()};stroll.Resources.Clear();stroll.SuccessConditions=null;
         stroll.DurationSeconds=8;stroll.TimeoutSeconds=20;stroll.Cost=Lit(1);stroll.Preconditions=Expr(NpcExpressionKind.All,Fact("input.地点.open"),Fact("input.地点.at"));
         stroll.ExecutionGraph=Flow(new NpcRoamAction{Radius=.6});
         stroll.Predictions=new(){Set("needs.fun.value",.15),new(){Key="private.completed_visits",Mode=NpcEffectMode.Add,Value=Lit(1)}};

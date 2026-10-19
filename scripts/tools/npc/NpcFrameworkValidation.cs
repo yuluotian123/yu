@@ -128,6 +128,7 @@ public partial class NpcFrameworkValidation : Node
             ValidatePlanSearch(p);
             ValidateTargetSelectors(graph);
             ValidateActionBindings(graph);
+            ValidateInputResourceRequirements(graph);
             // A content author can rename a need and its entire behavior without editing any runtime type.
             var custom=(NpcGraphAsset)graph.Duplicate(true);
             var customNeed=custom.Definitions.OfType<NpcNeedsDefinition>().Single().Needs.Single(n=>n.NeedId=="hunger");customNeed.NeedId="invented_focus";
@@ -152,6 +153,7 @@ public partial class NpcFrameworkValidation : Node
             var view=GraphNodeViewBuilder.CreateNodeUI(goalNode,paletteContext);Check(view.Title==goal.Name,"Node title ignored configured display name");view.Free();
             ValidateEditorTopology(graph);
             ValidateExpressionEditor(graph);
+            ValidateFormulaUi(graph);
             ValidateNeedPresets(graph);
             ValidateEffectEditor(graph);
             ValidatePlanEditor(graph);

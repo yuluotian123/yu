@@ -54,6 +54,8 @@ public partial class GraphAsset : Resource
 #if TOOLS
     public virtual void PrepareForEditing() { }
     public virtual bool HasCustomPropertyEditors(GodotObject target) => false;
+    public virtual string GetResourceEditorTitle(Resource resource)=>string.IsNullOrEmpty(resource.ResourceName)?resource.GetClass().ToString():resource.ResourceName;
+    public virtual string GetResourceEditorDescription(Resource resource)=>"Resource properties · changes are saved with the graph or scene";
     public virtual EditorProperty CreateCustomPropertyEditor(GodotObject target, string property) => null;
     /// <summary>Capture node-owned resources at copy time, independently of the live graph.</summary>
     public virtual Godot.Collections.Array<Resource> CopyNodeResources(IReadOnlyList<GraphNodeData> nodes) => new();

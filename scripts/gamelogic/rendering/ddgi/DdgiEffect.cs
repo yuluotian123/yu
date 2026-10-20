@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -70,9 +71,15 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
             Status("native_receiver_available", native); Status("native_receiver", native);
             if (_status["state"].AsString() is "unsupported" or "failed") settings = settings with { Enabled = false };
         }
+        long captureStart = Stopwatch.GetTimestamp();
         var packet = _capture.Capture(root, settings);
+        double captureMs = Stopwatch.GetElapsedTime(captureStart).TotalMilliseconds;
         if (configuration.ContainsKey("sky_energy")) packet.SkyEnergy = configuration["sky_energy"].AsSingle();
-        lock (_gate) _pending = packet;
+        lock (_gate)
+        {
+            _pending = packet;
+            Status("capture_cpu_ms", captureMs);
+        }
         // Allocate before depth/opaque lists are prepared; only update existing caches in PreOpaque.
         RenderingServer.CallOnRenderThread(Callable.From(PrepareRender));
     }

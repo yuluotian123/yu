@@ -49,6 +49,7 @@ internal static class DdgiBytes
 internal sealed class DdgiSceneCapture
 {
     public const int TextureSize = 128, MaxTextures = 32, MaterialStride = 192, TriangleStride = 176;
+    private static readonly byte[] WhiteTexture = CreateWhiteTexture();
     private const string Town = "res://assets/shaders/town/town_toon.gdshader";
     private const string Ground = "res://assets/shaders/town/town_ground.gdshader";
     private const string Plant = "res://assets/shaders/town/plant_painterly.gdshader";
@@ -59,6 +60,13 @@ internal sealed class DdgiSceneCapture
     private readonly Dictionary<string, DdgiGeometry> _meshes = new();
     private readonly Dictionary<string, byte[]> _textures = new();
     private readonly HashSet<ulong> _usedResources = new();
+
+    private static byte[] CreateWhiteTexture()
+    {
+        var pixels = new byte[TextureSize * TextureSize * 4];
+        System.Array.Fill(pixels, (byte)255);
+        return pixels;
+    }
 
     private string Version(Resource resource)
     {
@@ -145,7 +153,7 @@ internal sealed class DdgiSceneCapture
         return value.VariantType == Variant.Type.Nil ? fallback : value.As<T>();
     }
 
-    private byte[] MaterialData(Material source, DdgiPacket packet)
+    private byte[] MaterialData(Material source, DdgiPacket packet, bool physical)
     {
         Color color = Colors.White, snowColor = Colors.White;
         Vector3 emission = Vector3.Zero, average = Vector3.One;
@@ -155,7 +163,6 @@ internal sealed class DdgiSceneCapture
         bool repeat = true, useTexture = false, vertexColor = false;
         int kind = 0, orm = -1;
         Texture2D texture = null;
-        bool physical = ProjectSettings.GetSetting("rendering/lights_and_shadows/use_physical_light_units", false).AsBool();
         if (source is StandardMaterial3D standard)
         {
             if (standard.Transparency != BaseMaterial3D.TransparencyEnum.Disabled && standard.Transparency != BaseMaterial3D.TransparencyEnum.AlphaScissor) return null;
@@ -229,8 +236,6 @@ internal sealed class DdgiSceneCapture
         else if (source != null) return null;
         int layer = Texture(texture, packet);
         if (layer < 0) return null;
-        string protocol = new[] { "standard", "town", "plant", "leaf" }[kind];
-        packet.MaterialCounts[protocol] = packet.MaterialCounts.GetValueOrDefault(protocol) + 1;
         return DdgiBytes.Of(new float[] { color.R, color.G, color.B, color.A, emission.X, emission.Y, emission.Z, Mathf.Clamp(metallic, 0, 1), uv.X, uv.Y, uv.Z, uv.W,
             cutoff, layer, useTexture ? 1 : 0, repeat ? 1 : 0, average.X, average.Y, average.Z, saturation, detail, vertexColor ? 1 : 0, kind, orm,
             weather.X, weather.Y, weather.Z, weather.W, puddles.X, puddles.Y, puddles.Z, puddles.W, snowColor.R, snowColor.G, snowColor.B, snowColor.A,
@@ -241,8 +246,11 @@ internal sealed class DdgiSceneCapture
     {
         var packet = new DdgiPacket { Settings = settings };
         _usedResources.Clear();
-        byte[] white = new byte[TextureSize * TextureSize * 4]; System.Array.Fill(white, (byte)255);
-        packet.TextureData.Add(white); packet.DataTextures.Add(white);
+        packet.TextureData.Add(WhiteTexture); packet.DataTextures.Add(WhiteTexture);
+        // Cache only within this snapshot: shared surfaces reuse their reads, while
+        // weather/uniform changes are still captured on the very next frame.
+        var materialCache = new Dictionary<Material, byte[]>();
+        byte[] defaultMaterial = null;
         using var materials = new MemoryStream(); using var lights = new MemoryStream(); using var lightWriter = new BinaryWriter(lights);
         using var emitters = new MemoryStream(); using var emitterWriter = new BinaryWriter(emitters);
         emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0);
@@ -270,8 +278,15 @@ internal sealed class DdgiSceneCapture
             {
                 Material material = instance.GetActiveMaterial(surface);
                 if (!instance.GetMeta("ddgi_contribute", true).AsBool()) continue;
-                byte[] bytes = MaterialData(material, packet);
+                byte[] bytes;
+                if (material == null)
+                    bytes = defaultMaterial ??= MaterialData(null, packet, physical);
+                else if (!materialCache.TryGetValue(material, out bytes))
+                    materialCache[material] = bytes = MaterialData(material, packet, physical);
                 if (bytes == null) continue;
+                var parameters = MemoryMarshal.Cast<byte, float>(bytes);
+                string protocol = (int)parameters[22] switch { 1 => "town", 2 => "plant", 3 => "leaf", _ => "standard" };
+                packet.MaterialCounts[protocol] = packet.MaterialCounts.GetValueOrDefault(protocol) + 1;
                 var geometry = Geometry(instance.Mesh, surface);
                 if (geometry == null) continue;
                 packet.Geometry[geometry.Key] = geometry;
@@ -279,7 +294,6 @@ internal sealed class DdgiSceneCapture
                 Transform3D transform = instance.GlobalTransform;
                 packet.Instances.Add(new(geometry.Key, transform, materialIndex));
                 materials.Write(bytes);
-                var parameters = MemoryMarshal.Cast<byte, float>(bytes);
                 if (parameters[12] >= 0 && Math.Max(parameters[4], Math.Max(parameters[5], parameters[6])) > 0)
                     packet.Warnings["alpha_emission"] = "Alpha-tested emission uses ray sampling; deterministic area integration currently supports opaque emitters.";
                 if (parameters[12] < 0 && Math.Max(parameters[4], Math.Max(parameters[5], parameters[6])) > 0)

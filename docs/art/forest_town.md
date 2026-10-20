@@ -79,3 +79,27 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 `material_scope_validation.json` 是此前只改材质阶段的历史记录；随后获得模型和摆放调整授权，最新范围与结果记录在 `reconstruction_v4.json`。
 
 运行日志仍可能包含本机证书、MCP 注册表写权限、未配置全局黑板，以及退出时既有资源清理提示；这些不属于材质或模型校验结果。
+
+## 性能定位（2026-10-21）
+
+当前 209 个独立实例合计 614396 个三角面，其中树木和植物占 553736 个。单资产小于 8000 面不等于整个场景负载低；固定镜头下统计约 505 次绘制、169 万个图元，包含阴影等重复绘制。临时隐藏植被的对照中，GPU 中位耗时由约 4.7 ms 降至 2.1–2.3 ms；临时隐藏河流几乎无改善。
+
+另一个瓶颈是 DDGI 的 CPU 场景采集：364 个材质表面逐帧重复读取共享材质。现在每份快照只读取每个共享材质一次，并复用白色占位纹理；下帧仍重新采集，保留天气、材质修改与动态物体的及时更新。`DdgiEffect.GetStatus()` 的 `capture_cpu_ms` 可查看这部分耗时，`gpu_update_ms` 只代表 DDGI 探针 GPU 更新，不能当作完整帧耗时。
+
+RTX 5080、当前定制 Godot 4.8、1920×1080、主菜单启动 Spacelevel、原固定镜头下，预热后对比结果：
+
+| 指标 | 优化前 | 优化后 |
+| --- | ---: | ---: |
+| DDGI CPU 采集中位耗时 | 5.6 ms | 1.4–1.5 ms |
+| 完整帧平均耗时（临时解除帧率上限） | 10.5 ms | 5.9–6.3 ms |
+| 平均帧率（由完整帧平均耗时换算） | 约 95 FPS | 约 158–170 FPS |
+| GPU 中位耗时 | 4.7 ms | 4.7–4.8 ms |
+
+恢复项目原有 120 FPS 上限和 VSync 后，360 帧采样平均约 117 FPS。优化后仍有少量约 40 ms 的长帧，尚未消除所有卡顿；场景、材质效果、分辨率、抗锯齿、阴影、后处理及 DDGI 质量配置均未调整。以上是静止镜头的本机测试，不代表所有位置或其他设备的帧率。
+
+原始采样与临时隔离脚本位于忽略目录 `.godot/forest-town/profile-*.json`、`profile_scene.gd`。共享材质、颜色和天气逐帧变化、纹理层复用、空材质以及不支持着色器的 12 项回归检查可运行：
+
+```powershell
+dotnet build yu.csproj
+& $forestEngine --headless --path . --script res://scripts/tools/rendering/validate_ddgi_capture.gd --quit-after 300
+```

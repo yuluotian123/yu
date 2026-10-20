@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/terrace.mesh.res" id="1_adsey"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j0gsi"]
+size = Vector3(4.7, 0.34, 3.5)
+
+[node name="Terrace" type="Node3D" unique_id=304571343]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/terrace.glb"
+metadata/source_polygons = 330
+metadata/triangles = 660
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=884331058]
+mesh = ExtResource("1_adsey")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=1070077783]
+collision_mask = 0
+
+[node name="@CollisionShape3D@79" type="CollisionShape3D" parent="Collision1" unique_id=1626901649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.16, 0)
+shape = SubResource("BoxShape3D_j0gsi")

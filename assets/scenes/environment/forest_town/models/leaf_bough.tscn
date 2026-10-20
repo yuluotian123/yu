@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/leaf_bough.mesh.res" id="1_kit16"]
+
+[node name="LeafBough" type="Node3D" unique_id=401725409]
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_town/leaf_bough.glb"
+metadata/source_polygons = 749
+metadata/triangles = 1544
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=512595073]
+mesh = ExtResource("1_kit16")

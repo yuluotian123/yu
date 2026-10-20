@@ -37,8 +37,6 @@ public partial class NpcGraphAsset
         // A copied plan uses the copied actions; references outside the selection stay intact.
         foreach (var plan in resources.OfType<NpcPlanTemplateDefinition>())
             plan.ActionIds = plan.ActionIds.Select(id => ids.GetValueOrDefault(id, id)).ToArray();
-        foreach(var binding in resources.OfType<NpcActionDefinition>().SelectMany(a=>a.Inputs).Concat(resources.OfType<NpcPlanTemplateDefinition>().SelectMany(p=>p.Variables)))
-            binding.SelectorId=ids.GetValueOrDefault(binding.SelectorId,binding.SelectorId);
         return resources;
     }
 

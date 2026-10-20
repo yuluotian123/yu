@@ -38,7 +38,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public int CompletedActions {get;private set;}
     public IReadOnlyList<string> Trace=>_trace;
     public IReadOnlyList<string> GoalScores=>_scores;
-    public IReadOnlyDictionary<string,CharacterValue> PlanBindings=>new System.Collections.ObjectModel.ReadOnlyDictionary<string,CharacterValue>(_bindings);
+    public IReadOnlyDictionary<string,CharacterValue> SelectorBindings=>new System.Collections.ObjectModel.ReadOnlyDictionary<string,CharacterValue>(_selectorBindings);
     public string SectionKey=>"npc_agent";
     public string EntryKey=>ActorId;
     public int SchemaVersion=>2;
@@ -50,7 +50,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     readonly Dictionary<string,NpcBoundAction> _grounded=new(StringComparer.Ordinal);
     readonly Queue<NpcBoundAction> _plan=new();
     readonly HashSet<string> _seenPoints=new(StringComparer.Ordinal);
-    readonly Dictionary<string,CharacterValue> _bindings=new(StringComparer.Ordinal);
+    readonly Dictionary<string,CharacterValue> _selectorBindings=new(StringComparer.Ordinal);
     readonly List<INpcResourceLease> _leases=new();
     readonly Dictionary<string,double> _goalBlockedUntil=new(StringComparer.Ordinal);
     NpcPlanSearch _search;
@@ -88,7 +88,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         if(!_registered)Register();
         if(Program==null||State==null||World==null)return;
         Decision.Refresh();
-        if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_bindings.Count>0)CancelPlan("Stopped");return;}
+        if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_selectorBindings.Count>0)CancelPlan("Stopped");return;}
         var player=Owner.GetTree().CurrentScene?.GetNodeOrNull<Node3D>("Player");
         if(player!=null){float distance=player.GlobalPosition.DistanceTo(Owner.GlobalPosition);bool next=IsAbstract?distance>Program.Policy.Detailed:distance>Program.Policy.Abstract;if(next!=IsAbstract){CancelPlan("LodChanged");IsAbstract=next;}}
         if(World.RuntimeSeconds>=_senseAt){_senseAt=World.RuntimeSeconds+Program.SenseInterval;Sense();}
@@ -142,13 +142,13 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     {
         var facts=Program.KnownKeys.Select(k=>new KeyValuePair<string,GoapValue>(k,Program.Encode(k,Read(k)))).ToList();
         foreach(var adapter in NpcBindingAdapters.All)facts.AddRange(adapter.Capture(this));
-        if(_selectedPlan!=null)foreach(var binding in _bindings)facts.Add(new(NpcProgram.BindingKey(_selectedPlan.Id,binding.Key),Program.Encode(NpcProgram.BindingKey(_selectedPlan.Id,binding.Key),binding.Value)));
+        if(_selectedPlan!=null)foreach(var binding in _selectorBindings)facts.Add(new(NpcProgram.SelectionKey(_selectedPlan.Id,binding.Key),Program.Encode(NpcProgram.SelectionKey(_selectedPlan.Id,binding.Key),binding.Value)));
         return new(facts);
     }
     void BeginPlanning()
     {
         if(_goal==null)return;
-        if(_goal.Actions.SelectMany(a=>a.Inputs).Concat(_goal.Plans.SelectMany(p=>p.Bindings)).Any(i=>i.Source==NpcBindingSource.Selector&&Program.TargetSelectors[i.SelectorId].RequireReachable)&&Navigation?.MapReady!=true){_retryAt=World.RuntimeSeconds+.1;return;}
+        if(_goal.Actions.SelectMany(a=>a.Inputs).Any(i=>i.IsTarget&&Program.TargetSelectors[i.SelectorId].RequireReachable)&&Navigation?.MapReady!=true){_retryAt=World.RuntimeSeconds+.1;return;}
         _grounded.Clear();var snapshot=Snapshot();
         var points=NpcBindingAdapters.All.SelectMany(a=>a.Candidates(this)).ToArray();
         try{foreach(var bound in NpcTargetQuery.Ground(Program,_goal,snapshot,points))_grounded[bound.Search.Id]=bound;}
@@ -164,7 +164,18 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         if(status is GoapSearchStatus.Found or GoapSearchStatus.AlreadySatisfied)
         {
             _selectedPlan=_search.ChosenPlan;
-            foreach(var step in _search.Result.Steps)_plan.Enqueue(_grounded[step.Id]);
+            foreach(var step in _search.Result.Steps)
+            {
+                var bound=_grounded[step.Id];
+                foreach(var input in bound.Action.Inputs)
+                {
+                    if(input.SelectionNodeId.Length==0)continue;
+                    var value=bound.Candidates[input.Name];
+                    if(_selectorBindings.TryGetValue(input.SelectionNodeId,out var previous)&&previous!=value){Fail("SelectorBindingChanged");return;}
+                    if(_selectorBindings.TryAdd(input.SelectionNodeId,value))Record("Target",Program.TargetSelectors[input.SelectorId].Name+" = "+value);
+                }
+                _plan.Enqueue(bound);
+            }
             Record("Plan",$"{_selectedPlan?.Name}: {_plan.Count} steps, {_search.Expanded} expanded");_search=null;
         }
         else {string reason=_search.FailureReason;_search=null;Fail(reason);}
@@ -177,11 +188,11 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public void CancelPlan(string reason="Replan")
     {
-        StopExecution();_search?.Invalidate();_search=null;_plan.Clear();_selectedPlan=null;_bindings.Clear();
+        StopExecution();_search?.Invalidate();_search=null;_plan.Clear();_selectedPlan=null;_selectorBindings.Clear();
         ReleaseResources();_current=null;Navigation?.Stop();Record("Cancelled",reason);
     }
     public void Record(string kind,string detail=""){_trace.Add($"{World?.RuntimeSeconds??0:0.0} {kind} {detail}");while(_trace.Count>128)_trace.RemoveAt(0);}
-    public string Describe()=>$"{ActorId}  {CurrentGoal} → {CurrentAction}  完成 {CompletedActions}  LOD {(IsAbstract?"抽象":"详细")}\n"+string.Join("\n",_bindings.Select(b=>b.Key+" = "+b.Value))+"\n"+string.Join("\n",_scores)+"\n"+string.Join("\n",_trace.TakeLast(8));
+    public string Describe()=>$"{ActorId}  {CurrentGoal} → {CurrentAction}  完成 {CompletedActions}  LOD {(IsAbstract?"抽象":"详细")}\n"+string.Join("\n",_selectorBindings.Select(b=>b.Key+" = "+b.Value))+"\n"+string.Join("\n",_scores)+"\n"+string.Join("\n",_trace.TakeLast(8));
     void CharacterRestored(){CancelPlan("CharacterRestored");Decision?.Refresh();_goal=null;_selectAt=_retryAt=0;}
     public JsonObject Capture()=>Decision?.Capture()??new();
     public void Restore(JsonObject data,int version){if(version!=SchemaVersion||State==null)return;Decision.Restore(data);CancelPlan("Restored");_goal=null;_selectAt=_retryAt=0;}

@@ -17,6 +17,7 @@ uniform float gradient_strength : hint_range(0.0, 1.0) = 0.60;
 uniform float transmission_strength : hint_range(0.0, 0.4) = 0.075;
 uniform float wind_strength : hint_range(0.0, 0.1) = 0.018;
 uniform float wind_speed : hint_range(0.0, 3.0) = 0.65;
+uniform float painterly_strength : hint_range(0.0, 1.0) = 0.0;
 
 varying float crown_height;
 varying float color_variation;
@@ -86,6 +87,13 @@ void light() {
     float diffuse_attenuation = LIGHT_IS_DIRECTIONAL
                                ? mix(directional_shadow_lift, 1.0, ATTENUATION) : ATTENUATION;
     vec3 diffuse = shade * soft_diffuse * diffuse_attenuation;
+    if (painterly_strength > 0.0) {
+        float middle = smoothstep(0.45, 0.51, half_lambert);
+        float bright = smoothstep(0.82, 0.87, half_lambert);
+        vec3 painted = mix(vec3(0.14, 0.33, 0.46), vec3(0.65, 0.82, 0.69), middle);
+        painted = mix(painted, vec3(1.08, 1.04, 0.72), bright);
+        diffuse = mix(diffuse, painted * diffuse_attenuation, painterly_strength);
+    }
     float back_scatter = pow(clamp(dot(VIEW, -normalize(LIGHT + NORMAL * 0.35)), 0.0, 1.0), 6.0);
     vec3 transmission = vec3(1.0, 0.98, 0.82) * back_scatter * transmission_strength * ATTENUATION;
     DIFFUSE_LIGHT += (diffuse + transmission) * LIGHT_COLOR / PI;

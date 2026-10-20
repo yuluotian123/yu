@@ -7,9 +7,19 @@ render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 uniform sampler2D ggx_energy_lut : hint_default_white, filter_linear, repeat_disable;
 uniform float toon_strength : hint_range(0.0, 1.0) = 1.0;
 uniform float toon_softness : hint_range(0.01, 2.0) = 1.0;
+// Opt-in material treatment for the forest concept. Other town materials keep
+// their existing native diffuse response when painterly_strength is zero.
+uniform float painterly_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float painterly_light_wrap : hint_range(0.0, 1.5) = 0.8;
+uniform float painterly_dapple_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float painterly_dapple_scale : hint_range(0.1, 2.0) = 0.18;
+uniform float painterly_shadow_lift : hint_range(0.0, 1.0) = 0.0;
+uniform float painterly_path_clearance : hint_range(0.0, 1.0) = 0.0;
+uniform sampler2D painterly_atlas : source_color, filter_nearest_mipmap, repeat_disable;
 varying float town_specular;
 varying float town_toon_width;
 varying float town_toon_amount;
+varying float town_painted_mask;
 
 // 底色保留原模型配色。纹理均值与细节混合，减弱照片式碎纹理；不改变 UV。
 uniform vec4 base_color : source_color = vec4(1.0);
@@ -60,6 +70,23 @@ void fragment() {
 		METALLIC *= orm.b;
 	}
 	town_toon_width = max(ROUGHNESS * toon_softness, 0.01);
+	town_painted_mask = 1.0;
+	if (painterly_strength > 0.0 && painterly_dapple_strength > 0.0) {
+		// A painted canopy mask belongs to this surface material; it never changes
+		// the actual sun, shadow maps, exposure or camera. Quantized coordinates
+		// retain the reference's small stepped paint contours in world space.
+		vec2 brush_position = floor((weather_position.xz + weather_position.y * vec2(0.21, 0.13)) * 40.0) / 40.0;
+		vec2 tile = fract(brush_position * painterly_dapple_scale);
+		vec2 mask_uv = vec2(0.753) + tile * 0.244;
+		float edge_distance = min(min(tile.x, 1.0 - tile.x), min(tile.y, 1.0 - tile.y));
+		float canopy_a = texture(painterly_atlas, mask_uv).r;
+		float canopy_b = texture(painterly_atlas, vec2(0.753) + fract(tile + vec2(0.381, 0.271)) * 0.244).r;
+		float canopy = mix(canopy_b, canopy_a, smoothstep(0.025, 0.10, edge_distance));
+		float road_center = 0.8 + max(0.0, -weather_position.z) * 0.15;
+		float clearing = mix(0.12, 1.0, smoothstep(1.2, 4.4, abs(weather_position.x - road_center)));
+		float strength = painterly_dapple_strength * mix(1.0, clearing, painterly_path_clearance);
+		town_painted_mask = mix(1.0, mix(0.08, 1.0, smoothstep(0.32, 0.72, canopy)), strength);
+	}
 	EMISSION = emission_color * emission_intensity;
 	if (emission_luminance_units) EMISSION /= max(dot(emission_color, vec3(0.2126, 0.7152, 0.0722)), 1e-6);
 	vec3 world_normal = normalize((INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
@@ -108,7 +135,19 @@ void light() {
 	float burley = (1.0 + fd90 * town_pow5(1.0 - nv))
 				 * (1.0 + fd90 * town_pow5(1.0 - clamped_nl)) * clamped_nl;
 	float toon = smoothstep(-town_toon_width, town_toon_width, nl);
-	DIFFUSE_LIGHT += LIGHT_COLOR * ATTENUATION * mix(burley, toon, town_toon_amount) / PI;
+	float native_diffuse = mix(burley, toon, town_toon_amount);
+	vec3 diffuse = vec3(native_diffuse) * ATTENUATION;
+	if (painterly_strength > 0.0) {
+		float facing = clamp((nl + painterly_light_wrap) / (1.0 + painterly_light_wrap), 0.0, 1.0);
+		float middle = smoothstep(0.22, 0.32, facing);
+		float bright = smoothstep(0.65, 0.73, facing);
+		vec3 painted = mix(vec3(0.19, 0.28, 0.36), vec3(0.76, 0.75, 0.67), middle);
+		painted = mix(painted, vec3(1.04, 1.00, 0.85), bright);
+		if (LIGHT_IS_DIRECTIONAL) painted *= town_painted_mask;
+		float painted_attenuation = LIGHT_IS_DIRECTIONAL ? mix(painterly_shadow_lift, 1.0, ATTENUATION) : ATTENUATION;
+		diffuse = mix(diffuse, painted * painted_attenuation, painterly_strength);
+	}
+	DIFFUSE_LIGHT += LIGHT_COLOR * diffuse / PI;
 
 	if (clamped_nl > 0.0 && ROUGHNESS > 0.0) {
 		// GGX distribution, visibility, Schlick Fresnel and multiscatter compensation.

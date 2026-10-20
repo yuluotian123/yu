@@ -200,19 +200,20 @@ HFSM 继续用于 `CharacterAnimationComponent3D` 内部的 LocomotionGraph，�
 
 - cooldown 和最终激活裁决属于 AbilitySystem，不放进 CharacterGraph 或 Timeline。
 - CharacterGraph 只负责玩家输入映射以及 Interrupt/Completion 请求关系。
-- AI BehaviorTree 直接调用 AbilitySystem，不挂载 CharacterGraph。
+- AI 执行能力直接调用 AbilitySystem，不挂载 CharacterGraph。
 - Timeline 只描述 Ability 已开始后的动画、位移、Hitbox 和事件。
 
 ### AI
 
-`scripts/gamelogic/ai` 使用 BehaviorTree 图驱动简单角色 AI。
+`scripts/gamelogic/ai` 使用可配置 NPC 图、GOAP 和 Flow 执行图驱动角色决策。
 
 运行方式：
 
-- `SimpleAICharacterControllerComponent3D` 持有 `BehaviorTreeGraphAsset`。
-- 行为树 action 写入本帧移动和跳跃 intent。
-- Controller 在帧末将 intent 直接提交给 CharacterMovementComponent3D。
-- 战斗 AI 按需直接调用 AbilitySystemComponent3D。
+- `AiAgentComponent3D` 持有 NPC 图，读取独立的角色数据。
+- Goal 选择业务目标，Plan 手动限定可用 Action，GOAP 搜索行动组合。
+- 目标选择器通过命名端口连接 Action 输入，同一节点在本次计划共享目标。
+- Flow 能力调用导航、Movement、Animation 和可选 AbilitySystem，按生命周期执行与取消。
+- 当前世界组件只处理已加载场景；世界会话、关卡切换和跨关卡引用见[独立实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)。
 
 推荐约定：
 
@@ -292,7 +293,8 @@ dotnet build yu.csproj
 
 - [角色系统](CHARACTER_SYSTEM.md)
 - [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
-- [AI 角色示例](AI_CHARACTER_EXAMPLE.md)
+- [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)
+- [世界框架实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)
 - [GraphPlugin](../addons/GraphPlugin/README.md)
 - [GraphPlugin 详细文档](../addons/GraphPlugin/docs/README.md)
 - [ResourceModule](../scripts/framework/resource/ResourceModule.md)

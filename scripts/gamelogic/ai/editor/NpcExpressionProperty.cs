@@ -39,8 +39,8 @@ public partial class NpcExpressionProperty : EditorProperty
     bool Required=>_owner switch
     {
         NpcGoalDefinition=>_property is nameof(NpcGoalDefinition.Utility) or nameof(NpcGoalDefinition.Completion),
-        NpcEffectDefinition=>true,NpcBindingDefinition binding=>binding.Source==NpcBindingSource.Expression,
-        NpcTargetSelectorDefinition selector=>_property==nameof(NpcTargetSelectorDefinition.Score)&&selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore,
+        NpcEffectDefinition=>true,NpcActionInputDefinition input=>!input.IsTarget,
+        NpcTargetSelectorDefinition selector=>!NpcTargetSelectorDefinition.IsSingleSource(selector.Source)&&_property==nameof(NpcTargetSelectorDefinition.Score)&&selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore,
         NpcActionDefinition action=>_property==nameof(NpcActionDefinition.SuccessConditions)&&action.Predictions.Any(e=>e.Key=="self.location"),_=>false
     };
 

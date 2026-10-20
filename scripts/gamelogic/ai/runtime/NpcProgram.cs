@@ -10,14 +10,14 @@ public sealed record NpcFactSpec(string Key,CharacterValueType Type,double Minim
 public sealed record NpcNeedSpec(string Id,double Min,double Max,double Initial,bool Higher,double Enter,double Exit,double Exponent);
 public sealed record NpcWindowSpec(string Id,double Start,double End,int Priority,IReadOnlyList<string> Tags);
 public sealed record NpcEffect(string Key,NpcEffectMode Mode,CharacterExpression Value);
-public sealed record NpcBindingSpec(string Name,CharacterValueType Type,string Adapter,NpcBindingSource Source,string SelectorId,string Variable,CharacterExpression Value);
+public sealed record NpcBindingSpec(string Name,CharacterValueType Type,string Adapter,string SelectorId,CharacterExpression Value,string SelectionNodeId="")
+{
+    public bool IsTarget=>Adapter.Length>0;
+}
 public sealed record NpcClaimSpec(string Input,string Capability);
 public sealed record NpcActionSpec(string Id,string Name,IReadOnlyList<NpcBindingSpec> Inputs,IReadOnlyList<NpcClaimSpec> Resources,CharacterExpression Precondition,CharacterExpression Success,CharacterExpression Cost,double Duration,double Timeout,FlowGraphAsset Execution,IReadOnlyList<NpcEffect> Predictions,IReadOnlyList<NpcEffect> Results);
-public sealed record NpcTargetSelectorSpec(string Id,string Name,NpcTargetSource Source,string ParameterKey,IReadOnlyList<string> AllTags,IReadOnlyList<string> AnyTags,IReadOnlyList<string> ExcludedTags,double MaximumDistance,bool RequireUsable,bool RequireReachable,CharacterExpression Filter,NpcTargetSelection Selection,CharacterExpression Score,int Limit,string Adapter="point");
-public sealed record NpcPlanSpec(string Id,string Name,int Priority,CharacterExpression Eligibility,IReadOnlyList<string> ActionIds,IReadOnlyList<NpcBindingSpec> Variables=null)
-{
-    public IReadOnlyList<NpcBindingSpec> Bindings=>Variables??Array.Empty<NpcBindingSpec>();
-}
+public sealed record NpcTargetSelectorSpec(string Id,string Name,NpcTargetSource Source,string ParameterKey,IReadOnlyList<string> AllTags,IReadOnlyList<string> AnyTags,IReadOnlyList<string> ExcludedTags,double MaximumDistance,bool RequireUsable,bool RequireReachable,CharacterExpression Filter,NpcTargetSelection Selection,CharacterExpression Score,int Limit,string Adapter="point",string FixedObjectId="");
+public sealed record NpcPlanSpec(string Id,string Name,int Priority,CharacterExpression Eligibility,IReadOnlyList<string> ActionIds);
 public sealed record NpcGoalSpec(string Id,string Name,CharacterExpression Activation,CharacterExpression Utility,CharacterExpression Completion,IReadOnlyList<NpcActionSpec> Actions,IReadOnlyList<NpcPlanSpec> Plans);
 public sealed record NpcPolicy(int Slice,int Expanded,int Depth,int Targets,double Commitment,double Margin,double Retry,float Detailed,float Abstract);
 
@@ -46,7 +46,7 @@ public sealed partial class NpcProgram
     public static NpcProgram Compile(NpcGraphAsset graph,CharacterProfile profile=null)
     {
         if (graph == null) throw new ArgumentException("缺少 NPC 图。");
-        graph.MigrateActionBindings();
+        foreach(var actionNode in graph.Nodes.OfType<NpcActionNodeData>())actionNode.Bind(graph);
         var p = new NpcProgram();
         var character=profile??graph.CharacterContext;
         p.Character=CharacterProfileSpec.Compile(character);
@@ -68,8 +68,10 @@ public sealed partial class NpcProgram
             var from=graph.FindNodeById(edge.FromNode);var to=graph.FindNodeById(edge.ToNode);
             Require(from!=null&&to!=null,"连线端点丢失。");
             Require(edge.ToPort==0 && (from is NpcRootNodeData && (edge.FromPort==0 && to is NpcDefinitionNodeData and not (NpcGoalNodeData or NpcActionNodeData or NpcTemplateNodeData or NpcTargetSelectorNodeData)
-                || edge.FromPort==1&&to is NpcGoalNodeData || edge.FromPort==2&&to is NpcTargetSelectorNodeData) || from is NpcGoalNodeData&&(edge.FromPort==0&&to is NpcActionNodeData||edge.FromPort==1&&to is NpcTemplateNodeData)),"NPC 连线类型不匹配。");
+                || edge.FromPort==1&&to is NpcGoalNodeData || edge.FromPort==2&&to is NpcTargetSelectorNodeData) || from is NpcGoalNodeData&&(edge.FromPort==0&&to is NpcActionNodeData||edge.FromPort==1&&to is NpcTemplateNodeData))
+                || from is NpcTargetSelectorNodeData&&edge.FromPort==0&&to is NpcActionNodeData action&&action.InputAt(edge.ToPort)!=null,"NPC 连线类型不匹配，或目标输入已被移除/更改来源。");
         }
+        Require(active.Where(e=>e.ToPort>0).GroupBy(e=>(e.ToNode,e.ToPort)).All(g=>g.Count()==1),"每个行动输入只能连接一个选择器节点。");
         NpcDefinitionResource Resolve(NpcDefinitionNodeData node)
         {
             var d=graph.Resolve(node.DefinitionId);Require(d!=null&&node.DefinitionType.IsInstanceOfType(d),$"节点 {node.Id} 的定义未绑定或类型错误。");return d;
@@ -100,20 +102,32 @@ public sealed partial class NpcProgram
         {
             Require(Enum.IsDefined(selector.Source)&&Enum.IsDefined(selector.Selection)&&double.IsFinite(selector.MaximumDistance)&&selector.MaximumDistance>=0&&selector.CandidateLimit>=0&&NpcBindingAdapters.Find(selector.Adapter)!=null,"目标选择器的来源、策略、距离或数量无效。");
             Require(selector.Source!=NpcTargetSource.IdentityParameter||p.Parameters.TryGetValue(selector.ParameterKey,out var value)&&value.Type==CharacterValueType.Symbol,"目标选择器必须选择已注册的文本角色参数。");
-            Require(selector.Selection is not (NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore)||selector.Score!=null,"评分选择策略必须配置评分表达式。");
-            var score=selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore?selector.Score?.Freeze():null;
-            p.TargetSelectors.Add(selector.DefinitionId,new(selector.DefinitionId,selector.DisplayName,selector.Source,selector.ParameterKey,ReadOnly(selector.AllTags),ReadOnly(selector.AnyTags),ReadOnly(selector.ExcludedTags),selector.MaximumDistance,selector.RequireUsable,selector.RequireReachable,selector.Filter?.Freeze(),selector.Selection,score,selector.CandidateLimit,selector.Adapter));
+            Require(selector.Source!=NpcTargetSource.FixedObject||!string.IsNullOrWhiteSpace(selector.FixedObjectId),"固定对象选择器必须选择一个对象。");
+            var selection=NpcTargetSelectorDefinition.IsSingleSource(selector.Source)?NpcTargetSelection.Nearest:selector.Selection;
+            Require(selection is not (NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore)||selector.Score!=null,"评分选择策略必须配置评分表达式。");
+            var score=selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore?selector.Score?.Freeze():null;
+            p.TargetSelectors.Add(selector.DefinitionId,new(selector.DefinitionId,selector.DisplayName,selector.Source,selector.ParameterKey,ReadOnly(selector.AllTags),ReadOnly(selector.AnyTags),ReadOnly(selector.ExcludedTags),selector.MaximumDistance,selector.RequireUsable,selector.RequireReachable,selector.Filter?.Freeze(),selection,score,selector.CandidateLimit,selector.Adapter,selector.FixedObjectId));
         }
         foreach(var c in active.Where(c=>c.FromNode==root.Id&&c.FromPort==1))
         {
             var node=(NpcGoalNodeData)graph.FindNodeById(c.ToNode);var g=(NpcGoalDefinition)Resolve(node);if(!g.Enabled)continue;
             Require(g.Completion!=null&&g.Utility!=null,"目标必须配置完成条件与评分。");
-            var actions=active.Where(e=>e.FromNode==node.Id&&e.FromPort==0).Select(e=>(NpcActionDefinition)Resolve((NpcActionNodeData)graph.FindNodeById(e.ToNode))).Where(a=>a.Enabled).Distinct().Select(a=>
+            var actionNodes=active.Where(e=>e.FromNode==node.Id&&e.FromPort==0).Select(e=>(NpcActionNodeData)graph.FindNodeById(e.ToNode)).Distinct().Where(n=>Resolve(n).Enabled).ToArray();
+            Require(actionNodes.GroupBy(n=>n.DefinitionId).All(group=>group.Count()==1||!((NpcActionDefinition)Resolve(group.First())).Inputs.Any(i=>i is {IsTarget:true})),"使用目标输入的行动请复用同一个节点，不要在同一目标下放置重复定义的行动节点。");
+            var actions=actionNodes.DistinctBy(n=>n.DefinitionId).Select(n=>
             {
-                return p.CompileAction(a);
+                return p.CompileAction((NpcActionDefinition)Resolve(n),input=>
+                {
+                    int port=n.InputPorts.IndexOf(((NpcActionInputDefinition)input).InputId)+1;
+                    var links=active.Where(e=>e.ToNode==n.Id&&e.ToPort==port&&e.FromPort==0&&graph.FindNodeById(e.FromNode) is NpcTargetSelectorNodeData).ToArray();
+                    Require(port>0&&links.Length==1,"行动“"+Resolve(n).DisplayName+"”的输入“"+input.Name+"”必须连接一个选择器节点。");
+                    var selectorNode=(NpcTargetSelectorNodeData)graph.FindNodeById(links[0].FromNode);
+                    Require(active.Any(e=>e.FromNode==root.Id&&e.FromPort==2&&e.ToNode==selectorNode.Id),"行动输入所连选择器必须连接人物根节点："+input.Name);
+                    return(selectorNode.DefinitionId,selectorNode.Id);
+                });
             }).ToArray();
             var plans=active.Where(e=>e.FromNode==node.Id&&e.FromPort==1).Select(e=>(NpcPlanTemplateDefinition)Resolve((NpcTemplateNodeData)graph.FindNodeById(e.ToNode))).Where(t=>t.Enabled)
-                .Select(t=>new NpcPlanSpec(t.DefinitionId,t.DisplayName,t.Priority,t.Eligibility?.Freeze(),ReadOnly(t.ActionIds.Distinct(StringComparer.Ordinal)),p.CompileBindings(t.Variables,true))).ToArray();
+                .Select(t=>new NpcPlanSpec(t.DefinitionId,t.DisplayName,t.Priority,t.Eligibility?.Freeze(),ReadOnly(t.ActionIds.Distinct(StringComparer.Ordinal)))).ToArray();
             Require(actions.Length>0&&plans.Length>0,"目标必须连接候选行动和至少一个启用计划。");
             Require(plans.All(t=>t.ActionIds.Count>0&&t.ActionIds.All(id=>actions.Any(a=>a.Id==id))),"计划必须选择可用行动，且只能引用所属目标中已启用的候选行动。");
             p.Goals.Add(new(g.DefinitionId,g.DisplayName,g.Activation?.Freeze(),g.Utility.Freeze(),g.Completion.Freeze(),ReadOnly(actions),ReadOnly(plans)));
@@ -126,7 +140,6 @@ public sealed partial class NpcProgram
             foreach(var t in g.Plans)
             {
                 if(t.Eligibility!=null)p.Expect(t.Eligibility,CharacterValueType.Boolean);
-                p.ValidatePlan(t,g.Actions);
             }
         }
         foreach(var selector in p.TargetSelectors.Values)
@@ -189,7 +202,7 @@ public sealed partial class NpcProgram
         var value=state[key];return value.Kind switch {GoapValueKind.Boolean=>CharacterValue.Bool(value.Integer!=0),GoapValueKind.Symbol=>CharacterValue.Text(value.Symbol),GoapValueKind.Integer=>CharacterValue.Numeric(value.Integer*(Facts.TryGetValue(key,out var f)?f.Step:.001)),_=>default};
     }
     public GoapValue Encode(string key,CharacterValue value)=>value.Type switch {CharacterValueType.Boolean=>GoapValue.Bool(value.IsTrue),CharacterValueType.Symbol=>GoapValue.Id(value.Symbol),CharacterValueType.Number=>GoapValue.Number((long)Math.Round(value.Number/(Facts.TryGetValue(key,out var f)?f.Step:.001))),_=>default};
-    public static string BindingKey(string planId,string name)=>"binding."+planId+"."+name;
+    public static string SelectionKey(string planId,string nodeId)=>"selection."+planId+"."+nodeId;
     public GoapWorldState TargetContext(GoapWorldState state,string target,double? distance=null,string adapter="point")
         =>NpcBindingAdapters.Find(adapter).Project(this,state,"target",CharacterValue.Text(target),distance,false);
     public bool TryEffects(GoapWorldState state,IReadOnlyList<NpcEffect> effects,out GoapWorldState result,NpcActionSpec action=null)

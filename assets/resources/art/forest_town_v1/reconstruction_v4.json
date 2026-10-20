@@ -1,0 +1,11 @@
+{
+  "authorization": "允许调整模型和摆放",
+  "reference": "assets/textures/concepts/environments/forest_town_v1/scene-concept.png",
+  "preserved": ["Godot camera and controller", "sun and sky", "exposure", "fog", "post-processing", "weather and DDGI configuration", "existing character behavior"],
+  "model_budget": {"polygons": 8000, "triangles": 8000, "maximum_actual_triangles": 7816},
+  "summary": {"unique_assets": 29, "instances": 184, "buildings": 8, "trees": 48, "plants": 100, "props": 27, "ground": 1},
+  "changes": ["Complete stepped-roof inn with lower side wing", "Revised building proportions and street placement", "Planted windows and eaves", "Raised landings, twelve stone steps and continuous elevated lane", "Native gentle ramp collision for stairs", "Thicker ancient oak and overhead leafy boughs", "Dark teal foreground shrub and fence framing", "Broad painted materials with separate plaster, timber, clay, stone and glass surfaces"],
+  "validation": {"scene_report": "assets/resources/art/forest_town_v1/scene_validation.json", "checks": 84, "passed": true, "import_report": "assets/resources/art/forest_town_v1/godot_validation.json"},
+  "editor_sync": {"updated_subtree": "RPGTown", "other_scene_nodes_preserved": true, "backup": ".godot/forest-town/editor-town-before-v4.tscn"},
+  "capture": ".godot/forest-town/godot-composition.png"
+}

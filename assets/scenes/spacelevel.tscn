@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
 [ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/shaders/environment/day_night_sky.gdshader" id="2_qbpkg"]
-[ext_resource type="PackedScene" uid="uid://cxfmq4nlwci8j" path="res://assets/scenes/levels/whitebox_test.tscn" id="whitebox"]
+[ext_resource type="PackedScene" path="res://assets/scenes/levels/forest_town_level.tscn" id="whitebox"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sodt5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbpkg"]
 resource_local_to_scene = true
 shader = ExtResource("2_qbpkg")
 shader_parameter/ibl_strength = 1.0
@@ -34,16 +34,16 @@ shader_parameter/horizon_softness = 0.24
 shader_parameter/mie_strength = 0.1
 shader_parameter/mie_anisotropy = 0.76
 
-[sub_resource type="Sky" id="Sky_filij"]
+[sub_resource type="Sky" id="Sky_sodt5"]
 resource_local_to_scene = true
-sky_material = SubResource("ShaderMaterial_sodt5")
+sky_material = SubResource("ShaderMaterial_qbpkg")
 process_mode = 3
 
-[sub_resource type="Environment" id="Environment_wiwca"]
+[sub_resource type="Environment" id="Environment_filij"]
 resource_local_to_scene = true
 background_mode = 2
 background_intensity = 26000.0
-sky = SubResource("Sky_filij")
+sky = SubResource("Sky_sodt5")
 ambient_light_source = 3
 ambient_light_energy = 0.35000002
 reflected_light_source = 2
@@ -72,7 +72,7 @@ fog_depth_end = 240.0
 adjustment_contrast = 1.04
 adjustment_saturation = 1.08
 
-[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_61a5g"]
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_wiwca"]
 resource_local_to_scene = true
 exposure_multiplier = 1.2
 frustum_focus_distance = 9.0
@@ -82,5 +82,8 @@ exposure_shutter_speed = 81.5719
 [node name="Spacelevel" unique_id=1400882544 instance=ExtResource("whitebox")]
 
 [node name="WorldEnvironment" parent="EnvironmentRig" parent_id_path=PackedInt32Array(660897677) index="1" unique_id=594835174]
-environment = SubResource("Environment_wiwca")
-camera_attributes = SubResource("CameraAttributesPhysical_61a5g")
+environment = SubResource("Environment_filij")
+camera_attributes = SubResource("CameraAttributesPhysical_wiwca")
+
+[node name="CameraFramingTarget" type="Marker3D" parent="." index="8" unique_id=889559128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)

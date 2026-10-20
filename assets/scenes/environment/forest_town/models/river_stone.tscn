@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/river_stone.mesh.res" id="1_dopp2"]
+
+[node name="RiverStone" type="Node3D" unique_id=1637258620]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/river_stone.glb"
+metadata/source_polygons = 38
+metadata/triangles = 92
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1744612917]
+mesh = ExtResource("1_dopp2")

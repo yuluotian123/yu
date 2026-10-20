@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/barrel.mesh.res" id="1_vctyo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0wbm0"]
+size = Vector3(0.46, 0.58, 0.46)
+
+[node name="Barrel" type="Node3D" unique_id=1844400637]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/barrel.glb"
+metadata/source_polygons = 42
+metadata/triangles = 132
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1155676137]
+mesh = ExtResource("1_vctyo")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=1490083717]
+collision_mask = 0
+
+[node name="@CollisionShape3D@19" type="CollisionShape3D" parent="Collision1" unique_id=940849303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
+shape = SubResource("BoxShape3D_0wbm0")

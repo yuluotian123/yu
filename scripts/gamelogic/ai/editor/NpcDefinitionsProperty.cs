@@ -57,8 +57,7 @@ public partial class NpcDefinitionsProperty : EditorProperty
         _list.AddChild(new Label{Text=_message,AutowrapMode=TextServer.AutowrapMode.WordSmart});
     }
     bool Referenced(string id)=>_graph.Nodes.OfType<NpcDefinitionNodeData>().Any(n=>n.DefinitionId==id)||
-        _graph.Definitions.OfType<NpcPlanTemplateDefinition>().Any(p=>p.ActionIds.Contains(id)||p.Variables.Any(v=>v.SelectorId==id))||
-        _graph.Definitions.OfType<NpcActionDefinition>().Any(a=>a.Inputs.Any(i=>i.SelectorId==id));
+        _graph.Definitions.OfType<NpcPlanTemplateDefinition>().Any(p=>p.ActionIds.Contains(id));
     internal void AddExisting(NpcDefinitionResource definition)
     {
         if(definition==null){_message="请选择有效的 NPC 定义资源。";Rebuild();return;}

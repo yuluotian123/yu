@@ -75,7 +75,7 @@ public sealed class NpcRememberAction : GraphInstantAction
 {
     public string Category {get;set;}="";
     public string Detail {get;set;}="";
-    public NpcInputReference SubjectInput {get;set;}=new();
+    public NpcInputReference SubjectInput {get;set;}=new(){Name=""};
     protected override bool Run(GraphActionInvocation invocation)
     {
         var c=invocation.Execution.GetUserData<NpcActionContext>();

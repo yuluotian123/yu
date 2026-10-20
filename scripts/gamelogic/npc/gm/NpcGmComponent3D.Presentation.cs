@@ -21,7 +21,8 @@ public partial class NpcGmComponent3D
             + $"世界坐标：{a.Owner.GlobalPosition}  ·  速度：{move?.Velocity.Length():0.00} m/s\n"
             + $"移动：{(move == null ? "缺少组件" : !move.IsActive ? "组件停用" : move.StartDisabled ? "已禁用" : move.IsOnFloor ? "在地面" : "在空中")}  ·  控制锁：{(move?.MovementLocked == true ? "已锁定" : "无")}  ·  当前动画：{animation?.ActiveAnimation}\n\n"
             + $"最近失败：{Failure(a.LastFailure)}\n导航最近失败：{Failure(nav?.Failure)}\n\n"
-            + "计划绑定\n" + (a.PlanBindings.Count == 0 ? "无" : string.Join("\n", a.PlanBindings.Select(x => x.Key + " → " + x.Value)))
+            + "共享目标\n" + (a.SelectorBindings.Count == 0 ? "无" : string.Join("\n", a.SelectorBindings.Select(x =>
+                (a.Graph.FindNodeById(x.Key) is NpcTargetSelectorNodeData node ? a.Graph.Resolve(node.DefinitionId)?.DisplayName : null) + " → " + x.Value)))
             + "\n\n需求摘要\n" + (a.State == null ? "未初始化" : string.Join("  ·  ", a.State.Needs.Values.Select(n => $"{NeedName(a, n.Key)} {n.Value:0.00}"))));
     }
     static string Or(string value, string fallback) => string.IsNullOrEmpty(value) ? fallback : value;
@@ -29,7 +30,7 @@ public partial class NpcGmComponent3D
     {
         var parts = line.Split(' ', 3);
         if (parts.Length < 2) return line;
-        string kind = parts[1] switch { "Initialized" => "初始化", "Goal" => "选择目标", "Plan" => "生成计划", "Action" => "开始行动", "Completed" => "行动完成", "Cancelled" => "取消计划", _ => parts[1] };
+        string kind = parts[1] switch { "Initialized" => "初始化", "Goal" => "选择目标", "Plan" => "生成计划", "Target" => "绑定目标", "Action" => "开始行动", "Completed" => "行动完成", "Cancelled" => "取消计划", _ => parts[1] };
         string detail = parts.Length < 3 ? "" : parts[2] switch
         {
             "GoalChanged" => "目标变更", "Replan" => "手动重规划", "Paused" => "暂停 AI", "Stopped" => "AI 停止",
@@ -47,6 +48,7 @@ public partial class NpcGmComponent3D
         null or "" => "无",
         "NoPlan" => "找不到合法计划（NoPlan）",
         "InputUnavailable" or "InputChanged" => "绑定对象已不可用或不符合选择条件（" + reason + "）",
+        "SelectorBindingChanged" => "共享目标绑定不一致，已取消计划（SelectorBindingChanged）",
         "ResourceBusy" => "交互点容量已满（ResourceBusy）",
         "PreconditionChanged" => "行动前提已改变（PreconditionChanged）",
         "PlanEligibilityChanged" => "计划适用条件已改变，如天气变化（PlanEligibilityChanged）",

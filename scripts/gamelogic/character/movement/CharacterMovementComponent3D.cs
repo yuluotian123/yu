@@ -13,20 +13,20 @@ namespace GameLogic
             bool overrideHorizontal = true,
             bool overrideVertical = true,
             int priority = 0,
-            bool useMovementInput = false)
+            bool restoreBeforeMovement = false)
         {
             Velocity = velocity;
             OverrideHorizontal = overrideHorizontal;
             OverrideVertical = overrideVertical;
             Priority = priority;
-            UseMovementInput = useMovementInput;
+            RestoreBeforeMovement = restoreBeforeMovement;
         }
 
         public Vector3 Velocity { get; }
         public bool OverrideHorizontal { get; }
         public bool OverrideVertical { get; }
         public int Priority { get; }
-        public bool UseMovementInput { get; }
+        public bool RestoreBeforeMovement { get; }
     }
 
     [Tool, GlobalClass]
@@ -161,6 +161,13 @@ namespace GameLogic
                 : (IsOnFloor ? CharacterMovementMode.Walking : CharacterMovementMode.Falling);
             MoveInputX = MovementLocked ? 0f : RawMoveInputX;
             MoveInputZ = MovementLocked || MovementSpace == CharacterMovementSpace.SideView ? 0f : command.MoveAxisZ;
+
+            if (_hasVelocityOverride && _velocityOverride.RestoreBeforeMovement)
+            {
+                // 恢复临时覆盖前的速度，再处理当前输入、跳跃和重力。
+                ApplyVelocityOverride();
+                _hasVelocityOverride = false;
+            }
 
             UpdateFacing();
             UpdateHorizontalVelocity(dt);
@@ -338,11 +345,10 @@ namespace GameLogic
         }
 
         private CharacterMovementProfile Settings => _settings ??= Profile ?? new CharacterMovementProfile();
-        private Vector2 TargetHorizontalVelocity => new Vector2(MoveInputX, MoveInputZ).LimitLength() * Settings.MoveSpeed;
 
         private void UpdateHorizontalVelocity(float delta)
         {
-            Vector2 target = TargetHorizontalVelocity;
+            Vector2 target = new Vector2(MoveInputX, MoveInputZ).LimitLength() * Settings.MoveSpeed;
             float control = IsOnFloor ? 1f : Settings.AirControl;
             float rate = target.LengthSquared() > 0.0001f ? Settings.Acceleration * control : Settings.Deceleration;
             Vector2 planar = new Vector2(Velocity.X, Velocity.Z).MoveToward(target, rate * delta);
@@ -406,11 +412,8 @@ namespace GameLogic
             Vector3 velocity = Velocity;
             if (_velocityOverride.OverrideHorizontal)
             {
-                Vector2 horizontal = _velocityOverride.UseMovementInput
-                    ? TargetHorizontalVelocity
-                    : new Vector2(_velocityOverride.Velocity.X, _velocityOverride.Velocity.Z);
-                velocity.X = horizontal.X;
-                velocity.Z = MovementSpace == CharacterMovementSpace.SideView ? 0f : horizontal.Y;
+                velocity.X = _velocityOverride.Velocity.X;
+                velocity.Z = MovementSpace == CharacterMovementSpace.SideView ? 0f : _velocityOverride.Velocity.Z;
             }
             if (_velocityOverride.OverrideVertical)
                 velocity.Y = _velocityOverride.Velocity.Y;

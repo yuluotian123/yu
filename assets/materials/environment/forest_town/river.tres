@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/forest_river.gdshader" id="water"]
+
+[resource]
+resource_name = "Forest Town · painted flowing river"
+shader = ExtResource("water")
+shader_parameter/flow_speed = 0.22
+shader_parameter/river_width = 4.8
+shader_parameter/wave_height = 0.008
+shader_parameter/foam_width = 0.045
+shader_parameter/ripple_strength = 0.43
+shader_parameter/reflection_strength = 0.32
+shader_parameter/surface_roughness = 0.58

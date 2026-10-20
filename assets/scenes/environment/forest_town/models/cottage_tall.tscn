@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/cottage_tall.mesh.res" id="1_r3onj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pu4fg"]
+size = Vector3(2.3, 3.1, 2.8)
+
+[node name="CottageTall" type="Node3D" unique_id=1066441473]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_town/cottage_tall.glb"
+metadata/source_polygons = 2531
+metadata/triangles = 5067
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1171842309]
+mesh = ExtResource("1_r3onj")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=651954595]
+collision_mask = 0
+
+[node name="@CollisionShape3D@5" type="CollisionShape3D" parent="Collision1" unique_id=1583550542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("BoxShape3D_pu4fg")

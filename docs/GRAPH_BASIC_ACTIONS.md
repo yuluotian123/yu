@@ -31,7 +31,7 @@
 - 周期跳跃在 Interval 到达且落地时请求起跳，持续 Running。Interval 必须大于 0，HoldDuration 必须大于等于 0。
 - 接近目标只处理水平距离，到达成功，超时或目标失效时失败；不执行寻路或自动跳跃。
 - 移动类动作默认使用 AI 优先级 100，可配置 Priority；Movement 负责最终命令优先级、跳跃锁和物理规则。
-- 这些动作只依赖移动组件与黑板，不依赖 SimpleAICharacterControllerComponent3D。每次运行创建独立任务，不在资源或 Controller 中共享进度。
+- 这些动作通过移动组件与黑板工作。每次运行创建独立任务，不在资源或 Controller 中共享进度。
 
 参数中的 `Use blackboard` 决定从常量还是黑板读取。数值参数必须为有限数值；移动和技能等待的 Timeout 必须大于 0。
 

@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/river_surface.mesh.res" id="1_0belo"]
+
+[node name="RiverSurface" type="Node3D" unique_id=998991333]
+metadata/asset_category = "water"
+metadata/source_model = "res://assets/models/environment/forest_town/river_surface.glb"
+metadata/source_polygons = 2880
+metadata/triangles = 5760
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1291571536]
+cast_shadow = 0
+gi_mode = 0
+mesh = ExtResource("1_0belo")

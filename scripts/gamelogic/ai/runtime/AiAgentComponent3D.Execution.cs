@@ -25,9 +25,8 @@ public partial class AiAgentComponent3D
         {
             var value=Program.Read(context,"input."+input.Name);
             if(NpcBindingAdapters.Find(input.Adapter) is {} adapter&&!adapter.Validate(this,value))return false;
-            var source=Program.Source(bound,input);
-            if(source.Source!=NpcBindingSource.Selector)continue;
-            if(!NpcBindingAdapters.Find(input.Adapter).Matches(this,value,Program.TargetSelectors[source.SelectorId]))return false;
+            if(!input.IsTarget)continue;
+            if(!NpcBindingAdapters.Find(input.Adapter).Matches(this,value,Program.TargetSelectors[input.SelectorId]))return false;
         }
         return true;
     }
@@ -40,12 +39,6 @@ public partial class AiAgentComponent3D
         if(!Meets(bound.Action.Precondition,context)){Fail("PreconditionChanged");return;}
         var inputs=new ReadOnlyDictionary<string,CharacterValue>(bound.Action.Inputs.ToDictionary(i=>i.Name,i=>Program.Read(context,"input."+i.Name),StringComparer.Ordinal));
         bound=bound with{Resolved=inputs};
-        foreach(var input in bound.Action.Inputs.Where(i=>i.Source==NpcBindingSource.PlanVariable))
-        {
-            var value=inputs[input.Name];
-            if(_bindings.TryGetValue(input.Variable,out var old)&&old!=value){Fail("PlanVariableChanged");return;}
-            _bindings[input.Variable]=value;
-        }
         var acquired=new HashSet<(string,CharacterValue,string)>();
         foreach(var resource in bound.Action.Resources)
         {
@@ -88,6 +81,6 @@ public partial class AiAgentComponent3D
         }
         _committed=true;CompletedActions++;Record("Completed",_current.Action.Name);
         StopExecution();_current=null;ReleaseResources();Navigation?.Stop();Sense();_selectAt=0;
-        if(_plan.Count==0){_bindings.Clear();_selectedPlan=null;}
+        if(_plan.Count==0){_selectorBindings.Clear();_selectedPlan=null;}
     }
 }

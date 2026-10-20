@@ -1,0 +1,3781 @@
+{
+  "budget": {
+    "polygons": 8000,
+    "triangles": 8000
+  },
+  "assets": [
+    {
+      "name": "inn",
+      "category": "building",
+      "file": "inn.glb",
+      "polygons": 3123,
+      "triangles": 6249,
+      "vertices": 12495,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.25,
+            0
+          ],
+          "size": [
+            2.65,
+            2.5,
+            2.75
+          ]
+        },
+        {
+          "position": [
+            -1.88,
+            1.07,
+            -0.18
+          ],
+          "size": [
+            1.35,
+            2.14,
+            2.5025
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "cottage_wide",
+      "category": "building",
+      "file": "cottage_wide.glb",
+      "polygons": 2477,
+      "triangles": 4959,
+      "vertices": 9913,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.425,
+            0
+          ],
+          "size": [
+            3.8,
+            2.85,
+            3.0
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "cottage_tall",
+      "category": "building",
+      "file": "cottage_tall.glb",
+      "polygons": 2531,
+      "triangles": 5067,
+      "vertices": 10129,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.55,
+            0
+          ],
+          "size": [
+            2.3,
+            3.1,
+            2.8
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "cottage_small",
+      "category": "building",
+      "file": "cottage_small.glb",
+      "polygons": 2477,
+      "triangles": 4959,
+      "vertices": 9913,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.075,
+            0
+          ],
+          "size": [
+            2.15,
+            2.15,
+            2.45
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "house_gabled",
+      "category": "building",
+      "file": "house_gabled.glb",
+      "polygons": 2477,
+      "triangles": 4959,
+      "vertices": 9913,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.3,
+            0
+          ],
+          "size": [
+            2.5,
+            2.6,
+            2.6
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "cottage_right",
+      "category": "building",
+      "file": "cottage_right.glb",
+      "polygons": 2531,
+      "triangles": 5067,
+      "vertices": 10129,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.4000000000000001,
+            0
+          ],
+          "size": [
+            3.4,
+            2.8000000000000003,
+            3.2
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "far_cottage",
+      "category": "building",
+      "file": "far_cottage.glb",
+      "polygons": 2477,
+      "triangles": 4959,
+      "vertices": 9913,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.2000000000000002,
+            0
+          ],
+          "size": [
+            2.0,
+            2.4000000000000004,
+            2.4
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "back_house",
+      "category": "building",
+      "file": "back_house.glb",
+      "polygons": 2477,
+      "triangles": 4959,
+      "vertices": 9913,
+      "collision": [
+        {
+          "position": [
+            0,
+            1.35,
+            0
+          ],
+          "size": [
+            2.8,
+            2.7,
+            3.0
+          ]
+        }
+      ],
+      "complete_exterior": true,
+      "cutout_sprigs": 50
+    },
+    {
+      "name": "ancient_oak",
+      "category": "tree",
+      "file": "ancient_oak.glb",
+      "polygons": 3743,
+      "triangles": 7816,
+      "vertices": 15302,
+      "collision": [
+        {
+          "position": [
+            0,
+            6.0040000000000004,
+            0
+          ],
+          "size": [
+            1.83,
+            12.008000000000001,
+            1.83
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 660
+    },
+    {
+      "name": "branching_oak",
+      "category": "tree",
+      "file": "branching_oak.glb",
+      "polygons": 3343,
+      "triangles": 6984,
+      "vertices": 13670,
+      "collision": [
+        {
+          "position": [
+            0,
+            5.054,
+            0
+          ],
+          "size": [
+            0.99,
+            10.108,
+            0.99
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 572
+    },
+    {
+      "name": "forest_column",
+      "category": "tree",
+      "file": "forest_column.glb",
+      "polygons": 3743,
+      "triangles": 7816,
+      "vertices": 15302,
+      "collision": [
+        {
+          "position": [
+            0,
+            7.22,
+            0
+          ],
+          "size": [
+            1.0050000000000001,
+            14.44,
+            1.0050000000000001
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 660
+    },
+    {
+      "name": "canopy_oak",
+      "category": "tree",
+      "file": "canopy_oak.glb",
+      "polygons": 3343,
+      "triangles": 6984,
+      "vertices": 13670,
+      "collision": [
+        {
+          "position": [
+            0,
+            4.255999999999999,
+            0
+          ],
+          "size": [
+            0.9450000000000001,
+            8.511999999999999,
+            0.9450000000000001
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 572
+    },
+    {
+      "name": "understory_oak",
+      "category": "tree",
+      "file": "understory_oak.glb",
+      "polygons": 3743,
+      "triangles": 7816,
+      "vertices": 15302,
+      "collision": [
+        {
+          "position": [
+            0,
+            2.8120000000000003,
+            0
+          ],
+          "size": [
+            0.6000000000000001,
+            5.6240000000000006,
+            0.6000000000000001
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 660
+    },
+    {
+      "name": "shrub_round",
+      "category": "plant",
+      "file": "shrub_round.glb",
+      "polygons": 1230,
+      "triangles": 2520,
+      "vertices": 4980,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 420
+    },
+    {
+      "name": "shrub_low",
+      "category": "plant",
+      "file": "shrub_low.glb",
+      "polygons": 1230,
+      "triangles": 2520,
+      "vertices": 4980,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 420
+    },
+    {
+      "name": "shrub_tall",
+      "category": "plant",
+      "file": "shrub_tall.glb",
+      "polygons": 1230,
+      "triangles": 2520,
+      "vertices": 4980,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 420
+    },
+    {
+      "name": "shrub_shadow",
+      "category": "plant",
+      "file": "shrub_shadow.glb",
+      "polygons": 1230,
+      "triangles": 2520,
+      "vertices": 4980,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 420
+    },
+    {
+      "name": "fern",
+      "category": "plant",
+      "file": "fern.glb",
+      "polygons": 126,
+      "triangles": 126,
+      "vertices": 378,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "woodland_flowers",
+      "category": "plant",
+      "file": "woodland_flowers.glb",
+      "polygons": 203,
+      "triangles": 840,
+      "vertices": 1246,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "leaf_bough",
+      "category": "plant",
+      "file": "leaf_bough.glb",
+      "polygons": 749,
+      "triangles": 1544,
+      "vertices": 3042,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 288
+    },
+    {
+      "name": "stone_wall",
+      "category": "prop",
+      "file": "stone_wall.glb",
+      "polygons": 66,
+      "triangles": 132,
+      "vertices": 264,
+      "collision": [
+        {
+          "position": [
+            0,
+            0.44,
+            0
+          ],
+          "size": [
+            2.05,
+            0.9,
+            0.44
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "fence",
+      "category": "prop",
+      "file": "fence.glb",
+      "polygons": 36,
+      "triangles": 72,
+      "vertices": 144,
+      "collision": [
+        {
+          "position": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            1.8,
+            0.9,
+            0.18
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "steps",
+      "category": "prop",
+      "file": "steps.glb",
+      "polygons": 24,
+      "triangles": 48,
+      "vertices": 96,
+      "collision": [
+        {
+          "position": [
+            0,
+            0.14,
+            -0.34
+          ],
+          "size": [
+            1.25,
+            0.28,
+            0.94
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "barrel",
+      "category": "prop",
+      "file": "barrel.glb",
+      "polygons": 42,
+      "triangles": 132,
+      "vertices": 216,
+      "collision": [
+        {
+          "position": [
+            0,
+            0.29,
+            0
+          ],
+          "size": [
+            0.46,
+            0.58,
+            0.46
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "crate",
+      "category": "prop",
+      "file": "crate.glb",
+      "polygons": 54,
+      "triangles": 108,
+      "vertices": 216,
+      "collision": [
+        {
+          "position": [
+            0,
+            0.24,
+            0
+          ],
+          "size": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "village_ground",
+      "category": "ground",
+      "file": "village_ground.glb",
+      "polygons": 1696,
+      "triangles": 4670,
+      "vertices": 8062,
+      "collision": [
+        {
+          "position": [
+            -27.5,
+            -0.51,
+            -19.604010266120323
+          ],
+          "size": [
+            1,
+            1,
+            52.791979467759354
+          ]
+        },
+        {
+          "position": [
+            -26.5,
+            -0.51,
+            -19.586131189941693
+          ],
+          "size": [
+            1,
+            1,
+            52.827737620116615
+          ]
+        },
+        {
+          "position": [
+            -25.5,
+            -0.51,
+            -19.638284448287106
+          ],
+          "size": [
+            1,
+            1,
+            52.72343110342579
+          ]
+        },
+        {
+          "position": [
+            -24.5,
+            -0.51,
+            -19.638284448287106
+          ],
+          "size": [
+            1,
+            1,
+            52.72343110342579
+          ]
+        },
+        {
+          "position": [
+            -23.5,
+            -0.51,
+            -19.5496449659994
+          ],
+          "size": [
+            1,
+            1,
+            52.9007100680012
+          ]
+        },
+        {
+          "position": [
+            -22.5,
+            -0.51,
+            -19.640011678849092
+          ],
+          "size": [
+            1,
+            1,
+            52.719976642301816
+          ]
+        },
+        {
+          "position": [
+            -21.5,
+            -0.51,
+            -19.640011678849092
+          ],
+          "size": [
+            1,
+            1,
+            52.719976642301816
+          ]
+        },
+        {
+          "position": [
+            -20.5,
+            -0.51,
+            -19.558499958970714
+          ],
+          "size": [
+            1,
+            1,
+            52.88300008205857
+          ]
+        },
+        {
+          "position": [
+            -19.5,
+            -0.51,
+            -19.605931151106873
+          ],
+          "size": [
+            1,
+            1,
+            52.788137697786254
+          ]
+        },
+        {
+          "position": [
+            -18.5,
+            -0.51,
+            -19.632389134222667
+          ],
+          "size": [
+            1,
+            1,
+            52.73522173155467
+          ]
+        },
+        {
+          "position": [
+            -17.5,
+            -0.51,
+            -19.594146436660342
+          ],
+          "size": [
+            1,
+            1,
+            52.811707126679316
+          ]
+        },
+        {
+          "position": [
+            -16.5,
+            -0.51,
+            -19.55811911596373
+          ],
+          "size": [
+            1,
+            1,
+            52.88376176807254
+          ]
+        },
+        {
+          "position": [
+            -15.5,
+            -0.51,
+            -19.608087414803848
+          ],
+          "size": [
+            1,
+            1,
+            52.783825170392305
+          ]
+        },
+        {
+          "position": [
+            -14.5,
+            -0.51,
+            -19.621520650417185
+          ],
+          "size": [
+            1,
+            1,
+            52.75695869916563
+          ]
+        },
+        {
+          "position": [
+            -13.5,
+            -0.51,
+            -19.595283980925448
+          ],
+          "size": [
+            1,
+            1,
+            52.809432038149104
+          ]
+        },
+        {
+          "position": [
+            -12.5,
+            -0.51,
+            -19.574374516555483
+          ],
+          "size": [
+            1,
+            1,
+            52.85125096688903
+          ]
+        },
+        {
+          "position": [
+            -11.5,
+            -0.51,
+            -19.635913374778607
+          ],
+          "size": [
+            1,
+            1,
+            52.72817325044279
+          ]
+        },
+        {
+          "position": [
+            -10.5,
+            -0.51,
+            -19.635913374778607
+          ],
+          "size": [
+            1,
+            1,
+            52.72817325044279
+          ]
+        },
+        {
+          "position": [
+            -9.5,
+            -0.51,
+            -19.547155196513184
+          ],
+          "size": [
+            1,
+            1,
+            52.90568960697363
+          ]
+        },
+        {
+          "position": [
+            -8.5,
+            -0.51,
+            -19.645391791068157
+          ],
+          "size": [
+            1,
+            1,
+            52.709216417863686
+          ]
+        },
+        {
+          "position": [
+            -7.5,
+            -0.51,
+            -19.645391791068157
+          ],
+          "size": [
+            1,
+            1,
+            52.709216417863686
+          ]
+        },
+        {
+          "position": [
+            -6.5,
+            -0.51,
+            -19.567390282503144
+          ],
+          "size": [
+            1,
+            1,
+            52.86521943499371
+          ]
+        },
+        {
+          "position": [
+            -5.5,
+            -0.51,
+            -19.61803459463336
+          ],
+          "size": [
+            1,
+            1,
+            52.76393081073328
+          ]
+        },
+        {
+          "position": [
+            -4.5,
+            -0.51,
+            -19.61803459463336
+          ],
+          "size": [
+            1,
+            1,
+            52.76393081073328
+          ]
+        },
+        {
+          "position": [
+            -3.5,
+            -0.51,
+            -19.60032599283963
+          ],
+          "size": [
+            1,
+            1,
+            52.79934801432074
+          ]
+        },
+        {
+          "position": [
+            -2.5,
+            -0.51,
+            -19.966123441261225
+          ],
+          "size": [
+            1,
+            1,
+            52.06775311747755
+          ]
+        },
+        {
+          "position": [
+            -1.5,
+            -0.51,
+            -20.62877255327201
+          ],
+          "size": [
+            1,
+            1,
+            50.74245489345598
+          ]
+        },
+        {
+          "position": [
+            -0.5,
+            -0.51,
+            -21.027248657897417
+          ],
+          "size": [
+            1,
+            1,
+            49.94550268420517
+          ]
+        },
+        {
+          "position": [
+            0.5,
+            -0.51,
+            -21.027248657897417
+          ],
+          "size": [
+            1,
+            1,
+            49.94550268420517
+          ]
+        },
+        {
+          "position": [
+            1.5,
+            -0.51,
+            -20.836066267204277
+          ],
+          "size": [
+            1,
+            1,
+            50.327867465591446
+          ]
+        },
+        {
+          "position": [
+            2.5,
+            -0.51,
+            -20.28093220193031
+          ],
+          "size": [
+            1,
+            1,
+            51.43813559613938
+          ]
+        },
+        {
+          "position": [
+            3.5,
+            -0.51,
+            -19.760675552700015
+          ],
+          "size": [
+            1,
+            1,
+            52.47864889459997
+          ]
+        },
+        {
+          "position": [
+            4.5,
+            -0.51,
+            -19.54967400716037
+          ],
+          "size": [
+            1,
+            1,
+            52.90065198567926
+          ]
+        },
+        {
+          "position": [
+            5.5,
+            -0.51,
+            -19.635474484787114
+          ],
+          "size": [
+            1,
+            1,
+            52.72905103042577
+          ]
+        },
+        {
+          "position": [
+            6.5,
+            -0.51,
+            -19.635474484787114
+          ],
+          "size": [
+            1,
+            1,
+            52.72905103042577
+          ]
+        },
+        {
+          "position": [
+            7.5,
+            -0.51,
+            -19.582609717496855
+          ],
+          "size": [
+            1,
+            1,
+            52.83478056500629
+          ]
+        },
+        {
+          "position": [
+            8.5,
+            -0.51,
+            -19.614747682341036
+          ],
+          "size": [
+            1,
+            1,
+            52.77050463531793
+          ]
+        },
+        {
+          "position": [
+            9.5,
+            -0.51,
+            -19.61611837238669
+          ],
+          "size": [
+            1,
+            1,
+            52.76776325522662
+          ]
+        },
+        {
+          "position": [
+            10.5,
+            -0.51,
+            -19.61611837238669
+          ],
+          "size": [
+            1,
+            1,
+            52.76776325522662
+          ]
+        },
+        {
+          "position": [
+            11.5,
+            -0.51,
+            -19.575625483444515
+          ],
+          "size": [
+            1,
+            1,
+            52.84874903311097
+          ]
+        },
+        {
+          "position": [
+            12.5,
+            -0.51,
+            -19.621941188862067
+          ],
+          "size": [
+            1,
+            1,
+            52.756117622275866
+          ]
+        },
+        {
+          "position": [
+            13.5,
+            -0.51,
+            -19.63294892830028
+          ],
+          "size": [
+            1,
+            1,
+            52.73410214339944
+          ]
+        },
+        {
+          "position": [
+            14.5,
+            -0.51,
+            -19.55471601907455
+          ],
+          "size": [
+            1,
+            1,
+            52.8905679618509
+          ]
+        },
+        {
+          "position": [
+            15.5,
+            -0.51,
+            -19.591880884036268
+          ],
+          "size": [
+            1,
+            1,
+            52.816238231927464
+          ]
+        },
+        {
+          "position": [
+            16.5,
+            -0.51,
+            -19.646848643034165
+          ],
+          "size": [
+            1,
+            1,
+            52.70630271393167
+          ]
+        },
+        {
+          "position": [
+            17.5,
+            -0.51,
+            -19.598994272231153
+          ],
+          "size": [
+            1,
+            1,
+            52.802011455537695
+          ]
+        },
+        {
+          "position": [
+            18.5,
+            -0.51,
+            -19.555853563339657
+          ],
+          "size": [
+            1,
+            1,
+            52.88829287332069
+          ]
+        },
+        {
+          "position": [
+            19.5,
+            -0.51,
+            -19.623023524510195
+          ],
+          "size": [
+            1,
+            1,
+            52.75395295097961
+          ]
+        },
+        {
+          "position": [
+            20.5,
+            -0.51,
+            -19.61754129506741
+          ],
+          "size": [
+            1,
+            1,
+            52.76491740986518
+          ]
+        },
+        {
+          "position": [
+            21.5,
+            -0.51,
+            -19.591500041029285
+          ],
+          "size": [
+            1,
+            1,
+            52.81699991794143
+          ]
+        },
+        {
+          "position": [
+            22.5,
+            -0.51,
+            -19.600355034000604
+          ],
+          "size": [
+            1,
+            1,
+            52.79928993199879
+          ]
+        },
+        {
+          "position": [
+            23.5,
+            -0.51,
+            -19.629306756685256
+          ],
+          "size": [
+            1,
+            1,
+            52.74138648662949
+          ]
+        },
+        {
+          "position": [
+            24.5,
+            -0.51,
+            -19.629306756685256
+          ],
+          "size": [
+            1,
+            1,
+            52.74138648662949
+          ]
+        },
+        {
+          "position": [
+            25.5,
+            -0.51,
+            -19.563868810058306
+          ],
+          "size": [
+            1,
+            1,
+            52.87226237988339
+          ]
+        },
+        {
+          "position": [
+            26.5,
+            -0.51,
+            -19.640018105575937
+          ],
+          "size": [
+            1,
+            1,
+            52.719963788848126
+          ]
+        },
+        {
+          "position": [
+            27.5,
+            -0.51,
+            -19.640018105575937
+          ],
+          "size": [
+            1,
+            1,
+            52.719963788848126
+          ]
+        },
+        {
+          "position": [
+            28.5,
+            -0.51,
+            -19.545989733879676
+          ],
+          "size": [
+            1,
+            1,
+            52.90802053224065
+          ]
+        },
+        {
+          "position": [
+            29.5,
+            -0.51,
+            -19.613287280983094
+          ],
+          "size": [
+            1,
+            1,
+            52.77342543803381
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0,
+      "river_cut": true
+    },
+    {
+      "name": "terrace",
+      "category": "prop",
+      "file": "terrace.glb",
+      "polygons": 330,
+      "triangles": 660,
+      "vertices": 1320,
+      "collision": [
+        {
+          "position": [
+            -0.5,
+            0.16,
+            0
+          ],
+          "size": [
+            4.7,
+            0.34,
+            3.5
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "street_steps",
+      "category": "prop",
+      "file": "street_steps.glb",
+      "polygons": 288,
+      "triangles": 576,
+      "vertices": 1152,
+      "collision": [
+        {
+          "shape": "ramp",
+          "width": 1.7,
+          "run": 3.38,
+          "height": 1.44
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "raised_lane",
+      "category": "prop",
+      "file": "raised_lane.glb",
+      "polygons": 990,
+      "triangles": 1980,
+      "vertices": 3960,
+      "collision": [
+        {
+          "position": [
+            0.09,
+            0.72,
+            -1
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            0.27,
+            0.72,
+            -3
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            0.45,
+            0.72,
+            -5
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            0.63,
+            0.72,
+            -7
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            0.8099999999999999,
+            0.72,
+            -9
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            0.99,
+            0.72,
+            -11
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            1.17,
+            0.72,
+            -13
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            1.35,
+            0.72,
+            -15
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            1.5299999999999998,
+            0.72,
+            -17
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            1.71,
+            0.72,
+            -19
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        },
+        {
+          "position": [
+            1.89,
+            0.72,
+            -21
+          ],
+          "size": [
+            3.5,
+            1.44,
+            2.1
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "river_surface",
+      "category": "water",
+      "file": "river_surface.glb",
+      "polygons": 2880,
+      "triangles": 5760,
+      "vertices": 11520,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "river_bank",
+      "category": "prop",
+      "file": "river_bank.glb",
+      "polygons": 602,
+      "triangles": 1204,
+      "vertices": 2408,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "river_stone",
+      "category": "prop",
+      "file": "river_stone.glb",
+      "polygons": 38,
+      "triangles": 92,
+      "vertices": 168,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    },
+    {
+      "name": "river_reeds",
+      "category": "plant",
+      "file": "river_reeds.glb",
+      "polygons": 364,
+      "triangles": 808,
+      "vertices": 1536,
+      "collision": [],
+      "complete_exterior": false,
+      "cutout_sprigs": 0
+    }
+  ],
+  "instances": [
+    {
+      "name": "MainInn",
+      "asset": "inn",
+      "position": [
+        0.6,
+        0.34,
+        -3.9
+      ],
+      "rotation_y": 18,
+      "scale": 1
+    },
+    {
+      "name": "LeftCottage",
+      "asset": "cottage_wide",
+      "position": [
+        -4.7,
+        0,
+        0.5
+      ],
+      "rotation_y": 14,
+      "scale": 1
+    },
+    {
+      "name": "RightCottage",
+      "asset": "cottage_right",
+      "position": [
+        5.9,
+        0,
+        0.7
+      ],
+      "rotation_y": -26,
+      "scale": 1
+    },
+    {
+      "name": "TallHouse",
+      "asset": "cottage_tall",
+      "position": [
+        4.7,
+        1.44,
+        -15.9
+      ],
+      "rotation_y": -10,
+      "scale": 0.92
+    },
+    {
+      "name": "SmallHouse",
+      "asset": "cottage_small",
+      "position": [
+        5.8,
+        1.44,
+        -12.7
+      ],
+      "rotation_y": 8,
+      "scale": 1
+    },
+    {
+      "name": "LaneHouse",
+      "asset": "house_gabled",
+      "position": [
+        7.7,
+        1.44,
+        -23.8
+      ],
+      "rotation_y": -15,
+      "scale": 0.95
+    },
+    {
+      "name": "FarCottage",
+      "asset": "far_cottage",
+      "position": [
+        6.9,
+        1.44,
+        -30.5
+      ],
+      "rotation_y": 8,
+      "scale": 1
+    },
+    {
+      "name": "LeftBackHouse",
+      "asset": "back_house",
+      "position": [
+        -7.8,
+        0.0,
+        -13.8
+      ],
+      "rotation_y": 18,
+      "scale": 1
+    },
+    {
+      "name": "Tree_00",
+      "asset": "ancient_oak",
+      "position": [
+        -3.2,
+        0,
+        -6.8
+      ],
+      "rotation_y": 0,
+      "scale": 1.0
+    },
+    {
+      "name": "Tree_01",
+      "asset": "branching_oak",
+      "position": [
+        -7.6,
+        0,
+        -10
+      ],
+      "rotation_y": 47,
+      "scale": 1.03
+    },
+    {
+      "name": "Tree_02",
+      "asset": "forest_column",
+      "position": [
+        1.2,
+        0,
+        -18
+      ],
+      "rotation_y": 94,
+      "scale": 1.05
+    },
+    {
+      "name": "Tree_03",
+      "asset": "forest_column",
+      "position": [
+        6.5,
+        0,
+        -21
+      ],
+      "rotation_y": 141,
+      "scale": 1.03
+    },
+    {
+      "name": "Tree_04",
+      "asset": "ancient_oak",
+      "position": [
+        8.2,
+        0,
+        -6.7
+      ],
+      "rotation_y": 188,
+      "scale": 1.02
+    },
+    {
+      "name": "Tree_05",
+      "asset": "branching_oak",
+      "position": [
+        12.5,
+        0,
+        -17
+      ],
+      "rotation_y": 235,
+      "scale": 0.95
+    },
+    {
+      "name": "Tree_06",
+      "asset": "forest_column",
+      "position": [
+        -13,
+        0,
+        -21
+      ],
+      "rotation_y": 282,
+      "scale": 1.15
+    },
+    {
+      "name": "Tree_07",
+      "asset": "forest_column",
+      "position": [
+        -7,
+        0,
+        -27
+      ],
+      "rotation_y": 329,
+      "scale": 1.1
+    },
+    {
+      "name": "Tree_08",
+      "asset": "forest_column",
+      "position": [
+        2,
+        0,
+        -32
+      ],
+      "rotation_y": 376,
+      "scale": 1.15
+    },
+    {
+      "name": "Tree_09",
+      "asset": "forest_column",
+      "position": [
+        12,
+        0,
+        -31
+      ],
+      "rotation_y": 423,
+      "scale": 1.08
+    },
+    {
+      "name": "Tree_10",
+      "asset": "forest_column",
+      "position": [
+        20,
+        0,
+        -29
+      ],
+      "rotation_y": 470,
+      "scale": 1.2
+    },
+    {
+      "name": "Tree_11",
+      "asset": "canopy_oak",
+      "position": [
+        -12,
+        0,
+        -12
+      ],
+      "rotation_y": 517,
+      "scale": 1.1
+    },
+    {
+      "name": "Tree_12",
+      "asset": "canopy_oak",
+      "position": [
+        14,
+        0,
+        -3
+      ],
+      "rotation_y": 564,
+      "scale": 1.0
+    },
+    {
+      "name": "Tree_13",
+      "asset": "forest_column",
+      "position": [
+        -15,
+        0,
+        -34
+      ],
+      "rotation_y": 611,
+      "scale": 1.2
+    },
+    {
+      "name": "Tree_14",
+      "asset": "branching_oak",
+      "position": [
+        18,
+        0,
+        -38
+      ],
+      "rotation_y": 658,
+      "scale": 1.15
+    },
+    {
+      "name": "Woodland_0_00",
+      "asset": "understory_oak",
+      "position": [
+        -29.0,
+        0,
+        -27.76679074976053
+      ],
+      "rotation_y": 0,
+      "scale": 1.3809872599066189
+    },
+    {
+      "name": "Woodland_0_01",
+      "asset": "understory_oak",
+      "position": [
+        -23.2,
+        0,
+        -27.158633283509
+      ],
+      "rotation_y": 71,
+      "scale": 1.5191153862513973
+    },
+    {
+      "name": "Woodland_0_02",
+      "asset": "understory_oak",
+      "position": [
+        -17.4,
+        0,
+        -26.312805937892822
+      ],
+      "rotation_y": 142,
+      "scale": 1.0336715179853746
+    },
+    {
+      "name": "Woodland_0_03",
+      "asset": "understory_oak",
+      "position": [
+        -11.600000000000001,
+        0,
+        -27.73033284806766
+      ],
+      "rotation_y": 213,
+      "scale": 1.3131472392481274
+    },
+    {
+      "name": "Woodland_0_04",
+      "asset": "understory_oak",
+      "position": [
+        -5.800000000000001,
+        0,
+        -28.213607699966108
+      ],
+      "rotation_y": 284,
+      "scale": 1.4756703857318338
+    },
+    {
+      "name": "Woodland_0_05",
+      "asset": "understory_oak",
+      "position": [
+        0.0,
+        0,
+        -27.492779488990713
+      ],
+      "rotation_y": 355,
+      "scale": 1.3337334898684459
+    },
+    {
+      "name": "Woodland_0_06",
+      "asset": "understory_oak",
+      "position": [
+        5.799999999999997,
+        0,
+        -25.811493822048032
+      ],
+      "rotation_y": 426,
+      "scale": 1.4240076096991203
+    },
+    {
+      "name": "Woodland_0_07",
+      "asset": "understory_oak",
+      "position": [
+        11.600000000000001,
+        0,
+        -27.858863359350874
+      ],
+      "rotation_y": 497,
+      "scale": 1.4549175858999717
+    },
+    {
+      "name": "Woodland_0_08",
+      "asset": "understory_oak",
+      "position": [
+        17.4,
+        0,
+        -28.0428970839693
+      ],
+      "rotation_y": 568,
+      "scale": 1.0368885853772323
+    },
+    {
+      "name": "Woodland_0_09",
+      "asset": "understory_oak",
+      "position": [
+        23.199999999999996,
+        0,
+        -25.541488896762417
+      ],
+      "rotation_y": 639,
+      "scale": 1.0026659062304237
+    },
+    {
+      "name": "Woodland_0_10",
+      "asset": "understory_oak",
+      "position": [
+        29.0,
+        0,
+        -25.36234236116921
+      ],
+      "rotation_y": 710,
+      "scale": 1.2880323095766304
+    },
+    {
+      "name": "Woodland_1_00",
+      "asset": "understory_oak",
+      "position": [
+        -26.2,
+        0,
+        -35.79870253439385
+      ],
+      "rotation_y": 29,
+      "scale": 1.5795413154101707
+    },
+    {
+      "name": "Woodland_1_01",
+      "asset": "understory_oak",
+      "position": [
+        -20.4,
+        0,
+        -38.10963242427289
+      ],
+      "rotation_y": 100,
+      "scale": 1.5506176075995128
+    },
+    {
+      "name": "Woodland_1_02",
+      "asset": "understory_oak",
+      "position": [
+        -14.599999999999998,
+        0,
+        -36.24078762286546
+      ],
+      "rotation_y": 171,
+      "scale": 1.3287594704651629
+    },
+    {
+      "name": "Woodland_1_03",
+      "asset": "understory_oak",
+      "position": [
+        -8.8,
+        0,
+        -36.781338279276206
+      ],
+      "rotation_y": 242,
+      "scale": 1.6076681548302365
+    },
+    {
+      "name": "Woodland_1_04",
+      "asset": "understory_oak",
+      "position": [
+        -3.000000000000001,
+        0,
+        -36.0773522369258
+      ],
+      "rotation_y": 313,
+      "scale": 1.2917693669481323
+    },
+    {
+      "name": "Woodland_1_05",
+      "asset": "understory_oak",
+      "position": [
+        2.8,
+        0,
+        -36.833256527682195
+      ],
+      "rotation_y": 384,
+      "scale": 1.1412313523242936
+    },
+    {
+      "name": "Woodland_1_06",
+      "asset": "understory_oak",
+      "position": [
+        8.599999999999998,
+        0,
+        -38.176068657304576
+      ],
+      "rotation_y": 455,
+      "scale": 1.3512234303203177
+    },
+    {
+      "name": "Woodland_1_07",
+      "asset": "understory_oak",
+      "position": [
+        14.400000000000002,
+        0,
+        -36.06360118711644
+      ],
+      "rotation_y": 526,
+      "scale": 0.9657956332153399
+    },
+    {
+      "name": "Woodland_1_08",
+      "asset": "understory_oak",
+      "position": [
+        20.2,
+        0,
+        -36.34106391827913
+      ],
+      "rotation_y": 597,
+      "scale": 1.4152319689629629
+    },
+    {
+      "name": "Woodland_1_09",
+      "asset": "understory_oak",
+      "position": [
+        25.999999999999996,
+        0,
+        -36.47213752686666
+      ],
+      "rotation_y": 668,
+      "scale": 1.0891479795723717
+    },
+    {
+      "name": "Woodland_1_10",
+      "asset": "understory_oak",
+      "position": [
+        31.8,
+        0,
+        -37.48908590085184
+      ],
+      "rotation_y": 739,
+      "scale": 1.3918435577036514
+    },
+    {
+      "name": "Woodland_2_00",
+      "asset": "understory_oak",
+      "position": [
+        -29.0,
+        0,
+        -46.8802057705886
+      ],
+      "rotation_y": 58,
+      "scale": 1.6130314823315999
+    },
+    {
+      "name": "Woodland_2_01",
+      "asset": "understory_oak",
+      "position": [
+        -23.2,
+        0,
+        -45.8135531758752
+      ],
+      "rotation_y": 129,
+      "scale": 1.4395499801643568
+    },
+    {
+      "name": "Woodland_2_02",
+      "asset": "understory_oak",
+      "position": [
+        -17.4,
+        0,
+        -45.55898252519571
+      ],
+      "rotation_y": 200,
+      "scale": 1.5693586760409513
+    },
+    {
+      "name": "Woodland_2_03",
+      "asset": "understory_oak",
+      "position": [
+        -11.600000000000001,
+        0,
+        -46.86541632853849
+      ],
+      "rotation_y": 271,
+      "scale": 1.4382052021463632
+    },
+    {
+      "name": "Woodland_2_04",
+      "asset": "understory_oak",
+      "position": [
+        -5.800000000000001,
+        0,
+        -48.423399596111
+      ],
+      "rotation_y": 342,
+      "scale": 1.6304395723043916
+    },
+    {
+      "name": "Woodland_2_05",
+      "asset": "understory_oak",
+      "position": [
+        0.0,
+        0,
+        -47.8861625114686
+      ],
+      "rotation_y": 413,
+      "scale": 1.291812206891163
+    },
+    {
+      "name": "Woodland_2_06",
+      "asset": "understory_oak",
+      "position": [
+        5.799999999999997,
+        0,
+        -48.763035344773925
+      ],
+      "rotation_y": 484,
+      "scale": 1.066365649931422
+    },
+    {
+      "name": "Woodland_2_07",
+      "asset": "understory_oak",
+      "position": [
+        11.600000000000001,
+        0,
+        -45.42586915437022
+      ],
+      "rotation_y": 555,
+      "scale": 1.036003070017991
+    },
+    {
+      "name": "Woodland_2_08",
+      "asset": "understory_oak",
+      "position": [
+        17.4,
+        0,
+        -47.12809698601086
+      ],
+      "rotation_y": 626,
+      "scale": 1.2831541660459491
+    },
+    {
+      "name": "Woodland_2_09",
+      "asset": "understory_oak",
+      "position": [
+        23.199999999999996,
+        0,
+        -45.30984534200616
+      ],
+      "rotation_y": 697,
+      "scale": 0.9747438691591761
+    },
+    {
+      "name": "Woodland_2_10",
+      "asset": "understory_oak",
+      "position": [
+        29.0,
+        0,
+        -47.81300330346944
+      ],
+      "rotation_y": 768,
+      "scale": 1.029332244313863
+    },
+    {
+      "name": "InnTerrace",
+      "asset": "terrace",
+      "position": [
+        0.35,
+        0.0,
+        -3.65
+      ],
+      "rotation_y": 18,
+      "scale": 1
+    },
+    {
+      "name": "InnWall_0",
+      "asset": "stone_wall",
+      "position": [
+        -3.7,
+        0.0,
+        -1.0
+      ],
+      "rotation_y": -3,
+      "scale": 0.85
+    },
+    {
+      "name": "InnWall_1",
+      "asset": "stone_wall",
+      "position": [
+        -1.8,
+        0.0,
+        -1.0
+      ],
+      "rotation_y": -3,
+      "scale": 0.85
+    },
+    {
+      "name": "LeftFence_0",
+      "asset": "fence",
+      "position": [
+        -4.0,
+        0,
+        6.505583822058765
+      ],
+      "rotation_y": 1.8470027932662703,
+      "scale": 0.85
+    },
+    {
+      "name": "LeftFence_1",
+      "asset": "fence",
+      "position": [
+        -2.6,
+        0,
+        6.230950920957849
+      ],
+      "rotation_y": 37.675225889962576,
+      "scale": 0.85
+    },
+    {
+      "name": "LeftFence_2",
+      "asset": "fence",
+      "position": [
+        -1.2,
+        0,
+        4.776196797696463
+      ],
+      "rotation_y": 53.16924800635281,
+      "scale": 0.85
+    },
+    {
+      "name": "RightFence_0",
+      "asset": "fence",
+      "position": [
+        2.8,
+        0,
+        5.994543407976822
+      ],
+      "rotation_y": -48.2286592264957,
+      "scale": 0.85
+    },
+    {
+      "name": "RightFence_1",
+      "asset": "fence",
+      "position": [
+        4.2,
+        0,
+        6.683408403567345
+      ],
+      "rotation_y": -2.3663904834425216,
+      "scale": 0.85
+    },
+    {
+      "name": "RightFence_2",
+      "asset": "fence",
+      "position": [
+        5.6,
+        0,
+        6.557679184217832
+      ],
+      "rotation_y": 13.867019333358838,
+      "scale": 0.85
+    },
+    {
+      "name": "BackFence_0",
+      "asset": "fence",
+      "position": [
+        -4.0,
+        0.65,
+        -3.4
+      ],
+      "rotation_y": -2,
+      "scale": 0.8
+    },
+    {
+      "name": "BackFence_1",
+      "asset": "fence",
+      "position": [
+        -2.6,
+        0.65,
+        -3.4
+      ],
+      "rotation_y": -2,
+      "scale": 0.8
+    },
+    {
+      "name": "InnSteps",
+      "asset": "steps",
+      "position": [
+        0.25,
+        0.02,
+        -0.85
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "LeftSteps",
+      "asset": "steps",
+      "position": [
+        -3.2,
+        0.02,
+        1.4
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "LaneSteps",
+      "asset": "street_steps",
+      "position": [
+        4.6,
+        0,
+        -8.2
+      ],
+      "rotation_y": -8,
+      "scale": 1
+    },
+    {
+      "name": "LaneLanding",
+      "asset": "terrace",
+      "position": [
+        5.3,
+        1.14,
+        -13.1
+      ],
+      "rotation_y": -8,
+      "scale": 0.9
+    },
+    {
+      "name": "UpperLanding",
+      "asset": "terrace",
+      "position": [
+        5.8,
+        1.14,
+        -18.0
+      ],
+      "rotation_y": -8,
+      "scale": 0.9
+    },
+    {
+      "name": "RaisedLane",
+      "asset": "raised_lane",
+      "position": [
+        5.1,
+        0,
+        -11.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "LaneRetaining_0",
+      "asset": "stone_wall",
+      "position": [
+        3.45,
+        0.6,
+        -10.5
+      ],
+      "rotation_y": -8,
+      "scale": 0.8
+    },
+    {
+      "name": "LaneRetaining_1",
+      "asset": "stone_wall",
+      "position": [
+        3.7,
+        0.6,
+        -12.7
+      ],
+      "rotation_y": -8,
+      "scale": 0.8
+    },
+    {
+      "name": "LaneRetaining_2",
+      "asset": "stone_wall",
+      "position": [
+        3.95,
+        0.6,
+        -14.9
+      ],
+      "rotation_y": -8,
+      "scale": 0.8
+    },
+    {
+      "name": "LaneRetaining_3",
+      "asset": "stone_wall",
+      "position": [
+        4.2,
+        0.6,
+        -17.1
+      ],
+      "rotation_y": -8,
+      "scale": 0.8
+    },
+    {
+      "name": "LaneRetaining_4",
+      "asset": "stone_wall",
+      "position": [
+        4.45,
+        0.6,
+        -19.3
+      ],
+      "rotation_y": -8,
+      "scale": 0.8
+    },
+    {
+      "name": "InnBarrel",
+      "asset": "barrel",
+      "position": [
+        1.9,
+        0.34,
+        -1.8
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "LeftBarrel",
+      "asset": "barrel",
+      "position": [
+        -3.5,
+        0,
+        1.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "RightBarrel",
+      "asset": "barrel",
+      "position": [
+        5.0,
+        0,
+        0.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "LeftCrate",
+      "asset": "crate",
+      "position": [
+        -3.75,
+        0,
+        1.12
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "RightCrate",
+      "asset": "crate",
+      "position": [
+        4.7,
+        0,
+        0.6
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "Plant_000",
+      "asset": "fern",
+      "position": [
+        -5.808925117939008,
+        0.015,
+        -4.993256702256627
+      ],
+      "rotation_y": 314.3038975545129,
+      "scale": 0.7979880566772085
+    },
+    {
+      "name": "Plant_001",
+      "asset": "fern",
+      "position": [
+        -9.634923154262035,
+        0.015,
+        -15.054923119728565
+      ],
+      "rotation_y": 306.31494941163817,
+      "scale": 0.7180391516504239
+    },
+    {
+      "name": "Plant_002",
+      "asset": "fern",
+      "position": [
+        -8.68990411949636,
+        0.015,
+        -11.48588386576782
+      ],
+      "rotation_y": 226.71193227209878,
+      "scale": 1.0773252325352587
+    },
+    {
+      "name": "Plant_003",
+      "asset": "fern",
+      "position": [
+        -8.750494877640508,
+        0.015,
+        -8.324582175302801
+      ],
+      "rotation_y": 117.64056482459668,
+      "scale": 0.7642049477462254
+    },
+    {
+      "name": "Plant_004",
+      "asset": "shrub_round",
+      "position": [
+        -5.35089515236688,
+        0.015,
+        -13.213957753045568
+      ],
+      "rotation_y": 188.04427809630133,
+      "scale": 1.0764178240833608
+    },
+    {
+      "name": "Plant_005",
+      "asset": "fern",
+      "position": [
+        -4.319484695039218,
+        0.015,
+        -13.709313888337903
+      ],
+      "rotation_y": 97.52734592902813,
+      "scale": 0.7229425464945531
+    },
+    {
+      "name": "Plant_006",
+      "asset": "shrub_round",
+      "position": [
+        -4.350199397102974,
+        0.015,
+        -1.3037855224775257
+      ],
+      "rotation_y": 13.92760736338202,
+      "scale": 0.8303553842441028
+    },
+    {
+      "name": "Plant_007",
+      "asset": "shrub_round",
+      "position": [
+        -4.052600195177952,
+        0.015,
+        -21.138157990893255
+      ],
+      "rotation_y": 128.82700090034544,
+      "scale": 1.1392521911138476
+    },
+    {
+      "name": "Plant_008",
+      "asset": "fern",
+      "position": [
+        -5.7478187211815515,
+        0.015,
+        -7.045534281043722
+      ],
+      "rotation_y": 354.01528958681536,
+      "scale": 0.8540775295164372
+    },
+    {
+      "name": "Plant_009",
+      "asset": "shrub_tall",
+      "position": [
+        -8.75280147089247,
+        0.015,
+        -8.122768091824675
+      ],
+      "rotation_y": 121.11298048158179,
+      "scale": 0.9299981117157645
+    },
+    {
+      "name": "Plant_010",
+      "asset": "shrub_round",
+      "position": [
+        -3.6620839702209604,
+        0.015,
+        -4.937609164680534
+      ],
+      "rotation_y": 220.7769563053139,
+      "scale": 1.096301382720327
+    },
+    {
+      "name": "Plant_011",
+      "asset": "shrub_tall",
+      "position": [
+        -5.043902648811243,
+        0.015,
+        -15.232888021833713
+      ],
+      "rotation_y": 125.80218603738727,
+      "scale": 0.7790239097200583
+    },
+    {
+      "name": "Plant_012",
+      "asset": "shrub_tall",
+      "position": [
+        -7.732042265961672,
+        0.015,
+        -10.718163448145148
+      ],
+      "rotation_y": 39.98930089440306,
+      "scale": 0.799071992886287
+    },
+    {
+      "name": "Plant_013",
+      "asset": "woodland_flowers",
+      "position": [
+        -9.474093931011659,
+        0.015,
+        -17.079747021823213
+      ],
+      "rotation_y": 140.37041697850782,
+      "scale": 1.189818972792989
+    },
+    {
+      "name": "Plant_014",
+      "asset": "shrub_low",
+      "position": [
+        -4.028675192640305,
+        0.015,
+        -23.11151081757459
+      ],
+      "rotation_y": 90.66407703646112,
+      "scale": 0.9972946415744461
+    },
+    {
+      "name": "Plant_015",
+      "asset": "shrub_low",
+      "position": [
+        -5.378797222190901,
+        0.015,
+        -12.265365396780801
+      ],
+      "rotation_y": 201.45516743240862,
+      "scale": 1.032061620641723
+    },
+    {
+      "name": "Plant_016",
+      "asset": "shrub_round",
+      "position": [
+        -7.141877015273979,
+        0.015,
+        -13.163775368209146
+      ],
+      "rotation_y": 61.89089570124268,
+      "scale": 1.0629178540779658
+    },
+    {
+      "name": "Plant_017",
+      "asset": "shrub_low",
+      "position": [
+        -5.141682278909786,
+        0.015,
+        -13.781203778005459
+      ],
+      "rotation_y": 9.492749422411642,
+      "scale": 0.7506238311072679
+    },
+    {
+      "name": "Plant_018",
+      "asset": "shrub_round",
+      "position": [
+        -8.980772497945381,
+        0.015,
+        -10.45078075200752
+      ],
+      "rotation_y": 317.55107061701017,
+      "scale": 1.1025586681510608
+    },
+    {
+      "name": "Plant_019",
+      "asset": "fern",
+      "position": [
+        -9.431396095261132,
+        0.015,
+        -2.2844347104573473
+      ],
+      "rotation_y": 2.264126033674221,
+      "scale": 0.7973897260517524
+    },
+    {
+      "name": "Plant_020",
+      "asset": "shrub_low",
+      "position": [
+        -4.847761634273263,
+        0.015,
+        -7.264460302438277
+      ],
+      "rotation_y": 148.39159763079616,
+      "scale": 1.1809032456439301
+    },
+    {
+      "name": "Plant_021",
+      "asset": "fern",
+      "position": [
+        -8.348313674967708,
+        0.015,
+        -0.4443426291887569
+      ],
+      "rotation_y": 179.85386854177273,
+      "scale": 1.092638652214498
+    },
+    {
+      "name": "Plant_022",
+      "asset": "fern",
+      "position": [
+        -5.670792283275307,
+        0.015,
+        -19.55815285166252
+      ],
+      "rotation_y": 338.77687794933377,
+      "scale": 0.7863946157426293
+    },
+    {
+      "name": "Plant_023",
+      "asset": "shrub_low",
+      "position": [
+        -6.946505773588079,
+        0.015,
+        -19.819452021404516
+      ],
+      "rotation_y": 29.815123076862182,
+      "scale": 0.8038319282966468
+    },
+    {
+      "name": "Plant_024",
+      "asset": "woodland_flowers",
+      "position": [
+        0.6606567453995513,
+        0.015,
+        -24.835555993065935
+      ],
+      "rotation_y": 225.93460465661482,
+      "scale": 1.1905725147336321
+    },
+    {
+      "name": "Plant_025",
+      "asset": "fern",
+      "position": [
+        10.387447777643164,
+        0.015,
+        -9.634862367102418
+      ],
+      "rotation_y": 203.15814127759782,
+      "scale": 0.9437781912847695
+    },
+    {
+      "name": "Plant_026",
+      "asset": "shrub_round",
+      "position": [
+        0.6937510676833751,
+        0.015,
+        -15.786372530892226
+      ],
+      "rotation_y": 216.91132544315903,
+      "scale": 0.9686562900797857
+    },
+    {
+      "name": "Plant_027",
+      "asset": "woodland_flowers",
+      "position": [
+        8.24062439057779,
+        0.015,
+        -4.699340574888279
+      ],
+      "rotation_y": 199.91316261028916,
+      "scale": 0.8256438524329965
+    },
+    {
+      "name": "Plant_028",
+      "asset": "woodland_flowers",
+      "position": [
+        8.047914577144937,
+        0.015,
+        0.443294765466959
+      ],
+      "rotation_y": 302.67800720952465,
+      "scale": 1.1754472658558193
+    },
+    {
+      "name": "Plant_029",
+      "asset": "shrub_tall",
+      "position": [
+        9.636263707496857,
+        0.015,
+        -6.753219989794918
+      ],
+      "rotation_y": 217.96938680421982,
+      "scale": 1.009090060983211
+    },
+    {
+      "name": "Plant_030",
+      "asset": "shrub_tall",
+      "position": [
+        -0.2672605892415785,
+        0.015,
+        -21.91698854094936
+      ],
+      "rotation_y": 122.9887782916188,
+      "scale": 0.8188403358263452
+    },
+    {
+      "name": "Plant_031",
+      "asset": "shrub_tall",
+      "position": [
+        -0.2726246509821455,
+        0.015,
+        -8.826717060665587
+      ],
+      "rotation_y": 246.04590276222115,
+      "scale": 1.016972627886396
+    },
+    {
+      "name": "Plant_032",
+      "asset": "shrub_low",
+      "position": [
+        1.2452255432324772,
+        0.015,
+        -20.6718463126426
+      ],
+      "rotation_y": 330.56014877333894,
+      "scale": 0.9214611732234343
+    },
+    {
+      "name": "Plant_033",
+      "asset": "shrub_tall",
+      "position": [
+        9.650405052173298,
+        0.015,
+        -6.717136422230961
+      ],
+      "rotation_y": 121.39476889875058,
+      "scale": 0.7697591266147508
+    },
+    {
+      "name": "Plant_034",
+      "asset": "shrub_round",
+      "position": [
+        5.909899501834129,
+        0.015,
+        -0.3978832746284233
+      ],
+      "rotation_y": 108.34727757383544,
+      "scale": 1.0832014489733683
+    },
+    {
+      "name": "Plant_035",
+      "asset": "fern",
+      "position": [
+        -0.6169701175110669,
+        0.015,
+        -14.852987018994186
+      ],
+      "rotation_y": 17.78096614173255,
+      "scale": 0.985929916243049
+    },
+    {
+      "name": "Plant_036",
+      "asset": "shrub_tall",
+      "position": [
+        -1.7091578739791213,
+        0.015,
+        -15.915961427275626
+      ],
+      "rotation_y": 199.25323809333932,
+      "scale": 0.8627678169792905
+    },
+    {
+      "name": "Plant_037",
+      "asset": "shrub_low",
+      "position": [
+        9.643696608597287,
+        0.015,
+        -6.910840312623684
+      ],
+      "rotation_y": 148.5036313430416,
+      "scale": 1.052179567769457
+    },
+    {
+      "name": "Plant_038",
+      "asset": "shrub_round",
+      "position": [
+        0.6706130605717018,
+        0.015,
+        -16.468326472355756
+      ],
+      "rotation_y": 225.90995152759635,
+      "scale": 1.1320348070974946
+    },
+    {
+      "name": "Plant_039",
+      "asset": "shrub_tall",
+      "position": [
+        -1.7316049488652387,
+        0.015,
+        -6.473514881490576
+      ],
+      "rotation_y": 121.22240889586507,
+      "scale": 0.8077653092383512
+    },
+    {
+      "name": "Plant_040",
+      "asset": "shrub_low",
+      "position": [
+        1.6717280637478424,
+        0.015,
+        -24.237564679703404
+      ],
+      "rotation_y": 131.50751340588846,
+      "scale": 0.8444201885423832
+    },
+    {
+      "name": "Plant_041",
+      "asset": "fern",
+      "position": [
+        7.696132404884252,
+        0.015,
+        -4.153561262066265
+      ],
+      "rotation_y": 212.5620959550642,
+      "scale": 0.9703162488875341
+    },
+    {
+      "name": "Plant_042",
+      "asset": "shrub_low",
+      "position": [
+        1.013048407265881,
+        0.015,
+        -20.682067858818368
+      ],
+      "rotation_y": 348.58918796696463,
+      "scale": 1.1225076461787484
+    },
+    {
+      "name": "Plant_043",
+      "asset": "fern",
+      "position": [
+        -2.382144924553497,
+        0.015,
+        -6.865071566254947
+      ],
+      "rotation_y": 210.41840205494654,
+      "scale": 0.9424804316530966
+    },
+    {
+      "name": "Plant_044",
+      "asset": "shrub_round",
+      "position": [
+        -0.34227843295531457,
+        0.015,
+        -25.87656836809468
+      ],
+      "rotation_y": 178.7609859339703,
+      "scale": 1.099540081813369
+    },
+    {
+      "name": "Plant_045",
+      "asset": "woodland_flowers",
+      "position": [
+        7.681197394203428,
+        0.015,
+        -3.7291473878871173
+      ],
+      "rotation_y": 103.52495903806935,
+      "scale": 1.1477864550899015
+    },
+    {
+      "name": "Plant_046",
+      "asset": "shrub_low",
+      "position": [
+        9.57239948427882,
+        0.015,
+        -4.277944303185691
+      ],
+      "rotation_y": 22.438937364434146,
+      "scale": 0.8712159087723552
+    },
+    {
+      "name": "Plant_047",
+      "asset": "shrub_low",
+      "position": [
+        -0.48670388677334486,
+        0.015,
+        -13.992384210652043
+      ],
+      "rotation_y": 70.60714431265332,
+      "scale": 1.0202292169454066
+    },
+    {
+      "name": "Plant_048",
+      "asset": "shrub_round",
+      "position": [
+        -1.337356771494675,
+        0.015,
+        -8.187279628484468
+      ],
+      "rotation_y": 42.5546196945239,
+      "scale": 1.0082761019357083
+    },
+    {
+      "name": "Plant_049",
+      "asset": "woodland_flowers",
+      "position": [
+        9.092591097455122,
+        0.015,
+        -2.3900170179233733
+      ],
+      "rotation_y": 217.5754352133088,
+      "scale": 0.8278163815415076
+    },
+    {
+      "name": "Plant_050",
+      "asset": "shrub_round",
+      "position": [
+        9.123877132054549,
+        0.015,
+        -15.950872319113252
+      ],
+      "rotation_y": 119.43812624618312,
+      "scale": 0.8828913684664748
+    },
+    {
+      "name": "Plant_051",
+      "asset": "shrub_round",
+      "position": [
+        -2.0868254437272897,
+        0.015,
+        0.31466817756045273
+      ],
+      "rotation_y": 159.38664184503824,
+      "scale": 1.179438828365382
+    },
+    {
+      "name": "Plant_052",
+      "asset": "fern",
+      "position": [
+        9.064770031394566,
+        0.015,
+        1.2943361010050474
+      ],
+      "rotation_y": 55.650742540744716,
+      "scale": 0.8201087678823431
+    },
+    {
+      "name": "Plant_053",
+      "asset": "shrub_low",
+      "position": [
+        8.299185593847751,
+        0.015,
+        1.2968864890156766
+      ],
+      "rotation_y": 189.39169553765404,
+      "scale": 1.1124660296731905
+    },
+    {
+      "name": "Plant_054",
+      "asset": "shrub_round",
+      "position": [
+        9.290408660530233,
+        0.015,
+        -3.2273401060826146
+      ],
+      "rotation_y": 216.4428066480455,
+      "scale": 0.8387759723439682
+    },
+    {
+      "name": "Plant_055",
+      "asset": "shrub_low",
+      "position": [
+        7.573685736632797,
+        0.015,
+        -7.705319607277556
+      ],
+      "rotation_y": 187.6306639690283,
+      "scale": 1.0546678576927278
+    },
+    {
+      "name": "Plant_056",
+      "asset": "shrub_round",
+      "position": [
+        12.457969165773072,
+        0.015,
+        -24.270552056498836
+      ],
+      "rotation_y": 301.1451353735152,
+      "scale": 0.7363709760700121
+    },
+    {
+      "name": "Plant_057",
+      "asset": "shrub_tall",
+      "position": [
+        11.979173789025081,
+        0.015,
+        -18.993659635532737
+      ],
+      "rotation_y": 320.85140907606865,
+      "scale": 0.9575029887539888
+    },
+    {
+      "name": "Plant_058",
+      "asset": "shrub_tall",
+      "position": [
+        -2.474430269084168,
+        0.015,
+        1.3910139031689113
+      ],
+      "rotation_y": 2.1724042748587102,
+      "scale": 0.9791605659138884
+    },
+    {
+      "name": "Plant_059",
+      "asset": "shrub_round",
+      "position": [
+        -2.1437420675720595,
+        0.015,
+        -0.03405710066138923
+      ],
+      "rotation_y": 278.0250207620452,
+      "scale": 0.7733571499796166
+    },
+    {
+      "name": "Plant_060",
+      "asset": "shrub_round",
+      "position": [
+        10.346577887934984,
+        0.015,
+        -11.969670365404093
+      ],
+      "rotation_y": 118.79321441527772,
+      "scale": 1.0991848660768628
+    },
+    {
+      "name": "Plant_061",
+      "asset": "shrub_tall",
+      "position": [
+        -2.72838606762972,
+        0.015,
+        -8.613629557904915
+      ],
+      "rotation_y": 358.2460024328638,
+      "scale": 0.7787034346591188
+    },
+    {
+      "name": "Plant_062",
+      "asset": "woodland_flowers",
+      "position": [
+        -3.058644588692969,
+        0.015,
+        -5.950802209591021
+      ],
+      "rotation_y": 43.69804288345745,
+      "scale": 0.9900363629970352
+    },
+    {
+      "name": "Plant_063",
+      "asset": "shrub_tall",
+      "position": [
+        7.661424352194393,
+        0.015,
+        -7.9731301486731745
+      ],
+      "rotation_y": 245.4823542254053,
+      "scale": 1.1044749661626752
+    },
+    {
+      "name": "Plant_064",
+      "asset": "fern",
+      "position": [
+        8.816002797518099,
+        0.015,
+        -0.30421471560402935
+      ],
+      "rotation_y": 157.98333368124815,
+      "scale": 0.7187375152044887
+    },
+    {
+      "name": "Plant_065",
+      "asset": "shrub_round",
+      "position": [
+        10.02565014047423,
+        0.015,
+        -10.946121231378276
+      ],
+      "rotation_y": 128.70080443821848,
+      "scale": 0.7109194331960698
+    },
+    {
+      "name": "Plant_066",
+      "asset": "shrub_tall",
+      "position": [
+        11.749058704665014,
+        0.015,
+        -25.08413131364236
+      ],
+      "rotation_y": 170.57881405816403,
+      "scale": 0.8549955330624932
+    },
+    {
+      "name": "Plant_067",
+      "asset": "shrub_round",
+      "position": [
+        -0.6467365137879293,
+        0.015,
+        -13.010538992599
+      ],
+      "rotation_y": 151.93226279568827,
+      "scale": 1.1556076829899027
+    },
+    {
+      "name": "Plant_068",
+      "asset": "fern",
+      "position": [
+        6.431864284082737,
+        0.015,
+        -0.20281256957160565
+      ],
+      "rotation_y": 164.7421638581566,
+      "scale": 0.8591830536067433
+    },
+    {
+      "name": "Plant_069",
+      "asset": "fern",
+      "position": [
+        -3.463966904594519,
+        0.015,
+        0.014860604852046322
+      ],
+      "rotation_y": 330.1943654247089,
+      "scale": 0.8717532116783024
+    },
+    {
+      "name": "Plant_070",
+      "asset": "shrub_round",
+      "position": [
+        9.608173070541184,
+        0.015,
+        -8.606767098667323
+      ],
+      "rotation_y": 227.598817976267,
+      "scale": 1.0931480351574945
+    },
+    {
+      "name": "Plant_071",
+      "asset": "shrub_round",
+      "position": [
+        9.314326711648302,
+        0.015,
+        -17.97078145124179
+      ],
+      "rotation_y": 281.1262102841716,
+      "scale": 1.1730735002168198
+    },
+    {
+      "name": "ForegroundShrub_0",
+      "asset": "shrub_shadow",
+      "position": [
+        -2.8,
+        0,
+        6.2
+      ],
+      "rotation_y": 0,
+      "scale": 1.6
+    },
+    {
+      "name": "ForegroundShrub_1",
+      "asset": "shrub_shadow",
+      "position": [
+        -1.9,
+        0,
+        6.8
+      ],
+      "rotation_y": 70,
+      "scale": 1.6
+    },
+    {
+      "name": "ForegroundShrub_2",
+      "asset": "shrub_shadow",
+      "position": [
+        3.15,
+        0,
+        6.4
+      ],
+      "rotation_y": 140,
+      "scale": 1.6
+    },
+    {
+      "name": "ForegroundShrub_3",
+      "asset": "shrub_shadow",
+      "position": [
+        4.1,
+        0,
+        6.8
+      ],
+      "rotation_y": 210,
+      "scale": 1.6
+    },
+    {
+      "name": "CanopyBough_0",
+      "asset": "leaf_bough",
+      "position": [
+        -3.2,
+        4.4,
+        -6.8
+      ],
+      "rotation_y": 0,
+      "scale": 1.15
+    },
+    {
+      "name": "CanopyBough_1",
+      "asset": "leaf_bough",
+      "position": [
+        8.2,
+        4.4,
+        -6.7
+      ],
+      "rotation_y": 170,
+      "scale": 1.15
+    },
+    {
+      "name": "CanopyBough_2",
+      "asset": "leaf_bough",
+      "position": [
+        -6,
+        4.8,
+        -4.0
+      ],
+      "rotation_y": -25,
+      "scale": 1.15
+    },
+    {
+      "name": "CanopyBough_3",
+      "asset": "leaf_bough",
+      "position": [
+        9,
+        4.8,
+        -13
+      ],
+      "rotation_y": 145,
+      "scale": 1.15
+    },
+    {
+      "name": "StreetGarden_00",
+      "asset": "woodland_flowers",
+      "position": [
+        -1.6268513020398125,
+        0,
+        -0.7472652329593628
+      ],
+      "rotation_y": 355.4698309606444,
+      "scale": 0.8758818263455492
+    },
+    {
+      "name": "StreetGarden_01",
+      "asset": "fern",
+      "position": [
+        -1.9370297838414885,
+        0,
+        -0.08220307994850806
+      ],
+      "rotation_y": 58.00102802707982,
+      "scale": 0.7560507787793037
+    },
+    {
+      "name": "StreetGarden_02",
+      "asset": "shrub_low",
+      "position": [
+        -2.6321815707748923,
+        0,
+        0.5846401683269415
+      ],
+      "rotation_y": 221.18212108896557,
+      "scale": 0.8158400498356274
+    },
+    {
+      "name": "StreetGarden_03",
+      "asset": "woodland_flowers",
+      "position": [
+        -1.3220566924976325,
+        0,
+        -1.0315847519840666
+      ],
+      "rotation_y": 175.16014532100937,
+      "scale": 0.7263707628658908
+    },
+    {
+      "name": "StreetGarden_04",
+      "asset": "woodland_flowers",
+      "position": [
+        -1.9921213555724804,
+        0,
+        -1.3231592520891615
+      ],
+      "rotation_y": 239.78505371746098,
+      "scale": 0.999282249175556
+    },
+    {
+      "name": "StreetGarden_05",
+      "asset": "shrub_low",
+      "position": [
+        -1.7086167331128599,
+        0,
+        0.29502657454737724
+      ],
+      "rotation_y": 143.41447159540138,
+      "scale": 0.9599473510286891
+    },
+    {
+      "name": "StreetGarden_06",
+      "asset": "shrub_low",
+      "position": [
+        -3.750870956411048,
+        0,
+        1.1219668082375551
+      ],
+      "rotation_y": 249.193683586023,
+      "scale": 0.8841931915516794
+    },
+    {
+      "name": "StreetGarden_07",
+      "asset": "shrub_low",
+      "position": [
+        -2.385433785844839,
+        0,
+        0.3892519938958865
+      ],
+      "rotation_y": 268.34155646595366,
+      "scale": 0.8627217165952403
+    },
+    {
+      "name": "StreetGarden_08",
+      "asset": "shrub_low",
+      "position": [
+        -3.5755542832435605,
+        0,
+        0.21757135254222693
+      ],
+      "rotation_y": 271.07349399852706,
+      "scale": 0.8065312783751002
+    },
+    {
+      "name": "StreetGarden_09",
+      "asset": "fern",
+      "position": [
+        -3.4963415480686963,
+        0,
+        0.9214307364440728
+      ],
+      "rotation_y": 236.13112311689227,
+      "scale": 0.6855174312097404
+    },
+    {
+      "name": "StreetGarden_10",
+      "asset": "fern",
+      "position": [
+        5.54353728507283,
+        0,
+        -0.046812663608283955
+      ],
+      "rotation_y": 314.2390585412038,
+      "scale": 0.7547454599012655
+    },
+    {
+      "name": "StreetGarden_11",
+      "asset": "shrub_low",
+      "position": [
+        4.877673177248613,
+        0,
+        0.7889628718233426
+      ],
+      "rotation_y": 81.4209256797042,
+      "scale": 0.8609781139836323
+    },
+    {
+      "name": "StreetGarden_12",
+      "asset": "fern",
+      "position": [
+        4.272277559094221,
+        0,
+        -0.7786187173737248
+      ],
+      "rotation_y": 345.46041127908035,
+      "scale": 0.7971703649487629
+    },
+    {
+      "name": "StreetGarden_13",
+      "asset": "fern",
+      "position": [
+        4.97478949824573,
+        0,
+        1.9794206480478524
+      ],
+      "rotation_y": 217.3858909454935,
+      "scale": 0.6750213215607077
+    },
+    {
+      "name": "StreetGarden_14",
+      "asset": "fern",
+      "position": [
+        4.53579031418623,
+        0,
+        1.894711630046205
+      ],
+      "rotation_y": 280.11412305654125,
+      "scale": 0.9925909306990224
+    },
+    {
+      "name": "StreetGarden_15",
+      "asset": "shrub_low",
+      "position": [
+        3.974801467414936,
+        0,
+        -0.24429932254672915
+      ],
+      "rotation_y": 119.60403257003692,
+      "scale": 0.7154634228327772
+    },
+    {
+      "name": "StreetGarden_16",
+      "asset": "shrub_low",
+      "position": [
+        5.1924004107838115,
+        0,
+        -0.778199299757952
+      ],
+      "rotation_y": 350.5046791601228,
+      "scale": 0.874791523590571
+    },
+    {
+      "name": "StreetGarden_17",
+      "asset": "shrub_low",
+      "position": [
+        4.9342964387308665,
+        0,
+        1.0376616642285112
+      ],
+      "rotation_y": 207.34613538526284,
+      "scale": 0.8587589287434438
+    },
+    {
+      "name": "StreetGarden_18",
+      "asset": "fern",
+      "position": [
+        4.292432813163661,
+        0,
+        1.21146392500372
+      ],
+      "rotation_y": 333.6897432358243,
+      "scale": 0.8298456162923984
+    },
+    {
+      "name": "StreetGarden_19",
+      "asset": "shrub_low",
+      "position": [
+        5.067572833814722,
+        0,
+        1.8719054511247522
+      ],
+      "rotation_y": 287.5416775865078,
+      "scale": 0.6557280555992154
+    },
+    {
+      "name": "Ground",
+      "asset": "village_ground",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "name": "ForegroundRiver",
+      "asset": "river_surface",
+      "position": [
+        0,
+        0,
+        0.0
+      ],
+      "rotation_y": 0.0,
+      "scale": 1.0
+    },
+    {
+      "name": "RiverBank",
+      "asset": "river_bank",
+      "position": [
+        0,
+        0,
+        0.0
+      ],
+      "rotation_y": 0.0,
+      "scale": 1.0
+    },
+    {
+      "name": "BankReeds_00",
+      "asset": "river_reeds",
+      "position": [
+        -6,
+        -0.04,
+        6.862876978884178
+      ],
+      "rotation_y": 105.72612655207473,
+      "scale": 0.7026041718139776
+    },
+    {
+      "name": "BankReeds_01",
+      "asset": "river_reeds",
+      "position": [
+        -4.8,
+        -0.04,
+        6.709859626074421
+      ],
+      "rotation_y": 200.02963978397287,
+      "scale": 0.7190908394765885
+    },
+    {
+      "name": "BankReeds_02",
+      "asset": "river_reeds",
+      "position": [
+        -3.65,
+        -0.04,
+        6.632360275080181
+      ],
+      "rotation_y": 281.7488307048413,
+      "scale": 0.6463370209924719
+    },
+    {
+      "name": "BankReeds_03",
+      "asset": "river_reeds",
+      "position": [
+        -2.9,
+        -0.04,
+        6.870374186855548
+      ],
+      "rotation_y": 79.75951482372231,
+      "scale": 0.5561258957840045
+    },
+    {
+      "name": "BankReeds_04",
+      "asset": "river_reeds",
+      "position": [
+        -2.2,
+        -0.04,
+        6.250174376486235
+      ],
+      "rotation_y": 6.069573560416113,
+      "scale": 0.599943140135848
+    },
+    {
+      "name": "BankReeds_05",
+      "asset": "river_reeds",
+      "position": [
+        -1.4,
+        -0.04,
+        5.190208331311853
+      ],
+      "rotation_y": 104.4689510923921,
+      "scale": 0.8831715797106602
+    },
+    {
+      "name": "BankReeds_06",
+      "asset": "river_reeds",
+      "position": [
+        1.75,
+        -0.04,
+        5.071957847808041
+      ],
+      "rotation_y": 66.59958724959988,
+      "scale": 0.6120733735407937
+    },
+    {
+      "name": "BankReeds_07",
+      "asset": "river_reeds",
+      "position": [
+        2.6,
+        -0.04,
+        5.985457525649428
+      ],
+      "rotation_y": 197.38298018911297,
+      "scale": 0.68501669226155
+    },
+    {
+      "name": "BankReeds_08",
+      "asset": "river_reeds",
+      "position": [
+        3.7,
+        -0.04,
+        6.87923226969051
+      ],
+      "rotation_y": 48.7063316526032,
+      "scale": 0.610910106709095
+    },
+    {
+      "name": "BankReeds_09",
+      "asset": "river_reeds",
+      "position": [
+        4.9,
+        -0.04,
+        6.7948611176874145
+      ],
+      "rotation_y": 221.82311881965234,
+      "scale": 0.8545414487228643
+    },
+    {
+      "name": "BankReeds_10",
+      "asset": "river_reeds",
+      "position": [
+        6.5,
+        -0.04,
+        6.789240009151575
+      ],
+      "rotation_y": 284.5418209637689,
+      "scale": 0.6344074252612262
+    },
+    {
+      "name": "RiverStone_00",
+      "asset": "river_stone",
+      "position": [
+        -7,
+        -0.08,
+        6.903341935618007
+      ],
+      "rotation_y": 171.43298415411786,
+      "scale": 1.0829450203093698
+    },
+    {
+      "name": "RiverStone_01",
+      "asset": "river_stone",
+      "position": [
+        -5,
+        -0.08,
+        6.83804389313135
+      ],
+      "rotation_y": 82.56052032659375,
+      "scale": 1.0502736612172447
+    },
+    {
+      "name": "RiverStone_02",
+      "asset": "river_stone",
+      "position": [
+        -3.7,
+        -0.08,
+        6.8390456201436605
+      ],
+      "rotation_y": 201.5647265335987,
+      "scale": 0.9591901148322874
+    },
+    {
+      "name": "RiverStone_03",
+      "asset": "river_stone",
+      "position": [
+        -2.7,
+        -0.08,
+        6.906634556562047
+      ],
+      "rotation_y": 309.20156893190847,
+      "scale": 1.0934756796906653
+    },
+    {
+      "name": "RiverStone_04",
+      "asset": "river_stone",
+      "position": [
+        -1.5,
+        -0.08,
+        5.398445195815158
+      ],
+      "rotation_y": 80.46552030426447,
+      "scale": 1.0928892896159577
+    },
+    {
+      "name": "RiverStone_05",
+      "asset": "river_stone",
+      "position": [
+        -0.65,
+        -0.08,
+        4.443988075855332
+      ],
+      "rotation_y": 77.0947219277074,
+      "scale": 0.7514887487365376
+    },
+    {
+      "name": "RiverStone_06",
+      "asset": "river_stone",
+      "position": [
+        0.8,
+        -0.08,
+        4.343053276580504
+      ],
+      "rotation_y": 213.6355143797749,
+      "scale": 0.661303214130862
+    },
+    {
+      "name": "RiverStone_07",
+      "asset": "river_stone",
+      "position": [
+        1.65,
+        -0.08,
+        5.14720510732437
+      ],
+      "rotation_y": 3.2021115649946363,
+      "scale": 0.6049119473976868
+    },
+    {
+      "name": "RiverStone_08",
+      "asset": "river_stone",
+      "position": [
+        2.7,
+        -0.08,
+        6.163923680185471
+      ],
+      "rotation_y": 16.934666911929227,
+      "scale": 0.9866945818541429
+    },
+    {
+      "name": "RiverStone_09",
+      "asset": "river_stone",
+      "position": [
+        3.5,
+        -0.08,
+        6.912120371291339
+      ],
+      "rotation_y": 32.40153620669416,
+      "scale": 0.7840025466747604
+    },
+    {
+      "name": "RiverStone_10",
+      "asset": "river_stone",
+      "position": [
+        5.2,
+        -0.08,
+        6.945075562192908
+      ],
+      "rotation_y": 73.744338588215,
+      "scale": 0.6211336401046015
+    },
+    {
+      "name": "RiverStone_11",
+      "asset": "river_stone",
+      "position": [
+        7.0,
+        -0.08,
+        6.876033146202873
+      ],
+      "rotation_y": 117.52583560662731,
+      "scale": 0.8491247909830482
+    }
+  ],
+  "summary": {
+    "unique_assets": 33,
+    "placed_instances": 209,
+    "max_asset_triangles": 7816
+  },
+  "river": {
+    "water_height": -0.24,
+    "width": 4.8,
+    "center_bank_z": 4.001958691937457,
+    "shader": "res://assets/shaders/town/forest_river.gdshader",
+    "collision": "land stops at bank; no water collision"
+  }
+}

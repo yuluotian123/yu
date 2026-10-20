@@ -103,7 +103,7 @@ public static class NpcExpressionEditorCatalog
     }
     public static IReadOnlyList<NpcEditorSymbol> For(NpcGraphAsset graph,GodotObject owner)=>owner is NpcTargetSelectorDefinition selector?
         Collect(graph).Concat(NpcBindingAdapters.Find(selector.Adapter)?.Properties.Select(p=>new NpcEditorSymbol("target."+p.Name,"候选 · "+p.Label,"候选对象",p.Type))??Array.Empty<NpcEditorSymbol>()).ToArray():
-        owner is NpcBindingDefinition?Collect(graph):Collect(graph,ActionOwner(graph,owner)!=null,ActionOwner(graph,owner));
+        owner is NpcActionInputDefinition?Collect(graph):Collect(graph,ActionOwner(graph,owner)!=null,ActionOwner(graph,owner));
     public static IReadOnlyList<NpcEditorSymbol> WritableTargets(NpcGraphAsset graph,GodotObject owner=null)=>
         (owner==null?Collect(graph,true):For(graph,owner)).Where(s=>s.Writable&&(s.Key!="self.location"||owner==null||owner is NpcEffectDefinition effect&&ActionOwner(graph,effect)?.Predictions.Contains(effect)==true)).ToArray();
 
@@ -119,13 +119,13 @@ public static class NpcExpressionEditorCatalog
         (CharacterNeedDefinition, nameof(CharacterNeedDefinition.RateMultiplier)) => CharacterValueType.Number,
         (NpcEffectDefinition effect, nameof(NpcEffectDefinition.Value)) => effect.Mode == NpcEffectMode.Add ? CharacterValueType.Number :
             WritableTargets(graph,effect).FirstOrDefault(s => s.Key == effect.Key)?.Type ?? CharacterValueType.Number,
-        (NpcBindingDefinition binding, nameof(NpcBindingDefinition.Value)) => binding.ValueType,
+        (NpcActionInputDefinition input, nameof(NpcActionInputDefinition.Value)) => input.IsTarget?null:input.ValueType,
         _ => null
     };
 
     public static bool Owns(NpcGraphAsset graph, GodotObject target)
     {
-        if (target is not (CharacterDefinitionResource or CharacterNeedDefinition or NpcEffectDefinition or NpcBindingDefinition or NpcResourceClaimDefinition)) return false;
+        if (target is not (CharacterDefinitionResource or CharacterNeedDefinition or NpcEffectDefinition or NpcActionInputDefinition)) return false;
         var visited = new HashSet<Resource>();
         bool Visit(Resource resource)
         {

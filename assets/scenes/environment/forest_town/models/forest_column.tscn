@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/forest_column.mesh.res" id="1_qqjcx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5nfp7"]
+size = Vector3(1.005, 14.44, 1.005)
+
+[node name="ForestColumn" type="Node3D" unique_id=2123053404]
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
+metadata/source_polygons = 3743
+metadata/triangles = 7816
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1493092124]
+mesh = ExtResource("1_qqjcx")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=947739697]
+collision_mask = 0
+
+[node name="@CollisionShape3D@13" type="CollisionShape3D" parent="Collision1" unique_id=125134924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.22, 0)
+shape = SubResource("BoxShape3D_5nfp7")

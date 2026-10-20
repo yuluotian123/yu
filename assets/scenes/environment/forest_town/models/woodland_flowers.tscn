@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/woodland_flowers.mesh.res" id="1_g2v43"]
+
+[node name="WoodlandFlowers" type="Node3D" unique_id=1447257830]
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_town/woodland_flowers.glb"
+metadata/source_polygons = 203
+metadata/triangles = 840
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=741346095]
+mesh = ExtResource("1_g2v43")

@@ -7,7 +7,7 @@ namespace GameLogic.AI;
 [GraphProvidedBy(typeof(AiAgentComponent3D))]
 public sealed class NpcRoamAction : GraphSharedAction
 {
-    public NpcInputReference Input {get;set;}=new();
+    public NpcInputReference Input {get;set;}=new(){Name=""};
     public double Radius {get;set;}=.6;
     public double DurationOverride {get;set;}=-1;
     public string Animation {get;set;}="walk";

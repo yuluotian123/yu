@@ -29,15 +29,25 @@ namespace GameLogic
                 return;
             }
 
-            if (invocation.Execution?.GetUserData<FlowTimelineContext>()?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
+            FlowTimelineContext timeline = invocation.Execution?.GetUserData<FlowTimelineContext>();
+            AbilityRuntime runtime = invocation.Execution?.GetUserData<AbilityRuntime>();
+            string velocityKey = $"DashVelocityX:{timeline?.Node?.Id}:{timeline?.ClipId}";
+            if (timeline?.Phase == FlowTimelinePhase.Start)
+                runtime?.SetData(velocityKey, movement.Velocity.X);
+
+            if (timeline?.Phase is FlowTimelinePhase.Complete or FlowTimelinePhase.Cancel)
             {
-                // 等移动组件解析本帧输入和控制锁后，直接衔接普通移速，避免归零后重新加速。
-                movement.RequestVelocityOverride(new CharacterMovementOverride3D(
-                    Vector3.Zero,
-                    overrideHorizontal: true,
-                    overrideVertical: false,
-                    priority: 100,
-                    useMovementInput: true));
+                // 只继承冲刺前的 X 速度；Z 不继承，Y 继续由当前跳跃和重力处理。
+                if (runtime != null && runtime.TryGetData(velocityKey, out float velocityXBeforeDash))
+                {
+                    movement.RequestVelocityOverride(new CharacterMovementOverride3D(
+                        new Vector3(velocityXBeforeDash, 0f, 0f),
+                        overrideHorizontal: true,
+                        overrideVertical: false,
+                        priority: 100,
+                        restoreBeforeMovement: true));
+                    runtime.SetData(velocityKey, null);
+                }
                 return;
             }
 

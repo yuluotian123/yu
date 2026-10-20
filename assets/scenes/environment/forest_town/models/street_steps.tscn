@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/street_steps.mesh.res" id="1_4p5q3"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f3pso"]
+points = PackedVector3Array(-0.85, 0, 0.15, 0.85, 0, 0.15, -0.85, 0, -3.23, 0.85, 0, -3.23, -0.85, 1.44, -3.23, 0.85, 1.44, -3.23)
+
+[node name="StreetSteps" type="Node3D" unique_id=1174138567]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/street_steps.glb"
+metadata/source_polygons = 288
+metadata/triangles = 576
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1549303240]
+mesh = ExtResource("1_4p5q3")
+
+[node name="WalkableStairRamp" type="StaticBody3D" parent="." unique_id=1539165233]
+collision_mask = 0
+
+[node name="RampShape" type="CollisionShape3D" parent="WalkableStairRamp" unique_id=878907726]
+shape = SubResource("ConvexPolygonShape3D_f3pso")

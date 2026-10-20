@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/fence.mesh.res" id="1_tt3tj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v3vw2"]
+size = Vector3(1.8, 0.9, 0.18)
+
+[node name="Fence" type="Node3D" unique_id=803760220]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/fence.glb"
+metadata/source_polygons = 36
+metadata/triangles = 72
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=117107342]
+mesh = ExtResource("1_tt3tj")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=982408012]
+collision_mask = 0
+
+[node name="@CollisionShape3D@17" type="CollisionShape3D" parent="Collision1" unique_id=788175469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_v3vw2")

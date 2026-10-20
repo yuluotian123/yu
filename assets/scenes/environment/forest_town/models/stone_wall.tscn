@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/stone_wall.mesh.res" id="1_tieyp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5s6gh"]
+size = Vector3(2.05, 0.9, 0.44)
+
+[node name="StoneWall" type="Node3D" unique_id=2124961065]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/stone_wall.glb"
+metadata/source_polygons = 66
+metadata/triangles = 132
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1244924189]
+mesh = ExtResource("1_tieyp")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=7132362]
+collision_mask = 0
+
+[node name="@CollisionShape3D@16" type="CollisionShape3D" parent="Collision1" unique_id=1969345747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+shape = SubResource("BoxShape3D_5s6gh")

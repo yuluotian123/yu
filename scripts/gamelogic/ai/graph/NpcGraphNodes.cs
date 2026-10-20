@@ -77,6 +77,66 @@ public class NpcGoalNodeData : NpcDefinitionNodeData
     public override int GetOutputCount()=>2;
     public override string GetOutputPortName(int port)=>port==0?"候选行动":"计划";
 }
-public class NpcActionNodeData : NpcDefinitionNodeData { public override Type DefinitionType=>typeof(NpcActionDefinition); public override string GetDisplayName()=>"行动"; }
+public class NpcActionNodeData : NpcDefinitionNodeData
+{
+    public const int TargetPortType=200;
+    // Saved port identities remap wires when inputs are reordered or removed.
+    public List<string> InputPorts {get;set;}=new();
+    [JsonIgnore] NpcActionDefinition _action;
+    [JsonIgnore] readonly Dictionary<string,List<GraphConnection>> _removedInputWires=new();
+    public void Bind(NpcGraphAsset graph)
+    {
+        _action=graph.Resolve(DefinitionId) as NpcActionDefinition;
+        if(_action==null)return;
+        var ports=_action.Inputs.Where(i=>i is {IsTarget:true}).Select(i=>i.InputId).ToList();
+        if(InputPorts.SequenceEqual(ports))return;
+        foreach(var edge in graph.Connections.Where(e=>e.ToNode==Id&&e.ToPort>0).ToArray())
+        {
+            string inputId=edge.ToPort<=InputPorts.Count?InputPorts[edge.ToPort-1]:null;
+            int port=inputId==null?-1:ports.IndexOf(inputId);
+            if(port>=0)edge.ToPort=port+1;
+            else
+            {
+                graph.Connections.Remove(edge);
+                if(inputId!=null)
+                {
+                    if(!_removedInputWires.TryGetValue(inputId,out var removed))_removedInputWires[inputId]=removed=new();
+                    removed.Add(edge);
+                }
+            }
+        }
+        InputPorts=ports;
+        for(int i=0;i<ports.Count;i++)
+            if(_removedInputWires.Remove(ports[i],out var removed)&&!graph.Connections.Any(e=>e.ToNode==Id&&e.ToPort==i+1))
+                foreach(var edge in removed.Where(e=>graph.FindNodeById(e.FromNode) is NpcTargetSelectorNodeData))
+                {
+                    edge.ToPort=i+1;graph.Connections.Add(edge);
+                }
+        graph.MarkDirty();
+    }
+    public NpcActionInputDefinition InputAt(int port)=>port>0&&port<=InputPorts.Count
+        ?_action?.Inputs.FirstOrDefault(i=>i!=null&&i.InputId==InputPorts[port-1]&&i.IsTarget):null;
+    public override Type DefinitionType=>typeof(NpcActionDefinition);
+    public override string GetDisplayName()=>"行动";
+    public override string GetDisplayName(GraphAsset graph){Bind((NpcGraphAsset)graph);return base.GetDisplayName(graph);}
+    public override int GetInputCount()=>1+InputPorts.Count;
+    public override string GetInputPortName(int port)=>port==0?"候选行动":InputAt(port)?.Name??"";
+    public override int GetInputPortType(int port)=>port==0?0:TargetPortType;
+    public override int GetInputMaxConnections(int port)=>port==0?-1:1;
+    public override void CreateNodeUI(GraphEditorContext context)
+    {
+        base.CreateNodeUI(context);
+#if TOOLS
+        ((NpcGraphAsset)context.CurrentGraph).QueueConnectionRefresh(context.GraphEdit,context.GraphNode);
+#endif
+    }
+}
 public class NpcTemplateNodeData : NpcDefinitionNodeData { public override Type DefinitionType=>typeof(NpcPlanTemplateDefinition); public override string GetDisplayName()=>"计划"; }
-public class NpcTargetSelectorNodeData : NpcDefinitionNodeData { public override Type DefinitionType=>typeof(NpcTargetSelectorDefinition); public override string GetDisplayName()=>"目标选择器"; }
+public class NpcTargetSelectorNodeData : NpcDefinitionNodeData
+{
+    public override Type DefinitionType=>typeof(NpcTargetSelectorDefinition);
+    public override string GetDisplayName()=>"目标选择器";
+    public override int GetOutputCount()=>1;
+    public override int GetOutputPortType(int port)=>NpcActionNodeData.TargetPortType;
+    public override string GetOutputPortName(int port)=>"本次计划共享目标";
+}

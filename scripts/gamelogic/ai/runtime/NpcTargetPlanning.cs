@@ -18,6 +18,7 @@ public static class NpcTargetQuery
             NpcTargetSource.PerceivedPoints=>p.Perceived,
             NpcTargetSource.WorldPoints=>true,
             NpcTargetSource.IdentityParameter=>parameter.Length>0&&p.Id==parameter,
+            NpcTargetSource.FixedObject=>p.Id==selector.FixedObjectId,
             NpcTargetSource.CurrentLocation=>p.Id==program.Read(state,"self.location").Symbol,
             NpcTargetSource.KnownPoints=>p.Known,
             _=>false
@@ -54,23 +55,23 @@ public static class NpcTargetQuery
         foreach(var plan in goal.Plans.Where(p=>p.Eligibility==null||p.Eligibility.Evaluate(k=>program.Read(initial,k),program.Parameter).IsTrue))
         foreach(var action in goal.Actions.Where(a=>plan.ActionIds.Contains(a.Id)))
         {
-            NpcBindingSpec Source(NpcBindingSpec input)=>input.Source==NpcBindingSource.PlanVariable?plan.Bindings.First(v=>v.Name==input.Variable):input;
-            var slots=action.Inputs.Where(i=>Source(i).Source==NpcBindingSource.Selector).ToArray();
+            var slots=action.Inputs.Where(i=>i.IsTarget).ToArray();
             var values=new Dictionary<string,CharacterValue>(StringComparer.Ordinal);
-            var variables=new Dictionary<string,CharacterValue>(StringComparer.Ordinal);
+            var selections=new Dictionary<string,CharacterValue>(StringComparer.Ordinal);
             void Expand(int index)
             {
                 if(index<slots.Length)
                 {
-                    var input=slots[index];var source=Source(input);
-                    if(!candidates.TryGetValue(source.SelectorId,out var choices))candidates[source.SelectorId]=choices=Select(program,program.TargetSelectors[source.SelectorId],initial,points);
+                    var input=slots[index];
+                    if(!candidates.TryGetValue(input.SelectorId,out var choices))candidates[input.SelectorId]=choices=Select(program,program.TargetSelectors[input.SelectorId],initial,points);
                     foreach(var point in choices)
                     {
                         var value=CharacterValue.Text(point.Id);
-                        if(input.Source==NpcBindingSource.PlanVariable&&variables.TryGetValue(input.Variable,out var previous)&&previous!=value)continue;
-                        bool added=input.Source==NpcBindingSource.PlanVariable&&variables.TryAdd(input.Variable,value);
+                        string shared=input.SelectionNodeId.Length>0?input.SelectionNodeId:null;
+                        if(shared!=null&&selections.TryGetValue(shared,out var previous)&&previous!=value)continue;
+                        bool added=shared!=null&&selections.TryAdd(shared,value);
                         values[input.Name]=value;Expand(index+1);values.Remove(input.Name);
-                        if(added)variables.Remove(input.Variable);
+                        if(added)selections.Remove(shared);
                     }
                     return;
                 }

@@ -5,29 +5,31 @@
 ## 系统分工
 
 ```text
-Player Input / AI
-        |
-        v
+Player Input
+		|
+		v
 CharacterGraph --------------------> AbilitySystem
-        |                                  |
-        +---- Movement intent              +---- Ability Timeline
-                    |                                  |
-                    v                                  v
-             CharacterMovement -----> CharacterAnimation
-                    |                     Locomotion HFSM
-                    +--------------------------+
+		|                                  |
+		+---- Movement intent              +---- Ability Timeline
+					|                                  |
+					v                                  v
+			 CharacterMovement -----> CharacterAnimation
+					|                     Locomotion HFSM
+					+--------------------------+
 ```
 
 | 组件 | 作用 | 当前优先级 |
 | --- | --- | ---: |
 | `PlayerCharacterInputComponent3D` | 将输入模块转换为 `ICharacterInputProvider` | 100 |
-| `SimpleAICharacterControllerComponent3D` | 驱动 BehaviorTree，并提交移动/战斗意图 | 100 |
+| `AiAgentComponent3D` | 驱动 NPC 图、GOAP 与行动 Flow，调用共享执行能力 | 100 |
 | `CharacterGraphComponent3D` | 执行玩家输入、生命周期和 Ability 编排 | 90 |
 | `AbilitySystemComponent3D` | 授权、冷却、优先级、打断和 Ability 运行时 | 55 |
 | `CharacterMovementComponent3D` | 消费移动命令、处理跳跃/重力并移动 `CharacterBody3D` | 50 |
 | `CharacterAnimationComponent3D` | 运行 Locomotion HFSM 并选择 `AnimatedSprite3D` 动画 | 20 |
 
 CharacterGraph 不负责物理和 Locomotion 状态；它提交意图。Movement 计算最终结果，Animation 再读取结果并选择动画。AI 可以直接使用 Movement 和 Ability API，不需要挂载 CharacterGraph。
+
+NPC 通过 Goal、Plan、Action 和选择器配置决策，执行流程见 [NPC 图指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)；世界会话与关卡切换见[世界框架实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)。
 
 ## 创建玩家角色
 
@@ -45,14 +47,14 @@ CharacterGraph 是 Character 专用的 FlowGraph。常见连接如下：
 
 ```text
 Axis1D(player_move_left, player_move_right)
-    -> Component Call: AddMovementInput
+	-> Component Call: AddMovementInput
 
 Pressed(player_jump)
-    -> Component Call: RequestJumpStart
-    -> Component Call: SetJumpSustain(true)
+	-> Component Call: RequestJumpStart
+	-> Component Call: SetJumpSustain(true)
 
 Released(player_jump)
-    -> Component Call: SetJumpSustain(false)
+	-> Component Call: SetJumpSustain(false)
 
 Pressed(player_attack) -> Character Ability: attack
 Pressed(player_dash)   -> Character Ability: dash

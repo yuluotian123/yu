@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/steps.mesh.res" id="1_ifofq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k6hq4"]
+size = Vector3(1.25, 0.28, 0.94)
+
+[node name="Steps" type="Node3D" unique_id=1656063153]
+metadata/asset_category = "prop"
+metadata/source_model = "res://assets/models/environment/forest_town/steps.glb"
+metadata/source_polygons = 24
+metadata/triangles = 48
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1557348771]
+mesh = ExtResource("1_ifofq")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=2096426046]
+collision_mask = 0
+
+[node name="@CollisionShape3D@18" type="CollisionShape3D" parent="Collision1" unique_id=115773437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, -0.34)
+shape = SubResource("BoxShape3D_k6hq4")

@@ -2,7 +2,7 @@
 
 Ability 系统只包含能力资源、运行时和 Timeline Action。CharacterGraph、Movement 与 Animation 已独立到 `scripts/gamelogic/character`。
 
-完整说明见 [角色系统](../../../docs/CHARACTER_SYSTEM.md)，使用示例见 [玩家角色示例](../../../docs/PLAYER_CHARACTER_EXAMPLE.md) 和 [AI 角色示例](../../../docs/AI_CHARACTER_EXAMPLE.md)。
+完整说明见 [角色系统](../../../docs/CHARACTER_SYSTEM.md)，使用示例见 [玩家角色示例](../../../docs/PLAYER_CHARACTER_EXAMPLE.md) 和 [NPC 图配置与运行指南](../ai/NPC_GRAPH_GUIDE.md)。
 
 ## 结构
 

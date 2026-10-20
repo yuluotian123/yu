@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/shrub_shadow.mesh.res" id="1_tjp85"]
+
+[node name="ShrubShadow" type="Node3D" unique_id=1093342347]
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_town/shrub_shadow.glb"
+metadata/source_polygons = 1230
+metadata/triangles = 2520
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1004187564]
+mesh = ExtResource("1_tjp85")

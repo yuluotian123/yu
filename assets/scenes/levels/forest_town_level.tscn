@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/scenes/levels/whitebox_test.tscn" id="base"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="town"]
+
+[node name="ForestTownLevel" instance=ExtResource("base")]
+editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；WASD / 跳跃及现有角色框架沿用白盒。"
+
+[node name="Visual" parent="Ground" index="0"]
+visible = false
+
+[node name="GameplayBody" parent="Ground" index="1"]
+collision_layer = 0
+
+[node name="RPGTown" parent="." instance=ExtResource("town")]

@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/fern.mesh.res" id="1_3psjt"]
+
+[node name="Fern" type="Node3D" unique_id=2112012052]
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_town/fern.glb"
+metadata/source_polygons = 126
+metadata/triangles = 126
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1392816446]
+mesh = ExtResource("1_3psjt")

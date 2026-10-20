@@ -1,0 +1,27 @@
+{
+  "request": "我希望能在场景最前方加入一条河流，用特殊材质去做风格化水体效果",
+  "scene_node": "RPGTown/Water/ForegroundRiver",
+  "shader": "res://assets/shaders/town/forest_river.gdshader",
+  "material": "res://assets/materials/environment/forest_town/river.tres",
+  "blender_source": "res://assets/models/environment/forest_town/source/forest_town.blend",
+  "builder": "res://scripts/tools/art/forest_town/add_river.py",
+  "width_m": 4.8,
+  "water_height_m": -0.24,
+  "model_triangles": {
+    "river_surface": 5760,
+    "river_bank": 1204,
+    "river_stone": 92,
+    "river_reeds": 808,
+    "village_ground": 4670
+  },
+  "material_effects": ["quantized painted color patches", "moving horizontal ripples", "woodland colored reflection patches", "broken shoreline foam", "subtle vertex waves"],
+  "rendering": "opaque; authored shoreline distance UV; no screen or depth texture; no static GI capture or shadow casting",
+  "gameplay": "land collision stops at bank; water has no collision or swimming behavior",
+  "preserved": ["camera", "lights", "sky", "fog", "exposure", "postprocessing", "environment components"],
+  "validation": {
+    "scene_checks_passed": 97,
+    "menu_load_and_reentry_passed": true,
+    "rendered_flow_animation_confirmed": true,
+    "per_model_polygon_and_triangle_limit": 8000
+  }
+}

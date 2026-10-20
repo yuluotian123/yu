@@ -7,9 +7,9 @@
 相关示例：
 
 - [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
-- [AI 角色示例](AI_CHARACTER_EXAMPLE.md)
+- [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)
 - [玩家场景](../assets/scenes/player.tscn)
-- [简单 AI 场景](../assets/scenes/ai_runner.tscn)
+- [NPC 白盒场景](../assets/scenes/levels/whitebox_test.tscn)
 - [Player 场景内联 CharacterGraph](../assets/scenes/player.tscn)
 
 ## 1. 完整结构
@@ -48,12 +48,12 @@ AbilitySystemComponent3D (55)                  CharacterMovementComponent3D (50)
                                       +-- AnimatedSprite3D 唯一写入者
 
 AI
-BehaviorTree Controller (100)
+AiAgentComponent3D (100) → Goal / Plan / GOAP → Action Flow
         |-- Movement API ----------------> CharacterMovementComponent3D
         +-- Ability API (战斗 AI 可选) ---> AbilitySystemComponent3D
 ```
 
-简单 AI 不挂载 CharacterGraph、AbilitySystem 或 Animation。战斗 AI 可以按需增加 AbilitySystem 和 Animation，但仍不增加 CharacterGraph。
+NPC 使用自己的图配置决策，复用 Movement、Animation 和按需配置的 AbilitySystem。NPC 图与玩家 CharacterGraph 分别组织控制意图。
 
 ## 2. 组件职责
 
@@ -189,17 +189,17 @@ CharacterGraph 不包含 Locomotion。二者都“是图”，但职责不同：
 
 ## 7. 玩家与 AI 共用边界
 
-| 能力 | 玩家 | 简单 AI | 战斗 AI |
-| --- | --- | --- | --- |
-| Input Adapter | 是 | 否 | 否 |
-| CharacterGraph | 是 | 否 | 否 |
-| BehaviorTree | 否 | 是 | 是 |
-| Movement | 是 | 是 | 是 |
-| AbilitySystem | 是 | 否 | 按需 |
-| Animation | 是 | 否 | 按需 |
-| Persistence | 是 | 是 | 是 |
+| 能力 | 玩家 | NPC |
+| --- | --- | --- |
+| Input Adapter | 是 | 否 |
+| CharacterGraph | 是 | 否 |
+| NPC 图 / GOAP | 否 | 是 |
+| Movement | 是 | 是 |
+| AbilitySystem | 是 | 按需 |
+| Animation | 是 | 是 |
+| Persistence | 是 | 是 |
 
-AI BehaviorTree 直接调用与玩家图相同的 Movement 和 AbilitySystem API。共享的是执行层，不共享玩家输入编排图。
+NPC 的行动能力调用与玩家图相同的 Movement 和 AbilitySystem API，决策配置见 [NPC 图指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)。
 
 ## 8. 更新顺序
 

@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/inn.mesh.res" id="1_ov7u8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wpt4p"]
+size = Vector3(2.65, 2.5, 2.75)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lydvi"]
+size = Vector3(1.35, 2.14, 2.5025)
+
+[node name="Inn" type="Node3D" unique_id=1368003098]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_town/inn.glb"
+metadata/source_polygons = 3123
+metadata/triangles = 6249
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1264358519]
+mesh = ExtResource("1_ov7u8")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=1360858095]
+collision_mask = 0
+
+[node name="@CollisionShape3D@2" type="CollisionShape3D" parent="Collision1" unique_id=179127935]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("BoxShape3D_wpt4p")
+
+[node name="Collision2" type="StaticBody3D" parent="." unique_id=2134321521]
+collision_mask = 0
+
+[node name="@CollisionShape3D@3" type="CollisionShape3D" parent="Collision2" unique_id=1677921579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88, 1.07, -0.18)
+shape = SubResource("BoxShape3D_lydvi")

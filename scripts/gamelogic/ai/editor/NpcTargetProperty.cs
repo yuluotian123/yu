@@ -1,22 +1,42 @@
 #if TOOLS
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 namespace GameLogic.AI;
 
 public static class NpcTargetCatalog
 {
-    public static NpcTargetSelectorDefinition[] Available(NpcGraphAsset graph)=>graph.Nodes.OfType<NpcRootNodeData>()
-        .SelectMany(r=>graph.GetOutgoingConnections(r.Id,2)).Where(e=>e.IsAvailable)
-        .Select(e=>graph.FindNodeById(e.ToNode)).OfType<NpcTargetSelectorNodeData>()
-        .Select(n=>graph.Resolve(n.DefinitionId)).OfType<NpcTargetSelectorDefinition>().Where(s=>s.Enabled).DistinctBy(s=>s.DefinitionId).ToArray();
+    public sealed record Point(string Id,string Name,string Path);
+    public static IReadOnlyList<Point> Points(Node root)
+    {
+        var points=new List<Point>();
+        void Visit(Node node)
+        {
+            if(node is GameObject3D host)foreach(var point in host.Components.OfType<AiInteractionPointComponent3D>())
+            {
+                string id=point.PointId.Length>0?point.PointId:host.PersistentId;
+                if(id.Length>0)points.Add(new(id,point.DisplayName.Length>0?point.DisplayName:host.Name.ToString(),root.GetPathTo(host).ToString()));
+            }
+            foreach(Node child in node.GetChildren())Visit(child);
+        }
+        if(GodotObject.IsInstanceValid(root))Visit(root);
+        // Ambiguous identities cannot be resolved safely at runtime.
+        return points.GroupBy(p=>p.Id,StringComparer.Ordinal).Where(g=>g.Count()==1).Select(g=>g.Single()).OrderBy(p=>p.Name,StringComparer.Ordinal).ThenBy(p=>p.Path,StringComparer.Ordinal).ToArray();
+    }
+    public static IReadOnlyList<Point> Points(NpcGraphAsset graph)
+    {
+        Node root=Engine.IsEditorHint()?EditorInterface.Singleton.GetEditedSceneRoot():null;
+        root??=GodotObject.IsInstanceValid(graph.EditorHostContext)?graph.EditorHostContext.Owner??graph.EditorHostContext:null;
+        return Points(root);
+    }
 }
 
 /// <summary>Name-based references and native Inspector undo; IDs are storage only.</summary>
 [Tool]
 public partial class NpcTargetProperty : EditorProperty
 {
-    sealed record Choice(string Id,string Name);
+    sealed record Choice(string Id,string Name,string Group);
     readonly VBoxContainer _body=new();
     readonly NpcGraphAsset _graph;
     readonly Resource _owner;
@@ -27,13 +47,17 @@ public partial class NpcTargetProperty : EditorProperty
     public override void _UpdateProperty()
     {
         if(!GodotObject.IsInstanceValid(_owner))return;
-        Choice[] choices=NpcExpressionEditorCatalog.Collect(_graph).Where(s=>s.Parameter&&s.Type==CharacterValueType.Symbol).Select(s=>new Choice(s.Key,s.Label)).ToArray();
+        bool fixedObject=_property==nameof(NpcTargetSelectorDefinition.FixedObjectId);
+        Choice[] choices=fixedObject
+            ?((_owner as NpcTargetSelectorDefinition)?.Adapter=="point"?NpcTargetCatalog.Points(_graph).Select(p=>new Choice(p.Id,p.Name,p.Path)).ToArray():Array.Empty<Choice>())
+            :NpcExpressionEditorCatalog.Collect(_graph).Where(s=>s.Parameter&&s.Type==CharacterValueType.Symbol).Select(s=>new Choice(s.Key,s.Label,"角色参数")).ToArray();
         string value=_owner.Get(_property).ToString();
-        string stamp=value+"\n"+string.Join("\n",choices.Select(c=>c.Id+":"+c.Name));if(stamp==_stamp)return;_stamp=stamp;
+        string stamp=value+"\n"+string.Join("\n",choices.Select(c=>c.Id+":"+c.Name+":"+c.Group));if(stamp==_stamp)return;_stamp=stamp;
         foreach(Node child in _body.GetChildren()){GraphEditorSignalCleanup.PrepareForRemoval(child);_body.RemoveChild(child);}
         Label=_property switch
         {
             nameof(NpcTargetSelectorDefinition.ParameterKey)=>"目标角色参数",
+            nameof(NpcTargetSelectorDefinition.FixedObjectId)=>"固定对象",
             nameof(NpcTargetSelectorDefinition.Source)=>"候选来源",
             nameof(NpcTargetSelectorDefinition.Selection)=>"选择策略",
             _=>_property
@@ -42,20 +66,21 @@ public partial class NpcTargetProperty : EditorProperty
         {
             var select=new OptionButton();
             string[] labels=_property==nameof(NpcTargetSelectorDefinition.Source)
-                ?new[]{"感知到的对象","世界中的对象","身份参数指定的对象","当前位置对应的对象","已知对象"}
+                ?new[]{"感知到的对象","当前已加载的对象","角色参数指定的对象","当前位置对应的对象","已知对象","固定对象"}
                 :new[]{"提供多个候选给 GOAP","最近一个","评分最低的一个","评分最高的一个"};
             foreach(string label in labels)select.AddItem(label);select.Select(_owner.Get(_property).AsInt32());
             select.ItemSelected+=i=>EmitChanged(_property,(int)i);_body.AddChild(select);return;
         }
         string chosen=choices.FirstOrDefault(c=>c.Id==value)?.Name;
-        var button=new Button{Text=chosen??(value.Length==0?"选择文本角色参数":"引用不可用，请重新选择"),Disabled=choices.Length==0,
+        var button=new Button{Text=chosen??(value.Length==0?(fixedObject?"选择场景交互点":"选择文本角色参数"):"引用不可用，请重新选择"),Disabled=choices.Length==0,
             ClipText=true,TextOverrunBehavior=TextServer.OverrunBehavior.TrimEllipsis,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill,TooltipText=chosen??"选择已注册项；原引用会保留至重新选择。"};
         button.Pressed+=()=>
         {
-            var popup=new SearchablePopup<Choice>(choices,c=>c.Name,_=>"身份参数",c=>c.Name);
+            var popup=new SearchablePopup<Choice>(choices,c=>c.Name,c=>c.Group,c=>c.Name+" · "+c.Group);
             popup.OnItemSelected+=c=>{if(GodotObject.IsInstanceValid(this)&&!IsQueuedForDeletion())EmitChanged(_property,c.Id);};popup.ShowBelow(button);
         };
         _body.AddChild(button);
+        if(fixedObject&&choices.Length==0)_body.AddChild(new Label{Text="当前场景没有可选择的交互点。请配置交互点或宿主的稳定标识；重复标识的对象不能选择。",AutowrapMode=TextServer.AutowrapMode.WordSmart});
 
     }
 }

@@ -1,0 +1,394 @@
+{
+	"checks": [
+		{
+			"check": "Camera transform unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera fov unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera far unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera near unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera size unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera projection unchanged",
+			"passed": true
+		},
+		{
+			"check": "Camera keep_aspect unchanged",
+			"passed": true
+		},
+		{
+			"check": "Environment component 0 unchanged",
+			"passed": true
+		},
+		{
+			"check": "Environment component 1 unchanged",
+			"passed": true
+		},
+		{
+			"check": "Environment component 2 unchanged",
+			"passed": true
+		},
+		{
+			"check": "Environment component 3 unchanged",
+			"passed": true
+		},
+		{
+			"check": "Environment background_intensity matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment ambient_light_energy matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment fog_depth_begin matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment fog_depth_end matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment fog_density matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment glow_intensity matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment adjustment_contrast matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Environment adjustment_saturation matches task baseline",
+			"passed": true
+		},
+		{
+			"check": "Eight independent complete building instances",
+			"passed": true
+		},
+		{
+			"check": "Stone stair run has a native walkable ramp",
+			"passed": true
+		},
+		{
+			"check": "River uses its dedicated painted flow shader",
+			"passed": true
+		},
+		{
+			"check": "Animated water does not become a solid DDGI occluder",
+			"passed": true
+		},
+		{
+			"check": "Exported water UV distance starts at the town bank",
+			"passed": true
+		},
+		{
+			"check": "inn polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "inn painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "cottage_wide polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "cottage_wide painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "cottage_tall polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "cottage_tall painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "cottage_small polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "cottage_small painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "house_gabled polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "house_gabled painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "cottage_right polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "cottage_right painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "far_cottage polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "far_cottage painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "back_house polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "back_house painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "ancient_oak polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "ancient_oak painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "branching_oak polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "branching_oak painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "forest_column polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "forest_column painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "canopy_oak polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "canopy_oak painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "understory_oak polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "understory_oak painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "shrub_round polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "shrub_round painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "shrub_low polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "shrub_low painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "shrub_tall polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "shrub_tall painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "shrub_shadow polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "shrub_shadow painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "fern polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "fern painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "woodland_flowers polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "woodland_flowers painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "leaf_bough polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "leaf_bough painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "stone_wall polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "stone_wall painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "fence polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "fence painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "steps polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "steps painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "barrel polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "barrel painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "crate polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "crate painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "village_ground polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "village_ground painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "terrace polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "terrace painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "street_steps polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "street_steps painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "raised_lane polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "raised_lane painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "river_surface polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "river_surface painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "river_bank polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "river_bank painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "river_stone polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "river_stone painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "river_reeds polygon and triangle budget",
+			"passed": true
+		},
+		{
+			"check": "river_reeds painted bark and cutout leaf material bindings",
+			"passed": true
+		},
+		{
+			"check": "Walkable ground collision",
+			"passed": true
+		},
+		{
+			"check": "Inn blocks movement through walls",
+			"passed": true
+		},
+		{
+			"check": "Player remains above ground",
+			"passed": true
+		},
+		{
+			"check": "Land behind the river still supports characters",
+			"passed": true
+		},
+		{
+			"check": "River has no remaining invisible ground collider",
+			"passed": true
+		},
+		{
+			"check": "Character can stand on the gentle stair ramp",
+			"passed": true
+		},
+		{
+			"check": "Elevated lane continues beyond the stairs",
+			"passed": true
+		}
+	],
+	"count": 97,
+	"passed": true
+}

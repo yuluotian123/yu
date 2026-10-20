@@ -1,0 +1,37 @@
+{
+  "phase": "Historical material-only v3 checkpoint, before the user authorized model and layout changes",
+  "geometry_and_topology_unchanged": true,
+  "layout_unchanged": true,
+  "assets": 24,
+  "instances": 153,
+  "fingerprints": {
+    "inn": "419f40e208517b8d5bf0109274060003a1b5b01954bf68e846ab45fdb5777dcc",
+    "cottage_wide": "65e4215d842e9932ab587d760a1edd5453e7b5d958aea24dba1ab34ad178fb21",
+    "cottage_tall": "41b3f94f43afdb294dffe287f3a571f9d4fdae56bf1540d990c7a2f88fddb9ca",
+    "cottage_small": "3dd1455945e79f768ee187500787a3d9ca4777966e866e5e7ecf30d656b4dec1",
+    "house_gabled": "a3c852229b7abaaf9dd9a6bd06cf1c3f580c51443df539cd1143ea07078bf849",
+    "cottage_right": "9530f49d6a8821aaefef858af98a6c6b01f880bce053fb57a9d0cec597cb96cd",
+    "far_cottage": "c33ab15f67ca99c350d00a64118ab34178951ca0a85ab0818b1d84a3523b4359",
+    "back_house": "de65aeeecc21544c7ea10f6b424c3ddee7b18bcd1b6fb5d16bd1fb4b6b510726",
+    "ancient_oak": "452b81beded30459a5f3991345cb2f079d0ef111dfd45f71dbeb0335c09f399c",
+    "branching_oak": "60295755a3c34c5f97d1b20ccd9b66a7352952e1f973a6e023b80334c5025faa",
+    "forest_column": "50d0748dc786daebfe5a4cfbfd1e36ff32fd5badc8b32084730537c5f6b88a60",
+    "canopy_oak": "b3b020d3c2bc1d09c957b208bbcbf820194ffc1858e41781784c3d1778fcb866",
+    "understory_oak": "6a2b312838fc6bb0bb1bf3f267f6fb71c8348405d64e7eaef934b987a0b0df48",
+    "shrub_round": "ce9054ebf89b9d5fd9ab1a48b26f69c0ad8c910574ff2b52daa3f509d7ab2f3b",
+    "shrub_low": "b2dd1e148c0671157f590f6a4f8cb54d99c6657cefe3bd72ce7364ffe991f654",
+    "shrub_tall": "28a5e11d9d3669bd98c9aea15b5b2492340ea43e46cb52d184b4b3dc5f3e6880",
+    "fern": "cdf9bdb10c8f97ee188f64e1b6524b7999fb9295fe853c90c270b76b99ef52ff",
+    "woodland_flowers": "d42886e42345651b9a0d1e04af217a884c57b0e192dbc0ecf540b9de03b8cc32",
+    "stone_wall": "92548efbd6ce91b84222f0c54a3cf1d37e7b629b105b033f47e011414e2f8ff9",
+    "fence": "163400c90ecba1c19078717bb15b8140ecca65cee4ad30c82a0dfac835dce722",
+    "steps": "1e2576a226219cd1cb6c183e945793ef66b1160df58fb7b951a0bfc392759bb5",
+    "barrel": "6ac2ec665d026c631fb90295a5dd108c692da52824a9ea49fcbd04240bf5031a",
+    "crate": "22aa3e5f6fc371f3e0b7a1d325180fee5a7461ffb82a9da59e1883c4e7d7fab1",
+    "village_ground": "771c38b9625d6d11d1361655b8de4d8a996402581fe3815b816e5b21ce45d737"
+  },
+  "atlas_dimensions": [
+    1254,
+    1254
+  ]
+}

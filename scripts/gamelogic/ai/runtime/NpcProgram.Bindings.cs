@@ -7,33 +7,37 @@ namespace GameLogic.AI;
 public sealed partial class NpcProgram
 {
     readonly Dictionary<string,CharacterValueType> _scope=new(StringComparer.Ordinal);
-    IReadOnlyList<NpcBindingSpec> CompileBindings(IEnumerable<NpcBindingDefinition> source,bool variable)
+    IReadOnlyList<NpcBindingSpec> CompileBindings(IEnumerable<NpcActionInputDefinition> source,Func<NpcActionInputDefinition,(string SelectorId,string NodeId)> link)
     {
         var definitions=source.ToArray();
         Require(definitions.All(b=>b!=null&&!string.IsNullOrWhiteSpace(b.Name)&&!b.Name.Contains('.'))&&definitions.Select(b=>b.Name).Distinct().Count()==definitions.Length,"参数名称不能为空、重复或包含句点。");
         return ReadOnly(definitions.Select(b=>
         {
-            Require(Enum.IsDefined(b.Source)&&b.ValueType!=CharacterValueType.Unknown&&Enum.IsDefined(b.ValueType),"输入类型或来源无效："+b.Name);
-            Require(b.Adapter.Length==0||b.ValueType==CharacterValueType.Symbol&&NpcBindingAdapters.Find(b.Adapter)!=null,"输入对象类型未注册："+b.Name);
-            Require(!variable||b.Source!=NpcBindingSource.PlanVariable,"计划变量不能引用另一个计划变量。");
-            Require(!variable||b is not NpcActionInputDefinition,"计划变量只保存值，请使用普通绑定定义；资源要求应配置在行动输入中。");
-            Require(b.Source!=NpcBindingSource.Selector||TargetSelectors.TryGetValue(b.SelectorId,out var selector)&&selector.Adapter==b.Adapter,"选择器输入必须引用已连接启用的交互点选择器："+b.Name);
-            Require(b.Source!=NpcBindingSource.PlanVariable||!string.IsNullOrWhiteSpace(b.Variable),"请选择计划变量："+b.Name);
-            if(b.Source==NpcBindingSource.Expression)
+            Require(b.ValueType!=CharacterValueType.Unknown&&Enum.IsDefined(b.ValueType),"输入类型无效："+b.Name);
+            Require(!b.IsTarget||NpcBindingAdapters.Find(b.Adapter)!=null,"输入对象类型未注册："+b.Name);
+            string selectorId="",nodeId="";
+            if(b.IsTarget)
+            {
+                (selectorId,nodeId)=link(b);
+                Require(TargetSelectors.TryGetValue(selectorId,out var selector)&&selector.Adapter==b.Adapter,"目标输入必须连接已启用且对象类型相同的选择器："+b.Name);
+            }
+            else
             {
                 Require(b.Value!=null,"请输入参数值："+b.Name);var expression=b.Value.Freeze();
                 Require(!expression.FactKeys().Any(k=>k.StartsWith("target.")||k.StartsWith("input.")||k=="action.duration"),"输入来源只能使用人物、世界的已注册参数或常量。");Expect(expression,b.ValueType);
             }
-            return new NpcBindingSpec(b.Name,b.ValueType,b.Adapter,b.Source,b.SelectorId,b.Variable,b.Source==NpcBindingSource.Expression?b.Value.Freeze():null);
+            return new NpcBindingSpec(b.Name,b.ValueType,b.Adapter,selectorId,b.IsTarget?null:b.Value.Freeze(),nodeId);
         }));
     }
-    NpcActionSpec CompileAction(NpcActionDefinition action)
+    NpcActionSpec CompileAction(NpcActionDefinition action,Func<NpcActionInputDefinition,(string SelectorId,string NodeId)> link)
     {
         Require(action.ExecutionGraph!=null&&double.IsFinite(action.DurationSeconds)&&action.DurationSeconds>=0&&double.IsFinite(action.TimeoutSeconds)&&action.TimeoutSeconds>0,"行动缺少执行图或时间无效："+action.DisplayName);
         Require(action.ExecutionGraph.Validate(out _),"行动执行图无效："+action.DisplayName);
         IReadOnlyList<NpcEffect> Effects(IEnumerable<NpcEffectDefinition> source)=>ReadOnly(source.Select(e=>
         {Require(e?.Value!=null,"效果缺少值。");return new NpcEffect(e.Key,e.Mode,e.Value.Freeze());}));
-        var inputs=CompileBindings(action.Inputs,false);
+        var objectInputs=action.Inputs.OfType<NpcActionInputDefinition>().ToArray();
+        Require(objectInputs.All(i=>!string.IsNullOrWhiteSpace(i.InputId))&&objectInputs.Select(i=>i.InputId).Distinct(StringComparer.Ordinal).Count()==objectInputs.Length,"行动输入身份为空或重复："+action.DisplayName);
+        var inputs=CompileBindings(action.Inputs,link);
         foreach(var ability in action.ExecutionGraph.Nodes.OfType<FlowActionNodeData>().SelectMany(n=>n.Actions))
         {
             if(ability is NpcMoveToTargetAction move)
@@ -43,7 +47,7 @@ public sealed partial class NpcProgram
             if(ability is NpcRememberAction remember&&remember.SubjectInput?.Name.Length>0)
                 Require(inputs.Any(i=>i.Name==remember.SubjectInput.Name&&i.Type==CharacterValueType.Symbol),"记忆主题必须选择本行动的文本或对象输入："+action.DisplayName);
         }
-        var claims=ReadOnly(action.Inputs.OfType<NpcActionInputDefinition>().SelectMany(input=>input.ResourceRequirements.Select(capability=>
+        var claims=ReadOnly(action.Inputs.Where(input=>input.IsTarget).SelectMany(input=>input.ResourceRequirements.Select(capability=>
         {
             var adapter=NpcBindingAdapters.Find(input.Adapter);
             Require(input.ValueType==CharacterValueType.Symbol&&adapter!=null&&adapter.Capabilities.Contains(capability),"输入“"+input.Name+"”不支持此资源要求："+capability);
@@ -79,14 +83,6 @@ public sealed partial class NpcProgram
         }
         finally{_scope.Clear();}
     }
-    void ValidatePlan(NpcPlanSpec plan,IReadOnlyList<NpcActionSpec> actions)
-    {
-        foreach(var action in actions.Where(a=>plan.ActionIds.Contains(a.Id)))foreach(var input in action.Inputs.Where(i=>i.Source==NpcBindingSource.PlanVariable))
-        {
-            var variable=plan.Bindings.FirstOrDefault(v=>v.Name==input.Variable);
-            Require(variable!=null&&variable.Type==input.Type&&variable.Adapter==input.Adapter,$"计划“{plan.Name}”缺少行动“{action.Name}”所需的同类型变量：{input.Variable}");
-        }
-    }
     public CharacterValueType EffectType(NpcActionSpec action,string key)
     {
         if(Facts.TryGetValue(key,out var fact))return fact.Type;
@@ -106,24 +102,23 @@ public sealed partial class NpcProgram
         if(Facts.ContainsKey(key)||key=="self.location")return key;
         return SplitInputMember(action,key,out var input,out var member)?NpcBindingAdapters.Find(input.Adapter)?.WriteKey(member,Read(context,"input."+input.Name)):null;
     }
-    public NpcBindingSpec Source(NpcBoundAction bound,NpcBindingSpec input)=>input.Source==NpcBindingSource.PlanVariable?bound.Plan.Bindings.First(v=>v.Name==input.Variable):input;
     public GoapWorldState Contextual(GoapWorldState state,NpcBoundAction bound,Func<string,CharacterValue,double?> distance=null,bool physical=false)
     {
         var context=state.With(GoapEffect.Set("action.duration",Encode("action.duration",CharacterValue.Numeric(bound.Action.Duration))));
         foreach(var input in bound.Action.Inputs)
         {
-            var source=Source(bound,input);string key=BindingKey(bound.Plan.Id,source.Name);
             CharacterValue value;
             if(bound.Resolved?.TryGetValue(input.Name,out value)==true){}
-            else if(source.Source==NpcBindingSource.Selector)
-            {
-                value=bound.Candidates.GetValueOrDefault(input.Name);
-                var previous=Read(context,key);
-                if(input.Source==NpcBindingSource.PlanVariable&&previous.Type!=CharacterValueType.Unknown&&previous!=value)return null;
-            }
-            else value=input.Source==NpcBindingSource.PlanVariable&&Read(context,key).Type!=CharacterValueType.Unknown?Read(context,key):source.Value.Evaluate(k=>Read(state,k),Parameter);
+            else if(input.IsTarget)value=bound.Candidates.GetValueOrDefault(input.Name);
+            else value=input.Value.Evaluate(k=>Read(state,k),Parameter);
             if(value.Type!=input.Type||input.Adapter.Length>0&&string.IsNullOrEmpty(value.Symbol))return null;
-            if(input.Source==NpcBindingSource.PlanVariable)context=context.With(GoapEffect.Set(key,Encode(key,value)));
+            if(input.SelectionNodeId.Length>0)
+            {
+                string selectionKey=SelectionKey(bound.Plan.Id,input.SelectionNodeId);
+                var previous=Read(context,selectionKey);
+                if(previous.Type!=CharacterValueType.Unknown&&previous!=value)return null;
+                context=context.With(GoapEffect.Set(selectionKey,Encode(selectionKey,value)));
+            }
             string prefix="input."+input.Name;context=context.With(GoapEffect.Set(prefix,Encode(prefix,value)));
             if(NpcBindingAdapters.Find(input.Adapter) is {} adapter)context=adapter.Project(this,context,prefix,value,distance?.Invoke(input.Name,value),physical);
         }
@@ -134,8 +129,8 @@ public sealed partial class NpcProgram
         var context=Contextual(state,bound,distance);if(context==null)return null;
         foreach(var input in bound.Action.Inputs)
         {
-            var source=Source(bound,input);if(source.Source!=NpcBindingSource.Selector)continue;
-            var selector=TargetSelectors[source.SelectorId];string id=Read(context,"input."+input.Name).Symbol;
+            if(!input.IsTarget)continue;
+            var selector=TargetSelectors[input.SelectorId];string id=Read(context,"input."+input.Name).Symbol;
             var target=TargetContext(context,id,Read(context,"input."+input.Name+".distance").Number,selector.Adapter);
             if(selector.RequireUsable&&!Read(target,"target.open").IsTrue||selector.Filter!=null&&!selector.Filter.Evaluate(k=>Read(target,k),Parameter).IsTrue)return null;
         }

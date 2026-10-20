@@ -1,0 +1,39 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://d1ussteg4qnd3"]
+
+[ext_resource type="Shader" uid="uid://ci4r06dqcpn7h" path="res://assets/shaders/town/leaf_article.gdshader" id="1_70fam"]
+[ext_resource type="Texture2D" uid="uid://b2cdoeylhc5lc" path="res://assets/textures/environment/forest_town/oak_sprigs_v2.res" id="2_6cyfx"]
+
+[resource]
+resource_name = "Forest Town · painted oak sprays"
+render_priority = 0
+shader = ExtResource("1_70fam")
+shader_parameter/weather_wetness = 0.0
+shader_parameter/weather_puddles = 0.0
+shader_parameter/weather_puddles_enabled = false
+shader_parameter/weather_puddle_coverage = 0.55
+shader_parameter/weather_puddle_scale = 0.85
+shader_parameter/weather_darkening = 0.24
+shader_parameter/weather_wet_roughness = 0.14
+shader_parameter/weather_puddle_roughness = 0.045
+shader_parameter/weather_wet_specular = 0.6
+shader_parameter/weather_rain = 0.0
+shader_parameter/weather_ripple_strength = 0.14
+shader_parameter/weather_ripple_scale = 1.7
+shader_parameter/weather_ripple_speed = 1.35
+shader_parameter/weather_snow = 0.0
+shader_parameter/weather_snow_color = Color(0.91, 0.95, 1, 1)
+shader_parameter/weather_snow_roughness = 0.86
+shader_parameter/weather_time = 0.0
+shader_parameter/leaf_texture = ExtResource("2_6cyfx")
+shader_parameter/alpha_cutoff = 0.38
+shader_parameter/lower_color = Vector3(1, 1, 1)
+shader_parameter/upper_color = Vector3(1, 1, 1)
+shader_parameter/normal_roundness = 0.0
+shader_parameter/vertex_color_strength = 1.0
+shader_parameter/directional_shadow_lift = 0.04
+shader_parameter/texture_detail = 0.3
+shader_parameter/gradient_strength = 0.0
+shader_parameter/transmission_strength = 0.03
+shader_parameter/wind_strength = 0.0
+shader_parameter/wind_speed = 0.65
+shader_parameter/painterly_strength = 0.9

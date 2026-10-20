@@ -5,7 +5,7 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("profile")
-Origin = Vector3(-24, -11.5, -24)
+Origin = Vector3(-24, 0, -24)
 ProbeCounts = Vector3i(27, 8, 27)
 Spacing = 2.0
 ProbesPerFrame = 256

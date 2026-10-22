@@ -38,6 +38,13 @@ public sealed partial class NpcProgram
         var objectInputs=action.Inputs.OfType<NpcActionInputDefinition>().ToArray();
         Require(objectInputs.All(i=>!string.IsNullOrWhiteSpace(i.InputId))&&objectInputs.Select(i=>i.InputId).Distinct(StringComparer.Ordinal).Count()==objectInputs.Length,"行动输入身份为空或重复："+action.DisplayName);
         var inputs=CompileBindings(action.Inputs,link);
+        var interactions=action.ExecutionGraph.Nodes.OfType<FlowActionNodeData>().SelectMany(n=>n.Actions).OfType<NpcInteractAction>().ToArray();
+        Require(interactions.Length<=1,"一个行动最多提交一个对象交互；多个操作请拆为多个行动。");
+        foreach(var interaction in interactions)
+        {
+            Require(inputs.Any(i=>i.Name==interaction.Input?.Name&&i.Adapter=="point")&&!string.IsNullOrWhiteSpace(interaction.OperationId),"对象交互需要本行动的交互点输入与操作 Id。");
+            Require(!action.Results.Any(e=>e.Key.StartsWith("input."+interaction.Input.Name+".",StringComparison.Ordinal)),"对象交互已提交目标变化，请在预测效果中描述它，不要再次写入目标结果。");
+        }
         foreach(var ability in action.ExecutionGraph.Nodes.OfType<FlowActionNodeData>().SelectMany(n=>n.Actions))
         {
             if(ability is NpcMoveToTargetAction move)
@@ -76,6 +83,7 @@ public sealed partial class NpcProgram
                 Expect(effect.Value,type);
             }
             Require(!action.Results.Any(e=>e.Key=="self.location"),"当前位置由实际空间状态观测；请将位置变化配置为预测效果，并配置实际成功条件。");
+            Require(!action.Results.Any(e=>e.Key.StartsWith("input.",StringComparison.Ordinal)),"世界对象只能通过公共交互操作修改；目标变化配置为预测效果，执行图使用对象交互能力。");
             // Physical outcomes need an explicit observation check before results may commit.
             Require(!action.Predictions.Any(e=>e.Key=="self.location")||action.Success!=null,"预测位置变化必须配置实际成功条件。");
             foreach(var e in new[]{action.Precondition,action.Success,action.Cost}.Concat(action.Predictions.Concat(action.Results).Select(e=>e.Value)).Where(e=>e!=null))

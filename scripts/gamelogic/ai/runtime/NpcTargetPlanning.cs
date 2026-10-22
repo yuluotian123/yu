@@ -21,6 +21,7 @@ public static class NpcTargetQuery
             NpcTargetSource.FixedObject=>p.Id==selector.FixedObjectId,
             NpcTargetSource.CurrentLocation=>p.Id==program.Read(state,"self.location").Symbol,
             NpcTargetSource.KnownPoints=>p.Known,
+            NpcTargetSource.WorldDirectory or NpcTargetSource.CharacterBinding=>true,
             _=>false
         }).Where(p=>Matches(program,selector,state,p)).Select(p=>
         {
@@ -47,7 +48,7 @@ public static class NpcTargetQuery
         return selector.Filter==null||selector.Filter.Evaluate(k=>program.Read(context,k),program.Parameter).IsTrue;
     }
 
-    public static IReadOnlyList<NpcBoundAction> Ground(NpcProgram program,NpcGoalSpec goal,GoapWorldState initial,IReadOnlyList<NpcTargetCandidate> points)
+    public static IReadOnlyList<NpcBoundAction> Ground(NpcProgram program,NpcGoalSpec goal,GoapWorldState initial,IReadOnlyList<NpcTargetCandidate> points,IReadOnlyDictionary<string,IReadOnlyList<NpcTargetCandidate>> queries=null)
     {
         var candidates=new Dictionary<string,IReadOnlyList<NpcTargetCandidate>>(StringComparer.Ordinal);
         var positions=points.ToDictionary(p=>(p.Adapter,p.Id),p=>p.Position);
@@ -63,7 +64,7 @@ public static class NpcTargetQuery
                 if(index<slots.Length)
                 {
                     var input=slots[index];
-                    if(!candidates.TryGetValue(input.SelectorId,out var choices))candidates[input.SelectorId]=choices=Select(program,program.TargetSelectors[input.SelectorId],initial,points);
+                    if(!candidates.TryGetValue(input.SelectorId,out var choices))candidates[input.SelectorId]=choices=Select(program,program.TargetSelectors[input.SelectorId],initial,queries?.GetValueOrDefault(input.SelectorId)??points);
                     foreach(var point in choices)
                     {
                         var value=CharacterValue.Text(point.Id);

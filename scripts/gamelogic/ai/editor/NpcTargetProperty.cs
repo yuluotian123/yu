@@ -11,12 +11,17 @@ public static class NpcTargetCatalog
     public static IReadOnlyList<Point> Points(Node root)
     {
         var points=new List<Point>();
+        IReadOnlyDictionary<GameObject3D,string> identities=null;
+        if(root is GameObject3D level&&level.Components.OfType<WorldLevelContextComponent3D>().Any())
+            try{identities=WorldIdentity.Resolve(root);}catch(ArgumentException){return points;}
         void Visit(Node node)
         {
-            if(node is GameObject3D host)foreach(var point in host.Components.OfType<AiInteractionPointComponent3D>())
+            if(node is GameObject3D host)foreach(var point in host.Components.OfType<WorldInteractionComponent3D>())
             {
-                string id=point.PointId.Length>0?point.PointId:host.PersistentId;
-                if(id.Length>0)points.Add(new(id,point.DisplayName.Length>0?point.DisplayName:host.Name.ToString(),root.GetPathTo(host).ToString()));
+                var binding=host.Components.OfType<WorldObjectComponent3D>().SingleOrDefault();if(binding==null)continue;
+                string id=identities?.GetValueOrDefault(host)??host.PersistentId;
+                string label=binding.DisplayName;
+                if(id.Length>0)points.Add(new(id,label.Length>0?label:host.Name.ToString(),root.GetPathTo(host).ToString()));
             }
             foreach(Node child in node.GetChildren())Visit(child);
         }
@@ -28,7 +33,11 @@ public static class NpcTargetCatalog
     {
         Node root=Engine.IsEditorHint()?EditorInterface.Singleton.GetEditedSceneRoot():null;
         root??=GodotObject.IsInstanceValid(graph.EditorHostContext)?graph.EditorHostContext.Owner??graph.EditorHostContext:null;
-        return Points(root);
+        var local=Points(root);
+        IEnumerable<Point> directory=Array.Empty<Point>();
+        try{directory=WorldAuthoringCompiler.EditorCatalog.Objects.Values.Where(p=>p.Type.SupportsAdapter("point")).Select(p=>new Point(p.Id,p.DisplayName,p.Level.DisplayName+" / "+p.Location?.DisplayName)).ToArray();}
+        catch(ArgumentException){/* Missing catalogs are reported by the authoring plugin. */}
+        return directory.Concat(local).GroupBy(p=>p.Id,StringComparer.Ordinal).Select(g=>g.First()).OrderBy(p=>p.Name,StringComparer.Ordinal).ToArray();
     }
 }
 
@@ -48,7 +57,12 @@ public partial class NpcTargetProperty : EditorProperty
     {
         if(!GodotObject.IsInstanceValid(_owner))return;
         bool fixedObject=_property==nameof(NpcTargetSelectorDefinition.FixedObjectId);
-        Choice[] choices=fixedObject
+        bool objectBinding=_property==nameof(NpcTargetSelectorDefinition.ParameterKey)&&(_owner as NpcTargetSelectorDefinition)?.Source==NpcTargetSource.CharacterBinding;
+        bool placeBinding=_property==nameof(NpcTargetSelectorDefinition.LocationBinding);
+        Choice[] choices=objectBinding
+            ?_graph.CharacterContext?.World?.Objects.Select(p=>new Choice(p.Key,p.Key+" · "+p.Value,"角色对象绑定")).ToArray()??Array.Empty<Choice>()
+            :placeBinding?_graph.CharacterContext?.World?.Locations.Select(p=>new Choice(p.Key,p.Key+" · "+p.Value?.DisplayName,"角色地点绑定")).ToArray()??Array.Empty<Choice>()
+            :fixedObject
             ?((_owner as NpcTargetSelectorDefinition)?.Adapter=="point"?NpcTargetCatalog.Points(_graph).Select(p=>new Choice(p.Id,p.Name,p.Path)).ToArray():Array.Empty<Choice>())
             :NpcExpressionEditorCatalog.Collect(_graph).Where(s=>s.Parameter&&s.Type==CharacterValueType.Symbol).Select(s=>new Choice(s.Key,s.Label,"角色参数")).ToArray();
         string value=_owner.Get(_property).ToString();
@@ -56,18 +70,25 @@ public partial class NpcTargetProperty : EditorProperty
         foreach(Node child in _body.GetChildren()){GraphEditorSignalCleanup.PrepareForRemoval(child);_body.RemoveChild(child);}
         Label=_property switch
         {
-            nameof(NpcTargetSelectorDefinition.ParameterKey)=>"目标角色参数",
+            nameof(NpcTargetSelectorDefinition.ParameterKey)=>objectBinding?"角色对象绑定":"目标角色参数",
             nameof(NpcTargetSelectorDefinition.FixedObjectId)=>"固定对象",
             nameof(NpcTargetSelectorDefinition.Source)=>"候选来源",
             nameof(NpcTargetSelectorDefinition.Selection)=>"选择策略",
+            nameof(NpcTargetSelectorDefinition.Scope)=>"地点范围",
+            nameof(NpcTargetSelectorDefinition.Information)=>"信息权限",
+            nameof(NpcTargetSelectorDefinition.LocationBinding)=>"角色地点绑定",
             _=>_property
         };
-        if(_property is nameof(NpcTargetSelectorDefinition.Source) or nameof(NpcTargetSelectorDefinition.Selection))
+        if(_property is nameof(NpcTargetSelectorDefinition.Source) or nameof(NpcTargetSelectorDefinition.Selection) or nameof(NpcTargetSelectorDefinition.Scope) or nameof(NpcTargetSelectorDefinition.Information))
         {
             var select=new OptionButton();
-            string[] labels=_property==nameof(NpcTargetSelectorDefinition.Source)
-                ?new[]{"感知到的对象","当前已加载的对象","角色参数指定的对象","当前位置对应的对象","已知对象","固定对象"}
-                :new[]{"提供多个候选给 GOAP","最近一个","评分最低的一个","评分最高的一个"};
+            string[] labels=_property switch
+            {
+                nameof(NpcTargetSelectorDefinition.Source)=>new[]{"感知到的对象","本关卡已加载的对象（授权状态）","角色参数指定的对象","当前位置对应的对象","已知对象","固定世界对象","世界目录查询","角色对象绑定"},
+                nameof(NpcTargetSelectorDefinition.Scope)=>new[]{"当前关卡","当前地点","指定地点","角色地点绑定","整个世界"},
+                nameof(NpcTargetSelectorDefinition.Information)=>new[]{"已知具体对象","已知地点的公开服务","授权访问权威状态"},
+                _=>new[]{"提供多个候选给 GOAP","最近一个","评分最低的一个","评分最高的一个"}
+            };
             foreach(string label in labels)select.AddItem(label);select.Select(_owner.Get(_property).AsInt32());
             select.ItemSelected+=i=>EmitChanged(_property,(int)i);_body.AddChild(select);return;
         }

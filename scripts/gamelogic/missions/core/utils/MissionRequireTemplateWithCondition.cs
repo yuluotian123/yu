@@ -115,6 +115,8 @@ public class MissionRequireTemplateWithCondition : MissionRequireTemplate
         }
     }
 
+#if TOOLS
+
     public override Control CreateEditUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -180,6 +182,7 @@ public class MissionRequireTemplateWithCondition : MissionRequireTemplate
 
         return root;
     }
+#endif
 
     private string GetConditionSummary()
     {

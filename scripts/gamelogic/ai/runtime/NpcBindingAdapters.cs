@@ -15,15 +15,14 @@ public interface INpcBindingAdapter
     string Label { get; }
     IReadOnlyList<NpcObjectProperty> Properties { get; }
     IReadOnlyList<string> Capabilities { get; }
-    IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent);
-    IEnumerable<NpcTargetCandidate> Candidates(AiAgentComponent3D agent);
+    IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent,IReadOnlyCollection<string> ids,bool planning);
+    IEnumerable<NpcTargetCandidate> Candidates(AiAgentComponent3D agent,NpcTargetSelectorSpec selector);
     bool Matches(AiAgentComponent3D agent,CharacterValue value,NpcTargetSelectorSpec selector);
     GoapWorldState Project(NpcProgram program,GoapWorldState state,string prefix,CharacterValue value,double? distance,bool physical);
     string WriteKey(string member,CharacterValue value);
     bool Validate(AiAgentComponent3D agent,CharacterValue value);
     bool CanClaim(NpcProgram program,GoapWorldState state,string prefix,string capability);
     INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability);
-    void Commit(AiAgentComponent3D agent,CharacterValue value,string member,CharacterValue result);
 }
 
 public static class NpcBindingAdapters
@@ -55,46 +54,60 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
             GoapEffect.Set(prefix+".at",physical?state["point."+id+".at"]:GoapValue.Bool(program.Read(state,"self.location").Symbol==id)));
     }
     public string WriteKey(string member,CharacterValue value)=>member=="stock"?"point."+value.Symbol+".stock":null;
-    static AiInteractionPointComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Points.GetValueOrDefault(value.Symbol);
-    public bool Validate(AiAgentComponent3D agent,CharacterValue value)=>Point(agent,value) is {} p&&p.IsActive&&GodotObject.IsInstanceValid(p.Owner);
+    static WorldInteractionComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Points.GetValueOrDefault(value.Symbol);
+    public bool Validate(AiAgentComponent3D agent,CharacterValue value)=>Point(agent,value) is {} p&&p.IsActive&&!agent.World.Session.IsDestroyed(p.PointId)&&GodotObject.IsInstanceValid(p.Owner);
     public bool CanClaim(NpcProgram program,GoapWorldState state,string prefix,string capability)=>capability=="capacity"&&program.Read(state,prefix+".available").IsTrue;
-    public IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent)
+    public IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent,IReadOnlyCollection<string> ids,bool planning)
     {
-        foreach(var p in agent.World.Points.Values)
+        foreach(var id in ids)
         {
+            if(!agent.World.Points.TryGetValue(id,out var p))continue;
             string key="point."+p.PointId;
-            yield return new(key+".open",GoapValue.Bool(p.CanUse(agent.ActorId)));
-            yield return new(key+".available",GoapValue.Bool(p.CanReserve(agent.ActorId)));
+            bool readable=!planning||agent.CanReadPoint(id)||p.Object.OwnerId==agent.ActorId;
+            var stock=p.Owner.GetComponent<WorldStockComponent3D>();var capacity=p.Owner.GetComponent<WorldUsageCapacityComponent3D>();
+            yield return new(key+".open",readable?GoapValue.Bool(p.Object.CanUse(agent.ActorId)):default);
+            yield return new(key+".available",readable&&capacity!=null?GoapValue.Bool(capacity.Available(agent.ActorId)):default);
             yield return new(key+".at",GoapValue.Bool(p.ContainsPosition(agent.Owner.GlobalPosition)));
-            yield return new(key+".stock",agent.Program.Encode(key+".stock",CharacterValue.Numeric(p.Stock)));
+            yield return new(key+".stock",readable&&stock is {IsActive:true}?agent.Program.Encode(key+".stock",CharacterValue.Numeric(stock.Amount)):default);
             yield return new(key+".distance",agent.Program.Encode(key+".distance",CharacterValue.Numeric(agent.Owner.GlobalPosition.DistanceTo(p.UsePosition))));
         }
     }
-    public IEnumerable<NpcTargetCandidate> Candidates(AiAgentComponent3D agent)
+    public IEnumerable<NpcTargetCandidate> Candidates(AiAgentComponent3D agent,NpcTargetSelectorSpec selector)
     {
-        foreach(var p in agent.World.Points.Values.Where(p=>p.IsActive))
+        var ids=NpcWorldTargetQuery.Ids(agent,selector);
+        agent.RecordQuery(selector,ids);
+        int wanted=selector.Selection==NpcTargetSelection.Candidates?Math.Min(agent.Program.Policy.Targets,selector.Limit>0?selector.Limit:agent.Program.Policy.Targets):1;
+        var points=ids.Select(id=>agent.World.Points.GetValueOrDefault(id)).Where(p=>p is {IsActive:true}&&!agent.World.Session.IsDestroyed(p.PointId)
+            &&selector.AllTags.All(p.Tags.Contains)&&(selector.AnyTags.Count==0||selector.AnyTags.Any(p.Tags.Contains))&&!selector.ExcludedTags.Any(p.Tags.Contains))
+            .OrderBy(p=>agent.Owner.GlobalPosition.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal).Take(agent.QueryProbeLimit).ToArray();
+        int found=0;
+        foreach(var p in points)
         {
             double distance=agent.Owner.GlobalPosition.DistanceTo(p.UsePosition);
-            bool reachable=agent.Navigation!=null&&agent.Navigation.TryEstimateBetween(agent.Owner.GlobalPosition,p.UsePosition,out distance);
-            if(!reachable)distance=agent.Owner.GlobalPosition.DistanceTo(p.UsePosition);
-            yield return new(p.PointId,Array.AsReadOnly(p.Tags.ToArray()),p.UsePosition,distance,p.CanUse(agent.ActorId),reachable,agent.PerceivedPoint(p.PointId),agent.Program.KnownPoints.Contains(p.PointId),Id);
+            if(selector.MaximumDistance>0&&distance>selector.MaximumDistance||selector.RequireUsable&&!p.Object.CanUse(agent.ActorId))continue;
+            bool reachable=!selector.RequireReachable||agent.EstimatePath(p,out distance);
+            if(selector.RequireReachable&&!reachable)continue;
+            if(selector.Filter!=null)
+            {
+                var state=agent.Program.TargetContext(agent.Snapshot(new[]{p.PointId},true),p.PointId,distance,Id);
+                if(!selector.Filter.Evaluate(k=>agent.Program.Read(state,k),agent.Program.Parameter).IsTrue)continue;
+            }
+            yield return new(p.PointId,Array.AsReadOnly(p.Tags.ToArray()),p.UsePosition,distance,p.Object.CanUse(agent.ActorId),reachable,agent.PerceivedPoint(p.PointId),agent.KnownPoint(p.PointId),Id);
+            found++;
+            if(selector.Selection is not (NpcTargetSelection.HighestScore or NpcTargetSelection.LowestScore)&&found>=wanted)yield break;
         }
     }
     public bool Matches(AiAgentComponent3D agent,CharacterValue value,NpcTargetSelectorSpec selector)
     {
         if(Point(agent,value) is not {} p)return false;
-        var candidate=new NpcTargetCandidate(p.PointId,p.Tags.ToArray(),p.UsePosition,agent.Owner.GlobalPosition.DistanceTo(p.UsePosition),p.CanUse(agent.ActorId),true,agent.PerceivedPoint(p.PointId),agent.Program.KnownPoints.Contains(p.PointId));
+        var candidate=new NpcTargetCandidate(p.PointId,p.Tags.ToArray(),p.UsePosition,agent.Owner.GlobalPosition.DistanceTo(p.UsePosition),p.Object.CanUse(agent.ActorId),true,agent.PerceivedPoint(p.PointId),agent.KnownPoint(p.PointId));
         return NpcTargetQuery.Matches(agent.Program,selector,agent.Snapshot(),candidate);
     }
-    public INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability)=>capability=="capacity"&&Point(agent,value) is {} point&&point.TryReserve(agent.ActorId)?new Lease(agent,point):null;
-    sealed class Lease(AiAgentComponent3D agent,AiInteractionPointComponent3D point) : INpcResourceLease
+    public INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability)=>capability=="capacity"&&Point(agent,value)?.Owner.GetComponent<WorldUsageCapacityComponent3D>() is {} capacity&&capacity.Reserve(agent.ActorId)?new Lease(agent,capacity):null;
+    sealed class Lease(AiAgentComponent3D agent,WorldUsageCapacityComponent3D capacity) : INpcResourceLease
     {
         bool released;
-        public bool Renew()=>!released&&agent.World?.Points.GetValueOrDefault(point.PointId)==point&&point.IsActive&&point.TryReserve(agent.ActorId);
-        public void Dispose(){if(released)return;released=true;if(GodotObject.IsInstanceValid(point))point.Release(agent.ActorId);}
-    }
-    public void Commit(AiAgentComponent3D agent,CharacterValue value,string member,CharacterValue result)
-    {
-        if(member=="stock"&&Point(agent,value) is {} p){p.Stock=result.Number;p.MarkChanged();}
+        public bool Renew()=>!released&&capacity.Object!=null&&agent.World?.Session.ResolveObject(capacity.Object.ObjectId)==capacity.Object&&capacity.IsActive&&capacity.Reserve(agent.ActorId);
+        public void Dispose(){if(released)return;released=true;if(GodotObject.IsInstanceValid(capacity))capacity.Release(agent.ActorId);}
     }
 }

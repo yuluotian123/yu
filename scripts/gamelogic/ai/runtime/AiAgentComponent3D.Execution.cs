@@ -17,7 +17,7 @@ public partial class AiAgentComponent3D
         var execution=_execution;_execution=null;
         try{execution?.Stop();}catch(Exception e){Record("ExecutionCleanupError",e.Message);}
     }
-    GoapWorldState LiveContext(NpcBoundAction bound)=>Program.Contextual(Snapshot(),bound,physical:true);
+    GoapWorldState LiveContext(NpcBoundAction bound)=>Program.Contextual(Snapshot(bound.Candidates.Values.Where(v=>v.Type==CharacterValueType.Symbol).Select(v=>v.Symbol)),bound,physical:true);
     bool ValidateInputs(NpcBoundAction bound,GoapWorldState context)
     {
         if(context==null)return false;
@@ -33,7 +33,7 @@ public partial class AiAgentComponent3D
     bool Meets(CharacterExpression expression,GoapWorldState context)=>expression==null||expression.Evaluate(k=>Program.Read(context,k),Program.Parameter).IsTrue;
     internal void BeginAction(NpcBoundAction bound)
     {
-        if(!Meets(_selectedPlan?.Eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
+        if(_selectedPlan?.Eligibility is {} eligibility&&!Meets(eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
         var context=LiveContext(bound);
         if(!ValidateInputs(bound,context)){Fail("InputUnavailable",false);return;}
         if(!Meets(bound.Action.Precondition,context)){Fail("PreconditionChanged");return;}
@@ -58,27 +58,23 @@ public partial class AiAgentComponent3D
     }
     internal void TickExecution(double delta)
     {
-        if(!Meets(_selectedPlan?.Eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
+        if(_selectedPlan?.Eligibility is {} eligibility&&!Meets(eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
         _actionElapsed+=delta;if(_actionElapsed>_current.Action.Timeout){Fail("Timeout");return;}
         var context=LiveContext(_current);
         if(!ValidateInputs(_current,context)){Fail("InputChanged");return;}
         if(_leases.Any(l=>!l.Renew())){Fail("ResourceLost");return;}
         try{_execution.Update(delta);}catch(Exception e){Fail("ExecutionException:"+e.Message);return;}
         if(!_execution.IsCompleted)return;
-        if(!_execution.ReturnLabels.Contains("Success")){Fail("ExecutionFailed:"+Navigation?.Failure);return;}
+        if(!_execution.ReturnLabels.Contains("Success")){Fail("ExecutionFailed:"+(_execution.Context.GetUserData<NpcActionContext>()?.LastInteractionResult.Message??Navigation?.Failure));return;}
         if(_committed)return;
         context=LiveContext(_current);
         if(!ValidateInputs(_current,context)||!Meets(_current.Action.Precondition,context)||!Meets(_current.Action.Success,context)||
             !Program.TryEffects(context,_current.Action.Results,out var result,_current.Action)){Fail("ResultValidationFailed");return;}
         // Validate the complete transaction and all leases before changing any participant.
         if(_leases.Any(l=>!l.Renew())){Fail("ResourceLost");return;}
+        var interaction=_execution.Context.GetUserData<NpcActionContext>()?.CommitInteraction()??WorldInteractionResult.Ok();
+        if(!interaction.Success){Fail("InteractionFailed:"+interaction.Message);return;}
         State.Apply(_current.Action.Results.Select(e=>e.Key).Distinct().Where(Program.Facts.ContainsKey).Select(key=>new KeyValuePair<string,CharacterValue>(key,Program.Read(result,key))));
-        foreach(var effect in _current.Action.Results)
-        {
-            if(!NpcProgram.SplitInputMember(_current.Action,effect.Key,out var input,out var member))continue;
-            var value=Program.Read(context,"input."+input.Name);string key=Program.EffectKey(context,_current.Action,effect.Key);
-            NpcBindingAdapters.Find(input.Adapter).Commit(this,value,member,Program.Read(result,key));
-        }
         _committed=true;CompletedActions++;Record("Completed",_current.Action.Name);
         StopExecution();_current=null;ReleaseResources();Navigation?.Stop();Sense();_selectAt=0;
         if(_plan.Count==0){_selectorBindings.Clear();_selectedPlan=null;}

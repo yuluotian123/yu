@@ -1,8 +1,10 @@
 using Godot;
 namespace GameLogic.AI;
 
-public enum NpcTargetSource { PerceivedPoints, WorldPoints, IdentityParameter, CurrentLocation, KnownPoints, FixedObject }
+public enum NpcTargetSource { PerceivedPoints, WorldPoints, IdentityParameter, CurrentLocation, KnownPoints, FixedObject, WorldDirectory, CharacterBinding }
 public enum NpcTargetSelection { Candidates, Nearest, LowestScore, HighestScore }
+public enum NpcWorldScope { CurrentLevel, CurrentPlace, FixedPlace, CharacterPlace, World }
+public enum NpcWorldInformation { KnownObjects, PublicServices, Authoritative }
 
 /// <summary>A reusable query. Each planning run freezes its candidates; resources contain no live bindings.</summary>
 [Tool, GlobalClass]
@@ -13,6 +15,11 @@ public partial class NpcTargetSelectorDefinition : NpcDefinitionResource
     [Export] public NpcTargetSource Source { get=>_source; set {if(_source==value)return;_source=value;NotifyPropertyListChanged();} }
     [Export] public string ParameterKey { get; set; } = "";
     [Export] public string FixedObjectId { get; set; } = "";
+    NpcWorldScope _scope;
+    [Export] public NpcWorldScope Scope {get=>_scope;set{_scope=value;NotifyPropertyListChanged();}}
+    [Export] public WorldLocationDefinition Location {get;set;}
+    [Export] public string LocationBinding {get;set;}="";
+    [Export] public NpcWorldInformation Information {get;set;}
     [Export] public string[] AllTags { get; set; } = System.Array.Empty<string>();
     [Export] public string[] AnyTags { get; set; } = System.Array.Empty<string>();
     [Export] public string[] ExcludedTags { get; set; } = System.Array.Empty<string>();
@@ -25,17 +32,21 @@ public partial class NpcTargetSelectorDefinition : NpcDefinitionResource
     [Export] public CharacterExpressionDefinition Score { get; set; }
     [Export] public int CandidateLimit { get; set; }
     public override string Category => "目标选择器";
-    public static bool IsSingleSource(NpcTargetSource source)=>source is NpcTargetSource.FixedObject or NpcTargetSource.IdentityParameter or NpcTargetSource.CurrentLocation;
+    public static bool IsSingleSource(NpcTargetSource source)=>source is NpcTargetSource.FixedObject or NpcTargetSource.IdentityParameter or NpcTargetSource.CurrentLocation or NpcTargetSource.CharacterBinding;
     public override void _ValidateProperty(Godot.Collections.Dictionary property)
     {
         base._ValidateProperty(property);
         string name=property["name"].AsString();
         bool single=IsSingleSource(Source);
-        if(name==nameof(ParameterKey)&&Source!=NpcTargetSource.IdentityParameter ||
+        if(name==nameof(ParameterKey)&&Source is not (NpcTargetSource.IdentityParameter or NpcTargetSource.CharacterBinding) ||
             name==nameof(FixedObjectId)&&Source!=NpcTargetSource.FixedObject ||
             name==nameof(Selection)&&single ||
             name==nameof(Score)&&(single||Selection is not (NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore)) ||
-            name==nameof(CandidateLimit)&&(single||Selection!=NpcTargetSelection.Candidates))
+            name==nameof(CandidateLimit)&&(single||Selection!=NpcTargetSelection.Candidates) ||
+            name==nameof(Scope)&&Source!=NpcTargetSource.WorldDirectory ||
+            name==nameof(Information)&&Source!=NpcTargetSource.WorldDirectory ||
+            name==nameof(Location)&&(Source!=NpcTargetSource.WorldDirectory||Scope!=NpcWorldScope.FixedPlace) ||
+            name==nameof(LocationBinding)&&(Source!=NpcTargetSource.WorldDirectory||Scope!=NpcWorldScope.CharacterPlace))
             property["usage"]=(long)PropertyUsageFlags.Storage;
     }
 }

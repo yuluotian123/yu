@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://cxfmq4nlwci8j"]
 
-[ext_resource type="PackedScene" uid="uid://jcbmfduqeu6j" path="res://assets/scenes/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="world_context"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="world_spawn"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="world_transition"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/town.tres" id="world_level"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/workshop.tres" id="world_workshop"]
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="5_host"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="6_component"]
 [ext_resource type="Resource" uid="uid://d3j7g4vybewnk" path="res://assets/resources/camera/hd2d_free_3d.tres" id="8_camera_profile"]
@@ -193,9 +197,27 @@ Profile = ExtResource("character_profile_ochre_courier")
 script = ExtResource("npc_agent")
 Graph = ExtResource("ochre_courier_npc_graph")
 
+[sub_resource type="Resource" id="world_context"]
+script = ExtResource("world_context")
+Level = ExtResource("world_level")
+
+[sub_resource type="Resource" id="world_spawn"]
+script = ExtResource("world_spawn")
+
+[sub_resource type="Resource" id="world_transition"]
+script = ExtResource("world_transition")
+TargetLevel = ExtResource("world_workshop")
+
+[sub_resource type="BoxShape3D" id="world_portal_shape"]
+size = Vector3(1.2, 2, 1.2)
+
+[sub_resource type="BoxMesh" id="world_portal_mesh"]
+size = Vector3(0.2, 1.8, 1)
+
 [node name="WhiteboxTest" type="Node3D" unique_id=1907641290 groups=["gameplay_level"]]
 editor_description = "白盒关卡测试：只有平地，保留玩家、相机、环境与两名待机 NPC；尚未配置交互点或生活目标。"
 script = ExtResource("5_host")
+Components = Array[ExtResource("6_component")]([SubResource("world_context")])
 
 [node name="EnvironmentRig" type="Node3D" parent="." unique_id=660897677]
 process_mode = 1
@@ -278,8 +300,32 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
 shape = SubResource("shape_Ground")
 
-[node name="Player" parent="." unique_id=1448143200 instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)
+[node name="EntryDefault" type="Node3D" parent="."]
+script = ExtResource("5_host")
+Components = Array[ExtResource("6_component")]([SubResource("world_spawn")])
+
+[node name="Arrival" type="Marker3D" parent="EntryDefault"]
+position = Vector3(0, 0.55, 3)
+
+[node name="WorkshopPortal" type="Node3D" parent="."]
+position = Vector3(3, 0.9, 3)
+script = ExtResource("5_host")
+Components = Array[ExtResource("6_component")]([SubResource("world_transition")])
+
+[node name="Area3D" type="Area3D" parent="WorkshopPortal"]
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorkshopPortal/Area3D"]
+shape = SubResource("world_portal_shape")
+
+[node name="Door" type="MeshInstance3D" parent="WorkshopPortal"]
+mesh = SubResource("world_portal_mesh")
+
+[node name="Label3D" type="Label3D" parent="WorkshopPortal"]
+position = Vector3(0, 1.3, 0)
+text = "仓储间入口"
+font_size = 40
+billboard = 1
 
 [node name="RuntimeGm" parent="." unique_id=1779226142 instance=ExtResource("12_time_gm")]
 

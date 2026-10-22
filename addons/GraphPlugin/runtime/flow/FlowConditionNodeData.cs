@@ -40,6 +40,8 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
         context.GraphNode.AddChild(root);
     }
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -63,12 +65,16 @@ public class FlowConditionNodeData : GraphNodeData, IFlowNode
         root.AddChild(listControl.Build());
         return root;
     }
+#endif
+
+#if TOOLS
 
     public override void CreateUI(GraphEditorContext context)
     {
         var root = CreateInspectorUI(context);
         context.GraphNode.AddChild(root);
     }
+#endif
 
     private bool IsMet(GraphExecutionContext context)
     {

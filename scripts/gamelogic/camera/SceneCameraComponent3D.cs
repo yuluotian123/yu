@@ -126,7 +126,7 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
         // CameraRig 往往排在 Player 前面；等目标完成 EC 初始化再绑定。
         if (!_boundOnce)
         {
-            var target = Owner.GetNodeOrNull<Node3D>(TargetPath);
+            var target = ModuleSystem.GetModule<IWorldModule>().Player??Owner.GetNodeOrNull<Node3D>(TargetPath);
             if (target == null || !target.IsNodeReady()) return;
             ModuleSystem.GetModule<ICameraModule>().Activate(Owner, Owner, target, Profile);
         }

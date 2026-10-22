@@ -64,6 +64,7 @@ public sealed class GoapWorldState
 {
     private readonly SortedDictionary<string, GoapValue> _facts;
     private string _key;
+    private GoapWorldState(GoapWorldState source)=>_facts=new(source._facts,StringComparer.Ordinal);
     public GoapWorldState(IEnumerable<KeyValuePair<string, GoapValue>> facts = null)
     {
         _facts = new(StringComparer.Ordinal);
@@ -90,7 +91,7 @@ public sealed class GoapWorldState
     public bool TryApply(IEnumerable<GoapEffect> effects, out GoapWorldState result)
     {
         result = null;
-        var next = new GoapWorldState(_facts);
+        var next = new GoapWorldState(this);
         foreach (var effect in effects)
         {
             if (string.IsNullOrWhiteSpace(effect.Key)) return false;

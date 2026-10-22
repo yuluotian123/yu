@@ -55,7 +55,14 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "开始游戏"
+text = "继续游戏"
+
+[node name="BtnNew" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "新游戏"
 
 [node name="BtnQuit" type="Button" parent="VBoxContainer" unique_id=791819802]
 unique_name_in_owner = true

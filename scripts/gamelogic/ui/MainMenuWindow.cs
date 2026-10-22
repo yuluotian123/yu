@@ -32,6 +32,7 @@ namespace GameLogic
     {
         // ── [UIBind] 自动绑定 ──────────────────────
         [UIBind("%")] private Button _btnStart;
+        [UIBind("%")] private Button _btnNew;
         [UIBind("%")] private Button _btnQuit;
         [UIBind("%")] private Label  _labelVersion;
         [UIBind("%")] private Control _panelNotice;
@@ -68,6 +69,7 @@ namespace GameLogic
             Debugger.Info("[MainMenuWindow] OnCreate");
 
             _btnStart.Pressed += OnStartClicked;
+            _btnNew.Pressed += () => Start(false);
             _btnQuit.Pressed  += OnQuitClicked;
         }
 
@@ -79,6 +81,7 @@ namespace GameLogic
         {
             string version = UserDatas?.Length > 0 ? UserDatas[0] as string : "v1.0.0";
             _labelVersion.Text = $"Version: {version}";
+            _btnStart.Disabled = !ModuleSystem.GetModule<ISaveModule>().Exists();
             Debugger.Info($"[MainMenuWindow] OnRefresh, version={version}");
         }
 
@@ -96,7 +99,11 @@ namespace GameLogic
         // ───────────────────────────────────────────
 
         private void OnStartClicked()
+        { Start(true); }
+
+        private void Start(bool resume)
         {
+            PreloadProcedure.ResumeGame = resume;
             Debugger.Info("[MainMenuWindow] 开始游戏");
             var ui = ModuleSystem.GetModule<IUIModule>();
             ui.CloseUI<MainMenuWindow>();

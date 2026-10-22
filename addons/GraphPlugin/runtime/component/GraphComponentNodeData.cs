@@ -59,6 +59,8 @@ public sealed class GraphComponentReferenceNodeData : GraphNodeData, IFlowNode
     }
     public void Exit(FlowGraphRuntime runtime, GraphExecutionContext context) { }
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -72,6 +74,7 @@ public sealed class GraphComponentReferenceNodeData : GraphNodeData, IFlowNode
         root.AddChild(slot);
         return root;
     }
+#endif
 
     private bool TryResolve(GraphExecutionContext context, out IComponent component, out string error)
     {
@@ -149,6 +152,8 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
         runtime.SetNodeData(Id, null);
     }
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -179,6 +184,7 @@ public sealed class GraphActionNodeData : GraphNodeData, IFlowNode
 #endif
         return root;
     }
+#endif
 }
 
 public abstract class GraphComponentNodeData : GraphNodeData
@@ -292,6 +298,8 @@ public class GraphComponentCallNodeData : GraphComponentNodeData, IFlowNode
         context.GraphNode.AddChild(new Label { Text = ResolveAction()?.DisplayName ?? "Component Call", HorizontalAlignment = HorizontalAlignment.Center });
     }
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -312,6 +320,7 @@ public class GraphComponentCallNodeData : GraphComponentNodeData, IFlowNode
         }
         return root;
     }
+#endif
 
     private static void AddField(VBoxContainer root, string label, string value, Action<string> setter)
     {
@@ -372,6 +381,8 @@ public class GraphComponentGetNodeData : GraphComponentNodeData, IFlowNode
     public override int GetOutputPortType(int port) => GraphComponentPortTypes.FromType(ResolveValue()?.ValueType);
     public override bool CanBePrime() => false;
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -380,6 +391,7 @@ public class GraphComponentGetNodeData : GraphComponentNodeData, IFlowNode
         AddField(root, "Member ID", MemberId, value => MemberId = value);
         return root;
     }
+#endif
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
@@ -440,6 +452,8 @@ public class GraphComponentSetNodeData : GraphComponentNodeData, IFlowNode
     public override string GetOutputPortName(int port) => "Completed";
     public override bool CanBePrime() => false;
 
+#if TOOLS
+
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -455,6 +469,7 @@ public class GraphComponentSetNodeData : GraphComponentNodeData, IFlowNode
         }
         return root;
     }
+#endif
 
     public void Enter(FlowGraphRuntime runtime, GraphExecutionContext context)
     {
@@ -538,7 +553,10 @@ public class BehaviorTreeComponentCallNodeData : BehaviorTreeNodeData
     {
         context.GraphNode.AddChild(new Label { Text = Call?.Description ?? "Component Call", HorizontalAlignment = HorizontalAlignment.Center });
     }
+
+#if TOOLS
     public override Control CreateInspectorUI(GraphEditorContext context) => Call?.CreateEditUI(context);
+#endif
     public override void Validate(GraphAsset graph, GraphValidationResult result) => Call?.Validate(graph, Id, result);
 }
 
@@ -556,6 +574,8 @@ public sealed class BehaviorTreeComponentGetNodeData : BehaviorTreeNodeData
         if (graph?.ActionDependencyMode == GraphActionDependencyMode.HostBound && Component?.IsAssigned != true)
             result.AddError("HostBound component get node requires an explicit component reference.", Id);
     }
+
+#if TOOLS
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -565,6 +585,7 @@ public sealed class BehaviorTreeComponentGetNodeData : BehaviorTreeNodeData
         AddField(root, "Output blackboard key", OutputKey, value => OutputKey = value);
         return root;
     }
+#endif
     public override BehaviorTreeStatus Tick(BehaviorTreeRuntime runtime, GraphExecutionContext context, double delta)
     {
         GraphComponentTypeDescriptor descriptor = null;
@@ -607,6 +628,8 @@ public sealed class BehaviorTreeComponentSetNodeData : BehaviorTreeNodeData
         if (graph?.ActionDependencyMode == GraphActionDependencyMode.HostBound && Component?.IsAssigned != true)
             result.AddError("HostBound component set node requires an explicit component reference.", Id);
     }
+
+#if TOOLS
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer();
@@ -616,6 +639,7 @@ public sealed class BehaviorTreeComponentSetNodeData : BehaviorTreeNodeData
         AddField(root, "Input blackboard key", InputKey, value => InputKey = value);
         return root;
     }
+#endif
     public override BehaviorTreeStatus Tick(BehaviorTreeRuntime runtime, GraphExecutionContext context, double delta)
     {
         if (string.IsNullOrWhiteSpace(InputKey) || !context.Blackboard.TryGetValue(InputKey, out object value))
@@ -671,6 +695,8 @@ namespace GameLogic
             completion = new NodeCompletion(Call?.LastStatus == GraphActionStatus.Success ? 0 : 1);
             return true;
         }
+
+#if TOOLS
         public override Control CreateInspectorUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
@@ -678,5 +704,6 @@ namespace GameLogic
             root.AddChild(Call?.CreateEditUI(context));
             return root;
         }
+#endif
     }
 }

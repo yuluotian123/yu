@@ -114,7 +114,9 @@ namespace Framework
 
         private void StartTask(ResourceLoadTask task, string typeHint = "")
         {
-            var err = ResourceLoader.LoadThreadedRequest(task.Path, typeHint, useSubThreads: true);
+            // C# script-backed typed arrays must finish dependency registration in order.
+            // The request remains asynchronous; nested dependency workers can race script registration.
+            var err = ResourceLoader.LoadThreadedRequest(task.Path, typeHint, useSubThreads: false);
             if (err != Error.Ok)
             {
                 Debugger.Error($"[ResourceLoader] LoadThreadedRequest failed for '{task.Path}': {err}");

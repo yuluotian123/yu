@@ -20,7 +20,7 @@ weapons/       武器定义、动作配置与装备切换组件
 inventory/     武器行囊、装备卸下和像素风背包窗口
 ai/            NPC 图定义、选择器、GOAP、Flow 执行与当前场景世界组件
 npc/           NPC 导航适配与运行诊断
-world/         世界会话、关卡切换与跨关卡引用实施计划（待实施）
+world/         世界目录、会话状态、关卡切换与角色世界引用
 hfsm/          通用 HFSM；角色侧仅用于 Locomotion 动画
 ```
 
@@ -31,6 +31,7 @@ CharacterGraph 是 `FlowGraphAsset` 的业务扩展，不属于 HFSM。AI 不使
 - [角色系统](../../docs/CHARACTER_SYSTEM.md)
 - [NPC 图配置与运行指南](ai/NPC_GRAPH_GUIDE.md)
 - [世界框架、关卡切换与 NPC 世界引用实施计划](world/WORLD_FRAMEWORK_PLAN.md)
+- [世界配置与关卡切换指南](world/README.md)
 - [Ability](abilities/README.md)
 - [武器与切换](weapons/README.md)
 - [背包与装备](inventory/README.md)

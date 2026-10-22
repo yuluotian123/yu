@@ -11,7 +11,7 @@ namespace GameLogic;
 public partial class CharacterDataInspector : EditorInspectorPlugin
 {
     CharacterProfile _profile;
-    public override bool _CanHandle(GodotObject target)=>target is CharacterDataComponent3D or CharacterProfile or CharacterNeedsDefinition or CharacterNeedDefinition or CharacterFeatureLibrary or CharacterFeatureDefinition or CharacterFeatureValue or CharacterPersonalityDefinition or CharacterAffectDefinition or CharacterRelationsDefinition;
+    public override bool _CanHandle(GodotObject target)=>target is CharacterWorldDefinition or CharacterDataComponent3D or CharacterProfile or CharacterNeedsDefinition or CharacterNeedDefinition or CharacterFeatureLibrary or CharacterFeatureDefinition or CharacterFeatureValue or CharacterPersonalityDefinition or CharacterAffectDefinition or CharacterRelationsDefinition;
     public override void _ParseBegin(GodotObject target)
     {
         if(target is CharacterDataComponent3D component)_profile=component.Profile;
@@ -19,6 +19,8 @@ public partial class CharacterDataInspector : EditorInspectorPlugin
     }
     public override bool _ParseProperty(GodotObject target,Variant.Type type,string name,PropertyHint hint,string hintString,PropertyUsageFlags usage,bool wide)
     {
+        if(target is CharacterWorldDefinition world&&name is nameof(CharacterWorldDefinition.Objects) or nameof(CharacterWorldDefinition.KnownObjects))
+        {AddPropertyEditor(name,new CharacterWorldObjectProperty(world,name==nameof(CharacterWorldDefinition.Objects)));return true;}
         if(target is CharacterFeatureLibrary library&&name==nameof(CharacterFeatureLibrary.Definitions))
         {AddPropertyEditor(name,new CharacterFeatureLibraryProperty(library));return true;}
         if(_profile==null||!Contains(_profile,target))

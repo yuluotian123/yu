@@ -8,4 +8,5 @@ public interface ITimeOfDayModule
     bool HasEnvironment { get; }
     void Attach(Node owner, TimeOfDayProfile profile);
     void Detach(Node owner);
+    void ResetCalendar();
 }

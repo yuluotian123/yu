@@ -23,6 +23,10 @@ namespace GameLogic
 
         void RegisterSection(ISaveSection section);
         void UnregisterSection(ISaveSection section);
+        /// <summary>Retain current sections before unloading their scene; unloaded entries survive subsequent saves.</summary>
+        void CheckpointSections();
+        /// <summary>Discard retained entries before starting a new world or loading another slot.</summary>
+        void ResetSession();
 
         /// <summary>将所有已注册对象保存到指定存档槽。</summary>
         void Save(string slot = "default");

@@ -55,6 +55,7 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
         context.GraphNode.AddChild(root);
     }
 
+#if TOOLS
     public override Control CreateInspectorUI(GraphEditorContext context)
     {
         var root = new VBoxContainer { CustomMinimumSize = new Vector2(260f, 0f) };
@@ -81,6 +82,8 @@ public class FlowActionNodeData : GraphNodeData, IFlowNode
             factory: type => (GraphActionBase)System.Activator.CreateInstance(type)
         );
     }
+
+#endif
 
     private string GetActionSummary()
     {

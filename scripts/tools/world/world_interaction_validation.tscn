@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/tools/world/WorldInteractionValidation.cs" id="script"]
+[node name="WorldInteractionValidation" type="Node"]
+script = ExtResource("script")

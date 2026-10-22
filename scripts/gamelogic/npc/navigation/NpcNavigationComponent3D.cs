@@ -69,8 +69,7 @@ public partial class NpcNavigationComponent3D : Component3D
         if (HorizontalDistance(Owner.GlobalPosition, _positionTarget) <= _positionRadius) { Status = NpcNavigationStatus.Arrived; Halt(); return; }
         Vector3 next = Agent.GetNextPathPosition();
         // Godot's reachability check compares the offset path end against TargetDesiredDistance.
-        // Our business point can legally lie within UseRadius of a baked edge; verify the real
-        // interaction distance instead of rejecting a valid path on its first frame.
+        // Test the requested navigation tolerance rather than rejecting a valid path on its first frame.
         if (Agent.IsNavigationFinished()) { Fail("TargetUnreachable"); return; }
         if (HorizontalDistance(Owner.GlobalPosition, _lastProgress) > .08f) { _lastProgress = Owner.GlobalPosition; _stuck = 0; }
         else _stuck += delta;

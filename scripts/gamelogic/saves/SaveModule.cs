@@ -88,8 +88,22 @@ namespace GameLogic
                 _sections.Remove(key);
         }
 
+        public void ResetSession(){_pendingSections=null;_pendingSlot=null;}
+        public void CheckpointSections()
+        {
+            var next=(JsonObject)(_pendingSections?.DeepClone()??new JsonObject());
+            foreach(var section in _sections.Values)
+            {
+                if(next[section.SectionKey] is not JsonObject group){group=new();next[section.SectionKey]=group;}
+                var state=section.Capture()??new JsonObject();state["schema_version"]=section.SchemaVersion;
+                group[section.EntryKey]=state;
+            }
+            _pendingSections=next;
+        }
+
         public void Save(string slot = "default")
         {
+            CheckpointSections();
             var path = GetPath(slot);
             EnsureSaveDir();
 
@@ -101,7 +115,7 @@ namespace GameLogic
                     ["saved_at_unix_ms"] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                 },
                 ["legacy"] = new JsonObject(),
-                ["sections"] = new JsonObject()
+                ["sections"] = _pendingSections.DeepClone()
             };
 
             JsonObject legacy = root["legacy"].AsObject();
@@ -109,24 +123,6 @@ namespace GameLogic
             {
                 kv.Value.Save();
                 legacy[kv.Key] = AutoStateSerializer.SerializeObject(kv.Value);
-            }
-
-            JsonObject sections = root["sections"].AsObject();
-            foreach (var kv in _sections)
-            {
-                ISaveSection section = kv.Value;
-                if (section == null)
-                    continue;
-
-                if (sections[section.SectionKey] is not JsonObject group)
-                {
-                    group = new JsonObject();
-                    sections[section.SectionKey] = group;
-                }
-
-                JsonObject state = section.Capture() ?? new JsonObject();
-                state["schema_version"] = section.SchemaVersion;
-                group[section.EntryKey] = state;
             }
 
             WriteAtomic(path, root);
@@ -151,7 +147,7 @@ namespace GameLogic
                 {
                     // Do not replace a usable backup with a corrupt primary file.
                     string backup = TryReadSave(path, out _) ? $"{globalPath}.bak" : null;
-                    System.IO.File.Replace(tempPath, globalPath, backup);
+                    System.IO.File.Replace(tempPath, globalPath, backup, ignoreMetadataErrors: true);
                 }
                 else
                     System.IO.File.Move(tempPath, globalPath);

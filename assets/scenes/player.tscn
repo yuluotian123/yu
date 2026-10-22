@@ -21,6 +21,11 @@
 [ext_resource type="Resource" uid="uid://cfq0gesvgyy03" path="res://assets/resources/weapons/katana.tres" id="29_katana"]
 [ext_resource type="Script" uid="uid://ccvmabg8cuile" path="res://scripts/gamelogic/weapons/WeaponDefinition.cs" id="30_weapon_definition"]
 [ext_resource type="Script" uid="uid://c1dg3d15qhc1s" path="res://scripts/gamelogic/inventory/InventoryComponent3D.cs" id="31_inventory"]
+[ext_resource type="Script" path="res://scripts/gamelogic/player/interaction/PlayerWorldInteractionComponent3D.cs" id="world_interaction_script"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/world_interaction_hud.tscn" id="world_interaction_hud"]
+
+[sub_resource type="Resource" id="world_interaction"]
+script = ExtResource("world_interaction_script")
 
 [sub_resource type="Resource" id="character_data_player"]
 script = ExtResource("character_data_script")
@@ -81,7 +86,7 @@ size = Vector3(0.468, 0.936, 0.468)
 [node name="Player" type="Node3D" unique_id=587364041]
 script = ExtResource("1_gobj")
 PersistentId = "player"
-Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence"), SubResource("world_interaction")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=817041810]
 
@@ -101,3 +106,5 @@ texture_filter = 0
 sprite_frames = ExtResource("16_player_frames")
 animation = &"idle"
 autoplay = "idle"
+
+[node name="WorldInteractionHUD" parent="." instance=ExtResource("world_interaction_hud")]

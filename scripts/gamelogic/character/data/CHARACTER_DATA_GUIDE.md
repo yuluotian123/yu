@@ -20,6 +20,7 @@ Player 和 NPC 都在 GameObject3D 的 Components 中配置 `CharacterDataCompon
 | Relations | 覆盖各关系维度的初始值，配置联系人容量 |
 | Affect | 覆盖情绪基线和自然恢复速度；当前情绪保存在运行状态中 |
 | Facts | 角色自己的业务状态，例如 private.completed_visits |
+| World | 具名地点／对象绑定、已知地点与具体对象，见 [世界配置指南](../../world/README.md) |
 
 各模块可禁用或不配置。外观资源由场景的 AnimatedSprite3D 与 CharacterAnimationComponent3D 管理。
 参数的实例覆盖在角色数据组件的 `ParameterOverrides` 中设置，必须引用 Profile 已声明的同类型参数。

@@ -60,6 +60,8 @@ namespace GameLogic
                 priority: 100));
         }
 
+#if TOOLS
+
         public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
@@ -80,5 +82,6 @@ namespace GameLogic
 
             return root;
         }
+#endif
     }
 }

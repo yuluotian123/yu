@@ -21,6 +21,7 @@
 4. 通过 `ModuleSystem.GetModule<T>()` 懒加载核心模块。
 5. 初始化 `IProcedureModule`，注册 `PreloadProcedure`、`MainMenuProcedure`、`LevelProcedure`。
 6. 从 `MainMenuProcedure` 开始进入游戏流程。
+7. 新游戏或继续游戏进入 `PreloadProcedure`，调用 `IWorldModule.OpenAsync`；世界会话创建唯一玩家，按默认配置或存档选择关卡。关卡切换和返回菜单统一经过世界服务，配置见 [世界指南](../scripts/gamelogic/world/README.md)。
 
 每帧运行：
 

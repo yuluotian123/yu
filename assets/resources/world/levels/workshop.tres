@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://c1ll4rxbxvfy6"]
+
+[ext_resource type="Resource" uid="uid://cvx03le1g2g0l" path="res://assets/resources/world/locations/workshop.tres" id="location"]
+[ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="script"]
+
+[resource]
+resource_name = "仓储间关卡"
+script = ExtResource("script")
+ScenePath = "res://assets/scenes/levels/world_workshop.tscn"
+Location = ExtResource("location")
+Id = "workshop_level"
+DisplayName = "仓储间"

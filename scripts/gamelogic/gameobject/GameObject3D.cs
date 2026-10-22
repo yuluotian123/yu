@@ -18,6 +18,7 @@ namespace GameLogic
         private readonly System.Collections.Generic.Dictionary<Type, Component3D> _runtimeComponents = new();
         private List<Component3D> _sortedComponents = new();
         private bool _componentsInitialized;
+        public string InitializationError {get;private set;}=string.Empty;
         private double _editorElapsed;
         private bool _editorSaving;
 
@@ -131,6 +132,12 @@ namespace GameLogic
             return true;
         }
 
+        public override void _EnterTree()
+        {
+            if (!Engine.IsEditorHint() && Components.OfType<WorldLevelContextComponent3D>().Any())
+                WorldIdentity.Bind(this);
+        }
+
         public override void _Ready()
         {
             if (Engine.IsEditorHint()) return;
@@ -182,6 +189,9 @@ namespace GameLogic
             if (!Engine.IsEditorHint()) return;
             if (what == NotificationEditorPostSave) { _editorSaving = false; return; }
             if (what != NotificationEditorPreSave) return;
+#if TOOLS
+            if (EditorInterface.Singleton.GetEditedSceneRoot() == this) WorldAuthoringCompiler.Prepare(this);
+#endif
             _editorSaving = true;
             var definitions = (Godot.Collections.Array)Components;
             foreach (Variant item in definitions)
@@ -223,8 +233,20 @@ namespace GameLogic
             if (_componentsInitialized)
                 return;
             _componentsInitialized = true;
-            for (int i = 0; i < _sortedComponents.Count; i++)
-                _sortedComponents[i].OnInit();
+            InitializationError=string.Empty;
+            int initialized=0;
+            try
+            {
+                for (; initialized < _sortedComponents.Count; initialized++)
+                    _sortedComponents[initialized].OnInit();
+            }
+            catch(Exception error)
+            {
+                InitializationError=error.Message;_componentsInitialized=false;
+                for(int i=initialized;i>=0;i--)
+                    try{_sortedComponents[i].OnDestroy();}catch(Exception cleanup){Debugger.Warn(cleanup.Message);}
+                throw;
+            }
         }
 
         private void DeactivateComponents()

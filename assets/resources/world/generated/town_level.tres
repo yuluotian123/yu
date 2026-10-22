@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://23ot7xj6my8e"]
+
+[ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_s0gqf"]
+
+[resource]
+script = ExtResource("1_s0gqf")
+LevelId = "town_level"
+SourceSignature = "CA34BBB172A68F9C4EF5DF127B64E385D611EDBDC079B967AA729A043E5CAB25/town_level/town"

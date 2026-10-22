@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WorldLocationDefinition" format=3 uid="uid://cfngkb7g7nxqj"]
+
+[ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="script"]
+
+[resource]
+resource_name = "森林小镇"
+script = ExtResource("script")
+Tags = PackedStringArray("town")
+Id = "town"
+DisplayName = "森林小镇"

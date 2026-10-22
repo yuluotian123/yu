@@ -47,6 +47,8 @@ namespace GameLogic
                 RestartIfPlaying);
         }
 
+#if TOOLS
+
         public override Control CreateEditUI(GraphEditorContext context)
         {
             var root = new VBoxContainer();
@@ -87,6 +89,7 @@ namespace GameLogic
 
             return root;
         }
+#endif
 
         internal string ResolveAnimationRequestKey(GraphExecutionContext context)
         {

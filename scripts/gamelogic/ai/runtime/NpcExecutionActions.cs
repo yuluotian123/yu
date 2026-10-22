@@ -30,7 +30,7 @@ public sealed class NpcMoveToTargetAction : GraphSharedAction
                 agent.Owner.GlobalPosition=b+Vector3.Up*(movement?.HalfHeight??.36f);movement?.SyncBodyToOwner();
                 return BehaviorTreeStatus.Success;
             }
-            if(!started){if(!nav.BeginPosition(b,target.PointId,target.UseRadius))return BehaviorTreeStatus.Failure;started=true;}
+            if(!started){if(!nav.BeginPosition(b,target.PointId,.12f))return BehaviorTreeStatus.Failure;started=true;}
             if(nav.Status is NpcNavigationStatus.Failed or NpcNavigationStatus.Arrived)return BehaviorTreeStatus.Failure;
             return BehaviorTreeStatus.Running;
         },()=>call?.Agent.Navigation?.Stop());

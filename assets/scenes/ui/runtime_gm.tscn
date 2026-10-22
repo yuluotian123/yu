@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://rfn8rtrhsg6d" path="res://scripts/gamelogic/gm/RenderingGmComponent3D.cs" id="5_render"]
 [ext_resource type="Script" uid="uid://buchr6vfhgrk5" path="res://scripts/gamelogic/weather/WeatherGmComponent3D.cs" id="6_weather"]
 [ext_resource type="Script" path="res://scripts/gamelogic/npc/gm/NpcGmComponent3D.cs" id="npc_gm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldGmComponent3D.cs" id="world_gm"]
 
 [sub_resource type="Resource" id="shell"]
 script = ExtResource("4_shell")
@@ -23,6 +24,9 @@ script = ExtResource("6_weather")
 
 [sub_resource type="Resource" id="npc_gm"]
 script = ExtResource("npc_gm")
+
+[sub_resource type="Resource" id="world_gm"]
+script = ExtResource("world_gm")
 
 [sub_resource type="StyleBoxFlat" id="npc_panel_style"]
 content_margin_left = 12.0
@@ -56,7 +60,7 @@ corner_radius_bottom_left = 12
 [node name="RuntimeGm" type="Node3D" unique_id=1210845066]
 process_mode = 3
 script = ExtResource("1_host")
-Components = Array[ExtResource("2_base")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm")])
+Components = Array[ExtResource("2_base")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm"), SubResource("world_gm")])
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=856679333]
 layer = 100
@@ -825,3 +829,43 @@ title = "确认存档操作"
 size = Vector2i(520, 160)
 ok_button_text = "确认"
 cancel_button_text = "取消"
+
+[node name="WorldPage" type="VBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_tab_name = "世界与关卡"
+
+[node name="WorldStatus" type="Label" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Travel" type="HBoxContainer" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage"]
+layout_mode = 2
+
+[node name="WorldLevels" type="OptionButton" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage/Travel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WorldEntry" type="LineEdit" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage/Travel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+placeholder_text = "留空使用默认入口"
+
+[node name="WorldSwitch" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage/Travel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "切换关卡"
+
+[node name="WorldCancel" type="Button" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage/Travel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "取消准备"
+
+[node name="WorldRecords" type="RichTextLabel" parent="CanvasLayer/Root/Panel/Content/Tabs/WorldPage"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+selection_enabled = true

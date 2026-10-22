@@ -16,7 +16,7 @@ public sealed record NpcBindingSpec(string Name,CharacterValueType Type,string A
 }
 public sealed record NpcClaimSpec(string Input,string Capability);
 public sealed record NpcActionSpec(string Id,string Name,IReadOnlyList<NpcBindingSpec> Inputs,IReadOnlyList<NpcClaimSpec> Resources,CharacterExpression Precondition,CharacterExpression Success,CharacterExpression Cost,double Duration,double Timeout,FlowGraphAsset Execution,IReadOnlyList<NpcEffect> Predictions,IReadOnlyList<NpcEffect> Results);
-public sealed record NpcTargetSelectorSpec(string Id,string Name,NpcTargetSource Source,string ParameterKey,IReadOnlyList<string> AllTags,IReadOnlyList<string> AnyTags,IReadOnlyList<string> ExcludedTags,double MaximumDistance,bool RequireUsable,bool RequireReachable,CharacterExpression Filter,NpcTargetSelection Selection,CharacterExpression Score,int Limit,string Adapter="point",string FixedObjectId="");
+public sealed record NpcTargetSelectorSpec(string Id,string Name,NpcTargetSource Source,string ParameterKey,IReadOnlyList<string> AllTags,IReadOnlyList<string> AnyTags,IReadOnlyList<string> ExcludedTags,double MaximumDistance,bool RequireUsable,bool RequireReachable,CharacterExpression Filter,NpcTargetSelection Selection,CharacterExpression Score,int Limit,string Adapter="point",string FixedObjectId="",NpcWorldScope Scope=NpcWorldScope.CurrentLevel,string LocationId="",string LocationBinding="",NpcWorldInformation Information=NpcWorldInformation.KnownObjects);
 public sealed record NpcPlanSpec(string Id,string Name,int Priority,CharacterExpression Eligibility,IReadOnlyList<string> ActionIds);
 public sealed record NpcGoalSpec(string Id,string Name,CharacterExpression Activation,CharacterExpression Utility,CharacterExpression Completion,IReadOnlyList<NpcActionSpec> Actions,IReadOnlyList<NpcPlanSpec> Plans);
 public sealed record NpcPolicy(int Slice,int Expanded,int Depth,int Targets,double Commitment,double Margin,double Retry,float Detailed,float Abstract);
@@ -38,7 +38,6 @@ public sealed partial class NpcProgram
     public double SenseInterval { get; private set; } = .3;
     public bool LineOfSight { get; private set; } = true;
     public string[] PointTags { get; private set; } = Array.Empty<string>();
-    public string[] KnownPoints { get; private set; } = Array.Empty<string>();
     public int MemoryCapacity { get; private set; } = 32;
     public double MemoryLifetime { get; private set; } = 24;
     private NpcProgram() { }
@@ -87,7 +86,7 @@ public sealed partial class NpcProgram
                     break;
                 case NpcPerceptionDefinition perception:
                     Require(perception.ViewRange>0&&perception.SenseInterval>0,"感知范围/间隔必须大于零。");
-                    p.ViewRange=perception.ViewRange;p.SenseInterval=perception.SenseInterval;p.LineOfSight=perception.RequireLineOfSight;p.PointTags=perception.PointTags.ToArray();p.KnownPoints=perception.KnownPointIds.ToArray();break;
+                    p.ViewRange=perception.ViewRange;p.SenseInterval=perception.SenseInterval;p.LineOfSight=perception.RequireLineOfSight;p.PointTags=perception.PointTags.ToArray();break;
                 case NpcMemoryDefinition memory:
                     p.MemoryCategories.AddRange(memory.Categories);p.MemoryCapacity=memory.Capacity;p.MemoryLifetime=memory.LifetimeHours;Require(p.MemoryCapacity>0&&p.MemoryLifetime>0,"记忆配置无效。");break;
                 case NpcPolicyDefinition policy:
@@ -96,17 +95,21 @@ public sealed partial class NpcProgram
             }
         }
         foreach(var key in p.MemoryCategories)p.KnownKeys.Add("memory."+key+".count");
-        foreach(var key in new[]{"world.hour","world.rain","self.location","action.duration"})p.KnownKeys.Add(key);
+        foreach(var key in new[]{"world.hour","world.rain","self.location","self.level","self.place","action.duration"})p.KnownKeys.Add(key);
         foreach(var selector in active.Where(c=>c.FromNode==root.Id&&c.FromPort==2)
             .Select(c=>(NpcTargetSelectorDefinition)Resolve((NpcTargetSelectorNodeData)graph.FindNodeById(c.ToNode))).Where(s=>s.Enabled).Distinct())
         {
             Require(Enum.IsDefined(selector.Source)&&Enum.IsDefined(selector.Selection)&&double.IsFinite(selector.MaximumDistance)&&selector.MaximumDistance>=0&&selector.CandidateLimit>=0&&NpcBindingAdapters.Find(selector.Adapter)!=null,"目标选择器的来源、策略、距离或数量无效。");
             Require(selector.Source!=NpcTargetSource.IdentityParameter||p.Parameters.TryGetValue(selector.ParameterKey,out var value)&&value.Type==CharacterValueType.Symbol,"目标选择器必须选择已注册的文本角色参数。");
             Require(selector.Source!=NpcTargetSource.FixedObject||!string.IsNullOrWhiteSpace(selector.FixedObjectId),"固定对象选择器必须选择一个对象。");
+            Require(selector.Source!=NpcTargetSource.CharacterBinding||character?.World?.Objects.ContainsKey(selector.ParameterKey)==true,"选择器必须选择有效的角色对象绑定。");
+            Require(selector.Source!=NpcTargetSource.WorldDirectory||Enum.IsDefined(selector.Scope)&&Enum.IsDefined(selector.Information)
+                &&(selector.Scope!=NpcWorldScope.FixedPlace||selector.Location!=null)
+                &&(selector.Scope!=NpcWorldScope.CharacterPlace||character?.World?.Locations.ContainsKey(selector.LocationBinding)==true),"世界查询范围未配置或角色地点绑定已失效。");
             var selection=NpcTargetSelectorDefinition.IsSingleSource(selector.Source)?NpcTargetSelection.Nearest:selector.Selection;
             Require(selection is not (NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore)||selector.Score!=null,"评分选择策略必须配置评分表达式。");
             var score=selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore?selector.Score?.Freeze():null;
-            p.TargetSelectors.Add(selector.DefinitionId,new(selector.DefinitionId,selector.DisplayName,selector.Source,selector.ParameterKey,ReadOnly(selector.AllTags),ReadOnly(selector.AnyTags),ReadOnly(selector.ExcludedTags),selector.MaximumDistance,selector.RequireUsable,selector.RequireReachable,selector.Filter?.Freeze(),selection,score,selector.CandidateLimit,selector.Adapter,selector.FixedObjectId));
+            p.TargetSelectors.Add(selector.DefinitionId,new(selector.DefinitionId,selector.DisplayName,selector.Source,selector.ParameterKey,ReadOnly(selector.AllTags),ReadOnly(selector.AnyTags),ReadOnly(selector.ExcludedTags),selector.MaximumDistance,selector.RequireUsable,selector.RequireReachable,selector.Filter?.Freeze(),selection,score,selector.CandidateLimit,selector.Adapter,selector.FixedObjectId,selector.Scope,selector.Location?.Id??"",selector.LocationBinding,selector.Information));
         }
         foreach(var c in active.Where(c=>c.FromNode==root.Id&&c.FromPort==1))
         {
@@ -166,7 +169,7 @@ public sealed partial class NpcProgram
             if(Facts.TryGetValue(e.Key,out var f))return f.Type;
             if(e.Key.StartsWith("personality."))return Character.Personality[e.Key[12..]].Type;
             if(e.Key.StartsWith("preference."))return Character.Preferences[e.Key[11..]].Type;
-            if(e.Key is "target.id" or "self.location")return CharacterValueType.Symbol;
+            if(e.Key is "target.id" or "self.location" or "self.level" or "self.place")return CharacterValueType.Symbol;
             if(e.Key=="target.open"||e.Key.StartsWith("schedule.")||e.Key.StartsWith("trait.")||e.Key.EndsWith(".urgent"))return CharacterValueType.Boolean;
             return CharacterValueType.Number;
         }
@@ -213,7 +216,11 @@ public sealed partial class NpcProgram
             var value=e.Value.Evaluate(k=>Read(state,k),Parameter);string key=EffectKey(state,action,e.Key);if(key==null){result=null;return false;}var current=values.GetValueOrDefault(key,Read(state,key));
             if(e.Mode==NpcEffectMode.Add){if(value.Type!=CharacterValueType.Number||current.Type!=CharacterValueType.Number){result=null;return false;}value=CharacterValue.Numeric(current.Number+value.Number);}
             NpcObjectProperty property=null;
-            if(SplitInputMember(action,e.Key,out var input,out var member))property=NpcBindingAdapters.Find(input.Adapter)?.Properties.FirstOrDefault(p=>p.Name==member&&p.Writable);
+            if(SplitInputMember(action,e.Key,out var input,out var member))
+            {
+                property=NpcBindingAdapters.Find(input.Adapter)?.Properties.FirstOrDefault(p=>p.Name==member&&p.Writable);
+                if(Read(state,key).Type==CharacterValueType.Unknown){result=null;return false;}
+            }
             var spec=Facts.GetValueOrDefault(key)??new NpcFactSpec(key,key=="self.location"?CharacterValueType.Symbol:property?.Type??CharacterValueType.Unknown,property?.Minimum??0,property?.Maximum??1000000,.001,default,true);
             if(value.Type!=spec.Type||value.Type==CharacterValueType.Number&&(value.Number<spec.Minimum-1e-8||value.Number>spec.Maximum+1e-8)){result=null;return false;}
             values[key]=value;

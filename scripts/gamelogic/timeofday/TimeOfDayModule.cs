@@ -43,6 +43,11 @@ public sealed class TimeOfDayModule : Module, IProcessModule, ITimeOfDayModule, 
     }
 
     public void Detach(Node owner) { if (owner != null) _owners.Remove(owner); }
+    public void ResetCalendar()
+    {
+        if(HasEnvironment)throw new InvalidOperationException("请先关闭当前世界再重置日历。");
+        _hasCalendar=false;Clock.SetDate(0,12);Clock.Paused=false;Clock.Speed=1;
+    }
 
     public void Process(double elapseSeconds, double realElapseSeconds)
     {

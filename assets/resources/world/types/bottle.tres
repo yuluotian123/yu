@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WorldObjectTypeDefinition" format=3 uid="uid://banbp5lw4kup7"]
+
+[ext_resource type="Script" uid="uid://horp2pihr3m3" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="capability"]
+[ext_resource type="Script" uid="uid://drr68am8h6rqu" path="res://scripts/gamelogic/world/definitions/capabilities/WorldInteractionCapability.cs" id="interaction_script"]
+[ext_resource type="Script" uid="uid://dm6hgvlliu17p" path="res://scripts/gamelogic/world/definitions/capabilities/WorldLiquidCapability.cs" id="liquid_script"]
+[ext_resource type="Script" uid="uid://btcj1b2clpbmx" path="res://scripts/gamelogic/world/definitions/interactions/WorldInteractionDefinition.cs" id="operation_script"]
+[ext_resource type="Script" uid="uid://c6vabwlec061a" path="res://scripts/gamelogic/world/definitions/interactions/WorldConsumeLiquidInteraction.cs" id="pour_script"]
+[ext_resource type="Script" uid="uid://cmajrnuv2v77k" path="res://scripts/gamelogic/world/definitions/WorldObjectTypeDefinition.cs" id="script"]
+
+[sub_resource type="Resource" id="liquid"]
+script = ExtResource("liquid_script")
+InitialVolume = 0.75
+
+[sub_resource type="Resource" id="pour_liquid"]
+script = ExtResource("pour_script")
+Id = "pour_liquid"
+DisplayName = "倒出液体"
+
+[sub_resource type="Resource" id="interaction"]
+script = ExtResource("interaction_script")
+Operations = Array[ExtResource("operation_script")]([SubResource("pour_liquid")])
+
+[resource]
+resource_name = "瓶子（液体容纳与交互）"
+script = ExtResource("script")
+Tags = PackedStringArray("bottle")
+Capabilities = Array[ExtResource("capability")]([SubResource("liquid"), SubResource("interaction")])
+Id = "bottle_type"
+DisplayName = "瓶子"

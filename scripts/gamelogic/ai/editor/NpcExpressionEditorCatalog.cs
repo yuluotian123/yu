@@ -69,6 +69,8 @@ public static class NpcExpressionEditorCatalog
         Add("world.hour", "当前小时", "世界", CharacterValueType.Number);
         Add("world.rain", "降雨量", "世界", CharacterValueType.Number);
         Add("self.location", "当前位置 ID", "人物", CharacterValueType.Symbol);
+        Add("self.level", "当前关卡", "人物", CharacterValueType.Symbol);
+        Add("self.place", "当前地点", "人物", CharacterValueType.Symbol);
         if (actionContext)
         {
             Add("self.location", "当前位置（仅用于预测）", "人物", CharacterValueType.Symbol, writable:true);
@@ -105,7 +107,7 @@ public static class NpcExpressionEditorCatalog
         Collect(graph).Concat(NpcBindingAdapters.Find(selector.Adapter)?.Properties.Select(p=>new NpcEditorSymbol("target."+p.Name,"候选 · "+p.Label,"候选对象",p.Type))??Array.Empty<NpcEditorSymbol>()).ToArray():
         owner is NpcActionInputDefinition?Collect(graph):Collect(graph,ActionOwner(graph,owner)!=null,ActionOwner(graph,owner));
     public static IReadOnlyList<NpcEditorSymbol> WritableTargets(NpcGraphAsset graph,GodotObject owner=null)=>
-        (owner==null?Collect(graph,true):For(graph,owner)).Where(s=>s.Writable&&(s.Key!="self.location"||owner==null||owner is NpcEffectDefinition effect&&ActionOwner(graph,effect)?.Predictions.Contains(effect)==true)).ToArray();
+        (owner==null?Collect(graph,true):For(graph,owner)).Where(s=>s.Writable&&(!(s.Key=="self.location"||s.Key.StartsWith("input.",StringComparison.Ordinal))||owner==null||owner is NpcEffectDefinition effect&&ActionOwner(graph,effect)?.Predictions.Contains(effect)==true)).ToArray();
 
     public static CharacterValueType? ExpectedType(NpcGraphAsset graph, GodotObject target, string property) => (target, property) switch
     {

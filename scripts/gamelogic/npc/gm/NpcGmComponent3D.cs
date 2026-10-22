@@ -21,7 +21,7 @@ public partial class NpcGmComponent3D : Component3D
     readonly List<(GodotObject Source, StringName Signal, Callable Callback)> _bindings = new();
     AiWorldComponent3D World => AiWorldComponent3D.Find(Owner);
     AiAgentComponent3D Actor => World?.Actors.GetValueOrDefault(Selected(_actors));
-    AiInteractionPointComponent3D Point => World?.Points.GetValueOrDefault(Selected(_points));
+    WorldInteractionComponent3D Point => World?.Points.GetValueOrDefault(Selected(_points));
     T Find<T>(string name) where T : Node => Owner.GetNodeOrNull<T>("%" + name);
     static string Selected(OptionButton menu) => menu?.Selected >= 0 ? menu.GetItemMetadata(menu.Selected).AsString() : "";
     static string Name(AiAgentComponent3D a) => a.Character?.Profile?.Identity?.DisplayName is { Length: > 0 } name ? name : a.ActorId;
@@ -46,8 +46,8 @@ public partial class NpcGmComponent3D : Component3D
         });
         Button("NpcApplyNeed", ApplyNeed); Button("NpcReadNeed", ReadNeed);
         Button("NpcOpenPoint", () => SetPoint(true)); Button("NpcClosePoint", () => SetPoint(false));
-        Button("NpcAutoPoint", () => { Point?.ClearOpenOverride(); ReplanAll(); });
-        Button("NpcRestock", () => { if (Point is {} p) { p.Stock = p.StartingStock; p.MarkChanged(); ReplanAll(); } });
+        Button("NpcAutoPoint", () => { Point?.Owner.GetComponent<WorldOpeningHoursComponent3D>()?.ClearOverride(); ReplanAll(); });
+        Button("NpcRestock", () => { Point?.Owner.GetComponent<WorldStockComponent3D>()?.Restock(); ReplanAll(); });
         Button("NpcCopy", () => DisplayServer.ClipboardSet(BuildSnapshot()));
         Bind(_actors, OptionButton.SignalName.ItemSelected, Callable.From<long>(_ => { Refresh(); ReadNeed(); }));
         Bind(_needs, OptionButton.SignalName.ItemSelected, Callable.From<long>(_ => ReadNeed()));
@@ -91,7 +91,7 @@ public partial class NpcGmComponent3D : Component3D
     }
     void Text(string name, string value) { if (Find<RichTextLabel>(name) is {} label) label.Text = value; }
     void ReplanAll() { if (World != null) foreach (var a in World.Actors.Values.Where(a => a.Program != null)) a.RequestReplan(); }
-    void SetPoint(bool open) { Point?.SetOpen(open); ReplanAll(); }
+    void SetPoint(bool open) { Point?.Owner.GetComponent<WorldOpeningHoursComponent3D>()?.SetOpen(open); ReplanAll(); }
     void Refresh()
     {
         if (_summary == null) return;
@@ -107,7 +107,8 @@ public partial class NpcGmComponent3D : Component3D
         Find<Button>("NpcCopy").Disabled = a == null;
         _needValue.Editable = a?.State != null && _needs.ItemCount > 0;
         _running.Disabled |= a?.IsActive != true;
-        foreach (string name in new[] { "NpcOpenPoint", "NpcClosePoint", "NpcAutoPoint", "NpcRestock" }) Find<Button>(name).Disabled = Point == null;
+        foreach (string name in new[] { "NpcOpenPoint", "NpcClosePoint", "NpcAutoPoint" }) Find<Button>(name).Disabled = Point?.Owner.GetComponent<WorldOpeningHoursComponent3D>()==null;
+        Find<Button>("NpcRestock").Disabled=Point?.Owner.GetComponent<WorldStockComponent3D>()==null;
         var eligible = actors.Where(x => x.Program != null && x.State != null && x.IsActive).ToArray();
         _allRunning.Disabled = eligible.Length == 0; Find<Button>("NpcAllReplan").Disabled = eligible.Length == 0;
         _rain.Disabled = w == null;

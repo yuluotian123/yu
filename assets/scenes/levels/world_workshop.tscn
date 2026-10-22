@@ -1,0 +1,132 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/runtime/AiWorldComponent3D.cs" id="ai"]
+[ext_resource type="PackedScene" path="res://assets/scenes/world/bottle.tscn" id="bottle_scene"]
+[ext_resource type="Script" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="camera"]
+[ext_resource type="Resource" path="res://assets/resources/camera/hd2d_free_3d.tres" id="camera_profile"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="component"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="context"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/runtime_gm.tscn" id="gm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="host"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/workshop.tres" id="level"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="spawn"]
+[ext_resource type="PackedScene" path="res://assets/scenes/world/storage.tscn" id="storage_scene"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/town.tres" id="town"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="transition"]
+
+[sub_resource type="Resource" id="context"]
+script = ExtResource("context")
+Level = ExtResource("level")
+
+[sub_resource type="Resource" id="ai"]
+script = ExtResource("ai")
+
+[sub_resource type="Environment" id="environment"]
+background_mode = 1
+background_color = Color(0.12, 0.15, 0.2, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.8, 0.85, 1, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.8
+
+[sub_resource type="CameraAttributesPhysical" id="exposure"]
+
+[sub_resource type="StandardMaterial3D" id="floor_material"]
+albedo_color = Color(0.22, 0.27, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="floor_mesh"]
+material = SubResource("floor_material")
+size = Vector3(18, 1, 18)
+
+[sub_resource type="BoxShape3D" id="floor_shape"]
+size = Vector3(18, 1, 18)
+
+[sub_resource type="Resource" id="spawn"]
+script = ExtResource("spawn")
+
+[sub_resource type="Resource" id="camera"]
+script = ExtResource("camera")
+FramingOriginPath = NodePath("../EntryDefault/Arrival")
+Profile = ExtResource("camera_profile")
+
+[sub_resource type="Resource" id="transition"]
+script = ExtResource("transition")
+TargetLevel = ExtResource("town")
+
+[sub_resource type="BoxShape3D" id="portal_shape"]
+size = Vector3(1.2, 2, 1.2)
+
+[node name="WorldWorkshop" type="Node3D" unique_id=1861200180 groups=["gameplay_level"]]
+script = ExtResource("host")
+Components = Array[ExtResource("component")]([SubResource("context")])
+
+[node name="World" type="Node3D" parent="." unique_id=648546724]
+script = ExtResource("host")
+Components = Array[ExtResource("component")]([SubResource("ai")])
+
+[node name="EnvironmentRig" type="Node3D" parent="." unique_id=1341997271]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=1031499773]
+environment = SubResource("environment")
+camera_attributes = SubResource("exposure")
+
+[node name="Light" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1284612744]
+transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1431030604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor" unique_id=1169420]
+mesh = SubResource("floor_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=1237521745]
+shape = SubResource("floor_shape")
+
+[node name="EntryDefault" type="Node3D" parent="." unique_id=2082765671]
+script = ExtResource("host")
+Components = Array[ExtResource("component")]([SubResource("spawn")])
+
+[node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1911723273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1243985191]
+process_priority = 100
+script = ExtResource("host")
+Components = Array[ExtResource("component")]([SubResource("camera")])
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1185930094]
+transform = Transform3D(1, 0, 0, 0, 0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 4, 10)
+current = true
+fov = 40.0
+
+[node name="TownPortal" type="Node3D" parent="." unique_id=1333359108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 0)
+script = ExtResource("host")
+Components = Array[ExtResource("component")]([SubResource("transition")])
+
+[node name="Area3D" type="Area3D" parent="TownPortal" unique_id=1063233909]
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TownPortal/Area3D" unique_id=372346803]
+shape = SubResource("portal_shape")
+
+[node name="Label3D" type="Label3D" parent="TownPortal" unique_id=500466605]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+billboard = 1
+text = "返回小镇"
+font_size = 40
+
+[node name="RuntimeGm" parent="." unique_id=529524211 instance=ExtResource("gm")]
+
+[node name="Storage" parent="." unique_id=490928955 instance=ExtResource("storage_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+metadata/_world_placement = "4b208b24b610436cbc5b418b7cc0c455"
+
+[node name="StorageCopy" parent="." unique_id=810246106 instance=ExtResource("storage_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2)
+metadata/_world_placement = "03b5672e717f455a9e7ede84e5a10b04"
+
+[node name="Bottle" parent="." unique_id=769037124 instance=ExtResource("bottle_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+metadata/_world_placement = "ea0383a6f51c4d1bb92086dcac699d2c"

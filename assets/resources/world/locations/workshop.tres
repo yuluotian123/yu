@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WorldLocationDefinition" format=3 uid="uid://cvx03le1g2g0l"]
+
+[ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="script"]
+
+[resource]
+resource_name = "小镇仓储间"
+script = ExtResource("script")
+Tags = PackedStringArray("storage")
+PublicServices = PackedStringArray("storage")
+Id = "workshop"
+DisplayName = "小镇仓储间"

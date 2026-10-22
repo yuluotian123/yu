@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="WorldObjectTypeDefinition" format=3 uid="uid://b2gm3rndyq1u8"]
+
+[ext_resource type="Script" uid="uid://horp2pihr3m3" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="capability"]
+[ext_resource type="Script" uid="uid://bqtmclui4oefx" path="res://scripts/gamelogic/world/definitions/capabilities/WorldUsageCapacityCapability.cs" id="capacity_script"]
+[ext_resource type="Script" uid="uid://c8lu0m6ekfcnl" path="res://scripts/gamelogic/world/definitions/capabilities/WorldOpeningHoursCapability.cs" id="hours_script"]
+[ext_resource type="Script" uid="uid://drr68am8h6rqu" path="res://scripts/gamelogic/world/definitions/capabilities/WorldInteractionCapability.cs" id="interaction_script"]
+[ext_resource type="Script" uid="uid://btcj1b2clpbmx" path="res://scripts/gamelogic/world/definitions/interactions/WorldInteractionDefinition.cs" id="operation_script"]
+[ext_resource type="Script" uid="uid://cmajrnuv2v77k" path="res://scripts/gamelogic/world/definitions/WorldObjectTypeDefinition.cs" id="script"]
+[ext_resource type="Script" uid="uid://c3yr26n3rmi78" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="stock_script"]
+[ext_resource type="Script" uid="uid://bracks0vd1ioi" path="res://scripts/gamelogic/world/definitions/interactions/WorldTakeStockInteraction.cs" id="take_script"]
+
+[sub_resource type="Resource" id="take_stock"]
+script = ExtResource("take_script")
+Id = "take_stock"
+DisplayName = "使用物资"
+RequireCapacity = true
+
+[sub_resource type="Resource" id="interaction"]
+script = ExtResource("interaction_script")
+Operations = Array[ExtResource("operation_script")]([SubResource("take_stock")])
+
+[sub_resource type="Resource" id="stock"]
+script = ExtResource("stock_script")
+InitialAmount = 20.0
+
+[sub_resource type="Resource" id="capacity"]
+script = ExtResource("capacity_script")
+
+[sub_resource type="Resource" id="hours"]
+script = ExtResource("hours_script")
+OpenHour = 0.0
+CloseHour = 0.0
+
+[resource]
+resource_name = "储物服务点"
+script = ExtResource("script")
+Tags = PackedStringArray("storage")
+Capabilities = Array[ExtResource("capability")]([SubResource("interaction"), SubResource("stock"), SubResource("capacity"), SubResource("hours")])
+Id = "storage_type"
+DisplayName = "储物服务点"

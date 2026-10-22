@@ -80,6 +80,7 @@ public sealed partial class RootModule : Node
         ModuleSystem.GetModule<IMissionModule>();
         ModuleSystem.GetModule<IEventModule>();
         ModuleSystem.GetModule<IResourceModule>();
+        ModuleSystem.GetModule<IWorldModule>();
         ModuleSystem.GetModule<IConfigModule>();
         ModuleSystem.GetModule<IInputModule>();
         ModuleSystem.GetModule<ICameraModule>();

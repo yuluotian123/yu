@@ -19,6 +19,7 @@ public partial class CharacterProfile : Resource
     [Export] public CharacterRelationsDefinition Relations {get;set;}
     [Export] public CharacterAffectDefinition Affect {get;set;}
     [Export] public CharacterFactSchema Facts {get;set;}
+    [Export] public CharacterWorldDefinition World {get;set;}
 
     // Called by compilation and editor tools, never by constructors or serialization getters.
     public CharacterFeatureLibrary ResolveFeatureLibrary()=>FeatureLibrary??GD.Load<CharacterFeatureLibrary>(CharacterFeatureLibrary.CommonPath);

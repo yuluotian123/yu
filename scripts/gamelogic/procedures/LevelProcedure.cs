@@ -34,7 +34,7 @@ public class LevelProcedure : ProcedureBase
         {
             if (Engine.GetMainLoop() is SceneTree tree)
             {
-                tree.GetFirstNodeInGroup("gameplay_level")?.QueueFree();
+                ModuleSystem.GetModule<IWorldModule>().Close();
 
                 ChangeState<MainMenuProcedure>(procedureOwner);
             }

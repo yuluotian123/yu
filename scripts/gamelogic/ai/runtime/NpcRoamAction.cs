@@ -34,7 +34,6 @@ public sealed class NpcRoamAction : GraphSharedAction
                 navigation?.Stop();
                 float half=call.Agent.Owner.GetComponent<CharacterMovementComponent3D>()?.HalfHeight??.36f;
                 origin=call.Point(Input.Name)?.UsePosition??call.Agent.Owner.GlobalPosition-Vector3.Up*half;
-                if(call.Point(Input.Name)!=null)radius=Math.Min(radius,call.Point(Input.Name).UseRadius*.75f);
                 animation.RequestAnimation(request,Animation,AnimationPriority,restartIfPlaying:false);started=true;
             }
             elapsed+=delta;
@@ -47,6 +46,7 @@ public sealed class NpcRoamAction : GraphSharedAction
             {
                 float angle=(direction++%8)*Mathf.Pi/4;
                 var destination=origin+new Vector3(Mathf.Cos(angle)*radius,0,Mathf.Sin(angle)*radius);
+                if(call.Point(Input.Name) is {} area&&!area.ContainsPosition(destination+Vector3.Up*(call.Agent.Owner.GetComponent<CharacterMovementComponent3D>()?.HalfHeight??.36f)))continue;
                 var offset=destination-call.Agent.Owner.GlobalPosition;
                 if(new Vector2(offset.X,offset.Z).Length()<.2f)continue;
                 if(navigation.TryEstimateBetween(call.Agent.Owner.GlobalPosition,destination,out _)&&navigation.BeginPosition(destination,"local_activity",.12f))return BehaviorTreeStatus.Running;

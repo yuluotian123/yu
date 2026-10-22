@@ -49,7 +49,7 @@ public partial class NpcSelectorBindingValidation : Node
         var flow=new FlowGraphAsset();var entry=new FlowEntryNodeData();var done=new FlowReturnNodeData{Label="Success"};
         flow.Nodes.Add(entry);flow.Nodes.Add(done);flow.ConnectNodes(entry.Id,0,done.Id,0);flow.SaveJsonFields();return flow;
     }
-    sealed class Fixture
+    internal sealed class Fixture
     {
         public readonly CharacterProfile Profile=new(){FeatureLibrary=new CharacterFeatureLibrary()};
         public readonly NpcGraphAsset Graph=new();
@@ -139,6 +139,13 @@ public partial class NpcSelectorBindingValidation : Node
         f.Graph.ConnectNodes(other.Id,0,f.SecondNode.Id,1);
         var program=NpcProgram.Compile(f.Graph);var result=Search(program,Initial(program));
         Check(result.Search.Status==GoapSearchStatus.Found&&Targets(result).SequenceEqual(new[]{"A","B"}),"Different nodes sharing one query definition must select independently");
+        var otherQuery=new NpcTargetSelectorDefinition{Source=NpcTargetSource.WorldDirectory};f.Graph.Definitions.Add(otherQuery);other.DefinitionId=otherQuery.DefinitionId;
+        f.Selector.Source=NpcTargetSource.WorldDirectory;program=NpcProgram.Compile(f.Graph);
+        var queries=program.TargetSelectors.ToDictionary(p=>p.Key,p=>(IReadOnlyList<NpcTargetCandidate>)(p.Key==f.Selector.DefinitionId?new[]{Points()[0]}:new[]{Points()[1]}));
+        // Different scoped queries cannot borrow one another's candidates during grounding.
+        var scoped=NpcTargetQuery.Ground(program,program.Goals[0],Initial(program),Points(),queries).ToArray();
+        Check(scoped.Count(b=>b.Action.Id==f.First.DefinitionId)==1&&scoped.First(b=>b.Action.Id==f.First.DefinitionId).Candidates["target"].Symbol=="A"
+            &&scoped.Count(b=>b.Action.Id==f.Second.DefinitionId)==1&&scoped.First(b=>b.Action.Id==f.Second.DefinitionId).Candidates["target"].Symbol=="B","Scoped query results must not leak through another selector's candidate union");
         var extra=new NpcActionInputDefinition{Name="other",InputType="target:point"};f.First.Inputs.Add(extra);f.FirstNode.Bind(f.Graph);
         f.Graph.ConnectNodes(f.SelectorNode.Id,0,f.FirstNode.Id,2);program=NpcProgram.Compile(f.Graph);
         var grounded=NpcTargetQuery.Ground(program,program.Goals[0],Initial(program),Points()).Where(b=>b.Action.Id==f.First.DefinitionId).ToArray();
@@ -214,10 +221,10 @@ public partial class NpcSelectorBindingValidation : Node
         var catalogRoot=new Node();
         try
         {
-            catalogRoot.AddChild(new GameObject3D{Name="NamedBed",PersistentId="bed-id",Components=new(){new AiInteractionPointComponent3D{DisplayName="Own bed"}}});
+            catalogRoot.AddChild(new GameObject3D{Name="NamedBed",PersistentId="bed-id",Components=new(){new WorldObjectComponent3D{DisplayName="Own bed",ObjectType=WorldTestObjects.StockType()},new WorldInteractionComponent3D()}});
             var choices=NpcTargetCatalog.Points(catalogRoot);
             Check(choices.Count==1&&choices[0].Id=="bed-id"&&choices[0].Name=="Own bed","The fixed-object picker must show names and save stable identities");
-            catalogRoot.AddChild(new GameObject3D{Name="Duplicate",Components=new(){new AiInteractionPointComponent3D{PointId="bed-id"}}});
+            catalogRoot.AddChild(new GameObject3D{Name="Duplicate",PersistentId="bed-id",Components=new(){new WorldObjectComponent3D{ObjectType=WorldTestObjects.StockType()},new WorldInteractionComponent3D()}});
             Check(NpcTargetCatalog.Points(catalogRoot).Count==0,"Ambiguous object identities must not be offered by the picker");
         }
         finally{catalogRoot.Free();}
@@ -340,7 +347,7 @@ public partial class NpcSelectorBindingValidation : Node
         GameObject3D Host(string name,params Component3D[] components)
         {
             var host=new GameObject3D{Name=name,PersistentId=name,Components=new(components)};
-            hosts.Add(host);AddChild(host);return host;
+            WorldTestObjects.WithArea(host);hosts.Add(host);AddChild(host);return host;
         }
         void Plan(AiAgentComponent3D agent)
         {
@@ -349,20 +356,20 @@ public partial class NpcSelectorBindingValidation : Node
         }
         try
         {
-            Host("BindingWorld",new AiWorldComponent3D{Persist=false});
-            var pointA=Host("PointA",new AiInteractionPointComponent3D{PointId="A",StartingStock=10}).GetComponent<AiInteractionPointComponent3D>();
-            var pointB=Host("PointB",new AiInteractionPointComponent3D{PointId="B",StartingStock=1}).GetComponent<AiInteractionPointComponent3D>();
+            Host("BindingWorld",new AiWorldComponent3D());
+            var pointA=Host("A",WorldTestObjects.Components(WorldTestObjects.StockType(10))).GetComponent<WorldInteractionComponent3D>();
+            var pointB=Host("B",WorldTestObjects.Components(WorldTestObjects.StockType(1))).GetComponent<WorldInteractionComponent3D>();
             pointB.Owner.Position=Vector3.Right;
             AiAgentComponent3D Actor(string name)=>Host(name,new CharacterDataComponent3D{Profile=f.Profile,Persist=false},new AiAgentComponent3D{Graph=f.Graph,Persist=false}).GetComponent<AiAgentComponent3D>();
             var first=Actor("BindingActor1");var second=Actor("BindingActor2");
             Check(first.Program!=null&&second.Program!=null&&first.Running&&second.Running,"Actors must initialize through the EC lifecycle");
             Plan(first);Check(first.SelectorBindings.Count==1&&first.SelectorBindings.Values.Single().Symbol=="B","Generated plan must store B before starting its first step");
-            pointA.Stock=0;pointB.Stock=10;Plan(second);
+            pointA.Owner.GetComponent<WorldStockComponent3D>().Amount=0;pointB.Owner.GetComponent<WorldStockComponent3D>().Amount=10;Plan(second);
             Check(second.SelectorBindings.Values.Single().Symbol=="A"&&first.SelectorBindings.Values.Single().Symbol=="B","Two NPCs using one graph must retain independent selected targets");
             second.CancelPlan();Check(second.SelectorBindings.Count==0&&first.SelectorBindings.Count==1,"Cancelling one actor must clear only its own bindings");
-            pointB.SetOpen(false);first.OnUpdate(0);
+            pointB.Owner.GetComponent<WorldOpeningHoursComponent3D>().SetOpen(false);first.OnUpdate(0);
             Check(first.LastFailure=="InputUnavailable"&&first.SelectorBindings.Count==0&&first.CurrentAction.Length==0,"An invalid selected object must cancel rather than silently switch to A");
-            pointB.SetOpen(true);pointA.Stock=10;pointB.Stock=1;
+            pointB.Owner.GetComponent<WorldOpeningHoursComponent3D>().SetOpen(true);pointA.Owner.GetComponent<WorldStockComponent3D>().Amount=10;pointB.Owner.GetComponent<WorldStockComponent3D>().Amount=1;
             first.RequestReplan();Plan(first);
             for(int i=0;i<8&&first.CompletedActions<2;i++)first.OnUpdate(.01);
             Check(first.CompletedActions==2&&first.SelectorBindings.Count==0&&first.Read("private.done").IsTrue,"Successful execution must keep shared identity and clear bindings on completion");

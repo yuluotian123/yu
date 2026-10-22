@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://ldrysx0x7ie1"]
+
+[ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="bottle_type"]
+[ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="calendar_script"]
+[ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="level_script"]
+[ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="location_script"]
+[ext_resource type="Script" uid="uid://dsp55wblt8lbr" path="res://scripts/gamelogic/world/definitions/WorldDefinition.cs" id="script"]
+[ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="storage_type"]
+[ext_resource type="Resource" uid="uid://dsbub5bo15ktr" path="res://assets/resources/world/levels/town.tres" id="town"]
+[ext_resource type="Resource" uid="uid://cfngkb7g7nxqj" path="res://assets/resources/world/locations/town.tres" id="town_place"]
+[ext_resource type="Script" uid="uid://cmajrnuv2v77k" path="res://scripts/gamelogic/world/definitions/WorldObjectTypeDefinition.cs" id="type_script"]
+[ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="workshop"]
+[ext_resource type="Resource" uid="uid://cvx03le1g2g0l" path="res://assets/resources/world/locations/workshop.tres" id="workshop_place"]
+
+[sub_resource type="Resource" id="calendar"]
+script = ExtResource("calendar_script")
+DayLengthSeconds = 4800.0
+
+[resource]
+resource_name = "默认世界"
+script = ExtResource("script")
+Locations = Array[ExtResource("location_script")]([ExtResource("town_place"), ExtResource("workshop_place")])
+Levels = Array[ExtResource("level_script")]([ExtResource("town"), ExtResource("workshop")])
+ObjectTypes = Array[ExtResource("type_script")]([ExtResource("storage_type"), ExtResource("bottle_type")])
+InitialLevel = ExtResource("town")
+Calendar = SubResource("calendar")
+Id = "default_world"
+DisplayName = "默认世界"

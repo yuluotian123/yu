@@ -31,7 +31,7 @@ public partial class AiAgentComponent3D
         return true;
     }
     bool Meets(CharacterExpression expression,GoapWorldState context)=>expression==null||expression.Evaluate(k=>Program.Read(context,k),Program.Parameter).IsTrue;
-    internal void BeginAction(NpcBoundAction bound)
+    internal void BeginAction(NpcBoundAction bound,NpcSavedAction checkpoint=null)
     {
         if(_selectedPlan?.Eligibility is {} eligibility&&!Meets(eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
         var context=LiveContext(bound);
@@ -49,10 +49,24 @@ public partial class AiAgentComponent3D
             catch(Exception e){Fail("ResourceException:"+e.Message);return;}
             if(lease==null){Fail("ResourceBusy",false);return;}_leases.Add(lease);
         }
-        _current=bound;_actionElapsed=0;_committed=false;LastFailure="";
-        var call=new GraphExecutionContext(bound.Action.Execution,new GraphBlackboardRuntime());call.UserData.Add(Owner);call.UserData.Add(new NpcActionContext(this,bound.Action,inputs,context));
-        _execution=new(bound.Action.Execution,call);
-        try{if(!_execution.Start()){Fail("ExecutionGraphFailed");return;}}
+        _current=bound;_actionElapsed=checkpoint?.Elapsed??0;_committed=false;LastFailure="";
+        _actionInstanceId=checkpoint?.InstanceId??Guid.NewGuid().ToString("N");
+        try
+        {
+            var start=context;
+            if(checkpoint!=null)
+            {
+                var facts=checkpoint.Execution.Start;
+                NpcProgram.Require(facts!=null&&facts.Count<=100000&&facts.All(f=>f!=null&&!string.IsNullOrWhiteSpace(f.Key))
+                    &&facts.Select(f=>f.Key).Distinct(StringComparer.Ordinal).Count()==facts.Count,"InvalidStartSnapshot");
+                start=new(facts.Select(f=>new KeyValuePair<string,GoapValue>(f.Key,f.Read())));
+            }
+            var call=new GraphExecutionContext(bound.Action.Execution,new GraphBlackboardRuntime());call.UserData.Add(Owner);
+            var executionContext=new NpcActionContext(this,bound.Action,inputs,start);
+            if(checkpoint!=null)executionContext.RestoreExecution(checkpoint.Execution);
+            call.UserData.Add(executionContext);_execution=new(bound.Action.Execution,call);
+            if(!_execution.Start()){Fail("ExecutionGraphFailed");return;}
+        }
         catch(Exception e){Fail("ExecutionException:"+e.Message);return;}
         Record("Action",bound.Action.Name+" · "+string.Join(", ",inputs.Select(v=>v.Key+"="+v.Value)));
     }
@@ -66,7 +80,7 @@ public partial class AiAgentComponent3D
         try{_execution.Update(delta);}catch(Exception e){Fail("ExecutionException:"+e.Message);return;}
         if(!_execution.IsCompleted)return;
         if(!_execution.ReturnLabels.Contains("Success")){Fail("ExecutionFailed:"+(_execution.Context.GetUserData<NpcActionContext>()?.LastInteractionResult.Message??Navigation?.Failure));return;}
-        if(_committed)return;
+        if(_committed||_actionInstanceId==_lastCommittedInstanceId)return;
         context=LiveContext(_current);
         if(!ValidateInputs(_current,context)||!Meets(_current.Action.Precondition,context)||!Meets(_current.Action.Success,context)||
             !Program.TryEffects(context,_current.Action.Results,out var result,_current.Action)){Fail("ResultValidationFailed");return;}
@@ -75,7 +89,7 @@ public partial class AiAgentComponent3D
         var interaction=_execution.Context.GetUserData<NpcActionContext>()?.CommitInteraction()??WorldInteractionResult.Ok();
         if(!interaction.Success){Fail("InteractionFailed:"+interaction.Message);return;}
         State.Apply(_current.Action.Results.Select(e=>e.Key).Distinct().Where(Program.Facts.ContainsKey).Select(key=>new KeyValuePair<string,CharacterValue>(key,Program.Read(result,key))));
-        _committed=true;CompletedActions++;Record("Completed",_current.Action.Name);
+        _committed=true;_lastCommittedInstanceId=_actionInstanceId;CompletedActions++;Record("Completed",_current.Action.Name);
         StopExecution();_current=null;ReleaseResources();Navigation?.Stop();Sense();_selectAt=0;
         if(_plan.Count==0){_selectorBindings.Clear();_selectedPlan=null;}
     }

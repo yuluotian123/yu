@@ -10,25 +10,31 @@ public sealed class NpcMoveToTargetAction : GraphSharedAction
     public NpcInputReference Input {get;set;}=new();
     public override GraphActionTask CreateTask(GraphActionInvocation invocation)
     {
-        var call=invocation.Execution.GetUserData<NpcActionContext>();bool started=false;double elapsed=0,travel=0;
+        var call=invocation.Execution.GetUserData<NpcActionContext>();bool started=false;
+        var progress=call?.Progress(this)??new();
         return new GraphDelegateTask(delta=>
         {
             if(call?.Point(Input.Name)==null||!call.Point(Input.Name).IsActive||!GodotObject.IsInstanceValid(call.Point(Input.Name).Owner))return BehaviorTreeStatus.Failure;
             var agent=call.Agent;var target=call.Point(Input.Name);var nav=agent.Navigation;
             var a=agent.Owner.GlobalPosition;var b=target.UsePosition;
-            if(target.ContainsPosition(a)){nav?.Stop();return BehaviorTreeStatus.Success;}
+            if(progress.Complete)return BehaviorTreeStatus.Success;
+            if(target.ContainsPosition(a)){progress.Complete=true;nav?.Stop();return BehaviorTreeStatus.Success;}
             if(nav==null)return BehaviorTreeStatus.Failure;
             if(agent.IsAbstract)
             {
                 if(!started)
                 {
-                    if(!nav.TryEstimateBetween(a,b,out double distance))return BehaviorTreeStatus.Failure;
-                    travel=distance/Math.Max(.1,agent.Owner.GetComponent<CharacterMovementComponent3D>()?.Profile?.MoveSpeed??2.2);started=true;
+                    if(!progress.Duration.HasValue)
+                    {
+                        if(!nav.TryEstimateBetween(a,b,out double distance))return BehaviorTreeStatus.Failure;
+                        progress.Duration=distance/Math.Max(.1,agent.Owner.GetComponent<CharacterMovementComponent3D>()?.Profile?.MoveSpeed??2.2);
+                    }
+                    started=true;
                 }
-                elapsed+=delta;if(elapsed<travel)return BehaviorTreeStatus.Running;
+                progress.Elapsed+=delta;if(progress.Elapsed<progress.Duration.Value)return BehaviorTreeStatus.Running;
                 var movement=agent.Owner.GetComponent<CharacterMovementComponent3D>();
                 agent.Owner.GlobalPosition=b+Vector3.Up*(movement?.HalfHeight??.36f);movement?.SyncBodyToOwner();
-                return BehaviorTreeStatus.Success;
+                progress.Complete=true;return BehaviorTreeStatus.Success;
             }
             if(!started){if(!nav.BeginPosition(b,target.PointId,.12f))return BehaviorTreeStatus.Failure;started=true;}
             if(nav.Status is NpcNavigationStatus.Failed or NpcNavigationStatus.Arrived)return BehaviorTreeStatus.Failure;
@@ -69,9 +75,15 @@ public sealed class NpcWaitAction : GraphSharedAction
 #endif
     public override GraphActionTask CreateTask(GraphActionInvocation invocation)
     {
-        bool valid=Seconds.TryRead(invocation.Execution,out double seconds)&&seconds>=0;double elapsed=0;
+        var progress=invocation.Execution.GetUserData<NpcActionContext>()?.Progress(this)??new();
+        bool valid=Seconds.TryRead(invocation.Execution,out double seconds)&&seconds>=0;
+        progress.Duration??=seconds;
         return new GraphDelegateTask(delta=>
-        {if(!valid)return BehaviorTreeStatus.Failure;elapsed+=delta;return elapsed>=seconds?BehaviorTreeStatus.Success:BehaviorTreeStatus.Running;});
+        {
+            if(!valid)return BehaviorTreeStatus.Failure;if(progress.Complete)return BehaviorTreeStatus.Success;
+            progress.Elapsed+=delta;progress.Complete=progress.Elapsed>=progress.Duration.Value;
+            return progress.Complete?BehaviorTreeStatus.Success:BehaviorTreeStatus.Running;
+        });
     }
 }
 

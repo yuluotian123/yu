@@ -106,8 +106,8 @@ public sealed partial class WorldModule
             ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=true;
             _pausedBeforeTransition=oldClockPaused;
             if(Player!=null)Player.ProcessMode=Node.ProcessModeEnum.Disabled;
-            foreach(var environment in _environments.Values.ToArray())foreach(var actor in environment.Actors.Values.ToArray())actor.CancelPlan("LevelChanging");
             _save.CheckpointSections();beforeObjects=_objects.ToDictionary(p=>p.Key,p=>p.Value.Capture());
+            foreach(var environment in _environments.Values.ToArray())foreach(var actor in environment.Actors.Values.ToArray())actor.CancelPlan("LevelChanging");
             if(old!=null)
             {
                 old.GetParent().RemoveChild(old);detached=true;

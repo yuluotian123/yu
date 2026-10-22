@@ -11,7 +11,7 @@ public sealed record NpcBoundAction(NpcActionSpec Action,NpcPlanSpec Plan,IReadO
 {
     public string PlanActionKey=>Plan.Id+"::"+Action.Id;
 }
-public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,CharacterValue> Inputs,GoapWorldState StartState=null)
+public sealed partial record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,CharacterValue> Inputs,GoapWorldState StartState=null)
 {
     WorldInteractionComponent3D _interactionPoint;
     string _operationId;
@@ -84,7 +84,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public IReadOnlyDictionary<string,CharacterValue> SelectorBindings=>new System.Collections.ObjectModel.ReadOnlyDictionary<string,CharacterValue>(_selectorBindings);
     public string SectionKey=>"npc_agent";
     public string EntryKey=>ActorId;
-    public int SchemaVersion=>2;
+    public int SchemaVersion=>3;
     public IEnumerable<Type> GetGraphNodeTypes(GraphAsset graph, GraphAsset root) => graph is NpcGraphAsset
         ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
     public IEnumerable<Type> GetGraphActionTypes(GraphAsset graph, GraphAsset root) => graph is FlowGraphAsset && (root is NpcGraphAsset || Graph?.Definitions.OfType<NpcActionDefinition>().Any(a=>a.ExecutionGraph==graph)==true)
@@ -118,6 +118,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
             Decision=new(Program,State);Character.Restored+=CharacterRestored;
             _senseAt=(World?.RuntimeSeconds??0)+Math.Abs(ActorId.GetHashCode()%100)*.003;
             Navigation=Owner.GetComponent<NpcNavigationComponent3D>();
+            _checkpointSignature=NpcCheckpointLayout.Signature(Program);
             _save=ModuleSystem.GetModule<ISaveModule>();if(Persist)_save.RegisterSection(this);
             Record("Initialized");
         }
@@ -135,6 +136,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         if(Program==null||State==null||World==null||ModuleSystem.GetModule<IWorldModule>().IsSwitching)return;
         Decision.Refresh();
         if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_selectorBindings.Count>0)CancelPlan("Stopped");return;}
+        if(_pendingCheckpoint!=null){TryResumeCheckpoint();if(_pendingCheckpoint!=null)return;}
         var player=ModuleSystem.GetModule<IWorldModule>().Player;
         if(player!=null){float distance=player.GlobalPosition.DistanceTo(Owner.GlobalPosition);bool next=IsAbstract?distance>Program.Policy.Detailed:distance>Program.Policy.Abstract;if(next!=IsAbstract){CancelPlan("LodChanged");IsAbstract=next;}}
         if(World.RuntimeSeconds>=_senseAt){_senseAt=World.RuntimeSeconds+Program.SenseInterval;Sense();}
@@ -244,6 +246,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public void AdvancePlanning(double milliseconds)
     {
+        if(_pendingCheckpoint!=null)return;
         if(_search==null&&_current==null&&_plan.Count==0&&Running&&World!=null&&World.RuntimeSeconds>=_retryAt)BeginPlanning();
         if(_search==null||!Running)return;
         if(_search.SourceVersion!=State.Revision){CancelPlan("StateChanged");return;}
@@ -252,6 +255,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         if(status is GoapSearchStatus.Found or GoapSearchStatus.AlreadySatisfied)
         {
             _selectedPlan=_search.ChosenPlan;
+            _planInstanceId=Guid.NewGuid().ToString("N");
             foreach(var step in _search.Result.Steps)
             {
                 var bound=_grounded[step.Id];
@@ -276,13 +280,12 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public void CancelPlan(string reason="Replan")
     {
+        _pendingCheckpoint=null;_actionInstanceId="";_planInstanceId="";
         StopExecution();_search?.Invalidate();_search=null;_plan.Clear();_selectedPlan=null;_selectorBindings.Clear();
         ReleaseResources();_current=null;Navigation?.Stop();Record("Cancelled",reason);
     }
     public void Record(string kind,string detail=""){_trace.Add($"{World?.RuntimeSeconds??0:0.0} {kind} {detail}");while(_trace.Count>128)_trace.RemoveAt(0);}
     public string Describe()=>$"{ActorId}  {CurrentGoal} → {CurrentAction}  完成 {CompletedActions}  LOD {(IsAbstract?"抽象":"详细")}\n"+string.Join("\n",_selectorBindings.Select(b=>b.Key+" = "+b.Value))+"\n"+string.Join("\n",_scores)+"\n"+string.Join("\n",_trace.TakeLast(8));
-    void CharacterRestored(){CancelPlan("CharacterRestored");_seenPoints.Clear();_seenUntil.Clear();_paths.Clear();_authorizedPoints.Clear();Decision?.Refresh();_goal=null;_senseAt=_selectAt=_retryAt=0;}
-    public JsonObject Capture()=>Decision?.Capture()??new();
-    public void Restore(JsonObject data,int version){if(version!=SchemaVersion||State==null)return;Decision.Restore(data);CancelPlan("Restored");_goal=null;_selectAt=_retryAt=0;}
+    void CharacterRestored(){var pending=_pendingCheckpoint;CancelPlan("CharacterRestored");_pendingCheckpoint=pending;_seenPoints.Clear();_seenUntil.Clear();_paths.Clear();_authorizedPoints.Clear();Decision?.Refresh();_goal=null;_senseAt=_selectAt=_retryAt=0;}
     public override void OnDestroy(){if(Character!=null)Character.Restored-=CharacterRestored;CancelPlan("Destroyed");if(_registered&&World?.Actors.GetValueOrDefault(ActorId)==this)World.Actors.Remove(ActorId);if(Persist)_save?.UnregisterSection(this);World=null;_registered=false;}
 }

@@ -37,8 +37,8 @@ public static class NpcWorldTargetQuery
         };
         if(selector.Scope==NpcWorldScope.CurrentLevel&&level.Length==0||selector.Scope is NpcWorldScope.CurrentPlace or NpcWorldScope.FixedPlace or NpcWorldScope.CharacterPlace&&place.Length==0)return Array.Empty<string>();
         IEnumerable<WorldCatalogEntry> source=selector.Information==NpcWorldInformation.KnownObjects
-            ?knowledge.KnownObjects.Select(id=>world.Catalog.Objects.GetValueOrDefault(id)).Where(record=>record!=null&&world.Catalog.Matches(record,level,place,selector.AllTags,selector.Adapter))
-            :world.Catalog.Query(level,place,selector.AllTags,selector.Adapter);
+            ?knowledge.KnownObjects.Select(id=>world.Catalog.Objects.GetValueOrDefault(id)).Where(record=>record!=null&&world.Catalog.Matches(record,level,place,selector.AllTags,selector.Adapter,selector.ObjectTypeId,selector.RequiredCapabilities,selector.RequiredOperations))
+            :world.Catalog.Query(level,place,selector.AllTags,selector.Adapter,selector.ObjectTypeId,selector.RequiredCapabilities,selector.RequiredOperations);
         return source.Where(record=>
             selector.Information==NpcWorldInformation.Authoritative||knowledge.KnownObjects.Contains(record.Id)
             ||selector.Information==NpcWorldInformation.PublicServices&&world.Catalog.Locations.TryGetValue(record.Location?.Id??record.Level.Location?.Id??"",out var location)

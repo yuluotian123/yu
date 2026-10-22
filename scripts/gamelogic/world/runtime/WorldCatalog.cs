@@ -11,10 +11,11 @@ public sealed class WorldCatalog
     public IReadOnlyDictionary<string,WorldLocationDefinition> Locations {get;}
     public IReadOnlyDictionary<string,WorldLevelDefinition> Levels {get;}
     public IReadOnlyDictionary<string,WorldCatalogEntry> Objects {get;}
-    readonly Dictionary<string,WorldCatalogEntry[]> _byLevel=new(),_byPlace=new(),_byTag=new();
+    readonly Dictionary<string,WorldCatalogEntry[]> _byLevel=new(),_byPlace=new(),_byTag=new(),_byType=new(),_byCapability=new(),_byOperation=new();
     readonly Dictionary<string,HashSet<string>> _tags=new();
     readonly Dictionary<string,HashSet<string>> _adapters=new();
-    readonly Dictionary<(string,string,string,string),IReadOnlyList<WorldCatalogEntry>> _queries=new();
+    readonly Dictionary<string,HashSet<string>> _capabilities=new(),_operations=new();
+    readonly Dictionary<(string,string,string,string,string,string,string),IReadOnlyList<WorldCatalogEntry>> _queries=new();
     public WorldCatalog(WorldDefinition definition,IEnumerable<WorldCatalogEntry> entries=null)
     {
         Definition=definition??throw new ArgumentNullException(nameof(definition));
@@ -43,12 +44,17 @@ public sealed class WorldCatalog
         }
         Index(_byLevel,Objects.Values.GroupBy(o=>o.Level.Id));
         Index(_byPlace,Objects.Values.GroupBy(o=>o.Location?.Id??o.Level.Location?.Id??""));
+        Index(_byType,Objects.Values.GroupBy(o=>o.Type.Id));
         foreach(var record in Objects.Values)
         {
             _tags[record.Id]=record.AllTags.ToHashSet(StringComparer.Ordinal);
             _adapters[record.Id]=record.EffectiveCapabilities.Select(c=>c.Adapter).Where(a=>a.Length>0).ToHashSet(StringComparer.Ordinal);
+            _capabilities[record.Id]=record.EffectiveCapabilities.Select(c=>c.Key).ToHashSet(StringComparer.Ordinal);
+            _operations[record.Id]=(record.Capability<WorldInteractionCapability>()?.Operations.Select(o=>o.Id)??Enumerable.Empty<string>()).ToHashSet(StringComparer.Ordinal);
         }
         foreach(var group in Objects.Values.SelectMany(o=>_tags[o.Id].Select(t=>(Tag:t,Object:o))).GroupBy(x=>x.Tag))_byTag[group.Key]=group.Select(x=>x.Object).ToArray();
+        foreach(var group in Objects.Values.SelectMany(o=>_capabilities[o.Id].Select(key=>(Key:key,Object:o))).GroupBy(x=>x.Key))_byCapability[group.Key]=group.Select(x=>x.Object).ToArray();
+        foreach(var group in Objects.Values.SelectMany(o=>_operations[o.Id].Select(key=>(Key:key,Object:o))).GroupBy(x=>x.Key))_byOperation[group.Key]=group.Select(x=>x.Object).ToArray();
         Require(definition.InitialLevel==null||Levels.ContainsKey(definition.InitialLevel.Id),"初始关卡未登记。");
     }
     static void Index(Dictionary<string,WorldCatalogEntry[]> target,IEnumerable<IGrouping<string,WorldCatalogEntry>> groups)
@@ -59,25 +65,26 @@ public sealed class WorldCatalog
         {if(place==ancestor)return true;place=location.Parent?.Id;}
         return false;
     }
-    public IReadOnlyList<WorldCatalogEntry> Query(string level="",string place="",IReadOnlyList<string> allTags=null,string adapter="point")
+    static string QueryKey(IReadOnlyList<string> keys)=>keys==null?"":string.Concat(keys.Distinct().OrderBy(t=>t,StringComparer.Ordinal).Select(t=>t.Length+":"+t));
+    public IReadOnlyList<WorldCatalogEntry> Query(string level="",string place="",IReadOnlyList<string> allTags=null,string adapter="point",string objectType="",IReadOnlyList<string> capabilities=null,IReadOnlyList<string> operations=null)
     {
-        var key=(level,place,adapter,allTags==null?"":string.Concat(allTags.Distinct().OrderBy(t=>t,StringComparer.Ordinal).Select(t=>t.Length+":"+t)));
+        var key=(level,place,adapter,QueryKey(allTags),objectType,QueryKey(capabilities),QueryKey(operations));
         if(_queries.TryGetValue(key,out var cached))return cached;
-        IEnumerable<WorldCatalogEntry> source=Objects.Values;
-        if(level.Length>0)source=_byLevel.GetValueOrDefault(level,Array.Empty<WorldCatalogEntry>());
-        else if(place.Length>0)source=_byPlace.Where(p=>InPlace(p.Key,place)).SelectMany(p=>p.Value);
-        if(allTags?.Count>0)
-        {
-            var tag=allTags.OrderBy(t=>_byTag.GetValueOrDefault(t,Array.Empty<WorldCatalogEntry>()).Length).First();
-            var tagged=_byTag.GetValueOrDefault(tag,Array.Empty<WorldCatalogEntry>());
-            if(level.Length==0&&place.Length==0)source=tagged;
-        }
-        var result=Array.AsReadOnly(source.Where(o=>Matches(o,level,place,allTags,adapter)).ToArray());
+        IEnumerable<WorldCatalogEntry> source=Objects.Values;int size=Objects.Count;
+        void Narrow(WorldCatalogEntry[] entries){if(entries.Length<size){source=entries;size=entries.Length;}}
+        if(level.Length>0)Narrow(_byLevel.GetValueOrDefault(level,Array.Empty<WorldCatalogEntry>()));
+        else if(place.Length>0)Narrow(_byPlace.Where(p=>InPlace(p.Key,place)).SelectMany(p=>p.Value).ToArray());
+        if(objectType.Length>0)Narrow(_byType.GetValueOrDefault(objectType,Array.Empty<WorldCatalogEntry>()));
+        foreach(var tag in allTags??Array.Empty<string>())Narrow(_byTag.GetValueOrDefault(tag,Array.Empty<WorldCatalogEntry>()));
+        foreach(var capability in capabilities??Array.Empty<string>())Narrow(_byCapability.GetValueOrDefault(capability,Array.Empty<WorldCatalogEntry>()));
+        foreach(var operation in operations??Array.Empty<string>())Narrow(_byOperation.GetValueOrDefault(operation,Array.Empty<WorldCatalogEntry>()));
+        var result=Array.AsReadOnly(source.Where(o=>Matches(o,level,place,allTags,adapter,objectType,capabilities,operations)).ToArray());
         if(_queries.Count>=256)_queries.Clear();_queries[key]=result;return result;
     }
-    public bool Matches(WorldCatalogEntry record,string level,string place,IReadOnlyList<string> allTags,string adapter)=>_adapters[record.Id].Contains(adapter)
+    public bool Matches(WorldCatalogEntry record,string level,string place,IReadOnlyList<string> allTags,string adapter,string objectType="",IReadOnlyList<string> capabilities=null,IReadOnlyList<string> operations=null)=>_adapters[record.Id].Contains(adapter)
         &&(level.Length==0||record.Level.Id==level)&&(place.Length==0||InPlace(record.Location?.Id??record.Level.Location?.Id,place))
-        &&(allTags==null||allTags.All(_tags[record.Id].Contains));
+        &&(allTags==null||allTags.All(_tags[record.Id].Contains))&&(objectType.Length==0||record.Type.Id==objectType)
+        &&(capabilities==null||capabilities.All(_capabilities[record.Id].Contains))&&(operations==null||operations.All(_operations[record.Id].Contains));
     public static void Require(bool condition,string message){if(!condition)throw new ArgumentException(message);}
     public static void ValidateCapabilities(IEnumerable<WorldCapabilityDefinition> capabilities,bool checkDependencies=true)
     {

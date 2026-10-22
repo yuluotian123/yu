@@ -20,6 +20,9 @@ public partial class NpcTargetSelectorDefinition : NpcDefinitionResource
     [Export] public WorldLocationDefinition Location {get;set;}
     [Export] public string LocationBinding {get;set;}="";
     [Export] public NpcWorldInformation Information {get;set;}
+    [Export] public WorldObjectTypeDefinition ObjectType {get;set;}
+    [Export] public string[] RequiredCapabilities {get;set;}=System.Array.Empty<string>();
+    [Export] public string[] RequiredOperations {get;set;}=System.Array.Empty<string>();
     [Export] public string[] AllTags { get; set; } = System.Array.Empty<string>();
     [Export] public string[] AnyTags { get; set; } = System.Array.Empty<string>();
     [Export] public string[] ExcludedTags { get; set; } = System.Array.Empty<string>();

@@ -6,10 +6,14 @@ using Godot;
 namespace GameLogic.AI;
 
 /// <summary>Value snapshot supplied by the world adapter, never a mutable scene/component reference.</summary>
-public sealed record NpcTargetCandidate(string Id,IReadOnlyList<string> Tags,Vector3 Position,double Distance,bool Usable,bool Reachable,bool Perceived,bool Known,string Adapter="point");
+public sealed record NpcTargetCandidate(string Id,IReadOnlyList<string> Tags,Vector3 Position,double Distance,bool Usable,bool Reachable,bool Perceived,bool Known,string Adapter="point",string ObjectTypeId="",IReadOnlyList<string> Capabilities=null,IReadOnlyList<string> Operations=null);
 
 public static class NpcTargetQuery
 {
+    public static bool MatchesObject(NpcTargetSelectorSpec selector,string type,IEnumerable<string> capabilities,IEnumerable<string> operations)=>
+        (selector.ObjectTypeId.Length==0||selector.ObjectTypeId==type)
+        &&(selector.RequiredCapabilities==null||selector.RequiredCapabilities.All(key=>capabilities?.Contains(key)==true))
+        &&(selector.RequiredOperations==null||selector.RequiredOperations.All(key=>operations?.Contains(key)==true));
     public static IReadOnlyList<NpcTargetCandidate> Select(NpcProgram program,NpcTargetSelectorSpec selector,GoapWorldState state,IEnumerable<NpcTargetCandidate> points)
     {
         string parameter=selector.Source==NpcTargetSource.IdentityParameter?program.Parameter(selector.ParameterKey).Symbol:"";
@@ -41,7 +45,7 @@ public static class NpcTargetQuery
 
     public static bool Matches(NpcProgram program,NpcTargetSelectorSpec selector,GoapWorldState state,NpcTargetCandidate point)
     {
-        if(point.Adapter!=selector.Adapter||selector.RequireUsable&&!point.Usable || selector.RequireReachable&&!point.Reachable ||
+        if(point.Adapter!=selector.Adapter||!MatchesObject(selector,point.ObjectTypeId,point.Capabilities,point.Operations)||selector.RequireUsable&&!point.Usable || selector.RequireReachable&&!point.Reachable ||
             selector.MaximumDistance>0&&point.Distance>selector.MaximumDistance ||
             !selector.AllTags.All(point.Tags.Contains)||selector.AnyTags.Count>0&&!selector.AnyTags.Any(point.Tags.Contains)||selector.ExcludedTags.Any(point.Tags.Contains))return false;
         var context=program.TargetContext(state,point.Id,point.Distance,selector.Adapter);

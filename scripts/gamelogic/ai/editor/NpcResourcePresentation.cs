@@ -29,7 +29,7 @@ public static class NpcResourcePresentation
         NpcGoalDefinition=>"目标 · 启用条件、评分、完成条件；通过连线配置候选行动与计划",
         NpcActionDefinition action=>$"行动 · {action.Inputs.Count} 个输入 · {action.Predictions.Count} 个预测效果 · {action.Results.Count} 个结果效果",
         NpcPlanTemplateDefinition plan=>$"计划 · {plan.ActionIds.Length} 个候选行动 · 适用条件与优先级",
-        NpcTargetSelectorDefinition=>"目标选择器 · 输出连到行动输入；同一节点在本次计划中共享选定目标",
+        NpcTargetSelectorDefinition=>"目标选择器 · 按世界对象类型、能力、操作及条件筛选；同一节点在本次计划中共享选定目标",
         CharacterNeedDefinition need=>$"需求 · 每小时变化 {need.ChangePerHour:G} · 进入 {(need.HigherIsUrgent?"≥":"≤")} {need.UrgencyEnter:G} · 解除 {(need.HigherIsUrgent?"≤":"≥")} {need.UrgencyExit:G} · 曲线指数 {need.UrgencyExponent:G}",
         NpcActionInputDefinition input=>$"行动输入 · {TypeName(input)} · {(input.IsTarget?"选择器连线":"表达式或常量")} · {input.ResourceRequirements.Length} 项资源要求",
         NpcEffectDefinition effect=>(effect.Mode==NpcEffectMode.Add?"增加/减少：":"设为：")+NpcExpressionPresentation.Format(effect.Value,NpcExpressionEditorCatalog.For(graph,effect)),

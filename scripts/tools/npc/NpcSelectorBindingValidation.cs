@@ -18,6 +18,8 @@ public partial class NpcSelectorBindingValidation : Node
             IndependentSearch();
             InputSourcesAndActionSets();
             SelectorSources();
+            WorldFilters();
+            CatalogFilters();
             ConfigurationSurface();
             PortsAndValidation();
 #if TOOLS
@@ -190,6 +192,77 @@ public partial class NpcSelectorBindingValidation : Node
         Check(Targets(Search(program,initial)).SequenceEqual(new[]{"A","A"}),"Current-location selectors must bind the initial location consistently");
         Check(Search(program,Initial(program)).Search.Status==GoapSearchStatus.NoPlan,"Unknown current location must not select an arbitrary object");
     }
+    void WorldFilters()
+    {
+        var f=new Fixture();var type=WorldTestObjects.StockType();
+        f.Selector.ObjectType=type;f.Selector.RequiredCapabilities=new[]{"stock","interaction"};f.Selector.RequiredOperations=new[]{"take_stock"};
+        var program=NpcProgram.Compile(f.Graph);var selector=program.TargetSelectors[f.Selector.DefinitionId];var state=Initial(program);
+        var point=Points()[0] with{ObjectTypeId=type.Id,Capabilities=new[]{"stock","interaction"},Operations=new[]{"take_stock"}};
+        bool Matches(NpcTargetCandidate candidate,NpcTargetSelectorSpec query=null)=>NpcTargetQuery.Matches(program,query??selector,state,candidate);
+        Check(Matches(point),"Type, capabilities and operations must all match");
+        Check(!Matches(point with{ObjectTypeId="other"}),"Identical tags cannot substitute for object type");
+        Check(!Matches(point with{Capabilities=new[]{"interaction"}}),"Every required capability must be declared");
+        Check(!Matches(point with{Operations=new[]{"pour_liquid"}}),"Every required operation must be provided");
+        Check(!Matches(Points()[0]),"Candidates without world metadata cannot satisfy world filters");
+        Check(NpcTargetQuery.Select(program,selector with{Source=NpcTargetSource.FixedObject,FixedObjectId="A"},state,new[]{point with{ObjectTypeId="other"}}).Count==0,"Fixed identity cannot bypass world filters");
+        Check(Matches(Points()[0],selector with{ObjectTypeId="",RequiredCapabilities=Array.Empty<string>(),RequiredOperations=Array.Empty<string>()}),"Empty world filters must impose no restriction");
+        const string path="res://.godot/npc-selector-validation/world_filters.tres";
+        DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(path.GetBaseDir()));f.Graph.SaveJsonFields();
+        Check(ResourceSaver.Save(f.Graph,path)==Error.Ok,"World-filter graph must save");
+        var loaded=ResourceLoader.Load<NpcGraphAsset>(path,"",ResourceLoader.CacheMode.Ignore);
+        var restored=NpcProgram.Compile(loaded,f.Profile).TargetSelectors[f.Selector.DefinitionId];
+        Check(restored.ObjectTypeId==type.Id&&restored.RequiredCapabilities.SequenceEqual(new[]{"stock","interaction"})&&restored.RequiredOperations.Single()=="take_stock","World filters must survive serialization");
+#if TOOLS
+        foreach(var property in new[]{nameof(NpcTargetSelectorDefinition.ObjectType),nameof(NpcTargetSelectorDefinition.RequiredCapabilities),nameof(NpcTargetSelectorDefinition.RequiredOperations)})
+        {
+            var editor=f.Graph.CreateCustomPropertyEditor(f.Selector,property);
+            try{Check(editor is NpcWorldFilterProperty,"World filters must use named registered choices");editor._UpdateProperty();}
+            finally{editor.Free();}
+        }
+#endif
+        f.Selector.RequiredCapabilities[0]="liquid";f.Selector.RequiredOperations[0]="other";type.Id="changed";
+        Check(Matches(point),"Compiled selectors must freeze IDs and requirement arrays");
+        f.Selector.RequiredCapabilities=new[]{"stock","stock"};Reject(()=>NpcProgram.Compile(f.Graph),"Duplicate capability requirements must be rejected");
+        f.Selector.RequiredCapabilities=Array.Empty<string>();f.Selector.RequiredOperations=new[]{" "};Reject(()=>NpcProgram.Compile(f.Graph),"Empty operation requirements must be rejected");
+        f.Selector.RequiredOperations=Array.Empty<string>();f.Selector.ObjectType=new(){Capabilities=new(){new WorldLiquidCapability()}};
+        Reject(()=>NpcProgram.Compile(f.Graph),"Object type must support the selected adapter");
+    }
+    void CatalogFilters()
+    {
+        var type=WorldTestObjects.StockType();type.Capability<WorldInteractionCapability>().Operations.Add(new WorldTakeStockInteraction{Id="take",DisplayName="Take"});
+        var other=WorldTestObjects.StockType();var place=new WorldLocationDefinition();var level=new WorldLevelDefinition{ScenePath="res://unused.tscn",Location=place};
+        var definition=new WorldDefinition{Locations=new(){place},Levels=new(){level},ObjectTypes=new(){type,other}};
+        var overridden=type.Capabilities.Select(c=>c is WorldInteractionCapability?new WorldInteractionCapability{Operations=new(){new WorldTakeStockInteraction{Id="withdraw",DisplayName="Withdraw"}}}:c).ToArray();
+        var records=new[]{
+            new WorldCatalogEntry("base","Base",type,level,place,Array.Empty<string>(),"",Array.AsReadOnly(type.Capabilities.ToArray())),
+            new WorldCatalogEntry("override","Override",type,level,place,Array.Empty<string>(),"",Array.AsReadOnly(overridden)),
+            new WorldCatalogEntry("other","Other",other,level,place,Array.Empty<string>(),"",Array.AsReadOnly(other.Capabilities.ToArray()))};
+        var catalog=new WorldCatalog(definition,records);
+        Check(catalog.Query(objectType:type.Id).Count==2&&catalog.Query(objectType:other.Id).Single().Id=="other","Type query and cache must use stable IDs");
+        Check(catalog.Query(operations:new[]{"take"}).Single().Id=="base"&&catalog.Query(operations:new[]{"withdraw"}).Single().Id=="override","Operation index must use effective instance overrides");
+        Check(catalog.Query(capabilities:new[]{"stock","liquid"}).Count==0&&catalog.Query(capabilities:new[]{"stock","interaction"}).Count==3,"Capability queries require all requested capabilities");
+        Check(catalog.Query(objectType:other.Id,operations:new[]{"take"}).Count==0,"Type and operation requirements must intersect");
+        Check(catalog.Query(place:place.Id,allTags:new[]{"storage"},objectType:type.Id,capabilities:new[]{"stock"},operations:new[]{"withdraw"}).Single().Id=="override","Location, tags, type, capabilities and operations must compose");
+        Check(catalog.Query(capabilities:new[]{"interaction","stock"}).Count==3&&catalog.Query(operations:new[]{"missing"}).Count==0,"Query cache must isolate operation and capability filters");
+        level.ScenePath="res://.godot/npc-selector-validation/filters.tscn";
+        var generated=new WorldLevelCatalog{LevelId=level.Id,Entries=new(records.Select(r=>r.Encode()))};
+        Check(ResourceSaver.Save(generated,level.CatalogPath)==Error.Ok,"Permission-query catalog fixture must save");
+        try
+        {
+            var world=(WorldModule)Framework.ModuleSystem.GetModule<IWorldModule>();world.Configure(definition);
+            var f=new Fixture();f.Selector.ObjectType=type;f.Selector.RequiredOperations=new[]{"withdraw"};
+            var query=NpcProgram.Compile(f.Graph).TargetSelectors[f.Selector.DefinitionId] with{Source=NpcTargetSource.WorldDirectory,Scope=NpcWorldScope.World};
+            var knowledge=new WorldKnowledge(null);
+            Check(NpcWorldTargetQuery.Directory(world,knowledge,query,null).Count==0,"World filters must not grant knowledge");
+            knowledge.KnownObjects.UnionWith(records.Select(r=>r.Id));
+            Check(NpcWorldTargetQuery.Directory(world,knowledge,query,null).Single()=="override","Known-object directory queries must honor effective operation filters");
+            knowledge.KnownObjects.Clear();knowledge.KnownLocations.Add(place.Id);place.PublicServices=new[]{"storage"};
+            Check(NpcWorldTargetQuery.Directory(world,knowledge,query with{Information=NpcWorldInformation.PublicServices},null).Single()=="override","Public-service queries must combine permission and world filters");
+            knowledge.KnownLocations.Clear();
+            Check(NpcWorldTargetQuery.Directory(world,knowledge,query with{Information=NpcWorldInformation.Authoritative},null).Single()=="override","Authoritative queries must still honor world filters");
+        }
+        finally{Framework.ModuleSystem.Shutdown();}
+    }
     void ConfigurationSurface()
     {
         var f=new Fixture();
@@ -229,8 +302,10 @@ public partial class NpcSelectorBindingValidation : Node
         }
         finally{catalogRoot.Free();}
 #endif
-        foreach(string path in new[]{"res://assets/resources/npc/gray_green_resident/npc_graph.tres","res://assets/resources/npc/ochre_courier/npc_graph.tres"})
+        string scaffoldRoot=OS.GetCmdlineUserArgs().FirstOrDefault(arg=>arg.StartsWith("--scaffold-root=",StringComparison.Ordinal))?["--scaffold-root=".Length..]??"res://assets/resources/npc";
+        foreach(string name in new[]{"gray_green_resident","ochre_courier"})
         {
+            string path=scaffoldRoot.TrimEnd('/')+"/"+name+"/npc_graph.tres";
             var graph=ResourceLoader.Load<NpcGraphAsset>(path,"",ResourceLoader.CacheMode.Ignore);
             Check(graph!=null&&NpcProgram.Compile(graph,f.Profile).Goals.Count==0,"Existing scaffold graph must still load and compile: "+path);
             Check(graph.Definitions.Count==3&&graph.Definitions.All(d=>graph.Nodes.OfType<NpcDefinitionNodeData>().Any(n=>n.DefinitionId==d.DefinitionId)),"Shipped scaffold graphs must contain only their three referenced module definitions: "+path);
@@ -340,6 +415,7 @@ public partial class NpcSelectorBindingValidation : Node
     void ExecutionLifecycle()
     {
         var f=new Fixture();f.Selector.RequireReachable=false;
+        f.Selector.RequiredCapabilities=new[]{"stock"};f.Selector.RequiredOperations=new[]{"take_stock"};
         f.First.Results.Add(Set("private.started",Bool(true)));f.Second.Results.Add(Set("private.done",Bool(true)));
         var perception=new NpcPerceptionNodeData();f.Add(perception,new NpcPerceptionDefinition{RequireLineOfSight=false});f.Graph.ConnectNodes(f.Root.Id,0,perception.Id,0);
         var hosts=new List<GameObject3D>();
@@ -357,12 +433,21 @@ public partial class NpcSelectorBindingValidation : Node
         try
         {
             Host("BindingWorld",new AiWorldComponent3D());
-            var pointA=Host("A",WorldTestObjects.Components(WorldTestObjects.StockType(10))).GetComponent<WorldInteractionComponent3D>();
-            var pointB=Host("B",WorldTestObjects.Components(WorldTestObjects.StockType(1))).GetComponent<WorldInteractionComponent3D>();
+            var typeA=WorldTestObjects.StockType(10);var typeB=WorldTestObjects.StockType(1);
+            foreach(var type in new[]{typeA,typeB})type.Capability<WorldInteractionCapability>().Operations.Add(new WorldTakeStockInteraction{Id="take_stock",DisplayName="Take stock"});
+            var pointA=Host("A",WorldTestObjects.Components(typeA)).GetComponent<WorldInteractionComponent3D>();
+            var pointB=Host("B",WorldTestObjects.Components(typeB)).GetComponent<WorldInteractionComponent3D>();
             pointB.Owner.Position=Vector3.Right;
             AiAgentComponent3D Actor(string name)=>Host(name,new CharacterDataComponent3D{Profile=f.Profile,Persist=false},new AiAgentComponent3D{Graph=f.Graph,Persist=false}).GetComponent<AiAgentComponent3D>();
             var first=Actor("BindingActor1");var second=Actor("BindingActor2");
             Check(first.Program!=null&&second.Program!=null&&first.Running&&second.Running,"Actors must initialize through the EC lifecycle");
+            var adapter=NpcBindingAdapters.Find("point");var query=first.Program.TargetSelectors[f.Selector.DefinitionId] with{ObjectTypeId=typeB.Id};
+            Check(adapter.Candidates(first,query).Single().Id=="B","Loaded-object queries must apply type and operation filters before selection");
+            Check(!adapter.Candidates(first,query with{Source=NpcTargetSource.FixedObject,FixedObjectId="A"}).Any(),"Fixed sources must obey type filters at runtime");
+            first.Character.WorldKnowledge.KnownObjects.UnionWith(new[]{"A","B"});
+            Check(adapter.Candidates(first,query with{Source=NpcTargetSource.KnownPoints}).Single().Id=="B","Known-object sources must obey the same world filters");
+            Check(!adapter.Matches(first,CharacterValue.Text("A"),query)&&!adapter.Matches(first,CharacterValue.Text("B"),query with{RequiredOperations=new[]{"missing"}}),"Execution validation must recheck type and operation requirements");
+            Check(!adapter.Candidates(first,query with{RequiredOperations=new[]{"missing"},RequireReachable=true}).Any(),"Unsupported operations must be eliminated before navigation");
             Plan(first);Check(first.SelectorBindings.Count==1&&first.SelectorBindings.Values.Single().Symbol=="B","Generated plan must store B before starting its first step");
             pointA.Owner.GetComponent<WorldStockComponent3D>().Amount=0;pointB.Owner.GetComponent<WorldStockComponent3D>().Amount=10;Plan(second);
             Check(second.SelectorBindings.Values.Single().Symbol=="A"&&first.SelectorBindings.Values.Single().Symbol=="B","Two NPCs using one graph must retain independent selected targets");
@@ -374,6 +459,10 @@ public partial class NpcSelectorBindingValidation : Node
             for(int i=0;i<8&&first.CompletedActions<2;i++)first.OnUpdate(.01);
             Check(first.CompletedActions==2&&first.SelectorBindings.Count==0&&first.Read("private.done").IsTrue,"Successful execution must keep shared identity and clear bindings on completion");
             second.RequestReplan();Plan(second);Check(second.SelectorBindings.Count==1,"Replanning must create a fresh binding");
+            string selected=second.SelectorBindings.Values.Single().Symbol;var selectedPoint=selected=="A"?pointA:pointB;
+            var operation=selectedPoint.Operations[0];selectedPoint.Operations.Clear();second.OnUpdate(0);
+            Check(second.LastFailure=="InputUnavailable"&&second.SelectorBindings.Count==0,"A removed required operation must cancel the bound plan instead of switching objects");
+            selectedPoint.Operations.Add(operation);second.RequestReplan();Plan(second);
             second.SetRunning(false);Check(second.SelectorBindings.Count==0,"Pausing must release shared target bindings");
         }
         finally

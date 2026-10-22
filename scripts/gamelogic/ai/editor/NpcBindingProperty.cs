@@ -22,7 +22,7 @@ public partial class NpcBindingProperty : EditorProperty
         string value=_owner.Get(_property).ToString();string stamp=value+"|"+string.Join("|",choices.Select(c=>c.Id+":"+c.Label));
         if(stamp==_stamp)return;bool refresh=_stamp!=null;_stamp=stamp;
         foreach(Node child in _body.GetChildren()){GraphEditorSignalCleanup.PrepareForRemoval(child);_body.RemoveChild(child);}
-        Label=input?"输入类型":"对象类型";
+        Label=input?"输入类型":"对象适配器";
         var button=new Button{Text=choices.FirstOrDefault(c=>c.Id==value)?.Label??"类型已失效，请重新选择",Disabled=choices.Length==0,ClipText=true,SizeFlagsHorizontal=Control.SizeFlags.ExpandFill};
         button.Pressed+=()=>{var popup=new SearchablePopup<Choice>(choices,c=>c.Label,_=>Label,c=>c.Label);popup.OnItemSelected+=c=>EmitChanged(_property,c.Id);popup.ShowBelow(button);};_body.AddChild(button);
         if(_owner is NpcActionInputDefinition {IsTarget:true})

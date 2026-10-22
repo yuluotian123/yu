@@ -55,6 +55,12 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     }
     public string WriteKey(string member,CharacterValue value)=>member=="stock"?"point."+value.Symbol+".stock":null;
     static WorldInteractionComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Points.GetValueOrDefault(value.Symbol);
+    static bool MatchesObject(WorldInteractionComponent3D point,NpcTargetSelectorSpec selector)=>NpcTargetQuery.MatchesObject(selector,
+        point.Object.ObjectType.Id,point.Object.Definitions.Select(c=>c.Key),point.Operations?.Select(o=>o.Id));
+    static NpcTargetCandidate Candidate(AiAgentComponent3D agent,WorldInteractionComponent3D point,double distance,bool reachable)=>new(
+        point.PointId,Array.AsReadOnly(point.Tags.ToArray()),point.UsePosition,distance,point.Object.CanUse(agent.ActorId),reachable,
+        agent.PerceivedPoint(point.PointId),agent.KnownPoint(point.PointId),"point",point.Object.ObjectType.Id,
+        Array.AsReadOnly(point.Object.Definitions.Select(c=>c.Key).ToArray()),Array.AsReadOnly(point.Operations?.Select(o=>o.Id).ToArray()??Array.Empty<string>()));
     public bool Validate(AiAgentComponent3D agent,CharacterValue value)=>Point(agent,value) is {} p&&p.IsActive&&!agent.World.Session.IsDestroyed(p.PointId)&&GodotObject.IsInstanceValid(p.Owner);
     public bool CanClaim(NpcProgram program,GoapWorldState state,string prefix,string capability)=>capability=="capacity"&&program.Read(state,prefix+".available").IsTrue;
     public IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent,IReadOnlyCollection<string> ids,bool planning)
@@ -78,6 +84,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
         agent.RecordQuery(selector,ids);
         int wanted=selector.Selection==NpcTargetSelection.Candidates?Math.Min(agent.Program.Policy.Targets,selector.Limit>0?selector.Limit:agent.Program.Policy.Targets):1;
         var points=ids.Select(id=>agent.World.Points.GetValueOrDefault(id)).Where(p=>p is {IsActive:true}&&!agent.World.Session.IsDestroyed(p.PointId)
+            &&MatchesObject(p,selector)
             &&selector.AllTags.All(p.Tags.Contains)&&(selector.AnyTags.Count==0||selector.AnyTags.Any(p.Tags.Contains))&&!selector.ExcludedTags.Any(p.Tags.Contains))
             .OrderBy(p=>agent.Owner.GlobalPosition.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal).Take(agent.QueryProbeLimit).ToArray();
         int found=0;
@@ -92,7 +99,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
                 var state=agent.Program.TargetContext(agent.Snapshot(new[]{p.PointId},true),p.PointId,distance,Id);
                 if(!selector.Filter.Evaluate(k=>agent.Program.Read(state,k),agent.Program.Parameter).IsTrue)continue;
             }
-            yield return new(p.PointId,Array.AsReadOnly(p.Tags.ToArray()),p.UsePosition,distance,p.Object.CanUse(agent.ActorId),reachable,agent.PerceivedPoint(p.PointId),agent.KnownPoint(p.PointId),Id);
+            yield return Candidate(agent,p,distance,reachable);
             found++;
             if(selector.Selection is not (NpcTargetSelection.HighestScore or NpcTargetSelection.LowestScore)&&found>=wanted)yield break;
         }
@@ -100,7 +107,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     public bool Matches(AiAgentComponent3D agent,CharacterValue value,NpcTargetSelectorSpec selector)
     {
         if(Point(agent,value) is not {} p)return false;
-        var candidate=new NpcTargetCandidate(p.PointId,p.Tags.ToArray(),p.UsePosition,agent.Owner.GlobalPosition.DistanceTo(p.UsePosition),p.Object.CanUse(agent.ActorId),true,agent.PerceivedPoint(p.PointId),agent.KnownPoint(p.PointId));
+        var candidate=Candidate(agent,p,agent.Owner.GlobalPosition.DistanceTo(p.UsePosition),true);
         return NpcTargetQuery.Matches(agent.Program,selector,agent.Snapshot(),candidate);
     }
     public INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability)=>capability=="capacity"&&Point(agent,value)?.Owner.GetComponent<WorldUsageCapacityComponent3D>() is {} capacity&&capacity.Reserve(agent.ActorId)?new Lease(agent,capacity):null;

@@ -83,8 +83,8 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 - 拖入模板、Ctrl+D 复制、复制整个房间模板，均自动获得独立摆放身份。嵌套 Scene 内的对象按各层摆放键组合，不要求开启 Editable Children。
 - 保存、运行及导出前会同步配置和目录。编辑器监听节点新增、场景与资源保存；没有逐帧扫描项目的烘焙任务，也不需要手动创建、绑定或烘焙按钮。
 - 节点改名、移动坐标、保存后重开、更新模板内容不会重新分配既有摆放键；撤销／重做恢复相同实例的键。节点名、路径、坐标不充当身份。
-- 生成目录位于 `assets/resources/world/generated/<关卡Id>.tres`；这是自动产物，与 Scene 一起提交 Git，不在 Inspector 手动维护。运行时只读目录，不实例化未加载关卡。
-- 类型变更后，保存模板会补齐／移除现场能力提供者，保留仍适用的组件参数；先删除不属于新类型的 Overrides。模型、碰撞、原生节点及路径仍由模板配置。
+- 目录生成使用独立场景快照，保留编辑器已打开 Scene 的组件资源。生成目录位于 `assets/resources/world/generated/<关卡Id>.tres`；这是自动产物，与 Scene 一起提交 Git，不在 Inspector 手动维护。运行时只读目录，不实例化未加载关卡。
+- 选择其他类型或修改同一 Type 的能力列表后，编辑器会同步；保存模板或后台标签页时也会补齐／移除现场能力提供者，保留仍适用的组件参数；先删除不属于新类型的 Overrides。模型、碰撞、原生节点及路径仍由模板配置。
 - 单个摆放需要不同名称、所有者、地点或覆盖时，将该实例的 Components 数组与 WorldObjectComponent3D 资源设为独立，再修改实例；保留 ObjectType 共享。只改变状态不需要分离任何配置。
 - 摆放键属于其所在 Scene 的制作层级。把对象移到另一层 Scene 实例内部，或删除后重新拖入，属于新的摆放；不要手改 `_world_placement` 元数据。
 - 运行时动态创建的对象仍须由生成系统提供持久身份；自动目录覆盖已保存 Scene 的静态摆放。纯装饰不挂世界对象组件。
@@ -198,7 +198,7 @@ Objects 与 KnownObjects 的检查器按对象名称、关卡和身份后缀提�
 
 `world_authoring_validation.tscn` 已通过 14 项，覆盖自动补齐能力、模板无全局身份、嵌套实例、复制顺序、改名移动、撤销重做、重开、生成目录、类型更新和独立状态；`scripts/tools/world/world_framework_validation.tscn` 已通过 45 项，覆盖目录、库存往返、卸载角色、知识权限、Unknown、独立复制、销毁禁用、空间更新、继续游戏、实时读档、失败回退、取消、会话替换及目录规模查询。`world_capability_validation.tscn` 已通过 20 项，覆盖能力组合、缺失能力、覆盖与独立复制、现场同步、液体事务、延迟恢复本地类型、租约重置、旧版本拒绝。`world_interaction_validation.tscn` 已通过 37 项，覆盖物理 E 输入、区域不同位置、大区域索引、操作列表、遮挡／权限／容量、NPC 公共操作提交、禁止直接写目标、独立复制及存档。`world_production_validation.tscn` 使用真实城镇、工坊、玩家、GM、物理触发门与存档，并验证库存覆盖、瓶子液体余量保存、主菜单新游戏／返回／继续链路。`world_population_validation.tscn` 提供上表压力测试。原有 `scripts/tools/npc/selector_binding_validation.tscn` 已通过 67 项，继续验证共享目标及图编辑。
 
-先运行自动身份验证生成忽略目录中的夹具，再用编辑器模式执行 `--editor --headless --script res://scripts/tools/world/world_authoring_editor_validation.gd`，可验证实际插件在复制插到原节点前及普通保存时的自动身份维护。该编辑器探针也已通过；无头缩略图生成会报告 Dummy 纹理为空。
+先运行自动身份验证生成忽略目录中的夹具，再用编辑器模式执行 `--editor --headless --script res://scripts/tools/world/world_authoring_editor_validation.gd`，已通过 13 项实际编辑器检查：后台标签页保存时补齐缺失组件、保留交互参数、连续编译与构建保留已打开场景资源、同一 Type 增删能力后同步，以及复制时保留原身份。无头缩略图生成会报告 Dummy 纹理为空。
 
 使用项目配套的 DDGI 引擎。世界无头逻辑验证可以用兼容渲染；实际场景中的 DDGI 会提示需要 Forward+ Vulkan Ray Query，这类运行不验证画面。测试文件及日志写在 `.godot/world-validation/`，不会改正式存档。
 

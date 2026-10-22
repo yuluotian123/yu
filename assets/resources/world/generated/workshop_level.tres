@@ -1,18 +1,18 @@
-[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://cjbeejbh0n0ol"]
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3]
 
-[ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="1_finbp"]
-[ext_resource type="Resource" uid="uid://cvx03le1g2g0l" path="res://assets/resources/world/locations/workshop.tres" id="2_mk5gq"]
-[ext_resource type="Script" uid="uid://horp2pihr3m3" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="3_0h8rt"]
-[ext_resource type="Script" uid="uid://btcj1b2clpbmx" path="res://scripts/gamelogic/world/definitions/interactions/WorldInteractionDefinition.cs" id="4_533gc"]
-[ext_resource type="Script" uid="uid://bracks0vd1ioi" path="res://scripts/gamelogic/world/definitions/interactions/WorldTakeStockInteraction.cs" id="5_m1tga"]
-[ext_resource type="Script" uid="uid://drr68am8h6rqu" path="res://scripts/gamelogic/world/definitions/capabilities/WorldInteractionCapability.cs" id="6_pmdbl"]
-[ext_resource type="Script" uid="uid://c3yr26n3rmi78" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="7_xs6u5"]
-[ext_resource type="Script" uid="uid://bqtmclui4oefx" path="res://scripts/gamelogic/world/definitions/capabilities/WorldUsageCapacityCapability.cs" id="8_lwssk"]
-[ext_resource type="Script" uid="uid://c8lu0m6ekfcnl" path="res://scripts/gamelogic/world/definitions/capabilities/WorldOpeningHoursCapability.cs" id="9_lc2vu"]
-[ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="10_2asib"]
-[ext_resource type="Script" uid="uid://dm6hgvlliu17p" path="res://scripts/gamelogic/world/definitions/capabilities/WorldLiquidCapability.cs" id="11_c77eg"]
-[ext_resource type="Script" uid="uid://c6vabwlec061a" path="res://scripts/gamelogic/world/definitions/interactions/WorldConsumeLiquidInteraction.cs" id="12_80jti"]
-[ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="13_2gl8f"]
+[ext_resource type="Resource" path="res://assets/resources/world/types/storage.tres" id="1_finbp"]
+[ext_resource type="Resource" path="res://assets/resources/world/locations/workshop.tres" id="2_mk5gq"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="3_0h8rt"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/interactions/WorldInteractionDefinition.cs" id="4_533gc"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/interactions/WorldTakeStockInteraction.cs" id="5_m1tga"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldInteractionCapability.cs" id="6_pmdbl"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="7_xs6u5"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldUsageCapacityCapability.cs" id="8_lwssk"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldOpeningHoursCapability.cs" id="9_lc2vu"]
+[ext_resource type="Resource" path="res://assets/resources/world/types/bottle.tres" id="10_2asib"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldLiquidCapability.cs" id="11_c77eg"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/interactions/WorldConsumeLiquidInteraction.cs" id="12_80jti"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="13_2gl8f"]
 
 [sub_resource type="Resource" id="take_stock"]
 script = ExtResource("5_m1tga")
@@ -52,7 +52,7 @@ Operations = Array[ExtResource("4_533gc")]([SubResource("pour_liquid")])
 [resource]
 script = ExtResource("13_2gl8f")
 LevelId = "workshop_level"
-SourceSignature = "73E813002BE243CE3C11900E1A70B5CD5712CAD8450624F89937C0A4947F4DB9/workshop_level/workshop"
+SourceSignature = "171F5D7844A0E6CE43DF2FE341712E9AE904C6C2A18BA4AFD14B759B72A44053/workshop_level/workshop"
 Entries = Array[Dictionary]([{
 "capabilities": Array[ExtResource("3_0h8rt")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
 "id": "world/4b208b24b610436cbc5b418b7cc0c455",

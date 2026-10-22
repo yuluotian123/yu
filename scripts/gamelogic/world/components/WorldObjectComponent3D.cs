@@ -52,19 +52,27 @@ public partial class WorldObjectComponent3D : Component3D
     public override void OnDestroy(){Session.UnregisterObject(this);State=null;}
 #if TOOLS
     GameObject3D _editorHost;
-    WorldObjectTypeDefinition _editorType;
+    readonly Dictionary<ulong,int> _editorSignatures=new();
+    int EditorSignature(GameObject3D host)
+    {
+        var hash=new HashCode();hash.Add(ObjectType?.GetInstanceId()??0);
+        if(ObjectType!=null)foreach(var capability in ObjectType.Capabilities){hash.Add(capability?.Key);hash.Add(capability?.ComponentType);}
+        foreach(var component in host.Components){hash.Add(component?.GetType());if(component is IWorldCapabilityProvider p)hash.Add(p.CapabilityKey);}
+        return hash.ToHashCode();
+    }
     public override void OnEditorUpdate(GameObject3D host)
     {
-        _editorHost=host;
-        if(_editorType==ObjectType)return;_editorType=ObjectType;
+        _editorHost=host;ulong id=host.GetInstanceId();int signature=EditorSignature(host);
+        if(_editorSignatures.TryGetValue(id,out int old)&&old==signature)return;_editorSignatures[id]=signature;
         if(ObjectType!=null)Callable.From(()=>
         {
-            if(!GodotObject.IsInstanceValid(host))return;
+            if(!GodotObject.IsInstanceValid(host)||!host.Components.Contains(this)||EditorSignature(host)!=signature)return;
             try{var before=host.Components;WorldObjectAuthoring.SynchronizeHost(this,host);if(!ReferenceEquals(before,host.Components))EditorInterface.Singleton.MarkSceneAsUnsaved();}
             catch(Exception error){GD.PushError(error.Message);}
         }).CallDeferred();
     }
-    public override void OnEditorExit(GameObject3D host){if(_editorHost==host)_editorHost=null;}
+    public override void OnEditorPreSave(GameObject3D host)=>WorldObjectAuthoring.SynchronizeHost(this,host);
+    public override void OnEditorExit(GameObject3D host){_editorSignatures.Remove(host.GetInstanceId());if(_editorHost==host)_editorHost=null;}
     [Export(PropertyHint.Enum)] public string OverrideCapability {get;set;}="";
     [ExportToolButton("添加所选能力覆盖")] public Callable AddOverride=>Callable.From(()=>
     {

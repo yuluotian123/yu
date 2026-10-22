@@ -38,7 +38,8 @@ public partial class WorldAuthoringPlugin : EditorPlugin
     }
     public override void _ApplyChanges()=>Prepare();
     public override void _SaveExternalData(){Compile();}
-    public override bool _Build(){Prepare();EditorInterface.Singleton.SaveAllScenes();return Compile();}
+    // Godot autosaves before build callbacks. Saving again here stops play and nests editor progress tasks.
+    public override bool _Build(){Prepare();return Compile();}
 }
 [Tool]
 public partial class WorldCatalogExport : EditorExportPlugin

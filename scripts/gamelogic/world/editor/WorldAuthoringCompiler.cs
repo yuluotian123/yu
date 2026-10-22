@@ -73,7 +73,8 @@ public static class WorldAuthoringCompiler
         foreach(string dep in Dependencies(path))if(dep.EndsWith(".tscn")||dep.EndsWith(".scn"))NormalizeScene(dep,visited,relevant);
         string signature=Signature(path,relevant);
         if(Normalized.GetValueOrDefault(path)==signature)return;
-        var packed=ResourceLoader.Load<PackedScene>(path,cacheMode:ResourceLoader.CacheMode.Replace);
+        // Replacing a cached scene also replaces subresources used by open editor scenes.
+        var packed=ResourceLoader.Load<PackedScene>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
         WorldCatalog.Require(packed!=null,"关卡或模板读取失败："+path);
         Node root=packed.Instantiate(PackedScene.GenEditState.Instance);
         try
@@ -81,7 +82,10 @@ public static class WorldAuthoringCompiler
             if(Prepare(root))
             {
                 var saved=new PackedScene();WorldCatalog.Require(saved.Pack(root)==Error.Ok&&ResourceSaver.Save(saved,path)==Error.Ok,"自动摆放身份保存失败："+path);
+                packed=saved;
             }
+            // Parent scenes must see the fresh dependency, without resetting resources held by editor tabs.
+            packed.TakeOverPath(path);
             Normalized[path]=Signature(path,relevant);
         }
         finally{Forget(root);root.Free();}
@@ -95,7 +99,7 @@ public static class WorldAuthoringCompiler
             var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
             if(old?.SourceSignature==signature&&old.Version==1&&old.LevelId==level.Id)return;
         }
-        Node root=Relevant(level.ScenePath,relevant)?ResourceLoader.Load<PackedScene>(level.ScenePath,cacheMode:ResourceLoader.CacheMode.Replace).Instantiate(PackedScene.GenEditState.Instance):null;
+        Node root=Relevant(level.ScenePath,relevant)?ResourceLoader.Load<PackedScene>(level.ScenePath,cacheMode:ResourceLoader.CacheMode.Ignore).Instantiate(PackedScene.GenEditState.Instance):null;
         try
         {
             var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature};

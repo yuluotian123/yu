@@ -65,9 +65,22 @@ public partial class WorldAuthoringValidation : Node
             Check(new WorldCatalog(world).Objects[original].Capability<WorldStockCapability>().InitialAmount==22,"Changing a type rebuilds dependent catalogs while preserving identity");
             Check(!FileAccess.GetFileAsString(Folder+"crate.tscn").Contains("_world_placement"),"Rebuilding levels does not write instance identity into the reusable template root");
             WorldAuthoringCompiler.Forget(root);root.Free();
+            SaveServiceFixtures();
             GD.Print($"WORLD_AUTHORING_OK: {_checks} checks");GetTree().Quit();
         }
         catch(Exception error){GD.PushError(error.ToString());GetTree().Quit(1);}
+    }
+    static void SaveServiceFixtures()
+    {
+        var type=WorldTestObjects.StockType();type.Id="authoring_service_type";
+        ResourceSaver.Save(type,Folder+"service_type.tres");type.TakeOverPath(Folder+"service_type.tres");
+        var service=new GameObject3D{Name="Service",Components=new(){new WorldObjectComponent3D{ObjectType=type}}};
+        WorldAuthoringCompiler.Prepare(service);WorldTestObjects.WithArea(service);
+        foreach(Node child in service.FindChildren("*","",true,false))child.Owner=service;
+        Save(service,Folder+"service.tscn");service.Free();
+        var level=new Node3D{Name="Services"};
+        for(int i=0;i<2;i++){var child=Load(Folder+"service.tscn");level.AddChild(child);child.Owner=level;}
+        WorldAuthoringCompiler.Prepare(level);Save(level,Folder+"service_level.tscn");WorldAuthoringCompiler.Forget(level);level.Free();
     }
 }
 #endif

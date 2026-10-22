@@ -1,52 +1,66 @@
 [gd_scene format=3]
-[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="host"]
-[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="component"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldInteractionComponent3D.cs" id="7_s8wle"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldStockComponent3D.cs" id="8_cubeq"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldUsageCapacityComponent3D.cs" id="9_7xsk3"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldOpeningHoursComponent3D.cs" id="10_bpm3b"]
 [ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldObjectComponent3D.cs" id="binding_script"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldInteractionComponent3D.cs" id="point"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldStockComponent3D.cs" id="stock_component"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldOpeningHoursComponent3D.cs" id="hours_component"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldUsageCapacityComponent3D.cs" id="capacity_component"]
 [ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="capability"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="component"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="host"]
 [ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="stock_definition"]
 [ext_resource type="Resource" path="res://assets/resources/world/types/storage.tres" id="type"]
+
 [sub_resource type="Resource" id="stock_override"]
 script = ExtResource("stock_definition")
 InitialAmount = 50.0
+
 [sub_resource type="Resource" id="binding"]
 script = ExtResource("binding_script")
 ObjectType = ExtResource("type")
 DisplayName = "仓储间储物箱"
 Overrides = Array[ExtResource("capability")]([SubResource("stock_override")])
-[sub_resource type="Resource" id="stock_provider"]
-script = ExtResource("stock_component")
-[sub_resource type="Resource" id="hours_provider"]
-script = ExtResource("hours_component")
-[sub_resource type="Resource" id="capacity_provider"]
-script = ExtResource("capacity_component")
-[sub_resource type="BoxShape3D" id="storage_interaction_shape"]
-size = Vector3(3.5, 2.0, 3.5)
-[sub_resource type="Resource" id="point"]
-script = ExtResource("point")
-[sub_resource type="BoxMesh" id="crate_mesh"]
-size = Vector3(1, 1, 1)
-[sub_resource type="BoxShape3D" id="crate_shape"]
-size = Vector3(1, 1, 1)
 
-[node name="Storage" type="Node3D"]
+[sub_resource type="Resource" id="Resource_k70mf"]
+script = ExtResource("7_s8wle")
+
+[sub_resource type="Resource" id="Resource_wuv4c"]
+script = ExtResource("8_cubeq")
+
+[sub_resource type="Resource" id="Resource_0lj6d"]
+script = ExtResource("9_7xsk3")
+
+[sub_resource type="Resource" id="Resource_yhrhl"]
+script = ExtResource("10_bpm3b")
+
+[sub_resource type="BoxMesh" id="crate_mesh"]
+
+[sub_resource type="BoxShape3D" id="crate_shape"]
+
+[sub_resource type="BoxShape3D" id="storage_interaction_shape"]
+size = Vector3(3.5, 2, 3.5)
+
+[node name="Storage" type="Node3D" unique_id=284093624]
 script = ExtResource("host")
-Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("stock_provider"), SubResource("hours_provider"), SubResource("capacity_provider"), SubResource("point")])
-[node name="Body" type="StaticBody3D" parent="."]
-position = Vector3(0, 0.5, 0)
-[node name="Mesh" type="MeshInstance3D" parent="Body"]
+Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("Resource_k70mf"), SubResource("Resource_wuv4c"), SubResource("Resource_0lj6d"), SubResource("Resource_yhrhl")])
+
+[node name="Body" type="StaticBody3D" parent="." unique_id=1120878239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Body" unique_id=1440899462]
 mesh = SubResource("crate_mesh")
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body" unique_id=269419005]
 shape = SubResource("crate_shape")
-[node name="UsePosition" type="Marker3D" parent="."]
-position = Vector3(0, 0, 0.9)
-[node name="InteractionArea" type="Area3D" parent="."]
-position = Vector3(0, 0.8, 0)
+
+[node name="UsePosition" type="Marker3D" parent="." unique_id=1092651383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9)
+
+[node name="InteractionArea" type="Area3D" parent="." unique_id=896188934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 collision_layer = 0
 collision_mask = 0
 monitoring = false
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea" unique_id=392248978]
 shape = SubResource("storage_interaction_shape")

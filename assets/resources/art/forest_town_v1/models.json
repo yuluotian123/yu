@@ -212,121 +212,91 @@
       "name": "ancient_oak",
       "category": "tree",
       "file": "ancient_oak.glb",
-      "polygons": 3743,
-      "triangles": 7816,
-      "vertices": 15302,
+      "polygons": 3863,
+      "triangles": 7948,
+      "vertices": 15674,
       "collision": [
         {
           "position": [
             0,
-            6.0040000000000004,
+            5.032000000000001,
             0
           ],
           "size": [
-            1.83,
-            12.008000000000001,
-            1.83
+            1.836,
+            10.064000000000002,
+            1.836
           ]
         }
       ],
       "complete_exterior": false,
-      "cutout_sprigs": 660
+      "cutout_sprigs": 935,
+      "variant": "buttressed broad oak",
+      "revision": 2,
+      "wood_triangles": 4208,
+      "leaf_sprays": 935,
+      "crown_clusters": 19,
+      "authored_height": 14.8
     },
     {
       "name": "branching_oak",
       "category": "tree",
       "file": "branching_oak.glb",
-      "polygons": 3343,
-      "triangles": 6984,
-      "vertices": 13670,
+      "polygons": 3863,
+      "triangles": 7948,
+      "vertices": 15674,
       "collision": [
         {
           "position": [
             0,
-            5.054,
+            5.848,
             0
           ],
           "size": [
-            0.99,
-            10.108,
-            0.99
+            1.1520000000000001,
+            11.696,
+            1.1520000000000001
           ]
         }
       ],
       "complete_exterior": false,
-      "cutout_sprigs": 572
-    },
-    {
-      "name": "forest_column",
-      "category": "tree",
-      "file": "forest_column.glb",
-      "polygons": 3743,
-      "triangles": 7816,
-      "vertices": 15302,
-      "collision": [
-        {
-          "position": [
-            0,
-            7.22,
-            0
-          ],
-          "size": [
-            1.0050000000000001,
-            14.44,
-            1.0050000000000001
-          ]
-        }
-      ],
-      "complete_exterior": false,
-      "cutout_sprigs": 660
+      "cutout_sprigs": 935,
+      "variant": "forked upright hornbeam",
+      "revision": 2,
+      "wood_triangles": 4208,
+      "leaf_sprays": 935,
+      "crown_clusters": 19,
+      "authored_height": 17.2
     },
     {
       "name": "canopy_oak",
       "category": "tree",
       "file": "canopy_oak.glb",
-      "polygons": 3343,
-      "triangles": 6984,
-      "vertices": 13670,
+      "polygons": 3872,
+      "triangles": 7948,
+      "vertices": 15692,
       "collision": [
         {
           "position": [
             0,
-            4.255999999999999,
+            3.8760000000000003,
             0
           ],
           "size": [
-            0.9450000000000001,
-            8.511999999999999,
-            0.9450000000000001
+            1.062,
+            7.752000000000001,
+            1.062
           ]
         }
       ],
       "complete_exterior": false,
-      "cutout_sprigs": 572
-    },
-    {
-      "name": "understory_oak",
-      "category": "tree",
-      "file": "understory_oak.glb",
-      "polygons": 3743,
-      "triangles": 7816,
-      "vertices": 15302,
-      "collision": [
-        {
-          "position": [
-            0,
-            2.8120000000000003,
-            0
-          ],
-          "size": [
-            0.6000000000000001,
-            5.6240000000000006,
-            0.6000000000000001
-          ]
-        }
-      ],
-      "complete_exterior": false,
-      "cutout_sprigs": 660
+      "cutout_sprigs": 1008,
+      "variant": "sweeping crooked oak",
+      "revision": 2,
+      "wood_triangles": 3916,
+      "leaf_sprays": 1008,
+      "crown_clusters": 16,
+      "authored_height": 11.4
     },
     {
       "name": "shrub_round",
@@ -1578,25 +1548,25 @@
     },
     {
       "name": "Tree_02",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         1.2,
         0,
         -18
       ],
       "rotation_y": 94,
-      "scale": 1.05
+      "scale": 1.1550000000000002
     },
     {
       "name": "Tree_03",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         6.5,
         0,
         -21
       ],
       "rotation_y": 141,
-      "scale": 1.03
+      "scale": 1.1330000000000002
     },
     {
       "name": "Tree_04",
@@ -1622,58 +1592,58 @@
     },
     {
       "name": "Tree_06",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         -13,
         0,
         -21
       ],
       "rotation_y": 282,
-      "scale": 1.15
+      "scale": 1.265
     },
     {
       "name": "Tree_07",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         -7,
         0,
         -27
       ],
       "rotation_y": 329,
-      "scale": 1.1
+      "scale": 1.2100000000000002
     },
     {
       "name": "Tree_08",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         2,
         0,
         -32
       ],
       "rotation_y": 376,
-      "scale": 1.15
+      "scale": 1.265
     },
     {
       "name": "Tree_09",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         12,
         0,
         -31
       ],
       "rotation_y": 423,
-      "scale": 1.08
+      "scale": 1.1880000000000002
     },
     {
       "name": "Tree_10",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         20,
         0,
         -29
       ],
       "rotation_y": 470,
-      "scale": 1.2
+      "scale": 1.32
     },
     {
       "name": "Tree_11",
@@ -1699,14 +1669,14 @@
     },
     {
       "name": "Tree_13",
-      "asset": "forest_column",
+      "asset": "branching_oak",
       "position": [
         -15,
         0,
         -34
       ],
       "rotation_y": 611,
-      "scale": 1.2
+      "scale": 1.32
     },
     {
       "name": "Tree_14",
@@ -1721,366 +1691,366 @@
     },
     {
       "name": "Woodland_0_00",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -29.0,
         0,
         -27.76679074976053
       ],
       "rotation_y": 0,
-      "scale": 1.3809872599066189
+      "scale": 0.9114515915383685
     },
     {
       "name": "Woodland_0_01",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -23.2,
         0,
         -27.158633283509
       ],
       "rotation_y": 71,
-      "scale": 1.5191153862513973
+      "scale": 1.0026161549259223
     },
     {
       "name": "Woodland_0_02",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -17.4,
         0,
         -26.312805937892822
       ],
       "rotation_y": 142,
-      "scale": 1.0336715179853746
+      "scale": 0.6822232018703472
     },
     {
       "name": "Woodland_0_03",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -11.600000000000001,
         0,
         -27.73033284806766
       ],
       "rotation_y": 213,
-      "scale": 1.3131472392481274
+      "scale": 0.8666771779037641
     },
     {
       "name": "Woodland_0_04",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -5.800000000000001,
         0,
         -28.213607699966108
       ],
       "rotation_y": 284,
-      "scale": 1.4756703857318338
+      "scale": 0.9739424545830104
     },
     {
       "name": "Woodland_0_05",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         0.0,
         0,
         -27.492779488990713
       ],
       "rotation_y": 355,
-      "scale": 1.3337334898684459
+      "scale": 0.8802641033131743
     },
     {
       "name": "Woodland_0_06",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         5.799999999999997,
         0,
         -25.811493822048032
       ],
       "rotation_y": 426,
-      "scale": 1.4240076096991203
+      "scale": 0.9398450224014194
     },
     {
       "name": "Woodland_0_07",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         11.600000000000001,
         0,
         -27.858863359350874
       ],
       "rotation_y": 497,
-      "scale": 1.4549175858999717
+      "scale": 0.9602456066939813
     },
     {
       "name": "Woodland_0_08",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         17.4,
         0,
         -28.0428970839693
       ],
       "rotation_y": 568,
-      "scale": 1.0368885853772323
+      "scale": 0.6843464663489733
     },
     {
       "name": "Woodland_0_09",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         23.199999999999996,
         0,
         -25.541488896762417
       ],
       "rotation_y": 639,
-      "scale": 1.0026659062304237
+      "scale": 0.6617594981120797
     },
     {
       "name": "Woodland_0_10",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         29.0,
         0,
         -25.36234236116921
       ],
       "rotation_y": 710,
-      "scale": 1.2880323095766304
+      "scale": 0.8501013243205761
     },
     {
       "name": "Woodland_1_00",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -26.2,
         0,
         -35.79870253439385
       ],
       "rotation_y": 29,
-      "scale": 1.5795413154101707
+      "scale": 1.0424972681707128
     },
     {
       "name": "Woodland_1_01",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -20.4,
         0,
         -38.10963242427289
       ],
       "rotation_y": 100,
-      "scale": 1.5506176075995128
+      "scale": 1.0234076210156786
     },
     {
       "name": "Woodland_1_02",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -14.599999999999998,
         0,
         -36.24078762286546
       ],
       "rotation_y": 171,
-      "scale": 1.3287594704651629
+      "scale": 0.8769812505070075
     },
     {
       "name": "Woodland_1_03",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -8.8,
         0,
         -36.781338279276206
       ],
       "rotation_y": 242,
-      "scale": 1.6076681548302365
+      "scale": 1.0610609821879562
     },
     {
       "name": "Woodland_1_04",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -3.000000000000001,
         0,
         -36.0773522369258
       ],
       "rotation_y": 313,
-      "scale": 1.2917693669481323
+      "scale": 0.8525677821857673
     },
     {
       "name": "Woodland_1_05",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         2.8,
         0,
         -36.833256527682195
       ],
       "rotation_y": 384,
-      "scale": 1.1412313523242936
+      "scale": 0.7532126925340338
     },
     {
       "name": "Woodland_1_06",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         8.599999999999998,
         0,
         -38.176068657304576
       ],
       "rotation_y": 455,
-      "scale": 1.3512234303203177
+      "scale": 0.8918074640114096
     },
     {
       "name": "Woodland_1_07",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         14.400000000000002,
         0,
         -36.06360118711644
       ],
       "rotation_y": 526,
-      "scale": 0.9657956332153399
+      "scale": 0.6374251179221244
     },
     {
       "name": "Woodland_1_08",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         20.2,
         0,
         -36.34106391827913
       ],
       "rotation_y": 597,
-      "scale": 1.4152319689629629
+      "scale": 0.9340530995155556
     },
     {
       "name": "Woodland_1_09",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         25.999999999999996,
         0,
         -36.47213752686666
       ],
       "rotation_y": 668,
-      "scale": 1.0891479795723717
+      "scale": 0.7188376665177654
     },
     {
       "name": "Woodland_1_10",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         31.8,
         0,
         -37.48908590085184
       ],
       "rotation_y": 739,
-      "scale": 1.3918435577036514
+      "scale": 0.91861674808441
     },
     {
       "name": "Woodland_2_00",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -29.0,
         0,
         -46.8802057705886
       ],
       "rotation_y": 58,
-      "scale": 1.6130314823315999
+      "scale": 1.064600778338856
     },
     {
       "name": "Woodland_2_01",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -23.2,
         0,
         -45.8135531758752
       ],
       "rotation_y": 129,
-      "scale": 1.4395499801643568
+      "scale": 0.9501029869084755
     },
     {
       "name": "Woodland_2_02",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -17.4,
         0,
         -45.55898252519571
       ],
       "rotation_y": 200,
-      "scale": 1.5693586760409513
+      "scale": 1.0357767261870279
     },
     {
       "name": "Woodland_2_03",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -11.600000000000001,
         0,
         -46.86541632853849
       ],
       "rotation_y": 271,
-      "scale": 1.4382052021463632
+      "scale": 0.9492154334165998
     },
     {
       "name": "Woodland_2_04",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         -5.800000000000001,
         0,
         -48.423399596111
       ],
       "rotation_y": 342,
-      "scale": 1.6304395723043916
+      "scale": 1.0760901177208986
     },
     {
       "name": "Woodland_2_05",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         0.0,
         0,
         -47.8861625114686
       ],
       "rotation_y": 413,
-      "scale": 1.291812206891163
+      "scale": 0.8525960565481676
     },
     {
       "name": "Woodland_2_06",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         5.799999999999997,
         0,
         -48.763035344773925
       ],
       "rotation_y": 484,
-      "scale": 1.066365649931422
+      "scale": 0.7038013289547386
     },
     {
       "name": "Woodland_2_07",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         11.600000000000001,
         0,
         -45.42586915437022
       ],
       "rotation_y": 555,
-      "scale": 1.036003070017991
+      "scale": 0.6837620262118741
     },
     {
       "name": "Woodland_2_08",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         17.4,
         0,
         -47.12809698601086
       ],
       "rotation_y": 626,
-      "scale": 1.2831541660459491
+      "scale": 0.8468817495903265
     },
     {
       "name": "Woodland_2_09",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         23.199999999999996,
         0,
         -45.30984534200616
       ],
       "rotation_y": 697,
-      "scale": 0.9747438691591761
+      "scale": 0.6433309536450562
     },
     {
       "name": "Woodland_2_10",
-      "asset": "understory_oak",
+      "asset": "canopy_oak",
       "position": [
         29.0,
         0,
         -47.81300330346944
       ],
       "rotation_y": 768,
-      "scale": 1.029332244313863
+      "scale": 0.6793592812471496
     },
     {
       "name": "InnTerrace",
@@ -3764,12 +3734,342 @@
       ],
       "rotation_y": 117.52583560662731,
       "scale": 0.8491247909830482
+    },
+    {
+      "name": "DenseWoodland_00",
+      "asset": "ancient_oak",
+      "position": [
+        -18.867904343235868,
+        0,
+        -19.115240286835174
+      ],
+      "rotation_y": 73.16953631849039,
+      "scale": 0.8280871276124964
+    },
+    {
+      "name": "DenseWoodland_01",
+      "asset": "branching_oak",
+      "position": [
+        26.625074823794485,
+        0,
+        -8.623916975897766
+      ],
+      "rotation_y": 353.54481685865704,
+      "scale": 0.8936343135160658
+    },
+    {
+      "name": "DenseWoodland_02",
+      "asset": "canopy_oak",
+      "position": [
+        12.65972802712184,
+        0,
+        -7.627575366157849
+      ],
+      "rotation_y": 308.8596490202514,
+      "scale": 0.9648185991059806
+    },
+    {
+      "name": "DenseWoodland_03",
+      "asset": "ancient_oak",
+      "position": [
+        20.094688052483978,
+        0,
+        -12.874215941235983
+      ],
+      "rotation_y": 186.2206675719484,
+      "scale": 0.9301782689826581
+    },
+    {
+      "name": "DenseWoodland_04",
+      "asset": "branching_oak",
+      "position": [
+        24.160037361150525,
+        0,
+        -13.656516414022093
+      ],
+      "rotation_y": 299.0614946614575,
+      "scale": 1.0001898614523925
+    },
+    {
+      "name": "DenseWoodland_05",
+      "asset": "canopy_oak",
+      "position": [
+        18.361590289450056,
+        0,
+        -7.7524185728356825
+      ],
+      "rotation_y": 320.364553077709,
+      "scale": 0.9052164480201866
+    },
+    {
+      "name": "DenseWoodland_06",
+      "asset": "ancient_oak",
+      "position": [
+        -22.75214164852476,
+        0,
+        -7.71411709783934
+      ],
+      "rotation_y": 123.59591072644903,
+      "scale": 0.8448312882886839
+    },
+    {
+      "name": "DenseWoodland_07",
+      "asset": "branching_oak",
+      "position": [
+        22.38469572420392,
+        0,
+        -7.669326344472436
+      ],
+      "rotation_y": 108.98191298601724,
+      "scale": 0.8399509677576653
+    },
+    {
+      "name": "DenseWoodland_08",
+      "asset": "canopy_oak",
+      "position": [
+        -14.949203982024791,
+        0,
+        -7.4331458920043865
+      ],
+      "rotation_y": 20.074138439564905,
+      "scale": 0.7032249811408149
+    },
+    {
+      "name": "DenseWoodland_09",
+      "asset": "ancient_oak",
+      "position": [
+        -23.4861520735154,
+        0,
+        -18.78384335437436
+      ],
+      "rotation_y": 109.84519385999602,
+      "scale": 0.730971080766583
+    },
+    {
+      "name": "DenseWoodland_10",
+      "asset": "branching_oak",
+      "position": [
+        22.87451822361013,
+        0,
+        -18.880431894275148
+      ],
+      "rotation_y": 96.07979852551736,
+      "scale": 0.7435511469498821
+    },
+    {
+      "name": "DenseWoodland_11",
+      "asset": "canopy_oak",
+      "position": [
+        15.104503317180601,
+        0,
+        -24.138786892857723
+      ],
+      "rotation_y": 298.5994416712896,
+      "scale": 0.983984397312283
+    },
+    {
+      "name": "DenseWoodland_12",
+      "asset": "ancient_oak",
+      "position": [
+        -16.890775921817465,
+        0,
+        -13.995588784946833
+      ],
+      "rotation_y": 112.15182926514954,
+      "scale": 0.7357112125937949
+    },
+    {
+      "name": "DenseWoodland_13",
+      "asset": "branching_oak",
+      "position": [
+        19.73280978166198,
+        0,
+        -23.716425778508547
+      ],
+      "rotation_y": 231.82956364168587,
+      "scale": 0.7909666390007919
+    },
+    {
+      "name": "DenseWoodland_14",
+      "asset": "canopy_oak",
+      "position": [
+        18.6770052643141,
+        0,
+        -19.47709791170432
+      ],
+      "rotation_y": 294.96276938571685,
+      "scale": 0.7412111558760125
+    },
+    {
+      "name": "DenseWoodland_15",
+      "asset": "ancient_oak",
+      "position": [
+        14.973632916954164,
+        0,
+        -13.861715867689794
+      ],
+      "rotation_y": 190.28755563865894,
+      "scale": 1.0042940922066945
+    },
+    {
+      "name": "DenseWoodland_16",
+      "asset": "branching_oak",
+      "position": [
+        -0.6981433103531385,
+        0,
+        -40.210092443963994
+      ],
+      "rotation_y": 93.94084273092795,
+      "scale": 0.8067466098000095
+    },
+    {
+      "name": "DenseWoodland_17",
+      "asset": "canopy_oak",
+      "position": [
+        -18.82250053533584,
+        0,
+        -29.996358158592475
+      ],
+      "rotation_y": 341.98158715088243,
+      "scale": 0.7913975993162976
+    },
+    {
+      "name": "DenseWoodland_18",
+      "asset": "ancient_oak",
+      "position": [
+        3.651321748186251,
+        0,
+        -40.6298769849301
+      ],
+      "rotation_y": 328.50200549135144,
+      "scale": 0.6755992330126044
+    },
+    {
+      "name": "DenseWoodland_19",
+      "asset": "branching_oak",
+      "position": [
+        -24.01251165276418,
+        0,
+        -40.93460357458367
+      ],
+      "rotation_y": 34.287795827534154,
+      "scale": 0.799758618998361
+    },
+    {
+      "name": "DenseWoodland_20",
+      "asset": "canopy_oak",
+      "position": [
+        26.91973800423867,
+        0,
+        -29.19731064381608
+      ],
+      "rotation_y": 30.172807421697165,
+      "scale": 0.6515530641201412
+    },
+    {
+      "name": "DenseWoodland_21",
+      "asset": "ancient_oak",
+      "position": [
+        -13.544337207241806,
+        0,
+        -40.41276022351661
+      ],
+      "rotation_y": 309.3218166952226,
+      "scale": 0.8240972463280029
+    },
+    {
+      "name": "DenseWoodland_22",
+      "asset": "branching_oak",
+      "position": [
+        13.716370391203256,
+        0,
+        -40.0784348087331
+      ],
+      "rotation_y": 65.91428811456512,
+      "scale": 0.7142137230038941
+    },
+    {
+      "name": "DenseWoodland_23",
+      "asset": "canopy_oak",
+      "position": [
+        23.160769734528678,
+        0,
+        -39.720171303340614
+      ],
+      "rotation_y": 160.77072768072878,
+      "scale": 0.7894307891967447
+    },
+    {
+      "name": "DenseWoodland_24",
+      "asset": "ancient_oak",
+      "position": [
+        -24.34220091919563,
+        0,
+        -12.262599644236232
+      ],
+      "rotation_y": 288.8064248575821,
+      "scale": 1.0145587002397438
+    },
+    {
+      "name": "DenseWoodland_25",
+      "asset": "branching_oak",
+      "position": [
+        -18.239139181098146,
+        0,
+        -3.6716480272606375
+      ],
+      "rotation_y": 325.193286476988,
+      "scale": 0.9087150281407116
+    },
+    {
+      "name": "DenseWoodland_26",
+      "asset": "canopy_oak",
+      "position": [
+        -9.684002966748539,
+        0,
+        -3.711800895575628
+      ],
+      "rotation_y": 162.631936852038,
+      "scale": 0.9293968214797311
+    },
+    {
+      "name": "DenseWoodland_27",
+      "asset": "ancient_oak",
+      "position": [
+        -9.297255139345701,
+        0,
+        -40.92391605187832
+      ],
+      "rotation_y": 349.27717063089955,
+      "scale": 0.6899213276187507
+    },
+    {
+      "name": "DenseWoodland_28",
+      "asset": "branching_oak",
+      "position": [
+        -10.818394535223277,
+        0,
+        -31.737930297572582
+      ],
+      "rotation_y": 320.91597094773124,
+      "scale": 0.7004903191644928
+    },
+    {
+      "name": "DenseWoodland_29",
+      "asset": "canopy_oak",
+      "position": [
+        23.819082947185944,
+        0,
+        -33.063897131487906
+      ],
+      "rotation_y": 332.08698557652707,
+      "scale": 0.8436384888409753
     }
   ],
   "summary": {
-    "unique_assets": 33,
-    "placed_instances": 209,
-    "max_asset_triangles": 7816
+    "unique_assets": 31,
+    "placed_instances": 239,
+    "max_asset_triangles": 7948
   },
   "river": {
     "water_height": -0.24,
@@ -3777,5 +4077,17 @@
     "center_bank_z": 4.001958691937457,
     "shader": "res://assets/shaders/town/forest_river.gdshader",
     "collision": "land stops at bank; no water collision"
+  },
+  "tree_upgrade": {
+    "revision": 2,
+    "variants": [
+      "ancient_oak",
+      "branching_oak",
+      "canopy_oak"
+    ],
+    "trees_before": 48,
+    "trees_after": 78,
+    "added_instances": 30,
+    "non_tree_placements_preserved": true
   }
 }

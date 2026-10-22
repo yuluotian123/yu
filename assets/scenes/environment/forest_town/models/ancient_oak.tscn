@@ -3,20 +3,21 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/ancient_oak.mesh.res" id="1_dlkx2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h7t8b"]
-size = Vector3(1.83, 12.008, 1.83)
+size = Vector3(1.836, 10.064, 1.836)
 
-[node name="AncientOak" type="Node3D" unique_id=308568117]
+[node name="AncientOak" type="Node3D" unique_id=1616643208]
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Model" type="MeshInstance3D" parent="." unique_id=888213497]
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1061906611]
 mesh = ExtResource("1_dlkx2")
 
-[node name="Collision1" type="StaticBody3D" parent="." unique_id=756428271]
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=1772130836]
 collision_mask = 0
 
-[node name="@CollisionShape3D@11" type="CollisionShape3D" parent="Collision1" unique_id=2035045250]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.004, 0)
+[node name="@CollisionShape3D@11" type="CollisionShape3D" parent="Collision1" unique_id=1582217921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.032, 0)
 shape = SubResource("BoxShape3D_h7t8b")

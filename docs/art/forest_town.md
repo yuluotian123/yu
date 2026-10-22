@@ -13,7 +13,7 @@
 | 模型 | 独立种类 | 每个模型三角面 |
 | --- | ---: | ---: |
 | 完整建筑 | 8 | 4959–6249 |
-| 树木 | 5 | 6984–7816 |
+| 树木 | 3 | 7948 |
 | 灌木 | 4 | 2520 |
 | 蕨类 / 林间花草 | 2 | 126 / 840 |
 | 横向带叶枝梢 | 1 | 1544 |
@@ -21,7 +21,15 @@
 | 地面与散布铺石（切出河岸） | 1 | 4670 |
 | 河面 / 河岸 / 河石 / 芦苇 | 4 | 5760 / 1204 / 92 / 808 |
 
-合计 33 个独立模型、209 个场景实例：8 栋建筑、48 棵树、111 个植物实例、40 个道具、1 个地面和 1 个河面。完整清单及逐项面数记录在 `assets/resources/art/forest_town_v1/models.json`。
+合计 31 个独立模型、239 个场景实例：8 栋建筑、78 棵树、111 个植物实例、40 个道具、1 个地面和 1 个河面。完整清单及逐项面数记录在 `assets/resources/art/forest_town_v1/models.json`。
+
+## 树木细化与林区密度（2026-10-21）
+
+当前只使用三个独立树型：粗根宽冠古橡树 `ancient_oak`、挺拔分叉树 `branching_oak` 和弯干舒展树 `canopy_oak`。模型采用 24 边树干截面、连续输运环线法线、根部外扩、二三级枝梢、树结凸缘和树皮起伏；树冠从原来的 572–660 簇增加为每棵 935–1008 个四三角面叶簇，围绕 16–19 组不对称枝梢体积排列。每种完整近景模型均为 7948 个三角面，仍低于 8000 上限；沿用现有灰度叶簇贴图、顶点配色和真实树冠阴影。
+
+原有 48 棵树改用这三种树型，侧后方增加 30 棵，合计 78 棵。新增树干避开建筑碰撞范围和主通路，通过旋转、缩放与错列打破重复；全部非树物件的摆放保持一致。旧 `forest_column`、`understory_oak` 资源保留在源文件和磁盘中作为历史资产，当前场景不再引用。
+
+三种树都带原生距离 LOD，各表面的附加 LOD 数为 `[4,1]`，完整细节保留为 LOD0。RTX 5080、1920×1080、主菜单启动 Spacelevel、解除帧率上限的同机固定镜头对照：旧 48 棵树 GPU 中位耗时约 4.51 ms，新 78 棵树约 4.57–4.58 ms；完整帧平均耗时由约 5.42 ms 变为 5.42–5.54 ms。该对照保留相机、灯光、阴影质量、DDGI 和后处理配置，不代表所有位置和设备的表现。独立运行截图、对照脚本和采样位于 `.godot/forest-town/trees-v2-*.png`、`check_trees_v2.gd`、`trees-v2-runtime.json`；源资产统计在 `trees_v2.json`。
 
 ## 建筑与街道层次
 
@@ -34,8 +42,9 @@
 - 材质在 `assets/materials/environment/forest_town/`。建筑、树皮、地面使用现有 `town_toon.gdshader`；叶簇使用现有 `leaf_article.gdshader`，保留原生光照、天气与 DDGI 材质协议。树皮和树叶分别绑定到同一独立模型的两个网格表面。
 - 当前手绘灰度图集为 `assets/textures/environment/forest_town/painterly_atlas_v3.png`，实际尺寸 **1254×1254**。16 个分区覆盖灰泥、木材、屋瓦、石材、树皮、泥土、叶片、苔藓、玻璃与树冠光斑遮罩；旧 `painted_atlas.png` 保留为早期版本。
 - 颜色来自模型的 `Palette` 顶点色，灰泥、木材、屋瓦、石材与玻璃分表面绑定材质。暖灰泥使用较高的材质阴影抬升，深木框、窗玻璃和前景右屋使用较低值，保持明暗对比；背景与前景植物采用不同顶点色。地面使用连续空间顶点色消除方格感。
-- `town_toon.gdshader` 和 `leaf_article.gdshader` 新增可选 `painterly_strength`，默认 0，保留其他材质原有行为。森林材质启用分段直接光照；地面使用世界空间树冠遮罩，并降低道路中央的遮罩强度。该遮罩是材质绘画效果，不修改真实灯光或阴影贴图。原生高光、天气和 DDGI 材质提取协议继续沿用。
-- 新叶簇图集 `oak_sprigs_v2.png` 为内置 ImageGen 生成的灰度 RGBA 贴图，实际尺寸 **1254×1254**，四个分区包含圆裂橡树叶、枝梢、叶脉和透明空隙。每棵树使用 572–660 个四三角面叶簇，每株灌木 420 个；形体细节由曲面与透明轮廓共同表现。
+- `town_toon.gdshader` 和 `leaf_article.gdshader` 新增可选 `painterly_strength`，默认 0，保留其他材质原有行为。森林材质启用分段直接光照；原生高光、天气和 DDGI 材质提取协议继续沿用。
+- 树荫使用实际树冠、枝干与太阳原生级联阴影。叶簇通过 `ALPHA_SCISSOR_THRESHOLD` 裁出纹理中的透明空隙，实际叶片轮廓参与投影。小镇 9 个接收材质的 `painterly_dapple_strength` 均为 0，停用此前按世界坐标平铺的模拟树荫；`build_scene.gd` 同步保持为 0。树下保留斑驳阴影，开阔街道和河岸不再附加无对应树冠的暗块。此次不增加投影网格或光源，也不调整相机、灯光、阴影质量、DDGI 和后处理参数。
+- 新叶簇图集 `oak_sprigs_v2.png` 为内置 ImageGen 生成的灰度 RGBA 贴图，实际尺寸 **1254×1254**，四个分区包含圆裂橡树叶、枝梢、叶脉和透明空隙。当前每棵树使用 935–1008 个四三角面叶簇，每株灌木 420 个；形体细节由曲面与透明轮廓共同表现。
 - 叶簇采用作者制作的圆润体积法线。材质的 `normal_roundness`、`gradient_strength`、`wind_strength` 均为 0，避免旧材质内六棵合并树的固定中心覆盖新模型法线；`vertex_color_strength=1`、`alpha_cutoff=0.38`、`texture_detail=0.30`。
 - `painterly_atlas_v3.res`、`oak_sprigs_v2.res` 是原生带 mipmap 纹理，配合材质采样降低远处细纹闪烁；保留原 PNG 的内容与尺寸。树皮 UV 按环段重复，避免整棵树共用一段被拉长的纹理。
 - 两个图集均使用内置 ImageGen 生成；完整提示词和参考路径记录在 `painterly_generation_v3.json`、`foliage_generation_v2.json`，位于 `assets/resources/art/forest_town_v1/`。
@@ -57,6 +66,8 @@ Blender 文件：`assets/models/environment/forest_town/source/forest_town.blend
 
 在连接的 Blender 中，通过 MCP 执行 `scripts/tools/art/forest_town/build_assets.py` 的定义，再依次调用 `buildings()`、`vegetation()`、`props_and_ground()`、`finish()`。脚本只维护本任务的模型和集合，不合并整个小镇。
 
+完整重建基础模型和河流后，再执行 `upgrade_trees.py` 的定义，依次调用 `build_tree('ancient_oak')`、`build_tree('branching_oak')`、`build_tree('canopy_oak')` 和 `finish_tree_upgrade()`。通过 MCP 分多次调用时，把执行命名空间保存在 `bpy.app.driver_namespace` 中。树木更新脚本保留非树资产和布置，重复执行不累积新增树木。只更新树木时使用 `build_tree_upgrade.gd` 导入三个 GLB、生成原生 LOD 并替换场景的 `Trees` 子树，避免重建其他模型和材质。
+
 然后通过同一 Blender MCP 执行 `scripts/tools/art/forest_town/add_river.py`，切出前景河岸并导出独立河流资产。该脚本保留 `FT_GroundBeforeRiver` 源网格，可重复执行，不会累积裁剪或重复散布。若完整重建基础模型，应先执行 `finish()` 再执行河流脚本。
 
 在项目根目录使用当前 Godot 4.8 引擎运行：
@@ -64,6 +75,7 @@ Blender 文件：`assets/models/environment/forest_town/source/forest_town.blend
 ```powershell
 $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mono.ddgi_scene.console.exe'
 & $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/build_scene.gd --quit-after 600
+& $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/build_tree_upgrade.gd --quit-after 600
 & $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/validate_scene.gd --quit-after 600
 & $forestEngine --path . --rendering-driver vulkan --script res://scripts/tools/art/forest_town/capture_scene.gd
 ```
@@ -72,9 +84,11 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 
 `editor_sync.gd` 只用于把新布局同步到当前编辑器的 `RPGTown` 节点：先保存带时间戳的子树快照，再替换该子树，校验其他同级节点及其变换均未变化。快照在 `.godot/forest-town/editor-town-before-<时间>.tscn`；新实例不挂工具脚本。它不重载整个 `spacelevel.tscn`。若编辑器已自动刷新外部场景，无须再替换。Blender 预览镜头复制固定 Godot 镜头以便检查构图，不反写 Godot 相机。
 
+仅同步树木时调用 `sync_authored_trees()`：先保存小镇快照，只替换 `Trees` 下的实例，校验其他分组、其子节点及变换保持不变，随后自动移除临时同步脚本。
+
 ## 验证
 
-33 个模型的实际导入面数、UV、顶点色和叶簇表面均已检查，记录在 `godot_validation.json`。相机与环境基准、完整建筑实例、材质绑定、地面碰撞、建筑阻挡、角色落地、台阶坡面、高处街道支撑、水面 UV 方向和河岸碰撞合计 97 项检查通过，记录在 `scene_validation.json`。通过真实主菜单按钮触发关卡加载，并验证退出后再次进入；实际 Forward+ / Vulkan 渲染中水面采样确认发生动画。河流未修改 C# 或渲染器参数。
+31 个当前模型的实际导入面数、UV、顶点色、叶簇表面与树木 LOD 均已检查，记录在 `godot_validation.json`。相机与环境基准、完整建筑实例、材质绑定、地面碰撞、建筑阻挡、角色落地、台阶坡面、高处街道支撑、水面 UV 方向、河岸碰撞、三种树型、加密树木实例和新增树干落地合计 102 项检查通过，记录在 `scene_validation.json`。通过真实主菜单按钮触发关卡加载，并验证退出后再次进入；实际 Forward+ / Vulkan 渲染中水面采样确认发生动画。河流和本轮树木更新均未修改 C# 或渲染器参数。
 
 `material_scope_validation.json` 是此前只改材质阶段的历史记录；随后获得模型和摆放调整授权，最新范围与结果记录在 `reconstruction_v4.json`。
 
@@ -82,7 +96,7 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 
 ## 性能定位（2026-10-21）
 
-当前 209 个独立实例合计 614396 个三角面，其中树木和植物占 553736 个。单资产小于 8000 面不等于整个场景负载低；固定镜头下统计约 505 次绘制、169 万个图元，包含阴影等重复绘制。临时隐藏植被的对照中，GPU 中位耗时由约 4.7 ms 降至 2.1–2.3 ms；临时隐藏河流几乎无改善。
+本节记录树木加密前的性能定位：209 个独立实例合计 614396 个三角面，其中树木和植物占 553736 个。单资产小于 8000 面不等于整个场景负载低；固定镜头下统计约 505 次绘制、169 万个图元，包含阴影等重复绘制。临时隐藏植被的对照中，GPU 中位耗时由约 4.7 ms 降至 2.1–2.3 ms；临时隐藏河流几乎无改善。最新树木布置的性能对照见上文。
 
 另一个瓶颈是 DDGI 的 CPU 场景采集：364 个材质表面逐帧重复读取共享材质。现在每份快照只读取每个共享材质一次，并复用白色占位纹理；下帧仍重新采集，保留天气、材质修改与动态物体的及时更新。`DdgiEffect.GetStatus()` 的 `capture_cpu_ms` 可查看这部分耗时，`gpu_update_ms` 只代表 DDGI 探针 GPU 更新，不能当作完整帧耗时。
 

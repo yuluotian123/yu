@@ -3,20 +3,21 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_town/branching_oak.mesh.res" id="1_b681p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0lr68"]
-size = Vector3(0.99, 10.108, 0.99)
+size = Vector3(1.152, 11.696, 1.152)
 
-[node name="BranchingOak" type="Node3D" unique_id=1711858851]
+[node name="BranchingOak" type="Node3D" unique_id=1295839888]
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Model" type="MeshInstance3D" parent="." unique_id=150996139]
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1689728496]
 mesh = ExtResource("1_b681p")
 
-[node name="Collision1" type="StaticBody3D" parent="." unique_id=1225678068]
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=509772951]
 collision_mask = 0
 
-[node name="@CollisionShape3D@12" type="CollisionShape3D" parent="Collision1" unique_id=28151869]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.054, 0)
+[node name="@CollisionShape3D@12" type="CollisionShape3D" parent="Collision1" unique_id=1098358746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.848, 0)
 shape = SubResource("BoxShape3D_0lr68")

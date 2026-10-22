@@ -97,6 +97,14 @@
 			"passed": true
 		},
 		{
+			"check": "Three independently authored detailed tree variants",
+			"passed": true
+		},
+		{
+			"check": "Denser woodland instance count matches manifest",
+			"passed": true
+		},
+		{
 			"check": "inn polygon and triangle budget",
 			"passed": true
 		},
@@ -169,6 +177,14 @@
 			"passed": true
 		},
 		{
+			"check": "ancient_oak detailed layered canopy revision",
+			"passed": true
+		},
+		{
+			"check": "ancient_oak preserves native canopy shadows",
+			"passed": true
+		},
+		{
 			"check": "branching_oak polygon and triangle budget",
 			"passed": true
 		},
@@ -177,11 +193,11 @@
 			"passed": true
 		},
 		{
-			"check": "forest_column polygon and triangle budget",
+			"check": "branching_oak detailed layered canopy revision",
 			"passed": true
 		},
 		{
-			"check": "forest_column painted bark and cutout leaf material bindings",
+			"check": "branching_oak preserves native canopy shadows",
 			"passed": true
 		},
 		{
@@ -193,11 +209,11 @@
 			"passed": true
 		},
 		{
-			"check": "understory_oak polygon and triangle budget",
+			"check": "canopy_oak detailed layered canopy revision",
 			"passed": true
 		},
 		{
-			"check": "understory_oak painted bark and cutout leaf material bindings",
+			"check": "canopy_oak preserves native canopy shadows",
 			"passed": true
 		},
 		{
@@ -365,6 +381,10 @@
 			"passed": true
 		},
 		{
+			"check": "All added woodland trunks stand on existing land",
+			"passed": true
+		},
+		{
 			"check": "Inn blocks movement through walls",
 			"passed": true
 		},
@@ -389,6 +409,6 @@
 			"passed": true
 		}
 	],
-	"count": 97,
+	"count": 102,
 	"passed": true
 }

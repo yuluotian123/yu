@@ -1,0 +1,129 @@
+{
+  "summary": {
+    "revision": 2,
+    "variants": [
+      "ancient_oak",
+      "branching_oak",
+      "canopy_oak"
+    ],
+    "trees_before": 48,
+    "trees_after": 78,
+    "added_instances": 30,
+    "non_tree_placements_preserved": true
+  },
+  "assets": [
+    {
+      "name": "ancient_oak",
+      "category": "tree",
+      "file": "ancient_oak.glb",
+      "polygons": 3863,
+      "triangles": 7948,
+      "vertices": 15674,
+      "collision": [
+        {
+          "position": [
+            0,
+            5.032000000000001,
+            0
+          ],
+          "size": [
+            1.836,
+            10.064000000000002,
+            1.836
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 935,
+      "variant": "buttressed broad oak",
+      "revision": 2,
+      "wood_triangles": 4208,
+      "leaf_sprays": 935,
+      "crown_clusters": 19,
+      "authored_height": 14.8
+    },
+    {
+      "name": "branching_oak",
+      "category": "tree",
+      "file": "branching_oak.glb",
+      "polygons": 3863,
+      "triangles": 7948,
+      "vertices": 15674,
+      "collision": [
+        {
+          "position": [
+            0,
+            5.848,
+            0
+          ],
+          "size": [
+            1.1520000000000001,
+            11.696,
+            1.1520000000000001
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 935,
+      "variant": "forked upright hornbeam",
+      "revision": 2,
+      "wood_triangles": 4208,
+      "leaf_sprays": 935,
+      "crown_clusters": 19,
+      "authored_height": 17.2
+    },
+    {
+      "name": "canopy_oak",
+      "category": "tree",
+      "file": "canopy_oak.glb",
+      "polygons": 3872,
+      "triangles": 7948,
+      "vertices": 15692,
+      "collision": [
+        {
+          "position": [
+            0,
+            3.8760000000000003,
+            0
+          ],
+          "size": [
+            1.062,
+            7.752000000000001,
+            1.062
+          ]
+        }
+      ],
+      "complete_exterior": false,
+      "cutout_sprigs": 1008,
+      "variant": "sweeping crooked oak",
+      "revision": 2,
+      "wood_triangles": 3916,
+      "leaf_sprays": 1008,
+      "crown_clusters": 16,
+      "authored_height": 11.4
+    }
+  ],
+  "validation": {
+    "scene_checks": 102,
+    "passed": true,
+    "max_triangles": 7948,
+    "native_lods_per_surface": [
+      4,
+      1
+    ],
+    "all_new_trunks_grounded": true,
+    "non_tree_placements_preserved": true
+  },
+  "performance": {
+    "gpu": "RTX 5080",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "frames_per_phase": 240,
+    "old_48_gpu_median_ms": 4.50899982452393,
+    "new_78_gpu_median_ms": 4.56500005722046,
+    "old_48_frame_mean_ms": 5.42126666666667,
+    "new_78_frame_mean_ms": 5.41735416666666
+  }
+}

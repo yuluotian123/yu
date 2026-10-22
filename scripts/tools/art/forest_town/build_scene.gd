@@ -38,7 +38,8 @@ func make_material(label: String, softness: float, specular: float) -> ShaderMat
 	material.set_shader_parameter("painterly_strength", 0.92)
 	material.set_shader_parameter("painterly_light_wrap", 0.90)
 	material.set_shader_parameter("painterly_atlas", load("res://assets/textures/environment/forest_town/painterly_atlas_v3.res"))
-	material.set_shader_parameter("painterly_dapple_strength", 0.32)
+	# Dappled shadows come from the authored alpha-tested canopy and native lights.
+	material.set_shader_parameter("painterly_dapple_strength", 0.0)
 	material.set_shader_parameter("painterly_dapple_scale", 0.18)
 	material.set_shader_parameter("painterly_shadow_lift", 0.78)
 	material.set_shader_parameter("uv_scale", Vector2.ONE)
@@ -127,7 +128,6 @@ func build() -> void:
 	var roof_material: ShaderMaterial = architecture.duplicate()
 	roof_material.resource_name = "Forest Town · warm clay shingles"
 	roof_material.set_shader_parameter("painterly_shadow_lift", 0.30)
-	roof_material.set_shader_parameter("painterly_dapple_strength", 0.40)
 	roof_material.set_shader_parameter("texture_detail", 0.48)
 	var masonry: ShaderMaterial = architecture.duplicate()
 	masonry.resource_name = "Forest Town · painted limestone"
@@ -145,7 +145,6 @@ func build() -> void:
 	bark.set_shader_parameter("toon_strength", 0.85)
 	bark.set_shader_parameter("texture_detail", 0.68)
 	bark.set_shader_parameter("painterly_light_wrap", 0.40)
-	bark.set_shader_parameter("painterly_dapple_strength", 0.55)
 	bark.set_shader_parameter("painterly_shadow_lift", 0.03)
 	var hero_bark: ShaderMaterial = bark.duplicate()
 	hero_bark.resource_name = "Forest Town · sun brushed ancient oak"
@@ -154,7 +153,6 @@ func build() -> void:
 	var foliage := make_leaf_material()
 	var ground := make_material("earth and paving", 0.42, 0.08)
 	ground.set_shader_parameter("texture_detail", 0.48)
-	ground.set_shader_parameter("painterly_dapple_strength", 0.94)
 	ground.set_shader_parameter("painterly_dapple_scale", 0.16)
 	ground.set_shader_parameter("painterly_path_clearance", 1.0)
 	ground.set_shader_parameter("painterly_shadow_lift", 0.0)
@@ -209,8 +207,16 @@ func build() -> void:
 		assert(triangles <= 8000 and int(asset.polygons) <= 8000, "Model over budget: " + name)
 		assert(triangles == int(asset.triangles), "Imported triangle count differs from Blender: " + name)
 		assert(leaf_surfaces == (1 if int(asset.get("cutout_sprigs", 0)) > 0 else 0), "Painted leaf surface not preserved: " + name)
+		var lod_counts: Array = []
+		if asset.category == "tree":
+			# Full authored geometry remains LOD0; the engine selects lighter indices at distance.
+			var importer := ImporterMesh.from_mesh(source_mesh.mesh)
+			importer.generate_lods(60.0, 0.0, [])
+			for surface in importer.get_surface_count():
+				lod_counts.append(importer.get_surface_lod_count(surface))
+			source_mesh.mesh = importer.get_mesh()
 		save_resource(source_mesh.mesh, MODEL_ROOT + name + ".mesh.res")
-		checks.append({"asset": name, "polygons": int(asset.polygons), "godot_triangles": triangles, "within_budget": true, "painted_uvs": true, "authored_colors": true, "cutout_leaf_surfaces": leaf_surfaces})
+		checks.append({"asset": name, "polygons": int(asset.polygons), "godot_triangles": triangles, "within_budget": true, "painted_uvs": true, "authored_colors": true, "cutout_leaf_surfaces": leaf_surfaces, "lod_counts":lod_counts})
 		var prefab := Node3D.new()
 		prefab.name = name.to_pascal_case()
 		prefab.set_meta("asset_category", asset.category)

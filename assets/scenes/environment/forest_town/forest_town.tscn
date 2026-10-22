@@ -10,9 +10,7 @@
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/back_house.tscn" id="8_seug2"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/ancient_oak.tscn" id="9_lof8s"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/branching_oak.tscn" id="10_p6yup"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/forest_column.tscn" id="11_0d6im"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/canopy_oak.tscn" id="12_3kvw7"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/understory_oak.tscn" id="13_grj21"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/fern.tscn" id="14_pefae"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/shrub_round.tscn" id="15_ramn0"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/models/shrub_tall.tscn" id="16_3nxom"]
@@ -97,341 +95,629 @@ metadata/triangles = 4959
 
 [node name="Trees" type="Node3D" parent="." unique_id=1856057247]
 
-[node name="Tree_00" type="Node3D" parent="Trees" unique_id=308568117 instance=ExtResource("9_lof8s")]
+[node name="Tree_00" type="Node3D" parent="Trees" unique_id=1616643208 instance=ExtResource("9_lof8s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -6.8)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_01" type="Node3D" parent="Trees" unique_id=1711858851 instance=ExtResource("10_p6yup")]
+[node name="Tree_01" type="Node3D" parent="Trees" unique_id=1295839888 instance=ExtResource("10_p6yup")]
 transform = Transform3D(0.7024583, 0, 0.7532943, 0, 1.03, 0, -0.7532943, 0, 0.7024583, -7.6, 0, -10)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_02" type="Node3D" parent="Trees" unique_id=2123053404 instance=ExtResource("11_0d6im")]
-transform = Transform3D(-0.073244296, 0, 1.0474422, 0, 1.05, 0, -1.0474422, 0, -0.073244296, 1.2, 0, -18)
+[node name="Tree_02" type="Node3D" parent="Trees" unique_id=359586219 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.08056873, 0, 1.1521865, 0, 1.155, 0, -1.1521865, 0, -0.08056873, 1.2, 0, -18)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_03" type="Node3D" parent="Trees" unique_id=957647419 instance=ExtResource("11_0d6im")]
-transform = Transform3D(-0.8004602, 0, 0.6482001, 0, 1.03, 0, -0.6482001, 0, -0.8004602, 6.5, 0, -21)
+[node name="Tree_03" type="Node3D" parent="Trees" unique_id=1437535302 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.8805063, 0, 0.71302015, 0, 1.133, 0, -0.71302015, 0, -0.8805063, 6.5, 0, -21)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_04" type="Node3D" parent="Trees" unique_id=1784615181 instance=ExtResource("9_lof8s")]
+[node name="Tree_04" type="Node3D" parent="Trees" unique_id=2000801511 instance=ExtResource("9_lof8s")]
 transform = Transform3D(-1.0100734, 0, -0.14195657, 0, 1.02, 0, 0.14195657, 0, -1.0100734, 8.2, 0, -6.7)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_05" type="Node3D" parent="Trees" unique_id=404375845 instance=ExtResource("10_p6yup")]
+[node name="Tree_05" type="Node3D" parent="Trees" unique_id=1625980383 instance=ExtResource("10_p6yup")]
 transform = Transform3D(-0.5448975, 0, -0.7781945, 0, 0.95, 0, 0.7781945, 0, -0.5448975, 12.5, 0, -17)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_06" type="Node3D" parent="Trees" unique_id=895770986 instance=ExtResource("11_0d6im")]
-transform = Transform3D(0.23909819, 0, -1.1248697, 0, 1.15, 0, 1.1248697, 0, 0.23909819, -13, 0, -21)
+[node name="Tree_06" type="Node3D" parent="Trees" unique_id=1255958070 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.26300803, 0, -1.2373568, 0, 1.265, 0, 1.2373568, 0, 0.26300803, -13, 0, -21)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_07" type="Node3D" parent="Trees" unique_id=1595075543 instance=ExtResource("11_0d6im")]
-transform = Transform3D(0.94288397, 0, -0.56654197, 0, 1.1, 0, 0.56654197, 0, 0.94288397, -7, 0, -27)
+[node name="Tree_07" type="Node3D" parent="Trees" unique_id=1966242612 instance=ExtResource("10_p6yup")]
+transform = Transform3D(1.0371724, 0, -0.6231962, 0, 1.21, 0, 0.6231962, 0, 1.0371724, -7, 0, -27)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_08" type="Node3D" parent="Trees" unique_id=904432702 instance=ExtResource("11_0d6im")]
-transform = Transform3D(1.1054509, 0, 0.31698298, 0, 1.15, 0, -0.31698298, 0, 1.1054509, 2, 0, -32)
+[node name="Tree_08" type="Node3D" parent="Trees" unique_id=1106509866 instance=ExtResource("10_p6yup")]
+transform = Transform3D(1.215996, 0, 0.3486813, 0, 1.265, 0, -0.3486813, 0, 1.215996, 2, 0, -32)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_09" type="Node3D" parent="Trees" unique_id=817934558 instance=ExtResource("11_0d6im")]
-transform = Transform3D(0.49030963, 0, 0.9622871, 0, 1.08, 0, -0.9622871, 0, 0.49030963, 12, 0, -31)
+[node name="Tree_09" type="Node3D" parent="Trees" unique_id=1109076068 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.53934056, 0, 1.0585158, 0, 1.188, 0, -1.0585158, 0, 0.53934056, 12, 0, -31)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_10" type="Node3D" parent="Trees" unique_id=550018093 instance=ExtResource("11_0d6im")]
-transform = Transform3D(-0.4104245, 0, 1.1276311, 0, 1.2, 0, -1.1276311, 0, -0.4104245, 20, 0, -29)
+[node name="Tree_10" type="Node3D" parent="Trees" unique_id=426855440 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.45146695, 0, 1.2403942, 0, 1.32, 0, -1.2403942, 0, -0.45146695, 20, 0, -29)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_11" type="Node3D" parent="Trees" unique_id=1789344897 instance=ExtResource("12_3kvw7")]
+[node name="Tree_11" type="Node3D" parent="Trees" unique_id=453536558 instance=ExtResource("12_3kvw7")]
 transform = Transform3D(-1.0125555, 0, 0.42980385, 0, 1.1, 0, -0.42980385, 0, -1.0125555, -12, 0, -12)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_12" type="Node3D" parent="Trees" unique_id=320983726 instance=ExtResource("12_3kvw7")]
+[node name="Tree_12" type="Node3D" parent="Trees" unique_id=282730994 instance=ExtResource("12_3kvw7")]
 transform = Transform3D(-0.9135456, 0, -0.40673625, 0, 1, 0, 0.40673625, 0, -0.9135456, 14, 0, -3)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_13" type="Node3D" parent="Trees" unique_id=232824593 instance=ExtResource("11_0d6im")]
-transform = Transform3D(-0.3906822, 0, -1.1346222, 0, 1.2, 0, 1.1346222, 0, -0.3906822, -15, 0, -34)
+[node name="Tree_13" type="Node3D" parent="Trees" unique_id=1072164067 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.42975038, 0, -1.2480844, 0, 1.32, 0, 1.2480844, 0, -0.42975038, -15, 0, -34)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/forest_column.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Tree_14" type="Node3D" parent="Trees" unique_id=1632394427 instance=ExtResource("10_p6yup")]
+[node name="Tree_14" type="Node3D" parent="Trees" unique_id=1316880138 instance=ExtResource("10_p6yup")]
 transform = Transform3D(0.5398921, 0, -1.0153898, 0, 1.15, 0, 1.0153898, 0, 0.5398921, 18, 0, -38)
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
-metadata/source_polygons = 3343
-metadata/triangles = 6984
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_00" type="Node3D" parent="Trees" unique_id=447157889 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.3809873, 0, 0, 0, 1.3809873, 0, 0, 0, 1.3809873, -29, 0, -27.76679)
+[node name="Woodland_0_00" type="Node3D" parent="Trees" unique_id=1707284574 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.9114516, 0, 0, 0, 0.9114516, 0, 0, 0, 0.9114516, -29, 0, -27.76679)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_01" type="Node3D" parent="Trees" unique_id=2293285 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.49457556, 0, 1.4363518, 0, 1.5191153, 0, -1.4363518, 0, 0.49457556, -23.2, 0, -27.158634)
+[node name="Woodland_0_01" type="Node3D" parent="Trees" unique_id=236584675 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.3264199, 0, 0.9479922, 0, 1.0026162, 0, -0.9479922, 0, 0.3264199, -23.2, 0, -27.158634)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_02" type="Node3D" parent="Trees" unique_id=1423904150 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.81454426, 0, 0.6363917, 0, 1.0336715, 0, -0.6363917, 0, -0.81454426, -17.4, 0, -26.312805)
+[node name="Woodland_0_02" type="Node3D" parent="Trees" unique_id=335626928 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.5375992, 0, 0.42001852, 0, 0.6822232, 0, -0.42001852, 0, -0.5375992, -17.4, 0, -26.312805)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_03" type="Node3D" parent="Trees" unique_id=152436787 instance=ExtResource("13_grj21")]
-transform = Transform3D(-1.101298, 0, -0.7151912, 0, 1.3131472, 0, 0.7151912, 0, -1.101298, -11.6, 0, -27.730333)
+[node name="Woodland_0_03" type="Node3D" parent="Trees" unique_id=453262104 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.72685665, 0, -0.47202617, 0, 0.86667717, 0, 0.47202617, 0, -0.72685665, -11.6, 0, -27.730333)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_04" type="Node3D" parent="Trees" unique_id=2078168502 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.35699704, 0, -1.4318366, 0, 1.4756703, 0, 1.4318366, 0, 0.35699704, -5.8, 0, -28.213608)
+[node name="Woodland_0_04" type="Node3D" parent="Trees" unique_id=1396436956 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.23561805, 0, -0.9450122, 0, 0.97394246, 0, 0.9450122, 0, 0.23561805, -5.8, 0, -28.213608)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_05" type="Node3D" parent="Trees" unique_id=441240637 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.3286582, 0, -0.116242275, 0, 1.3337334, 0, 0.116242275, 0, 1.3286582, 0, 0, -27.492779)
+[node name="Woodland_0_05" type="Node3D" parent="Trees" unique_id=285525410 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.87691444, 0, -0.0767199, 0, 0.8802641, 0, 0.0767199, 0, 0.87691444, 0, 0, -27.492779)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_06" type="Node3D" parent="Trees" unique_id=1668423870 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.5791963, 0, 1.3008956, 0, 1.4240077, 0, -1.3008956, 0, 0.5791963, 5.8, 0, -25.811493)
+[node name="Woodland_0_06" type="Node3D" parent="Trees" unique_id=947208121 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.38226956, 0, 0.8585911, 0, 0.939845, 0, -0.8585911, 0, 0.38226956, 5.8, 0, -25.811493)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_07" type="Node3D" parent="Trees" unique_id=1000711939 instance=ExtResource("13_grj21")]
-transform = Transform3D(-1.0640597, 0, 0.99225086, 0, 1.4549176, 0, -0.99225086, 0, -1.0640597, 11.6, 0, -27.858864)
+[node name="Woodland_0_07" type="Node3D" parent="Trees" unique_id=2011153933 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.70227945, 0, 0.6548856, 0, 0.9602456, 0, -0.6548856, 0, -0.70227945, 11.6, 0, -27.858864)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_08" type="Node3D" parent="Trees" unique_id=549579883 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.9155183, 0, -0.48678982, 0, 1.0368886, 0, 0.48678982, 0, -0.9155183, 17.4, 0, -28.042896)
+[node name="Woodland_0_08" type="Node3D" parent="Trees" unique_id=307630232 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.604242, 0, -0.32128125, 0, 0.68434644, 0, 0.32128125, 0, -0.604242, 17.4, 0, -28.042896)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_09" type="Node3D" parent="Trees" unique_id=61599544 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.15685128, 0, -0.9903214, 0, 1.0026659, 0, 0.9903214, 0, 0.15685128, 23.2, 0, -25.541489)
+[node name="Woodland_0_09" type="Node3D" parent="Trees" unique_id=98925552 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.10352184, 0, -0.65361214, 0, 0.6617595, 0, 0.65361214, 0, 0.10352184, 23.2, 0, -25.541489)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_0_10" type="Node3D" parent="Trees" unique_id=899056604 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.2684643, 0, -0.22366399, 0, 1.2880323, 0, 0.22366399, 0, 1.2684643, 29, 0, -25.362343)
+[node name="Woodland_0_10" type="Node3D" parent="Trees" unique_id=1443776499 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.83718646, 0, -0.14761823, 0, 0.85010135, 0, 0.14761823, 0, 0.83718646, 29, 0, -25.362343)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_00" type="Node3D" parent="Trees" unique_id=127523554 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.381498, 0, 0.7657768, 0, 1.5795413, 0, -0.7657768, 0, 1.381498, -26.2, 0, -35.798702)
+[node name="Woodland_1_00" type="Node3D" parent="Trees" unique_id=1577755243 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.9117887, 0, 0.5054127, 0, 1.0424973, 0, -0.5054127, 0, 0.9117887, -26.2, 0, -35.798702)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_01" type="Node3D" parent="Trees" unique_id=804233698 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.26926193, 0, 1.5270602, 0, 1.5506176, 0, -1.5270602, 0, -0.26926193, -20.4, 0, -38.10963)
+[node name="Woodland_1_01" type="Node3D" parent="Trees" unique_id=1547167625 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.17771287, 0, 1.0078597, 0, 1.0234076, 0, -1.0078597, 0, -0.17771287, -20.4, 0, -38.10963)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_02" type="Node3D" parent="Trees" unique_id=1457611990 instance=ExtResource("13_grj21")]
-transform = Transform3D(-1.3124002, 0, 0.20786375, 0, 1.3287594, 0, -0.20786375, 0, -1.3124002, -14.6, 0, -36.240788)
+[node name="Woodland_1_02" type="Node3D" parent="Trees" unique_id=187626210 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.8661842, 0, 0.13719007, 0, 0.87698126, 0, -0.13719007, 0, -0.8661842, -14.6, 0, -36.240788)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_03" type="Node3D" parent="Trees" unique_id=2102530811 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.7547546, 0, -1.4194866, 0, 1.6076682, 0, 1.4194866, 0, -0.7547546, -8.8, 0, -36.781338)
+[node name="Woodland_1_03" type="Node3D" parent="Trees" unique_id=1286088540 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.49813804, 0, -0.9368613, 0, 1.061061, 0, 0.9368613, 0, -0.49813804, -8.8, 0, -36.781338)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_04" type="Node3D" parent="Trees" unique_id=1299196815 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.8809846, 0, -0.94474024, 0, 1.2917694, 0, 0.94474024, 0, 0.8809846, -3, 0, -36.07735)
+[node name="Woodland_1_04" type="Node3D" parent="Trees" unique_id=2121437560 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.58144987, 0, -0.62352854, 0, 0.8525678, 0, 0.62352854, 0, 0.58144987, -3, 0, -36.07735)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_05" type="Node3D" parent="Trees" unique_id=195552443 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.0425665, 0, 0.4641808, 0, 1.1412313, 0, -0.4641808, 0, 1.0425665, 2.8, 0, -36.833256)
+[node name="Woodland_1_05" type="Node3D" parent="Trees" unique_id=772081735 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.68809396, 0, 0.30635932, 0, 0.7532127, 0, -0.30635932, 0, 0.68809396, 2.8, 0, -36.833256)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_06" type="Node3D" parent="Trees" unique_id=432874971 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.11776668, 0, 1.3460817, 0, 1.3512235, 0, -1.3460817, 0, -0.11776668, 8.6, 0, -38.176067)
+[node name="Woodland_1_06" type="Node3D" parent="Trees" unique_id=1951644945 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.077726, 0, 0.88841385, 0, 0.89180744, 0, -0.88841385, 0, -0.077726, 8.6, 0, -38.176067)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_07" type="Node3D" parent="Trees" unique_id=337045498 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.9371075, 0, 0.23364669, 0, 0.96579564, 0, -0.23364669, 0, -0.9371075, 14.4, 0, -36.063602)
+[node name="Woodland_1_07" type="Node3D" parent="Trees" unique_id=1483770135 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.61849093, 0, 0.15420681, 0, 0.6374251, 0, -0.15420681, 0, -0.61849093, 14.4, 0, -36.063602)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_08" type="Node3D" parent="Trees" unique_id=1650183128 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.7707904, 0, -1.1869135, 0, 1.415232, 0, 1.1869135, 0, -0.7707904, 20.2, 0, -36.341064)
+[node name="Woodland_1_08" type="Node3D" parent="Trees" unique_id=1053221169 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.5087217, 0, -0.7833629, 0, 0.9340531, 0, 0.7833629, 0, -0.5087217, 20.2, 0, -36.341064)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_09" type="Node3D" parent="Trees" unique_id=430672842 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.6705462, 0, -0.85826045, 0, 1.0891479, 0, 0.85826045, 0, 0.6705462, 26, 0, -36.472137)
+[node name="Woodland_1_09" type="Node3D" parent="Trees" unique_id=1676359733 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.44256052, 0, -0.5664519, 0, 0.7188377, 0, 0.5664519, 0, 0.44256052, 26, 0, -36.472137)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_1_10" type="Node3D" parent="Trees" unique_id=330471856 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.3160137, 0, 0.45314047, 0, 1.3918436, 0, -0.45314047, 0, 1.3160137, 31.8, 0, -37.489086)
+[node name="Woodland_1_10" type="Node3D" parent="Trees" unique_id=165956614 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.8685691, 0, 0.2990727, 0, 0.9186168, 0, -0.2990727, 0, 0.8685691, 31.8, 0, -37.489086)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_00" type="Node3D" parent="Trees" unique_id=600608107 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.8547765, 0, 1.3679283, 0, 1.6130315, 0, -1.3679283, 0, 0.8547765, -29, 0, -46.880207)
+[node name="Woodland_2_00" type="Node3D" parent="Trees" unique_id=336786495 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.5641525, 0, 0.9028327, 0, 1.0646008, 0, -0.9028327, 0, 0.5641525, -29, 0, -46.880207)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_01" type="Node3D" parent="Trees" unique_id=671825999 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.905938, 0, 1.1187406, 0, 1.4395499, 0, -1.1187406, 0, -0.905938, -23.2, 0, -45.813553)
+[node name="Woodland_2_01" type="Node3D" parent="Trees" unique_id=1016335636 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.5979191, 0, 0.73836875, 0, 0.950103, 0, -0.73836875, 0, -0.5979191, -23.2, 0, -45.813553)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_02" type="Node3D" parent="Trees" unique_id=2081769265 instance=ExtResource("13_grj21")]
-transform = Transform3D(-1.4747148, 0, -0.5367523, 0, 1.5693587, 0, 0.5367523, 0, -1.4747148, -17.4, 0, -45.558983)
+[node name="Woodland_2_02" type="Node3D" parent="Trees" unique_id=1738979162 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.9733117, 0, -0.3542565, 0, 1.0357767, 0, 0.3542565, 0, -0.9733117, -17.4, 0, -45.558983)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_03" type="Node3D" parent="Trees" unique_id=814692099 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.025100019, 0, -1.4379863, 0, 1.4382052, 0, 1.4379863, 0, 0.025100019, -11.6, 0, -46.865417)
+[node name="Woodland_2_03" type="Node3D" parent="Trees" unique_id=565157970 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.016566012, 0, -0.9490709, 0, 0.9492154, 0, 0.9490709, 0, 0.016566012, -11.6, 0, -46.865417)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_04" type="Node3D" parent="Trees" unique_id=271412107 instance=ExtResource("13_grj21")]
-transform = Transform3D(1.5506402, 0, -0.5038334, 0, 1.6304395, 0, 0.5038334, 0, 1.5506402, -5.8, 0, -48.4234)
+[node name="Woodland_2_04" type="Node3D" parent="Trees" unique_id=451089356 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(1.0234225, 0, -0.33253008, 0, 1.0760901, 0, 0.33253008, 0, 1.0234225, -5.8, 0, -48.4234)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_05" type="Node3D" parent="Trees" unique_id=1679012634 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.7774318, 0, 1.0316871, 0, 1.2918122, 0, -1.0316871, 0, 0.7774318, 0, 0, -47.88616)
+[node name="Woodland_2_05" type="Node3D" parent="Trees" unique_id=781198243 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.513105, 0, 0.68091357, 0, 0.85259604, 0, -0.68091357, 0, 0.513105, 0, 0, -47.88616)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_06" type="Node3D" parent="Trees" unique_id=2117065419 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.59630394, 0, 0.8840572, 0, 1.0663656, 0, -0.8840572, 0, -0.59630394, 5.8, 0, -48.763035)
+[node name="Woodland_2_06" type="Node3D" parent="Trees" unique_id=1899894921 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.39356062, 0, 0.5834778, 0, 0.70380133, 0, -0.5834778, 0, -0.39356062, 5.8, 0, -48.763035)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_07" type="Node3D" parent="Trees" unique_id=1587360525 instance=ExtResource("13_grj21")]
-transform = Transform3D(-1.000702, 0, -0.2681378, 0, 1.0360031, 0, 0.2681378, 0, -1.000702, 11.6, 0, -45.42587)
+[node name="Woodland_2_07" type="Node3D" parent="Trees" unique_id=1150946012 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.6604633, 0, -0.17697093, 0, 0.683762, 0, 0.17697093, 0, -0.6604633, 11.6, 0, -45.42587)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_08" type="Node3D" parent="Trees" unique_id=1669196990 instance=ExtResource("13_grj21")]
-transform = Transform3D(-0.08950817, 0, -1.2800285, 0, 1.2831541, 0, 1.2800285, 0, -0.08950817, 17.4, 0, -47.128098)
+[node name="Woodland_2_08" type="Node3D" parent="Trees" unique_id=1215686203 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.059075393, 0, -0.84481883, 0, 0.84688175, 0, 0.84481883, 0, -0.059075393, 17.4, 0, -47.128098)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_09" type="Node3D" parent="Trees" unique_id=1568627806 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.8972563, 0, -0.38086295, 0, 0.97474384, 0, 0.38086295, 0, 0.8972563, 23.2, 0, -45.309845)
+[node name="Woodland_2_09" type="Node3D" parent="Trees" unique_id=1970572786 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.5921892, 0, -0.25136957, 0, 0.64333093, 0, 0.25136957, 0, 0.5921892, 23.2, 0, -45.309845)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
-[node name="Woodland_2_10" type="Node3D" parent="Trees" unique_id=19700279 instance=ExtResource("13_grj21")]
-transform = Transform3D(0.6887574, 0, 0.7649432, 0, 1.0293323, 0, -0.7649432, 0, 0.6887574, 29, 0, -47.813004)
+[node name="Woodland_2_10" type="Node3D" parent="Trees" unique_id=1778502662 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.4545799, 0, 0.5048625, 0, 0.67935926, 0, -0.5048625, 0, 0.4545799, 29, 0, -47.813004)
 metadata/asset_category = "tree"
-metadata/source_model = "res://assets/models/environment/forest_town/understory_oak.glb"
-metadata/source_polygons = 3743
-metadata/triangles = 7816
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_00" type="Node3D" parent="Trees" unique_id=1981851028 instance=ExtResource("9_lof8s")]
+transform = Transform3D(0.23976499, 0, 0.7926166, 0, 0.82808715, 0, -0.7926166, 0, 0.23976499, -18.867905, 0, -19.11524)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_01" type="Node3D" parent="Trees" unique_id=755014827 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.8879688, 0, -0.1004676, 0, 0.8936343, 0, 0.1004676, 0, 0.8879688, 26.625074, 0, -8.623917)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_02" type="Node3D" parent="Trees" unique_id=1503029623 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.60534155, 0, -0.7512899, 0, 0.9648186, 0, 0.7512899, 0, 0.60534155, 12.659728, 0, -7.6275754)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_03" type="Node3D" parent="Trees" unique_id=1339557582 instance=ExtResource("9_lof8s")]
+transform = Transform3D(-0.92470133, 0, -0.10079223, 0, 0.9301783, 0, 0.10079223, 0, -0.92470133, 20.094688, 0, -12.874216)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_04" type="Node3D" parent="Trees" unique_id=1919124404 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.48584038, 0, -0.87426484, 0, 1.0001899, 0, 0.87426484, 0, 0.48584038, 24.160038, 0, -13.656516)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_05" type="Node3D" parent="Trees" unique_id=1481495837 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.69712424, 0, -0.577438, 0, 0.90521646, 0, 0.577438, 0, 0.69712424, 18.36159, 0, -7.7524185)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_06" type="Node3D" parent="Trees" unique_id=1948519308 instance=ExtResource("9_lof8s")]
+transform = Transform3D(-0.46747223, 0, 0.70371133, 0, 0.8448313, 0, -0.70371133, 0, -0.46747223, -22.752142, 0, -7.714117)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_07" type="Node3D" parent="Trees" unique_id=8447733 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.27321056, 0, 0.7942755, 0, 0.839951, 0, -0.7942755, 0, -0.27321056, 22.384695, 0, -7.6693263)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_08" type="Node3D" parent="Trees" unique_id=389031176 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.6605035, 0, 0.24137196, 0, 0.70322496, 0, -0.24137196, 0, 0.6605035, -14.949204, 0, -7.433146)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_09" type="Node3D" parent="Trees" unique_id=164457885 instance=ExtResource("9_lof8s")]
+transform = Transform3D(-0.24815004, 0, 0.6875611, 0, 0.7309711, 0, -0.6875611, 0, -0.24815004, -23.486153, 0, -18.783844)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_10" type="Node3D" parent="Trees" unique_id=1513267419 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.0787521, 0, 0.7393689, 0, 0.74355114, 0, -0.7393689, 0, -0.0787521, 22.874517, 0, -18.880432)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_11" type="Node3D" parent="Trees" unique_id=1362604829 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.47101703, 0, -0.86392605, 0, 0.9839844, 0, 0.86392605, 0, 0.47101703, 15.104504, 0, -24.138786)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_12" type="Node3D" parent="Trees" unique_id=652979010 instance=ExtResource("9_lof8s")]
+transform = Transform3D(-0.27740893, 0, 0.68140686, 0, 0.7357112, 0, -0.68140686, 0, -0.27740893, -16.890776, 0, -13.995589)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_13" type="Node3D" parent="Trees" unique_id=2069335744 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.4888195, 0, -0.6218389, 0, 0.79096663, 0, 0.6218389, 0, -0.4888195, 19.73281, 0, -23.716425)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_14" type="Node3D" parent="Trees" unique_id=720499726 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.31281266, 0, -0.67196894, 0, 0.7412112, 0, 0.67196894, 0, 0.31281266, 18.677006, 0, -19.477098)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_15" type="Node3D" parent="Trees" unique_id=55849013 instance=ExtResource("9_lof8s")]
+transform = Transform3D(-0.98814887, 0, -0.17935535, 0, 1.004294, 0, 0.17935535, 0, -0.98814887, 14.973633, 0, -13.861716)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_16" type="Node3D" parent="Trees" unique_id=1938403089 instance=ExtResource("10_p6yup")]
+transform = Transform3D(-0.05544486, 0, 0.8048391, 0, 0.8067466, 0, -0.8048391, 0, -0.05544486, -0.6981433, 0, -40.21009)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_17" type="Node3D" parent="Trees" unique_id=1567033328 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.7525852, 0, -0.24479716, 0, 0.7913976, 0, 0.24479716, 0, 0.7525852, -18.8225, 0, -29.996359)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_18" type="Node3D" parent="Trees" unique_id=258414802 instance=ExtResource("9_lof8s")]
+transform = Transform3D(0.57605547, 0, -0.3529793, 0, 0.6755992, 0, 0.3529793, 0, 0.57605547, 3.6513216, 0, -40.629875)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_19" type="Node3D" parent="Trees" unique_id=2054419087 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.6607752, 0, 0.4505441, 0, 0.7997586, 0, -0.4505441, 0, 0.6607752, -24.012512, 0, -40.934605)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_20" type="Node3D" parent="Trees" unique_id=242798932 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.56327635, 0, 0.3274769, 0, 0.65155303, 0, -0.3274769, 0, 0.56327635, 26.919739, 0, -29.197311)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_21" type="Node3D" parent="Trees" unique_id=2138191044 instance=ExtResource("9_lof8s")]
+transform = Transform3D(0.5222102, 0, -0.63752085, 0, 0.8240973, 0, 0.63752085, 0, 0.5222102, -13.544337, 0, -40.41276)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_22" type="Node3D" parent="Trees" unique_id=714587619 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.2914726, 0, 0.6520314, 0, 0.7142137, 0, -0.6520314, 0, 0.2914726, 13.716371, 0, -40.078434)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_23" type="Node3D" parent="Trees" unique_id=1406902911 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.745387, 0, 0.25999832, 0, 0.7894308, 0, -0.25999832, 0, -0.745387, 23.16077, 0, -39.720173)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_24" type="Node3D" parent="Trees" unique_id=1597455656 instance=ExtResource("9_lof8s")]
+transform = Transform3D(0.32706532, 0, -0.9603945, 0, 1.0145587, 0, 0.9603945, 0, 0.32706532, -24.342201, 0, -12.2626)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_25" type="Node3D" parent="Trees" unique_id=776945349 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.7461298, 0, -0.51870346, 0, 0.908715, 0, 0.51870346, 0, 0.7461298, -18.23914, 0, -3.671648)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_26" type="Node3D" parent="Trees" unique_id=259082153 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(-0.8870227, 0, 0.27743313, 0, 0.9293968, 0, -0.27743313, 0, -0.8870227, -9.684003, 0, -3.7118008)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_27" type="Node3D" parent="Trees" unique_id=418655037 instance=ExtResource("9_lof8s")]
+transform = Transform3D(0.6778744, 0, -0.12836559, 0, 0.6899213, 0, 0.12836559, 0, 0.6778744, -9.2972555, 0, -40.923916)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_28" type="Node3D" parent="Trees" unique_id=1397285374 instance=ExtResource("10_p6yup")]
+transform = Transform3D(0.54373616, 0, -0.44163072, 0, 0.7004903, 0, 0.44163072, 0, 0.54373616, -10.818395, 0, -31.73793)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
+metadata/source_polygons = 3863
+metadata/triangles = 7948
+metadata/tree_revision = 2
+
+[node name="DenseWoodland_29" type="Node3D" parent="Trees" unique_id=280574953 instance=ExtResource("12_3kvw7")]
+transform = Transform3D(0.74548906, 0, -0.39493284, 0, 0.8436385, 0, 0.39493284, 0, 0.74548906, 23.819082, 0, -33.063896)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
+metadata/source_polygons = 3872
+metadata/triangles = 7948
+metadata/tree_revision = 2
 
 [node name="Plants" type="Node3D" parent="." unique_id=520751694]
 

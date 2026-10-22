@@ -103,7 +103,9 @@ public static class NpcExpressionEditorCatalog
         }
         return Visit(resource);
     }
-    public static IReadOnlyList<NpcEditorSymbol> For(NpcGraphAsset graph,GodotObject owner)=>owner is NpcTargetSelectorDefinition selector?
+    public static IReadOnlyList<NpcEditorSymbol> For(NpcGraphAsset graph,GodotObject owner)=>owner is NpcGraphExpressionOwner execution?
+        Collect(graph,true,execution.Action).Concat((execution.Flow?.BlackboardEntries??new()).Where(e=>(e.Value is GraphFloatBlackboardValue or GraphIntBlackboardValue)&&e.Binding==null)
+            .Select(e=>new NpcEditorSymbol("local."+e.Key,e.Key,"本次执行图局部数值",CharacterValueType.Number))).ToArray():owner is NpcTargetSelectorDefinition selector?
         Collect(graph).Concat(NpcBindingAdapters.Find(selector.Adapter)?.Properties.Select(p=>new NpcEditorSymbol("target."+p.Name,"候选 · "+p.Label,"候选对象",p.Type))??Array.Empty<NpcEditorSymbol>()).ToArray():
         owner is NpcActionInputDefinition?Collect(graph):Collect(graph,ActionOwner(graph,owner)!=null,ActionOwner(graph,owner));
     public static IReadOnlyList<NpcEditorSymbol> WritableTargets(NpcGraphAsset graph,GodotObject owner=null)=>

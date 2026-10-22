@@ -6,5 +6,10 @@ public sealed class NpcInteractAction : GraphInstantAction
 {
     public NpcInputReference Input {get;set;}=new();
     public string OperationId {get;set;}="";
-    protected override bool Run(GraphActionInvocation invocation)=>invocation.Execution.GetUserData<NpcActionContext>()?.QueueInteraction(Input.Name,OperationId)==true;
+    public NpcGraphNumber Amount {get;set;}=NpcGraphNumber.Constant(1);
+#if TOOLS
+    public override Godot.Control CreateEditUI(GraphEditorContext context)=>NpcGraphValueEditor.Interaction(this,context);
+#endif
+    protected override bool Run(GraphActionInvocation invocation)=>Amount.TryRead(invocation.Execution,out double amount)
+        &&invocation.Execution.GetUserData<NpcActionContext>()?.QueueInteraction(Input.Name,OperationId,amount)==true;
 }

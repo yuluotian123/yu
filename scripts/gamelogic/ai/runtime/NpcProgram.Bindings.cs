@@ -60,7 +60,7 @@ public sealed partial class NpcProgram
             Require(input.ValueType==CharacterValueType.Symbol&&adapter!=null&&adapter.Capabilities.Contains(capability),"输入“"+input.Name+"”不支持此资源要求："+capability);
             return new NpcClaimSpec(input.Name,capability);
         })).Distinct());
-        return new(action.DefinitionId,action.DisplayName,inputs,claims,action.Preconditions?.Freeze(),action.SuccessConditions?.Freeze(),action.Cost?.Freeze(),action.DurationSeconds,action.TimeoutSeconds,action.ExecutionGraph,Effects(action.Predictions),Effects(action.Results));
+        return new(action.DefinitionId,action.DisplayName,inputs,claims,action.Preconditions?.Freeze(),action.SuccessConditions?.Freeze(),action.Cost?.Freeze(),action.DurationSeconds,action.TimeoutSeconds,action.ExecutionGraph,Effects(action.Predictions),Effects(action.Results),CompileGraph(action));
     }
     void ValidateAction(NpcActionSpec action)
     {
@@ -75,6 +75,8 @@ public sealed partial class NpcProgram
             if(action.Precondition!=null)Expect(action.Precondition,CharacterValueType.Boolean);
             if(action.Success!=null)Expect(action.Success,CharacterValueType.Boolean);
             if(action.Cost!=null)Expect(action.Cost,CharacterValueType.Number);
+            foreach(var expression in action.Graph?.PlanningValues??Array.Empty<CharacterExpression>())Expect(expression,CharacterValueType.Number);
+            Require(action.Graph?.Interaction==null||!action.Predictions.Any(e=>e.Key.StartsWith("input.",StringComparison.Ordinal)),"交互数量已经从执行图生成预测，该行动不要再手动填写对象预测效果。");
             foreach(var effect in action.Predictions.Concat(action.Results))
             {
                 var type=EffectType(action,effect.Key);
@@ -130,6 +132,12 @@ public sealed partial class NpcProgram
             string prefix="input."+input.Name;context=context.With(GoapEffect.Set(prefix,Encode(prefix,value)));
             if(NpcBindingAdapters.Find(input.Adapter) is {} adapter)context=adapter.Project(this,context,prefix,value,distance?.Invoke(input.Name,value),physical);
         }
+        if(bound.Action.Graph?.Durations is {Count:>0} durations)
+        {
+            var seconds=durations.Select(e=>e.Evaluate(k=>Read(context,k),Parameter)).ToArray();
+            if(seconds.Any(v=>v.Type!=CharacterValueType.Number||v.Number<0)||!double.IsFinite(seconds.Sum(v=>v.Number)))return null;
+            context=context.With(GoapEffect.Set("action.duration",Encode("action.duration",CharacterValue.Numeric(seconds.Sum(v=>v.Number)))));
+        }
         return context;
     }
     public GoapWorldState Predict(GoapWorldState state,NpcBoundAction bound,Func<string,CharacterValue,double?> distance=null)
@@ -149,6 +157,7 @@ public sealed partial class NpcProgram
         }
         if(bound.Action.Precondition!=null&&!bound.Action.Precondition.Evaluate(k=>Read(context,k),Parameter).IsTrue)return null;
         if(!TryEffects(context,bound.Action.Predictions,out var next,bound.Action))return null;
+        if(!PredictInteraction(bound.Action,context,next,out next))return null;
         return new GoapWorldState(next.Facts.Where(f=>!f.Key.StartsWith("input.")&&!f.Key.StartsWith("target.")&&f.Key!="action.duration"));
     }
 }

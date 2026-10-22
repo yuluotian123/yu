@@ -56,16 +56,22 @@ public sealed class NpcAbilityAction : GraphSharedAction
     }
 }
 
-[GraphCallable("Wait Action Duration", "NPC/能力", ChineseName="等待行动时长")]
+[GraphCallable("Wait Action Duration", "NPC/能力", ChineseName="等待图内时长")]
 [GraphProvidedBy(typeof(AiAgentComponent3D))]
 public sealed class NpcWaitAction : GraphSharedAction
 {
-    public double DurationOverride {get;set;}=-1;
+    public NpcGraphNumber Seconds {get;set;}=NpcGraphNumber.Constant(2);
+#if TOOLS
+    public override Control CreateEditUI(GraphEditorContext context)
+    {
+        var root=new VBoxContainer();root.AddChild(new Label{Text="等待秒数"});root.AddChild(Seconds.CreateEditUI(context));return root;
+    }
+#endif
     public override GraphActionTask CreateTask(GraphActionInvocation invocation)
     {
-        var call=invocation.Execution.GetUserData<NpcActionContext>();double elapsed=0;
+        bool valid=Seconds.TryRead(invocation.Execution,out double seconds)&&seconds>=0;double elapsed=0;
         return new GraphDelegateTask(delta=>
-        {if(call==null)return BehaviorTreeStatus.Failure;elapsed+=delta;return elapsed>=(DurationOverride<0?call.Action.Duration:DurationOverride)?BehaviorTreeStatus.Success:BehaviorTreeStatus.Running;});
+        {if(!valid)return BehaviorTreeStatus.Failure;elapsed+=delta;return elapsed>=seconds?BehaviorTreeStatus.Success:BehaviorTreeStatus.Running;});
     }
 }
 

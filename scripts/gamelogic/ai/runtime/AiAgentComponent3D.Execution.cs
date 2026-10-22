@@ -50,7 +50,7 @@ public partial class AiAgentComponent3D
             if(lease==null){Fail("ResourceBusy",false);return;}_leases.Add(lease);
         }
         _current=bound;_actionElapsed=0;_committed=false;LastFailure="";
-        var call=new GraphExecutionContext(bound.Action.Execution,new GraphBlackboardRuntime());call.UserData.Add(Owner);call.UserData.Add(new NpcActionContext(this,bound.Action,inputs));
+        var call=new GraphExecutionContext(bound.Action.Execution,new GraphBlackboardRuntime());call.UserData.Add(Owner);call.UserData.Add(new NpcActionContext(this,bound.Action,inputs,context));
         _execution=new(bound.Action.Execution,call);
         try{if(!_execution.Start()){Fail("ExecutionGraphFailed");return;}}
         catch(Exception e){Fail("ExecutionException:"+e.Message);return;}

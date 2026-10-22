@@ -68,7 +68,13 @@ public static class NpcTargetQuery
                 if(index<slots.Length)
                 {
                     var input=slots[index];
-                    if(!candidates.TryGetValue(input.SelectorId,out var choices))candidates[input.SelectorId]=choices=Select(program,program.TargetSelectors[input.SelectorId],initial,queries?.GetValueOrDefault(input.SelectorId)??points);
+                    string queryKey=NpcProgram.QueryKey(action,input);
+                    if(!candidates.TryGetValue(queryKey,out var choices))
+                    {
+                        var source=queries?.GetValueOrDefault(queryKey)??queries?.GetValueOrDefault(input.SelectorId)??points;
+                        if(action.Graph?.Interaction is {} interaction&&interaction.Input==input.Name)source=source.Where(p=>p.Operations?.Contains(interaction.Operation)==true).ToArray();
+                        candidates[queryKey]=choices=Select(program,program.TargetSelectors[input.SelectorId],initial,source);
+                    }
                     foreach(var point in choices)
                     {
                         var value=CharacterValue.Text(point.Id);

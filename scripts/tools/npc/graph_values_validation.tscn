@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/tools/npc/NpcGraphValuesValidation.cs" id="script"]
+[node name="NpcGraphValuesValidation" type="Node"]
+script = ExtResource("script")

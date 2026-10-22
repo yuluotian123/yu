@@ -11,21 +11,53 @@ public sealed record NpcBoundAction(NpcActionSpec Action,NpcPlanSpec Plan,IReadO
 {
     public string PlanActionKey=>Plan.Id+"::"+Action.Id;
 }
-public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,CharacterValue> Inputs)
+public sealed record NpcActionContext(AiAgentComponent3D Agent,NpcActionSpec Action,IReadOnlyDictionary<string,CharacterValue> Inputs,GoapWorldState StartState=null)
 {
     WorldInteractionComponent3D _interactionPoint;
     string _operationId;
+    double? _amount;
+    bool _commitAttempted;
+    readonly Dictionary<NpcGraphNumber,double> _numbers=new();
+    readonly Dictionary<string,double> _localNumbers=new(StringComparer.Ordinal);
     public WorldInteractionResult LastInteractionResult {get;private set;}
     public CharacterValue Input(string name)=>Inputs.GetValueOrDefault(name??"");
     public WorldInteractionComponent3D Point(string name)=>Input(name) is {Type:CharacterValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Points.GetValueOrDefault(id):null;
-    public bool QueueInteraction(string input,string operation)
+    public bool TryNumber(NpcGraphNumber definition,GraphExecutionContext execution,out double number)
+    {
+        if(_numbers.TryGetValue(definition,out number))return true;
+        number=0;if(StartState==null||Action.Graph?.Values.TryGetValue(definition,out var expression)!=true)return false;
+        var value=expression.Evaluate(key=>key.StartsWith("local.",StringComparison.Ordinal)
+            ?_localNumbers.TryGetValue(key[6..],out double stored)?CharacterValue.Numeric(stored)
+                :execution.Blackboard.TryGetValue(key[6..],out GraphBlackboardValue local)&&local.GetObjectValue() is int or float or double?CharacterValue.Numeric(Convert.ToDouble(local.GetObjectValue())):default
+            :Agent.Program.Read(StartState,key),Agent.Program.Parameter);
+        if(value.Type!=CharacterValueType.Number)return false;number=value.Number;_numbers[definition]=number;return true;
+    }
+    public bool SetLocalNumber(string key,double value,GraphExecutionContext execution)
+    {
+        if(!double.IsFinite(value)||!float.IsFinite((float)value)||!execution.Blackboard.SetValue(key,(float)value))return false;
+        // Keep quantity calculations in double precision; the generic graph blackboard uses Float values.
+        _localNumbers[key]=value;return true;
+    }
+    public bool QueueInteraction(string input,string operation,double? amount=null)
     {
         var point=Point(input);
-        if(_interactionPoint!=null)return point==_interactionPoint&&operation==_operationId;
-        LastInteractionResult=WorldInteraction.Check(Agent.Owner,point,operation);if(!LastInteractionResult.Success)return false;
-        _interactionPoint=point;_operationId=operation;return true;
+        if(StartState!=null&&Action.Graph?.Interaction is {} planned)
+        {
+            var expected=planned.Amount.Evaluate(k=>Agent.Program.Read(StartState,k),Agent.Program.Parameter);
+            if(planned.Input!=input||planned.Operation!=operation||expected.Type!=CharacterValueType.Number||amount==null||!double.IsFinite(amount.Value)
+                ||Math.Abs(expected.Number-amount.Value)>1e-6*Math.Max(1,Math.Abs(expected.Number)))
+            {LastInteractionResult=WorldInteractionResult.Fail("交互参数与本次行动的图内声明不一致。");return false;}
+        }
+        if(_interactionPoint!=null)return point==_interactionPoint&&operation==_operationId&&amount==_amount;
+        LastInteractionResult=WorldInteraction.Check(Agent.Owner,point,operation,amount);if(!LastInteractionResult.Success)return false;
+        _interactionPoint=point;_operationId=operation;_amount=amount;return true;
     }
-    internal WorldInteractionResult CommitInteraction()=>_interactionPoint==null?WorldInteractionResult.Ok():WorldInteraction.Execute(Agent.Owner,_interactionPoint,_operationId);
+    internal WorldInteractionResult CommitInteraction()
+    {
+        if(_commitAttempted)return LastInteractionResult;_commitAttempted=true;
+        return LastInteractionResult=_interactionPoint==null?(Action.Graph?.Interaction==null?WorldInteractionResult.Ok():WorldInteractionResult.Fail("执行图未请求声明的交互。"))
+            :WorldInteraction.Execute(Agent.Owner,_interactionPoint,_operationId,_amount);
+    }
 }
 
 [Tool, GlobalClass]
@@ -198,10 +230,11 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     {
         if(_goal==null||_goal.Completion.Evaluate(Read,Program.Parameter).IsTrue)return;
         var allowed=_goal.Plans.Where(p=>p.Eligibility==null||p.Eligibility.Evaluate(Read,Program.Parameter).IsTrue).SelectMany(p=>p.ActionIds).ToHashSet();
-        var requests=_goal.Actions.Where(a=>allowed.Contains(a.Id)).SelectMany(a=>a.Inputs).Where(i=>i.IsTarget).Select(i=>i.SelectorId).Distinct().Select(id=>Program.TargetSelectors[id]).ToArray();
-        if(requests.Any(s=>s.RequireReachable)&&Navigation?.MapReady!=true){_retryAt=World.RuntimeSeconds+.1;return;}
+        var requests=_goal.Actions.Where(a=>allowed.Contains(a.Id)).SelectMany(a=>a.Inputs.Where(i=>i.IsTarget)
+            .Select(i=>(Key:NpcProgram.QueryKey(a,i),Selector:Program.QuerySelector(a,i)))).DistinctBy(r=>r.Key).ToArray();
+        if(requests.Any(r=>r.Selector.RequireReachable)&&Navigation?.MapReady!=true){_retryAt=World.RuntimeSeconds+.1;return;}
         _grounded.Clear();_queryPoints.Clear();_authorizedPoints.Clear();_queryBudgetExceeded=false;QueryDiagnostics="";
-        var queries=requests.ToDictionary(s=>s.Id,s=>(IReadOnlyList<NpcTargetCandidate>)NpcBindingAdapters.Find(s.Adapter).Candidates(this,s).ToArray());
+        var queries=requests.ToDictionary(r=>r.Key,r=>(IReadOnlyList<NpcTargetCandidate>)NpcBindingAdapters.Find(r.Selector.Adapter).Candidates(this,r.Selector).ToArray());
         if(_queryBudgetExceeded){_retryAt=World.RuntimeSeconds+.02;LastFailure="QueryBudgetPending";return;}
         var points=queries.Values.SelectMany(p=>p).DistinctBy(p=>(p.Adapter,p.Id)).ToArray();_queryPoints.UnionWith(points.Select(p=>p.Id));var snapshot=Snapshot(_queryPoints,true);
         if(requests.Length>0&&points.Length==0&&QueryDiagnostics.Contains("TargetUnloaded")){Fail("TargetUnloaded",false);return;}

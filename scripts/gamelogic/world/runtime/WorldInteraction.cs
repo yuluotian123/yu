@@ -6,7 +6,7 @@ namespace GameLogic;
 /// <summary>One authoritative entry for player input and NPC interaction requests.</summary>
 public static class WorldInteraction
 {
-    public static WorldInteractionResult Check(GameObject3D actor,WorldInteractionComponent3D point,string operationId)
+    public static WorldInteractionResult Check(GameObject3D actor,WorldInteractionComponent3D point,string operationId,double? amount=null)
     {
         if(!GodotObject.IsInstanceValid(actor)||!actor.IsInsideTree()||string.IsNullOrWhiteSpace(actor.PersistentId))return WorldInteractionResult.Fail("交互角色无效。");
         var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
@@ -19,21 +19,22 @@ public static class WorldInteraction
         if(!target.CanUse(actor.PersistentId))return WorldInteractionResult.Fail("没有使用权限。");
         var operation=point.Operation(operationId);
         if(operation==null)return WorldInteractionResult.Fail("对象没有提供此操作。");
+        if(amount.HasValue&&(!double.IsFinite(amount.Value)||amount.Value<=0||operation.ConsumedProperty.Length==0))return WorldInteractionResult.Fail("本次操作数量无效或操作不支持数量参数。");
         if(!point.ContainsPosition(actor.GlobalPosition))return WorldInteractionResult.Fail("请进入对象的交互区域。");
         if(!HasLineOfSight(actor,point))return WorldInteractionResult.Fail("交互目标被遮挡。");
         foreach(var key in operation.RequiredCapabilities)
             if(!target.Owner.GetAllComponents().OfType<WorldCapabilityComponent3D>().Any(c=>c.CapabilityKey==key&&c.IsActive))return WorldInteractionResult.Fail("所需能力不可用："+key);
         if(operation.RequireCapacity&&target.Owner.GetComponent<WorldUsageCapacityComponent3D>()?.Available(actor.PersistentId)!=true)return WorldInteractionResult.Fail("对象正在被其他角色使用。");
-        return operation.Check(new(actor,target));
+        return operation.Check(new(actor,target,amount));
     }
-    public static WorldInteractionResult Execute(GameObject3D actor,WorldInteractionComponent3D point,string operationId)
+    public static WorldInteractionResult Execute(GameObject3D actor,WorldInteractionComponent3D point,string operationId,double? amount=null)
     {
-        var check=Check(actor,point,operationId);if(!check.Success)return check;
+        var check=Check(actor,point,operationId,amount);if(!check.Success)return check;
         var operation=point.Operation(operationId);var capacity=operation.RequireCapacity?point.Owner.GetComponent<WorldUsageCapacityComponent3D>():null;
         // An NPC action may already hold this slot. Do not release its longer-lived claim.
         bool alreadyReserved=capacity?.Reserved(actor.PersistentId)==true;
         if(capacity!=null&&!capacity.Reserve(actor.PersistentId))return WorldInteractionResult.Fail("对象正在被其他角色使用。");
-        try{return operation.Apply(new(actor,point.Object));}
+        try{return operation.Apply(new(actor,point.Object,amount));}
         finally{if(capacity!=null&&!alreadyReserved)capacity.Release(actor.PersistentId);}
     }
     public static bool HasLineOfSight(GameObject3D actor,WorldInteractionComponent3D point)

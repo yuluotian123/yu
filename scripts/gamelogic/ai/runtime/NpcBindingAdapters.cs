@@ -43,7 +43,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     public string Label=>"场景交互点";
     public IReadOnlyList<NpcObjectProperty> Properties {get;}=Array.AsReadOnly(new[]{
         new NpcObjectProperty("id","对象",CharacterValueType.Symbol),new("open","可用",CharacterValueType.Boolean),
-        new("stock","库存",CharacterValueType.Number,true,0),new("distance","距离",CharacterValueType.Number),new("at","自身已在范围内",CharacterValueType.Boolean),new("available","有空余容量",CharacterValueType.Boolean)});
+        new("stock","库存",CharacterValueType.Number,true,0),new("liquid","液体体积",CharacterValueType.Number,true,0),new("distance","距离",CharacterValueType.Number),new("at","自身已在范围内",CharacterValueType.Boolean),new("available","有空余容量",CharacterValueType.Boolean)});
     public IReadOnlyList<string> Capabilities {get;}=Array.AsReadOnly(new[]{"capacity"});
     public GoapWorldState Project(NpcProgram program,GoapWorldState state,string prefix,CharacterValue value,double? distance,bool physical)
     {
@@ -51,9 +51,10 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
         double d=distance??(!physical&&program.Read(state,"self.location").Symbol==id?0:program.Read(state,"point."+id+".distance").Number);
         return state.With(GoapEffect.Set(prefix+".id",GoapValue.Id(id)),GoapEffect.Set(prefix+".open",state["point."+id+".open"]),
             GoapEffect.Set(prefix+".stock",state["point."+id+".stock"]),GoapEffect.Set(prefix+".available",state["point."+id+".available"]),GoapEffect.Set(prefix+".distance",program.Encode(prefix+".distance",CharacterValue.Numeric(d))),
+            GoapEffect.Set(prefix+".liquid",state["point."+id+".liquid"]),
             GoapEffect.Set(prefix+".at",physical?state["point."+id+".at"]:GoapValue.Bool(program.Read(state,"self.location").Symbol==id)));
     }
-    public string WriteKey(string member,CharacterValue value)=>member=="stock"?"point."+value.Symbol+".stock":null;
+    public string WriteKey(string member,CharacterValue value)=>member is "stock" or "liquid"?"point."+value.Symbol+"."+member:null;
     static WorldInteractionComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Points.GetValueOrDefault(value.Symbol);
     static bool MatchesObject(WorldInteractionComponent3D point,NpcTargetSelectorSpec selector)=>NpcTargetQuery.MatchesObject(selector,
         point.Object.ObjectType.Id,point.Object.Definitions.Select(c=>c.Key),point.Operations?.Select(o=>o.Id));
@@ -75,6 +76,14 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
             yield return new(key+".available",readable&&capacity!=null?GoapValue.Bool(capacity.Available(agent.ActorId)):default);
             yield return new(key+".at",GoapValue.Bool(p.ContainsPosition(agent.Owner.GlobalPosition)));
             yield return new(key+".stock",readable&&stock is {IsActive:true}?agent.Program.Encode(key+".stock",CharacterValue.Numeric(stock.Amount)):default);
+            var liquid=p.Owner.GetComponent<WorldLiquidComponent3D>();
+            yield return new(key+".liquid",readable&&liquid is {IsActive:true}?agent.Program.Encode(key+".liquid",CharacterValue.Numeric(liquid.Volume)):default);
+            foreach(var operation in p.Operations??new())
+            {
+                string operationKey=NpcProgram.OperationKey(id,operation.Id);
+                yield return new(operationKey+".resource",GoapValue.Id(operation.ConsumedProperty));
+                yield return new(operationKey+".capacity",GoapValue.Bool(operation.RequireCapacity));
+            }
             yield return new(key+".distance",agent.Program.Encode(key+".distance",CharacterValue.Numeric(agent.Owner.GlobalPosition.DistanceTo(p.UsePosition))));
         }
     }
@@ -92,6 +101,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
         {
             double distance=agent.Owner.GlobalPosition.DistanceTo(p.UsePosition);
             if(selector.MaximumDistance>0&&distance>selector.MaximumDistance||selector.RequireUsable&&!p.Object.CanUse(agent.ActorId))continue;
+            if(!agent.Program.CandidateInteraction(agent,selector,p,distance))continue;
             bool reachable=!selector.RequireReachable||agent.EstimatePath(p,out distance);
             if(selector.RequireReachable&&!reachable)continue;
             if(selector.Filter!=null)

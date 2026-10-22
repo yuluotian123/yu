@@ -2,6 +2,8 @@
 
 2026-10-22，已采用 Scene 唯一配置来源、自动摆放身份和生成目录；不再创建每个对象的 Record 资源。运行代码与配置入口已落地；范围及后续任务见 [实施计划](WORLD_FRAMEWORK_PLAN.md)。
 
+2026-10-23，已接入世界角色名册、自主旅行、行动恢复、离屏事件模拟、活动上下文与远处候选。角色 Scene、路线、选择器和活动的完整制作流程见 [NPC 世界旅行、活动与离屏模拟配置](WORLD_NPC_SIMULATION.md)。
+
 世界入口是 [default_world.tres](../../../assets/resources/world/default_world.tres)。`WorldModule` 持有共享目录、长期对象状态和唯一玩家；`AiWorldComponent3D` 只管理当前关卡的现场角色、交互点和规划。首期同时激活一个游戏关卡。
 
 ## 先运行现成示例
@@ -184,7 +186,7 @@ Objects 与 KnownObjects 的检查器按对象名称、关卡和身份后缀提�
 
 **工作地点找仓库**：Locations 配置 `work`；选择器来源“世界目录”，Scope 选“角色地点绑定”、LocationBinding 选 `work`、AllTags 填 `storage`；需要了解公开服务时选择对应 Information。前往和取货共享一个节点。货源与收货点分别使用两个节点。
 
-**未加载床铺**：能解析并显示身份，现场 point 适配器返回 TargetUnloaded，关闭 RequireReachable 也不能远程执行。NPC 自主旅行、离屏收益和可恢复行动是后续阶段。
+**未加载床铺**：WorldActor 角色在具备获准路线与受支持行动时，可自行旅行并在离屏后端完成休息，随后恢复现场实例。普通现场 NPC 没有世界人口身份，仍要求加载目标；关闭 RequireReachable 不会绕过执行能力检查。具体配置见 [NPC 世界模拟](WORLD_NPC_SIMULATION.md)。
 
 ## 状态与性能
 

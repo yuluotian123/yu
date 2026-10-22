@@ -8,7 +8,7 @@ namespace GameLogic.AI;
 
 public sealed record NpcFactSpec(string Key,CharacterValueType Type,double Minimum,double Maximum,double Step,CharacterValue Initial,bool Writable);
 public sealed record NpcNeedSpec(string Id,double Min,double Max,double Initial,bool Higher,double Enter,double Exit,double Exponent);
-public sealed record NpcWindowSpec(string Id,double Start,double End,int Priority,IReadOnlyList<string> Tags);
+public sealed record NpcWindowSpec(string Id,double Start,double End,int Priority,IReadOnlyList<string> Tags,string Location="",string LocationBinding="",string Goal="",string Fallback="",IReadOnlyList<string> Operations=null,double Commitment=0,bool Interruptible=true,bool Emergency=false,CharacterExpression Activation=null);
 public sealed record NpcEffect(string Key,NpcEffectMode Mode,CharacterExpression Value);
 public sealed record NpcBindingSpec(string Name,CharacterValueType Type,string Adapter,string SelectorId,CharacterExpression Value,string SelectionNodeId="")
 {
@@ -85,7 +85,7 @@ public sealed partial class NpcProgram
             switch(d)
             {
                 case NpcScheduleDefinition schedule:
-                    foreach(var w in schedule.Windows){Require(w!=null&&w.StartHour>=0&&w.StartHour<=24&&w.EndHour>=0&&w.EndHour<=24&&!p.Windows.Any(x=>x.Id==w.WindowId),"日程窗口无效。");p.Windows.Add(new(w.WindowId,w.StartHour,w.EndHour,w.Priority,ReadOnly(w.Tags)));foreach(var tag in w.Tags)p.KnownKeys.Add("schedule."+tag);}
+                    foreach(var w in schedule.Windows){Require(w!=null&&w.StartHour>=0&&w.StartHour<=24&&w.EndHour>=0&&w.EndHour<=24&&!p.Windows.Any(x=>x.Id==w.WindowId)&&double.IsFinite(w.CommitmentSeconds)&&w.CommitmentSeconds>=0,"日程窗口无效。");p.Windows.Add(new(w.WindowId,w.StartHour,w.EndHour,w.Priority,ReadOnly(w.Tags),w.Location?.Id??"",w.LocationBinding,w.Goal?.DefinitionId??"",w.FallbackGoal?.DefinitionId??"",ReadOnly(w.AllowedOperations),w.CommitmentSeconds,w.Interruptible,w.Emergency,w.Activation?.Freeze()));foreach(var tag in w.Tags)p.KnownKeys.Add("schedule."+tag);}
                     break;
                 case NpcPerceptionDefinition perception:
                     Require(perception.ViewRange>0&&perception.SenseInterval>0,"感知范围/间隔必须大于零。");
@@ -98,7 +98,7 @@ public sealed partial class NpcProgram
             }
         }
         foreach(var key in p.MemoryCategories)p.KnownKeys.Add("memory."+key+".count");
-        foreach(var key in new[]{"world.hour","world.rain","self.location","self.level","self.place","action.duration"})p.KnownKeys.Add(key);
+        foreach(var key in new[]{"world.hour","world.rain","self.location","self.level","self.place","action.duration","activity.id","activity.place","activity.active"})p.KnownKeys.Add(key);
         foreach(var selector in active.Where(c=>c.FromNode==root.Id&&c.FromPort==2)
             .Select(c=>(NpcTargetSelectorDefinition)Resolve((NpcTargetSelectorNodeData)graph.FindNodeById(c.ToNode))).Where(s=>s.Enabled).Distinct())
         {
@@ -161,6 +161,11 @@ public sealed partial class NpcProgram
         var globalExpressions=p.Goals.SelectMany(g=>new[]{g.Activation,g.Utility,g.Completion}.Concat(g.Plans.Select(t=>t.Eligibility)));
         foreach(var e in globalExpressions.Where(e=>e!=null))Require(!e.FactKeys().Any(k=>k.StartsWith("target.")||k=="action.duration"),"人物、目标和计划条件尚未绑定行动目标，不能引用 target 或 action.duration。");
         foreach(var s in p.TargetSelectors.Values)foreach(var e in new[]{s.Filter,s.Score}.Where(e=>e!=null))Require(!e.FactKeys().Contains("action.duration"),"目标选择器尚未绑定行动时长。");
+        foreach(var window in p.Windows)
+        {
+            Require((window.Goal.Length==0||p.Goals.Any(g=>g.Id==window.Goal))&&(window.Fallback.Length==0||p.Goals.Any(g=>g.Id==window.Fallback)),"活动引用的 Goal 必须连接到同一角色图。");
+            if(window.Activation!=null)p.Expect(window.Activation,CharacterValueType.Boolean);
+        }
         return p;
     }
     void Expect(CharacterExpression expression,CharacterValueType expected)=>Require(Infer(expression)==expected,$"表达式应返回 {expected}。");
@@ -175,7 +180,8 @@ public sealed partial class NpcProgram
             if(Facts.TryGetValue(e.Key,out var f))return f.Type;
             if(e.Key.StartsWith("personality."))return Character.Personality[e.Key[12..]].Type;
             if(e.Key.StartsWith("preference."))return Character.Preferences[e.Key[11..]].Type;
-            if(e.Key is "target.id" or "self.location" or "self.level" or "self.place")return CharacterValueType.Symbol;
+            if(e.Key is "target.id" or "self.location" or "self.level" or "self.place" or "activity.id" or "activity.place")return CharacterValueType.Symbol;
+            if(e.Key=="activity.active")return CharacterValueType.Boolean;
             if(e.Key=="target.open"||e.Key.StartsWith("schedule.")||e.Key.StartsWith("trait.")||e.Key.EndsWith(".urgent"))return CharacterValueType.Boolean;
             return CharacterValueType.Number;
         }

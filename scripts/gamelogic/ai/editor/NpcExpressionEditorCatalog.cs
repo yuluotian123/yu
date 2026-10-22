@@ -71,6 +71,12 @@ public static class NpcExpressionEditorCatalog
         Add("self.location", "当前位置 ID", "人物", CharacterValueType.Symbol);
         Add("self.level", "当前关卡", "人物", CharacterValueType.Symbol);
         Add("self.place", "当前地点", "人物", CharacterValueType.Symbol);
+        if(graph.IncludeDecisionSymbols)
+        {
+            Add("activity.id", "当前活动", "活动", CharacterValueType.Symbol);
+            Add("activity.place", "活动地点", "活动", CharacterValueType.Symbol);
+            Add("activity.active", "活动已生效", "活动", CharacterValueType.Boolean);
+        }
         if (actionContext)
         {
             Add("self.location", "当前位置（仅用于预测）", "人物", CharacterValueType.Symbol, writable:true);
@@ -115,6 +121,7 @@ public static class NpcExpressionEditorCatalog
     {
         (NpcGoalDefinition, nameof(NpcGoalDefinition.Activation) or nameof(NpcGoalDefinition.Completion)) => CharacterValueType.Boolean,
         (NpcGoalDefinition, nameof(NpcGoalDefinition.Utility)) => CharacterValueType.Number,
+        (NpcScheduleWindow, nameof(NpcScheduleWindow.Activation)) => CharacterValueType.Boolean,
         (NpcActionDefinition, nameof(NpcActionDefinition.Preconditions) or nameof(NpcActionDefinition.SuccessConditions)) => CharacterValueType.Boolean,
         (NpcActionDefinition, nameof(NpcActionDefinition.Cost)) => CharacterValueType.Number,
         (NpcTargetSelectorDefinition, nameof(NpcTargetSelectorDefinition.Filter)) => CharacterValueType.Boolean,

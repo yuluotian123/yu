@@ -43,29 +43,33 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     public string Label=>"场景交互点";
     public IReadOnlyList<NpcObjectProperty> Properties {get;}=Array.AsReadOnly(new[]{
         new NpcObjectProperty("id","对象",CharacterValueType.Symbol),new("open","可用",CharacterValueType.Boolean),
-        new("stock","库存",CharacterValueType.Number,true,0),new("liquid","液体体积",CharacterValueType.Number,true,0),new("distance","距离",CharacterValueType.Number),new("at","自身已在范围内",CharacterValueType.Boolean),new("available","有空余容量",CharacterValueType.Boolean)});
+        new("stock","库存",CharacterValueType.Number,true,0),new("liquid","液体体积",CharacterValueType.Number,true,0),new("distance","距离",CharacterValueType.Number),new("at","自身已在范围内",CharacterValueType.Boolean),new("available","有空余容量",CharacterValueType.Boolean),
+        new("travel_hours","预计旅行小时",CharacterValueType.Number),new("route_known","路线已知",CharacterValueType.Boolean),new("executable","当前后端可执行",CharacterValueType.Boolean),new("level","所属关卡",CharacterValueType.Symbol),new("observation_age","观测年龄小时",CharacterValueType.Number)});
     public IReadOnlyList<string> Capabilities {get;}=Array.AsReadOnly(new[]{"capacity"});
     public GoapWorldState Project(NpcProgram program,GoapWorldState state,string prefix,CharacterValue value,double? distance,bool physical)
     {
         string id=value.Symbol;
-        double d=distance??(!physical&&program.Read(state,"self.location").Symbol==id?0:program.Read(state,"point."+id+".distance").Number);
+        var d=distance.HasValue?program.Encode(prefix+".distance",CharacterValue.Numeric(distance.Value)):!physical&&program.Read(state,"self.location").Symbol==id?program.Encode(prefix+".distance",CharacterValue.Numeric(0)):state["point."+id+".distance"];
         return state.With(GoapEffect.Set(prefix+".id",GoapValue.Id(id)),GoapEffect.Set(prefix+".open",state["point."+id+".open"]),
-            GoapEffect.Set(prefix+".stock",state["point."+id+".stock"]),GoapEffect.Set(prefix+".available",state["point."+id+".available"]),GoapEffect.Set(prefix+".distance",program.Encode(prefix+".distance",CharacterValue.Numeric(d))),
+            GoapEffect.Set(prefix+".stock",state["point."+id+".stock"]),GoapEffect.Set(prefix+".available",state["point."+id+".available"]),GoapEffect.Set(prefix+".distance",d),
+            GoapEffect.Set(prefix+".travel_hours",state["point."+id+".travel_hours"]),GoapEffect.Set(prefix+".route_known",state["point."+id+".route_known"]),GoapEffect.Set(prefix+".executable",state["point."+id+".executable"]),GoapEffect.Set(prefix+".level",state["point."+id+".level"]),GoapEffect.Set(prefix+".observation_age",state["point."+id+".observation_age"]),
             GoapEffect.Set(prefix+".liquid",state["point."+id+".liquid"]),
             GoapEffect.Set(prefix+".at",physical?state["point."+id+".at"]:GoapValue.Bool(program.Read(state,"self.location").Symbol==id)));
     }
     public string WriteKey(string member,CharacterValue value)=>member is "stock" or "liquid"?"point."+value.Symbol+"."+member:null;
-    static WorldInteractionComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Points.GetValueOrDefault(value.Symbol);
+    static WorldInteractionComponent3D Point(AiAgentComponent3D agent,CharacterValue value)=>agent.World?.Session.ResolvePoint(value.Symbol??"");
     static bool MatchesObject(WorldInteractionComponent3D point,NpcTargetSelectorSpec selector)=>NpcTargetQuery.MatchesObject(selector,
         point.Object.ObjectType.Id,point.Object.Definitions.Select(c=>c.Key),point.Operations?.Select(o=>o.Id));
     static NpcTargetCandidate Candidate(AiAgentComponent3D agent,WorldInteractionComponent3D point,double distance,bool reachable)=>new(
         point.PointId,Array.AsReadOnly(point.Tags.ToArray()),point.UsePosition,distance,point.Object.CanUse(agent.ActorId),reachable,
         agent.PerceivedPoint(point.PointId),agent.KnownPoint(point.PointId),"point",point.Object.ObjectType.Id,
         Array.AsReadOnly(point.Object.Definitions.Select(c=>c.Key).ToArray()),Array.AsReadOnly(point.Operations?.Select(o=>o.Id).ToArray()??Array.Empty<string>()));
-    public bool Validate(AiAgentComponent3D agent,CharacterValue value)=>Point(agent,value) is {} p&&p.IsActive&&!agent.World.Session.IsDestroyed(p.PointId)&&GodotObject.IsInstanceValid(p.Owner);
+    public bool Validate(AiAgentComponent3D agent,CharacterValue value)=>agent.ManagedActor!=null&&agent.World.Session.Catalog.Objects.ContainsKey(value.Symbol??"")
+        ?!agent.World.Session.IsDestroyed(value.Symbol):Point(agent,value) is {} p&&p.IsActive&&!agent.World.Session.IsDestroyed(p.PointId)&&GodotObject.IsInstanceValid(p.Owner);
     public bool CanClaim(NpcProgram program,GoapWorldState state,string prefix,string capability)=>capability=="capacity"&&program.Read(state,prefix+".available").IsTrue;
     public IEnumerable<KeyValuePair<string,GoapValue>> Capture(AiAgentComponent3D agent,IReadOnlyCollection<string> ids,bool planning)
     {
+        if(agent.ManagedActor!=null){foreach(var fact in NpcWorldCandidates.Capture(agent,ids,planning))yield return fact;yield break;}
         foreach(var id in ids)
         {
             if(!agent.World.Points.TryGetValue(id,out var p))continue;
@@ -89,6 +93,7 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     }
     public IEnumerable<NpcTargetCandidate> Candidates(AiAgentComponent3D agent,NpcTargetSelectorSpec selector)
     {
+        if(agent.ManagedActor!=null){foreach(var candidate in NpcWorldCandidates.Query(agent,selector))yield return candidate;yield break;}
         var ids=NpcWorldTargetQuery.Ids(agent,selector);
         agent.RecordQuery(selector,ids);
         int wanted=selector.Selection==NpcTargetSelection.Candidates?Math.Min(agent.Program.Policy.Targets,selector.Limit>0?selector.Limit:agent.Program.Policy.Targets):1;
@@ -116,11 +121,13 @@ public sealed class NpcPointBindingAdapter : INpcBindingAdapter
     }
     public bool Matches(AiAgentComponent3D agent,CharacterValue value,NpcTargetSelectorSpec selector)
     {
+        if(agent.ManagedActor!=null)return NpcWorldCandidates.Candidate(agent,value.Symbol) is {} remote&&NpcTargetQuery.Matches(agent.Program,selector,agent.Snapshot(),remote);
         if(Point(agent,value) is not {} p)return false;
         var candidate=Candidate(agent,p,agent.Owner.GlobalPosition.DistanceTo(p.UsePosition),true);
         return NpcTargetQuery.Matches(agent.Program,selector,agent.Snapshot(),candidate);
     }
-    public INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability)=>capability=="capacity"&&Point(agent,value)?.Owner.GetComponent<WorldUsageCapacityComponent3D>() is {} capacity&&capacity.Reserve(agent.ActorId)?new Lease(agent,capacity):null;
+    public INpcResourceLease Acquire(AiAgentComponent3D agent,CharacterValue value,string capability)=>agent.IsWorldProxy?NpcWorldCandidates.Acquire(agent,value.Symbol,capability)
+        :capability=="capacity"&&Point(agent,value)?.Owner.GetComponent<WorldUsageCapacityComponent3D>() is {} capacity&&capacity.Reserve(agent.ActorId)?new Lease(agent,capacity):null;
     sealed class Lease(AiAgentComponent3D agent,WorldUsageCapacityComponent3D capacity) : INpcResourceLease
     {
         bool released;

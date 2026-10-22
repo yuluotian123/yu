@@ -11,6 +11,8 @@ namespace GameLogic;
 public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProcessModule
 {
     public WorldCatalog Catalog {get;private set;}
+    public WorldRoutes Routes {get;private set;}
+    public WorldPopulation Population {get;private set;}
     public bool IsOpen=>_sessionRoot!=null&&GodotObject.IsInstanceValid(_sessionRoot);
     public bool IsSwitching=>_transition!=null;
     public string CurrentLevelId {get;private set;}="";
@@ -47,10 +49,11 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
         if(ResourceLoader.Exists(WorldDefinition.CommonPath))Configure(ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath));
         _save.RegisterSection(this);
     }
-    public void Configure(WorldDefinition definition){Catalog=new(definition);_definition=definition;}
+    public void Configure(WorldDefinition definition){Catalog=new(definition);_definition=definition;Routes=new(Catalog);Population=new(this);Population.Configure();}
     public void Process(double elapsed,double realElapsed)
     {
         RuntimeSeconds+=elapsed;PathQueriesLastFrame=0;SightQueriesLastFrame=0;
+        if(IsOpen&&!IsSwitching)Population?.Process();
         if(_restoreRequested&&!IsSwitching&&IsOpen)
         { _restoreRequested=false;_ = SwitchInternalAsync(_resumeLevel,"",true,default); }
     }
@@ -101,6 +104,7 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     internal void UnregisterEnvironment(AiWorldComponent3D world)=>_environments.Remove(world.Owner.GetInstanceId());
     public AiWorldComponent3D EnvironmentFor(Node node)
     {
+        if(Population?.OwnsEnvironment(node)==true)return Population.Environment;
         var level=LevelFor(node);
         return _environments.Values.FirstOrDefault(e=>level!=null?LevelFor(e.Owner)?.Id==level.Id:e.Owner.GetTree()==node.GetTree());
     }
@@ -112,6 +116,7 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     public WorldLevelDefinition LevelFor(Node node)
     {
         if(node==null)return null;
+        if(Population?.For(node) is {} actor)return Catalog.Levels.GetValueOrDefault(actor.Level);
         if(Player!=null&&(node==Player||Player.IsAncestorOf(node)))return CurrentContext?.Level;
         for(var n=node;n!=null;n=n.GetParent())
             if(_levels.TryGetValue(n.GetInstanceId(),out var entry))return entry.Definition;
@@ -133,7 +138,8 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     public JsonObject Capture()
     {
         var objects=new JsonObject();foreach(var entry in _objects)objects[entry.Key]=entry.Value.Capture();
-        return new(){["world_id"]=_definition?.Id??"",["level"]=CurrentLevelId,["player_transform"]=Player!=null?WriteTransform(Player.GlobalTransform):null,["objects"]=objects};
+        return new(){["world_id"]=_definition?.Id??"",["level"]=CurrentLevelId,["player_transform"]=Player!=null?WriteTransform(Player.GlobalTransform):null,["objects"]=objects,
+            ["population"]=Population?.Capture(),["closed_routes"]=new JsonArray((Routes?.Closed??Array.Empty<string>()).Select(id=>(JsonNode)JsonValue.Create(id)).ToArray())};
     }
     public void Restore(JsonObject state,int version)
     {
@@ -147,6 +153,7 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
         foreach(var world in _environments.Values)foreach(var actor in world.Actors.Values)actor.CancelPlan("WorldRestored");
         _objects.Clear();foreach(var entry in restored)_objects.Add(entry.Key,entry.Value);
         foreach(var instance in _instances.Values)instance.BindState(ObjectState(instance.ObjectId,instance.Definitions));
+        Routes?.Restore((state["closed_routes"] as JsonArray)?.Select(n=>n.GetValue<string>()));Population?.Restore(state["population"] as JsonObject);
         _resumeLevel=level;_resumeTransform=playerTransform;
         _restoreRequested=IsOpen&&level.Length>0;
     }

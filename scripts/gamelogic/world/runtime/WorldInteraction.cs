@@ -6,11 +6,28 @@ namespace GameLogic;
 /// <summary>One authoritative entry for player input and NPC interaction requests.</summary>
 public static class WorldInteraction
 {
+    public static WorldInteractionResult Semantic(GameLogic.AI.AiAgentComponent3D actor,string id,string operationId,double? amount=null,bool commit=false)
+    {
+        var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();var record=actor.ManagedActor;
+        if(record==null||!world.Catalog.Objects.TryGetValue(id??"",out var entry)||record.Level!=entry.Level.Id||actor.State.Location!=id||record.Travel!=null)return WorldInteractionResult.Fail("逻辑角色尚未抵达对象。");
+        if(!GameLogic.AI.NpcWorldCandidates.Open(actor,entry)||!actor.ActivityAllows(operationId))return WorldInteractionResult.Fail("对象权限、时段或活动条件不满足。");
+        var operation=entry.Capability<WorldInteractionCapability>()?.Operations.FirstOrDefault(o=>o.Id==operationId);
+        if(operation?.SupportsSemantic!=true||amount.HasValue&&(!double.IsFinite(amount.Value)||amount<=0||operation.ConsumedProperty.Length==0))return WorldInteractionResult.Fail("操作不支持语义后端或数量无效。");
+        var state=world.ObjectState(id);var loaded=world.ResolveObject(id);var capacity=state.Capability<WorldUsageCapacityState>("usage_capacity");
+        foreach(string key in operation.RequiredCapabilities)
+            if(state.Capability<WorldCapabilityState>(key)==null||loaded!=null&&!loaded.Owner.GetAllComponents().OfType<WorldCapabilityComponent3D>().Any(c=>c.CapabilityKey==key&&c.IsActive))return WorldInteractionResult.Fail("所需能力不可用："+key);
+        if(operation.RequireCapacity&&loaded?.Owner.GetComponent<WorldUsageCapacityComponent3D>() is {IsActive:false})return WorldInteractionResult.Fail("使用容量已停用。");
+        if(operation.RequireCapacity&&capacity?.Available(actor.ActorId,world.RuntimeSeconds)!=true)return WorldInteractionResult.Fail("对象正在使用中。");
+        var context=new WorldInteractionContext(actor.Owner,loaded,amount,state);var check=operation.Check(context);if(!check.Success||!commit)return check;
+        bool held=capacity?.Reserved(actor.ActorId,world.RuntimeSeconds)==true;
+        if(operation.RequireCapacity&&capacity?.ReservePersistent(actor.ActorId,world.RuntimeSeconds)!=true)return WorldInteractionResult.Fail("对象正在使用中。");
+        try{return operation.Apply(context);}finally{if(operation.RequireCapacity&&!held)capacity?.Release(actor.ActorId);}
+    }
     public static WorldInteractionResult Check(GameObject3D actor,WorldInteractionComponent3D point,string operationId,double? amount=null)
     {
         if(!GodotObject.IsInstanceValid(actor)||!actor.IsInsideTree()||string.IsNullOrWhiteSpace(actor.PersistentId))return WorldInteractionResult.Fail("交互角色无效。");
         var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
-        if(world.IsSwitching)return WorldInteractionResult.Fail("正在切换关卡。");
+        if(world.IsSwitching||world.Population?.IsCatchingUp==true)return WorldInteractionResult.Fail("正在切换关卡或补算世界事件。");
         if(!GodotObject.IsInstanceValid(point)||!point.IsActive||!GodotObject.IsInstanceValid(point.Owner)||!point.Owner.IsInsideTree()||point.Object==null
             ||world.ResolvePoint(point.PointId)!=point||world.ResolveObject(point.PointId)!=point.Object||actor.GetTree()!=point.Owner.GetTree()
             ||world.LevelFor(actor)?.Id!=world.LevelFor(point.Owner)?.Id)return WorldInteractionResult.Fail("目标不在当前关卡或已卸载。");

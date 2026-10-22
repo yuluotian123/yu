@@ -103,7 +103,7 @@ public partial class NpcSelectorBindingValidation : Node
             facts.Add(new("point."+point.Id+".open",GoapValue.Bool(true)));
             facts.Add(new("point."+point.Id+".available",GoapValue.Bool(true)));
             facts.Add(new("point."+point.Id+".stock",program.Encode("point."+point.Id+".stock",CharacterValue.Numeric(point.Id=="A"?stockA:stockB))));
-            facts.Add(new("point."+point.Id+".distance",program.Encode("point."+point.Id+".distance",CharacterValue.Numeric(point.Distance))));
+            facts.Add(new("point."+point.Id+".distance",program.Encode("point."+point.Id+".distance",CharacterValue.Numeric(point.Distance.Value))));
         }
         return new(facts);
     }

@@ -9,4 +9,6 @@ public partial class WorldLevelCatalog : Resource
     [Export] public string LevelId {get;set;}="";
     [Export] public string SourceSignature {get;set;}="";
     [Export] public Godot.Collections.Array<Godot.Collections.Dictionary> Entries {get;set;}=new();
+    [Export] public Godot.Collections.Array<Godot.Collections.Dictionary> Actors {get;set;}=new();
+    [Export] public Godot.Collections.Dictionary<string,Vector3> Entrances {get;set;}=new();
 }

@@ -20,7 +20,7 @@ public partial class NpcGmComponent3D
             + $"导航：{(nav == null ? "缺少组件" : !nav.IsActive ? "组件停用" : !nav.MapReady ? "地图未就绪" : NavigationStatus(nav.Status))}  ·  目标：{Or(nav?.TargetId, "无")}\n"
             + $"世界坐标：{a.Owner.GlobalPosition}  ·  速度：{move?.Velocity.Length():0.00} m/s\n"
             + $"移动：{(move == null ? "缺少组件" : !move.IsActive ? "组件停用" : move.StartDisabled ? "已禁用" : move.IsOnFloor ? "在地面" : "在空中")}  ·  控制锁：{(move?.MovementLocked == true ? "已锁定" : "无")}  ·  当前动画：{animation?.ActiveAnimation}\n\n"
-            + $"行动恢复：{a.CheckpointStatus}\n最近失败：{Failure(a.LastFailure)}\n导航最近失败：{Failure(nav?.Failure)}\n\n"
+            + $"活动：{Or(a.CurrentActivity,"无")} · 地点范围：{Or(a.ActivityPlace,"未限制")}\n行动恢复：{a.CheckpointStatus}\n最近失败：{Failure(a.LastFailure)}\n导航最近失败：{Failure(nav?.Failure)}\n\n"
             + "共享目标\n" + (a.SelectorBindings.Count == 0 ? "无" : string.Join("\n", a.SelectorBindings.Select(x =>
                 (a.Graph.FindNodeById(x.Key) is NpcTargetSelectorNodeData node ? a.Graph.Resolve(node.DefinitionId)?.DisplayName : null) + " → " + x.Value)))
             + "\n\n需求摘要\n" + (a.State == null ? "未初始化" : string.Join("  ·  ", a.State.Needs.Values.Select(n => $"{NeedName(a, n.Key)} {n.Value:0.00}"))));

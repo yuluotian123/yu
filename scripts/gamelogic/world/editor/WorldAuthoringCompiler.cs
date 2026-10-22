@@ -64,7 +64,7 @@ public static class WorldAuthoringCompiler
         if(cache.TryGetValue(path,out bool found))return found;
         cache[path]=false;
         var deps=Dependencies(path).ToArray();
-        return cache[path]=deps.Any(d=>d.EndsWith("/WorldObjectComponent3D.cs",StringComparison.Ordinal))
+        return cache[path]=deps.Any(d=>d.EndsWith("/WorldObjectComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldActorComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldSpawnPointComponent3D.cs",StringComparison.Ordinal))
             ||deps.Where(d=>d.EndsWith(".tscn")||d.EndsWith(".scn")||d.EndsWith(".tres")||d.EndsWith(".res")).Any(d=>Relevant(d,cache));
     }
     static void NormalizeScene(string path,HashSet<string> visited,Dictionary<string,bool> relevant)
@@ -93,7 +93,7 @@ public static class WorldAuthoringCompiler
     public static void Compile(WorldLevelDefinition level)=>Compile(level,new(StringComparer.Ordinal));
     static void Compile(WorldLevelDefinition level,Dictionary<string,bool> relevant)
     {
-        string signature=Signature(level.ScenePath,relevant)+"/"+level.Id+"/"+level.Location?.Id;
+        string signature=Signature(level.ScenePath,relevant)+"/population-v3/"+level.Id+"/"+level.Location?.Id;
         if(ResourceLoader.Exists(level.CatalogPath))
         {
             var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
@@ -103,11 +103,33 @@ public static class WorldAuthoringCompiler
         try
         {
             var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature};
+            if(root!=null)foreach(var host in WorldModule.Hosts(root))foreach(var spawn in host.Components.OfType<WorldSpawnPointComponent3D>())
+            {
+                var marker=host.GetNodeOrNull<Node3D>(spawn.MarkerPath);WorldCatalog.Require(marker!=null,"关卡入口缺少落点："+spawn.Entry);
+                Vector3 position=Vector3.Zero;
+                for(Node3D at=marker;at!=null&&at!=root;at=at.GetParent() as Node3D)position=at.Transform*position;
+                WorldCatalog.Require(catalog.Entrances.TryAdd(spawn.Entry,position),"关卡入口重复："+spawn.Entry);
+            }
             foreach(var pair in root!=null?WorldIdentity.Resolve(root):new Dictionary<GameObject3D,string>())
             {
                 var binding=pair.Key.Components.OfType<WorldObjectComponent3D>().Single();
                 WorldCatalog.ValidateOverrides(binding);binding.ValidateComponents(pair.Key.Components,pair.Key);
-                using var data=binding.Snapshot(pair.Value,level,pair.Key.Name).Encode();catalog.Entries.Add(data);
+                var reference=pair.Key.Components.OfType<WorldInteractionComponent3D>().FirstOrDefault()?.UsePositionPath;
+                var marker=reference!=null&&!reference.IsEmpty?pair.Key.GetNodeOrNull<Node3D>(reference):null;
+                Vector3 position=Vector3.Zero;for(Node3D at=marker??pair.Key;at!=null&&at!=root;at=at.GetParent() as Node3D)position=at.Transform*position;
+                using var data=(binding.Snapshot(pair.Value,level,pair.Key.Name) with{Position=position}).Encode();catalog.Entries.Add(data);
+            }
+            if(root!=null)foreach(var host in WorldModule.Hosts(root).Where(h=>h.Components.OfType<WorldActorComponent3D>().Any()))
+            {
+                var actor=host.Components.OfType<WorldActorComponent3D>().Single();
+                var character=host.Components.OfType<CharacterDataComponent3D>().SingleOrDefault();var ai=host.Components.OfType<GameLogic.AI.AiAgentComponent3D>().SingleOrDefault();
+                string scene=actor.ScenePathOverride.Length>0?actor.ScenePathOverride:host.SceneFilePath;
+                WorldCatalog.Require(!string.IsNullOrWhiteSpace(host.PersistentId)&&ResourceLoader.Exists(scene)&&character?.Profile!=null&&ai?.Graph!=null,"世界角色需要唯一 PersistentId、可复用 Scene、角色配置和 AI 图："+host.Name);
+                Vector3 position=Vector3.Zero;for(Node3D at=host;at!=null&&at!=root;at=at.GetParent() as Node3D)position=at.Transform*position;
+                float speed=host.Components.OfType<CharacterMovementComponent3D>().FirstOrDefault()?.Profile?.MoveSpeed??2.2f;
+                var shape=host.GetNodeOrNull<CollisionShape3D>("PhysicsBody/CollisionShape3D")?.Shape;
+                float height=shape switch {CapsuleShape3D capsule=>capsule.Height*.5f,BoxShape3D box=>box.Size.Y*.5f,SphereShape3D sphere=>sphere.Radius,_=>.36f};
+                using var entry=new WorldActorEntry(host.PersistentId,scene,level.Id,position,character.Profile,ai.Graph,speed,actor.DetailedDistance,actor.AbstractDistance,actor.MinimumResidencySeconds){ParameterOverrides=new(character.ParameterOverrides),HalfHeight=height,Running=ai.Running}.Encode();catalog.Actors.Add(entry);
             }
             DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(level.CatalogPath.GetBaseDir()));
             WorldCatalog.Require(ResourceSaver.Save(catalog,level.CatalogPath)==Error.Ok,"自动世界目录保存失败："+level.DisplayName);

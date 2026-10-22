@@ -17,11 +17,12 @@ public sealed partial record NpcActionContext(AiAgentComponent3D Agent,NpcAction
     string _operationId;
     double? _amount;
     bool _commitAttempted;
+    string _semanticTarget;
     readonly Dictionary<NpcGraphNumber,double> _numbers=new();
     readonly Dictionary<string,double> _localNumbers=new(StringComparer.Ordinal);
     public WorldInteractionResult LastInteractionResult {get;private set;}
     public CharacterValue Input(string name)=>Inputs.GetValueOrDefault(name??"");
-    public WorldInteractionComponent3D Point(string name)=>Input(name) is {Type:CharacterValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Points.GetValueOrDefault(id):null;
+    public WorldInteractionComponent3D Point(string name)=>Input(name) is {Type:CharacterValueType.Symbol,Symbol:{Length:>0} id}?Agent.World?.Session.ResolvePoint(id):null;
     public bool TryNumber(NpcGraphNumber definition,GraphExecutionContext execution,out double number)
     {
         if(_numbers.TryGetValue(definition,out number))return true;
@@ -41,6 +42,7 @@ public sealed partial record NpcActionContext(AiAgentComponent3D Agent,NpcAction
     public bool QueueInteraction(string input,string operation,double? amount=null)
     {
         var point=Point(input);
+        if(!Agent.ActivityAllows(operation)){LastInteractionResult=WorldInteractionResult.Fail("当前活动不允许此操作。");return false;}
         if(StartState!=null&&Action.Graph?.Interaction is {} planned)
         {
             var expected=planned.Amount.Evaluate(k=>Agent.Program.Read(StartState,k),Agent.Program.Parameter);
@@ -48,6 +50,8 @@ public sealed partial record NpcActionContext(AiAgentComponent3D Agent,NpcAction
                 ||Math.Abs(expected.Number-amount.Value)>1e-6*Math.Max(1,Math.Abs(expected.Number)))
             {LastInteractionResult=WorldInteractionResult.Fail("交互参数与本次行动的图内声明不一致。");return false;}
         }
+        if(Agent.IsWorldProxy)
+        {LastInteractionResult=WorldInteraction.Semantic(Agent,Input(input).Symbol,operation,amount);if(!LastInteractionResult.Success)return false;_semanticTarget=Input(input).Symbol;_operationId=operation;_amount=amount;return true;}
         if(_interactionPoint!=null)return point==_interactionPoint&&operation==_operationId&&amount==_amount;
         LastInteractionResult=WorldInteraction.Check(Agent.Owner,point,operation,amount);if(!LastInteractionResult.Success)return false;
         _interactionPoint=point;_operationId=operation;_amount=amount;return true;
@@ -55,6 +59,7 @@ public sealed partial record NpcActionContext(AiAgentComponent3D Agent,NpcAction
     internal WorldInteractionResult CommitInteraction()
     {
         if(_commitAttempted)return LastInteractionResult;_commitAttempted=true;
+        if(_semanticTarget!=null)return LastInteractionResult=WorldInteraction.Semantic(Agent,_semanticTarget,_operationId,_amount,true);
         return LastInteractionResult=_interactionPoint==null?(Action.Graph?.Interaction==null?WorldInteractionResult.Ok():WorldInteractionResult.Fail("执行图未请求声明的交互。"))
             :WorldInteraction.Execute(Agent.Owner,_interactionPoint,_operationId,_amount);
     }
@@ -85,6 +90,10 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public string SectionKey=>"npc_agent";
     public string EntryKey=>ActorId;
     public int SchemaVersion=>3;
+    public WorldActorRuntime ManagedActor=>World?.Session.Population?.For(Owner);
+    public bool IsWorldProxy=>ManagedActor?.IsProxy==true;
+    public double SimulationHours=>ManagedActor?.Hours??World?.Clock.TotalHours??12;
+    public double Now=>ManagedActor is {} actor?actor.Hours*World.Session.Population.SecondsPerHour:World?.RuntimeSeconds??0;
     public IEnumerable<Type> GetGraphNodeTypes(GraphAsset graph, GraphAsset root) => graph is NpcGraphAsset
         ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
     public IEnumerable<Type> GetGraphActionTypes(GraphAsset graph, GraphAsset root) => graph is FlowGraphAsset && (root is NpcGraphAsset || Graph?.Definitions.OfType<NpcActionDefinition>().Any(a=>a.ExecutionGraph==graph)==true)
@@ -116,11 +125,12 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
             Program=NpcProgram.Compile(Graph,Character.Profile);
             foreach(var parameter in Character.State.Profile.Parameters)Program.Parameters[parameter.Key]=parameter.Value;
             Decision=new(Program,State);Character.Restored+=CharacterRestored;
-            _senseAt=(World?.RuntimeSeconds??0)+Math.Abs(ActorId.GetHashCode()%100)*.003;
+            _senseAt=Now+Math.Abs(ActorId.GetHashCode()%100)*.003;
             Navigation=Owner.GetComponent<NpcNavigationComponent3D>();
             _checkpointSignature=NpcCheckpointLayout.Signature(Program);
             _save=ModuleSystem.GetModule<ISaveModule>();if(Persist)_save.RegisterSection(this);
             Record("Initialized");
+            World?.Session.Population?.Ready(this);
         }
         catch(Exception error){Running=false;LastFailure=error.Message;GD.PushError($"NPC {ActorId}: {error.Message}");}
     }
@@ -133,33 +143,38 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public override void OnUpdate(double delta)
     {
         if(!_registered)Register();
-        if(Program==null||State==null||World==null||ModuleSystem.GetModule<IWorldModule>().IsSwitching)return;
+        if(Program==null||State==null||World==null||ModuleSystem.GetModule<IWorldModule>().IsSwitching&&!IsWorldProxy)return;
+        if(ManagedActor!=null&&!IsWorldProxy&&World.Session.Population.IsCatchingUp)return;
         Decision.Refresh();
+        if(ManagedActor is {} managed&&!IsWorldProxy)
+        {double hours=World.Clock.TotalHours;delta=Math.Max(0,hours-managed.Hours)*World.Session.Population.SecondsPerHour;managed.Hours=hours;}
+        if(IsWorldProxy)IsAbstract=true;
+        UpdateActivity();
         if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_selectorBindings.Count>0)CancelPlan("Stopped");return;}
         if(_pendingCheckpoint!=null){TryResumeCheckpoint();if(_pendingCheckpoint!=null)return;}
         var player=ModuleSystem.GetModule<IWorldModule>().Player;
-        if(player!=null){float distance=player.GlobalPosition.DistanceTo(Owner.GlobalPosition);bool next=IsAbstract?distance>Program.Policy.Detailed:distance>Program.Policy.Abstract;if(next!=IsAbstract){CancelPlan("LodChanged");IsAbstract=next;}}
-        if(World.RuntimeSeconds>=_senseAt){_senseAt=World.RuntimeSeconds+Program.SenseInterval;Sense();}
-        if(World.RuntimeSeconds>=_selectAt){_selectAt=World.RuntimeSeconds+.5;SelectGoal();}
+        if(player!=null&&ManagedActor==null){float distance=player.GlobalPosition.DistanceTo(Owner.GlobalPosition);bool next=IsAbstract?distance>Program.Policy.Detailed:distance>Program.Policy.Abstract;if(next!=IsAbstract){CancelPlan("LodChanged");IsAbstract=next;}}
+        if(!IsWorldProxy&&Now>=_senseAt){_senseAt=Now+Program.SenseInterval;Sense();}
+        if(Now>=_selectAt){_selectAt=Now+.5;SelectGoal();}
         if(_current!=null)TickExecution(delta);
         else if(_plan.Count>0)BeginAction(_plan.Dequeue());
         // Candidate construction and GOAP share the level's fair planning scheduler.
     }
     void Sense()
     {
-        foreach(var id in _seenPoints.Where(id=>_seenUntil.GetValueOrDefault(id)<=World.RuntimeSeconds).ToArray()){_seenPoints.Remove(id);_seenUntil.Remove(id);}
+        foreach(var id in _seenPoints.Where(id=>_seenUntil.GetValueOrDefault(id)<=Now).ToArray()){_seenPoints.Remove(id);_seenUntil.Remove(id);}
         var nearby=World.Nearby(Owner.GlobalPosition,(float)Program.ViewRange)
             .Where(p=>p.IsActive&&(Program.PointTags.Length==0||Program.PointTags.Any(p.Tags.Contains))&&Owner.GlobalPosition.DistanceTo(p.UsePosition)<=Program.ViewRange)
             .OrderBy(p=>Owner.GlobalPosition.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal).ToArray();
         for(int i=0;i<Math.Min(8,nearby.Length);i++)
         {
             var p=nearby[_senseCursor%nearby.Length];
-            if(Program.LineOfSight&&!World.Session.TrySpendSightQuery()){_senseAt=World.RuntimeSeconds+.02;break;}
+            if(Program.LineOfSight&&!World.Session.TrySpendSightQuery()){_senseAt=Now+.02;break;}
             _senseCursor++;
             if(!Program.LineOfSight||CanSee(p.UsePosition))
             {
                 _seenPoints.Add(p.PointId);Character.WorldKnowledge.Observe(p.PointId,p.Object.EffectiveLocation?.Id,World.TotalHours,p.Owner.GetComponent<WorldStockComponent3D>()?.Amount,p.Object.IsAvailable);
-                _seenUntil[p.PointId]=World.RuntimeSeconds+Program.SenseInterval*2;
+                _seenUntil[p.PointId]=Now+Program.SenseInterval*2;
             }
             else{_seenPoints.Remove(p.PointId);_seenUntil.Remove(p.PointId);}
         }
@@ -175,8 +190,11 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     }
     public CharacterValue Read(string key)=>key switch
     {
-        "world.hour"=>CharacterValue.Numeric((World?.Clock.TotalHours??12)%24),
+        "world.hour"=>CharacterValue.Numeric(SimulationHours%24),
         "world.rain"=>CharacterValue.Numeric(World?.RainAmount??0),
+        "activity.id"=>CharacterValue.Text(CurrentActivity),
+        "activity.place"=>CharacterValue.Text(ActivityPlace),
+        "activity.active"=>CharacterValue.Bool(_activity!=null),
         "self.level" or "self.place"=>Character.Read(key),
         _=>Decision?.Read(key)??default
     };
@@ -185,18 +203,18 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         _scores.Clear();NpcGoalSpec best=null;double bestScore=0,currentScore=0;
         foreach(var goal in Program.Goals)
         {
-            bool active=goal.Activation==null||goal.Activation.Evaluate(Read,Program.Parameter).IsTrue;
+            bool active=ActivityGoalAllowed(goal)&&(goal.Activation==null||goal.Activation.Evaluate(Read,Program.Parameter).IsTrue);
             bool done=goal.Completion.Evaluate(Read,Program.Parameter).IsTrue;
             var score=goal.Utility.Evaluate(Read,Program.Parameter);
-            bool blocked=_goalBlockedUntil.GetValueOrDefault(goal.Id)>World.RuntimeSeconds;
+            bool blocked=_goalBlockedUntil.GetValueOrDefault(goal.Id)>Now;
             double value=active&&!done&&!blocked&&score.Type==CharacterValueType.Number?Math.Max(0,score.Number):0;
             _scores.Add($"{goal.Name}: {value:0.###} · {(done?"已完成":blocked?"失败冷却":!active?"条件不满足":score.Type!=CharacterValueType.Number?"评分未知":"可选")}");
             if(goal==_goal)currentScore=value;
             if(value>bestScore){best=goal;bestScore=value;}
         }
         if(best==_goal)return;
-        if(_goal!=null&&currentScore>0&&(World.RuntimeSeconds-_committedAt<Program.Policy.Commitment||bestScore<currentScore+Program.Policy.Margin))return;
-        CancelPlan("GoalChanged");_goal=best;_committedAt=World.RuntimeSeconds;
+        if(_goal!=null&&currentScore>0&&(Now-_committedAt<Program.Policy.Commitment||bestScore<currentScore+Program.Policy.Margin))return;
+        CancelPlan("GoalChanged");_goal=best;_committedAt=Now;
         if(best!=null)Record("Goal",best.Name);
     }
     readonly HashSet<string> _queryPoints=new(StringComparer.Ordinal),_authorizedPoints=new(StringComparer.Ordinal);
@@ -215,10 +233,10 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     {
         distance=0;if(Navigation?.MapReady!=true)return false;
         var key=(point.PointId,Owner.GlobalPosition,point.UsePosition,NavigationServer3D.MapGetIterationId(Navigation.Agent.GetNavigationMap()));
-        if(_paths.TryGetValue(key,out var cached)&&World.RuntimeSeconds-cached.Time<2){distance=cached.Distance;return cached.Reachable;}
+        if(_paths.TryGetValue(key,out var cached)&&Now-cached.Time<2){distance=cached.Distance;return cached.Reachable;}
         if(!World.Session.TrySpendPathQuery()){_queryBudgetExceeded=true;return false;}
         bool reachable=Navigation.TryEstimateBetween(Owner.GlobalPosition,point.UsePosition,out distance);
-        if(_paths.Count>256)_paths.Clear();_paths[key]=(World.RuntimeSeconds,reachable,distance);return reachable;
+        if(_paths.Count>256)_paths.Clear();_paths[key]=(Now,reachable,distance);return reachable;
     }
     public GoapWorldState Snapshot(IEnumerable<string> objects=null,bool planning=false)
     {
@@ -234,10 +252,10 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         var allowed=_goal.Plans.Where(p=>p.Eligibility==null||p.Eligibility.Evaluate(Read,Program.Parameter).IsTrue).SelectMany(p=>p.ActionIds).ToHashSet();
         var requests=_goal.Actions.Where(a=>allowed.Contains(a.Id)).SelectMany(a=>a.Inputs.Where(i=>i.IsTarget)
             .Select(i=>(Key:NpcProgram.QueryKey(a,i),Selector:Program.QuerySelector(a,i)))).DistinctBy(r=>r.Key).ToArray();
-        if(requests.Any(r=>r.Selector.RequireReachable)&&Navigation?.MapReady!=true){_retryAt=World.RuntimeSeconds+.1;return;}
+        if(ManagedActor==null&&requests.Any(r=>r.Selector.RequireReachable)&&Navigation?.MapReady!=true){_retryAt=Now+.1;return;}
         _grounded.Clear();_queryPoints.Clear();_authorizedPoints.Clear();_queryBudgetExceeded=false;QueryDiagnostics="";
         var queries=requests.ToDictionary(r=>r.Key,r=>(IReadOnlyList<NpcTargetCandidate>)NpcBindingAdapters.Find(r.Selector.Adapter).Candidates(this,r.Selector).ToArray());
-        if(_queryBudgetExceeded){_retryAt=World.RuntimeSeconds+.02;LastFailure="QueryBudgetPending";return;}
+        if(_queryBudgetExceeded){_retryAt=Now+.02;LastFailure="QueryBudgetPending";return;}
         var points=queries.Values.SelectMany(p=>p).DistinctBy(p=>(p.Adapter,p.Id)).ToArray();_queryPoints.UnionWith(points.Select(p=>p.Id));var snapshot=Snapshot(_queryPoints,true);
         if(requests.Length>0&&points.Length==0&&QueryDiagnostics.Contains("TargetUnloaded")){Fail("TargetUnloaded",false);return;}
         try{foreach(var bound in NpcTargetQuery.Ground(Program,_goal,snapshot,points,queries))_grounded[bound.Search.Id]=bound;}
@@ -247,7 +265,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public void AdvancePlanning(double milliseconds)
     {
         if(_pendingCheckpoint!=null)return;
-        if(_search==null&&_current==null&&_plan.Count==0&&Running&&World!=null&&World.RuntimeSeconds>=_retryAt)BeginPlanning();
+        if(_search==null&&_current==null&&_plan.Count==0&&Running&&World!=null&&Now>=_retryAt)BeginPlanning();
         if(_search==null||!Running)return;
         if(_search.SourceVersion!=State.Revision){CancelPlan("StateChanged");return;}
         var status=_search.Advance(Program.Policy.Slice,milliseconds);
@@ -275,16 +293,17 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     void Fail(string reason,bool blockGoal=true)
     {
         LastFailure=reason;
-        if(blockGoal&&_goal!=null)_goalBlockedUntil[_goal.Id]=(World?.RuntimeSeconds??0)+(Program?.Policy.Retry??2);
-        CancelPlan(reason);_retryAt=(World?.RuntimeSeconds??0)+(blockGoal?0:Program?.Policy.Retry??2);_selectAt=0;
+        if(blockGoal&&_goal!=null)_goalBlockedUntil[_goal.Id]=Now+(Program?.Policy.Retry??2);
+        CancelPlan(reason);_retryAt=Now+(blockGoal?0:Program?.Policy.Retry??2);_selectAt=0;
     }
     public void CancelPlan(string reason="Replan")
     {
+        if(ManagedActor is {} actor&&reason is not ("Restored" or "CharacterRestored" or "Destroyed" or "LevelChanging" or "LevelUnloaded"))actor.Travel=null;
         _pendingCheckpoint=null;_actionInstanceId="";_planInstanceId="";
         StopExecution();_search?.Invalidate();_search=null;_plan.Clear();_selectedPlan=null;_selectorBindings.Clear();
         ReleaseResources();_current=null;Navigation?.Stop();Record("Cancelled",reason);
     }
-    public void Record(string kind,string detail=""){_trace.Add($"{World?.RuntimeSeconds??0:0.0} {kind} {detail}");while(_trace.Count>128)_trace.RemoveAt(0);}
+    public void Record(string kind,string detail=""){_trace.Add($"{Now:0.0} {kind} {detail}");while(_trace.Count>128)_trace.RemoveAt(0);}
     public string Describe()=>$"{ActorId}  {CurrentGoal} → {CurrentAction}  完成 {CompletedActions}  LOD {(IsAbstract?"抽象":"详细")}\n"+string.Join("\n",_selectorBindings.Select(b=>b.Key+" = "+b.Value))+"\n"+string.Join("\n",_scores)+"\n"+string.Join("\n",_trace.TakeLast(8));
     void CharacterRestored(){var pending=_pendingCheckpoint;CancelPlan("CharacterRestored");_pendingCheckpoint=pending;_seenPoints.Clear();_seenUntil.Clear();_paths.Clear();_authorizedPoints.Clear();Decision?.Refresh();_goal=null;_senseAt=_selectAt=_retryAt=0;}
     public override void OnDestroy(){if(Character!=null)Character.Restored-=CharacterRestored;CancelPlan("Destroyed");if(_registered&&World?.Actors.GetValueOrDefault(ActorId)==this)World.Actors.Remove(ActorId);if(Persist)_save?.UnregisterSection(this);World=null;_registered=false;}

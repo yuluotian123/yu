@@ -40,6 +40,7 @@ public sealed class WorldUsageCapacityState(int slots) : WorldCapabilityState
     public bool Available(string actor,double now){Expire(now);return _leases.ContainsKey(actor)||_leases.Count<Slots;}
     public bool Reserve(string actor,double now){if(!Available(actor,now))return false;_leases[actor]=now+5;return true;}
     public bool Reserved(string actor,double now){Expire(now);return _leases.ContainsKey(actor);}
+    public bool ReservePersistent(string actor,double now){if(!Available(actor,now))return false;_leases[actor]=double.PositiveInfinity;return true;}
     public void Release(string actor)=>_leases.Remove(actor);
     public override JsonObject Capture()=>new();
     public override void Restore(JsonObject data){WorldCatalog.Require(data.Count==0,"容量存档不包含现场租约。");_leases.Clear();}

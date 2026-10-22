@@ -83,7 +83,7 @@ public partial class AiWorldComponent3D : Component3D,ICharacterEnvironment
     }
     public override void OnDestroy()
     {
-        foreach(var actor in Actors.Values.ToArray())actor.CancelPlan("LevelUnloaded");Actors.Clear();_actors.Clear();
+        foreach(var actor in Actors.Values.ToArray())if(actor.ManagedActor==null)actor.CancelPlan("LevelUnloaded");Actors.Clear();_actors.Clear();
         foreach(var point in Points.Values.ToArray())Session.UnregisterPoint(point);Points.Clear();_cells.Clear();_pointCells.Clear();
         Session.UnregisterEnvironment(this);Owner.RemoveFromGroup(Group);
     }

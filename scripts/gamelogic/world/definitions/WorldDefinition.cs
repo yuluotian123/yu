@@ -8,6 +8,7 @@ public partial class WorldDefinition : WorldRecord
     [Export] public Godot.Collections.Array<WorldLocationDefinition> Locations {get;set;}=new();
     [Export] public Godot.Collections.Array<WorldLevelDefinition> Levels {get;set;}=new();
     [Export] public Godot.Collections.Array<WorldObjectTypeDefinition> ObjectTypes {get;set;}=new();
+    [Export] public Godot.Collections.Array<WorldRouteDefinition> Routes {get;set;}=new();
     [Export] public WorldLevelDefinition InitialLevel {get;set;}
     [Export] public TimeOfDayProfile Calendar {get;set;}
     [Export(PropertyHint.File,"*.tscn,*.scn")] public string PlayerScene {get;set;}="res://assets/scenes/player.tscn";

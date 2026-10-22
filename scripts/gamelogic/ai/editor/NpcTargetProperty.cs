@@ -85,7 +85,7 @@ public partial class NpcTargetProperty : EditorProperty
             string[] labels=_property switch
             {
                 nameof(NpcTargetSelectorDefinition.Source)=>new[]{"感知到的对象","本关卡已加载的对象（授权状态）","角色参数指定的对象","当前位置对应的对象","已知对象","固定世界对象","世界目录查询","角色对象绑定"},
-                nameof(NpcTargetSelectorDefinition.Scope)=>new[]{"当前关卡","当前地点","指定地点","角色地点绑定","整个世界"},
+                nameof(NpcTargetSelectorDefinition.Scope)=>new[]{"当前关卡","当前地点","指定地点","角色地点绑定","整个世界","当前活动地点"},
                 nameof(NpcTargetSelectorDefinition.Information)=>new[]{"已知具体对象","已知地点的公开服务","授权访问权威状态"},
                 _=>new[]{"提供多个候选给 GOAP","最近一个","评分最低的一个","评分最高的一个"}
             };

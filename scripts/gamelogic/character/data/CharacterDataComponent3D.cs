@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using Framework;
@@ -49,7 +50,7 @@ public partial class CharacterDataComponent3D : Component3D, ISaveSection
         if(key=="self.place")
         {
             var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
-            return CharacterValue.Text(world.ResolveObject(State?.Location)?.EffectiveLocation?.Id??world.LevelFor(Owner)?.Location?.Id??"");
+            return CharacterValue.Text(world.ResolveObject(State?.Location)?.EffectiveLocation?.Id??world.Catalog?.Objects.GetValueOrDefault(State?.Location??"")?.Location?.Id??world.LevelFor(Owner)?.Location?.Id??"");
         }
         if(key=="world.hour")return CharacterValue.Numeric((Environment?.TotalHours??ModuleSystem.GetModule<ITimeOfDayModule>()?.Clock.TotalHours??12)%24);
         if(key=="world.rain")
@@ -61,6 +62,8 @@ public partial class CharacterDataComponent3D : Component3D, ISaveSection
     public override void OnUpdate(double delta)
     {
         if(State==null)return;
+        var session=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
+        if(session.Population?.For(Owner)!=null&&session.Population.IsCatchingUp)return;
         var environment=Environment;
         State.Advance(environment?.TotalHours??ModuleSystem.GetModule<ITimeOfDayModule>()?.Clock.TotalHours??12,Read);
         if(environment!=null)State.UpdateLocation(environment.LocationAt(Owner.GlobalPosition,State.Location));

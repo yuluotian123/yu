@@ -41,6 +41,7 @@ public sealed partial class WorldModule
         _sessionRoot=new(){Name="WorldSessionRoot"};_actorsRoot=new(){Name="Actors"};_levelsRoot=new(){Name="Levels"};
         _sessionRoot.AddChild(_actorsRoot);_sessionRoot.AddChild(_levelsRoot);parent.AddChild(_sessionRoot);
         if(_definition.Calendar!=null)ModuleSystem.GetModule<ITimeOfDayModule>().Attach(_sessionRoot,_definition.Calendar);
+        Population?.Start(_sessionRoot);
     }
     internal void AdoptStandalone(WorldLevelContextComponent3D context)
     {
@@ -69,6 +70,7 @@ public sealed partial class WorldModule
     async Task<bool> SwitchInternalAsync(string levelId,string entry,bool restorePosition,CancellationToken cancellation)
     {
         if(!IsOpen){LastError="世界会话未打开。";return false;}
+        if(Population?.IsCatchingUp==true){LastError="正在补算世界事件。";return false;}
         if(IsSwitching){LastError="已有正在执行的关卡切换。";return false;}
         if(levelId==null||Catalog?.Levels.TryGetValue(levelId,out var target)!=true){LastError="目标关卡未登记。";return false;}
         var operation=++_operation;
@@ -93,6 +95,9 @@ public sealed partial class WorldModule
             for(int i=0;i<next.Components.Count;i++)if(next.Components[i] is WorldLevelContextComponent3D)next.Components[i]=context;
             string arrival=string.IsNullOrWhiteSpace(entry)?target.DefaultEntry:entry;
             WorldIdentity.Bind(next);ValidateScene(next,target,arrival);
+            while(Population?.Backlog>0)
+            {Population.Process(true);await _sessionRoot.ToSignal(_sessionRoot.GetTree(),SceneTree.SignalName.ProcessFrame);CheckRequest(operation,token);}
+            Population?.PrepareScene(next,target);
             if(Player==null)
             {
                 newPlayerHandle=ModuleSystem.GetModule<IResourceModule>().LoadSceneAsync(_definition.PlayerScene).WithCancellation(token);
@@ -107,7 +112,7 @@ public sealed partial class WorldModule
             _pausedBeforeTransition=oldClockPaused;
             if(Player!=null)Player.ProcessMode=Node.ProcessModeEnum.Disabled;
             _save.CheckpointSections();beforeObjects=_objects.ToDictionary(p=>p.Key,p=>p.Value.Capture());
-            foreach(var environment in _environments.Values.ToArray())foreach(var actor in environment.Actors.Values.ToArray())actor.CancelPlan("LevelChanging");
+            foreach(var environment in _environments.Values.ToArray())foreach(var actor in environment.Actors.Values.ToArray())if(actor.ManagedActor==null)actor.CancelPlan("LevelChanging");
             if(old!=null)
             {
                 old.GetParent().RemoveChild(old);detached=true;
@@ -236,6 +241,7 @@ public sealed partial class WorldModule
         ++_operation;_transition?.Cancel();_transition=null;_loading?.Dispose();_loading=null;_committing=false;_restoreRequested=false;
         if(_pausedBeforeTransition is {} paused){ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=paused;_pausedBeforeTransition=null;}
         if(IsOpen)_save?.CheckpointSections();
+        Population?.Close();
         if(_ownsLevel&&GodotObject.IsInstanceValid(_activeLevel))_activeLevel.Free();
         if(GodotObject.IsInstanceValid(_sessionRoot))ModuleSystem.GetModule<ITimeOfDayModule>().Detach(_sessionRoot);
         if(GodotObject.IsInstanceValid(_sessionRoot))_sessionRoot.Free();

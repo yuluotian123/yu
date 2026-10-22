@@ -26,6 +26,7 @@ public partial class AiAgentComponent3D
             var value=Program.Read(context,"input."+input.Name);
             if(NpcBindingAdapters.Find(input.Adapter) is {} adapter&&!adapter.Validate(this,value))return false;
             if(!input.IsTarget)continue;
+            if(ActivityPlace.Length>0&&World.Session.Catalog.Objects.TryGetValue(value.Symbol,out var locationTarget)&&!World.Session.Catalog.InPlace(locationTarget.Location?.Id??locationTarget.Level.Location?.Id,ActivityPlace))return false;
             if(!NpcBindingAdapters.Find(input.Adapter).Matches(this,value,Program.TargetSelectors[input.SelectorId]))return false;
         }
         return true;
@@ -33,6 +34,8 @@ public partial class AiAgentComponent3D
     bool Meets(CharacterExpression expression,GoapWorldState context)=>expression==null||expression.Evaluate(k=>Program.Read(context,k),Program.Parameter).IsTrue;
     internal void BeginAction(NpcBoundAction bound,NpcSavedAction checkpoint=null)
     {
+        if(IsWorldProxy&&NpcCheckpointLayout.Create(bound.Action.Execution)==null){Fail("UnsupportedRemoteExecution");return;}
+        if(bound.Action.Graph?.Interaction is {} operation&&!ActivityAllows(operation.Operation)){Fail("ActivityOperationDenied");return;}
         if(_selectedPlan?.Eligibility is {} eligibility&&!Meets(eligibility,Snapshot())){Fail("PlanEligibilityChanged");return;}
         var context=LiveContext(bound);
         if(!ValidateInputs(bound,context)){Fail("InputUnavailable",false);return;}

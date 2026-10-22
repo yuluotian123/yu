@@ -11,6 +11,8 @@ public sealed class WorldCatalog
     public IReadOnlyDictionary<string,WorldLocationDefinition> Locations {get;}
     public IReadOnlyDictionary<string,WorldLevelDefinition> Levels {get;}
     public IReadOnlyDictionary<string,WorldCatalogEntry> Objects {get;}
+    public IReadOnlyDictionary<string,WorldActorEntry> Actors {get;}
+    public readonly Dictionary<(string Level,string Entry),Vector3> Entrances=new();
     readonly Dictionary<string,WorldCatalogEntry[]> _byLevel=new(),_byPlace=new(),_byTag=new(),_byType=new(),_byCapability=new(),_byOperation=new();
     readonly Dictionary<string,HashSet<string>> _tags=new();
     readonly Dictionary<string,HashSet<string>> _adapters=new();
@@ -25,6 +27,13 @@ public sealed class WorldCatalog
         Locations=definition.Locations.ToDictionary(r=>r.Id,StringComparer.Ordinal);
         Levels=definition.Levels.ToDictionary(r=>r.Id,StringComparer.Ordinal);
         Objects=(entries??LoadEntries(definition)).ToDictionary(r=>r.Id,StringComparer.Ordinal);
+        var actors=new List<WorldActorEntry>();
+        if(entries==null)foreach(var level in definition.Levels)
+            if(ResourceLoader.Exists(level.CatalogPath))
+            {var catalog=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath);foreach(var entry in catalog.Actors)actors.Add(WorldActorEntry.Decode(entry));foreach(var entrance in catalog.Entrances)Entrances.Add((level.Id,entrance.Key),entrance.Value);}
+        foreach(var actor in actors)Require(!string.IsNullOrWhiteSpace(actor.Id)&&ids.Add(actor.Id)&&Levels.ContainsKey(actor.LevelId)&&actor.Profile!=null&&actor.Graph!=null
+            &&ResourceLoader.Exists(actor.ScenePath)&&actor.Position.IsFinite()&&float.IsFinite(actor.Speed)&&actor.Speed>0&&float.IsFinite(actor.DetailedDistance)&&actor.DetailedDistance>=0&&float.IsFinite(actor.AbstractDistance)&&actor.AbstractDistance>=actor.DetailedDistance&&double.IsFinite(actor.ResidencySeconds)&&actor.ResidencySeconds>=0,"世界角色配置或身份无效："+actor.Id);
+        Actors=actors.ToDictionary(a=>a.Id,StringComparer.Ordinal);
         foreach(var location in Locations.Values)
         {
             var visited=new HashSet<string>();

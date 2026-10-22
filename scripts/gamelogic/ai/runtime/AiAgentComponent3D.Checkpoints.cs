@@ -23,6 +23,7 @@ public partial class AiAgentComponent3D
     {
         var data=Decision?.Capture()??new();
         data["completed_actions"]=CompletedActions;data["last_committed_action"]=_lastCommittedInstanceId;
+        data["activity"]=CaptureActivity();
         NpcPlanCheckpoint checkpoint=_pendingCheckpoint;
         if(checkpoint==null&&_selectedPlan!=null&&_goal!=null&&(_current!=null||_plan.Count>0))
         {
@@ -51,6 +52,7 @@ public partial class AiAgentComponent3D
         _checkpointNavigationDeadline=0;
         if(State==null||version!=SchemaVersion){CheckpointStatus="Replan:UnsupportedSchema";return;}
         Decision.Restore(data);CompletedActions=Math.Max(0,data?["completed_actions"]?.GetValue<int>()??0);
+        RestoreActivity(data?["activity"] as JsonObject);
         _lastCommittedInstanceId=data?["last_committed_action"]?.GetValue<string>()??"";
         try
         {
@@ -120,13 +122,13 @@ public partial class AiAgentComponent3D
             var firstLayout=first==null?null:NpcCheckpointLayout.Create(first.Action.Execution);
             bool needsNavigation=firstLayout?.Steps.Any(step=>step.Key is NpcMoveToTargetAction
                 &&(saved.Current==null||committed||saved.Current.Execution.Progress?.GetValueOrDefault(step.Value)?.Complete!=true))==true;
-            if(needsNavigation)
+            if(needsNavigation&&!IsWorldProxy)
             {
                 NpcProgram.Require(Navigation!=null,"NavigationMissing");
                 if(!Navigation.MapReady)
                 {
-                    if(_checkpointNavigationDeadline==0)_checkpointNavigationDeadline=World.RuntimeSeconds+5;
-                    NpcProgram.Require(World.RuntimeSeconds<_checkpointNavigationDeadline,"NavigationUnavailable");
+                    if(_checkpointNavigationDeadline==0)_checkpointNavigationDeadline=Now+5;
+                    NpcProgram.Require(Now<_checkpointNavigationDeadline,"NavigationUnavailable");
                     CheckpointStatus="等待导航就绪";return;
                 }
             }
@@ -140,7 +142,7 @@ public partial class AiAgentComponent3D
                 // may legitimately change after selection; execution revalidates the bound object.
                 RecordQuery(selector,new[]{id});
             }
-            _committedAt=World.RuntimeSeconds;_selectAt=World.RuntimeSeconds+.5;CheckpointStatus="已恢复";
+            _committedAt=Now;_selectAt=Now+.5;CheckpointStatus="已恢复";
             if(saved.Current!=null&&!committed)
             {
                 BeginAction(bound[0],saved.Current);

@@ -47,7 +47,7 @@ public partial class NpcGraphValuesValidation : Node
             string key="point."+point.Id;
             facts.Add(new(key+".open",GoapValue.Bool(true)));facts.Add(new(key+".available",GoapValue.Bool(true)));
             facts.Add(new(key+".stock",program.Encode(key+".stock",CharacterValue.Numeric(point.Id=="A"?stockA:stockB))));
-            facts.Add(new(key+".distance",program.Encode(key+".distance",CharacterValue.Numeric(point.Distance))));
+            facts.Add(new(key+".distance",program.Encode(key+".distance",CharacterValue.Numeric(point.Distance.Value))));
             facts.Add(new(NpcProgram.OperationKey(point.Id,"take_stock")+".resource",GoapValue.Id("stock")));
             facts.Add(new(NpcProgram.OperationKey(point.Id,"take_stock")+".capacity",GoapValue.Bool(true)));
         }

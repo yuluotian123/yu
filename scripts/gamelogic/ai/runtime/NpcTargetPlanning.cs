@@ -6,7 +6,9 @@ using Godot;
 namespace GameLogic.AI;
 
 /// <summary>Value snapshot supplied by the world adapter, never a mutable scene/component reference.</summary>
-public sealed record NpcTargetCandidate(string Id,IReadOnlyList<string> Tags,Vector3 Position,double Distance,bool Usable,bool Reachable,bool Perceived,bool Known,string Adapter="point",string ObjectTypeId="",IReadOnlyList<string> Capabilities=null,IReadOnlyList<string> Operations=null);
+public sealed record NpcTargetCandidate(string Id,IReadOnlyList<string> Tags,Vector3? Position,double? Distance,bool Usable,bool Reachable,bool Perceived,bool Known,string Adapter="point",string ObjectTypeId="",IReadOnlyList<string> Capabilities=null,IReadOnlyList<string> Operations=null,
+    string LevelId="",double? TravelHours=null,string CostSource="local_navigation",bool Executable=true)
+{public double RankingCost=>TravelHours??Distance??double.PositiveInfinity;}
 
 public static class NpcTargetQuery
 {
@@ -31,14 +33,14 @@ public static class NpcTargetQuery
         {
             var context=program.TargetContext(state,p.Id,p.Distance,selector.Adapter);
             var score=selector.Selection is NpcTargetSelection.LowestScore or NpcTargetSelection.HighestScore
-                ?selector.Score?.Evaluate(k=>program.Read(context,k),program.Parameter)??default:CharacterValue.Numeric(p.Distance);
+                ?selector.Score?.Evaluate(k=>program.Read(context,k),program.Parameter)??default:CharacterValue.Numeric(p.RankingCost);
             return(Point:p,Score:score);
         }).Where(p=>p.Score.Type==CharacterValueType.Number);
         candidates=selector.Selection==NpcTargetSelection.HighestScore
             ?candidates.OrderByDescending(p=>p.Score.Number).ThenBy(p=>p.Point.Id,StringComparer.Ordinal)
             :selector.Selection==NpcTargetSelection.LowestScore
                 ?candidates.OrderBy(p=>p.Score.Number).ThenBy(p=>p.Point.Id,StringComparer.Ordinal)
-                :candidates.OrderBy(p=>p.Point.Distance).ThenBy(p=>p.Point.Id,StringComparer.Ordinal);
+                :candidates.OrderBy(p=>p.Point.RankingCost).ThenBy(p=>p.Point.Id,StringComparer.Ordinal);
         int count=selector.Selection==NpcTargetSelection.Candidates?Math.Min(program.Policy.Targets,selector.Limit>0?selector.Limit:program.Policy.Targets):1;
         return candidates.Take(count).Select(p=>p.Point).ToArray();
     }
@@ -46,7 +48,7 @@ public static class NpcTargetQuery
     public static bool Matches(NpcProgram program,NpcTargetSelectorSpec selector,GoapWorldState state,NpcTargetCandidate point)
     {
         if(point.Adapter!=selector.Adapter||!MatchesObject(selector,point.ObjectTypeId,point.Capabilities,point.Operations)||selector.RequireUsable&&!point.Usable || selector.RequireReachable&&!point.Reachable ||
-            selector.MaximumDistance>0&&point.Distance>selector.MaximumDistance ||
+            selector.MaximumDistance>0&&(!point.Distance.HasValue||point.Distance>selector.MaximumDistance) ||
             !selector.AllTags.All(point.Tags.Contains)||selector.AnyTags.Count>0&&!selector.AnyTags.Any(point.Tags.Contains)||selector.ExcludedTags.Any(point.Tags.Contains))return false;
         var context=program.TargetContext(state,point.Id,point.Distance,selector.Adapter);
         return selector.Filter==null||selector.Filter.Evaluate(k=>program.Read(context,k),program.Parameter).IsTrue;
@@ -93,7 +95,8 @@ public static class NpcTargetQuery
                     string adapter=action.Inputs.First(i=>i.Name==name).Adapter;
                     string from=program.Read(state,"self.location").Symbol;if(from==value.Symbol)return 0;
                     var target=points.FirstOrDefault(p=>p.Id==value.Symbol&&p.Adapter==adapter);if(target==null)return null;
-                    return positions.TryGetValue((adapter,from),out var position)?position.DistanceTo(target.Position):target.Distance;
+                    var origin=points.FirstOrDefault(p=>p.Id==from&&p.Adapter==adapter);
+                    return origin!=null&&origin.LevelId==target.LevelId&&positions.TryGetValue((adapter,from),out var position)&&position.HasValue&&target.Position.HasValue?position.Value.DistanceTo(target.Position.Value):target.Distance;
                 }
                 double Cost(GoapWorldState state)
                 {

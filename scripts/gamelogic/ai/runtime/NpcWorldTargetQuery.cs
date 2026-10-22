@@ -18,7 +18,7 @@ public static class NpcWorldTargetQuery
             NpcTargetSource.CurrentLocation=>new[]{agent.State.Location},
             NpcTargetSource.KnownPoints=>knowledge.KnownObjects,
             NpcTargetSource.PerceivedPoints=>agent.PerceivedPoints,
-            NpcTargetSource.WorldPoints=>agent.World.Points.Keys,
+            NpcTargetSource.WorldPoints=>agent.ManagedActor!=null?agent.World.Session.Catalog.Objects.Keys:agent.World.Points.Keys,
             NpcTargetSource.WorldDirectory=>Directory(world,knowledge,selector,agent.Owner),
             _=>Array.Empty<string>()
         };
@@ -30,12 +30,13 @@ public static class NpcWorldTargetQuery
         string level=selector.Scope==NpcWorldScope.CurrentLevel?world.LevelFor(actor)?.Id??"":"";
         string place=selector.Scope switch
         {
-            NpcWorldScope.CurrentPlace=>world.ResolveObject((actor as GameObject3D)?.GetComponent<CharacterDataComponent3D>()?.State.Location)?.EffectiveLocation?.Id??world.LevelFor(actor)?.Location?.Id??"",
+            NpcWorldScope.CurrentPlace=>world.Catalog.Objects.GetValueOrDefault((actor as GameObject3D)?.GetComponent<CharacterDataComponent3D>()?.State.Location??"")?.Location?.Id??world.LevelFor(actor)?.Location?.Id??"",
             NpcWorldScope.FixedPlace=>selector.LocationId,
             NpcWorldScope.CharacterPlace=>knowledge.Locations.GetValueOrDefault(selector.LocationBinding,""),
+            NpcWorldScope.ActivityPlace=>(actor as GameObject3D)?.GetComponent<AiAgentComponent3D>()?.ActivityPlace??"",
             _=>""
         };
-        if(selector.Scope==NpcWorldScope.CurrentLevel&&level.Length==0||selector.Scope is NpcWorldScope.CurrentPlace or NpcWorldScope.FixedPlace or NpcWorldScope.CharacterPlace&&place.Length==0)return Array.Empty<string>();
+        if(selector.Scope==NpcWorldScope.CurrentLevel&&level.Length==0||selector.Scope is NpcWorldScope.CurrentPlace or NpcWorldScope.FixedPlace or NpcWorldScope.CharacterPlace or NpcWorldScope.ActivityPlace&&place.Length==0)return Array.Empty<string>();
         IEnumerable<WorldCatalogEntry> source=selector.Information==NpcWorldInformation.KnownObjects
             ?knowledge.KnownObjects.Select(id=>world.Catalog.Objects.GetValueOrDefault(id)).Where(record=>record!=null&&world.Catalog.Matches(record,level,place,selector.AllTags,selector.Adapter,selector.ObjectTypeId,selector.RequiredCapabilities,selector.RequiredOperations))
             :world.Catalog.Query(level,place,selector.AllTags,selector.Adapter,selector.ObjectTypeId,selector.RequiredCapabilities,selector.RequiredOperations);

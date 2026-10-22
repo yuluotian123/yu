@@ -14,6 +14,8 @@ public sealed class NpcMoveToTargetAction : GraphSharedAction
         var progress=call?.Progress(this)??new();
         return new GraphDelegateTask(delta=>
         {
+            if(call?.Agent.ManagedActor is {} managed&&(call.Agent.IsWorldProxy||call.Agent.World.Session.Catalog.Objects.TryGetValue(call.Input(Input.Name).Symbol??"",out var remote)&&remote.Level.Id!=managed.Level))
+                return call.Agent.World.Session.Population.TravelTo(call.Agent,call.Input(Input.Name).Symbol,delta,progress);
             if(call?.Point(Input.Name)==null||!call.Point(Input.Name).IsActive||!GodotObject.IsInstanceValid(call.Point(Input.Name).Owner))return BehaviorTreeStatus.Failure;
             var agent=call.Agent;var target=call.Point(Input.Name);var nav=agent.Navigation;
             var a=agent.Owner.GlobalPosition;var b=target.UsePosition;

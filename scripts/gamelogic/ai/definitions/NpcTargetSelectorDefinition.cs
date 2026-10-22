@@ -3,7 +3,7 @@ namespace GameLogic.AI;
 
 public enum NpcTargetSource { PerceivedPoints, WorldPoints, IdentityParameter, CurrentLocation, KnownPoints, FixedObject, WorldDirectory, CharacterBinding }
 public enum NpcTargetSelection { Candidates, Nearest, LowestScore, HighestScore }
-public enum NpcWorldScope { CurrentLevel, CurrentPlace, FixedPlace, CharacterPlace, World }
+public enum NpcWorldScope { CurrentLevel, CurrentPlace, FixedPlace, CharacterPlace, World, ActivityPlace }
 public enum NpcWorldInformation { KnownObjects, PublicServices, Authoritative }
 
 /// <summary>A reusable query. Each planning run freezes its candidates; resources contain no live bindings.</summary>

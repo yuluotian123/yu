@@ -46,6 +46,8 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 入口的钥匙、任务进度与角色权限等业务条件后续由任务图实现，本组件不增加独立条件字段。需要任务图控制的门应关闭 Automatic，再由任务图判断后调用 Activate，避免区域自动触发绕过业务规则；任务图的具体接线仍属后续工作。
 
+新游戏、继续游戏和关卡切换统一显示 `level_loading_window.tscn` 加载界面，展示目的地、进度和加载阶段。进度结合场景与角色资源加载、场景交接及就绪检查；物理和导航准备完成后才显示 100% 并关闭。加载期间暂停玩家控制，失败、取消或关闭会话时清理界面并恢复原有控制状态。界面由 `LevelLoadingWindow` 和 UI 模块管理，位于游戏及调试面板之上。
+
 ## 3. 按类型能力配置对象
 
 对象配置只有两层：Type 声明能力与默认参数；Scene 上的 WorldObjectComponent3D 保存显示名称、标签、所有者、可选地点和能力覆盖，其他组件实现现场能力。目录条目由编辑器生成。`WorldObjectState` 只建立已声明能力的状态，没有“所有对象都有库存、营业时间”的模型。
@@ -221,7 +223,7 @@ Objects 与 KnownObjects 的检查器按对象名称、关卡和身份后缀提�
 
 ## 验证
 
-`world_authoring_validation.tscn` 已通过 14 项，覆盖自动补齐能力、模板无全局身份、嵌套实例、复制顺序、改名移动、撤销重做、重开、生成目录、类型更新和独立状态；`scripts/tools/world/world_framework_validation.tscn` 已通过 45 项，覆盖目录、库存往返、卸载角色、知识权限、Unknown、独立复制、销毁禁用、空间更新、继续游戏、实时读档、失败回退、取消、会话替换及目录规模查询。`world_capability_validation.tscn` 已通过 20 项，覆盖能力组合、缺失能力、覆盖与独立复制、现场同步、液体事务、延迟恢复本地类型、租约重置、旧版本拒绝。`world_interaction_validation.tscn` 已通过 37 项，覆盖物理 E 输入、区域不同位置、大区域索引、操作列表、遮挡／权限／容量、NPC 公共操作提交、禁止直接写目标、独立复制及存档。`world_production_validation.tscn` 使用真实城镇、工坊、玩家、GM、物理触发门与存档，并验证库存覆盖、瓶子液体余量保存、主菜单新游戏／返回／继续链路。`world_population_validation.tscn` 提供上表压力测试。原有 `scripts/tools/npc/selector_binding_validation.tscn` 已通过 100 项，继续验证共享目标及图编辑。
+`world_authoring_validation.tscn` 已通过 14 项，覆盖自动补齐能力、模板无全局身份、嵌套实例、复制顺序、改名移动、撤销重做、重开、生成目录、类型更新和独立状态；`scripts/tools/world/world_framework_validation.tscn` 已通过 55 项，覆盖目录、库存往返、卸载角色、知识权限、Unknown、独立复制、销毁禁用、空间更新、继续游戏、实时读档、失败回退、取消、会话替换、加载界面、进度完成及目录规模查询。`world_capability_validation.tscn` 已通过 20 项，覆盖能力组合、缺失能力、覆盖与独立复制、现场同步、液体事务、延迟恢复本地类型、租约重置、旧版本拒绝。`world_interaction_validation.tscn` 已通过 37 项，覆盖物理 E 输入、区域不同位置、大区域索引、操作列表、遮挡／权限／容量、NPC 公共操作提交、禁止直接写目标、独立复制及存档。`world_production_validation.tscn` 使用真实城镇、工坊、玩家、GM、物理触发门与存档，并验证库存覆盖、瓶子液体余量保存、主菜单新游戏／返回／继续链路。`world_population_validation.tscn` 提供上表压力测试。原有 `scripts/tools/npc/selector_binding_validation.tscn` 已通过 100 项，继续验证共享目标及图编辑。
 
 先运行自动身份验证生成忽略目录中的夹具，再用编辑器模式执行 `--editor --headless --script res://scripts/tools/world/world_authoring_editor_validation.gd`，已通过 13 项实际编辑器检查：后台标签页保存时补齐缺失组件、保留交互参数、连续编译与构建保留已打开场景资源、同一 Type 增删能力后同步，以及复制时保留原身份。无头缩略图生成会报告 Dummy 纹理为空。
 

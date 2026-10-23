@@ -27,6 +27,7 @@ public class LevelProcedure : ProcedureBase
 
     protected internal override void OnProcess(IFsm<IProcedureModule> procedureOwner, double elapseSeconds, double realElapseSeconds)
     {
+        if(ModuleSystem.GetModule<IWorldModule>().IsSwitching)return;
         // Return to the main menu for now.
         if (_inputModule != null &&
             _inputModule.IsJustPressed("ui_cancel") &&

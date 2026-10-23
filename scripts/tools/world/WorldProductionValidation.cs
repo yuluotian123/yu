@@ -71,7 +71,48 @@ public partial class WorldProductionValidation : Node
         Find("BtnStart").EmitSignal(Button.SignalName.Pressed);
         await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is LevelProcedure,"Continue did not enter the level procedure");
         Require(world.CurrentLevelId=="workshop_level","Continue menu action must restore saved workshop");
-        GD.Print("WORLD_GAME_FLOW_OK: new game -> level -> save -> Escape -> menu -> continue saved level");world.Close();main.Free();
+        GD.Print("WORLD_GAME_FLOW_OK: new game -> level -> save -> Escape -> menu -> continue saved level");
+        await DeleteSaveFlow();world.Close();main.Free();
+    }
+    async Task DeleteSaveFlow()
+    {
+        var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();var saves=ModuleSystem.GetModule<ISaveModule>();
+        string[] paths={"res://assets/scenes/levels/world_workshop.tscn","res://assets/scenes/world/storage.tscn",
+            "res://assets/scenes/world/bottle.tscn",world.Catalog.Levels["workshop_level"].CatalogPath};
+        var sources=paths.ToDictionary(path=>path,path=>FileAccess.GetFileAsString(path));
+        string stockId=WorldTestObjects.ShippedId(world,"仓储间储物箱");
+        var stock=world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>();stock.Amount=7;
+        saves.Save();saves.Save();
+        const string savePath="res://.godot/world-validation/production-saves/default.json";
+        Require(FileAccess.FileExists(savePath)&&FileAccess.FileExists(savePath+".bak"),"Deletion fixture must contain a primary save and backup");
+        var gm=world.CurrentContext.Owner.GetNode<GameObject3D>("RuntimeGm");
+        var panel=gm.GetComponent<RuntimeGmComponent3D>();panel.ShowPanel(true);
+        gm.GetNode<TabContainer>("%Tabs").CurrentTab=2;
+        gm.GetNode<LineEdit>("%SlotName").Text="default";
+        gm.GetNode<Button>("%ReadSave").EmitSignal(Button.SignalName.Pressed);
+        gm.GetNode<Button>("%DeleteSave").EmitSignal(Button.SignalName.Pressed);
+        var confirm=gm.GetNode<ConfirmationDialog>("%Confirm");
+        Require(confirm.Visible,"GM deletion must request confirmation");
+        confirm.EmitSignal(ConfirmationDialog.SignalName.Confirmed);confirm.Hide();
+        Require(!saves.Exists()&&!saves.ListSlots().Contains("default")&&!FileAccess.FileExists(savePath)
+            &&!FileAccess.FileExists(savePath+".bak"),"GM deletion must remove the primary save and backup");
+        Require(world.CurrentLevelId=="workshop_level"&&world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>()==stock
+            &&stock.Amount==7,"GM deletion must preserve the active world and object state");
+        Require(sources.All(pair=>FileAccess.GetFileAsString(pair.Key)==pair.Value),"GM deletion must not change scenes or generated world catalogs");
+        panel.ShowPanel(false);
+        Input.ParseInputEvent(new InputEventAction{Action="ui_cancel",Pressed=true});await Frames(2);
+        Input.ParseInputEvent(new InputEventAction{Action="ui_cancel",Pressed=false});
+        Button Find(string name)=>GetTree().Root.FindChildren(name,"Button",true,false).OfType<Button>().FirstOrDefault();
+        await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is MainMenuProcedure&&Find("BtnStart")!=null,"Deleted save flow did not return to menu");
+        Require(!world.IsOpen&&Find("BtnStart").Disabled,"Continue must be disabled after deleting the default save");
+        Find("BtnNew").EmitSignal(Button.SignalName.Pressed);
+        await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is LevelProcedure,"New game after deletion did not open");
+        Require(world.CurrentLevelId=="town_level","New game after deletion must start in town");
+        Require(await world.SwitchAsync("workshop_level"),world.LastError);
+        Require(world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>().Amount==50,"New game after deletion must restore the scene stock default");
+        Require(WorldModule.Hosts(world.CurrentContext.Owner).All(host=>host.InitializationError.Length==0),"All capability providers must initialize after deletion and a new game");
+        Require(sources.All(pair=>FileAccess.GetFileAsString(pair.Key)==pair.Value),"Restarting after deletion must preserve scenes and generated world catalogs");
+        GD.Print("WORLD_SAVE_DELETE_OK: GM delete -> active state retained -> menu continue disabled -> new game -> workshop defaults and capability components");
     }
     async Task Frames(int count){for(int i=0;i<count;i++)await ToSignal(GetTree(),SceneTree.SignalName.PhysicsFrame);}
     static void Require(bool condition,string message){if(!condition)throw new InvalidOperationException(message);}

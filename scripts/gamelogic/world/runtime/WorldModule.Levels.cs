@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Framework;
+using Framework.UI;
 using Godot;
 using GameLogic.AI;
 namespace GameLogic;
@@ -15,6 +16,8 @@ public sealed partial class WorldModule
     Node3D _sessionRoot,_actorsRoot,_levelsRoot;
     GameObject3D _activeLevel;
     SceneHandle _activeHandle,_playerHandle,_loading;
+    IUIModule _loadingUi;
+    float _loadProgress,_loadWeight;
     CancellationTokenSource _transition;
     int _operation;
     bool _committing,_ownsLevel;
@@ -82,12 +85,26 @@ public sealed partial class WorldModule
         var playerProcess=Player?.ProcessMode??Node.ProcessModeEnum.Inherit;
         bool oldClockPaused=ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused;
         Dictionary<string,JsonObject> beforeObjects=null;
-        var timer=Stopwatch.StartNew();LastError="";Status="加载关卡";
+        var timer=Stopwatch.StartNew();LastError="";Status="准备加载";_loadProgress=0;_loadWeight=0;
         try
         {
+            token.ThrowIfCancellationRequested();
+            if(GodotObject.IsInstanceValid(Player))Player.ProcessMode=Node.ProcessModeEnum.Disabled;
+            var transitionTree=_sessionRoot.GetTree();
+            _loadingUi.ShowUI<LevelLoadingWindow>(this,string.IsNullOrWhiteSpace(target.DisplayName)?target.ScenePath.GetFile().GetBaseName():target.DisplayName);
+            // Let the overlay attach and draw before cached loads can instantiate a large scene.
+            do
+            {
+                await transitionTree.ToSignal(transitionTree,SceneTree.SignalName.ProcessFrame);CheckRequest(operation,token);
+            }while(_loadingUi.GetWindow<LevelLoadingWindow>()?.IsLoadDone!=true);
+            var loadingWindow=_loadingUi.GetWindow<LevelLoadingWindow>();
+            if(!GodotObject.IsInstanceValid(loadingWindow.Owner))throw new InvalidOperationException("加载界面不可用。");
+            await transitionTree.ToSignal(transitionTree,SceneTree.SignalName.ProcessFrame);CheckRequest(operation,token);
+            Status="加载关卡";_loadProgress=.05f;_loadWeight=.65f;
             nextHandle=ModuleSystem.GetModule<IResourceModule>().LoadSceneAsync(target.ScenePath).WithCancellation(token);
             _loading=nextHandle;await nextHandle.Task;CheckRequest(operation,token);
             if(!nextHandle.IsValid)throw new InvalidOperationException("关卡加载失败："+nextHandle.Error);
+            _loading=null;_loadProgress=.7f;_loadWeight=0;Status="创建关卡";
             next=InstantiateHost(nextHandle,"关卡根必须使用 GameObject3D。");
             var context=next.Components.OfType<WorldLevelContextComponent3D>().SingleOrDefault()
                 ??throw new InvalidOperationException("关卡缺少唯一 WorldLevelContextComponent3D。");
@@ -100,14 +117,16 @@ public sealed partial class WorldModule
             Population?.PrepareScene(next,target);
             if(Player==null)
             {
+                Status="加载玩家";_loadProgress=.75f;_loadWeight=.1f;
                 newPlayerHandle=ModuleSystem.GetModule<IResourceModule>().LoadSceneAsync(_definition.PlayerScene).WithCancellation(token);
+                _loading=newPlayerHandle;
                 await newPlayerHandle.Task;CheckRequest(operation,token);
                 if(!newPlayerHandle.IsValid)throw new InvalidOperationException("玩家场景加载失败："+newPlayerHandle.Error);
             }
+            _loading=null;_loadProgress=.85f;_loadWeight=0;
             // Cached loads may complete inside an Area3D physics callback. Commit outside the query flush.
-            var transitionTree=_sessionRoot.GetTree();
             await transitionTree.ToSignal(transitionTree,SceneTree.SignalName.ProcessFrame);
-            CheckRequest(operation,token);_committing=true;Status="交接关卡";
+            CheckRequest(operation,token);_committing=true;Status="交接关卡";_loadProgress=.9f;
             ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=true;
             _pausedBeforeTransition=oldClockPaused;
             if(Player!=null)Player.ProcessMode=Node.ProcessModeEnum.Disabled;
@@ -127,7 +146,7 @@ public sealed partial class WorldModule
                 _playerHandle=newPlayerHandle;newPlayerHandle=null;
             }
             PlacePlayer(restorePosition&&_resumeTransform is {} saved?saved:FindEntry(next,arrival));
-            Status="等待物理与导航";
+            Status="等待物理与导航";_loadProgress=.95f;
             var tree=next.GetTree();await tree.ToSignal(tree,SceneTree.SignalName.PhysicsFrame);CheckRequest(operation,token);
             if(CurrentContext?.RequireNavigation==true)
             {
@@ -140,6 +159,10 @@ public sealed partial class WorldModule
                     await tree.ToSignal(tree,SceneTree.SignalName.PhysicsFrame);CheckRequest(operation,token);
                 }
             }
+            Status="加载完成";_loadProgress=1;loadingWindow.RefreshProgress();
+            // Present the completed bar before revealing the ready level.
+            for(int frame=0;frame<2;frame++)
+            {await transitionTree.ToSignal(transitionTree,SceneTree.SignalName.ProcessFrame);CheckRequest(operation,token);}
             CurrentLevelId=target.Id;_activeHandle?.Dispose();_activeHandle=nextHandle;nextHandle=null;
             _ownsLevel=true;_resumeLevel="";_resumeTransform=null;_restoreRequested=false;
             if(old!=null&&GodotObject.IsInstanceValid(old))old.Free();
@@ -171,6 +194,7 @@ public sealed partial class WorldModule
             if(operation==_operation)
             {
                 _loading=null;_committing=false;
+                _loadingUi.CloseUI<LevelLoadingWindow>();
                 ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=oldClockPaused;
                 _pausedBeforeTransition=null;
                 if(GodotObject.IsInstanceValid(Player))Player.ProcessMode=playerProcess;
@@ -239,6 +263,7 @@ public sealed partial class WorldModule
     public void Close()
     {
         ++_operation;_transition?.Cancel();_transition=null;_loading?.Dispose();_loading=null;_committing=false;_restoreRequested=false;
+        _loadingUi?.CloseUI<LevelLoadingWindow>();
         if(_pausedBeforeTransition is {} paused){ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=paused;_pausedBeforeTransition=null;}
         if(IsOpen)_save?.CheckpointSections();
         Population?.Close();

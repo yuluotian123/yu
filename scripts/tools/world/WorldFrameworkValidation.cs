@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Framework;
+using Framework.UI;
 using GameLogic;
 using GameLogic.AI;
 using Godot;
@@ -37,7 +38,7 @@ public partial class WorldFrameworkValidation : Node
             Check(catalog.Query(place:place.Id,allTags:new[]{"storage"}).Single().Id==item.Id,"Indexed world queries must find unloaded objects without loading scenes");
             definition.Locations.Add(place);Reject(()=>new WorldCatalog(definition),"Duplicate identities must fail");definition.Locations.RemoveAt(1);
             place.Parent=place;Reject(()=>new WorldCatalog(definition),"Location cycles must fail");place.Parent=null;
-            Check(await world.OpenAsync(this,definition,false),"New world must open: "+world.LastError);
+            Check(await ObserveLoading(world,world.OpenAsync(this,definition,false)),"New world must open: "+world.LastError);
             Check(world.CurrentLevelId==a.Id&&world.Player.PersistentId=="player","World owns one persistent player");
             ulong player=world.Player.GetInstanceId();var character=world.Player.GetComponent<CharacterDataComponent3D>();
             character.State.Apply(new[]{new System.Collections.Generic.KeyValuePair<string,CharacterValue>("private.test",CharacterValue.Numeric(7))});
@@ -45,7 +46,7 @@ public partial class WorldFrameworkValidation : Node
             resident.State.Apply(new[]{new System.Collections.Generic.KeyValuePair<string,CharacterValue>("private.test",CharacterValue.Numeric(9))});
             Check(world.ResolveStatus(item.Id)=="未加载","Directory identity must remain valid while its level is unloaded");
             Check(await UnloadedQuery(world,item),"Disabling reachability must never permit unloaded point actions");
-            Check(await world.SwitchAsync(b.Id),"A to B must switch: "+world.LastError);
+            Check(await ObserveLoading(world,world.SwitchAsync(b.Id)),"A to B must switch: "+world.LastError);
             Check(world.Player.GetInstanceId()==player&&character.State.Read("private.test").Number==7,"Switching must preserve the same player and character state");
             Check(world.ResolveStatus(item.Id)=="已加载"&&world.ResolveObject(item.Id).Owner.GetComponent<WorldStockComponent3D>().Amount==20,"Object defaults apply on first creation only");
             KnowledgeQueries(world,place,item);
@@ -59,9 +60,15 @@ public partial class WorldFrameworkValidation : Node
             Check(!await world.SwitchAsync(a.Id,"missing-entry")&&world.CurrentLevelId==b.Id,"Missing entry must preserve the old level");
             double orphans=Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
             Check(!await world.SwitchAsync(wrong.Id)&&world.CurrentLevelId==b.Id&&Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)==orphans,"Invalid scene roots must not leak orphan nodes or replace the current level");
-            Check(!await world.SwitchAsync(bad.Id)&&world.CurrentLevelId==b.Id&&world.ResolveObject(item.Id).Owner.GetComponent<WorldStockComponent3D>().Amount==6,"Activation failure must roll back the original scene and state");
+            Check(!await ObserveLoading(world,world.SwitchAsync(bad.Id))&&world.CurrentLevelId==b.Id&&world.ResolveObject(item.Id).Owner.GetComponent<WorldStockComponent3D>().Amount==6,"Activation failure must roll back the original scene and state");
             Check(world.Player.GetInstanceId()==player&&world.Player.GlobalPosition.IsEqualApprox(new(1,2,3)),"Rollback must preserve player identity and transform");
             Check(!await world.SwitchAsync(a.Id,cancellation:new CancellationToken(true))&&world.CurrentLevelId==b.Id,"Cancelled preparation must not replace current level");
+            var cancelledLoad=world.SwitchAsync(a.Id);
+            while(ModuleSystem.GetModule<IUIModule>().GetWindow<LevelLoadingWindow>()?.IsPrepare!=true)
+                await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+            world.CancelTransition();
+            Check(!await cancelledLoad&&world.CurrentLevelId==b.Id&&!ModuleSystem.GetModule<IUIModule>().HasWindow<LevelLoadingWindow>()
+                &&world.Player.ProcessMode!=ProcessModeEnum.Disabled,"Cancelling visible loading must close the overlay and restore player control");
             world.Close();Check(!world.IsOpen&&world.Player==null,"Closing must release the session and player");
             Check(await world.OpenAsync(this,definition,true,"world-test"),"Saved world must reopen: "+world.LastError);
             Check(world.CurrentLevelId==b.Id&&world.Player.GlobalPosition.IsEqualApprox(new(1,2,3))&&world.ResolveObject(item.Id).Owner.GetComponent<WorldStockComponent3D>().Amount==6,"Continue must restore saved level, position and unloaded state");
@@ -85,6 +92,31 @@ public partial class WorldFrameworkValidation : Node
             GD.Print($"WORLD_FRAMEWORK_OK: {_checks} checks");GetTree().Quit();
         }
         catch(Exception error){GD.PushError(error.ToString());_driving=false;ModuleSystem.Shutdown();GetTree().Quit(1);}
+    }
+    async Task<bool> ObserveLoading(WorldModule world,Task<bool> request)
+    {
+        var ui=ModuleSystem.GetModule<IUIModule>();
+        bool visible=false,complete=false,monotonic=true,readyOnly=true,blocked=true;
+        float previous=0;
+        while(!request.IsCompleted)
+        {
+            float progress=world.Progress;
+            monotonic&=progress>=previous&&progress>=0&&progress<=1;previous=progress;
+            readyOnly&=progress<1||world.Status=="加载完成";
+            var window=ui.GetWindow<LevelLoadingWindow>();
+            if(window?.IsPrepare==true&&window.IsVisible)
+            {
+                visible=true;complete|=window.Owner.GetNode<ProgressBar>("%Progress").Value==100;
+                blocked&=window.Owner.GetParent<CanvasLayer>().Layer>200&&window.Owner.MouseFilter==Control.MouseFilterEnum.Stop
+                    &&(world.Player==null||world.Player.ProcessMode==ProcessModeEnum.Disabled);
+            }
+            await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        }
+        bool result=await request;
+        Check(visible&&monotonic&&readyOnly&&blocked,"Loading must show a topmost blocking overlay with monotonic progress that completes only when the level is ready");
+        Check(!result||complete,"Successful loading must present a completed progress bar");
+        Check(!ui.HasWindow<LevelLoadingWindow>(),"Success and failure must both close the loading overlay");
+        return result;
     }
     AiAgentComponent3D QueryActor(WorldModule world)
     {

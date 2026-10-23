@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using Framework;
+using Framework.UI;
 using Godot;
 using GameLogic.AI;
 namespace GameLogic;
@@ -18,7 +19,7 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     public string CurrentLevelId {get;private set;}="";
     public string Status {get;private set;}="未进入世界";
     public string LastError {get;private set;}="";
-    public float Progress=>_loading?.Progress??(IsSwitching?0:1);
+    public float Progress=>IsSwitching?Mathf.Clamp(_loadProgress+(_loading?.Progress??0)*_loadWeight,0,1):1;
     public GameObject3D Player {get;private set;}
     public WorldLevelContextComponent3D CurrentContext {get;private set;}
     public double RuntimeSeconds {get;private set;}
@@ -46,6 +47,7 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
         _save=ModuleSystem.GetModule<ISaveModule>();
         // Session-owned scene cleanup must run before these dependencies shut down.
         ModuleSystem.GetModule<ITimeOfDayModule>();ModuleSystem.GetModule<IResourceModule>();ModuleSystem.GetModule<ICameraModule>();ModuleSystem.GetModule<IInputModule>();
+        _loadingUi=ModuleSystem.GetModule<IUIModule>();
         if(ResourceLoader.Exists(WorldDefinition.CommonPath))Configure(ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath));
         _save.RegisterSection(this);
     }

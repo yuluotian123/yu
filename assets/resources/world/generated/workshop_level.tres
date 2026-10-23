@@ -52,13 +52,14 @@ Operations = Array[ExtResource("4_533gc")]([SubResource("pour_liquid")])
 [resource]
 script = ExtResource("13_2gl8f")
 LevelId = "workshop_level"
-SourceSignature = "171F5D7844A0E6CE43DF2FE341712E9AE904C6C2A18BA4AFD14B759B72A44053/workshop_level/workshop"
+SourceSignature = "F0C5075ED246DFF531F434FA5E9F94444521D9DE9400773A43F9BFC076C7C25C/population-v2/workshop_level/workshop"
 Entries = Array[Dictionary]([{
 "capabilities": Array[ExtResource("3_0h8rt")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
 "id": "world/4b208b24b610436cbc5b418b7cc0c455",
 "location": ExtResource("2_mk5gq"),
 "name": "仓储间储物箱",
 "owner": "",
+"position": Vector3(0, 0, -1.1),
 "tags": PackedStringArray(),
 "type": ExtResource("1_finbp")
 }, {
@@ -67,6 +68,7 @@ Entries = Array[Dictionary]([{
 "location": ExtResource("2_mk5gq"),
 "name": "仓储间储物箱",
 "owner": "",
+"position": Vector3(-4, 0, -1.1),
 "tags": PackedStringArray(),
 "type": ExtResource("1_finbp")
 }, {
@@ -75,6 +77,10 @@ Entries = Array[Dictionary]([{
 "location": ExtResource("2_mk5gq"),
 "name": "水瓶",
 "owner": "",
+"position": Vector3(2, 0, -1.45),
 "tags": PackedStringArray(),
 "type": ExtResource("10_2asib")
 }])
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.55, 0)
+})

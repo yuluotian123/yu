@@ -25,5 +25,8 @@ namespace Framework.UI
 
         /// <summary>顶层提示（CanvasLayer = 50）：飘字、Toast、引导遮罩等最顶层内容。</summary>
         Tips = 50,
+
+        /// <summary>关卡加载遮罩，覆盖游戏和调试面板。</summary>
+        Loading = 250,
     }
 }

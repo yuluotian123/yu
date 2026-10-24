@@ -6,7 +6,7 @@ Player 和 NPC 都在 GameObject3D 的 Components 中配置 `CharacterDataCompon
 ## 配置入口
 
 - Player：`assets/scenes/player.tscn` → Components → CharacterDataComponent3D → Profile。
-- 当前场景 NPC：`assets/scenes/levels/whitebox_test.tscn` → Resident / Courier → Components → CharacterDataComponent3D。
+- 当前场景 NPC：`assets/scenes/levels/forest_town_level.tscn` → Resident / Courier → Components → CharacterDataComponent3D。
 - 独立 NPC 场景：`assets/scenes/npc/resident.tscn` 和 `courier.tscn`。
 
 角色配置位于 `assets/resources/character/<角色>/profile.tres`。按模块展开：

@@ -1,18 +1,18 @@
-[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://23ot7xj6my8e"]
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://bcp0uu23m1gg8"]
 
-[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="1_6eym0"]
+[ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="1_6eym0"]
 [ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_s0gqf"]
-[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="2_6eym0"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="3_tm1xs"]
+[ext_resource type="Resource" uid="uid://ckdg7exkwhywi" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="2_vrwdb"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="3_tm1xs"]
 
 [resource]
 script = ExtResource("1_s0gqf")
 LevelId = "town_level"
-SourceSignature = "4670EF3A6BFE9BE8F6AA1BF1807D8AECF26C8F85FD2B0CCA50C9AA81B766CCD4/population-v3/town_level/town"
+SourceSignature = "93E8B2FA6D72CB89F36F791A26D37B6976E29D2AF05EFD385AC609F976967DD1/population-v3/town_level/town/portal-export-v1"
 Actors = Array[Dictionary]([{
 "abstract": 45.0,
 "detailed": 30.0,
-"graph": ExtResource("2_6eym0"),
+"graph": ExtResource("2_vrwdb"),
 "half_height": 0.36,
 "id": "town_resident_01",
 "level": "town_level",
@@ -27,3 +27,13 @@ Actors = Array[Dictionary]([{
 Entrances = Dictionary[String, Vector3]({
 "default": Vector3(0, 0.55, 3)
 })
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "default",
+"hours": 0.0,
+"id": "portal/d7ebd92d9db44aa89eca566ced0cb332",
+"name": "WorkshopPortal",
+"position": Vector3(3, 0.9, 3),
+"to": "workshop_level"
+}])

@@ -9,7 +9,7 @@
 - [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
 - [NPC 图配置与运行指南](../doc/NPC_AI_GUIDE.md)
 - [玩家场景](../assets/scenes/player.tscn)
-- [NPC 白盒场景](../assets/scenes/levels/whitebox_test.tscn)
+- [NPC 正式小镇场景](../assets/scenes/levels/forest_town_level.tscn)
 - [Player 场景内联 CharacterGraph](../assets/scenes/player.tscn)
 
 ## 1. 完整结构

@@ -262,28 +262,8 @@ func build() -> void:
 		attach(groups[category_groups[categories[placement.asset]]], instance, town)
 	save_scene(town, SCENE_ROOT + "forest_town.tscn")
 	town.free()
-	write_level()
+	# The gameplay level owns its components and overrides; only rebuild its town instance.
 	var file := FileAccess.open(META_ROOT + "godot_validation.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify({"checks": checks, "models": checks.size(), "all_within_budget": true}, "\t"))
 	print("FOREST_TOWN_BUILT: ", checks.size(), " independent models, ", manifest.instances.size(), " instances; imported budgets verified.")
 	quit()
-
-func write_level() -> void:
-	var text := """[gd_scene format=3]
-
-[ext_resource type="PackedScene" path="res://assets/scenes/levels/whitebox_test.tscn" id="base"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="town"]
-
-[node name="ForestTownLevel" instance=ExtResource("base")]
-editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；WASD / 跳跃及现有角色框架沿用白盒。"
-
-[node name="Visual" parent="Ground" index="0"]
-visible = false
-
-[node name="GameplayBody" parent="Ground" index="1"]
-collision_layer = 0
-
-[node name="RPGTown" parent="." instance=ExtResource("town")]
-"""
-	var file := FileAccess.open("res://assets/scenes/levels/forest_town_level.tscn", FileAccess.WRITE)
-	file.store_string(text)

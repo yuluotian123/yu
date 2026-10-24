@@ -1,26 +1,125 @@
 [gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
-[ext_resource type="PackedScene" path="res://assets/scenes/levels/whitebox_test.tscn" id="base"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="town"]
-[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="component"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="world_actor"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data"]
-[ext_resource type="Script" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="ai"]
-[ext_resource type="Script" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="navigation"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="movement"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="movement_profile"]
-[ext_resource type="Script" path="res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs" id="animation"]
-[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="abilities"]
-[ext_resource type="Script" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="persistence"]
-[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="resident_profile"]
-[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="resident_graph"]
-[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/locomotion.tres" id="resident_locomotion"]
+[ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_ueglv"]
+[ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_jbaxf"]
+[ext_resource type="Resource" uid="uid://dsbub5bo15ktr" path="res://assets/resources/world/levels/town.tres" id="3_rb52e"]
+[ext_resource type="Script" uid="uid://2wsybt7iy6nd" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="4_dhhqu"]
+[ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/resources/environment/clouds/rotation_timeline.tres" id="5_rbjpv"]
+[ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/resources/environment/clouds/base_timeline.tres" id="6_kb0tv"]
+[ext_resource type="Resource" uid="uid://dwmv4g61gvcbr" path="res://assets/resources/environment/clouds/high_timeline.tres" id="7_xstv4"]
+[ext_resource type="Resource" uid="uid://d0tihbxuxsssy" path="res://assets/resources/environment/clouds/secondary_timeline.tres" id="8_guok8"]
+[ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="9_ai2dc"]
+[ext_resource type="Script" uid="uid://b8lm4oftf5a3i" path="res://scripts/gamelogic/timeofday/DayNightEnvironmentComponent3D.cs" id="10_pad71"]
+[ext_resource type="Resource" uid="uid://bcac25hfauhxt" path="res://assets/resources/weather/default_weather.tres" id="11_yw17n"]
+[ext_resource type="Script" uid="uid://8lwsqfyrq2lf" path="res://scripts/gamelogic/weather/WeatherComponent3D.cs" id="12_2d10j"]
+[ext_resource type="Script" uid="uid://cxth0gcfog3yb" path="res://scripts/gamelogic/weather/WeatherSurfaceComponent3D.cs" id="13_2kyth"]
+[ext_resource type="Resource" uid="uid://dlhdeul3gxk77" path="res://assets/resources/rendering/ddgi/spacelevel.tres" id="14_mh63b"]
+[ext_resource type="Script" uid="uid://comngbdbyfrp5" path="res://scripts/gamelogic/rendering/ddgi/DdgiComponent3D.cs" id="15_8mmme"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/precipitation.tscn" id="16_aa5yu"]
+[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/shaders/environment/day_night_sky.gdshader" id="17_qml60"]
+[ext_resource type="Resource" uid="uid://cfyh6r7i8r6f8" path="res://assets/resources/rendering/relink_post/profile.tres" id="18_ialnm"]
+[ext_resource type="Script" uid="uid://xop3p8flwjrs" path="res://scripts/gamelogic/rendering/RelinkPostProcessEffect.cs" id="19_flsdq"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/reference_clouds.tscn" id="20_atre4"]
+[ext_resource type="Resource" uid="uid://d3j7g4vybewnk" path="res://assets/resources/camera/hd2d_free_3d.tres" id="21_i4cks"]
+[ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="22_6txhy"]
+[ext_resource type="Script" uid="uid://ds7blco3fe604" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="23_dimth"]
+[ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="24_7vjrn"]
+[ext_resource type="Script" uid="uid://dym3osxbqgwj8" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="25_tvavt"]
+[ext_resource type="PackedScene" uid="uid://b66h2k1q55477" path="res://assets/scenes/ui/runtime_gm.tscn" id="26_wy1je"]
+[ext_resource type="Script" uid="uid://ddvtsomeofpgl" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="27_dn66n"]
+[ext_resource type="Script" uid="uid://b5why58de2ya8" path="res://scripts/gamelogic/timeofday/TimeOfDayGmComponent3D.cs" id="28_qokn0"]
+[ext_resource type="Script" uid="uid://rfn8rtrhsg6d" path="res://scripts/gamelogic/gm/RenderingGmComponent3D.cs" id="29_cykts"]
+[ext_resource type="Script" uid="uid://buchr6vfhgrk5" path="res://scripts/gamelogic/weather/WeatherGmComponent3D.cs" id="30_s3758"]
+[ext_resource type="Script" uid="uid://ckm82j75hdcem" path="res://scripts/gamelogic/npc/gm/NpcGmComponent3D.cs" id="31_rinmr"]
+[ext_resource type="Script" uid="uid://b46qqxhbsd4xn" path="res://scripts/gamelogic/world/components/WorldGmComponent3D.cs" id="32_0x6cs"]
+[ext_resource type="Script" uid="uid://bvu87kbykbhnp" path="res://scripts/gamelogic/ai/runtime/AiWorldComponent3D.cs" id="33_mmr44"]
+[ext_resource type="Script" uid="uid://b8fgo3t2x2cbe" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="34_553iy"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="35_bctqq"]
+[ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="36_6r85h"]
+[ext_resource type="Script" uid="uid://8o1dotfiya30" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="37_1uuhk"]
+[ext_resource type="Resource" uid="uid://ckdg7exkwhywi" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="38_hwvb8"]
+[ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="39_i75ou"]
+[ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="40_4vq3v"]
+[ext_resource type="Script" uid="uid://c4x6txn44m7f8" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="41_sfmgt"]
+[ext_resource type="Script" uid="uid://pk5ksygkbvbu" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="42_d0qfs"]
+[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/locomotion.tres" id="43_77yxe"]
+[ext_resource type="Script" uid="uid://b44jqycjp4rbb" path="res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs" id="44_1qxs0"]
+[ext_resource type="Script" uid="uid://ca2w3yioktqom" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="45_x7h4q"]
+[ext_resource type="Script" uid="uid://ccjly65t5o7a2" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="46_ivfsh"]
+[ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="47_dl86u"]
+[ext_resource type="Resource" uid="uid://du4opl34fkii6" path="res://assets/resources/character/ochre_courier/profile.tres" id="48_o32mn"]
+[ext_resource type="Resource" uid="uid://cd8d8t8r5wfwd" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="49_w4x6r"]
+[ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="50_yv21s"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="51_f2ac5"]
 
-[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/shaders/environment/day_night_sky.gdshader" id="2_qbpkg"]
+[sub_resource type="Resource" id="world_context"]
+script = ExtResource("4_dhhqu")
+Level = ExtResource("3_rb52e")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbpkg"]
+[sub_resource type="Resource" id="environment_profile"]
+script = ExtResource("9_ai2dc")
+DayLengthSeconds = 4800.0
+DriveFogFromProfile = true
+DrivePostEffectsFromProfile = true
+DriveRelinkBloomFromProfile = true
+DriveSkyBrightnessFromProfile = true
+DriveExposureFromProfile = true
+DriveLightSettingsFromProfile = true
+DriveSkyProjectionFromProfile = true
+MoonTint = Color(0.78, 0.82, 1, 1)
+NoonTemperature = 5900.0
+NoonSunTint = Color(1, 0.99, 0.97, 1)
+BlendNightPostEffects = true
+DayZenith = Color(0.045, 0.24, 0.72, 1)
+DayHorizon = Color(0.34, 0.68, 0.94, 1)
+DayGround = Color(0.48, 0.7, 0.88, 1)
+NightZenith = Color(0.09, 0.075, 0.24, 1)
+NightHorizon = Color(0.24, 0.23, 0.46, 1)
+NightSkyIntensity = 8.0
+StarIntensity = 1.25
+MoonHaloStrength = 0.18
+HorizonHaze = 0.22
+HorizonSoftness = 0.24
+MieStrength = 0.1
+FogStart = 35.0
+FogEnd = 240.0
+FogOpacity = 0.38
+FogHeightDensity = 0.0
+BlendNightFog = true
+NightFogHeightDensity = 0.0
+CloudTimeline = ExtResource("6_kb0tv")
+HighCloudTimeline = ExtResource("7_xstv4")
+SecondaryCloudTimeline = ExtResource("8_guok8")
+CloudRotationTimeline = ExtResource("5_rbjpv")
+CloudRotationPeriodHours = 20.0
+CloudEvolutionPeriodHours = 4.0
+CloudNoisePeriodHours = 12.0
+DayExposureEv = 14.35
+NightExposureEv = 2.0
+VisualUpdatesPerSecond = 24.0
+
+[sub_resource type="Resource" id="controller"]
+script = ExtResource("10_pad71")
+Profile = SubResource("environment_profile")
+
+[sub_resource type="Resource" id="weather"]
+script = ExtResource("12_2d10j")
+Profile = ExtResource("11_yw17n")
+Automatic = false
+DriveFogFromWeather = true
+DriveLightsFromWeather = true
+
+[sub_resource type="Resource" id="weather_surfaces"]
+script = ExtResource("13_2kyth")
+
+[sub_resource type="Resource" id="ddgi"]
+script = ExtResource("15_8mmme")
+Profile = ExtResource("14_mh63b")
+GeometryRoot = NodePath("..")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6imi7"]
 resource_local_to_scene = true
-shader = ExtResource("2_qbpkg")
+shader = ExtResource("17_qml60")
 shader_parameter/ibl_strength = 1.0
 shader_parameter/weather_overcast = 0.0
 shader_parameter/weather_sky_loss = 0.35
@@ -49,16 +148,16 @@ shader_parameter/horizon_softness = 0.24
 shader_parameter/mie_strength = 0.1
 shader_parameter/mie_anisotropy = 0.76
 
-[sub_resource type="Sky" id="Sky_sodt5"]
+[sub_resource type="Sky" id="Sky_0d36c"]
 resource_local_to_scene = true
-sky_material = SubResource("ShaderMaterial_qbpkg")
+sky_material = SubResource("ShaderMaterial_6imi7")
 process_mode = 3
 
-[sub_resource type="Environment" id="Environment_filij"]
+[sub_resource type="Environment" id="Environment_mih7a"]
 resource_local_to_scene = true
 background_mode = 2
 background_intensity = 26000.0
-sky = SubResource("Sky_sodt5")
+sky = SubResource("Sky_0d36c")
 ambient_light_source = 3
 ambient_light_energy = 0.35000002
 reflected_light_source = 2
@@ -87,65 +186,356 @@ fog_depth_end = 240.0
 adjustment_contrast = 1.04
 adjustment_saturation = 1.08
 
-[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_wiwca"]
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_j785m"]
 resource_local_to_scene = true
 exposure_multiplier = 1.2
 frustum_focus_distance = 9.0
 frustum_focal_length = 20.0
 exposure_shutter_speed = 81.5719
 
+[sub_resource type="CompositorEffect" id="grade"]
+resource_local_to_scene = true
+resource_name = "Relink · HDR LUT (Before Transparency)"
+enabled = true
+effect_callback_type = 3
+access_resolved_color = true
+access_resolved_depth = true
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("19_flsdq")
+Pass = 0
+Profile = ExtResource("18_ialnm")
+
+[sub_resource type="CompositorEffect" id="film"]
+resource_local_to_scene = true
+resource_name = "Relink · Film + Bloom (After Transparency)"
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("19_flsdq")
+Profile = ExtResource("18_ialnm")
+
+[sub_resource type="Compositor" id="Compositor_qk2pt"]
+compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource("film")])
+
+[sub_resource type="Resource" id="camera_controller"]
+script = ExtResource("22_6txhy")
+Profile = ExtResource("21_i4cks")
+
+[sub_resource type="StandardMaterial3D" id="material_Ground"]
+albedo_color = Color(0.65, 0.67, 0.7, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="mesh_Ground"]
+material = SubResource("material_Ground")
+size = Vector3(40, 1, 30)
+
+[sub_resource type="BoxShape3D" id="shape_Ground"]
+size = Vector3(40, 1, 30)
+
+[sub_resource type="Resource" id="world_spawn"]
+script = ExtResource("23_dimth")
+
+[sub_resource type="Resource" id="world_transition"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("24_7vjrn")
+
+[sub_resource type="BoxShape3D" id="world_portal_shape"]
+size = Vector3(1.2, 2, 1.2)
+
+[sub_resource type="BoxMesh" id="world_portal_mesh"]
+size = Vector3(0.2, 1.8, 1)
+
+[sub_resource type="Resource" id="shell"]
+script = ExtResource("27_dn66n")
+
+[sub_resource type="Resource" id="gm"]
+script = ExtResource("28_qokn0")
+Embedded = true
+
+[sub_resource type="Resource" id="rendering"]
+script = ExtResource("29_cykts")
+
+[sub_resource type="Resource" id="weather_gm"]
+script = ExtResource("30_s3758")
+
+[sub_resource type="Resource" id="npc_gm"]
+script = ExtResource("31_rinmr")
+
+[sub_resource type="Resource" id="world_gm"]
+script = ExtResource("32_0x6cs")
+
+[sub_resource type="Resource" id="whitebox_world"]
+script = ExtResource("33_mmr44")
+
+[sub_resource type="NavigationMesh" id="whitebox_navigation"]
+vertices = PackedVector3Array(-19.5, 0, -14.5, -19.5, 0, 14.5, 19.5, 0, 14.5, 19.5, 0, -14.5)
+polygons = [PackedInt32Array(0, 1, 2, 3)]
+agent_height = 0.8
+agent_radius = 0.3
+
 [sub_resource type="Resource" id="resident_world_actor"]
-script = ExtResource("world_actor")
+script = ExtResource("34_553iy")
 ScenePathOverride = "res://assets/scenes/npc/resident.tscn"
 
 [sub_resource type="Resource" id="resident_character_data"]
-script = ExtResource("character_data")
-Profile = ExtResource("resident_profile")
+script = ExtResource("37_1uuhk")
+Profile = ExtResource("36_6r85h")
 
 [sub_resource type="Resource" id="resident_ai"]
-script = ExtResource("ai")
-Graph = ExtResource("resident_graph")
+script = ExtResource("39_i75ou")
+Graph = ExtResource("38_hwvb8")
 
 [sub_resource type="Resource" id="resident_navigation"]
-script = ExtResource("navigation")
+script = ExtResource("40_4vq3v")
 
 [sub_resource type="Resource" id="resident_movement_profile"]
-script = ExtResource("movement_profile")
+script = ExtResource("41_sfmgt")
 MoveSpeed = 2.2
 
 [sub_resource type="Resource" id="resident_movement"]
-script = ExtResource("movement")
+script = ExtResource("42_d0qfs")
 Profile = SubResource("resident_movement_profile")
 MovementSpace = 1
 
 [sub_resource type="Resource" id="resident_animation"]
-script = ExtResource("animation")
-LocomotionGraph = ExtResource("resident_locomotion")
+script = ExtResource("44_1qxs0")
+LocomotionGraph = ExtResource("43_77yxe")
 
 [sub_resource type="Resource" id="resident_abilities"]
-script = ExtResource("abilities")
+script = ExtResource("45_x7h4q")
 
 [sub_resource type="Resource" id="resident_persistence"]
-script = ExtResource("persistence")
+script = ExtResource("46_ivfsh")
 
-[node name="ForestTownLevel" instance=ExtResource("base")]
-editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；WASD / 跳跃及现有角色框架沿用白盒。"
+[sub_resource type="BoxShape3D" id="npc_body"]
+size = Vector3(0.4, 0.72, 0.4)
 
-[node name="Visual" parent="Ground" index="0"]
+[sub_resource type="Resource" id="character_data_ochre_courier"]
+script = ExtResource("37_1uuhk")
+Profile = ExtResource("48_o32mn")
+
+[sub_resource type="Resource" id="ochre_courier_agent"]
+script = ExtResource("39_i75ou")
+Graph = ExtResource("49_w4x6r")
+
+[sub_resource type="Resource" id="npc_navigation"]
+script = ExtResource("40_4vq3v")
+
+[sub_resource type="Resource" id="npc_move_profile"]
+script = ExtResource("41_sfmgt")
+MoveSpeed = 2.2
+
+[sub_resource type="Resource" id="npc_movement"]
+script = ExtResource("42_d0qfs")
+Profile = SubResource("npc_move_profile")
+MovementSpace = 1
+
+[sub_resource type="Resource" id="npc_animation"]
+script = ExtResource("44_1qxs0")
+LocomotionGraph = ExtResource("43_77yxe")
+
+[sub_resource type="Resource" id="npc_abilities"]
+script = ExtResource("45_x7h4q")
+
+[sub_resource type="Resource" id="npc_character_save"]
+script = ExtResource("46_ivfsh")
+
+[node name="ForestTownLevel" type="Node3D" unique_id=1386970310 groups=["gameplay_level"]]
+editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；独立关卡包含角色、相机、天气、世界入口与 NPC 行为配置。"
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("world_context")])
+
+[node name="EnvironmentRig" type="Node3D" parent="." unique_id=660897677]
+process_mode = 1
+script = ExtResource("1_ueglv")
+PersistentId = "level_environment"
+Components = Array[ExtResource("2_jbaxf")]([SubResource("controller"), SubResource("weather"), SubResource("weather_surfaces"), SubResource("ddgi")])
+
+[node name="Precipitation" parent="EnvironmentRig" unique_id=1523133243 instance=ExtResource("16_aa5yu")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=594835174]
+environment = SubResource("Environment_mih7a")
+camera_attributes = SubResource("CameraAttributesPhysical_j785m")
+compositor = SubResource("Compositor_qk2pt")
+
+[node name="Sun" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1850925047]
+physics_interpolation_mode = 2
+transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.9659258, 0.42261842, -0.875426, 0.23456971, 0, 0, 0)
+light_intensity_lux = 120000.0
+light_temperature = 5900.0
+light_color = Color(1, 0.99, 0.97, 1)
+light_indirect_energy = 0.75
+shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 55.0
+
+[node name="Moon" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=310034368]
+physics_interpolation_mode = 2
+transform = Transform3D(-0.9063079, 0.40821782, 0.10938164, 0, 0.2588191, -0.9659259, -0.42261815, -0.87542623, -0.23456976, 0, 0, 0)
 visible = false
+light_intensity_lux = 0.0
+light_temperature = 8500.0
+light_color = Color(0.78, 0.82, 1, 1)
+light_indirect_energy = 0.75
+shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 0.5
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.7
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 55.0
 
-[node name="GameplayBody" parent="Ground" index="1"]
+[node name="OriginalClouds" parent="EnvironmentRig" unique_id=1997370813 instance=ExtResource("20_atre4")]
+transform = Transform3D(-0.79863536, 0, 0.601815, 0, 1, 0, -0.601815, 0, -0.79863536, 0, 0, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1603033638]
+process_priority = 100
+physics_interpolation_mode = 2
+editor_description = "场景镜头控制器。展开 Components > SceneCameraComponent3D > Profile 调整跟随参数。X/Y/Z 对应世界左右/上下/前后，距离单位为米。DeadZone 越大越允许角色自由移动；FollowSmooth 越大跟随越快，0 表示直接到位。距离、俯角、FOV 请在子节点 Camera3D 调整。详见 res://docs/art/hd2d_camera.md。"
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("camera_controller")])
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=106388751]
+editor_description = "偏横版近景镜头：透视 FOV=30°，Rotation Degrees.X=-4.1°（轻微俯视），拍摄距离约 9 米。人物位于屏幕中心下方，天空和云保留在上半部。
+Transform/Position：沿镜头局部 Z 轴向负方向移动可拉近，向正方向移动可拉远；这是实际拍摄距离。Rotation Degrees.X 越接近 0 越平视，越负越俯视。
+FOV：仅透视生效，越小人物越大、视野越窄；越大视野越广。默认 Keep Aspect=Keep Height 时表示竖直视角。
+Size=7：仅正交/视锥投影生效，越小人物越大；不影响透视。Far=500：最远可见距离（米），减小可能裁掉远处天空或云。
+白盒初始构图位置为 (0, 2.0033, 11.8033)，视线高于角色中心，人物约在画面高度的三分之二处。保持角度和 Z 距离时，提高 Position.Y 会让人物更靠下，降低则让人物上移。运行时保留场景镜头角度和相对偏移，随角色平移；请在停止游戏时编辑。跟随死区、平滑及前视在 CameraRig 的 Profile 中调整。"
+transform = Transform3D(1, 0, 0, 0, 0.99744076, 0.07149744, 0, -0.07149744, 0.99744076, 0, 2.003256, 11.8033285)
+current = true
+fov = 30.0
+size = 7.0
+far = 500.0
+
+[node name="Ground" type="Node3D" parent="." unique_id=1104172541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+script = ExtResource("1_ueglv")
+
+[node name="Visual" type="MeshInstance3D" parent="Ground" unique_id=1118407196]
+visible = false
+mesh = SubResource("mesh_Ground")
+
+[node name="GameplayBody" type="StaticBody3D" parent="Ground" unique_id=1042351921 groups=["player_ground"]]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
+shape = SubResource("shape_Ground")
+
+[node name="EntryDefault" type="Node3D" parent="." unique_id=1339547343]
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("world_spawn")])
+
+[node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1050733781]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)
+
+[node name="WorkshopPortal" type="Node3D" parent="." unique_id=1881525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 3)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("world_transition")])
+metadata/_world_placement = "d7ebd92d9db44aa89eca566ced0cb332"
+
+[node name="Area3D" type="Area3D" parent="WorkshopPortal" unique_id=714242435]
 collision_layer = 0
 
-[node name="RPGTown" parent="." instance=ExtResource("town")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorkshopPortal/Area3D" unique_id=1130577865]
+shape = SubResource("world_portal_shape")
 
-[node name="Resident" parent="." index="7"]
+[node name="Door" type="MeshInstance3D" parent="WorkshopPortal" unique_id=145801013]
+mesh = SubResource("world_portal_mesh")
+
+[node name="Label3D" type="Label3D" parent="WorkshopPortal" unique_id=1018903333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+billboard = 1
+text = "仓储间入口"
+font_size = 40
+
+[node name="RuntimeGm" parent="." unique_id=1779226142 instance=ExtResource("26_wy1je")]
+Components = Array[ExtResource("2_jbaxf")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm"), SubResource("world_gm")])
+
+[node name="World" type="Node3D" parent="." unique_id=1671457750]
+script = ExtResource("1_ueglv")
+PersistentId = "whitebox_npc_world"
+Components = Array[ExtResource("2_jbaxf")]([SubResource("whitebox_world")])
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=500483842]
+navigation_mesh = SubResource("whitebox_navigation")
+
+[node name="Resident" type="Node3D" parent="." unique_id=1331650095]
 editor_description = "正式关卡世界居民 town_resident_01：从小镇前往工坊喝水、取货；配置步骤见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
-Components = Array[ExtResource("component")]([SubResource("resident_world_actor"), SubResource("resident_character_data"), SubResource("resident_ai"), SubResource("resident_navigation"), SubResource("resident_movement"), SubResource("resident_animation"), SubResource("resident_abilities"), SubResource("resident_persistence")])
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.42, 1.5)
+script = ExtResource("1_ueglv")
+PersistentId = "town_resident_01"
+Components = Array[ExtResource("2_jbaxf")]([SubResource("resident_world_actor"), SubResource("resident_character_data"), SubResource("resident_ai"), SubResource("resident_navigation"), SubResource("resident_movement"), SubResource("resident_animation"), SubResource("resident_abilities"), SubResource("resident_persistence")])
 
-[node name="WorldEnvironment" parent="EnvironmentRig" parent_id_path=PackedInt32Array(660897677) index="1" unique_id=594835174]
-environment = SubResource("Environment_filij")
-camera_attributes = SubResource("CameraAttributesPhysical_wiwca")
+[node name="PhysicsBody" type="CharacterBody3D" parent="Resident" unique_id=1888120704]
 
-[node name="CameraFramingTarget" type="Marker3D" parent="." index="8" unique_id=889559128]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Resident/PhysicsBody" unique_id=1951845494]
+shape = SubResource("npc_body")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Resident/PhysicsBody" unique_id=95934908]
+path_desired_distance = 0.2
+target_desired_distance = 0.25
+height = 0.72
+radius = 0.23
+neighbor_distance = 2.0
+max_neighbors = 6
+
+[node name="VisualRoot" type="Node3D" parent="Resident" unique_id=1801187863]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Resident/VisualRoot" unique_id=1749183551]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
+pixel_size = 0.0032142857
+billboard = 2
+shaded = true
+alpha_cut = 1
+texture_filter = 0
+sprite_frames = ExtResource("47_dl86u")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CameraFramingTarget" type="Marker3D" parent="." unique_id=889559128]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)
+
+[node name="Courier" type="Node3D" parent="." unique_id=411204691]
+editor_description = "ochre_courier：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.42, 1.5)
+script = ExtResource("1_ueglv")
+PersistentId = "town_courier_01"
+Components = Array[ExtResource("2_jbaxf")]([SubResource("character_data_ochre_courier"), SubResource("ochre_courier_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+
+[node name="PhysicsBody" type="CharacterBody3D" parent="Courier" unique_id=1856785106]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Courier/PhysicsBody" unique_id=7092250]
+shape = SubResource("npc_body")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Courier/PhysicsBody" unique_id=1066667449]
+path_desired_distance = 0.2
+target_desired_distance = 0.25
+height = 0.72
+radius = 0.23
+neighbor_distance = 2.0
+max_neighbors = 6
+
+[node name="VisualRoot" type="Node3D" parent="Courier" unique_id=922947840]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Courier/VisualRoot" unique_id=1444253915]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
+pixel_size = 0.0032142857
+billboard = 2
+shaded = true
+alpha_cut = 1
+texture_filter = 0
+sprite_frames = ExtResource("50_yv21s")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="RPGTown" parent="." unique_id=2016566930 instance=ExtResource("51_f2ac5")]

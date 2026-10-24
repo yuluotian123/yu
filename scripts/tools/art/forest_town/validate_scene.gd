@@ -11,17 +11,26 @@ func check(condition: bool, label: String) -> void:
 		push_error("Forest town validation: " + label)
 
 func validate() -> void:
-	var level: Node3D = load("res://assets/scenes/levels/forest_town_level.tscn").instantiate()
-	var baseline: Node3D = load("res://assets/scenes/levels/whitebox_test.tscn").instantiate()
+	var bridge = load("res://scripts/tools/art/forest_town/ForestTownValidationBridge.cs").new()
+	bridge.Prepare()
+	var packed: PackedScene = load("res://assets/scenes/levels/forest_town_level.tscn")
+	check(packed != null and packed.get_state().get_base_scene_state() == null, "Gameplay level is a standalone Scene")
+	if packed == null:
+		quit(1)
+		return
+	var level: Node3D = packed.instantiate()
+	check(level != null, "Gameplay level instantiates successfully")
+	if level == null:
+		quit(1)
+		return
 	var camera: Camera3D = level.get_node("CameraRig/Camera3D")
-	var base_camera: Camera3D = baseline.get_node("CameraRig/Camera3D")
-	check(camera.transform.is_equal_approx(base_camera.transform), "Camera transform unchanged")
-	for property in ["fov", "far", "near", "size", "projection", "keep_aspect"]:
-		check(camera.get(property) == base_camera.get(property), "Camera " + property + " unchanged")
+	check(camera.position.is_equal_approx(Vector3(0, 2.003256, 11.8033285)) and is_equal_approx(camera.rotation_degrees.x, -4.1), "Camera preserves the authored town framing")
+	var camera_settings := {"fov":30.0, "far":500.0, "near":0.05, "size":7.0, "projection":Camera3D.PROJECTION_PERSPECTIVE, "keep_aspect":Camera3D.KEEP_HEIGHT}
+	for property in camera_settings:
+		check(is_equal_approx(float(camera.get(property)), float(camera_settings[property])), "Camera " + property + " matches town settings")
 	var components: Array = level.get_node("EnvironmentRig").get("Components")
-	var base_components: Array = baseline.get_node("EnvironmentRig").get("Components")
-	for i in range(components.size()):
-		check(components[i] == base_components[i], "Environment component " + str(i) + " unchanged")
+	for script_name in ["DayNightEnvironmentComponent3D.cs", "WeatherComponent3D.cs", "WeatherSurfaceComponent3D.cs", "DdgiComponent3D.cs"]:
+		check(components.any(func(component): return component.get_script().resource_path.ends_with("/" + script_name)), "Environment retains " + script_name)
 	var settings: Environment = level.get_node("EnvironmentRig/WorldEnvironment").environment
 	var expected := {"background_intensity":26000.0,"ambient_light_energy":0.35000002,"fog_depth_begin":35.0,"fog_depth_end":240.0,"fog_density":0.38,"glow_intensity":0.03999999,"adjustment_contrast":1.04,"adjustment_saturation":1.08}
 	for key in expected:
@@ -69,7 +78,6 @@ func validate() -> void:
 			check(int(asset.get("leaf_sprays",0)) >= 900 and int(asset.revision) == 2, asset.name + " detailed layered canopy revision")
 			check(model.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, asset.name + " preserves native canopy shadows")
 		prefab.free()
-	baseline.free()
 	root.add_child(level)
 	current_scene = level
 	for frame in range(30):
@@ -104,10 +112,14 @@ func validate() -> void:
 	var passed := true
 	for item: Dictionary in checks:
 		passed = passed and bool(item.passed)
-	var file := FileAccess.open("res://assets/resources/art/forest_town_v1/scene_validation.json", FileAccess.WRITE)
+	DirAccess.make_dir_recursive_absolute("res://.godot/forest-town/")
+	var file := FileAccess.open("res://.godot/forest-town/scene_validation.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify({"passed":passed,"count":checks.size(),"checks":checks},"\t"))
 	file.close()
 	print("FOREST_TOWN_VALIDATION: ", checks.size(), " checks; passed=", passed)
+	bridge.CloseWorld()
 	level.queue_free()
 	await process_frame
+	# Close the standalone world before SceneTree teardown locks the root's children.
+	bridge.Shutdown()
 	quit(0 if passed else 1)

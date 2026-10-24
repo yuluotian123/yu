@@ -1,6 +1,6 @@
 # 森林小镇
 
-`assets/scenes/levels/forest_town_level.tscn` 是正式小镇入口，直接接入 `environment/forest_town/forest_town.tscn`，并保存环境、曝光和镜头参考点。基础场景继续提供角色、相机、天气、DDGI 等结构；正式关卡覆盖 Resident 的世界组件和生活行为图。喝水、取货与跨关卡配置见 [完整示例](../../doc/NPC_DAILY_GOALS_EXAMPLE.md)。
+`assets/scenes/levels/forest_town_level.tscn` 是独立的正式小镇关卡，直接保存角色、相机、天气、DDGI、世界入口及 Resident 的生活行为图，并实例化 `environment/forest_town/forest_town.tscn`。不再继承白盒场景。美术生成脚本只更新小镇环境及模型，不重写正式关卡。喝水、取货与跨关卡配置见 [完整示例](../../doc/NPC_DAILY_GOALS_EXAMPLE.md)。
 
 参考原画：`assets/textures/concepts/environments/forest_town_v1/scene-concept.png`。场景在固定 Godot 相机与环境下重建；材质使用手绘笔触、分区配色和绘画式直接光照。
 
@@ -88,7 +88,9 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 
 ## 验证
 
-31 个当前模型的实际导入面数、UV、顶点色、叶簇表面与树木 LOD 均已检查，记录在 `godot_validation.json`。相机与环境基准、完整建筑实例、材质绑定、地面碰撞、建筑阻挡、角色落地、台阶坡面、高处街道支撑、水面 UV 方向、河岸碰撞、三种树型、加密树木实例和新增树干落地合计 102 项检查通过，记录在 `scene_validation.json`。通过真实主菜单按钮触发关卡加载，并验证退出后再次进入；实际 Forward+ / Vulkan 渲染中水面采样确认发生动画。河流和本轮树木更新均未修改 C# 或渲染器参数。
+31 个当前模型的实际导入面数、UV、顶点色、叶簇表面与树木 LOD 均已检查，记录在 `godot_validation.json`。此前相机与环境基准、完整建筑实例、材质绑定、地面碰撞、建筑阻挡、角色落地、台阶坡面、高处街道支撑、水面 UV 方向、河岸碰撞、三种树型、加密树木实例和新增树干落地合计 102 项检查通过，记录在 `assets/resources/art/forest_town_v1/scene_validation.json`。现有验证改为检查独立关卡，运行结果写入 `.godot/forest-town/scene_validation.json`。此前通过真实主菜单按钮触发关卡加载，并验证退出后再次进入；实际 Forward+ / Vulkan 渲染中水面采样确认发生动画。河流和该轮树木更新均未修改 C# 或渲染器参数。
+
+2026-10-24 独立关卡修复：保留场景 UID、1024 个实例化节点、相机与环境配置，以及已编辑的入口和门坐标。当前编辑器可正常打开；场景验证 104 项、NPC 日常 Goal 31 项通过，主菜单新游戏、跨关卡、存档继续、GM 删档及重开流程通过。验证使用无头兼容渲染，不包含本轮 DDGI 画面验收；日志位于 `.godot/forest-town-repair/`。
 
 `material_scope_validation.json` 是此前只改材质阶段的历史记录；随后获得模型和摆放调整授权，最新范围与结果记录在 `reconstruction_v4.json`。
 

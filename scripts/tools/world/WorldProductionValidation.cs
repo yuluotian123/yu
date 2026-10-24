@@ -24,6 +24,10 @@ public partial class WorldProductionValidation : Node
             ModuleSystem.RegisterModule<ISaveModule>(new SaveModule("res://.godot/world-validation/production-saves","res://.godot/world-validation/no-legacy"));
             var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
             var definition=ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath);
+            // Keep this process's fixtures idle; daily_goals_validation covers autonomous consumption.
+            // Change only cached catalog data, never the authored Scenes or generated files.
+            foreach(var level in definition.Levels)
+                foreach(var actor in ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath).Actors)actor["running"]=false;
             Require(await world.OpenAsync(this,definition,false),world.LastError);
             Require(world.CurrentLevelId=="town_level"&&world.Player?.PersistentId=="player","Default world must open the town with one player");
             await Frames(3);ulong player=world.Player.GetInstanceId();

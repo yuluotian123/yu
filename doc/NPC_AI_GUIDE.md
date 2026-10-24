@@ -303,9 +303,9 @@ NPC agent section 使用 schema 3；旧 schema 不恢复行动，重新规划。
 
 先在 F8 → NPC 查看原因。未配置启用 Goal 时会显示“尚未配置启用目标”；提高需求不会自动创建行为。已配置 Goal 的角色还需检查 Plan 是否选择 Action、目标输入是否连接选择器，以及前提、路线和执行能力是否满足。
 
-## 白盒关卡
+## 正式关卡
 
-编辑测试场景为 `assets/scenes/levels/whitebox_test.tscn`。地面具有碰撞和平面导航，玩家和两个 NPC 使用真实 EC 组件；是否待机由当前图配置及运行状态决定。
+编辑场景为独立的 `assets/scenes/levels/forest_town_level.tscn`。玩家和两个 NPC 使用真实 EC 组件；Resident 配置了跨关卡喝水和取货，Courier 是否待机由当前图配置及运行状态决定。旧白盒基础场景已移除。
 
 美术说明见 [灰绿居民](../docs/art/npc_resident.md) 和 [跑腿员](../docs/art/npc_courier.md)。旧 Brain/Perception/Executor 生活分支、Guard、Population、LifeSimulation、旧职业配置和对应测试场景已经移除；保留通用导航适配器。
 

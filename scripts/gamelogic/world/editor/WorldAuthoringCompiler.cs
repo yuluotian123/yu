@@ -82,6 +82,7 @@ public static class WorldAuthoringCompiler
         var packed=ResourceLoader.Load<PackedScene>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
         WorldCatalog.Require(packed!=null,"关卡或模板读取失败："+path);
         Node root=packed.Instantiate(PackedScene.GenEditState.Instance);
+        WorldCatalog.Require(root!=null,"关卡或模板无法实例化，请检查场景继承和依赖："+path);
         try
         {
             if(Prepare(root,portals))
@@ -105,7 +106,9 @@ public static class WorldAuthoringCompiler
             var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
             if(old?.SourceSignature==signature&&old.Version==1&&old.LevelId==level.Id)return;
         }
-        Node root=Relevant(level.ScenePath,relevant)?ResourceLoader.Load<PackedScene>(level.ScenePath,cacheMode:ResourceLoader.CacheMode.Ignore).Instantiate(PackedScene.GenEditState.Instance):null;
+        bool hasWorldNodes=Relevant(level.ScenePath,relevant);
+        Node root=hasWorldNodes?ResourceLoader.Load<PackedScene>(level.ScenePath,cacheMode:ResourceLoader.CacheMode.Ignore)?.Instantiate(PackedScene.GenEditState.Instance):null;
+        WorldCatalog.Require(!hasWorldNodes||root!=null,"关卡无法实例化，保留已有世界目录："+level.ScenePath);
         try
         {
             var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature};

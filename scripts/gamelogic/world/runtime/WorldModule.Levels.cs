@@ -31,25 +31,25 @@ public sealed partial class WorldModule
         _save.ResetSession();ModuleSystem.GetModule<ITimeOfDayModule>().ResetCalendar();
         if(resume&&_save.Exists(slot)&&!_save.Load(slot)){LastError="存档无法读取。";return false;}
         WorldCatalog.Require(GodotObject.IsInstanceValid(parent)&&parent.IsInsideTree(),"世界宿主不在场景树中。");
-        CreateSession(parent);
         string level=_resumeLevel.Length>0?_resumeLevel:definition.InitialLevel?.Id;
+        CreateSession(parent,level);
         Task<bool> request=SwitchInternalAsync(level,"",_resumeTransform!=null,cancellation);
         int operation=_operation;
         bool success=await request;
         if(!success&&operation==_operation)Close();
         return success;
     }
-    void CreateSession(Node parent)
+    void CreateSession(Node parent,string enteringLevel)
     {
         _sessionRoot=new(){Name="WorldSessionRoot"};_actorsRoot=new(){Name="Actors"};_levelsRoot=new(){Name="Levels"};
         _sessionRoot.AddChild(_actorsRoot);_sessionRoot.AddChild(_levelsRoot);parent.AddChild(_sessionRoot);
         if(_definition.Calendar!=null)ModuleSystem.GetModule<ITimeOfDayModule>().Attach(_sessionRoot,_definition.Calendar);
-        Population?.Start(_sessionRoot);
+        Population?.Start(_sessionRoot,enteringLevel);
     }
     internal void AdoptStandalone(WorldLevelContextComponent3D context)
     {
         if(IsOpen||!GodotObject.IsInstanceValid(context.Owner)||!context.Owner.IsInsideTree())return;
-        CreateSession(context.Owner.GetTree().Root);_activeLevel=context.Owner;_ownsLevel=false;
+        CreateSession(context.Owner.GetTree().Root,context.Level.Id);_activeLevel=context.Owner;_ownsLevel=false;
         CurrentLevelId=context.Level.Id;CurrentContext=context;Status="关卡运行中";
         _ = CreateStandalonePlayer(context);
     }
@@ -89,6 +89,8 @@ public sealed partial class WorldModule
         try
         {
             token.ThrowIfCancellationRequested();
+            ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=true;
+            _pausedBeforeTransition=oldClockPaused;
             if(GodotObject.IsInstanceValid(Player))Player.ProcessMode=Node.ProcessModeEnum.Disabled;
             var transitionTree=_sessionRoot.GetTree();
             _loadingUi.ShowUI<LevelLoadingWindow>(this,string.IsNullOrWhiteSpace(target.DisplayName)?target.ScenePath.GetFile().GetBaseName():target.DisplayName);
@@ -127,8 +129,6 @@ public sealed partial class WorldModule
             // Cached loads may complete inside an Area3D physics callback. Commit outside the query flush.
             await transitionTree.ToSignal(transitionTree,SceneTree.SignalName.ProcessFrame);
             CheckRequest(operation,token);_committing=true;Status="交接关卡";_loadProgress=.9f;
-            ModuleSystem.GetModule<ITimeOfDayModule>().Clock.Paused=true;
-            _pausedBeforeTransition=oldClockPaused;
             if(Player!=null)Player.ProcessMode=Node.ProcessModeEnum.Disabled;
             _save.CheckpointSections();beforeObjects=_objects.ToDictionary(p=>p.Key,p=>p.Value.Capture());
             foreach(var environment in _environments.Values.ToArray())foreach(var actor in environment.Actors.Values.ToArray())if(actor.ManagedActor==null)actor.CancelPlan("LevelChanging");

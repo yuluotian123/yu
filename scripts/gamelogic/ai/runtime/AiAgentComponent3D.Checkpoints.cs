@@ -132,7 +132,9 @@ public partial class AiAgentComponent3D
                     CheckpointStatus="等待导航就绪";return;
                 }
             }
-            _pendingCheckpoint=null;_goal=goal;_selectedPlan=plan;_planInstanceId=saved.InstanceId;IsAbstract=saved.Abstract;
+            _pendingCheckpoint=null;_goal=goal;_selectedPlan=plan;_planInstanceId=saved.InstanceId;
+            // Execution progress survives handoff; simulation precision belongs to the current host.
+            IsAbstract=ManagedActor!=null?IsWorldProxy:saved.Abstract;
             foreach(var binding in saved.Bindings)_selectorBindings.Add(binding.Key,binding.Value);
             foreach(var step in bound.Skip(saved.Current==null?0:1))_plan.Enqueue(step);
             foreach(var step in bound.Skip(committed?1:0))foreach(var input in step.Action.Inputs.Where(i=>i.IsTarget))

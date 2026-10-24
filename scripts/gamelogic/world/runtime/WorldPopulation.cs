@@ -92,12 +92,18 @@ public sealed class WorldPopulation
         var p=_world.Player.GlobalPosition;int minX=(int)Math.Floor((p.X-_promotionRadius)/16),maxX=(int)Math.Floor((p.X+_promotionRadius)/16),minZ=(int)Math.Floor((p.Z-_promotionRadius)/16),maxZ=(int)Math.Floor((p.Z+_promotionRadius)/16);
         for(int x=minX;x<=maxX;x++)for(int z=minZ;z<=maxZ;z++)if(_cells.TryGetValue((_world.CurrentLevelId,x,z),out var entries))foreach(var actor in entries)if(seen.Add(actor))yield return actor;
     }
-    internal void Start(Node parent)
+    internal void Start(Node parent,string enteringLevel)
     {
         _closing=false;_lastHours=Clock.TotalHours;
         _root=new(){Name="WorldLogicalActors",Components=new(){new AiWorldComponent3D()}};parent.AddChild(_root);_root.SetProcess(false);
         foreach(var actor in _actors.Values.OrderBy(a=>a.Definition.Id,StringComparer.Ordinal))
-        {if(actor.Character==null)actor.Hours=actor.NextHours=Clock.TotalHours;EnsureProxy(actor);}
+        {
+            if(actor.Character==null)actor.Hours=actor.NextHours=Clock.TotalHours;
+            // The entering Scene gets the first chance to bind its residents. Running their
+            // proxies during the loading screen could send them away before they ever appear.
+            if(actor.Level==enteringLevel&&actor.Travel==null)_unbound.Enqueue(actor);
+            else EnsureProxy(actor);
+        }
     }
     internal bool OwnsEnvironment(Node node)=>_root!=null&&(node==_root||_root.IsAncestorOf(node));
     internal AiWorldComponent3D Environment=>_root?.GetComponent<AiWorldComponent3D>();
@@ -171,7 +177,7 @@ public sealed class WorldPopulation
         {_lockedPlayer=_world.Player;_playerProcess=_lockedPlayer.ProcessMode;_lockedPlayer.ProcessMode=Node.ProcessModeEnum.Disabled;}
         foreach(var id in _interest.Where(p=>p.Value<=_world.RuntimeSeconds).Select(p=>p.Key).ToArray())_interest.Remove(id);
         int changes=0;
-        for(int pending=0;pending<16&&_unbound.TryDequeue(out var unbound);pending++)EnsureProxy(unbound);
+        if(!transition)for(int pending=0;pending<16&&_unbound.TryDequeue(out var unbound);pending++)EnsureProxy(unbound);
         foreach(var actor in _detailed.Concat(PromotionCandidates()).Distinct().OrderBy(a=>a.Definition.Id,StringComparer.Ordinal).ToArray())
         {
             if(actor.Host==null){EnsureProxy(actor);continue;}
@@ -237,7 +243,10 @@ public sealed class WorldPopulation
             if(!actor.IsProxy&&route.Legs.Count>0)
             {
                 var exit=route.Legs[0].Exit;
-                if(agent.Owner.GlobalPosition.DistanceTo(exit)>.8f)
+                var offset=agent.Owner.GlobalPosition-exit;
+                // Portals are often authored above the floor. Match navigation's horizontal
+                // arrival radius so an arrived agent cannot wait forever for a height difference.
+                if(new Vector2(offset.X,offset.Z).Length()>.6f)
                 {if(agent.Navigation==null)return BehaviorTreeStatus.Failure;if(agent.Navigation.TargetId!="route:"+route.Legs[0].Id&&!agent.Navigation.BeginPosition(exit,"route:"+route.Legs[0].Id,.6f))return BehaviorTreeStatus.Failure;return agent.Navigation.Status==NpcNavigationStatus.Failed?BehaviorTreeStatus.Failure:BehaviorTreeStatus.Running;}
             }
             actor.Travel=new(){Target=targetId,Routes=route.Legs.Select(l=>l.Id).ToList(),Version=_world.Routes.Version};

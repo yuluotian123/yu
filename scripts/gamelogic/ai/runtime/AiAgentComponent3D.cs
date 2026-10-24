@@ -148,7 +148,7 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
         Decision.Refresh();
         if(ManagedActor is {} managed&&!IsWorldProxy)
         {double hours=World.Clock.TotalHours;delta=Math.Max(0,hours-managed.Hours)*World.Session.Population.SecondsPerHour;managed.Hours=hours;}
-        if(IsWorldProxy)IsAbstract=true;
+        if(ManagedActor!=null)IsAbstract=IsWorldProxy;
         UpdateActivity();
         if(!Running){if(_current!=null||_search!=null||_plan.Count>0||_selectorBindings.Count>0)CancelPlan("Stopped");return;}
         if(_pendingCheckpoint!=null){TryResumeCheckpoint();if(_pendingCheckpoint!=null)return;}

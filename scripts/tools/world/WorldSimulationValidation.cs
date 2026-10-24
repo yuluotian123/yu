@@ -81,7 +81,9 @@ public partial class WorldSimulationValidation : Node
             Check(await _world.OpenAsync(this,definition,false),"Simulation fixture must open: "+_world.LastError);_world.Population.Clock.Paused=true;
             var actor=_world.Population.Actors["worker"];string target=_world.Catalog.Objects.Values.Single().Id;
             Check(Math.Abs(actor.Hours-_world.Population.Clock.TotalHours)<.01&&actor.Hours>=6&&actor.Hours<7,"New actors start at the world's configured calendar epoch");
-            for(int frame=0;frame<20&&actor.Travel==null;frame++){_world.Population.Process();await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);}
+            // Loading is paused; let scheduled planning events advance after entering the level.
+            for(int frame=0;frame<20&&actor.Travel==null;frame++)
+            {_world.Population.Clock.AdvanceHours(.02/_world.Population.SecondsPerHour);_world.Population.Process();await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);}
             Check(actor.IsProxy&&actor.Agent.Program!=null,"Distant characters use a lightweight proxy without loading their remote level");
             var query=actor.Agent.Program.TargetSelectors.Values.Single();var candidates=NpcBindingAdapters.Find("point").Candidates(actor.Agent,query).ToArray();
             Check(candidates.Length==1&&candidates[0].LevelId==b.Id&&candidates[0].Distance==null&&candidates[0].TravelHours>=.2272,"Remote candidates distinguish route time including local transfers from unknown spatial distance");

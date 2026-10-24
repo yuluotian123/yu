@@ -14,6 +14,22 @@ public partial class NpcDailyGoalsValidation : Node
     WorldModule _world;
     bool _driving=true;
     int _checks;
+    ulong _observedHost;
+    Vector3 _previousPosition;
+    float _largestVisibleStep;
+    int _visibleSamples;
+    public override void _PhysicsProcess(double delta)
+    {
+        if(_world?.IsSwitching!=false||!_world.Population.Actors.TryGetValue("town_resident_01",out var actor)||actor.Host==null||actor.IsProxy||actor.Travel!=null)
+        {_observedHost=0;return;}
+        var host=actor.Host.Owner;var position=host.GlobalPosition;
+        if(_observedHost==host.GetInstanceId())
+        {
+            _largestVisibleStep=Math.Max(_largestVisibleStep,new Vector2(position.X-_previousPosition.X,position.Z-_previousPosition.Z).Length());
+            _visibleSamples++;
+        }
+        _observedHost=host.GetInstanceId();_previousPosition=position;
+    }
     void Check(bool ok,string message){if(!ok)throw new InvalidOperationException(message);_checks++;GD.Print("DAILY_CHECK: "+message);}
     public override void _Process(double delta){if(_driving&&_world?.CurrentContext==null)ModuleSystem.Process(delta,delta);}
     async Task CatchUp()
@@ -48,13 +64,16 @@ public partial class NpcDailyGoalsValidation : Node
             Check(await _world.OpenAsync(this,definition,false),"The actual formal town opens: "+_world.LastError);
             _world.Population.Clock.Paused=true;
             var actor=_world.Population.Actors[entry.Id];
+            Check(!actor.IsProxy&&actor.Level==entry.LevelId&&actor.Travel==null&&actor.Host.Owner.Visible
+                &&actor.Host.Owner.GlobalPosition.DistanceTo(entry.Position)<.2f,
+                $"New game shows the resident at its authored town spawn before it starts travelling (mode={actor.Mode}, position={actor.Position}, travel={actor.Travel?.Target})");
             double stock=crates.Sum(c=>_world.ObjectState(c.Id).Capability<WorldStockState>("stock").Amount);
             double liquid=_world.ObjectState(water.Id).Capability<WorldLiquidState>("liquid").Volume;
             // First exercise real town navigation to the departure; then fast-forward the remote leg.
             _world.Population.Clock.Paused=false;
             for(int n=0;n<900&&actor.Travel==null&&actor.Level==entry.LevelId;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
             _world.Population.Clock.Paused=true;
-            Check(actor.Travel!=null||actor.Level!=entry.LevelId,"The visible resident walks to the portal and starts or completes its exported route");
+            Check(actor.Travel!=null||actor.Level!=entry.LevelId,$"The visible resident walks to the portal and starts or completes its exported route (position={actor.Host?.Owner.GlobalPosition}, navigation={actor.Agent?.Navigation?.Status}, {actor.Agent?.Navigation?.Diagnostics})");
             _world.Population.Clock.AdvanceHours(.2);await CatchUp();
             Check(actor.Level==water.Level.Id&&actor.Travel==null,"The resident reaches the workshop without moving the player");
             Check(actor.Agent.Read("private.cargo").Number==2,"The resident completes the authored two-unit collection Goal");
@@ -112,6 +131,8 @@ public partial class NpcDailyGoalsValidation : Node
             _world.Close();Check(await _world.OpenAsync(this,definition,true,"daily-complete"),"The real-world save resumes");_world.Population.Clock.Paused=true;
             actor=_world.Population.Actors[entry.Id];_world.Population.Clock.AdvanceHours(.1);await CatchUp();
             Check(actor.Agent.Read("private.cargo").Number==2&&Math.Abs(crates.Sum(c=>_world.ObjectState(c.Id).Capability<WorldStockState>("stock").Amount)-(stock-2))<1e-6,"Resume does not duplicate collection rewards or consumption");
+            await MidPlanHandoff(definition,entry,water);
+            Check(_visibleSamples>60&&_largestVisibleStep<.2f,$"Detailed residents move continuously across {_visibleSamples} physics samples (largest step {_largestVisibleStep:0.000}m)");
             _world.Close();_driving=false;ModuleSystem.Shutdown();GD.Print($"NPC_DAILY_GOALS_OK: {_checks} checks");GetTree().Quit();
         }
         catch(Exception e)
@@ -119,6 +140,32 @@ public partial class NpcDailyGoalsValidation : Node
             GD.PushError(e+"\n"+string.Join("\n",_world?.Population?.Actors.Values.Select(a=>a.Agent?.Describe()+"\n"+string.Join("\n",a.Agent?.Trace??Array.Empty<string>()))??Array.Empty<string>()));
             _driving=false;ModuleSystem.Shutdown();GetTree().Quit(1);
         }
+    }
+    async Task MidPlanHandoff(WorldDefinition definition,WorldActorEntry entry,WorldCatalogEntry water)
+    {
+        _world.Close();Check(await _world.OpenAsync(this,definition,false),"A fresh world opens for the mid-plan handoff regression");
+        var actor=_world.Population.Actors[entry.Id];
+        for(int n=0;n<900&&actor.Travel==null;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        Check(actor.Travel!=null,"The resident reaches the portal before the handoff scenario");
+        _world.Population.Clock.Paused=true;
+        // Process one scheduled distant event at a time, stopping between movement and interaction.
+        for(int n=0;n<200&&actor.Travel!=null;n++)
+        {
+            _world.Population.Clock.AdvanceHours(Math.Max(0,actor.NextHours-_world.Population.Clock.TotalHours));
+            _world.Population.Process();await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        }
+        Check(actor.IsProxy&&actor.Level==water.Level.Id&&actor.Travel==null&&actor.Agent.Capture()["checkpoint"]!=null,
+            "The distant resident has a real unfinished plan at the destination");
+        Check(await _world.SwitchAsync(water.Level.Id),"The player enters while the distant plan is unfinished");
+        _world.Population.RequestInterest(entry.Id,20);
+        for(int n=0;n<240&&actor.IsProxy;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        for(int n=0;n<5;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        Check(!actor.IsProxy&&!actor.Agent.IsAbstract,"Restoring a distant checkpoint on a visible host restores detailed navigation");
+        _world.Population.Clock.Paused=false;
+        for(int n=0;n<1800&&(actor.Agent.Read("private.cargo").Number<2||actor.Agent.Read("needs.thirst.value").Number>.3);n++)
+            await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+        Check(actor.Agent.Read("private.cargo").Number==2&&actor.Agent.Read("needs.thirst.value").Number<.3,
+            "The materialized mid-plan resident finishes drinking and walks to collect stock");
     }
 }
 #endif

@@ -307,8 +307,9 @@ public partial class NpcSelectorBindingValidation : Node
         {
             string path=scaffoldRoot.TrimEnd('/')+"/"+name+"/npc_graph.tres";
             var graph=ResourceLoader.Load<NpcGraphAsset>(path,"",ResourceLoader.CacheMode.Ignore);
-            Check(graph!=null&&NpcProgram.Compile(graph,f.Profile).Goals.Count==0,"Existing scaffold graph must still load and compile: "+path);
-            Check(graph.Definitions.Count==3&&graph.Definitions.All(d=>graph.Nodes.OfType<NpcDefinitionNodeData>().Any(n=>n.DefinitionId==d.DefinitionId)),"Shipped scaffold graphs must contain only their three referenced module definitions: "+path);
+            var profile=ResourceLoader.Load<CharacterProfile>("res://assets/resources/character/"+name+"/profile.tres");
+            Check(graph!=null&&NpcProgram.Compile(graph,profile)!=null,"Shipped graph must compile with its character profile: "+path);
+            Check(graph.Nodes.OfType<NpcDefinitionNodeData>().All(n=>graph.Resolve(n.DefinitionId)!=null),"Every shipped graph node must resolve its definition: "+path);
         }
     }
     void PortsAndValidation()

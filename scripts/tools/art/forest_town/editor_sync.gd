@@ -7,7 +7,7 @@ func sync_authored_town() -> Dictionary:
 	assert(Engine.is_editor_hint(), "Editor-only art synchronization")
 	assert(name == "RPGTown" and get_parent() != null, "Only the authored town may be replaced")
 	var scene_root := get_parent()
-	assert(scene_root.scene_file_path == "res://assets/scenes/spacelevel.tscn", "Unexpected edited scene")
+	assert(scene_root.scene_file_path == "res://assets/scenes/levels/forest_town_level.tscn", "Unexpected edited scene")
 	var protected: Array = []
 	for sibling: Node in scene_root.get_children():
 		if sibling != self:

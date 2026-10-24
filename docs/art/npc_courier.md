@@ -20,4 +20,4 @@
 
 全部 37 个输出帧已与源 RGB 对照，检查脸、头发、服装、手、邮包、腿脚，以及深浅底剪影。数值审核为 0 项 RGB 错误；没有独立的全身前景遮罩，因此完整剪影保留采用逐帧目视检查，不将数值报告写成全遮罩证明。原始审核报告和覆盖说明保存在 `*_audit_report_v1.json`、`visual_review_v1.json`。
 
-已在真实 SpaceLevel 的 Vulkan 渲染中检查待机和行走。角色位于场景根节点 `Courier`，与主角使用相同的世界身高约定、最近邻采样和二值 alpha。运行和配置入口见 [NPC 图配置指南](../../doc/NPC_AI_GUIDE.md)。
+已在真实 ForestTownLevel 的 Vulkan 渲染中检查待机和行走。角色位于场景根节点 `Courier`，与主角使用相同的世界身高约定、最近邻采样和二值 alpha。运行和配置入口见 [NPC 图配置指南](../../doc/NPC_AI_GUIDE.md)。

@@ -29,6 +29,6 @@ Player 使用 `WeaponEquipmentComponent3D` 管理两个武器槽，新角色默�
 
 ## 验证
 
-运行 Spacelevel，使用 Q 检查切换、左键检查两把武器的攻击与独立冷却；攻击期间按 Q 检查延迟切换和取消队列。按 B 检查装备、卸下及当前武器外观，确认脚底对齐、攻击时长与存档恢复。
+运行 ForestTownLevel，使用 Q 检查切换、左键检查两把武器的攻击与独立冷却；攻击期间按 Q 检查延迟切换和取消队列。按 B 检查装备、卸下及当前武器外观，确认脚底对齐、攻击时长与存档恢复。
 
 当前大剑使用 [greatsword_v4](../../../assets/textures/sprites/amber_fox_style_v2/greatsword_v4/) 的 116 张独立透明帧、133 个帧引用，太刀使用 [katana_v3](../../../assets/textures/sprites/amber_fox_style_v2/katana_v3/) 的 118 张透明帧，两套均覆盖 11 个状态。大剑攻击 30 帧 / 25 fps，太刀 18 帧 / 30 fps。源视频、关键姿势、帧映射、提示词、种子、工作流及审核报告保存在各自资源目录。同一人物并排动画 按共同世界高度与脚底显示。

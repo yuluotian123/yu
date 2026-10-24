@@ -6,7 +6,7 @@
 [resource]
 resource_name = "森林小镇关卡"
 script = ExtResource("script")
-ScenePath = "res://assets/scenes/spacelevel.tscn"
+ScenePath = "res://assets/scenes/levels/forest_town_level.tscn"
 Location = ExtResource("location")
 Id = "town_level"
 DisplayName = "森林小镇"

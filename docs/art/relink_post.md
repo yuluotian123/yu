@@ -1,6 +1,6 @@
 # Relink HDR 后处理
 
-当前 `spacelevel.tscn → EnvironmentRig → WorldEnvironment → Compositor` 保存场景内的 Compositor。它包含透明绘制前的 HDR LUT 调色与透明绘制后的电影曲线、五级泛光。编辑器天空预览和运行时 EC 环境共用昼夜配置；2D UI 在 3D 后处理之后绘制。
+当前 `forest_town_level.tscn → EnvironmentRig → WorldEnvironment → Compositor` 保存场景内的 Compositor。它包含透明绘制前的 HDR LUT 调色与透明绘制后的电影曲线、五级泛光。编辑器天空预览和运行时 EC 环境共用昼夜配置；2D UI 在 3D 后处理之后绘制。
 
 这里只有一个 Compositor，其中两个 Effect 分别命名为 `Relink · HDR LUT (Before Transparency)` 和 `Relink · Film + Bloom (After Transparency)`，共用同一个 Profile。分成两阶段是为了让透明材质仍接收线性 HDR，最后再统一压缩高光，不会把电影曲线执行两次。
 
@@ -8,7 +8,7 @@
 
 `不透明物体与天空 → HDR LUT → MSAA 颜色写回（开启 MSAA 时）→ 线性透明合成 → Relink Film + Bloom → Godot Linear / sRGB 输出 → 2D UI`。
 
-关卡使用 `relink_environment.tres`，明确配置 Tonemap = Linear、Exposure = 1、Glow = Off、Adjustment = Off。核查时这些就是当前有效值，本次将默认值显式写入资源，并关闭 Spacelevel 的 `DrivePostEffectsFromProfile`，避免昼夜系统再驱动未启用的原生 Adjustment / Glow。`DriveRelinkBloomFromProfile` 继续独立驱动 Relink 泛光；物理相机曝光和日月照明沿用现有设置。
+关卡使用 `relink_environment.tres`，明确配置 Tonemap = Linear、Exposure = 1、Glow = Off、Adjustment = Off。核查时这些就是当前有效值，本次将默认值显式写入资源，并关闭 ForestTownLevel 的 `DrivePostEffectsFromProfile`，避免昼夜系统再驱动未启用的原生 Adjustment / Glow。`DriveRelinkBloomFromProfile` 继续独立驱动 Relink 泛光；物理相机曝光和日月照明沿用现有设置。
 
 HDR LUT 阶段请求解析后的颜色与深度；Film + Bloom 只请求解析颜色，不请求深度。`Pass` 属性同时设置回调阶段与深度需求，场景内和可复用 Compositor 使用相同配置。电影曲线由 Relink 执行一次，最后的颜色空间转换由 Godot 完成。
 

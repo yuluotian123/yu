@@ -6,12 +6,12 @@
 
 ## 配置入口
 
-打开 `assets/scenes/levels/whitebox_test.tscn`，选择根节点下的 `Resident` 或 `Courier`，在 Components 中打开 `AiAgentComponent3D.Graph` 的图编辑器。
+打开正式关卡 `assets/scenes/levels/forest_town_level.tscn`，选择根节点下的 `Resident` 或 `Courier`，在 Components 中打开 `AiAgentComponent3D.Graph` 的图编辑器。
 
-- 灰绿居民：`assets/resources/npc/gray_green_resident/npc_graph.tres`。
+- 灰绿居民：`assets/resources/npc/gray_green_resident/daily_goals.tres`，完整步骤见 [正式关卡喝水与取货示例](NPC_DAILY_GOALS_EXAMPLE.md)。
 - 女性跑腿员：`assets/resources/npc/ochre_courier/npc_graph.tres`。
 
-角色直接保存在 WhiteboxTest 根节点下；World 提供现场环境与平面导航。示例图内容以当前资源为准；空目标图合法，未配置启用目标的角色正常待机。
+正式小镇中的 Resident 接入 WorldActor，从小镇前往仓储间喝水和取货；World 提供现场环境与导航。Courier 及原基础图保留模块配置；空目标图合法，未配置启用目标的角色正常待机。
 
 **AI 组件提供 AI 节点。** `AiAgentComponent3D` 实现通用的 `IGraphNodeProvider`，提供 NPC 配置节点和执行能力。`GraphPlugin` 负责画布、连线、检查器、组件提供者与保存，不包含人物职业或生活行为规则。普通图的全局菜单不显示 AI 专属能力；进入 NPC 的执行子图后，菜单由所属 AI 组件提供。
 

@@ -2,11 +2,11 @@
 
 环境与日月节点只在 `DayNightEnvironmentComponent3D` 配置路径；天气组件复用已解析的节点。地表组件不另设 Profile，统一复用天气 Profile。各导出字段有中文注释，标明单位与可选驱动的生效条件。
 
-`WeatherComponent3D` 是 `EnvironmentRig` 上的 EC 组件，已接入 Spacelevel 和独立昼夜环境模板。晴天、阴天、雨天、雪天共用现有世界时钟，叠加阴云与跟随角色的 GPU 降水。直射光衰减和雨雪雾参数均为独立的可选驱动，默认不覆盖场景设置。
+`WeatherComponent3D` 是 `EnvironmentRig` 上的 EC 组件，已接入 ForestTownLevel 和独立昼夜环境模板。晴天、阴天、雨天、雪天共用现有世界时钟，叠加阴云与跟随角色的 GPU 降水。直射光衰减和雨雪雾参数均为独立的可选驱动，默认不覆盖场景设置。
 
 ## 使用
 
-运行 Spacelevel，按 **F8 → 天气**。默认开启自动天气；手动选择会关闭自动调度，再打开开关即可恢复。雨雪强度可实时调整。暂停时手动选择立即生效。「湿润程度」「地面积水」「地面积雪」可直接预览表面效果；「涟漪强度」调节水面扰动。推进游戏时间后继续自然变化。
+运行 ForestTownLevel，按 **F8 → 天气**。默认开启自动天气；手动选择会关闭自动调度，再打开开关即可恢复。雨雪强度可实时调整。暂停时手动选择立即生效。「湿润程度」「地面积水」「地面积雪」可直接预览表面效果；「涟漪强度」调节水面扰动。推进游戏时间后继续自然变化。
 
 `EnvironmentRig → Components → WeatherComponent3D → Profile` 提供配置；默认资源为 `res://assets/resources/weather/default_weather.tres`：
 
@@ -39,7 +39,7 @@ GDScript / Graph 可通过宿主 `weather` 元数据调用 `SetWeather`、`SetAu
 
 ## 湿润与积水
 
-Spacelevel 的 EnvironmentRig 还挂载 `WeatherSurfaceComponent3D`，`SurfaceRootPath = ../RPGTown`。它复制作用范围内的材质并绑定原网格，退出/回收时恢复原绑定；贴图、树叶风动与边缘光仍使用原资源。河流、透明玻璃、天空、人物纸片不替换材质。
+ForestTownLevel 的 EnvironmentRig 还挂载 `WeatherSurfaceComponent3D`，`SurfaceRootPath = ../RPGTown`。它复制作用范围内的材质并绑定原网格，退出/回收时恢复原绑定；贴图、树叶风动与边缘光仍使用原资源。河流、透明玻璃、天空、人物纸片不替换材质。
 
 雨雪逐渐加深建筑、路面、道具和植物的底色、降低粗糙度并增加水膜反射。雪天默认按雨天 55% 的程度湿润，并独立积累雪量；雪覆盖的区域转为柔和的粗糙雪面，压制下面的水膜反射。雨天另在启用 `weather_puddles_enabled` 的材质上积水。当前标记铺装石材 `Town_Structures_0.tres` 和路缘石 `Town_Structures_2.tres`，覆盖道路、桥面及路缘石，并根据朝上法线限制积水，墙面和树叶不会变成水塘。建筑与这两个地面材质统一使用 `town_toon.gdshader`；铺装、路缘石通过 `toon_strength = 0` 保留 Burley 漫反射，建筑默认 1。直接光的 Toon 明暗与 PBR 反射分开处理，非金属的天空和 SSR 反射保持有效。
 
@@ -50,7 +50,7 @@ Profile 的 `Wet Surfaces (Game Hours)` 可以调整：
 - `WettingHours = 0.15`：湿润响应时间，在默认日长下约 7.5 秒。
 - `PuddleBuildHours = 0.6`：积水形成比表面湿润慢，约 30 秒。
 - `DryingHours = 1.5` / `PuddleDryingHours = 3`：停雨后表面约 75 秒、积水约 150 秒的衰减时间。
-- 这些值是指数变化的时间常数，经过一个时间常数变化约 63%；强度越小，最终湿润和积水越少。上述秒数按时钟默认 1200 秒一天换算；当前 Spacelevel 的 `DayLengthSeconds = 4800`，对应时间为四倍，积水时间常数为 120 秒。暂停时通过 GM「地面积水」直接预览。
+- 这些值是指数变化的时间常数，经过一个时间常数变化约 63%；强度越小，最终湿润和积水越少。上述秒数按时钟默认 1200 秒一天换算；当前 ForestTownLevel 的 `DayLengthSeconds = 4800`，对应时间为四倍，积水时间常数为 120 秒。暂停时通过 GM「地面积水」直接预览。
 - `WetDarkening`、`PuddleCoverage`、`PuddleScale`：湿润压暗量、局部积水覆盖率和形状大小。
 - `WetRoughness = 0.14` / `PuddleRoughness = 0.045`：建筑、路面及标准 PBR 表面的水膜/积水目标粗糙度。水膜使用归一化指数响应；含水量 0.8 时，原粗糙度为 1 的表面降至约 0.16，而非旧算法的 0.42。植物保留较柔和的原有湿润高光。
 - `WetSpecular = 0.6`：上述水膜的非金属反射强度，沿用 Godot specular 语义；0.354 约对应物理水的正面 2% 反射，默认增强到约 5.8% 以适配卡通路面。积水的直接高光由统一 Shader 计算 Fresnel，天空/SSR 的 Fresnel 由原生 PBR 计算；干燥时恢复原材质的 specular。

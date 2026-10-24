@@ -1,8 +1,29 @@
 [gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://23ot7xj6my8e"]
 
+[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="1_6eym0"]
 [ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_s0gqf"]
+[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="2_6eym0"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="3_tm1xs"]
 
 [resource]
 script = ExtResource("1_s0gqf")
 LevelId = "town_level"
-SourceSignature = "CA34BBB172A68F9C4EF5DF127B64E385D611EDBDC079B967AA729A043E5CAB25/town_level/town"
+SourceSignature = "4670EF3A6BFE9BE8F6AA1BF1807D8AECF26C8F85FD2B0CCA50C9AA81B766CCD4/population-v3/town_level/town"
+Actors = Array[Dictionary]([{
+"abstract": 45.0,
+"detailed": 30.0,
+"graph": ExtResource("2_6eym0"),
+"half_height": 0.36,
+"id": "town_resident_01",
+"level": "town_level",
+"overrides": Array[ExtResource("3_tm1xs")]([]),
+"position": Vector3(-1.6, 0.42, 1.5),
+"profile": ExtResource("1_6eym0"),
+"residency": 2.0,
+"running": true,
+"scene": "res://assets/scenes/npc/resident.tscn",
+"speed": 2.2
+}])
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.55, 3)
+})

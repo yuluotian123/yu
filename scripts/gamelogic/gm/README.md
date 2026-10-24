@@ -1,6 +1,6 @@
 # Runtime GM
 
-Spacelevel 场景内实例化 `assets/scenes/ui/runtime_gm.tscn`，F8 或右上角按钮开关。
+ForestTownLevel 场景内实例化 `assets/scenes/ui/runtime_gm.tscn`，F8 或右上角按钮开关。
 所有控件都在场景中，可直接调整布局。`RuntimeGmComponent3D` 管理外壳和输入隔离，
 `TimeOfDayGmComponent3D` 通过 Embedded 模式提供时间页，不再创建第二个入口。
 

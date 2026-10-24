@@ -52,7 +52,7 @@ Operations = Array[ExtResource("4_533gc")]([SubResource("pour_liquid")])
 [resource]
 script = ExtResource("13_2gl8f")
 LevelId = "workshop_level"
-SourceSignature = "F0C5075ED246DFF531F434FA5E9F94444521D9DE9400773A43F9BFC076C7C25C/population-v2/workshop_level/workshop"
+SourceSignature = "33E2B9B77DF2807DB9CF3F2BD6B3362A3B8A88BC378BDFC21F8E8725F24593E1/population-v3/workshop_level/workshop"
 Entries = Array[Dictionary]([{
 "capabilities": Array[ExtResource("3_0h8rt")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
 "id": "world/4b208b24b610436cbc5b418b7cc0c455",
@@ -78,7 +78,7 @@ Entries = Array[Dictionary]([{
 "name": "水瓶",
 "owner": "",
 "position": Vector3(2, 0, -1.45),
-"tags": PackedStringArray(),
+"tags": PackedStringArray("drinking_water"),
 "type": ExtResource("10_2asib")
 }])
 Entrances = Dictionary[String, Vector3]({

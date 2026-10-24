@@ -8,7 +8,7 @@
 
 ## 先运行现成示例
 
-运行项目，在主菜单选择“新游戏”。城镇入口使用 `spacelevel.tscn`，继承 Whitebox 中的世界组件；走进 `WorkshopPortal` 进入工坊，工坊 `TownPortal` 返回城镇。
+运行项目，在主菜单选择“新游戏”。城镇入口直接使用 `assets/scenes/levels/forest_town_level.tscn`；走进 `WorkshopPortal` 进入工坊，工坊 `TownPortal` 返回城镇。正式 Resident 已接入世界角色名册，可跨关卡喝水与取货，详见 [完整配置示例](NPC_DAILY_GOALS_EXAMPLE.md)。
 
 进入工坊储物箱或瓶子的交互区域后按 **E**。储物箱每次使用 1 单位物资，瓶子每次倒出 0.25 单位液体。一个操作直接执行；多个操作先显示列表，可点击按钮，或方向键选择后按 E 确认。库存示例表示物资消耗，尚未定义可放入背包的物品；倒液体也不附带饮用效果。
 

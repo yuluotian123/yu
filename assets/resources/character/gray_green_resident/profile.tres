@@ -6,7 +6,11 @@
 [ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="6_6l3rr"]
 [ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="7_ur46o"]
 [ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="11_cd1og"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="12_1levc"]
+[ext_resource type="Resource" path="res://assets/resources/world/locations/town.tres" id="13_g1j2x"]
 [ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="13_r6wi1"]
+[ext_resource type="Resource" path="res://assets/resources/world/locations/workshop.tres" id="14_6fqan"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/CharacterWorldDefinition.cs" id="15_5xh60"]
 [ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="15_rvsd2"]
 [ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="16_37e1b"]
 [ext_resource type="Script" uid="uid://bmwt0dxhrjulh" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="character_profile"]
@@ -23,8 +27,17 @@ script = ExtResource("13_r6wi1")
 Dimensions = Array[ExtResource("feature_value")]([SubResource("Resource_a0ivl")])
 DefinitionId = "gray_green_resident.affect"
 
+[sub_resource type="Resource" id="Resource_1levc"]
+script = ExtResource("2_18gn3")
+
+[sub_resource type="Resource" id="Resource_g1j2x"]
+script = ExtResource("15_rvsd2")
+Key = "private.cargo"
+Initial = SubResource("Resource_1levc")
+
 [sub_resource type="Resource" id="Resource_bjsdq"]
 script = ExtResource("16_37e1b")
+Facts = Array[ExtResource("15_rvsd2")]([SubResource("Resource_g1j2x")])
 DefinitionId = "gray_green_resident.facts"
 
 [sub_resource type="Resource" id="Resource_ypyfa"]
@@ -37,6 +50,7 @@ DisplayName = "灰绿居民"
 script = ExtResource("6_6l3rr")
 NeedId = "thirst"
 DisplayName = "口渴"
+Initial = 0.8
 ChangePerHour = 0.18
 UseDefaultThresholds = false
 
@@ -107,6 +121,14 @@ script = ExtResource("11_cd1og")
 Dimensions = Array[ExtResource("feature_value")]([SubResource("Resource_4i2na"), SubResource("Resource_aegml")])
 DefinitionId = "gray_green_resident.relations"
 
+[sub_resource type="Resource" id="Resource_6fqan"]
+script = ExtResource("15_5xh60")
+Locations = Dictionary[String, ExtResource("12_1levc")]({
+"home": ExtResource("13_g1j2x"),
+"work": ExtResource("14_6fqan")
+})
+KnownObjects = PackedStringArray("world/4b208b24b610436cbc5b418b7cc0c455", "world/03b5672e717f455a9e7ede84e5a10b04", "world/ea0383a6f51c4d1bb92086dcac699d2c")
+
 [resource]
 script = ExtResource("character_profile")
 FeatureLibrary = ExtResource("feature_library")
@@ -116,3 +138,4 @@ Personality = SubResource("Resource_mk1td")
 Relations = SubResource("Resource_woaon")
 Affect = SubResource("Resource_lsiff")
 Facts = SubResource("Resource_bjsdq")
+World = SubResource("Resource_6fqan")

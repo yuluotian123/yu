@@ -1,6 +1,6 @@
 # 通用场景表面与卡通渲染
 
-Spacelevel 已接入 [森林小镇](forest_town.md)，通过白盒基础场景保留角色、相机、昼夜、天气和 DDGI。建筑与植物分别建模，使用手绘图集和顶点配色；原有画面参数保持不变。白盒测试场景继续单独保留。
+ForestTownLevel 已接入 [森林小镇](forest_town.md)，通过白盒基础场景保留角色、相机、昼夜、天气和 DDGI。建筑与植物分别建模，使用手绘图集和顶点配色；原有画面参数保持不变。白盒测试场景继续单独保留。
 
 环境系统支持 Forward+ 日月直射光、阴影、自研 DDGI、天空镜面反射与 SSR，保留 SSAO。SSIL / SDFGI 由 Environment 独立配置，单独验收 DDGI 时关闭；验证脚本只修改测试实例。建筑、水面和植被通过原生材质路径接收光照；受控城镇 / 植被材质同时贡献 DDGI。探针范围与限制见 [DDGI 接入指南](ddgi_implementation.md)。
 
@@ -22,11 +22,11 @@ Spacelevel 已接入 [森林小镇](forest_town.md)，通过白盒基础场景�
 
 参考图中的划痕需要法线/粗糙度贴图，未提供这些贴图时，三个标量只能控制整体反射。本 Shader 仍是不透明材质：仅调整 specular 与 roughness 无法产生玻璃的透射与折射，`base_color.a` 当前不参与透明度。玻璃的正面反射本来较弱。
 
-Spacelevel 使用现有天空辐照与 SSR，没有新增反射探针。天空材质的 AT_CUBEMAP_PASS 提供环境反射；昼夜组件将原三层云在独立云世界中采样为六个 256×256 的透明线性 HDR 视图，并在辐照通道与大气合成。云贴图、噪声、颜色、旋转和天气灰化来自同一套原材质，暂停时不继续刷新。可见背景保留原网格，正交天空构图也不变。镜面球和湿润路面现在可以反射云；采样仅包含云，按环境刷新频率更新变化，不重绘小镇场景。
+ForestTownLevel 使用现有天空辐照与 SSR，没有新增反射探针。天空材质的 AT_CUBEMAP_PASS 提供环境反射；昼夜组件将原三层云在独立云世界中采样为六个 256×256 的透明线性 HDR 视图，并在辐照通道与大气合成。云贴图、噪声、颜色、旋转和天气灰化来自同一套原材质，暂停时不继续刷新。可见背景保留原网格，正交天空构图也不变。镜面球和湿润路面现在可以反射云；采样仅包含云，按环境刷新频率更新变化，不重绘小镇场景。
 
 SSR 只能补充屏幕内可见几何的反射，屏幕外使用天空反射；增加 Max Steps 无法恢复屏幕外的建筑。
 
-Spacelevel 的天气表面组件为这些材质创建运行时副本，雨雪期间叠加压暗、低粗糙度和水膜高光；石路、桥面及路缘石额外启用局部积水与雨滴波纹。水膜形成时粗糙度以归一化指数响应下降，默认 WetRoughness = 0.14、PuddleRoughness = 0.045、WetSpecular = 0.6；积水区域加强水底石材的压暗，保持俯视时可读的水岸轮廓。默认 specular 为卡通画面增强；物理水的约 2% 正面反射可用 WetSpecular = 0.354。干燥时恢复原粗糙度与底色，退出后恢复原材质绑定，配置见 [天气系统](../../scripts/gamelogic/weather/README.md)。整体仍为卡通/PBR 混合渲染，而非写实 PBR 材质集。
+ForestTownLevel 的天气表面组件为这些材质创建运行时副本，雨雪期间叠加压暗、低粗糙度和水膜高光；石路、桥面及路缘石额外启用局部积水与雨滴波纹。水膜形成时粗糙度以归一化指数响应下降，默认 WetRoughness = 0.14、PuddleRoughness = 0.045、WetSpecular = 0.6；积水区域加强水底石材的压暗，保持俯视时可读的水岸轮廓。默认 specular 为卡通画面增强；物理水的约 2% 正面反射可用 WetSpecular = 0.354。干燥时恢复原粗糙度与底色，退出后恢复原材质绑定，配置见 [天气系统](../../scripts/gamelogic/weather/README.md)。整体仍为卡通/PBR 混合渲染，而非写实 PBR 材质集。
 
 树叶沿用原 alpha 轮廓、风动及树冠中心，以 `normal_roundness=0.68` 平滑叶片法线；顶点色权重降到 0.4，渐变强度 0.6，避免两次染色后暗面发黑。基础材质使用 Alpha Scissor 与 MSAA Alpha To Coverage，保留深度和投影，并平滑细小叶片轮廓；边缘光按屏幕导数平滑裁切。`directional_shadow_lift=0.12` 是日月照明下的风格化树冠透光量，设为 0 可关闭。点光和背向透光保留完整 ATTENUATION，不给范围外叶片补光。
 
@@ -56,4 +56,4 @@ EnvironmentRig → Components → Profile → Cartoon Lighting 可调整：
 
 WorldEnvironment → Environment 中可直接调整雾、SSAO、色调映射和 Adjustment。Profile → Scene Environment Controls 的 DriveFogFromProfile / DrivePostEffectsFromProfile 默认关闭，避免系统持续覆盖 Inspector。
 
-当前 Spacelevel 使用物理光照强度驱动昼夜，日月倍率为 1，间接能量为 0.75。相机曝光由昼夜 EV 曲线控制，不随镜头中的亮暗变化，曝光不改变光源。灯罩材质使用 300 cd/m² 自发光，除自身发光与泛光外，也通过 DDGI 向周围贡献低频间接光。`DayExposureEv` / `NightExposureEv` 控制日夜曝光，关闭 `DriveExposureFromProfile` 后可手动编辑 Camera Attributes。天空强度由太阳高度驱动；当前夜间 EV 为 2，`NightSkyIntensity = 8`。关闭 `DriveSkyBrightnessFromProfile` 后可手动编辑 Background Intensity。运行时修改 Profile 后调用环境组件 `RefreshProfile()`。
+当前 ForestTownLevel 使用物理光照强度驱动昼夜，日月倍率为 1，间接能量为 0.75。相机曝光由昼夜 EV 曲线控制，不随镜头中的亮暗变化，曝光不改变光源。灯罩材质使用 300 cd/m² 自发光，除自身发光与泛光外，也通过 DDGI 向周围贡献低频间接光。`DayExposureEv` / `NightExposureEv` 控制日夜曝光，关闭 `DriveExposureFromProfile` 后可手动编辑 Camera Attributes。天空强度由太阳高度驱动；当前夜间 EV 为 2，`NightSkyIntensity = 8`。关闭 `DriveSkyBrightnessFromProfile` 后可手动编辑 Background Intensity。运行时修改 Profile 后调用环境组件 `RefreshProfile()`。

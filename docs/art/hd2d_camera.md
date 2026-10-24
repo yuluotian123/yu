@@ -1,6 +1,6 @@
 # HD-2D 场景镜头
 
-Spacelevel/CameraRig/Camera3D 使用透视、30° FOV、4.1° 俯角和约 9m 拍摄距离（人物在中心下方、上方可见天空和云的横版构图）。
+ForestTownLevel/CameraRig/Camera3D 使用透视、30° FOV、4.1° 俯角和约 9m 拍摄距离（人物在中心下方、上方可见天空和云的横版构图）。
 Camera3D 节点直接调整镜头，hd2d_free_3d.tres 调整跟随、死区和前视。
 CameraFramingTarget 是编辑器构图时角色所在位置的参照点；它不会传送或限制角色。
 读档后相机按同一构图跟随恢复后的角色位置，不把存档位置误当作镜头偏移基准。
@@ -14,7 +14,7 @@ Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格
 ## 调参位置与作用
 
 选中 Camera3D 或 CameraRig 可查看节点的 Editor Description 中文说明；自定义导出参数的中文 XML 注释位于对应 C# 属性上。
-以下数值是当前 Spacelevel 的配置，未在资源里显式保存的属性使用脚本默认值。单位为米，X/Y/Z 均为世界轴。
+以下数值是当前 ForestTownLevel 的配置，未在资源里显式保存的属性使用脚本默认值。单位为米，X/Y/Z 均为世界轴。
 
 | 参数 / 位置 | 当前值 | 调整效果 |
 | --- | --- | --- |

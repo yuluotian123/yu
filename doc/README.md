@@ -6,6 +6,7 @@
 
 | 手册 | 内容 |
 | --- | --- |
+| [正式关卡：居民喝水与取货完整示例](NPC_DAILY_GOALS_EXAMPLE.md) | WorldActor、世界知识、道路、对象、两个 Goal、手动 Plan、选择器及四个 Action 的逐项实配 |
 | [NPC 与 AI 配置](NPC_AI_GUIDE.md) | 角色图、Goal、手动 Plan、Action、选择器连线、表达式、行动检查点及 NPC GM |
 | [世界、关卡与 NPC 模拟配置](WORLD_GUIDE.md) | 地点与对象类型、可复用 Scene、交互区域、知识、关卡切换、角色名册、道路、活动与离屏模拟 |
 | [架构与后续工作](ARCHITECTURE_AND_ROADMAP.md) | 组件职责、状态所有权、生命周期、实现边界、代码入口及尚未实施的范围 |

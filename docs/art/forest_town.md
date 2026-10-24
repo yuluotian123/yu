@@ -1,6 +1,6 @@
 # 森林小镇
 
-`assets/scenes/spacelevel.tscn` 通过 `levels/forest_town_level.tscn` 接入 `environment/forest_town/forest_town.tscn`。白盒基础场景继续提供原有角色、相机、环境、天气、DDGI 和玩法模块；新场景提供完整建筑、林木、植物、道路与原生碰撞。
+`assets/scenes/levels/forest_town_level.tscn` 是正式小镇入口，直接接入 `environment/forest_town/forest_town.tscn`，并保存环境、曝光和镜头参考点。基础场景继续提供角色、相机、天气、DDGI 等结构；正式关卡覆盖 Resident 的世界组件和生活行为图。喝水、取货与跨关卡配置见 [完整示例](../../doc/NPC_DAILY_GOALS_EXAMPLE.md)。
 
 参考原画：`assets/textures/concepts/environments/forest_town_v1/scene-concept.png`。场景在固定 Godot 相机与环境下重建；材质使用手绘笔触、分区配色和绘画式直接光照。
 
@@ -29,7 +29,7 @@
 
 原有 48 棵树改用这三种树型，侧后方增加 30 棵，合计 78 棵。新增树干避开建筑碰撞范围和主通路，通过旋转、缩放与错列打破重复；全部非树物件的摆放保持一致。旧 `forest_column`、`understory_oak` 资源保留在源文件和磁盘中作为历史资产，当前场景不再引用。
 
-三种树都带原生距离 LOD，各表面的附加 LOD 数为 `[4,1]`，完整细节保留为 LOD0。RTX 5080、1920×1080、主菜单启动 Spacelevel、解除帧率上限的同机固定镜头对照：旧 48 棵树 GPU 中位耗时约 4.51 ms，新 78 棵树约 4.57–4.58 ms；完整帧平均耗时由约 5.42 ms 变为 5.42–5.54 ms。该对照保留相机、灯光、阴影质量、DDGI 和后处理配置，不代表所有位置和设备的表现。独立运行截图、对照脚本和采样位于 `.godot/forest-town/trees-v2-*.png`、`check_trees_v2.gd`、`trees-v2-runtime.json`；源资产统计在 `trees_v2.json`。
+三种树都带原生距离 LOD，各表面的附加 LOD 数为 `[4,1]`，完整细节保留为 LOD0。RTX 5080、1920×1080、主菜单启动 ForestTownLevel、解除帧率上限的同机固定镜头对照：旧 48 棵树 GPU 中位耗时约 4.51 ms，新 78 棵树约 4.57–4.58 ms；完整帧平均耗时由约 5.42 ms 变为 5.42–5.54 ms。该对照保留相机、灯光、阴影质量、DDGI 和后处理配置，不代表所有位置和设备的表现。独立运行截图、对照脚本和采样位于 `.godot/forest-town/trees-v2-*.png`、`check_trees_v2.gd`、`trees-v2-runtime.json`；源资产统计在 `trees_v2.json`。
 
 ## 建筑与街道层次
 
@@ -82,7 +82,7 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 
 构建脚本直接读取最新 GLB，并保存带 UV、顶点色和逐表面材质的共享网格与独立模型场景，避免另一个开着的编辑器保留旧导入缓存。实机截图写入忽略目录 `.godot/forest-town/godot-composition.png`，不覆盖参考原画。截图同时将实际 DDGI 状态写入 `.godot/forest-town/ddgi-status.json`。
 
-`editor_sync.gd` 只用于把新布局同步到当前编辑器的 `RPGTown` 节点：先保存带时间戳的子树快照，再替换该子树，校验其他同级节点及其变换均未变化。快照在 `.godot/forest-town/editor-town-before-<时间>.tscn`；新实例不挂工具脚本。它不重载整个 `spacelevel.tscn`。若编辑器已自动刷新外部场景，无须再替换。Blender 预览镜头复制固定 Godot 镜头以便检查构图，不反写 Godot 相机。
+`editor_sync.gd` 只用于把新布局同步到当前编辑器的 `RPGTown` 节点：先保存带时间戳的子树快照，再替换该子树，校验其他同级节点及其变换均未变化。快照在 `.godot/forest-town/editor-town-before-<时间>.tscn`；新实例不挂工具脚本。它不重载整个 `forest_town_level.tscn`。若编辑器已自动刷新外部场景，无须再替换。Blender 预览镜头复制固定 Godot 镜头以便检查构图，不反写 Godot 相机。
 
 仅同步树木时调用 `sync_authored_trees()`：先保存小镇快照，只替换 `Trees` 下的实例，校验其他分组、其子节点及变换保持不变，随后自动移除临时同步脚本。
 
@@ -100,7 +100,7 @@ $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mon
 
 另一个瓶颈是 DDGI 的 CPU 场景采集：364 个材质表面逐帧重复读取共享材质。现在每份快照只读取每个共享材质一次，并复用白色占位纹理；下帧仍重新采集，保留天气、材质修改与动态物体的及时更新。`DdgiEffect.GetStatus()` 的 `capture_cpu_ms` 可查看这部分耗时，`gpu_update_ms` 只代表 DDGI 探针 GPU 更新，不能当作完整帧耗时。
 
-RTX 5080、当前定制 Godot 4.8、1920×1080、主菜单启动 Spacelevel、原固定镜头下，预热后对比结果：
+RTX 5080、当前定制 Godot 4.8、1920×1080、主菜单启动 ForestTownLevel、原固定镜头下，预热后对比结果：
 
 | 指标 | 优化前 | 优化后 |
 | --- | ---: | ---: |

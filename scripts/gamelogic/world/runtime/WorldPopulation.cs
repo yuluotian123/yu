@@ -219,7 +219,10 @@ public sealed class WorldPopulation
                 if(component is not CharacterDataComponent3D data)return component;
                 var character=(CharacterDataComponent3D)data.Duplicate();character.Profile=actor.Definition.Profile;character.ParameterOverrides=new(actor.Definition.ParameterOverrides);return (Component3D)character;
             }));
-            RemoveHost(actor);host.PersistentId=actor.Definition.Id;_world.CurrentContext.Owner.AddChild(host);actor.Handle=handle;handle=null;
+            RemoveHost(actor);host.PersistentId=actor.Definition.Id;
+            // Physics children enter the world before OnInit restores the actor. Spawn at the saved
+            // location immediately so a body at the scene origin cannot push or carry the player.
+            var parent=_world.CurrentContext.Owner;host.Position=parent.ToLocal(actor.Position);parent.AddChild(host);actor.Handle=handle;handle=null;
         }
         catch(Exception e){actor.Agent?.Record("MaterializationFailed",e.Message);}
         finally{handle?.Dispose();actor.Loading=false;EnsureProxy(actor);}

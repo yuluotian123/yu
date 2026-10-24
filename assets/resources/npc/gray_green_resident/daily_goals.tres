@@ -1,0 +1,435 @@
+[gd_resource type="Resource" script_class="NpcGraphAsset" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcDefinitionResource.cs" id="1_1rqy7"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPerceptionDefinition.cs" id="2_duqt2"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcMemoryDefinition.cs" id="3_5bvxl"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPolicyDefinition.cs" id="4_djxc7"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterExpressionDefinition.cs" id="5_68nev"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcGoalDefinition.cs" id="6_twfag"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcPlanTemplateDefinition.cs" id="7_wriac"]
+[ext_resource type="Resource" path="res://assets/resources/world/types/bottle.tres" id="8_srn5t"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcTargetSelectorDefinition.cs" id="9_ft04u"]
+[ext_resource type="Script" path="res://addons/GraphPlugin/runtime/flow/FlowGraphAsset.cs" id="10_q0fio"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionInputDefinition.cs" id="11_8or0a"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcEffectDefinition.cs" id="12_cq2dx"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/definitions/NpcActionDefinition.cs" id="13_djx3r"]
+[ext_resource type="Resource" path="res://assets/resources/world/types/storage.tres" id="14_3agru"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/graph/NpcGraphAsset.cs" id="15_1ykgx"]
+
+[sub_resource type="Resource" id="Resource_cslup"]
+script = ExtResource("2_duqt2")
+ViewRange = 18.0
+DefinitionId = "gray_green_resident.NpcPerceptionNodeData"
+
+[sub_resource type="Resource" id="Resource_gmw5a"]
+script = ExtResource("3_5bvxl")
+Categories = PackedStringArray("visited", "conversation", "danger")
+DefinitionId = "gray_green_resident.NpcMemoryNodeData"
+
+[sub_resource type="Resource" id="Resource_t73cy"]
+script = ExtResource("4_djxc7")
+DefinitionId = "gray_green_resident.NpcPolicyNodeData"
+
+[sub_resource type="Resource" id="Resource_sivk8"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "needs.thirst.urgent"
+
+[sub_resource type="Resource" id="Resource_d3y20"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "needs.thirst.value"
+
+[sub_resource type="Resource" id="Resource_dbjrw"]
+script = ExtResource("5_68nev")
+Number = 0.25
+
+[sub_resource type="Resource" id="Resource_2e5sv"]
+script = ExtResource("5_68nev")
+Kind = 15
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_d3y20"), SubResource("Resource_dbjrw")])
+
+[sub_resource type="Resource" id="Resource_f5x4j"]
+script = ExtResource("5_68nev")
+Number = 100.0
+
+[sub_resource type="Resource" id="Resource_am4jf"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "needs.thirst.urgency"
+
+[sub_resource type="Resource" id="Resource_vp81e"]
+script = ExtResource("5_68nev")
+Number = 100.0
+
+[sub_resource type="Resource" id="Resource_uehp0"]
+script = ExtResource("5_68nev")
+Kind = 5
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_am4jf"), SubResource("Resource_vp81e")])
+
+[sub_resource type="Resource" id="Resource_vrry4"]
+script = ExtResource("5_68nev")
+Kind = 3
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_f5x4j"), SubResource("Resource_uehp0")])
+
+[sub_resource type="Resource" id="Resource_rjarb"]
+script = ExtResource("6_twfag")
+Activation = SubResource("Resource_sivk8")
+Utility = SubResource("Resource_vrry4")
+Completion = SubResource("Resource_2e5sv")
+DefinitionId = "resident.daily.drink_goal"
+DisplayName = "解渴"
+
+[sub_resource type="Resource" id="Resource_dai1d"]
+script = ExtResource("7_wriac")
+ActionIds = PackedStringArray("resident.daily.drink_move", "resident.daily.drink_use")
+DefinitionId = "resident.daily.drink_plan"
+DisplayName = "到饮水源喝水"
+
+[sub_resource type="Resource" id="Resource_bk05b"]
+script = ExtResource("9_ft04u")
+Source = 6
+Scope = 3
+LocationBinding = "work"
+Information = 2
+ObjectType = ExtResource("8_srn5t")
+RequiredCapabilities = PackedStringArray("liquid")
+RequiredOperations = PackedStringArray("pour_liquid")
+AllTags = PackedStringArray("drinking_water")
+CandidateLimit = 4
+DefinitionId = "resident.daily.drink_source"
+DisplayName = "工坊饮水源"
+
+[sub_resource type="Resource" id="Resource_mtlvl"]
+script = ExtResource("5_68nev")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_fhjuk"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.travel_hours"
+
+[sub_resource type="Resource" id="Resource_0uflv"]
+script = ExtResource("5_68nev")
+Number = 10.0
+
+[sub_resource type="Resource" id="Resource_uhx0t"]
+script = ExtResource("5_68nev")
+Kind = 5
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_fhjuk"), SubResource("Resource_0uflv")])
+
+[sub_resource type="Resource" id="Resource_a17xa"]
+script = ExtResource("5_68nev")
+Kind = 3
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_mtlvl"), SubResource("Resource_uhx0t")])
+
+[sub_resource type="Resource" id="Resource_xfyyh"]
+script = ExtResource("10_q0fio")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":100},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":640,\"y\":80},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_0\",\"Position\":{\"x\":320,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Input\":{\"$type\":\"yu:GameLogic.AI.NpcInputReference\",\"Name\":\"destination\"},\"Description\":\"NpcMoveToTargetAction\"}],\"Id\":\"step_0\",\"Position\":{\"x\":320,\"y\":80},\"NodeType\":\"FlowActionNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"step_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":1,\"ToNode\":\"failure_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_j0mb1"]
+script = ExtResource("11_8or0a")
+Name = "destination"
+InputType = "target:point"
+InputId = "ec4f862a895f4b98aaba3382e92d4d49"
+
+[sub_resource type="Resource" id="Resource_ky52f"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.id"
+
+[sub_resource type="Resource" id="Resource_3pykf"]
+script = ExtResource("12_cq2dx")
+Key = "self.location"
+Value = SubResource("Resource_ky52f")
+
+[sub_resource type="Resource" id="Resource_j2hqy"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.at"
+
+[sub_resource type="Resource" id="Resource_jikfn"]
+script = ExtResource("13_djx3r")
+Inputs = Array[ExtResource("11_8or0a")]([SubResource("Resource_j0mb1")])
+SuccessConditions = SubResource("Resource_j2hqy")
+Cost = SubResource("Resource_a17xa")
+ExecutionGraph = SubResource("Resource_xfyyh")
+Predictions = Array[ExtResource("12_cq2dx")]([SubResource("Resource_3pykf")])
+TimeoutSeconds = 180.0
+DefinitionId = "resident.daily.drink_move"
+DisplayName = "前往饮水源"
+
+[sub_resource type="Resource" id="Resource_utmyi"]
+script = ExtResource("5_68nev")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_ygoxy"]
+script = ExtResource("10_q0fio")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":100},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":960,\"y\":80},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_0\",\"Position\":{\"x\":320,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"Seconds\":{\"$type\":\"yu:GameLogic.AI.NpcGraphNumber\",\"Kind\":\"Literal\",\"Number\":2,\"Key\":\"\",\"Inputs\":[]},\"Description\":\"NpcWaitAction\"}],\"Id\":\"step_0\",\"Position\":{\"x\":320,\"y\":80},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_1\",\"Position\":{\"x\":640,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcInteractAction\",\"Input\":{\"$type\":\"yu:GameLogic.AI.NpcInputReference\",\"Name\":\"source\"},\"OperationId\":\"pour_liquid\",\"Amount\":{\"$type\":\"yu:GameLogic.AI.NpcGraphNumber\",\"Kind\":\"Literal\",\"Number\":0.25,\"Key\":\"\",\"Inputs\":[]},\"Description\":\"NpcInteractAction\"}],\"Id\":\"step_1\",\"Position\":{\"x\":640,\"y\":80},\"NodeType\":\"FlowActionNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"step_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":1,\"ToNode\":\"failure_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":0,\"ToNode\":\"step_1\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_1\",\"FromPort\":1,\"ToNode\":\"failure_1\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_1\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_sf1gn"]
+script = ExtResource("11_8or0a")
+Name = "source"
+InputType = "target:point"
+InputId = "8b9451ca54b044c0841f8c19d083fe4c"
+
+[sub_resource type="Resource" id="Resource_yss8r"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.at"
+
+[sub_resource type="Resource" id="Resource_4th20"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.liquid"
+
+[sub_resource type="Resource" id="Resource_oyj4s"]
+script = ExtResource("5_68nev")
+Number = 0.25
+
+[sub_resource type="Resource" id="Resource_1qx3l"]
+script = ExtResource("5_68nev")
+Kind = 13
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_4th20"), SubResource("Resource_oyj4s")])
+
+[sub_resource type="Resource" id="Resource_hmlql"]
+script = ExtResource("5_68nev")
+Kind = 16
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_yss8r"), SubResource("Resource_1qx3l")])
+
+[sub_resource type="Resource" id="Resource_d7r5c"]
+script = ExtResource("5_68nev")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_s2bdf"]
+script = ExtResource("12_cq2dx")
+Key = "needs.thirst.value"
+Value = SubResource("Resource_d7r5c")
+
+[sub_resource type="Resource" id="Resource_tc7au"]
+script = ExtResource("5_68nev")
+Number = 0.2
+
+[sub_resource type="Resource" id="Resource_mgji0"]
+script = ExtResource("12_cq2dx")
+Key = "needs.thirst.value"
+Value = SubResource("Resource_tc7au")
+
+[sub_resource type="Resource" id="Resource_6o5ie"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.at"
+
+[sub_resource type="Resource" id="Resource_j4ldf"]
+script = ExtResource("13_djx3r")
+Inputs = Array[ExtResource("11_8or0a")]([SubResource("Resource_sf1gn")])
+Preconditions = SubResource("Resource_hmlql")
+SuccessConditions = SubResource("Resource_6o5ie")
+Cost = SubResource("Resource_utmyi")
+ExecutionGraph = SubResource("Resource_ygoxy")
+Predictions = Array[ExtResource("12_cq2dx")]([SubResource("Resource_s2bdf")])
+Results = Array[ExtResource("12_cq2dx")]([SubResource("Resource_mgji0")])
+TimeoutSeconds = 15.0
+DefinitionId = "resident.daily.drink_use"
+DisplayName = "喝水"
+
+[sub_resource type="Resource" id="Resource_0inhs"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "private.cargo"
+
+[sub_resource type="Resource" id="Resource_fu38d"]
+script = ExtResource("5_68nev")
+Number = 2.0
+
+[sub_resource type="Resource" id="Resource_7dnoo"]
+script = ExtResource("5_68nev")
+Kind = 14
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_0inhs"), SubResource("Resource_fu38d")])
+
+[sub_resource type="Resource" id="Resource_bgbd1"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "private.cargo"
+
+[sub_resource type="Resource" id="Resource_2ot3o"]
+script = ExtResource("5_68nev")
+Number = 2.0
+
+[sub_resource type="Resource" id="Resource_7m4kj"]
+script = ExtResource("5_68nev")
+Kind = 13
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_bgbd1"), SubResource("Resource_2ot3o")])
+
+[sub_resource type="Resource" id="Resource_m4v2t"]
+script = ExtResource("5_68nev")
+Number = 20.0
+
+[sub_resource type="Resource" id="Resource_u01at"]
+script = ExtResource("6_twfag")
+Activation = SubResource("Resource_7dnoo")
+Utility = SubResource("Resource_m4v2t")
+Completion = SubResource("Resource_7m4kj")
+DefinitionId = "resident.daily.collect_goal"
+DisplayName = "取得两份物资"
+
+[sub_resource type="Resource" id="Resource_swcmj"]
+script = ExtResource("7_wriac")
+ActionIds = PackedStringArray("resident.daily.collect_move", "resident.daily.collect_use")
+DefinitionId = "resident.daily.collect_plan"
+DisplayName = "到货源取货"
+
+[sub_resource type="Resource" id="Resource_ngiig"]
+script = ExtResource("9_ft04u")
+Source = 6
+Scope = 3
+LocationBinding = "work"
+Information = 2
+ObjectType = ExtResource("14_3agru")
+RequiredCapabilities = PackedStringArray("stock")
+RequiredOperations = PackedStringArray("take_stock")
+AllTags = PackedStringArray("storage")
+CandidateLimit = 4
+DefinitionId = "resident.daily.collect_source"
+DisplayName = "工坊货源"
+
+[sub_resource type="Resource" id="Resource_oei2k"]
+script = ExtResource("5_68nev")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_yrkun"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.travel_hours"
+
+[sub_resource type="Resource" id="Resource_uhriq"]
+script = ExtResource("5_68nev")
+Number = 10.0
+
+[sub_resource type="Resource" id="Resource_5vjq3"]
+script = ExtResource("5_68nev")
+Kind = 5
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_yrkun"), SubResource("Resource_uhriq")])
+
+[sub_resource type="Resource" id="Resource_nxv56"]
+script = ExtResource("5_68nev")
+Kind = 3
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_oei2k"), SubResource("Resource_5vjq3")])
+
+[sub_resource type="Resource" id="Resource_i7u31"]
+script = ExtResource("10_q0fio")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":100},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":640,\"y\":80},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_0\",\"Position\":{\"x\":320,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcMoveToTargetAction\",\"Input\":{\"$type\":\"yu:GameLogic.AI.NpcInputReference\",\"Name\":\"destination\"},\"Description\":\"NpcMoveToTargetAction\"}],\"Id\":\"step_0\",\"Position\":{\"x\":320,\"y\":80},\"NodeType\":\"FlowActionNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"step_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":1,\"ToNode\":\"failure_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_mkr34"]
+script = ExtResource("11_8or0a")
+Name = "destination"
+InputType = "target:point"
+InputId = "11b6ecd6be1d49bab526f62021f98e05"
+
+[sub_resource type="Resource" id="Resource_lgwxs"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.id"
+
+[sub_resource type="Resource" id="Resource_bm802"]
+script = ExtResource("12_cq2dx")
+Key = "self.location"
+Value = SubResource("Resource_lgwxs")
+
+[sub_resource type="Resource" id="Resource_4etf2"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.destination.at"
+
+[sub_resource type="Resource" id="Resource_3vt7m"]
+script = ExtResource("13_djx3r")
+Inputs = Array[ExtResource("11_8or0a")]([SubResource("Resource_mkr34")])
+SuccessConditions = SubResource("Resource_4etf2")
+Cost = SubResource("Resource_nxv56")
+ExecutionGraph = SubResource("Resource_i7u31")
+Predictions = Array[ExtResource("12_cq2dx")]([SubResource("Resource_bm802")])
+TimeoutSeconds = 180.0
+DefinitionId = "resident.daily.collect_move"
+DisplayName = "前往货源"
+
+[sub_resource type="Resource" id="Resource_boha7"]
+script = ExtResource("5_68nev")
+Number = 1.0
+
+[sub_resource type="Resource" id="Resource_0kwl5"]
+script = ExtResource("10_q0fio")
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"FlowGraph\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:FlowEntryNodeData\",\"Id\":\"entry\",\"Position\":{\"x\":0,\"y\":100},\"NodeType\":\"FlowEntryNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Success\",\"Id\":\"success\",\"Position\":{\"x\":960,\"y\":80},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_0\",\"Position\":{\"x\":320,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcWaitAction\",\"Seconds\":{\"$type\":\"yu:GameLogic.AI.NpcGraphNumber\",\"Kind\":\"Literal\",\"Number\":2,\"Key\":\"\",\"Inputs\":[]},\"Description\":\"NpcWaitAction\"}],\"Id\":\"step_0\",\"Position\":{\"x\":320,\"y\":80},\"NodeType\":\"FlowActionNodeData\"},{\"$type\":\"yu:FlowReturnNodeData\",\"Label\":\"Failure\",\"Id\":\"failure_1\",\"Position\":{\"x\":640,\"y\":340},\"NodeType\":\"FlowReturnNodeData\"},{\"$type\":\"yu:FlowActionNodeData\",\"Actions\":[{\"$type\":\"yu:GameLogic.AI.NpcInteractAction\",\"Input\":{\"$type\":\"yu:GameLogic.AI.NpcInputReference\",\"Name\":\"source\"},\"OperationId\":\"take_stock\",\"Amount\":{\"$type\":\"yu:GameLogic.AI.NpcGraphNumber\",\"Kind\":\"Literal\",\"Number\":2,\"Key\":\"\",\"Inputs\":[]},\"Description\":\"NpcInteractAction\"}],\"Id\":\"step_1\",\"Position\":{\"x\":640,\"y\":80},\"NodeType\":\"FlowActionNodeData\"}],\"Connections\":[{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"entry\",\"FromPort\":0,\"ToNode\":\"step_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":1,\"ToNode\":\"failure_0\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_0\",\"FromPort\":0,\"ToNode\":\"step_1\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_1\",\"FromPort\":1,\"ToNode\":\"failure_1\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:FlowConnection\",\"Mode\":\"Sequence\",\"UseMode\":\"And\",\"Conditions\":[],\"IsSequence\":true,\"IsParallel\":false,\"FromNode\":\"step_1\",\"FromPort\":0,\"ToNode\":\"success\",\"ToPort\":0,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":0,\"y\":0},\"Zoom\":1}}"
+
+[sub_resource type="Resource" id="Resource_6s5bn"]
+script = ExtResource("11_8or0a")
+Name = "source"
+InputType = "target:point"
+InputId = "d4fe25b77dbb44b8a17761cedebbaf93"
+ResourceRequirements = PackedStringArray("capacity")
+
+[sub_resource type="Resource" id="Resource_l1wsu"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.at"
+
+[sub_resource type="Resource" id="Resource_h0dkr"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.stock"
+
+[sub_resource type="Resource" id="Resource_6hvvb"]
+script = ExtResource("5_68nev")
+Number = 2.0
+
+[sub_resource type="Resource" id="Resource_a0hlp"]
+script = ExtResource("5_68nev")
+Kind = 13
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_h0dkr"), SubResource("Resource_6hvvb")])
+
+[sub_resource type="Resource" id="Resource_j417n"]
+script = ExtResource("5_68nev")
+Kind = 16
+Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_l1wsu"), SubResource("Resource_a0hlp")])
+
+[sub_resource type="Resource" id="Resource_iw8ep"]
+script = ExtResource("5_68nev")
+Number = 2.0
+
+[sub_resource type="Resource" id="Resource_bsavj"]
+script = ExtResource("12_cq2dx")
+Key = "private.cargo"
+Mode = 1
+Value = SubResource("Resource_iw8ep")
+
+[sub_resource type="Resource" id="Resource_i2ux0"]
+script = ExtResource("5_68nev")
+Number = 2.0
+
+[sub_resource type="Resource" id="Resource_1affb"]
+script = ExtResource("12_cq2dx")
+Key = "private.cargo"
+Mode = 1
+Value = SubResource("Resource_i2ux0")
+
+[sub_resource type="Resource" id="Resource_rqqnq"]
+script = ExtResource("5_68nev")
+Kind = 1
+Key = "input.source.at"
+
+[sub_resource type="Resource" id="Resource_2r7ge"]
+script = ExtResource("13_djx3r")
+Inputs = Array[ExtResource("11_8or0a")]([SubResource("Resource_6s5bn")])
+Preconditions = SubResource("Resource_j417n")
+SuccessConditions = SubResource("Resource_rqqnq")
+Cost = SubResource("Resource_boha7")
+ExecutionGraph = SubResource("Resource_0kwl5")
+Predictions = Array[ExtResource("12_cq2dx")]([SubResource("Resource_bsavj")])
+Results = Array[ExtResource("12_cq2dx")]([SubResource("Resource_1affb")])
+TimeoutSeconds = 15.0
+DefinitionId = "resident.daily.collect_use"
+DisplayName = "取货"
+
+[resource]
+script = ExtResource("15_1ykgx")
+Definitions = Array[ExtResource("1_1rqy7")]([SubResource("Resource_cslup"), SubResource("Resource_gmw5a"), SubResource("Resource_t73cy"), SubResource("Resource_rjarb"), SubResource("Resource_dai1d"), SubResource("Resource_bk05b"), SubResource("Resource_jikfn"), SubResource("Resource_j4ldf"), SubResource("Resource_u01at"), SubResource("Resource_swcmj"), SubResource("Resource_ngiig"), SubResource("Resource_3vt7m"), SubResource("Resource_2r7ge")])
+GraphJson = "{\"$type\":\"yu:GraphDocument\",\"SchemaVersion\":2,\"GraphType\":\"NPC\",\"ActionDependencyMode\":\"HostBound\",\"HasActionDependencyMode\":true,\"Nodes\":[{\"$type\":\"yu:GameLogic.AI.NpcRootNodeData\",\"Id\":\"character\",\"Position\":{\"x\":0,\"y\":180},\"NodeType\":\"NpcRootNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPerceptionNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPerceptionNodeData\",\"Id\":\"gray_green_resident_NpcPerceptionNodeData\",\"Position\":{\"x\":320,\"y\":0},\"NodeType\":\"NpcPerceptionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcMemoryNodeData\",\"DefinitionId\":\"gray_green_resident.NpcMemoryNodeData\",\"Id\":\"gray_green_resident_NpcMemoryNodeData\",\"Position\":{\"x\":320,\"y\":220},\"NodeType\":\"NpcMemoryNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcPolicyNodeData\",\"DefinitionId\":\"gray_green_resident.NpcPolicyNodeData\",\"Id\":\"gray_green_resident_NpcPolicyNodeData\",\"Position\":{\"x\":320,\"y\":440},\"NodeType\":\"NpcPolicyNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"resident.daily.drink_goal\",\"Id\":\"drink_goal\",\"Position\":{\"x\":640,\"y\":0},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"resident.daily.drink_plan\",\"Id\":\"drink_plan\",\"Position\":{\"x\":970,\"y\":0},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"resident.daily.drink_source\",\"Id\":\"drink_source\",\"Position\":{\"x\":970,\"y\":230},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"InputPorts\":[\"ec4f862a895f4b98aaba3382e92d4d49\"],\"DefinitionId\":\"resident.daily.drink_move\",\"Id\":\"drink_move\",\"Position\":{\"x\":1390,\"y\":0},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"InputPorts\":[\"8b9451ca54b044c0841f8c19d083fe4c\"],\"DefinitionId\":\"resident.daily.drink_use\",\"Id\":\"drink_use\",\"Position\":{\"x\":1390,\"y\":310},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcGoalNodeData\",\"DefinitionId\":\"resident.daily.collect_goal\",\"Id\":\"collect_goal\",\"Position\":{\"x\":640,\"y\":850},\"NodeType\":\"NpcGoalNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTemplateNodeData\",\"DefinitionId\":\"resident.daily.collect_plan\",\"Id\":\"collect_plan\",\"Position\":{\"x\":970,\"y\":850},\"NodeType\":\"NpcTemplateNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcTargetSelectorNodeData\",\"DefinitionId\":\"resident.daily.collect_source\",\"Id\":\"collect_source\",\"Position\":{\"x\":970,\"y\":1080},\"NodeType\":\"NpcTargetSelectorNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"InputPorts\":[\"11b6ecd6be1d49bab526f62021f98e05\"],\"DefinitionId\":\"resident.daily.collect_move\",\"Id\":\"collect_move\",\"Position\":{\"x\":1390,\"y\":850},\"NodeType\":\"NpcActionNodeData\"},{\"$type\":\"yu:GameLogic.AI.NpcActionNodeData\",\"InputPorts\":[\"d4fe25b77dbb44b8a17761cedebbaf93\"],\"DefinitionId\":\"resident.daily.collect_use\",\"Id\":\"collect_use\",\"Position\":{\"x\":1390,\"y\":1160},\"NodeType\":\"NpcActionNodeData\"}],\"Connections\":[{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPerceptionNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcMemoryNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":0,\"ToNode\":\"gray_green_resident_NpcPolicyNodeData\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"drink_goal\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"drink_source\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"drink_goal\",\"FromPort\":0,\"ToNode\":\"drink_move\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"drink_goal\",\"FromPort\":0,\"ToNode\":\"drink_use\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"drink_goal\",\"FromPort\":1,\"ToNode\":\"drink_plan\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"drink_source\",\"FromPort\":0,\"ToNode\":\"drink_move\",\"ToPort\":1,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"drink_source\",\"FromPort\":0,\"ToNode\":\"drink_use\",\"ToPort\":1,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":1,\"ToNode\":\"collect_goal\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"character\",\"FromPort\":2,\"ToNode\":\"collect_source\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"collect_goal\",\"FromPort\":0,\"ToNode\":\"collect_move\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"collect_goal\",\"FromPort\":0,\"ToNode\":\"collect_use\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"collect_goal\",\"FromPort\":1,\"ToNode\":\"collect_plan\",\"ToPort\":0,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"collect_source\",\"FromPort\":0,\"ToNode\":\"collect_move\",\"ToPort\":1,\"IsAvailable\":true},{\"$type\":\"yu:GraphConnection\",\"FromNode\":\"collect_source\",\"FromPort\":0,\"ToNode\":\"collect_use\",\"ToPort\":1,\"IsAvailable\":true}],\"BlackboardEntries\":[],\"EditorState\":{\"$type\":\"yu:GraphEditorState\",\"ScrollOffset\":{\"x\":-307.712,\"y\":-199.2362},\"Zoom\":0.60322154}}"

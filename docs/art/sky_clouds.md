@@ -4,7 +4,7 @@ Source: [新杨XIYAG article](https://zhuanlan.zhihu.com/p/660806535), [GitHub r
 
 ## Active resources
 
-`spacelevel/EnvironmentRig/OriginalClouds` contains BaseClouds, HighClouds and SecondaryClouds MeshInstance3D nodes from `assets/scenes/environment/reference_clouds.tscn`. Visible cloud geometry is authored in the scene. The day/night component additionally samples these same layers in an internal cloud-only world for sky radiance; see [day/night integration](../../scripts/gamelogic/timeofday/README.md).
+`ForestTownLevel/EnvironmentRig/OriginalClouds` contains BaseClouds, HighClouds and SecondaryClouds MeshInstance3D nodes from `assets/scenes/environment/reference_clouds.tscn`. Visible cloud geometry is authored in the scene. The day/night component additionally samples these same layers in an internal cloud-only world for sky radiance; see [day/night integration](../../scripts/gamelogic/timeofday/README.md).
 
 The active FBX under `assets/models/environment/clouds/` and PNGs under `assets/textures/environment/clouds/` are byte-for-byte copies, checked against the Git blob hashes in [source_manifest.json](../../assets/resources/environment/clouds/source_manifest.json). `original_cloud_mesh.res` is the Godot importer output of the author's `cloud.fbx` mesh (80 vertices, 20 quads, original UV2). `78678.png` is the exact RGBA image referenced by the source base-cloud material, retaining its sRGB import flag, mipmaps and clamp wrap. There is no synthetic SDF, blur, resizing or tile repacking. The original noise PNG is also used at its full 2048² resolution.
 

@@ -26,4 +26,4 @@ B 或右下角背包按钮打开；B / Esc / 右上角 × 关闭。点击物品�
 
 角色存档 schema 5 保存 `inventory.weapon_ids` 和可选的 `inventory.positions`（武器 ID 到行囊格编号），装备侧使用 `loadout_version = 1` 和允许 null 的 `slots` 保留空槽。先恢复所有权与格子位置，再恢复装备，最后恢复能力冷却。旧档没有 positions 时按已有物品顺序排列；重复、越界的位置自动放到空格。schema 1–4 继续兼容；无效的全空装备恢复一把已有武器，保持至少持有一把的规则。
 
-运行 Spacelevel 后按 B，检查物品拖拽、装备槽交换、最后一把武器保护、无效落点取消及关闭行囊后的输入恢复。存档格式与恢复顺序见[存档系统](../saves/README.md)。
+运行 ForestTownLevel 后按 B，检查物品拖拽、装备槽交换、最后一把武器保护、无效落点取消及关闭行囊后的输入恢复。存档格式与恢复顺序见[存档系统](../saves/README.md)。

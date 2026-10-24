@@ -1,7 +1,132 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://d0yq2aerjgd6i"]
 
 [ext_resource type="PackedScene" path="res://assets/scenes/levels/whitebox_test.tscn" id="base"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="town"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="component"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="world_actor"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="ai"]
+[ext_resource type="Script" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="navigation"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementComponent3D.cs" id="movement"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/movement/CharacterMovementProfile.cs" id="movement_profile"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/animation/CharacterAnimationComponent3D.cs" id="animation"]
+[ext_resource type="Script" path="res://scripts/gamelogic/abilities/runtime/AbilitySystemComponent3D.cs" id="abilities"]
+[ext_resource type="Script" path="res://scripts/gamelogic/saves/CharacterPersistenceComponent3D.cs" id="persistence"]
+[ext_resource type="Resource" path="res://assets/resources/character/gray_green_resident/profile.tres" id="resident_profile"]
+[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="resident_graph"]
+[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/locomotion.tres" id="resident_locomotion"]
+
+[ext_resource type="Shader" uid="uid://el11ksi3m7m0" path="res://assets/shaders/environment/day_night_sky.gdshader" id="2_qbpkg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbpkg"]
+resource_local_to_scene = true
+shader = ExtResource("2_qbpkg")
+shader_parameter/ibl_strength = 1.0
+shader_parameter/weather_overcast = 0.0
+shader_parameter/weather_sky_loss = 0.35
+shader_parameter/cloud_radiance_enabled = false
+shader_parameter/cloud_radiance_revision = 0.0
+shader_parameter/day_zenith = Color(0.045, 0.24, 0.72, 1)
+shader_parameter/day_horizon = Color(0.34, 0.68, 0.94, 1)
+shader_parameter/day_ground = Color(0.48, 0.7, 0.88, 1)
+shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
+shader_parameter/night_zenith = Color(0.09, 0.075, 0.24, 1)
+shader_parameter/night_horizon = Color(0.24, 0.23, 0.46, 1)
+shader_parameter/sun_direction = Vector3(-0.109381706, 0.9659258, 0.23456971)
+shader_parameter/moon_direction = Vector3(0.10938164, -0.9659259, -0.23456976)
+shader_parameter/daylight = 1.0
+shader_parameter/twilight = 0.0
+shader_parameter/sun_radius = 0.015707962
+shader_parameter/moon_radius = 0.02617994
+shader_parameter/moon_visibility = 0.0
+shader_parameter/stars_visibility = 0.0
+shader_parameter/star_intensity = 1.25
+shader_parameter/star_rotation = 3.1415927
+shader_parameter/moon_light = 0.0
+shader_parameter/moon_halo_strength = 0.18
+shader_parameter/horizon_haze = 0.22
+shader_parameter/horizon_softness = 0.24
+shader_parameter/mie_strength = 0.1
+shader_parameter/mie_anisotropy = 0.76
+
+[sub_resource type="Sky" id="Sky_sodt5"]
+resource_local_to_scene = true
+sky_material = SubResource("ShaderMaterial_qbpkg")
+process_mode = 3
+
+[sub_resource type="Environment" id="Environment_filij"]
+resource_local_to_scene = true
+background_mode = 2
+background_intensity = 26000.0
+sky = SubResource("Sky_sodt5")
+ambient_light_source = 3
+ambient_light_energy = 0.35000002
+reflected_light_source = 2
+ssr_enabled = true
+ssr_max_steps = 96
+ssr_depth_tolerance = 0.2
+ssao_enabled = true
+ssil_enabled = true
+glow_levels/2 = 0.6
+glow_levels/3 = 0.2
+glow_levels/4 = 0.05
+glow_normalized = true
+glow_intensity = 0.03999999
+glow_strength = 0.85
+glow_blend_mode = 0
+glow_hdr_threshold = 1.8
+fog_enabled = true
+fog_mode = 1
+fog_density = 0.38
+fog_aerial_perspective = 1.0
+fog_sky_affect = 0.0
+fog_height = -9.0
+fog_depth_curve = 1.15
+fog_depth_begin = 35.0
+fog_depth_end = 240.0
+adjustment_contrast = 1.04
+adjustment_saturation = 1.08
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_wiwca"]
+resource_local_to_scene = true
+exposure_multiplier = 1.2
+frustum_focus_distance = 9.0
+frustum_focal_length = 20.0
+exposure_shutter_speed = 81.5719
+
+[sub_resource type="Resource" id="resident_world_actor"]
+script = ExtResource("world_actor")
+ScenePathOverride = "res://assets/scenes/npc/resident.tscn"
+
+[sub_resource type="Resource" id="resident_character_data"]
+script = ExtResource("character_data")
+Profile = ExtResource("resident_profile")
+
+[sub_resource type="Resource" id="resident_ai"]
+script = ExtResource("ai")
+Graph = ExtResource("resident_graph")
+
+[sub_resource type="Resource" id="resident_navigation"]
+script = ExtResource("navigation")
+
+[sub_resource type="Resource" id="resident_movement_profile"]
+script = ExtResource("movement_profile")
+MoveSpeed = 2.2
+
+[sub_resource type="Resource" id="resident_movement"]
+script = ExtResource("movement")
+Profile = SubResource("resident_movement_profile")
+MovementSpace = 1
+
+[sub_resource type="Resource" id="resident_animation"]
+script = ExtResource("animation")
+LocomotionGraph = ExtResource("resident_locomotion")
+
+[sub_resource type="Resource" id="resident_abilities"]
+script = ExtResource("abilities")
+
+[sub_resource type="Resource" id="resident_persistence"]
+script = ExtResource("persistence")
 
 [node name="ForestTownLevel" instance=ExtResource("base")]
 editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；WASD / 跳跃及现有角色框架沿用白盒。"
@@ -13,3 +138,14 @@ visible = false
 collision_layer = 0
 
 [node name="RPGTown" parent="." instance=ExtResource("town")]
+
+[node name="Resident" parent="." index="7"]
+editor_description = "正式关卡世界居民 town_resident_01：从小镇前往工坊喝水、取货；配置步骤见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
+Components = Array[ExtResource("component")]([SubResource("resident_world_actor"), SubResource("resident_character_data"), SubResource("resident_ai"), SubResource("resident_navigation"), SubResource("resident_movement"), SubResource("resident_animation"), SubResource("resident_abilities"), SubResource("resident_persistence")])
+
+[node name="WorldEnvironment" parent="EnvironmentRig" parent_id_path=PackedInt32Array(660897677) index="1" unique_id=594835174]
+environment = SubResource("Environment_filij")
+camera_attributes = SubResource("CameraAttributesPhysical_wiwca")
+
+[node name="CameraFramingTarget" type="Marker3D" parent="." index="8" unique_id=889559128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)

@@ -1,6 +1,6 @@
 # 场景 3D 相机
 
-`spacelevel/CameraRig/Camera3D` 已直接保存在场景里，可在编辑器中选中、预览和调整。`CameraRig` 是 GameObject3D，唯一的 `SceneCameraComponent3D` 负责自动绑定、跟随、前瞻和平滑震动。`CameraModule` 只路由当前相机的控制接口，不创建相机或宿主。
+`ForestTownLevel/CameraRig/Camera3D` 已直接保存在场景里，可在编辑器中选中、预览和调整。`CameraRig` 是 GameObject3D，唯一的 `SceneCameraComponent3D` 负责自动绑定、跟随、前瞻和平滑震动。`CameraModule` 只路由当前相机的控制接口，不创建相机或宿主。
 
 ## 编辑构图
 
@@ -43,4 +43,4 @@ camera.StopShake();
 
 ## 验证
 
-`dotnet build yu.csproj` 后运行 `res://assets/scenes/spacelevel.tscn`，检查场景相机的构图、自动绑定、移动跟随及正交/透视天空切换。
+`dotnet build yu.csproj` 后运行 `res://assets/scenes/levels/forest_town_level.tscn`，检查场景相机的构图、自动绑定、移动跟随及正交/透视天空切换。

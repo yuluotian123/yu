@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://ldrysx0x7ie1"]
 
+[ext_resource type="Script" uid="uid://c38ips4bsm7vx" path="res://scripts/gamelogic/world/definitions/WorldRouteDefinition.cs" id="11_vi2k3"]
 [ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="bottle_type"]
 [ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="calendar_script"]
 [ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="level_script"]
@@ -12,6 +13,8 @@
 [ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="workshop"]
 [ext_resource type="Resource" uid="uid://cvx03le1g2g0l" path="res://assets/resources/world/locations/workshop.tres" id="workshop_place"]
 
+[ext_resource type="Resource" path="res://assets/resources/world/routes/town_workshop.tres" id="workshop_route"]
+
 [sub_resource type="Resource" id="calendar"]
 script = ExtResource("calendar_script")
 DayLengthSeconds = 4800.0
@@ -22,6 +25,7 @@ script = ExtResource("script")
 Locations = Array[ExtResource("location_script")]([ExtResource("town_place"), ExtResource("workshop_place")])
 Levels = Array[ExtResource("level_script")]([ExtResource("town"), ExtResource("workshop")])
 ObjectTypes = Array[ExtResource("type_script")]([ExtResource("storage_type"), ExtResource("bottle_type")])
+Routes = Array[ExtResource("11_vi2k3")]([ExtResource("workshop_route")])
 InitialLevel = ExtResource("town")
 Calendar = SubResource("calendar")
 Id = "default_world"

@@ -51,16 +51,16 @@ dotnet restore yu.csproj
 dotnet build yu.csproj --no-restore
 .\scripts\tools\engine\launch_godot.ps1
 
-# 运行主菜单，点击开始进入已接入 DDGI 的 Spacelevel。
+# 运行主菜单，点击开始进入已接入 DDGI 的 ForestTownLevel。
 .\scripts\tools\engine\launch_godot.ps1 -RunGame
 
 # 直接运行当前关卡。
-.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('res://assets/scenes/spacelevel.tscn')
+.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('res://assets/scenes/levels/forest_town_level.tscn')
 ```
 
 切换默认路径不能改变已经运行的进程。先保存并退出旧编辑器 / 游戏，再用上述入口重开；启动时会打印实际引擎路径。旧 `.mono.exe` 不含 Ray Query 修复，旧 `.mono.ddgi.exe` 不含原生接收 API，旧 `.mono.ddgi_native.exe` 不含天空 API，均不能替代当前默认版本。
 
-VS Code 的编辑器与运行/调试配置均指向上述 ddgi_scene 运行目录。维护时先编译 C#、导入资源，再运行 [DDGI 指南](../../../docs/art/ddgi_implementation.md#验证)中的验证入口并检查实际 Spacelevel。性能和硬件覆盖边界见同一指南。
+VS Code 的编辑器与运行/调试配置均指向上述 ddgi_scene 运行目录。维护时先编译 C#、导入资源，再运行 [DDGI 指南](../../../docs/art/ddgi_implementation.md#验证)中的验证入口并检查实际 ForestTownLevel。性能和硬件覆盖边界见同一指南。
 
 ## RTX 保留版本
 

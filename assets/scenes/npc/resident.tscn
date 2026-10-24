@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_cp75n"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_qx57b"]
-[ext_resource type="Resource" uid="uid://dxkkt6bnrusiu" path="res://assets/resources/npc/gray_green_resident/npc_graph.tres" id="3_i7in3"]
+[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="3_i7in3"]
 [ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="4_qtaxp"]
 [ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="5_0m851"]
 [ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="6_33efu"]
@@ -15,6 +15,10 @@
 [ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="13_w04po"]
 [ext_resource type="Script" uid="uid://8o1dotfiya30" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
 [ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="world_actor"]
+
+[sub_resource type="Resource" id="world_actor"]
+script = ExtResource("world_actor")
 
 [sub_resource type="Resource" id="character_data_gray_green_resident"]
 script = ExtResource("character_data_script")
@@ -50,10 +54,10 @@ script = ExtResource("12_y5ccx")
 size = Vector3(0.4, 0.72, 0.4)
 
 [node name="Resident" type="Node3D" unique_id=452096645]
-editor_description = "gray_green_resident：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
+editor_description = "世界居民：按口渴优先级到工坊喝水、取得两份物资。配置演示见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
 script = ExtResource("1_cp75n")
 PersistentId = "town_resident_01"
-Components = Array[ExtResource("2_qx57b")]([SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
+Components = Array[ExtResource("2_qx57b")]([SubResource("world_actor"), SubResource("character_data_gray_green_resident"), SubResource("gray_green_resident_agent"), SubResource("npc_navigation"), SubResource("npc_movement"), SubResource("npc_animation"), SubResource("npc_abilities"), SubResource("npc_character_save")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=1870513450]
 

@@ -11,7 +11,7 @@ func check(condition: bool, label: String) -> void:
 		push_error("Forest town validation: " + label)
 
 func validate() -> void:
-	var level: Node3D = load("res://assets/scenes/spacelevel.tscn").instantiate()
+	var level: Node3D = load("res://assets/scenes/levels/forest_town_level.tscn").instantiate()
 	var baseline: Node3D = load("res://assets/scenes/levels/whitebox_test.tscn").instantiate()
 	var camera: Camera3D = level.get_node("CameraRig/Camera3D")
 	var base_camera: Camera3D = baseline.get_node("CameraRig/Camera3D")
@@ -89,7 +89,8 @@ func validate() -> void:
 	var wall_query := PhysicsRayQueryParameters3D.create(Vector3(.9,1.0,3),Vector3(.9,1.0,-7),1)
 	var wall_hit := space.intersect_ray(wall_query)
 	check(not wall_hit.is_empty() and wall_hit.collider.get_parent().get_meta("asset_category", "") == "building", "Inn blocks movement through walls")
-	check(level.get_node("Player").position.y > .3, "Player remains above ground")
+	var player := root.find_child("Player", true, false) as Node3D
+	check(player != null and player.global_position.y > .3, "World session player remains above ground")
 	var bank_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(.25,2,3.3),Vector3(.25,-2,3.3),1))
 	check(not bank_hit.is_empty() and bank_hit.collider.get_parent().get_meta("asset_category", "") == "ground", "Land behind the river still supports characters")
 	var water_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(.25,2,6),Vector3(.25,-2,6),1))

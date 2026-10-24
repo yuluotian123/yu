@@ -1,6 +1,6 @@
 # DDGI 接入与维护
 
-当前 Spacelevel 已启用自研 DDGI：PC / Windows / Vulkan / Forward+，使用常规 Godot 4.8-beta 加本项目补丁，需要 GPU 支持 Ray Query。实现为 C# EC 场景捕获与调度、GLSL 探针计算、Forward+ 原生材质接收；不依赖 NVIDIA Godot 分支或 RTXGI SDK。算法参考 [DDGI 原始论文](https://jcgt.org/published/0008/02/01/)。
+当前 ForestTownLevel 已启用自研 DDGI：PC / Windows / Vulkan / Forward+，使用常规 Godot 4.8-beta 加本项目补丁，需要 GPU 支持 Ray Query。实现为 C# EC 场景捕获与调度、GLSL 探针计算、Forward+ 原生材质接收；不依赖 NVIDIA Godot 分支或 RTXGI SDK。算法参考 [DDGI 原始论文](https://jcgt.org/published/0008/02/01/)。
 
 ## 运行与调整
 
@@ -15,7 +15,7 @@ dotnet build yu.csproj --no-restore
 
 默认运行目录为 `D:/DCC/Godot_4.8/bin/ddgi_scene/`，必须连同其 GodotSharp 一起使用。已经打开的旧进程需要保存退出，再通过启动脚本重开。源码构建、补丁顺序和 NuGet 配套见 [引擎说明](../../scripts/tools/engine/README.md)。
 
-接线位于 `assets/scenes/spacelevel.tscn` 的 `EnvironmentRig → Components → DdgiComponent3D`：`GeometryRoot = ..` 收集整个关卡，`WorldEnvironmentPath = WorldEnvironment` 绑定同宿主环境。昼夜、天气、地表组件先更新，DDGI 随后捕获。它只在运行时启用；编辑器静态 3D 视图暂不显示 DDGI，按 F5 进入游戏或 F6 运行关卡检查。
+接线位于 `assets/scenes/levels/forest_town_level.tscn` 的 `EnvironmentRig → Components → DdgiComponent3D`：`GeometryRoot = ..` 收集整个关卡，`WorldEnvironmentPath = WorldEnvironment` 绑定同宿主环境。昼夜、天气、地表组件先更新，DDGI 随后捕获。它只在运行时启用；编辑器静态 3D 视图暂不显示 DDGI，按 F5 进入游戏或 F6 运行关卡检查。
 
 独立配置为 `assets/resources/rendering/ddgi/spacelevel.tres`：
 
@@ -89,7 +89,7 @@ Lightmap 优先；显式 IRRADIANCE 按 alpha 混合；unshaded 不接收。体�
 
 不支持 Ray Query 时报告 unsupported 并保留原环境路径；尚无等价软件 GI，当前关卡的暗部效果不能保证与支持光追的 GPU 一致。
 
-平稳光照下，每 23 次更新才能轮转 Spacelevel 全部探针；快速全局光照变化时会临时突破每帧预算，见下文。CPU 仍逐帧遍历与打包，尚未完成大场景性能优化。状态中的 gpu_update_ms 只统计探针任务，不能代表完整 GI 或整帧成本。交互式 C# 域重载、AMD / Intel、Vulkan 验证层和复杂薄墙仍需专项验收。
+平稳光照下，每 23 次更新才能轮转 ForestTownLevel 全部探针；快速全局光照变化时会临时突破每帧预算，见下文。CPU 仍逐帧遍历与打包，尚未完成大场景性能优化。状态中的 gpu_update_ms 只统计探针任务，不能代表完整 GI 或整帧成本。交互式 C# 域重载、AMD / Intel、Vulkan 验证层和复杂薄墙仍需专项验收。
 
 ## 时域稳定性
 

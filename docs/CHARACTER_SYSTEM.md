@@ -219,8 +219,8 @@ NPC 的行动能力调用与玩家图相同的 Movement 和 AbilitySystem API，
 
 ## 10. 验证
 
-运行 Spacelevel 检查移动、跳跃、技能打断、动画、AI 行为及持久化边界。
+运行 ForestTownLevel 检查移动、跳跃、技能打断、动画、AI 行为及持久化边界。
 
 ## 3D 场景与移动模式
 
-当前 SpaceLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。当前关卡的自由移动与镜头配置见 [HD-2D 场景镜头](art/hd2d_camera.md)。
+当前 ForestTownLevel 的角色使用 GameObject3D 与 Component3D，碰撞统一由 CharacterBody3D / StaticBody3D 处理。2D 指人物精灵外观，使用 AnimatedSprite3D，不再使用 SubViewport 或二维碰撞投影。MovementSpace 默认 SideView；Free3D 开启 X/Z 双轴移动。世界单位为米，Y 向上。当前关卡的自由移动与镜头配置见 [HD-2D 场景镜头](art/hd2d_camera.md)。

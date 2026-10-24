@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WorldRouteDefinition" format=3]
+
+[ext_resource type="Resource" path="res://assets/resources/world/levels/town.tres" id="1_snn10"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/workshop.tres" id="2_yc2c6"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldRouteDefinition.cs" id="3_ntae6"]
+
+[resource]
+script = ExtResource("3_ntae6")
+From = ExtResource("1_snn10")
+To = ExtResource("2_yc2c6")
+TravelHours = 0.05
+Id = "town_workshop_road"
+DisplayName = "小镇至仓储间"

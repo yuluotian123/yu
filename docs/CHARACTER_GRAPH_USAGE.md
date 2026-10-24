@@ -152,7 +152,7 @@ Get Value -> Set Value
 dotnet build yu.csproj
 ```
 
-运行 Spacelevel 检查输入、Movement、Ability、动画变量和 AI 场景边界。
+运行 ForestTownLevel 检查输入、Movement、Ability、动画变量和 AI 场景边界。
 # Action 依赖模式
 
 图资源的 `ActionDependencyMode` 决定组件如何传给 Action：

@@ -2,7 +2,7 @@
 
 昼夜组件持续更新世界时钟、日月方向、天空配色与云动画。原生 Environment、相机和灯光参数默认由场景资源控制；SSAO、SSIL、SDFGI、SSR、Glow、Adjustment、雾和自动曝光开关均可独立编辑。
 
-`TimeOfDayModule` 管理全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期更新环境。Spacelevel 引用 `relink_environment.tres` / `day_night_camera_attributes.tres` 和独立 Relink Compositor；模板位于 `res://assets/scenes/environment/day_night_environment.tscn`。这些资源的原生效果设置不会因组件刷新或 Relink 开关而自动改写。
+`TimeOfDayModule` 管理全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期更新环境。ForestTownLevel 引用 `relink_environment.tres` / `day_night_camera_attributes.tres` 和独立 Relink Compositor；模板位于 `res://assets/scenes/environment/day_night_environment.tscn`。这些资源的原生效果设置不会因组件刷新或 Relink 开关而自动改写。
 
 默认 20 分钟一个游戏日、初始满月、29.53059 天一个月相周期。模板及当前关卡默认 12:00，可通过 Profile 的 StartHour 覆盖。时间受游戏速度影响，游戏暂停、时钟暂停或没有环境宿主时停止推进。返回菜单和切换关卡保留日历。旧存档没有时间数据时使用默认值。
 
@@ -14,9 +14,9 @@
 
 ## 配置
 
-在 `spacelevel` 中选中 `EnvironmentRig → Components → DayNightEnvironmentComponent3D → Profile`，直接编辑内嵌配置。独立模板使用 `res://assets/resources/environment/default_time_of_day.tres`，不影响当前场景的内嵌配置。
+在 `ForestTownLevel` 中选中 `EnvironmentRig → Components → DayNightEnvironmentComponent3D → Profile`，直接编辑内嵌配置。独立模板使用 `res://assets/resources/environment/default_time_of_day.tres`，不影响当前场景的内嵌配置。
 
-- Scene Environment Controls：所有 Drive...FromProfile 开关默认关闭。DriveFogFromProfile 只驱动雾的数值；DrivePostEffectsFromProfile 驱动原生饱和度、对比度与泛光数值；DriveRelinkBloomFromProfile 单独驱动 Relink 泛光；DriveSkyBrightnessFromProfile 驱动背景强度；DriveExposureFromProfile 驱动物理曝光参数；DriveLightSettingsFromProfile 驱动日月照度、颜色和阴影；DriveSkyProjectionFromProfile 驱动天空 FOV/旋转。原生效果开关、Fog Mode、Tonemap、AutoExposure 和灯光能量倍率始终独立。开关默认关闭；当前 Spacelevel 已显式启用这些驱动，F8 手动调节 Relink 泛光后仅退出 Relink 泛光驱动。
+- Scene Environment Controls：所有 Drive...FromProfile 开关默认关闭。DriveFogFromProfile 只驱动雾的数值；DrivePostEffectsFromProfile 驱动原生饱和度、对比度与泛光数值；DriveRelinkBloomFromProfile 单独驱动 Relink 泛光；DriveSkyBrightnessFromProfile 驱动背景强度；DriveExposureFromProfile 驱动物理曝光参数；DriveLightSettingsFromProfile 驱动日月照度、颜色和阴影；DriveSkyProjectionFromProfile 驱动天空 FOV/旋转。原生效果开关、Fog Mode、Tonemap、AutoExposure 和灯光能量倍率始终独立。开关默认关闭；当前 ForestTownLevel 已显式启用这些驱动，F8 手动调节 Relink 泛光后仅退出 Relink 泛光驱动。
 - Calendar Defaults：新会话的日长、初始日期/时刻、朔望月长度、初始月相和暂停状态。已有存档优先。
 - Sun and Moon：日月方向随时钟更新；照度、颜色、可见性和阴影参数仅在 DriveLightSettingsFromProfile 开启时应用。天空天体盘大小仍由 SunDiameterDegrees / MoonDiameterDegrees 控制。
 - Sky：日夜天空、地平线与晚霞颜色、天空强度、星光。
@@ -45,11 +45,11 @@ MoonTint 控制月光的美术染色；MoonHaloStrength 控制背景中的蓝紫
 
 ### 运行时 GM
 
-进入 `spacelevel` 后按 **F8** 或右上角 **GM** 打开面板，选择「时间与天空」。拖动时间滑条会立即更新太阳、月亮和天空；曝光仅在显式开启驱动时变化；拖动期间暂时停表，松开后恢复原来的播放状态。也可输入日期、小时和分钟（回车提交），一键跳到黎明、正午、黄昏或午夜，独立暂停/调整时钟倍率，选择八种月相或拖动月相滑条。
+进入 `ForestTownLevel` 后按 **F8** 或右上角 **GM** 打开面板，选择「时间与天空」。拖动时间滑条会立即更新太阳、月亮和天空；曝光仅在显式开启驱动时变化；拖动期间暂时停表，松开后恢复原来的播放状态。也可输入日期、小时和分钟（回车提交），一键跳到黎明、正午、黄昏或午夜，独立暂停/调整时钟倍率，选择八种月相或拖动月相滑条。
 
 面板打开时暂时关闭项目输入层，避免点击控件触发角色攻击或移动镜头；收起或退出场景后恢复之前的输入状态。世界模拟不会因此暂停。修改的是当前日历，后续正常存档会包含修改；面板本身不主动写盘。即使游戏暂停也可操作面板。
 
-`spacelevel/RuntimeGm` 实例化 `res://assets/scenes/ui/runtime_gm.tscn`，所有 Control、样式和 F8 Shortcut 都已序列化。`RuntimeGmComponent3D` 负责面板开关和输入隔离；`TimeOfDayGmComponent3D` 以 Embedded 模式绑定时间页，`EnvironmentRigPath` 指向旁边的环境宿主。面板默认展开由外壳的 `StartOpen` 控制，其他页面见 [Runtime GM](../gm/README.md)。
+`ForestTownLevel/RuntimeGm` 实例化 `res://assets/scenes/ui/runtime_gm.tscn`，所有 Control、样式和 F8 Shortcut 都已序列化。`RuntimeGmComponent3D` 负责面板开关和输入隔离；`TimeOfDayGmComponent3D` 以 Embedded 模式绑定时间页，`EnvironmentRigPath` 指向旁边的环境宿主。面板默认展开由外壳的 `StartOpen` 控制，其他页面见 [Runtime GM](../gm/README.md)。
 
 ### 代码
 
@@ -81,7 +81,7 @@ controller.SetLunarPhase(0.5)
 
 调用 SetDate / SetTimeOfDay / AdvanceHours 会立即更新日月方向、天空和云动画；其他原生设置仅在显式开启对应驱动后更新。
 
-Spacelevel 的 Profile 使用白天 EV 14.35、夜间 EV 2 和夜间天空强度 8。是否更新相机与背景亮度，由各自独立驱动开关决定。
+ForestTownLevel 的 Profile 使用白天 EV 14.35、夜间 EV 2 和夜间天空强度 8。是否更新相机与背景亮度，由各自独立驱动开关决定。
 
 ## 原作者纸片云
 
@@ -97,7 +97,7 @@ Spacelevel 的 Profile 使用白天 EV 14.35、夜间 EV 2 和夜间天空强度
 
 ## 场景相机与投影
 
-`spacelevel/CameraRig/Camera3D` 是真实序列化的场景相机。直接在 Inspector 调整 Transform、Projection、FOV、Size、Near/Far，并用 Camera3D 的 Preview 检查构图。运行时不创建全局相机，也不覆盖投影、FOV 或初始构图。
+`ForestTownLevel/CameraRig/Camera3D` 是真实序列化的场景相机。直接在 Inspector 调整 Transform、Projection、FOV、Size、Near/Far，并用 Camera3D 的 Preview 检查构图。运行时不创建全局相机，也不覆盖投影、FOV 或初始构图。
 
 `CameraRig → Components → SceneCameraComponent3D` 是唯一的相机行为组件：`TargetPath = ../Player`，`CameraPath = Camera3D`。它在目标准备完成后自动绑定，处理跟随、前瞻、平滑和震动。原来的 LevelCamera / GlobalCamera 两层组件已经合并移除。其 `Profile` 只保留跟随参数；构图以 Camera3D 为准。CameraModule 只路由 Follow、Focus、Shake 等调用，不创建或销毁相机节点。
 
@@ -117,7 +117,7 @@ Spacelevel 的 Profile 使用白天 EV 14.35、夜间 EV 2 和夜间天空强度
 
 ```powershell
 dotnet build yu.csproj
-.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('res://assets/scenes/spacelevel.tscn')
+.\scripts\tools\engine\launch_godot.ps1 -RunGame -GodotArguments @('res://assets/scenes/levels/forest_town_level.tscn')
 ```
 
 检查跨日、暂停、速度、月相环绕、非法输入原子恢复、日月位置、存档往返、实例资源隔离、GM、烘焙云资源、相机自动绑定和跟随、保留编辑器构图、正交/透视天空切换以及退出释放。

@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://8ikyeo6dimwl"]
+
+[ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="1_36cn7"]
+[ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="2_hbg1c"]
+[ext_resource type="Script" uid="uid://horp2pihr3m3" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="3_nsrow"]
+[ext_resource type="Script" uid="uid://btcj1b2clpbmx" path="res://scripts/gamelogic/world/definitions/interactions/WorldInteractionDefinition.cs" id="4_wo1pi"]
+[ext_resource type="Script" uid="uid://bracks0vd1ioi" path="res://scripts/gamelogic/world/definitions/interactions/WorldTakeStockInteraction.cs" id="5_tm88c"]
+[ext_resource type="Script" uid="uid://drr68am8h6rqu" path="res://scripts/gamelogic/world/definitions/capabilities/WorldInteractionCapability.cs" id="6_xb8iv"]
+[ext_resource type="Script" uid="uid://c3yr26n3rmi78" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="7_kpmaj"]
+[ext_resource type="Script" uid="uid://bqtmclui4oefx" path="res://scripts/gamelogic/world/definitions/capabilities/WorldUsageCapacityCapability.cs" id="8_xbchp"]
+[ext_resource type="Script" uid="uid://c8lu0m6ekfcnl" path="res://scripts/gamelogic/world/definitions/capabilities/WorldOpeningHoursCapability.cs" id="9_maa3u"]
+[ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="10_ydkd4"]
+[ext_resource type="Script" uid="uid://dm6hgvlliu17p" path="res://scripts/gamelogic/world/definitions/capabilities/WorldLiquidCapability.cs" id="11_8m8k2"]
+[ext_resource type="Script" uid="uid://c6vabwlec061a" path="res://scripts/gamelogic/world/definitions/interactions/WorldConsumeLiquidInteraction.cs" id="12_i0ymx"]
+[ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="13_0kaw4"]
+
+[sub_resource type="Resource" id="take_stock"]
+script = ExtResource("5_tm88c")
+Id = "take_stock"
+DisplayName = "使用物资"
+RequireCapacity = true
+
+[sub_resource type="Resource" id="interaction"]
+script = ExtResource("6_xb8iv")
+Operations = Array[ExtResource("4_wo1pi")]([SubResource("take_stock")])
+
+[sub_resource type="Resource" id="stock_override"]
+script = ExtResource("7_kpmaj")
+InitialAmount = 50.0
+
+[sub_resource type="Resource" id="capacity"]
+script = ExtResource("8_xbchp")
+
+[sub_resource type="Resource" id="hours"]
+script = ExtResource("9_maa3u")
+OpenHour = 0.0
+CloseHour = 0.0
+
+[sub_resource type="Resource" id="liquid"]
+script = ExtResource("11_8m8k2")
+InitialVolume = 0.75
+
+[sub_resource type="Resource" id="pour_liquid"]
+script = ExtResource("12_i0ymx")
+Id = "pour_liquid"
+DisplayName = "倒出液体"
+
+[sub_resource type="Resource" id="Resource_bfjtq"]
+script = ExtResource("6_xb8iv")
+Operations = Array[ExtResource("4_wo1pi")]([SubResource("pour_liquid")])
+
+[resource]
+resource_name = "小镇仓储间 · 世界目录"
+script = ExtResource("13_0kaw4")
+LevelId = "31a903e2d81e45d0af568c59d0097bc8"
+SourceSignature = "B1B3BEE151F90D73D9F144BA121FD15BA2190272429BBC05F2A25EE21D3AA5C5/population-v3/31a903e2d81e45d0af568c59d0097bc8/be74d513517a4cfabc4a9fbd09e3779a/portal-export-v1"
+Entries = Array[Dictionary]([{
+"capabilities": Array[ExtResource("3_nsrow")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
+"id": "world/4b208b24b610436cbc5b418b7cc0c455",
+"location": ExtResource("2_hbg1c"),
+"name": "仓储间储物箱",
+"owner": "",
+"position": Vector3(0, 0, -1.1),
+"tags": PackedStringArray(),
+"type": ExtResource("1_36cn7")
+}, {
+"capabilities": Array[ExtResource("3_nsrow")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
+"id": "world/03b5672e717f455a9e7ede84e5a10b04",
+"location": ExtResource("2_hbg1c"),
+"name": "仓储间储物箱",
+"owner": "",
+"position": Vector3(-4, 0, -1.1),
+"tags": PackedStringArray(),
+"type": ExtResource("1_36cn7")
+}, {
+"capabilities": Array[ExtResource("3_nsrow")]([SubResource("liquid"), SubResource("Resource_bfjtq")]),
+"id": "world/ea0383a6f51c4d1bb92086dcac699d2c",
+"location": ExtResource("2_hbg1c"),
+"name": "水瓶",
+"owner": "",
+"position": Vector3(2, 0, -1.45),
+"tags": PackedStringArray("drinking_water"),
+"type": ExtResource("10_ydkd4")
+}])
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.55, 0)
+})
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "default",
+"hours": 0.0,
+"id": "portal/f7f5410fafa14b418a392e25a658edb1",
+"name": "TownPortal",
+"position": Vector3(3, 0.9, 0),
+"to": "209a74242d3e4c8ba415cd6ced08beea"
+}])

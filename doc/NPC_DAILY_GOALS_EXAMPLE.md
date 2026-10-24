@@ -14,11 +14,11 @@
 | 离屏转现场使用的角色 Scene | [resident.tscn](../assets/scenes/npc/resident.tscn) |
 | 仓储间 | [world_workshop.tscn](../assets/scenes/levels/world_workshop.tscn) |
 | 世界入口 | [default_world.tres](../assets/resources/world/default_world.tres) |
-| 小镇至仓储间路线 | [town_workshop.tres](../assets/resources/world/routes/town_workshop.tres) |
+| 往返路线 | 两个关卡的传送门导出，保存在 default_world.tres.Routes |
 
 选择正式关卡中的 Resident → Components → AiAgentComponent3D → Graph，打开图编辑器。这样表达式参数列表会读取同一角色的 Profile。场景中有两个 NPC，跑腿员仍使用自己的基础图。
 
-森林小镇直接作为 `town_level` 的 ScenePath。原入口场景的环境、曝光与 CameraFramingTarget 已合并到正式关卡，并保留原入口 UID。正式小镇仍继承基础场景提供的相机、天气等结构；本例的世界角色组件覆盖在正式小镇配置。
+森林小镇是独立 Scene，直接作为世界初始关卡；环境、相机、天气与世界角色组件均在这个正式关卡中配置。关卡记录和默认地点由根节点的“导出关卡配置”生成，Id 为自动保存的稳定身份，不再使用手写的关卡 Id。
 
 ## 2. 角色 Scene 与 WorldActor
 
@@ -34,7 +34,7 @@
 | CharacterAnimationComponent3D | 使用已有 locomotion.tres |
 | AbilitySystemComponent3D、CharacterPersistenceComponent3D | 沿用现有角色组件 |
 
-本例正式关卡中的 Resident 是继承来的内嵌节点，所以填写 ScenePathOverride，告诉世界系统恢复现场时加载哪个可复用 Scene。直接拖入 resident.tscn 实例时可以留空，系统读取实例的 SceneFilePath。可复用 resident.tscn 自身也挂有 WorldActor。
+本例正式关卡中的 Resident 是内嵌节点，所以填写 ScenePathOverride，告诉世界系统恢复现场时加载哪个可复用 Scene。直接拖入 resident.tscn 实例时可以留空，系统读取实例的 SceneFilePath。可复用 resident.tscn 自身也挂有 WorldActor。
 
 每个长期 NPC 必须有独立 PersistentId。同一个角色的逻辑代理与现场实例使用同一身份；在关卡中复制成第二名角色时要更换身份。
 
@@ -102,18 +102,20 @@ Profile.World 使用 CharacterWorldDefinition：
 
 导航使用 Static Colliders，按 `workshop_navigation_source` 分组收集仓储间的实体碰撞。CellSize=0.1、CellHeight=0.025、AgentHeight=0.8、AgentRadius=0.3；较小的高度精度避免网格高出地面过多，使角色无法通过路径点到达判定。调整布局后选择 World/NavigationRegion3D，执行 Bake NavigationMesh。关卡 Context 已开启 RequireNavigation。
 
-在 default_world.tres.Routes 添加 WorldRouteDefinition，本例资源为 town_workshop.tres：
+本例已清除旧手工道路，并按以下流程重新生成世界配置：
 
-| 字段 | 值 |
-| --- | --- |
-| Id | town_workshop_road |
-| From / To | 小镇关卡 / 仓储间关卡 |
-| FromEntry / ToEntry | default / default |
-| TravelHours | 0.05 游戏小时 |
-| Bidirectional / Enabled / Public | 全部开启 |
-| UseExplicitPositions | false，使用关卡入口 Marker |
+1. 在小镇和仓储间根节点的 WorldLevelContextComponent3D 分别点击“导出关卡配置”，生成 Level 和默认 Location。
+2. 按下表设置两个现有传送门，再分别导出一次。
+3. Profile.World.Locations 的 home、work 分别选择两个新 Level.Location；KnownObjects 继续引用场景内原有对象的稳定身份。
 
-当前一天 4800 秒，因此这条已有手工道路本身约耗 10 秒，另加前往入口及到目标的时间。新关卡可点击 WorldLevelContextComponent3D 的“导出关卡配置”，根据自动传送门生成 NPC 路线，无需再创建本节的 Route 资源。已存在同方向、同目标入口的手工道路会保留；本例的 town_workshop_road 因此不会被默认零耗时路线覆盖。具体流程见 [关卡导出按钮](WORLD_GUIDE.md#2-配置关卡与入口)。
+| 场景 / 门 | TargetLevel | TargetEntry | Automatic | NpcTravelHours |
+| --- | --- | --- | --- | --- |
+| ForestTownLevel / WorkshopPortal | 仓储间导出的 Level | default | true | 0 |
+| WorldWorkshop / TownPortal | 小镇导出的 Level | default | true | 0 |
+
+两个门生成两条单向路线，直接内嵌在 default_world.tres.Routes；不需要手建 Route 文件。NPC 走到门位置后即时跨关卡，再从对端 default 入口走向目标。当前没有额外道路耗时；需要时在门的 NpcTravelHours 设置游戏小时。移动门或 Arrival 后保存即可更新路线坐标。具体流程见 [关卡导出按钮](WORLD_GUIDE.md#2-配置关卡与入口)。
+
+本次重建重新分配了关卡与地点身份，旧存档仍包含旧身份。验证示例请选择“新游戏”；日常保存或再次点击导出会复用现有身份，无需再次重建。
 
 ## 5. 主图如何连接
 

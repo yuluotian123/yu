@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://cgb5anpmm6vkm"]
+
+[ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="1_fly31"]
+[ext_resource type="Resource" uid="uid://ckdg7exkwhywi" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="2_qk01i"]
+[ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="3_u4pgh"]
+[ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="4_gs7cx"]
+
+[resource]
+resource_name = "森林小镇 · 世界目录"
+script = ExtResource("4_gs7cx")
+LevelId = "209a74242d3e4c8ba415cd6ced08beea"
+SourceSignature = "D28EDA810A4816DF4A269D79239FAB08CAA2499625B522DF9EA4EC1C8BC21C10/population-v3/209a74242d3e4c8ba415cd6ced08beea/6261f7cc6f33405ebc8f6b4eec32bf8c/portal-export-v1"
+Actors = Array[Dictionary]([{
+"abstract": 45.0,
+"detailed": 30.0,
+"graph": ExtResource("2_qk01i"),
+"half_height": 0.36,
+"id": "town_resident_01",
+"level": "209a74242d3e4c8ba415cd6ced08beea",
+"overrides": Array[ExtResource("3_u4pgh")]([]),
+"position": Vector3(-1.6, 0.42, 1.5),
+"profile": ExtResource("1_fly31"),
+"residency": 2.0,
+"running": true,
+"scene": "res://assets/scenes/npc/resident.tscn",
+"speed": 2.2
+}])
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(-3, 0.55, 6)
+})
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "default",
+"hours": 0.0,
+"id": "portal/d7ebd92d9db44aa89eca566ced0cb332",
+"name": "WorkshopPortal",
+"position": Vector3(3, 0.9, 3),
+"to": "31a903e2d81e45d0af568c59d0097bc8"
+}])

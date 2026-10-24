@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://ckbd6sfedbubr" path="res://scripts/gamelogic/character/data/CharacterNeedDefinition.cs" id="6_6l3rr"]
 [ext_resource type="Script" uid="uid://dpten8cbiufl6" path="res://scripts/gamelogic/character/data/CharacterNeedsDefinition.cs" id="7_ur46o"]
 [ext_resource type="Script" uid="uid://cblf61sgamjlx" path="res://scripts/gamelogic/character/data/CharacterRelationsDefinition.cs" id="11_cd1og"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="12_1levc"]
-[ext_resource type="Resource" path="res://assets/resources/world/locations/town.tres" id="13_g1j2x"]
+[ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="12_1levc"]
+[ext_resource type="Resource" uid="uid://xec14ets2y0y" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="13_1levc"]
 [ext_resource type="Script" uid="uid://pupne4uwkfwi" path="res://scripts/gamelogic/character/data/CharacterAffectDefinition.cs" id="13_r6wi1"]
-[ext_resource type="Resource" path="res://assets/resources/world/locations/workshop.tres" id="14_6fqan"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/CharacterWorldDefinition.cs" id="15_5xh60"]
+[ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="14_g1j2x"]
+[ext_resource type="Script" uid="uid://chxxds0ty0ufl" path="res://scripts/gamelogic/world/definitions/CharacterWorldDefinition.cs" id="15_5xh60"]
 [ext_resource type="Script" uid="uid://uu5i6fupyq60" path="res://scripts/gamelogic/character/data/CharacterFactDefinition.cs" id="15_rvsd2"]
 [ext_resource type="Script" uid="uid://c3mllb6vc02jg" path="res://scripts/gamelogic/character/data/CharacterFactSchema.cs" id="16_37e1b"]
 [ext_resource type="Script" uid="uid://bmwt0dxhrjulh" path="res://scripts/gamelogic/character/data/CharacterProfile.cs" id="character_profile"]
@@ -124,8 +124,8 @@ DefinitionId = "gray_green_resident.relations"
 [sub_resource type="Resource" id="Resource_6fqan"]
 script = ExtResource("15_5xh60")
 Locations = Dictionary[String, ExtResource("12_1levc")]({
-"home": ExtResource("13_g1j2x"),
-"work": ExtResource("14_6fqan")
+"home": ExtResource("13_1levc"),
+"work": ExtResource("14_g1j2x")
 })
 KnownObjects = PackedStringArray("world/4b208b24b610436cbc5b418b7cc0c455", "world/03b5672e717f455a9e7ede84e5a10b04", "world/ea0383a6f51c4d1bb92086dcac699d2c")
 

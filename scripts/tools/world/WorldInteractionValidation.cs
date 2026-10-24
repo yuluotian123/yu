@@ -29,7 +29,10 @@ public partial class WorldInteractionValidation : Node
             ModuleSystem.RegisterModule<ISaveModule>(new SaveModule("res://.godot/world-validation/interaction-saves","res://.godot/world-validation/no-legacy"));
             var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
             var definition=(WorldDefinition)ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath).Duplicate();
-            definition.InitialLevel=definition.Levels.First(l=>l.Id=="workshop_level");
+            var town=WorldTestObjects.ShippedLevel(definition,WorldTestObjects.TownScene);
+            var workshop=WorldTestObjects.ShippedLevel(definition,WorldTestObjects.WorkshopScene);
+            definition.InitialLevel=workshop;
+            WorldTestObjects.KeepShippedActorsIdle(definition);
             Check(await world.OpenAsync(this,definition,false),"Interactive workshop must open: "+world.LastError);await Frames(8);
             var player=world.Player;var input=player.GetComponent<PlayerCharacterInputComponent3D>();var interactor=player.GetComponent<PlayerWorldInteractionComponent3D>();
             var point=world.ResolvePoint(WorldTestObjects.ShippedId(world,"仓储间储物箱"));var stock=point.Owner.GetComponent<WorldStockComponent3D>();var capacity=point.Owner.GetComponent<WorldUsageCapacityComponent3D>();
@@ -71,7 +74,7 @@ public partial class WorldInteractionValidation : Node
             Check(liquid.Volume==.75&&player.GetNode<Control>("WorldInteractionHUD/Root/Panel/Content/Choices").Visible,"Multiple operations open a choice list without changing the object");await Capture("interaction-menu");await PressE();bottle.Operations.RemoveAt(1);
             Check(liquid.Volume==.5,"E executes the bottle's configured .25 liquid operation");
             ModuleSystem.GetModule<ISaveModule>().Save("interaction");
-            Check(await world.SwitchAsync("town_level")&&await world.SwitchAsync("workshop_level"),"Interacted objects survive level travel");
+            Check(await world.SwitchAsync(town.Id)&&await world.SwitchAsync(workshop.Id),"Interacted objects survive level travel");
             Check(world.ResolveObject(WorldTestObjects.ShippedId(world,"仓储间储物箱")).Owner.GetComponent<WorldStockComponent3D>().Amount==0&&world.ResolveObject(WorldTestObjects.ShippedId(world,"水瓶")).Owner.GetComponent<WorldLiquidComponent3D>().Volume==.5,"Travel retains player and NPC mutations");
             Check(world.ResolveObject(otherId).Owner.GetComponent<WorldStockComponent3D>().Amount==50,"Independent reused storage state survives level travel");
             Check(!WorldInteraction.Execute(player,point,"take_stock").Success,"A stale component from an unloaded level cannot be used after travel");

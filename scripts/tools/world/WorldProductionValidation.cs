@@ -9,6 +9,7 @@ using Godot;
 public partial class WorldProductionValidation : Node
 {
     bool _driving=true;
+    string _townId,_workshopId;
     double _watchdog;
     public override void _Process(double delta)
     {
@@ -24,19 +25,19 @@ public partial class WorldProductionValidation : Node
             ModuleSystem.RegisterModule<ISaveModule>(new SaveModule("res://.godot/world-validation/production-saves","res://.godot/world-validation/no-legacy"));
             var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();
             var definition=ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath);
-            // Keep this process's fixtures idle; daily_goals_validation covers autonomous consumption.
-            // Change only cached catalog data, never the authored Scenes or generated files.
-            foreach(var level in definition.Levels)
-                foreach(var actor in ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath).Actors)actor["running"]=false;
+            _townId=WorldTestObjects.ShippedLevel(definition,WorldTestObjects.TownScene).Id;
+            _workshopId=WorldTestObjects.ShippedLevel(definition,WorldTestObjects.WorkshopScene).Id;
+            // daily_goals_validation covers autonomous consumption.
+            WorldTestObjects.KeepShippedActorsIdle(definition);
             Require(await world.OpenAsync(this,definition,false),world.LastError);
-            Require(world.CurrentLevelId=="town_level"&&world.Player?.PersistentId=="player","Default world must open the town with one player");
+            Require(world.CurrentLevelId==_townId&&world.Player?.PersistentId=="player","Default world must open the town with one player");
             await Frames(3);ulong player=world.Player.GetInstanceId();
             // Arrival protection uses wall time, independently of simulated game speed.
             while(world.ArrivalBlocked)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
             world.Player.GlobalPosition=world.CurrentContext.Owner.GetNode<Node3D>("WorkshopPortal").GlobalPosition;
             world.Player.GetComponent<CharacterMovementComponent3D>().SyncBodyToOwner();
-            for(int i=0;i<300&&(world.CurrentLevelId!="workshop_level"||world.IsSwitching);i++)await ToSignal(GetTree(),SceneTree.SignalName.PhysicsFrame);
-            Require(world.CurrentLevelId=="workshop_level"&&!world.IsSwitching,"Automatic town portal must switch the real physics player: "+world.LastError+
+            for(int i=0;i<300&&(world.CurrentLevelId!=_workshopId||world.IsSwitching);i++)await ToSignal(GetTree(),SceneTree.SignalName.PhysicsFrame);
+            Require(world.CurrentLevelId==_workshopId&&!world.IsSwitching,"Automatic town portal must switch the real physics player: "+world.LastError+
                 $" level={world.CurrentLevelId}, switching={world.IsSwitching}, blocked={world.ArrivalBlocked}, position={world.Player.GlobalPosition}, portal={world.CurrentContext.Owner.GetNodeOrNull<GameObject3D>("WorkshopPortal")?.InitializationError}");
             Require(world.Player.GetInstanceId()==player,"Actual player identity must survive the transition");
             var point=world.ResolvePoint(WorldTestObjects.ShippedId(world,"仓储间储物箱"));Require(point!=null,"Workshop object must register");
@@ -46,11 +47,11 @@ public partial class WorldProductionValidation : Node
             point.Owner.GetComponent<WorldOpeningHoursComponent3D>().SetOpen(false);await Frames(3);
             ModuleSystem.GetModule<ISaveModule>().Save("production");
             Require(await world.CurrentContext.Owner.GetNode<GameObject3D>("TownPortal").GetComponent<WorldTransitionComponent3D>().Activate(),world.LastError);
-            Require(await world.SwitchAsync("workshop_level"),world.LastError);
+            Require(await world.SwitchAsync(_workshopId),world.LastError);
             Require(world.ResolveObject(WorldTestObjects.ShippedId(world,"仓储间储物箱")).Owner.GetComponent<WorldOpeningHoursComponent3D>().ManualOpen==false,"Shipped record state must survive return travel");
             Require(world.ResolveObject(WorldTestObjects.ShippedId(world,"水瓶")).Owner.GetComponent<WorldLiquidComponent3D>().Volume==.5,"Liquid state must survive unload and reload");
             world.Close();Require(await world.OpenAsync(this,definition,true,"production"),world.LastError);
-            Require(world.CurrentLevelId=="workshop_level"&&world.ResolveObject(WorldTestObjects.ShippedId(world,"仓储间储物箱")).Owner.GetComponent<WorldOpeningHoursComponent3D>().ManualOpen==false,"Shipped save must resume the workshop");
+            Require(world.CurrentLevelId==_workshopId&&world.ResolveObject(WorldTestObjects.ShippedId(world,"仓储间储物箱")).Owner.GetComponent<WorldOpeningHoursComponent3D>().ManualOpen==false,"Shipped save must resume the workshop");
             Require(world.ResolveObject(WorldTestObjects.ShippedId(world,"水瓶")).Owner.GetComponent<WorldLiquidComponent3D>().Volume==.5,"Continue must restore the bottle's own capability state");
             Require(WorldModule.Hosts(world.CurrentContext.Owner).All(h=>h.InitializationError.Length==0),"No shipped host initialization errors");
             GD.Print($"WORLD_PRODUCTION_OK: town -> workshop -> town -> workshop -> saved workshop; last_transition_ms={world.LastTransitionMilliseconds:0.0}");
@@ -67,14 +68,14 @@ public partial class WorldProductionValidation : Node
         await Until(()=>Find("BtnNew")!=null,"Main menu did not open");
         Find("BtnNew").EmitSignal(Button.SignalName.Pressed);
         await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is LevelProcedure,"New game did not enter the level procedure");
-        var world=ModuleSystem.GetModule<IWorldModule>();Require(world.CurrentLevelId=="town_level","New menu action must start at initial level");
-        Require(await world.SwitchAsync("workshop_level"),world.LastError);ModuleSystem.GetModule<ISaveModule>().Save();
+        var world=ModuleSystem.GetModule<IWorldModule>();Require(world.CurrentLevelId==_townId,"New menu action must start at initial level");
+        Require(await world.SwitchAsync(_workshopId),world.LastError);ModuleSystem.GetModule<ISaveModule>().Save();
         Input.ParseInputEvent(new InputEventAction{Action="ui_cancel",Pressed=true});await Frames(2);Input.ParseInputEvent(new InputEventAction{Action="ui_cancel",Pressed=false});
         await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is MainMenuProcedure&&Find("BtnStart")!=null,"Escape did not return to the menu");
         Require(!world.IsOpen&&!Find("BtnStart").Disabled,"Returning to menu must close world and enable continue");
         Find("BtnStart").EmitSignal(Button.SignalName.Pressed);
         await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is LevelProcedure,"Continue did not enter the level procedure");
-        Require(world.CurrentLevelId=="workshop_level","Continue menu action must restore saved workshop");
+        Require(world.CurrentLevelId==_workshopId,"Continue menu action must restore saved workshop");
         GD.Print("WORLD_GAME_FLOW_OK: new game -> level -> save -> Escape -> menu -> continue saved level");
         await DeleteSaveFlow();world.Close();main.Free();
     }
@@ -82,7 +83,7 @@ public partial class WorldProductionValidation : Node
     {
         var world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();var saves=ModuleSystem.GetModule<ISaveModule>();
         string[] paths={"res://assets/scenes/levels/world_workshop.tscn","res://assets/scenes/world/storage.tscn",
-            "res://assets/scenes/world/bottle.tscn",world.Catalog.Levels["workshop_level"].CatalogPath};
+            "res://assets/scenes/world/bottle.tscn",world.Catalog.Levels[_workshopId].CatalogPath};
         var sources=paths.ToDictionary(path=>path,path=>FileAccess.GetFileAsString(path));
         string stockId=WorldTestObjects.ShippedId(world,"仓储间储物箱");
         var stock=world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>();stock.Amount=7;
@@ -100,7 +101,7 @@ public partial class WorldProductionValidation : Node
         confirm.EmitSignal(ConfirmationDialog.SignalName.Confirmed);confirm.Hide();
         Require(!saves.Exists()&&!saves.ListSlots().Contains("default")&&!FileAccess.FileExists(savePath)
             &&!FileAccess.FileExists(savePath+".bak"),"GM deletion must remove the primary save and backup");
-        Require(world.CurrentLevelId=="workshop_level"&&world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>()==stock
+        Require(world.CurrentLevelId==_workshopId&&world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>()==stock
             &&stock.Amount==7,"GM deletion must preserve the active world and object state");
         Require(sources.All(pair=>FileAccess.GetFileAsString(pair.Key)==pair.Value),"GM deletion must not change scenes or generated world catalogs");
         panel.ShowPanel(false);
@@ -111,8 +112,8 @@ public partial class WorldProductionValidation : Node
         Require(!world.IsOpen&&Find("BtnStart").Disabled,"Continue must be disabled after deleting the default save");
         Find("BtnNew").EmitSignal(Button.SignalName.Pressed);
         await Until(()=>ModuleSystem.GetModule<IProcedureModule>().CurrentProcedure is LevelProcedure,"New game after deletion did not open");
-        Require(world.CurrentLevelId=="town_level","New game after deletion must start in town");
-        Require(await world.SwitchAsync("workshop_level"),world.LastError);
+        Require(world.CurrentLevelId==_townId,"New game after deletion must start in town");
+        Require(await world.SwitchAsync(_workshopId),world.LastError);
         Require(world.ResolveObject(stockId).Owner.GetComponent<WorldStockComponent3D>().Amount==50,"New game after deletion must restore the scene stock default");
         Require(WorldModule.Hosts(world.CurrentContext.Owner).All(host=>host.InitializationError.Length==0),"All capability providers must initialize after deletion and a new game");
         Require(sources.All(pair=>FileAccess.GetFileAsString(pair.Key)==pair.Value),"Restarting after deletion must preserve scenes and generated world catalogs");

@@ -13,5 +13,9 @@ public partial class WorldLevelDefinition : WorldRecord
         base._ValidateProperty(property);
         if(property["name"].AsString()==nameof(ExportPortalRoutes))property["usage"]=(long)PropertyUsageFlags.Storage;
     }
-    public string CatalogPath=>ScenePath.StartsWith("res://.godot/")?ScenePath.GetBaseDir()+"/catalog_"+Id+".tres":"res://assets/resources/world/generated/"+Id+".tres";
+    // The external record filename is unique within its world and remains stable when its Scene moves.
+    public string CatalogPath=>ResourcePath.StartsWith("res://")&&!ResourcePath.Contains("::")&&ResourcePath.GetBaseDir().GetFile()=="levels"
+        ?ResourcePath.GetBaseDir().GetBaseDir()+"/generated/"+ResourcePath.GetFile().GetBaseName()+"_catalog.tres"
+        :ScenePath.StartsWith("res://.godot/")?ScenePath.GetBaseDir()+"/catalog_"+Id+".tres"
+        :"res://assets/resources/world/generated/"+ScenePath.GetFile().GetBaseName()+"_"+Id+"_catalog.tres";
 }

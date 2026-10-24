@@ -1,5 +1,9 @@
-[gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://ldrysx0x7ie1"]
+[gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://biun2wdfs0ui"]
 
+[ext_resource type="Resource" uid="uid://tvvnn53j7lvu" path="res://assets/resources/world/levels/forest_town_level.tres" id="2_vi2k3"]
+[ext_resource type="Resource" uid="uid://c60nrvv1uf412" path="res://assets/resources/world/levels/world_workshop.tres" id="4_oek4u"]
+[ext_resource type="Resource" uid="uid://xec14ets2y0y" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="6_0inog"]
+[ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="7_te4rk"]
 [ext_resource type="Script" uid="uid://c38ips4bsm7vx" path="res://scripts/gamelogic/world/definitions/WorldRouteDefinition.cs" id="11_vi2k3"]
 [ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="bottle_type"]
 [ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="calendar_script"]
@@ -7,26 +11,48 @@
 [ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="location_script"]
 [ext_resource type="Script" uid="uid://dsp55wblt8lbr" path="res://scripts/gamelogic/world/definitions/WorldDefinition.cs" id="script"]
 [ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="storage_type"]
-[ext_resource type="Resource" uid="uid://dsbub5bo15ktr" path="res://assets/resources/world/levels/town.tres" id="town"]
-[ext_resource type="Resource" uid="uid://cfngkb7g7nxqj" path="res://assets/resources/world/locations/town.tres" id="town_place"]
 [ext_resource type="Script" uid="uid://cmajrnuv2v77k" path="res://scripts/gamelogic/world/definitions/WorldObjectTypeDefinition.cs" id="type_script"]
-[ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="workshop"]
-[ext_resource type="Resource" uid="uid://cvx03le1g2g0l" path="res://assets/resources/world/locations/workshop.tres" id="workshop_place"]
-
-[ext_resource type="Resource" path="res://assets/resources/world/routes/town_workshop.tres" id="workshop_route"]
 
 [sub_resource type="Resource" id="calendar"]
 script = ExtResource("calendar_script")
 DayLengthSeconds = 4800.0
 
+[sub_resource type="Resource" id="Resource_oek4u"]
+resource_name = "森林小镇 → 小镇仓储间 · WorkshopPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(3, 0.9, 3)
+To = ExtResource("4_oek4u")
+ToPosition = Vector3(0, 0.55, 0)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/d7ebd92d9db44aa89eca566ced0cb332"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/d7ebd92d9db44aa89eca566ced0cb332"
+DisplayName = "WorkshopPortal"
+
+[sub_resource type="Resource" id="Resource_vi2k3"]
+resource_name = "小镇仓储间 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("4_oek4u")
+FromPosition = Vector3(3, 0.9, 0)
+To = ExtResource("2_vi2k3")
+ToPosition = Vector3(-3, 0.55, 6)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/f7f5410fafa14b418a392e25a658edb1"
+Id = "route/31a903e2d81e45d0af568c59d0097bc8/portal/f7f5410fafa14b418a392e25a658edb1"
+DisplayName = "TownPortal"
+
 [resource]
 resource_name = "默认世界"
 script = ExtResource("script")
-Locations = Array[ExtResource("location_script")]([ExtResource("town_place"), ExtResource("workshop_place")])
-Levels = Array[ExtResource("level_script")]([ExtResource("town"), ExtResource("workshop")])
+Locations = Array[ExtResource("location_script")]([ExtResource("6_0inog"), ExtResource("7_te4rk")])
+Levels = Array[ExtResource("level_script")]([ExtResource("2_vi2k3"), ExtResource("4_oek4u")])
 ObjectTypes = Array[ExtResource("type_script")]([ExtResource("storage_type"), ExtResource("bottle_type")])
-Routes = Array[ExtResource("11_vi2k3")]([ExtResource("workshop_route")])
-InitialLevel = ExtResource("town")
+Routes = Array[ExtResource("11_vi2k3")]([SubResource("Resource_oek4u"), SubResource("Resource_vi2k3")])
+InitialLevel = ExtResource("2_vi2k3")
 Calendar = SubResource("calendar")
 Id = "default_world"
 DisplayName = "默认世界"

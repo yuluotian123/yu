@@ -39,6 +39,8 @@ public partial class NpcDailyGoalsValidation : Node
             var program=NpcProgram.Compile(entry.Graph,entry.Profile);
             Check(program.Goals.Count==2&&entry.Graph.Definitions.OfType<NpcActionDefinition>().Count()==4,$"The resident graph compiles with two Goals and four Actions (actual {program.Goals.Count}/{entry.Graph.Definitions.OfType<NpcActionDefinition>().Count()}, {entry.Graph.ResourcePath}, nodes {entry.Graph.Nodes.Count}, edges {entry.Graph.Connections.Count})");
             var water=catalog.Objects.Values.Single(o=>o.AllTags.Contains("drinking_water"));
+            Check(definition.Routes.Count==2&&definition.Routes.All(route=>route.SourcePortalId.Length>0&&!route.Bidirectional&&route.UseExplicitPositions&&route.TravelHours==0),
+                "Both formal portals export directed zero-duration routes without manual road resources");
             var crates=catalog.Objects.Values.Where(o=>o.Type.Id=="storage_type").ToArray();
             Check(entry.Profile.World.Locations["work"].Id==water.Location.Id,"Both selectors use the authored work location binding");
             ModuleSystem.RegisterModule<ISaveModule>(new SaveModule(Folder+"saves",Folder+"no-legacy"));
@@ -50,9 +52,9 @@ public partial class NpcDailyGoalsValidation : Node
             double liquid=_world.ObjectState(water.Id).Capability<WorldLiquidState>("liquid").Volume;
             // First exercise real town navigation to the departure; then fast-forward the remote leg.
             _world.Population.Clock.Paused=false;
-            for(int n=0;n<900&&actor.Travel==null;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+            for(int n=0;n<900&&actor.Travel==null&&actor.Level==entry.LevelId;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
             _world.Population.Clock.Paused=true;
-            Check(actor.Travel!=null,"The visible resident walks to the town departure and starts the authored route");
+            Check(actor.Travel!=null||actor.Level!=entry.LevelId,"The visible resident walks to the portal and starts or completes its exported route");
             _world.Population.Clock.AdvanceHours(.2);await CatchUp();
             Check(actor.Level==water.Level.Id&&actor.Travel==null,"The resident reaches the workshop without moving the player");
             Check(actor.Agent.Read("private.cargo").Number==2,"The resident completes the authored two-unit collection Goal");

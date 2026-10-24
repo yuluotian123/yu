@@ -6,7 +6,7 @@ using Godot;
 
 public partial class WorldLevelExportValidation : Node
 {
-    const string Folder="res://.godot/world-validation/level-export/";
+    static readonly string Folder="res://.godot/world-validation/level-export/"+Guid.NewGuid().ToString("N")+"/";
     int _checks;
     void Check(bool ok,string message){if(!ok)throw new InvalidOperationException(message);_checks++;GD.Print("EXPORT_CHECK: "+message);}
     static void Save(Node root,string path)
@@ -14,13 +14,14 @@ public partial class WorldLevelExportValidation : Node
         var packed=new PackedScene();WorldCatalog.Require(packed.Pack(root)==Error.Ok&&ResourceSaver.Save(packed,path)==Error.Ok,"Cannot save "+path);packed.TakeOverPath(path);
     }
     static void Child(Node root,Node parent,Node child){parent.AddChild(child);child.Owner=root;}
-    static GameObject3D Create(string name,WorldLevelDefinition inherited=null)
+    static GameObject3D Create(string name,WorldLevelDefinition inherited=null,string subdir="")
     {
         var root=new GameObject3D{Name=name,Components=new(){new WorldLevelContextComponent3D{Level=inherited}}};
         var spawn=new GameObject3D{Name="Spawn",Components=new(){new WorldSpawnPointComponent3D{Entry="arrival"}}};Child(root,root,spawn);
         Child(root,spawn,new Marker3D{Name="Arrival",Position=new(1,0,2)});
-        Save(root,Folder+name+".tscn");root.Free();
-        return ResourceLoader.Load<PackedScene>(Folder+name+".tscn").Instantiate<GameObject3D>(PackedScene.GenEditState.Instance);
+        DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(Folder+subdir));
+        Save(root,Folder+subdir+name+".tscn");root.Free();
+        return ResourceLoader.Load<PackedScene>(Folder+subdir+name+".tscn").Instantiate<GameObject3D>(PackedScene.GenEditState.Instance);
     }
     static WorldLevelContextComponent3D Context(GameObject3D root)=>root.Components.OfType<WorldLevelContextComponent3D>().Single();
     static GameObject3D Portal(GameObject3D root,string name,WorldLevelDefinition target,Vector3 position)
@@ -45,13 +46,21 @@ public partial class WorldLevelExportValidation : Node
             Check(Context(a).GetPropertyList().Any(p=>p["name"].AsString()==nameof(WorldLevelContextComponent3D.ExportConfiguration)&&p["type"].AsInt32()==(int)Variant.Type.Callable),"The component exposes a callable export button");
             Export(a,world);var la=Context(a).Level;string identity=la.Id;
             Check(world.Levels.Count==1&&world.Locations.Count==1&&world.InitialLevel==la&&la.DefaultEntry=="arrival","Export creates and binds the level, place, default entrance and world registration");
+            Check(la.ResourcePath==Folder+"levels/A.tres"&&la.Location.ResourcePath==Folder+"locations/A_location.tres"&&la.CatalogPath==Folder+"generated/A_catalog.tres",
+                "Level, default location and catalog filenames identify their source Scene");
+            Check(la.ResourceName=="A · 关卡"&&la.Location.ResourceName=="A · 默认地点"&&ResourceLoader.Load<WorldLevelCatalog>(la.CatalogPath).ResourceName=="A · 世界目录",
+                "Resource pickers show the scene name and each resource's purpose");
             Check(world.ObjectTypes.Single()==type&&new WorldCatalog(world).Objects.Count==1,"Referenced object types and placed objects are exported without manual registry edits");
+            var damaged=ResourceLoader.Load<WorldLevelCatalog>(la.CatalogPath);damaged.Entries[0]["location"]=new Resource();
+            ResourceSaver.Save(damaged,la.CatalogPath);WorldAuthoringCompiler.CompileAll(world);
+            Check(new WorldCatalog(world).Objects.Values.Single().Location==la.Location,"A cached untyped dependency placeholder is regenerated even when its source signature matches");
             Check(new WorldCatalog(world).Actors.ContainsKey("export_resident"),"The same export includes the reusable NPC roster");
             Check(ResourceLoader.Load<PackedScene>(a.SceneFilePath,cacheMode:ResourceLoader.CacheMode.Ignore).GetState().GetNodeCount()>0,"Export saves the authored scene");
             Export(a,world);Check(world.Levels.Count==1&&world.Locations.Count==1&&Context(a).Level.Id==identity,"Repeated export keeps record identities and does not duplicate registration");
             Export(b,world);var lb=Context(b).Level;
             var pa=Portal(a,"Door",lb,new(4,0,3));Export(a,world);
             var forward=world.Routes.Single();string routeId=forward.Id;
+            Check(forward.ResourceName=="A → B · Door","Generated route names show both levels and the source portal");
             Check(!forward.Bidirectional&&forward.From==la&&forward.To==lb&&forward.ToEntry=="arrival"&&forward.TravelHours==0,"A source portal exports one zero-duration directed route");
             var routes=new WorldRoutes(new WorldCatalog(world));
             Check(routes.Find(la.Id,lb.Id,null)?.Legs.Count==1&&routes.Find(lb.Id,la.Id,null)==null,"A one-way portal never invents a return route");
@@ -92,11 +101,17 @@ public partial class WorldLevelExportValidation : Node
             Check(Context(clone).Level.Id!=la.Id&&la.ScenePath==a.SceneFilePath&&world.Levels.Count==3,"Saving an inherited level as a new scene does not retarget the original level record");
             var shared=Create("Shared");var originalContext=Context(a);shared.Components=new(){originalContext};Export(shared,world);
             Check(Context(shared)!=originalContext&&Context(a).Level==la&&Context(shared).Level!=la,"Exporting a new placement does not mutate a shared context component from another Scene");
+            var sameName=Create("A",subdir:"other/");Export(sameName,world);var other=Context(sameName).Level;
+            Check(other.ResourcePath==Folder+"levels/A_2.tres"&&other.Location.ResourcePath==Folder+"locations/A_2_location.tres"&&other.CatalogPath==Folder+"generated/A_2_catalog.tres"&&other.Id!=la.Id,
+                "Scenes with the same filename use a readable suffix and independent catalogs");
+            Export(sameName,world);
+            Check(Context(sameName).Level==other&&world.Levels.Count==5&&ResourceLoader.Load<WorldLevelDefinition>(la.ResourcePath).Id==identity,
+                "Repeated export reuses the suffixed record and never overwrites the first Scene");
             var saved=ResourceLoader.Load<WorldDefinition>(world.ResourcePath,cacheMode:ResourceLoader.CacheMode.Ignore);
-            Check(saved.Levels.Count==4&&saved.Routes.Count==1&&saved.Routes[0].Id==manual.Id,"World registration and route preservation survive resource reload");
+            Check(saved.Levels.Count==5&&saved.Routes.Count==1&&saved.Routes[0].Id==manual.Id,"World registration and route preservation survive resource reload");
             string unchanged=FileAccess.GetFileAsString(world.ResourcePath);Export(a,world);
             Check(FileAccess.GetFileAsString(world.ResourcePath)==unchanged,"Unchanged repeated exports serialize identically");
-            WorldAuthoringCompiler.Forget(a);WorldAuthoringCompiler.Forget(b);WorldAuthoringCompiler.Forget(clone);WorldAuthoringCompiler.Forget(shared);a.Free();b.Free();clone.Free();shared.Free();
+            WorldAuthoringCompiler.Forget(a);WorldAuthoringCompiler.Forget(b);WorldAuthoringCompiler.Forget(clone);WorldAuthoringCompiler.Forget(shared);WorldAuthoringCompiler.Forget(sameName);a.Free();b.Free();clone.Free();shared.Free();sameName.Free();
             GD.Print($"WORLD_LEVEL_EXPORT_OK: {_checks} checks");GetTree().Quit();
         }
         catch(Exception error){GD.PushError(error.ToString());GetTree().Quit(1);}

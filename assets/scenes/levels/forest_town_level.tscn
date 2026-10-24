@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_ueglv"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_jbaxf"]
-[ext_resource type="Resource" uid="uid://dsbub5bo15ktr" path="res://assets/resources/world/levels/town.tres" id="3_rb52e"]
+[ext_resource type="Resource" uid="uid://tvvnn53j7lvu" path="res://assets/resources/world/levels/forest_town_level.tres" id="3_ng12b"]
 [ext_resource type="Script" uid="uid://2wsybt7iy6nd" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="4_dhhqu"]
 [ext_resource type="Resource" uid="uid://btox8ltkjdvqf" path="res://assets/resources/environment/clouds/rotation_timeline.tres" id="5_rbjpv"]
 [ext_resource type="Resource" uid="uid://vm0f6tvqybs7" path="res://assets/resources/environment/clouds/base_timeline.tres" id="6_kb0tv"]
@@ -23,7 +23,7 @@
 [ext_resource type="Resource" uid="uid://d3j7g4vybewnk" path="res://assets/resources/camera/hd2d_free_3d.tres" id="21_i4cks"]
 [ext_resource type="Script" uid="uid://b4n2camra5xqy" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="22_6txhy"]
 [ext_resource type="Script" uid="uid://ds7blco3fe604" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="23_dimth"]
-[ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="24_7vjrn"]
+[ext_resource type="Resource" uid="uid://c60nrvv1uf412" path="res://assets/resources/world/levels/world_workshop.tres" id="24_uofgj"]
 [ext_resource type="Script" uid="uid://dym3osxbqgwj8" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="25_tvavt"]
 [ext_resource type="PackedScene" uid="uid://b66h2k1q55477" path="res://assets/scenes/ui/runtime_gm.tscn" id="26_wy1je"]
 [ext_resource type="Script" uid="uid://ddvtsomeofpgl" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="27_dn66n"]
@@ -52,9 +52,9 @@
 [ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="50_yv21s"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="51_f2ac5"]
 
-[sub_resource type="Resource" id="world_context"]
+[sub_resource type="Resource" id="Resource_ng12b"]
 script = ExtResource("4_dhhqu")
-Level = ExtResource("3_rb52e")
+Level = ExtResource("3_ng12b")
 
 [sub_resource type="Resource" id="environment_profile"]
 script = ExtResource("9_ai2dc")
@@ -239,7 +239,7 @@ script = ExtResource("23_dimth")
 
 [sub_resource type="Resource" id="world_transition"]
 script = ExtResource("25_tvavt")
-TargetLevel = ExtResource("24_7vjrn")
+TargetLevel = ExtResource("24_uofgj")
 
 [sub_resource type="BoxShape3D" id="world_portal_shape"]
 size = Vector3(1.2, 2, 1.2)
@@ -345,7 +345,7 @@ script = ExtResource("46_ivfsh")
 [node name="ForestTownLevel" type="Node3D" unique_id=1386970310 groups=["gameplay_level"]]
 editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；独立关卡包含角色、相机、天气、世界入口与 NPC 行为配置。"
 script = ExtResource("1_ueglv")
-Components = Array[ExtResource("2_jbaxf")]([SubResource("world_context")])
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_ng12b")])
 
 [node name="EnvironmentRig" type="Node3D" parent="." unique_id=660897677]
 process_mode = 1
@@ -431,6 +431,7 @@ collision_mask = 0
 shape = SubResource("shape_Ground")
 
 [node name="EntryDefault" type="Node3D" parent="." unique_id=1339547343]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 3)
 script = ExtResource("1_ueglv")
 Components = Array[ExtResource("2_jbaxf")]([SubResource("world_spawn")])
 

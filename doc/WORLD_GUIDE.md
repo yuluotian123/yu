@@ -20,15 +20,15 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 ## 1. 建立目录
 
-在 `assets/resources/world/` 新建下列 Resource，并登记到世界入口的对应数组。新记录的稳定 Id 自动生成并保存；显示名称可修改。运行中的目录视为只读，修改配置后重新进入世界。
+世界配置保存在 `assets/resources/world/`。日常从 Scene 制作：关卡记录、默认地点、引用的对象类型和传送门路线由下一节的导出按钮登记。只在需要地点层级、公开服务或特殊道路时额外编辑资源。新记录的稳定 Id 自动生成并保存；显示名称可修改。运行中的目录视为只读，修改配置后重新进入世界。
 
 | 类型 | 制作内容 |
 | --- | --- |
-| WorldLocationDefinition | 地点名称、Parent、Tags、PublicServices；父子地点都要登记 |
-| WorldLevelDefinition | 场景路径 ScenePath、语义地点 Location、DefaultEntry（默认 `default`） |
+| WorldLocationDefinition | 导出时自动创建默认地点；按需扩展 Parent、Tags、PublicServices |
+| WorldLevelDefinition | 导出时自动绑定 ScenePath、Location 和 DefaultEntry（默认 `default`） |
 | WorldObjectTypeDefinition | 默认标签、可选能力列表 Capabilities，各能力自己的默认参数 |
 | WorldLevelCatalog | 编辑器自动生成的关卡对象目录；不手动编辑 |
-| WorldDefinition | 上述数组、Routes、InitialLevel、PlayerScene、Calendar |
+| WorldDefinition | 导出自动登记上述数组与 Routes；首次导出设置 InitialLevel，PlayerScene、Calendar 按需配置 |
 
 在世界入口的检查器点击“校验世界目录”。身份重复、父级循环、缺失归属、非法容量或库存均会报错。Id、名称和场景路径职责不同：重命名对象不会改变存档身份；移动关卡文件后需要更新 ScenePath。
 
@@ -44,7 +44,11 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 4. 门的 `NpcTravelHours` 默认 0，表示即时跨门；需要抽象道路耗时才设置游戏小时。NPC 仍会花时间走到门口和从落点走到目标。出发位置使用门下的 UsePosition 标记，未提供时使用门宿主位置；应放在导航可达处。目的地使用 TargetEntry 对应的 Arrival。
 5. 首次导出之后，保存关卡、运行和导出游戏会继续同步自动路线。移动门或目标入口会更新坐标，改名保持身份，复制门获得独立身份，删除门移除它生成的路线。
 
+正式小镇与仓储间已按此流程从空登记表重新生成：2 个关卡、2 个默认地点、3 个对象、1 名世界 NPC、2 个入口和 2 条门路线。旧手工路线已移除。本次清理改变了关卡和地点身份，体验新配置请选择“新游戏”；正常重复导出保持身份稳定。
+
 关卡／默认地点资源保存在世界配置所在目录的 `levels/`、`locations/`；自动路线作为世界配置的内嵌资源保存。重复导出更新原记录；将已有场景另存为新关卡会创建独立关卡记录，避免改掉原关卡的路径。场景尚未保存时，按钮会提示先保存。
+
+文件按场景名命名，例如 `levels/forest_town_level.tres`、`locations/forest_town_level_location.tres`、`generated/forest_town_level_catalog.tres`。同名场景首次导出时使用 `_2`、`_3` 等后缀避免覆盖；后续导出复用原文件。检查器显示“森林小镇 · 关卡”“森林小镇 · 默认地点”“森林小镇 · 世界目录”，路线名称包含起点、终点和门名。稳定 Id 保存在资源内部，不需要记住 GUID。修改显示名称不会改变文件路径或身份。
 
 同方向、同目标入口已有手工路线时，保留它的时长、开放、知识和权限设置，不再生成旁路。`Automatic=false` 的事件控制门不自动生成 NPC 路线，避免绕过任务条件；未设置目标的门会在导出结果中提示并跳过，配置完整后再运行。目标关卡应先导出，目标入口缺失会报错。生成目录和身份仍由编辑器维护。
 
@@ -89,7 +93,7 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 ### 创建可复用对象：只配置一次
 
-1. 在 ObjectTypes 登记类型，例如 `types/storage.tres`。展开 Capabilities，设置库存 InitialAmount、容量 Slots、开放时段等默认参数。相同开／关时间表示全天开放，支持跨午夜。
+1. 创建或复用类型，例如 `types/storage.tres`；导出关卡时会登记场景引用的类型。展开 Capabilities，设置库存 InitialAmount、容量 Slots、开放时段等默认参数。相同开／关时间表示全天开放，支持跨午夜。
 2. 创建以 GameObject3D 为根的 Scene，Components 添加 WorldObjectComponent3D，ObjectType 选择类型。编辑器补齐类型声明的能力组件；保存前也会同步并验证。不再填写 Record、LocalType 或对象 Id。
 3. 填写 DisplayName、ExtraTags、OwnerId；Location 可留空，摆入关卡后继承关卡默认地点。需要特殊初值时，在“能力覆盖”选择类型已有能力，点击“添加所选能力覆盖”，展开 Overrides 修改复制后的资源；覆盖不会改动 Type。
 4. 添加模型与实体碰撞。类型声明 Interaction 时，增加 `InteractionArea` Area3D 和 CollisionShape3D；另加 `UsePosition` Marker3D，作为导航参考，放在交互范围内、实体碰撞外。
@@ -103,7 +107,7 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 - 拖入模板、Ctrl+D 复制、复制整个房间模板，均自动获得独立摆放身份。嵌套 Scene 内的对象按各层摆放键组合，不要求开启 Editable Children。
 - 保存、运行及导出前会同步配置和目录。编辑器监听节点新增、场景与资源保存；没有逐帧扫描项目的烘焙任务，也不需要手动创建、绑定或烘焙按钮。
 - 节点改名、移动坐标、保存后重开、更新模板内容不会重新分配既有摆放键；撤销／重做恢复相同实例的键。节点名、路径、坐标不充当身份。
-- 目录生成使用独立场景快照，保留编辑器已打开 Scene 的组件资源。生成目录位于 `assets/resources/world/generated/<关卡Id>.tres`；这是自动产物，与 Scene 一起提交 Git，不在 Inspector 手动维护。运行时只读目录，不实例化未加载关卡。
+- 目录生成使用独立场景快照，保留编辑器已打开 Scene 的组件资源。导出关卡的生成目录位于世界配置旁的 `generated/<关卡文件名>_catalog.tres`；这是自动产物，与 Scene 一起提交 Git，不在 Inspector 手动维护。运行时只读目录，不实例化未加载关卡。
 - 选择其他类型或修改同一 Type 的能力列表后，编辑器会同步；保存模板或后台标签页时也会补齐／移除现场能力提供者，保留仍适用的组件参数；先删除不属于新类型的 Overrides。模型、碰撞、原生节点及路径仍由模板配置。
 - 单个摆放需要不同名称、所有者、地点或覆盖时，将该实例的 Components 数组与 WorldObjectComponent3D 资源设为独立，再修改实例；保留 ObjectType 共享。只改变状态不需要分离任何配置。
 - 摆放键属于其所在 Scene 的制作层级。把对象移到另一层 Scene 实例内部，或删除后重新拖入，属于新的摆放；不要手改 `_world_placement` 元数据。

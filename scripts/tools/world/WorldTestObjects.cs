@@ -5,6 +5,15 @@ using GameLogic;
 
 internal static class WorldTestObjects
 {
+    public const string TownScene="res://assets/scenes/levels/forest_town_level.tscn";
+    public const string WorkshopScene="res://assets/scenes/levels/world_workshop.tscn";
+    public static WorldLevelDefinition ShippedLevel(WorldDefinition world,string scene)=>world.Levels.Single(level=>level.ScenePath==scene);
+    // Only this test process's cached catalogs change; authored NPCs remain enabled.
+    public static void KeepShippedActorsIdle(WorldDefinition world)
+    {
+        foreach(var level in world.Levels)
+            foreach(var actor in ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath).Actors)actor["running"]=false;
+    }
     public static WorldObjectTypeDefinition StockType(double amount=20)=>new(){Tags=new[]{"storage"},Capabilities=new(){
         new WorldInteractionCapability(),new WorldStockCapability{InitialAmount=amount},new WorldUsageCapacityCapability(),new WorldOpeningHoursCapability{OpenHour=0,CloseHour=0}}};
     public static Component3D[] Components(WorldObjectTypeDefinition type,WorldObjectComponent3D binding=null)

@@ -8,11 +8,16 @@ namespace GameLogic;
 public static class WorldLevelExporter
 {
     public static bool IsExporting {get;private set;}
-    public static void ExportCurrent(WorldLevelContextComponent3D context)
+    public static async void ExportCurrent(WorldLevelContextComponent3D context)
     {
         try
         {
             var editor=EditorInterface.Singleton;
+            // Leave the inspector's pressed signal before replacing its component.
+            // SaveScene opens editor progress tasks, which cannot run from CallDeferred.
+            var tree=editor.GetBaseControl().GetTree();
+            await tree.ToSignal(tree,SceneTree.SignalName.ProcessFrame);
+            if(!GodotObject.IsInstanceValid(context))return;
             var root=editor.GetEditedSceneRoot() as GameObject3D;
             WorldCatalog.Require(root!=null&&root.Components.Contains(context),"请在当前关卡根节点上使用导出按钮。");
             var world=ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath);
@@ -60,10 +65,13 @@ public static class WorldLevelExporter
             string folder=world.ResourcePath.GetBaseDir();
             level.ScenePath=root.SceneFilePath;level.DefaultEntry=entry;level.ExportPortalRoutes=true;
             if(string.IsNullOrWhiteSpace(level.DisplayName))level.DisplayName=root.Name;
+            level.ResourceName=level.DisplayName+" · 关卡";
+            string levelPath=level.ResourcePath.Length>0&&!level.ResourcePath.Contains("::",StringComparison.Ordinal)?level.ResourcePath
+                :AvailablePath(folder+"/levels",root.SceneFilePath.GetFile().GetBaseName());
             if(level.Location==null)
             {
-                level.Location=new(){DisplayName=level.DisplayName};
-                Save(level.Location,folder+"/locations/"+level.Location.Id+".tres");
+                level.Location=new(){DisplayName=level.DisplayName,ResourceName=level.DisplayName+" · 默认地点"};
+                Save(level.Location,AvailablePath(folder+"/locations",levelPath.GetFile().GetBaseName()+"_location"));
             }
             AddLocation(working,level.Location);
             foreach(var binding in WorldModule.Hosts(root).SelectMany(h=>h.Components.OfType<WorldObjectComponent3D>()))
@@ -74,7 +82,7 @@ public static class WorldLevelExporter
             }
             if(!working.Levels.Any(l=>l.Id==level.Id))working.Levels.Add(level);
             working.InitialLevel??=level;
-            Save(level,level.ResourcePath.Length>0&&!level.ResourcePath.Contains("::",StringComparison.Ordinal)?level.ResourcePath:folder+"/levels/"+level.Id+".tres");
+            Save(level,levelPath);
             if(context.Level!=level)
             {
                 // A component inherited from another Scene may still share its Resource instance.
@@ -90,8 +98,10 @@ public static class WorldLevelExporter
             WorldAuthoringCompiler.RefreshEditorCatalog(world);
             var catalog=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath);
             int generated=world.Routes.Count(r=>r.From.Id==level.Id&&r.SourcePortalId.Length>0);
+            int manualRoutes=world.Routes.Count(r=>r.SourcePortalId.Length==0);
             int unconfigured=portals.Count(p=>p.TargetLevel==null),manual=portals.Count(p=>!p.Automatic&&p.TargetLevel!=null);
-            return $"关卡配置已导出：{level.DisplayName} · 入口 {catalog.Entrances.Count} · 对象 {catalog.Entries.Count} · NPC {catalog.Actors.Count} · 自动路线 {generated}。已有手工路线保留。"
+            return $"关卡配置已导出：{level.DisplayName} · 入口 {catalog.Entrances.Count} · 对象 {catalog.Entries.Count} · NPC {catalog.Actors.Count} · 自动路线 {generated}。"
+                +(manualRoutes>0?$" 世界中 {manualRoutes} 条手工路线保留。":"")
                 +(unconfigured>0?$" {unconfigured} 个门尚未配置目标，暂不生成路线。":"")
                 +(manual>0?$" {manual} 个门由事件控制，未自动生成路线，避免绕过事件条件。":"");
         }
@@ -111,6 +121,12 @@ public static class WorldLevelExporter
         WorldCatalog.Require(DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(path.GetBaseDir()))==Error.Ok,"无法创建配置目录："+path);
         WorldCatalog.Require(ResourceSaver.Save(resource,path)==Error.Ok,"配置保存失败："+path);
         resource.TakeOverPath(path);
+    }
+    static string AvailablePath(string folder,string name)
+    {
+        string path=folder+"/"+name+".tres";
+        for(int suffix=2;FileAccess.FileExists(path);suffix++)path=folder+"/"+name+"_"+suffix+".tres";
+        return path;
     }
     internal static Godot.Collections.Array<Godot.Collections.Dictionary> CapturePortals(Node root)
     {
@@ -144,11 +160,12 @@ public static class WorldLevelExporter
             if(world.Routes.Any(r=>r.SourcePortalId.Length==0&&(r.From.Id==level.Id&&r.To.Id==target&&r.ToEntry==entry
                 ||r.Bidirectional&&r.To.Id==level.Id&&r.From.Id==target&&r.FromEntry==entry)))continue;
             var old=world.Routes.SingleOrDefault(r=>r.SourcePortalId==id&&r.From.Id==level.Id);
+            string resourceName=level.DisplayName+" → "+to.DisplayName+" · "+portal["name"].AsString();
             Vector3 departure=portal["position"].AsVector3();double hours=portal["hours"].AsDouble();bool enabled=portal["enabled"].AsBool();
             if(old!=null&&old.To.Id==target&&old.ToEntry==entry&&old.FromEntry==level.DefaultEntry&&old.FromPosition==departure&&old.ToPosition==arrival
-                &&old.TravelHours==hours&&old.Enabled==enabled&&!old.Bidirectional&&old.UseExplicitPositions&&old.DisplayName==portal["name"].AsString())
+                &&old.TravelHours==hours&&old.Enabled==enabled&&!old.Bidirectional&&old.UseExplicitPositions&&old.DisplayName==portal["name"].AsString()&&old.ResourceName==resourceName)
             {routes.Add(old);continue;}
-            routes.Add(new(){Id=old?.Id??"route/"+level.Id+"/"+id,DisplayName=portal["name"].AsString(),SourcePortalId=id,
+            routes.Add(new(){Id=old?.Id??"route/"+level.Id+"/"+id,DisplayName=portal["name"].AsString(),ResourceName=resourceName,SourcePortalId=id,
                 From=level,To=to,FromEntry=level.DefaultEntry,ToEntry=entry,FromPosition=departure,ToPosition=arrival,UseExplicitPositions=true,
                 Bidirectional=false,TravelHours=hours,Enabled=enabled,Public=old?.Public??true,Permission=old?.Permission});
         }

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://c60nrvv1uf412"]
+
+[ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="1_qkxms"]
+[ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_x013a"]
+
+[resource]
+resource_name = "小镇仓储间 · 关卡"
+script = ExtResource("2_x013a")
+ScenePath = "res://assets/scenes/levels/world_workshop.tscn"
+Location = ExtResource("1_qkxms")
+ExportPortalRoutes = true
+Id = "31a903e2d81e45d0af568c59d0097bc8"
+DisplayName = "小镇仓储间"

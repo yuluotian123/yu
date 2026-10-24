@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c48to2pjjyor7"]
 
+[ext_resource type="Resource" uid="uid://c60nrvv1uf412" path="res://assets/resources/world/levels/world_workshop.tres" id="3_kl1ku"]
+[ext_resource type="Resource" uid="uid://tvvnn53j7lvu" path="res://assets/resources/world/levels/forest_town_level.tres" id="10_k335l"]
 [ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="13_8txwa"]
 [ext_resource type="Script" uid="uid://horp2pihr3m3" path="res://scripts/gamelogic/world/definitions/capabilities/WorldCapabilityDefinition.cs" id="14_kl1ku"]
 [ext_resource type="Script" uid="uid://c3yr26n3rmi78" path="res://scripts/gamelogic/world/definitions/capabilities/WorldStockCapability.cs" id="15_k335l"]
@@ -18,16 +20,14 @@
 [ext_resource type="Script" uid="uid://2wsybt7iy6nd" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="context"]
 [ext_resource type="PackedScene" uid="uid://b66h2k1q55477" path="res://assets/scenes/ui/runtime_gm.tscn" id="gm"]
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="host"]
-[ext_resource type="Resource" uid="uid://c1ll4rxbxvfy6" path="res://assets/resources/world/levels/workshop.tres" id="level"]
+[ext_resource type="NavigationMesh" uid="uid://clj3emlwodv4a" path="res://assets/resources/world/workshop_navigation.tres" id="navigation"]
 [ext_resource type="Script" uid="uid://ds7blco3fe604" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="spawn"]
 [ext_resource type="PackedScene" path="res://assets/scenes/world/storage.tscn" id="storage_scene"]
-[ext_resource type="Resource" uid="uid://dsbub5bo15ktr" path="res://assets/resources/world/levels/town.tres" id="town"]
 [ext_resource type="Script" uid="uid://dym3osxbqgwj8" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="transition"]
-[ext_resource type="NavigationMesh" path="res://assets/resources/world/workshop_navigation.tres" id="navigation"]
 
-[sub_resource type="Resource" id="context"]
+[sub_resource type="Resource" id="Resource_ve1bi"]
 script = ExtResource("context")
-Level = ExtResource("level")
+Level = ExtResource("3_kl1ku")
 RequireNavigation = true
 
 [sub_resource type="Resource" id="ai"]
@@ -63,7 +63,7 @@ Profile = ExtResource("camera_profile")
 
 [sub_resource type="Resource" id="transition"]
 script = ExtResource("transition")
-TargetLevel = ExtResource("town")
+TargetLevel = ExtResource("10_k335l")
 
 [sub_resource type="BoxShape3D" id="portal_shape"]
 size = Vector3(1.2, 2, 1.2)
@@ -78,28 +78,28 @@ ObjectType = ExtResource("13_8txwa")
 DisplayName = "仓储间储物箱"
 Overrides = Array[ExtResource("14_kl1ku")]([SubResource("stock_override")])
 
-[sub_resource type="Resource" id="Resource_gi7gi"]
-script = ExtResource("17_gi7gi")
-
 [sub_resource type="Resource" id="Resource_fsks3"]
-script = ExtResource("18_fsks3")
+script = ExtResource("17_gi7gi")
 
 [sub_resource type="Resource" id="Resource_85it7"]
-script = ExtResource("19_85it7")
-
-[sub_resource type="Resource" id="Resource_ofgid"]
-script = ExtResource("20_ofgid")
-
-[sub_resource type="Resource" id="Resource_q4e3v"]
-script = ExtResource("17_gi7gi")
-
-[sub_resource type="Resource" id="Resource_7qe0b"]
 script = ExtResource("18_fsks3")
 
-[sub_resource type="Resource" id="Resource_401se"]
+[sub_resource type="Resource" id="Resource_ofgid"]
 script = ExtResource("19_85it7")
 
+[sub_resource type="Resource" id="Resource_q4e3v"]
+script = ExtResource("20_ofgid")
+
+[sub_resource type="Resource" id="Resource_7qe0b"]
+script = ExtResource("17_gi7gi")
+
+[sub_resource type="Resource" id="Resource_401se"]
+script = ExtResource("18_fsks3")
+
 [sub_resource type="Resource" id="Resource_03cug"]
+script = ExtResource("19_85it7")
+
+[sub_resource type="Resource" id="Resource_nr050"]
 script = ExtResource("20_ofgid")
 
 [sub_resource type="Resource" id="bottle_binding"]
@@ -108,21 +108,21 @@ ObjectType = ExtResource("18_2wm8d")
 DisplayName = "水瓶"
 ExtraTags = PackedStringArray("drinking_water")
 
-[sub_resource type="Resource" id="Resource_nr050"]
+[sub_resource type="Resource" id="Resource_0h7eh"]
 script = ExtResource("23_q4e3v")
 
-[sub_resource type="Resource" id="Resource_0h7eh"]
+[sub_resource type="Resource" id="Resource_dpbfg"]
 script = ExtResource("17_gi7gi")
 
 [node name="WorldWorkshop" type="Node3D" unique_id=1861200180 groups=["gameplay_level", "workshop_navigation_source"]]
 script = ExtResource("host")
-Components = Array[ExtResource("component")]([SubResource("context")])
+Components = Array[ExtResource("component")]([SubResource("Resource_ve1bi")])
 
 [node name="World" type="Node3D" parent="." unique_id=648546724]
 script = ExtResource("host")
 Components = Array[ExtResource("component")]([SubResource("ai")])
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="World"]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=607048453]
 navigation_mesh = ExtResource("navigation")
 
 [node name="EnvironmentRig" type="Node3D" parent="." unique_id=1341997271]
@@ -165,6 +165,7 @@ fov = 40.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 0)
 script = ExtResource("host")
 Components = Array[ExtResource("component")]([SubResource("transition")])
+metadata/_world_placement = "f7f5410fafa14b418a392e25a658edb1"
 
 [node name="Area3D" type="Area3D" parent="TownPortal" unique_id=1063233909]
 collision_layer = 0
@@ -182,15 +183,15 @@ font_size = 40
 
 [node name="Storage" parent="." unique_id=490928955 instance=ExtResource("storage_scene")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("Resource_gi7gi"), SubResource("Resource_fsks3"), SubResource("Resource_85it7"), SubResource("Resource_ofgid")])
+Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("Resource_fsks3"), SubResource("Resource_85it7"), SubResource("Resource_ofgid"), SubResource("Resource_q4e3v")])
 metadata/_world_placement = "4b208b24b610436cbc5b418b7cc0c455"
 
 [node name="StorageCopy" parent="." unique_id=810246106 instance=ExtResource("storage_scene")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2)
-Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("Resource_q4e3v"), SubResource("Resource_7qe0b"), SubResource("Resource_401se"), SubResource("Resource_03cug")])
+Components = Array[ExtResource("component")]([SubResource("binding"), SubResource("Resource_7qe0b"), SubResource("Resource_401se"), SubResource("Resource_03cug"), SubResource("Resource_nr050")])
 metadata/_world_placement = "03b5672e717f455a9e7ede84e5a10b04"
 
 [node name="Bottle" parent="." unique_id=769037124 instance=ExtResource("bottle_scene")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
-Components = Array[ExtResource("component")]([SubResource("bottle_binding"), SubResource("Resource_nr050"), SubResource("Resource_0h7eh")])
+Components = Array[ExtResource("component")]([SubResource("bottle_binding"), SubResource("Resource_0h7eh"), SubResource("Resource_dpbfg")])
 metadata/_world_placement = "ea0383a6f51c4d1bb92086dcac699d2c"

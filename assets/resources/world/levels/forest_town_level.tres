@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://tvvnn53j7lvu"]
+
+[ext_resource type="Resource" uid="uid://xec14ets2y0y" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="1_t2bqu"]
+[ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_psipy"]
+
+[resource]
+resource_name = "森林小镇 · 关卡"
+script = ExtResource("2_psipy")
+ScenePath = "res://assets/scenes/levels/forest_town_level.tscn"
+Location = ExtResource("1_t2bqu")
+ExportPortalRoutes = true
+Id = "209a74242d3e4c8ba415cd6ced08beea"
+DisplayName = "森林小镇"

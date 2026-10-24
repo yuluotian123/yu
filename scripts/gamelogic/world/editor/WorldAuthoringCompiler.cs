@@ -104,14 +104,14 @@ public static class WorldAuthoringCompiler
         if(ResourceLoader.Exists(level.CatalogPath))
         {
             var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
-            if(old?.SourceSignature==signature&&old.Version==1&&old.LevelId==level.Id)return;
+            if(old?.SourceSignature==signature&&old.Version==1&&old.LevelId==level.Id&&old.ResourceName==level.DisplayName+" · 世界目录"&&ReadableEntries(old,level))return;
         }
         bool hasWorldNodes=Relevant(level.ScenePath,relevant);
         Node root=hasWorldNodes?ResourceLoader.Load<PackedScene>(level.ScenePath,cacheMode:ResourceLoader.CacheMode.Ignore)?.Instantiate(PackedScene.GenEditState.Instance):null;
         WorldCatalog.Require(!hasWorldNodes||root!=null,"关卡无法实例化，保留已有世界目录："+level.ScenePath);
         try
         {
-            var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature};
+            var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature,ResourceName=level.DisplayName+" · 世界目录"};
             if(root!=null&&level.ExportPortalRoutes)catalog.Portals=WorldLevelExporter.CapturePortals(root);
             if(root!=null)foreach(var host in WorldModule.Hosts(root))foreach(var spawn in host.Components.OfType<WorldSpawnPointComponent3D>())
             {
@@ -141,12 +141,25 @@ public static class WorldAuthoringCompiler
                 float height=shape switch {CapsuleShape3D capsule=>capsule.Height*.5f,BoxShape3D box=>box.Size.Y*.5f,SphereShape3D sphere=>sphere.Radius,_=>.36f};
                 using var entry=new WorldActorEntry(host.PersistentId,scene,level.Id,position,character.Profile,ai.Graph,speed,actor.DetailedDistance,actor.AbstractDistance,actor.MinimumResidencySeconds){ParameterOverrides=new(character.ParameterOverrides),HalfHeight=height,Running=ai.Running}.Encode();catalog.Actors.Add(entry);
             }
+            WorldCatalog.Require(ReadableEntries(catalog,level),"场景引用尚未解析，保留已有世界目录："+level.DisplayName);
             DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(level.CatalogPath.GetBaseDir()));
             WorldCatalog.Require(ResourceSaver.Save(catalog,level.CatalogPath)==Error.Ok,"自动世界目录保存失败："+level.DisplayName);
             // Replace an existing cached resource so runtime and inspectors immediately see the new directory.
             _=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
         }
         finally{root?.Free();}
+    }
+    // Missing dependencies can be deserialized as plain Resource placeholders by the editor.
+    // Such a cache must be rebuilt even when the source signature is unchanged.
+    static bool ReadableEntries(WorldLevelCatalog catalog,WorldLevelDefinition level)
+    {
+        try
+        {
+            foreach(var entry in catalog.Entries)_=WorldCatalogEntry.Decode(entry,level);
+            foreach(var actor in catalog.Actors)_=WorldActorEntry.Decode(actor);
+            return true;
+        }
+        catch(Exception error)when(error is InvalidCastException or KeyNotFoundException){return false;}
     }
     static IEnumerable<string> Dependencies(string path)=>ResourceLoader.GetDependencies(path).Select(d=>d.Split("::").Last()).Where(d=>d.StartsWith("res://",StringComparison.Ordinal));
     static string Signature(string path,Dictionary<string,bool> relevant)

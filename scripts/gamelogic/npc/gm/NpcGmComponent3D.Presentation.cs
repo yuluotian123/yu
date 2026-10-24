@@ -126,13 +126,15 @@ public partial class NpcGmComponent3D
     string Points(AiAgentComponent3D a)
     {
         if (World == null) return "无 NPC 世界。";
-        var text = new StringBuilder("开放、容量、库存、归属和可达性均会影响计划；开放不代表该 NPC 有权使用。\n\n");
+        var text = new StringBuilder("开放、容量、库存、液体余量、归属和可达性均会影响计划；开放不代表该 NPC 有权使用。\n\n");
         foreach (var p in World.Points.Values.OrderBy(p => p.PointId, StringComparer.Ordinal))
         {
             double distance = 0;
             bool reachable = a.Navigation?.TryEstimateBetween(a.Owner.GlobalPosition, p.UsePosition, out distance) == true;
             var schedule=p.Owner.GetComponent<WorldOpeningHoursComponent3D>();var stock=p.Owner.GetComponent<WorldStockComponent3D>();var capacity=p.Owner.GetComponent<WorldUsageCapacityComponent3D>();
             text.AppendLine($"{(Point == p ? "▶ " : "")}{Or(p.DisplayName, p.PointId)} [{p.PointId}]\n  {(p.Object.IsAvailable ? "可用" : "不可用")} · {(schedule==null?"无开放时段能力":schedule.ManualOpen.HasValue?"手动覆盖":"按开放时段")} · 容量 {(capacity==null?"无此能力":capacity.Reservations+"/"+capacity.Slots)} · 库存 {(stock==null?"无此能力":stock.Amount.ToString("0.##"))}");
+            if(p.Owner.GetComponent<WorldLiquidComponent3D>() is {} liquid)
+                text.AppendLine($"  液体 {Or(liquid.Liquid,"空")} · 余量 {liquid.Volume:0.##}/{liquid.VolumeLimit:0.##} · 能力{(liquid.IsActive?"启用":"停用")}");
             text.AppendLine($"  此 NPC：{(p.Object.CanUse(a.ActorId) ? "有权使用" : "不可使用")} · {(capacity?.Available(a.ActorId)==true ? "可预订" : "不可预订")} · {(a.Navigation?.MapReady != true ? "导航未就绪" : reachable ? $"可达 {distance:0.0}m" : "不可达")}");
             text.AppendLine($"  {(a.KnownPoint(p.PointId) ? "已知" : "未知")} · {(a.PerceivedPoint(p.PointId) ? "感知到" : "未感知")} · 标签 {string.Join(", ", p.Tags)}\n");
         }

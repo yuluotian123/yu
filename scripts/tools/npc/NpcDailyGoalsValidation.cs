@@ -83,6 +83,28 @@ public partial class NpcDailyGoalsValidation : Node
             _world.Population.Clock.Paused=true;
             Check(!actor.IsProxy&&actor.Agent.Read("private.cargo").Number==2,"The visible resident also navigates and collects through its authored Action graph");
             Check(Math.Abs(crates.Sum(c=>_world.ObjectState(c.Id).Capability<WorldStockState>("stock").Amount)-(stock-4))<1e-6,"The visible collection consumes exactly two additional stock units");
+            // Player E and the NPC consume the same bottle. Exhaust it through the public entry.
+            var waterPoint=_world.ResolvePoint(water.Id);
+            var waterState=_world.ObjectState(water.Id).Capability<WorldLiquidState>("liquid");
+            var playerPosition=_world.Player.GlobalPosition;
+            _world.Player.GlobalPosition=waterPoint.UsePosition;
+            var playerUse=WorldInteraction.Execute(_world.Player,waterPoint,"pour_liquid");
+            _world.Player.GlobalPosition=playerPosition;
+            Check(playerUse.Success&&Math.Abs(waterState.Volume)<1e-6,"Player interaction consumes the last serving from the shared bottle: "+playerUse.Message);
+            actor.Agent.State.Apply(new[]{new System.Collections.Generic.KeyValuePair<string,CharacterValue>("needs.thirst.value",CharacterValue.Numeric(.8))});
+            actor.Agent.RequestReplan();_world.Population.Clock.Paused=false;
+            for(int n=0;n<180&&actor.Agent.LastFailure!="NoPlan";n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+            _world.Population.Clock.Paused=true;
+            Check(actor.Agent.LastFailure=="NoPlan"&&actor.Agent.Read("needs.thirst.value").Number>.3,"An empty bottle makes the drink Goal infeasible without granting thirst relief");
+            var drinkGoal=actor.Agent.Program.Goals.Single(g=>g.Name=="解渴");
+            double cooldown=actor.Agent.GoalCooldown(drinkGoal.Id);
+            Check(cooldown>0&&cooldown<=actor.Agent.Program.Policy.Retry&&actor.Agent.RetryRemaining<=actor.Agent.Program.Policy.Retry,$"Cooldown diagnostics use the actor simulation clock (goal {cooldown:0.000}s, retry {actor.Agent.RetryRemaining:0.000}s)");
+            Check(waterPoint.Owner.GetComponent<WorldLiquidComponent3D>().TryFill("water",.25),"The shared bottle can be refilled through its liquid capability");
+            _world.Population.Clock.Paused=false;
+            for(int n=0;n<1200&&actor.Agent.Read("needs.thirst.value").Number>.3;n++)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
+            _world.Population.Clock.Paused=true;
+            Check(actor.Agent.Read("needs.thirst.value").Number<.3&&Math.Abs(waterState.Volume)<1e-6,"After refill the NPC retries automatically and consumes exactly one serving");
+            Check(actor.Agent.GoalCooldown(drinkGoal.Id)==0&&actor.Agent.RetryRemaining==0,"Expired retry and Goal cooldown diagnostics return zero");
             Check(await _world.SwitchAsync(definition.InitialLevel.Id),"The player can return to the formal town");
             Check(!_world.CurrentContext.Owner.FindChildren("*","",true,false).OfType<GameObject3D>().Any(h=>h.PersistentId==entry.Id),"Returning to the origin does not respawn the resident");
             _world.Close();Check(await _world.OpenAsync(this,definition,true,"daily-complete"),"The real-world save resumes");_world.Population.Clock.Paused=true;

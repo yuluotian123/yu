@@ -267,6 +267,8 @@ SuccessConditions 在 Results 提交前检查，所以不要把“口渴已经�
 6. 通过现有门进入仓储间。居民在当前位置生成；靠近时按同一图处理后续行为。返回小镇不会从原摆放位置再生成一名居民。
 7. 在 F8 的角色数据页把口渴提高到 0.8，点“应用并重规划”，可以再次观察现场喝水。瓶子每次消耗 0.25，初始 0.75 只够三次，不会自动补水。
 
+玩家按 E 执行瓶子的“倒出液体”，也从同一个世界对象扣除 0.25；这不会替 NPC 完成解渴。F8 → NPC → 交互点可查看液体余量。少于 0.25 时，喝水行动不满足前置条件，解渴会显示找不到合法计划并按策略间隔重试；手动重规划不会补水。补水逻辑可调用该对象 `WorldLiquidComponent3D.TryFill("water", amount)`，补足后 NPC 会自动重试。修改类型的 InitialVolume 只影响新世界的初始状态，继续旧存档会保留已经消耗的余量。
+
 | 现象 | 先检查 |
 | --- | --- |
 | 没有目标 | 正式 Resident.Graph 是否指向 daily_goals.tres，Goal 是否连接根节点 |
@@ -275,7 +277,7 @@ SuccessConditions 在 Results 提交前检查，所以不要把“口渴已经�
 | 能看到对象但数量 Unknown | 知识与当前动态读取权限不同；本例使用工坊范围的权威读取 |
 | 到了还不交互 | at 范围、区域高度、UsePosition、容量和最终余量 |
 | 喝水后数值不变 | 是否配置 Results；检查交互提交是否失败 |
-| GOAP 说无解 | 是否漏配角色 Predictions，移动是否预测 self.location |
+| GOAP 说无解 | 是否漏配角色 Predictions，移动是否预测 self.location；饮水瓶余量是否至少 0.25（玩家和 NPC 共用） |
 | 出生初值与文档不同 | 是否继续了旧存档；旧状态优先于 Profile 初值 |
 
 ## 12. 自动验证
@@ -287,6 +289,6 @@ dotnet build yu.csproj --no-restore
 & '<本项目 Godot Mono 路径>' --headless --path . --rendering-method gl_compatibility --audio-driver Dummy --fixed-fps 60 res://scripts/tools/npc/daily_goals_validation.tscn
 ```
 
-成功标记为 `NPC_DAILY_GOALS_OK`。测试还检查居民现场走到小镇出发点、恢复现场时不在场景原点产生临时碰撞，以及现场再次取货。headless 检查验证行为与场景接线；DDGI 需要正常 Forward+ Vulkan 渲染环境，不能用 headless 的 DDGI 提示判断正式画面是否正常。
+成功标记为 `NPC_DAILY_GOALS_OK`。测试还检查居民现场走到小镇出发点、恢复现场时不在场景原点产生临时碰撞、现场再次取货，以及玩家耗尽共用水瓶后解渴无解、冷却倒计时和补水后自动恢复。headless 检查验证行为与场景接线；DDGI 需要正常 Forward+ Vulkan 渲染环境，不能用 headless 的 DDGI 提示判断正式画面是否正常。
 
-2026-10-24 已通过：本例 25 项、选择器绑定 100 项、图参数 47 项、世界模拟 44 项，以及名册逐帧预算压力测试。另在正常 Vulkan 模式检查正式小镇画面，DDGI 状态为 running。
+2026-10-24 已通过：本例 31 项（包含共用水瓶耗尽与补水恢复）、选择器绑定 100 项、图参数 47 项、世界模拟 44 项，以及名册逐帧预算压力测试。另在正常 Vulkan 模式检查正式小镇画面，DDGI 状态为 running。

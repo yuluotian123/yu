@@ -10,8 +10,8 @@ public partial class AiAgentComponent3D
     public IReadOnlyList<string> QueuedActions => _plan.Select(a => a.Action.Name).ToArray();
     public double ActionElapsed => _actionElapsed;
     public double ActionTimeout => _current?.Action.Timeout ?? 0;
-    public double RetryRemaining => Math.Max(0, _retryAt - (World?.RuntimeSeconds ?? 0));
-    public double GoalCooldown(string id) => Math.Max(0, _goalBlockedUntil.GetValueOrDefault(id) - (World?.RuntimeSeconds ?? 0));
+    public double RetryRemaining => Math.Max(0, _retryAt - Now);
+    public double GoalCooldown(string id) => Math.Max(0, _goalBlockedUntil.GetValueOrDefault(id) - Now);
     public string RuntimeStatus => Program == null || State == null ? "初始化失败"
         : !IsActive ? "组件停用" : !Running ? "AI 已暂停" : World == null ? "缺少 NPC 世界"
         : World.IsActive == false ? "NPC 世界已停用" : Owner.GetTree().Paused ? "游戏已暂停"

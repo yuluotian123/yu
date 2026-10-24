@@ -7,7 +7,7 @@
 相关示例：
 
 - [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
-- [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)
+- [NPC 图配置与运行指南](../doc/NPC_AI_GUIDE.md)
 - [玩家场景](../assets/scenes/player.tscn)
 - [NPC 白盒场景](../assets/scenes/levels/whitebox_test.tscn)
 - [Player 场景内联 CharacterGraph](../assets/scenes/player.tscn)
@@ -199,7 +199,7 @@ CharacterGraph 不包含 Locomotion。二者都“是图”，但职责不同：
 | Animation | 是 | 是 |
 | Persistence | 是 | 是 |
 
-NPC 的行动能力调用与玩家图相同的 Movement 和 AbilitySystem API，决策配置见 [NPC 图指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)。
+NPC 的行动能力调用与玩家图相同的 Movement 和 AbilitySystem API，决策配置见 [NPC 图指南](../doc/NPC_AI_GUIDE.md)。
 
 ## 8. 更新顺序
 

@@ -27,6 +27,6 @@ idle 为 24 帧、8 fps、3 秒循环；行走为 16 帧、12 fps、约 1.333 �
 
 逐帧对照脸、头发、上身、双手、挎包和腿脚，并在深浅底检查边缘。待机自动报告 和 行走自动报告 的数值错误均为 0，但仅检查保留下来的内部 RGB；没有独立的全身前景遮罩，因此保留 needs_visual_review 状态，不能据此宣称没有任何误抠。风格、造型与轮廓由目视核对，不由“像素与视频一致”替代。目视记录 与 source/review_v6/ 保留完整帧图、局部原视频/透明结果对照。
 
-原生导出脚本为 scripts/tools/art/prepare_gray_green_resident.py（v6 输入使用 --chroma，输出 source/keyframe_native_v6.png）和 export_gray_green_animations.py。旧版行走导出器、v2 至 v5 中间稿和旧视频已清理；保留第一版身份参考、当前 v6 源视频、工作流及逐帧证据。自动审核使用角色动画 skill 的 audit_sprite_frames.py。Godot 中的导入、动作切换与实际场景检查命令见 [NPC 图配置指南](../../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md#初版内容与验证)。
+原生导出脚本为 scripts/tools/art/prepare_gray_green_resident.py（v6 输入使用 --chroma，输出 source/keyframe_native_v6.png）和 export_gray_green_animations.py。旧版行走导出器、v2 至 v5 中间稿和旧视频已清理；保留第一版身份参考、当前 v6 源视频、工作流及逐帧证据。自动审核使用角色动画 skill 的 audit_sprite_frames.py。Godot 中的导入、动作切换与实际场景检查命令见 [NPC 图配置指南](../../doc/NPC_AI_GUIDE.md#白盒关卡)。
 
 当前角色直接位于 `assets/scenes/spacelevel.tscn` 根节点 `Resident`，统一配置入口是 `AiAgentComponent3D.Graph`。

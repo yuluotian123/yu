@@ -28,10 +28,12 @@ CharacterGraph 是 `FlowGraphAsset` 的业务扩展，不属于 HFSM。AI 不使
 
 ## 文档
 
+NPC、AI 与 World 的统一入口：[配置、运行与架构手册](../../doc/README.md)。
+
 - [角色系统](../../docs/CHARACTER_SYSTEM.md)
-- [NPC 图配置与运行指南](ai/NPC_GRAPH_GUIDE.md)
-- [世界框架、关卡切换与 NPC 世界引用实施计划](world/WORLD_FRAMEWORK_PLAN.md)
-- [世界配置与关卡切换指南](world/README.md)
+- [NPC 图配置与运行指南](../../doc/NPC_AI_GUIDE.md)
+- [NPC、AI 与世界架构和后续工作](../../doc/ARCHITECTURE_AND_ROADMAP.md)
+- [世界配置与关卡切换指南](../../doc/WORLD_GUIDE.md)
 - [Ability](abilities/README.md)
 - [武器与切换](weapons/README.md)
 - [背包与装备](inventory/README.md)

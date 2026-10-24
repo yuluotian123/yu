@@ -4,7 +4,7 @@
 
 本文以 [player.tscn](../assets/scenes/player.tscn) 为例，说明移动、跳跃、武器普攻和冲刺如何从输入进入 CharacterGraph，再交给 Movement、武器装备或 AbilitySystem。
 
-总览见 [角色系统](CHARACTER_SYSTEM.md)，AI 对照见 [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)。
+总览见 [角色系统](CHARACTER_SYSTEM.md)，AI 对照见 [NPC 图配置与运行指南](../doc/NPC_AI_GUIDE.md)。
 
 ## 场景组件
 

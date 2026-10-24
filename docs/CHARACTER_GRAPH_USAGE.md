@@ -29,7 +29,7 @@ CharacterGraph --------------------> AbilitySystem
 
 CharacterGraph 不负责物理和 Locomotion 状态；它提交意图。Movement 计算最终结果，Animation 再读取结果并选择动画。AI 可以直接使用 Movement 和 Ability API，不需要挂载 CharacterGraph。
 
-NPC 通过 Goal、Plan、Action 和选择器配置决策，执行流程见 [NPC 图指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)；世界会话与关卡切换见[世界框架实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)。
+NPC 通过 Goal、Plan、Action 和选择器配置决策，执行流程见 [NPC 图指南](../doc/NPC_AI_GUIDE.md)；世界会话与关卡切换见[NPC、AI 与世界架构](../doc/ARCHITECTURE_AND_ROADMAP.md)。
 
 ## 创建玩家角色
 

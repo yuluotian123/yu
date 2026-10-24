@@ -21,7 +21,7 @@
 4. 通过 `ModuleSystem.GetModule<T>()` 懒加载核心模块。
 5. 初始化 `IProcedureModule`，注册 `PreloadProcedure`、`MainMenuProcedure`、`LevelProcedure`。
 6. 从 `MainMenuProcedure` 开始进入游戏流程。
-7. 新游戏或继续游戏进入 `PreloadProcedure`，调用 `IWorldModule.OpenAsync`；世界会话创建唯一玩家，按默认配置或存档选择关卡。关卡切换和返回菜单统一经过世界服务，配置见 [世界指南](../scripts/gamelogic/world/README.md)。
+7. 新游戏或继续游戏进入 `PreloadProcedure`，调用 `IWorldModule.OpenAsync`；世界会话创建唯一玩家，按默认配置或存档选择关卡。关卡切换和返回菜单统一经过世界服务，配置见 [世界指南](../doc/WORLD_GUIDE.md)。
 
 每帧运行：
 
@@ -214,7 +214,7 @@ HFSM 继续用于 `CharacterAnimationComponent3D` 内部的 LocomotionGraph，�
 - Goal 选择业务目标，Plan 手动限定可用 Action，GOAP 搜索行动组合。
 - 目标选择器通过命名端口连接 Action 输入，同一节点在本次计划共享目标。
 - Flow 能力调用导航、Movement、Animation 和可选 AbilitySystem，按生命周期执行与取消。
-- 当前世界组件只处理已加载场景；世界会话、关卡切换和跨关卡引用见[独立实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)。
+- WorldActor 角色接入跨关卡旅行、活动上下文和离屏事件模拟；世界与角色配置见 [统一文档入口](../doc/README.md)。
 
 推荐约定：
 
@@ -294,8 +294,8 @@ dotnet build yu.csproj
 
 - [角色系统](CHARACTER_SYSTEM.md)
 - [玩家角色示例](PLAYER_CHARACTER_EXAMPLE.md)
-- [NPC 图配置与运行指南](../scripts/gamelogic/ai/NPC_GRAPH_GUIDE.md)
-- [世界框架实施计划](../scripts/gamelogic/world/WORLD_FRAMEWORK_PLAN.md)
+- [NPC 图配置与运行指南](../doc/NPC_AI_GUIDE.md)
+- [NPC、AI 与世界架构](../doc/ARCHITECTURE_AND_ROADMAP.md)
 - [GraphPlugin](../addons/GraphPlugin/README.md)
 - [GraphPlugin 详细文档](../addons/GraphPlugin/docs/README.md)
 - [ResourceModule](../scripts/framework/resource/ResourceModule.md)

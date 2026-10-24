@@ -221,6 +221,7 @@ compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource(
 
 [sub_resource type="Resource" id="camera_controller"]
 script = ExtResource("22_6txhy")
+FramingOriginPath = NodePath("../CameraFramingTarget")
 Profile = ExtResource("21_i4cks")
 
 [sub_resource type="StandardMaterial3D" id="material_Ground"]
@@ -431,12 +432,11 @@ collision_mask = 0
 shape = SubResource("shape_Ground")
 
 [node name="EntryDefault" type="Node3D" parent="." unique_id=1339547343]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 3)
 script = ExtResource("1_ueglv")
 Components = Array[ExtResource("2_jbaxf")]([SubResource("world_spawn")])
 
 [node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1050733781]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.55, 4)
 
 [node name="WorkshopPortal" type="Node3D" parent="." unique_id=1881525]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 3)

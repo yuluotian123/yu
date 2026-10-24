@@ -32,6 +32,7 @@ public partial class WorldProductionValidation : Node
             Require(await world.OpenAsync(this,definition,false),world.LastError);
             Require(world.CurrentLevelId==_townId&&world.Player?.PersistentId=="player","Default world must open the town with one player");
             await Frames(3);ulong player=world.Player.GetInstanceId();
+            CheckCamera(world);
             // Arrival protection uses wall time, independently of simulated game speed.
             while(world.ArrivalBlocked)await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);
             world.Player.GlobalPosition=world.CurrentContext.Owner.GetNode<Node3D>("WorkshopPortal").GlobalPosition;
@@ -40,11 +41,13 @@ public partial class WorldProductionValidation : Node
             Require(world.CurrentLevelId==_workshopId&&!world.IsSwitching,"Automatic town portal must switch the real physics player: "+world.LastError+
                 $" level={world.CurrentLevelId}, switching={world.IsSwitching}, blocked={world.ArrivalBlocked}, position={world.Player.GlobalPosition}, portal={world.CurrentContext.Owner.GetNodeOrNull<GameObject3D>("WorkshopPortal")?.InitializationError}");
             Require(world.Player.GetInstanceId()==player,"Actual player identity must survive the transition");
+            CheckCamera(world);
             var point=world.ResolvePoint(WorldTestObjects.ShippedId(world,"仓储间储物箱"));Require(point!=null,"Workshop object must register");
             Require(point.Owner.GetComponent<WorldStockComponent3D>().Amount==50,"Shipped stock override must take precedence over the type default");
             var bottle=world.ResolveObject(WorldTestObjects.ShippedId(world,"水瓶"));Require(bottle!=null&&world.ResolvePoint(WorldTestObjects.ShippedId(world,"水瓶"))!=null,"Interactive bottle must register its configured operations");
             Require(bottle.Owner.GetComponent<WorldLiquidComponent3D>().TryConsume(.25),"Shipped bottle should provide liquid contents");
             point.Owner.GetComponent<WorldOpeningHoursComponent3D>().SetOpen(false);await Frames(3);
+            world.Player.GlobalPosition+=new Vector3(-1,0,-1);world.Player.GetComponent<CharacterMovementComponent3D>().SyncBodyToOwner();
             ModuleSystem.GetModule<ISaveModule>().Save("production");
             Require(await world.CurrentContext.Owner.GetNode<GameObject3D>("TownPortal").GetComponent<WorldTransitionComponent3D>().Activate(),world.LastError);
             Require(await world.SwitchAsync(_workshopId),world.LastError);
@@ -53,14 +56,40 @@ public partial class WorldProductionValidation : Node
             world.Close();Require(await world.OpenAsync(this,definition,true,"production"),world.LastError);
             Require(world.CurrentLevelId==_workshopId&&world.ResolveObject(WorldTestObjects.ShippedId(world,"仓储间储物箱")).Owner.GetComponent<WorldOpeningHoursComponent3D>().ManualOpen==false,"Shipped save must resume the workshop");
             Require(world.ResolveObject(WorldTestObjects.ShippedId(world,"水瓶")).Owner.GetComponent<WorldLiquidComponent3D>().Volume==.5,"Continue must restore the bottle's own capability state");
+            CheckCamera(world);
             Require(WorldModule.Hosts(world.CurrentContext.Owner).All(h=>h.InitializationError.Length==0),"No shipped host initialization errors");
             GD.Print($"WORLD_PRODUCTION_OK: town -> workshop -> town -> workshop -> saved workshop; last_transition_ms={world.LastTransitionMilliseconds:0.0}");
-            world.Close();await MenuFlow();_driving=false;ModuleSystem.Shutdown();GetTree().Quit();
+            world.Close();await StandaloneCamera(world);await MenuFlow();_driving=false;ModuleSystem.Shutdown();GetTree().Quit();
         }
         catch(Exception error){GD.PushError(error.ToString());_driving=false;ModuleSystem.Shutdown();GetTree().Quit(1);}
     }
     async Task Until(Func<bool> condition,string message)
     {for(int n=0;n<600;n++){if(condition())return;await ToSignal(GetTree(),SceneTree.SignalName.ProcessFrame);}throw new InvalidOperationException(message);}
+    static void CheckCamera(WorldModule world)
+    {
+        var source=ResourceLoader.Load<PackedScene>(world.Catalog.Levels[world.CurrentLevelId].ScenePath).Instantiate<GameObject3D>();
+        Vector3 offset;
+        try
+        {
+            var rig=source.GetNode<Node3D>("CameraRig");
+            offset=rig.Transform*rig.GetNode<Camera3D>("Camera3D").Position-source.GetNode<Node3D>("CameraFramingTarget").Position;
+        }
+        finally{source.Free();}
+        var camera=ModuleSystem.GetModule<ICameraModule>();
+        Require(camera.IsActive&&camera.FollowTarget==world.Player,"The level camera must bind the live player");
+        var actual=camera.Camera.GlobalPosition-world.Player.GlobalPosition;
+        var profile=camera.Rig.GetComponent<SceneCameraComponent3D>().Profile;
+        float tolerance=profile.DeadZone.Length()*.5f+profile.LookAheadDistance+profile.VerticalVelocityLookDistance+.1f;
+        Require(actual.DistanceTo(offset)<tolerance,$"The camera must preserve its framing after spawning or restoring elsewhere: expected offset={offset}, actual={actual}");
+        GD.Print("WORLD_CAMERA_OK: "+world.CurrentLevelId);
+    }
+    async Task StandaloneCamera(WorldModule world)
+    {
+        var level=ResourceLoader.Load<PackedScene>(WorldTestObjects.TownScene).Instantiate<GameObject3D>();AddChild(level);
+        await Until(()=>world.IsOpen&&world.Player!=null&&ModuleSystem.GetModule<ICameraModule>().IsActive,"Standalone level did not bind its camera");
+        await Frames(3);CheckCamera(world);world.Close();level.Free();
+        GD.Print("WORLD_STANDALONE_CAMERA_OK: F6 scene follows the authored spawn");
+    }
     async Task MenuFlow()
     {
         var main=ResourceLoader.Load<PackedScene>("res://assets/scenes/main.tscn").Instantiate<RootModule>();_driving=false;GetTree().Root.AddChild(main);

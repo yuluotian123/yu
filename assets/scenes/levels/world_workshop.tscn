@@ -58,7 +58,7 @@ script = ExtResource("spawn")
 
 [sub_resource type="Resource" id="camera"]
 script = ExtResource("camera")
-FramingOriginPath = NodePath("../EntryDefault/Arrival")
+FramingOriginPath = NodePath("../CameraFramingTarget")
 Profile = ExtResource("camera_profile")
 
 [sub_resource type="Resource" id="transition"]
@@ -150,6 +150,9 @@ Components = Array[ExtResource("component")]([SubResource("spawn")])
 
 [node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1911723273]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+
+[node name="CameraFramingTarget" type="Marker3D" parent="."]
+position = Vector3(0, 0.55, 0)
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=1243985191]
 process_priority = 100

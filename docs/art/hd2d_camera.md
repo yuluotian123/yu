@@ -3,6 +3,7 @@
 ForestTownLevel/CameraRig/Camera3D 使用透视、30° FOV、4.1° 俯角和约 9m 拍摄距离（人物在中心下方、上方可见天空和云的横版构图）。
 Camera3D 节点直接调整镜头，hd2d_free_3d.tres 调整跟随、死区和前视。
 CameraFramingTarget 是编辑器构图时角色所在位置的参照点；它不会传送或限制角色。
+森林和工坊的 SceneCameraComponent3D.FramingOriginPath 均绑定到独立的 CameraFramingTarget。只调整出生点时，移动 EntryDefault 或其子节点 Arrival 即可，不移动 CameraFramingTarget；运行时镜头会按原构图平移到玩家的新位置。FramingOriginPath 留空会把激活时玩家的位置算作构图基准，导致更改出生点后镜头仍保留原场景位置；绑定到 Arrival 则会让移动出生点同时改变构图基准。
 读档后相机按同一构图跟随恢复后的角色位置，不把存档位置误当作镜头偏移基准。
 
 Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格跳跃。
@@ -37,5 +38,5 @@ Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格
 | Profile / LookUpAction / LookDownAction | camera_up / camera_down | 非 Free3D 模式下手动观察使用的输入动作。 |
 | Profile / ManualLookDistance | 0.8 | 手动观察最大高度偏移，有输入时替代跳跃前视。 |
 
-当前场景相机位置为 (1.6, -7.15, 8.8033)，X 旋转为 -4.1°，FOV 为 30°。人物约位于画面高度的三分之二处（随动作、前视和跟随死区略有变化），上半部保留天空和云。保持角度和 Z 距离时，提高相机 Position.Y 会让人物更靠下，降低则让人物上移；调整角度时需要配合高度以避免角色贴近底边。
-CameraFramingTarget 表示场景构图时的角色位置；修改角色初始位置时同步移动参照点和镜头，以保留构图。该节点不会修改存档或传送角色。
+当前森林场景的 Camera3D 编辑位置约为 (0, 2.0033, 11.8033)，CameraFramingTarget 为 (0, 0.55, 3)，X 旋转为 -4.1°，FOV 为 30°。运行时使用“玩家位置＋镜头相对构图参照点的偏移”。人物约位于画面高度的三分之二处（随动作、前视和跟随死区略有变化），上半部保留天空和云。保持角度和 Z 距离时，提高相机 Position.Y 会让人物更靠下，降低则让人物上移；调整角度时需要配合高度以避免角色贴近底边。
+只有重新布置编辑器中的整套构图时，才同步移动 CameraFramingTarget 和 Camera3D；单独改变出生位置不需要移动它们。该节点不会修改存档或传送角色。

@@ -12,7 +12,7 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
     [Export] public NodePath CameraPath { get; set; } = new("Camera3D");
     /// <summary>相对于 CameraRig 的初始跟随目标路径，通常为 ../Player；运行时自动等待目标初始化后绑定。</summary>
     [Export] public NodePath TargetPath { get; set; } = new("../Player");
-    /// <summary>相对于 CameraRig 的编辑器构图参照点路径，通常为 ../CameraFramingTarget。参照点应位于场景中角色的初始位置，使读档和重新激活后保持原构图；它不会传送角色。留空则按激活时目标位置计算偏移。</summary>
+    /// <summary>相对于 CameraRig 的独立构图参照点路径，通常为 ../CameraFramingTarget。它表示编辑镜头时的角色参照位置；只改出生点时保持此参照点不动，镜头会按原构图跟随新落点。不要绑定 Arrival。留空则以激活时目标位置计算偏移，保留当时镜头位置。</summary>
     [Export] public NodePath FramingOriginPath { get; set; } = new("");
     /// <summary>镜头跟随配置资源：控制死区、响应速度和前视。Spacelevel 使用 hd2d_free_3d.tres；镜头距离、俯角和透视 FOV 在 Camera3D 节点调整。</summary>
     [Export] public CameraProfile3D Profile { get; set; }

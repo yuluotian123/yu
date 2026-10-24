@@ -62,6 +62,10 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 每个关卡的入口键、宿主 PersistentId 和交互点身份必须各自唯一。入口不能靠同名节点猜测。切换会保留同一个玩家实例，同步物理、导航与镜头，并提供 750 ms 落地重触发保护。重复请求被拒绝；取消只作用于准备阶段。提交安排在 ProcessFrame，避免从 Area3D 物理回调直接修改物理树。
 
+`WorldLevelCatalog.Entrances` 是保存／导出时生成的“Entry 入口键 → Arrival 关卡坐标”索引，例如 `default → (-3, 0.55, 4)`；键来自 WorldSpawnPointComponent3D.Entry，与节点名 EntryDefault 无关。世界不加载目标 Scene 也能查询入口、生成传送门的 NPC 路线，并估算入口之间的移动。玩家实际切换关卡时读取现场 Arrival 的位置和朝向；继续游戏则优先使用存档位置。不要手改目录中的 Entrances，移动场景里的 EntryDefault／Arrival 后保存即可同步。
+
+出生点与相机构图分开编辑：森林和工坊的相机绑定独立 CameraFramingTarget，移动 EntryDefault／Arrival 后相机仍按原有偏移跟随玩家，不需要移动镜头或构图参照点。重新调整镜头构图时再编辑 Camera3D 和 CameraFramingTarget，见 [场景镜头说明](../docs/art/hd2d_camera.md)。
+
 入口的钥匙、任务进度与角色权限等业务条件后续由任务图实现，本组件不增加独立条件字段。需要任务图控制的门应关闭 Automatic，再由任务图判断后调用 Activate，避免区域自动触发绕过业务规则；任务图的具体接线仍属后续工作。
 
 新游戏、继续游戏和关卡切换统一显示 `level_loading_window.tscn` 加载界面，展示目的地、进度和加载阶段。进度结合场景与角色资源加载、场景交接及就绪检查；物理和导航准备完成后才显示 100% 并关闭。加载期间暂停玩家控制，失败、取消或关闭会话时清理界面并恢复原有控制状态。界面由 `LevelLoadingWindow` 和 UI 模块管理，位于游戏及调试面板之上。

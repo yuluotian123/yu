@@ -36,6 +36,20 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 ## 2. 配置关卡与入口
 
+日常制作可直接使用关卡根节点 `WorldLevelContextComponent3D` 的 **“导出关卡配置”** 按钮：
+
+1. 先把关卡保存为 Scene，放好出生点及 Arrival。新关卡的 Level 可以留空。
+2. 点击导出。编辑器创建或复用关卡记录，自动绑定当前 Scene，必要时创建默认地点，登记关卡引用的对象类型和地点，并保存场景、入口／对象／NPC 目录。只有一个出生点时自动采用它；多个出生点需要有与 DefaultEntry 匹配的入口。
+3. 两端关卡分别导出后，在现有 `WorldTransitionComponent3D` 选择 TargetLevel 和 TargetEntry。再导出一次，会根据自动触发的门生成 NPC 单向路线；返回门生成返回路线，无需另建 Route 资源或手填 Routes 数组。
+4. 门的 `NpcTravelHours` 默认 0，表示即时跨门；需要抽象道路耗时才设置游戏小时。NPC 仍会花时间走到门口和从落点走到目标。出发位置使用门下的 UsePosition 标记，未提供时使用门宿主位置；应放在导航可达处。目的地使用 TargetEntry 对应的 Arrival。
+5. 首次导出之后，保存关卡、运行和导出游戏会继续同步自动路线。移动门或目标入口会更新坐标，改名保持身份，复制门获得独立身份，删除门移除它生成的路线。
+
+关卡／默认地点资源保存在世界配置所在目录的 `levels/`、`locations/`；自动路线作为世界配置的内嵌资源保存。重复导出更新原记录；将已有场景另存为新关卡会创建独立关卡记录，避免改掉原关卡的路径。场景尚未保存时，按钮会提示先保存。
+
+同方向、同目标入口已有手工路线时，保留它的时长、开放、知识和权限设置，不再生成旁路。`Automatic=false` 的事件控制门不自动生成 NPC 路线，避免绕过任务条件；未设置目标的门会在导出结果中提示并跳过，配置完整后再运行。目标关卡应先导出，目标入口缺失会报错。生成目录和身份仍由编辑器维护。
+
+以下为现有组件的详细配置，首次使用按钮后不必再手动创建和登记关卡记录：
+
 1. 关卡根使用 `GameObject3D`，Components 添加 `WorldLevelContextComponent3D`，Level 选择已登记记录。
 2. 关卡包含一个带 `AiWorldComponent3D` 的 GameObject3D。EnvironmentPath 指向天气宿主；没有天气组件时降雨为零。
 3. 创建出生点 GameObject3D，添加 `WorldSpawnPointComponent3D`。Entry 填稳定入口键，在 MarkerPath 指定原生 Marker3D（默认 `Arrival`）。标记的位置及朝向决定落点。
@@ -232,14 +246,14 @@ WorldPopulation：唯一角色身份、逻辑位置、旅行和事件队列
 | `Entry` | `town_road` | 关卡内唯一入口键 |
 | `MarkerPath` | `Arrival` | 子节点 Marker3D 的路径，保存时编译其关卡坐标 |
 
-在 `WorldDefinition.Routes` 添加 `WorldRouteDefinition`：
+常规传送门优先使用关卡根的“导出关卡配置”按钮自动生成路线。需要事件控制、秘密道路或特殊权限等手工道路时，在 `WorldDefinition.Routes` 添加 `WorldRouteDefinition`：
 
 | 字段 | 配置 |
 | --- | --- |
 | `Id / DisplayName` | 稳定道路身份及名称，例如 `town_to_workshop` |
 | `From / To` | 起点和终点 WorldLevelDefinition |
 | `FromEntry / ToEntry` | 两端的 Entry 键；必须存在于已保存关卡目录 |
-| `TravelHours` | 正数，世界游戏小时，例如 `0.25` 表示 15 游戏分钟 |
+| `TravelHours` | 非负数，世界游戏小时；`0` 表示即时跨门，`0.25` 表示 15 游戏分钟 |
 | `Bidirectional` | 是否允许双向通行 |
 | `Enabled` | 静态启用状态 |
 | `Public` | 公开路线；关闭后角色必须在 KnownRoutes 中知道它 |
@@ -367,6 +381,8 @@ dotnet build yu.csproj --no-restore
 三组均完成，没有规划饥饿；路径峰值 8、射线峰值 32。结果同时暴露了候选构建、GOAP 状态复制和执行快照的分配及耗时，首组有明显预热峰值。该实现是有测量依据的首期功能基线，尚不能据此承诺商业项目的人群容量。后续性能工作应先用 profiler 拆分这些峰值，再考虑快照复用、进一步分帧及状态表示优化，不能只调低软预算数值。
 
 ## 验证
+
+2026-10-24：`scripts/tools/world/world_level_export_validation.tscn` 通过 24 项，覆盖关卡／地点／类型／NPC 自动登记、单向门、返回门、零耗时、坐标更新、复制删除、嵌套 Scene 复用、手工路线保护、另存关卡与重复导出。先运行该场景生成夹具，再运行 `--editor --headless --script res://scripts/tools/world/world_level_export_editor_validation.gd`，通过 4 项实际编辑器检查，验证导出调用编辑器保存、Scene 和路线坐标一致以及连续导出。相关回归另有自动身份 14 项、世界模拟 44 项、正式 NPC 日常 Goal 31 项通过。编辑器无头缩略图仍有 Dummy 纹理诊断，不影响保存结果和断言。
 
 `world_authoring_validation.tscn` 已通过 14 项，覆盖自动补齐能力、模板无全局身份、嵌套实例、复制顺序、改名移动、撤销重做、重开、生成目录、类型更新和独立状态；`scripts/tools/world/world_framework_validation.tscn` 已通过 55 项，覆盖目录、库存往返、卸载角色、知识权限、Unknown、独立复制、销毁禁用、空间更新、继续游戏、实时读档、失败回退、取消、会话替换、加载界面、进度完成及目录规模查询。`world_capability_validation.tscn` 已通过 20 项，覆盖能力组合、缺失能力、覆盖与独立复制、现场同步、液体事务、延迟恢复本地类型、租约重置、旧版本拒绝。`world_interaction_validation.tscn` 已通过 37 项，覆盖物理 E 输入、区域不同位置、大区域索引、操作列表、遮挡／权限／容量、NPC 公共操作提交、禁止直接写目标、独立复制及存档。`world_production_validation.tscn` 使用真实城镇、工坊、玩家、GM、物理触发门与存档，并验证库存覆盖、瓶子液体余量保存、主菜单新游戏／返回／继续链路。`world_population_validation.tscn` 提供上表压力测试。原有 `scripts/tools/npc/selector_binding_validation.tscn` 已通过 100 项，继续验证共享目标及图编辑。
 

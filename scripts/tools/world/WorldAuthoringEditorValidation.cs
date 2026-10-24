@@ -9,6 +9,32 @@ using Godot;
 public partial class WorldAuthoringEditorValidation : RefCounted
 {
     const string Folder="res://.godot/world-validation/authoring/";
+    const string ExportFolder="res://.godot/world-validation/level-export/";
+    public string ExportLevelFixture(Node root)
+    {
+        var host=(GameObject3D)root;
+        var world=ResourceLoader.Load<WorldDefinition>(ExportFolder+"world.tres");
+        // Reuse the isolated headless fixture, with generated edges rather than its final manual road.
+        world.Routes.Clear();
+        return WorldLevelExporter.Export(host,host.Components.OfType<WorldLevelContextComponent3D>().Single(),world,()=>
+        {
+            EditorInterface.Singleton.MarkSceneAsUnsaved();
+            if(EditorInterface.Singleton.SaveScene()!=Error.Ok)throw new InvalidOperationException("Editor scene save failed");
+        });
+    }
+    public bool ValidateLevelExport(Node root)
+    {
+        var saved=ResourceLoader.Load<PackedScene>(root.SceneFilePath,cacheMode:ResourceLoader.CacheMode.Ignore).Instantiate<GameObject3D>(PackedScene.GenEditState.Instance);
+        try
+        {
+            var level=saved.Components.OfType<WorldLevelContextComponent3D>().Single().Level;
+            var world=ResourceLoader.Load<WorldDefinition>(ExportFolder+"world.tres",cacheMode:ResourceLoader.CacheMode.Ignore);
+            var route=world.Routes.Single(r=>r.From.Id==level.Id);
+            return level.ExportPortalRoutes&&route.FromPosition==root.GetNode<Node3D>("Return").Position
+                &&saved.GetNode<Node3D>("Return").Position==route.FromPosition&&route.SourcePortalId.Length>0;
+        }
+        finally{saved.Free();}
+    }
     public bool ValidateComponents(Node root)
     {
         foreach(var host in WorldModule.Hosts(root))foreach(var binding in host.Components.OfType<WorldObjectComponent3D>())

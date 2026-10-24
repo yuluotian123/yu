@@ -31,7 +31,7 @@ public partial class WorldAuthoringPlugin : EditorPlugin
     {if(resource is WorldObjectTypeDefinition or WorldCapabilityDefinition or WorldDefinition or WorldLevelDefinition or WorldLocationDefinition)OnSaved(resource.ResourcePath);}
     bool Compile()
     {
-        if(_compiling)return true;_compiling=true;
+        if(_compiling||WorldLevelExporter.IsExporting)return true;_compiling=true;
         try{WorldAuthoringCompiler.CompileAll();return true;}
         catch(Exception error){GD.PushError("世界目录生成失败："+error.Message);return false;}
         finally{_compiling=false;}

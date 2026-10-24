@@ -18,4 +18,8 @@ public partial class WorldLevelContextComponent3D : Component3D
         if(RootModule.Instance==null&&ModuleSystem.GetModule<IWorldModule>().CurrentContext==this)ModuleSystem.Process(delta,delta);
     }
     public override void OnDestroy()=>((WorldModule)ModuleSystem.GetModule<IWorldModule>()).UnregisterContext(this);
+#if TOOLS
+    [ExportToolButton("导出关卡配置")]
+    public Callable ExportConfiguration=>Callable.From(()=>WorldLevelExporter.ExportCurrent(this));
+#endif
 }

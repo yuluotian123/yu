@@ -11,6 +11,7 @@ public partial class WorldTransitionComponent3D : Component3D
     [Export] public string TargetEntry {get;set;}="default";
     [Export] public NodePath AreaPath {get;set;}=new("Area3D");
     [Export] public bool Automatic {get;set;}=true;
+    [Export(PropertyHint.Range,"0,24,0.01,or_greater")] public double NpcTravelHours {get;set;}
     Area3D _area;
     public override void OnInit()
     {

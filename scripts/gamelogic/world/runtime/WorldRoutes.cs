@@ -16,7 +16,7 @@ public sealed class WorldRoutes
     {
         _catalog=catalog;var definition=catalog.Definition;_definition=definition;
         WorldCatalog.Require(definition.Routes.All(r=>r!=null&&!string.IsNullOrWhiteSpace(r.Id)&&r.From!=null&&r.To!=null&&r.From!=r.To
-            &&definition.Levels.Any(l=>l.Id==r.From.Id)&&definition.Levels.Any(l=>l.Id==r.To.Id)&&double.IsFinite(r.TravelHours)&&r.TravelHours>0
+            &&definition.Levels.Any(l=>l.Id==r.From.Id)&&definition.Levels.Any(l=>l.Id==r.To.Id)&&double.IsFinite(r.TravelHours)&&r.TravelHours>=0
             &&r.FromPosition.IsFinite()&&r.ToPosition.IsFinite()&&!string.IsNullOrWhiteSpace(r.FromEntry)&&!string.IsNullOrWhiteSpace(r.ToEntry))
             &&definition.Routes.Select(r=>r.Id).Distinct(StringComparer.Ordinal).Count()==definition.Routes.Count,"世界路线配置无效或身份重复。");
         foreach(var route in definition.Routes)WorldCatalog.Require(route.UseExplicitPositions||catalog.Entrances.ContainsKey((route.From.Id,route.FromEntry))&&catalog.Entrances.ContainsKey((route.To.Id,route.ToEntry)),"路线入口未登记，请保存关卡："+route.Id);

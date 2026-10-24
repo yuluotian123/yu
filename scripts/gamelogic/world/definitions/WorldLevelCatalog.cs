@@ -11,4 +11,5 @@ public partial class WorldLevelCatalog : Resource
     [Export] public Godot.Collections.Array<Godot.Collections.Dictionary> Entries {get;set;}=new();
     [Export] public Godot.Collections.Array<Godot.Collections.Dictionary> Actors {get;set;}=new();
     [Export] public Godot.Collections.Dictionary<string,Vector3> Entrances {get;set;}=new();
+    [Export] public Godot.Collections.Array<Godot.Collections.Dictionary> Portals {get;set;}=new();
 }

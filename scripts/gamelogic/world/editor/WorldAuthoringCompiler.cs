@@ -15,13 +15,16 @@ public static class WorldAuthoringCompiler
     static readonly Dictionary<string,string> Normalized=new(StringComparer.Ordinal);
     static WorldCatalog _editorCatalog;
     public static WorldCatalog EditorCatalog=>_editorCatalog??=new(ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath));
-    public static bool Prepare(Node root)
+    internal static void RefreshEditorCatalog(WorldDefinition world)
+    {if(world.ResourcePath==WorldDefinition.CommonPath)_editorCatalog=new WorldCatalog(world);}
+    public static bool Prepare(Node root,bool includePortals=false)
     {
         if(!GodotObject.IsInstanceValid(root))return false;
-        var relevant=WorldIdentity.RelevantNodes(root);if(relevant.Count==0)return false;
+        includePortals|=root is GameObject3D level&&level.Components.OfType<WorldLevelContextComponent3D>().Any(c=>c.Level?.ExportPortalRoutes==true);
+        var relevant=WorldIdentity.RelevantNodes(root);if(includePortals)relevant.UnionWith(WorldIdentity.RelevantNodes(root,true));if(relevant.Count==0)return false;
         bool changed=false;var scope=root.GetInstanceId();
         var anchors=Descendants(root).Where(n=>n.Owner==root&&relevant.Contains(n)
-            &&(!string.IsNullOrEmpty(n.SceneFilePath)||n is GameObject3D h&&h.Components.OfType<WorldObjectComponent3D>().Any())).ToArray();
+            &&(!string.IsNullOrEmpty(n.SceneFilePath)||n is GameObject3D h&&(h.Components.OfType<WorldObjectComponent3D>().Any()||includePortals&&h.Components.OfType<WorldTransitionComponent3D>().Any()))).ToArray();
         var used=new HashSet<string>(StringComparer.Ordinal);
         // Reserve keys of known original nodes before visiting fresh duplicates.
         foreach(var n in anchors)
@@ -55,7 +58,8 @@ public static class WorldAuthoringCompiler
         definition??=ResourceLoader.Load<WorldDefinition>(WorldDefinition.CommonPath);
         var normalized=new HashSet<string>(StringComparer.Ordinal);
         var relevant=new Dictionary<string,bool>(StringComparer.Ordinal);
-        foreach(var level in definition.Levels){NormalizeScene(level.ScenePath,normalized,relevant);Compile(level,relevant);}
+        foreach(var level in definition.Levels){NormalizeScene(level.ScenePath,normalized,relevant,level.ExportPortalRoutes);Compile(level,relevant);}
+        WorldLevelExporter.SynchronizeRoutes(definition);
         var catalog=new WorldCatalog(definition);
         if(definition.ResourcePath==WorldDefinition.CommonPath)_editorCatalog=catalog;
     }
@@ -64,29 +68,30 @@ public static class WorldAuthoringCompiler
         if(cache.TryGetValue(path,out bool found))return found;
         cache[path]=false;
         var deps=Dependencies(path).ToArray();
-        return cache[path]=deps.Any(d=>d.EndsWith("/WorldObjectComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldActorComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldSpawnPointComponent3D.cs",StringComparison.Ordinal))
+        return cache[path]=deps.Any(d=>d.EndsWith("/WorldObjectComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldActorComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldSpawnPointComponent3D.cs",StringComparison.Ordinal)||d.EndsWith("/WorldTransitionComponent3D.cs",StringComparison.Ordinal))
             ||deps.Where(d=>d.EndsWith(".tscn")||d.EndsWith(".scn")||d.EndsWith(".tres")||d.EndsWith(".res")).Any(d=>Relevant(d,cache));
     }
-    static void NormalizeScene(string path,HashSet<string> visited,Dictionary<string,bool> relevant)
+    static void NormalizeScene(string path,HashSet<string> visited,Dictionary<string,bool> relevant,bool portals)
     {
-        if(!visited.Add(path)||!Relevant(path,relevant))return;
-        foreach(string dep in Dependencies(path))if(dep.EndsWith(".tscn")||dep.EndsWith(".scn"))NormalizeScene(dep,visited,relevant);
+        string key=path+"/portals="+portals;
+        if(!visited.Add(key)||!Relevant(path,relevant))return;
+        foreach(string dep in Dependencies(path))if(dep.EndsWith(".tscn")||dep.EndsWith(".scn"))NormalizeScene(dep,visited,relevant,portals);
         string signature=Signature(path,relevant);
-        if(Normalized.GetValueOrDefault(path)==signature)return;
+        if(Normalized.GetValueOrDefault(key)==signature)return;
         // Replacing a cached scene also replaces subresources used by open editor scenes.
         var packed=ResourceLoader.Load<PackedScene>(path,cacheMode:ResourceLoader.CacheMode.Ignore);
         WorldCatalog.Require(packed!=null,"关卡或模板读取失败："+path);
         Node root=packed.Instantiate(PackedScene.GenEditState.Instance);
         try
         {
-            if(Prepare(root))
+            if(Prepare(root,portals))
             {
                 var saved=new PackedScene();WorldCatalog.Require(saved.Pack(root)==Error.Ok&&ResourceSaver.Save(saved,path)==Error.Ok,"自动摆放身份保存失败："+path);
                 packed=saved;
             }
             // Parent scenes must see the fresh dependency, without resetting resources held by editor tabs.
             packed.TakeOverPath(path);
-            Normalized[path]=Signature(path,relevant);
+            Normalized[key]=Signature(path,relevant);
         }
         finally{Forget(root);root.Free();}
     }
@@ -94,6 +99,7 @@ public static class WorldAuthoringCompiler
     static void Compile(WorldLevelDefinition level,Dictionary<string,bool> relevant)
     {
         string signature=Signature(level.ScenePath,relevant)+"/population-v3/"+level.Id+"/"+level.Location?.Id;
+        if(level.ExportPortalRoutes)signature+="/portal-export-v1";
         if(ResourceLoader.Exists(level.CatalogPath))
         {
             var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
@@ -103,6 +109,7 @@ public static class WorldAuthoringCompiler
         try
         {
             var catalog=new WorldLevelCatalog{LevelId=level.Id,SourceSignature=signature};
+            if(root!=null&&level.ExportPortalRoutes)catalog.Portals=WorldLevelExporter.CapturePortals(root);
             if(root!=null)foreach(var host in WorldModule.Hosts(root))foreach(var spawn in host.Components.OfType<WorldSpawnPointComponent3D>())
             {
                 var marker=host.GetNodeOrNull<Node3D>(spawn.MarkerPath);WorldCatalog.Require(marker!=null,"关卡入口缺少落点："+spawn.Entry);

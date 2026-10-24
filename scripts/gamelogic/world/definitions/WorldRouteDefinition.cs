@@ -16,4 +16,10 @@ public partial class WorldRouteDefinition : WorldRecord
     [Export] public bool Enabled {get;set;}=true;
     [Export] public bool Public {get;set;}=true;
     [Export] public CharacterExpressionDefinition Permission {get;set;}
+    [Export] public string SourcePortalId {get;set;}="";
+    public override void _ValidateProperty(Godot.Collections.Dictionary property)
+    {
+        base._ValidateProperty(property);
+        if(property["name"].AsString()==nameof(SourcePortalId))property["usage"]=(long)PropertyUsageFlags.Storage;
+    }
 }

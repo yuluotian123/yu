@@ -113,7 +113,7 @@ Profile.World 使用 CharacterWorldDefinition：
 | Bidirectional / Enabled / Public | 全部开启 |
 | UseExplicitPositions | false，使用关卡入口 Marker |
 
-当前一天 4800 秒，因此道路本身约耗 10 秒，另加前往入口及到目标的时间。玩家传送门与 NPC 路线分别配置；只配置 WorldTransitionComponent3D 不会自动产生 NPC 路线。
+当前一天 4800 秒，因此这条已有手工道路本身约耗 10 秒，另加前往入口及到目标的时间。新关卡可点击 WorldLevelContextComponent3D 的“导出关卡配置”，根据自动传送门生成 NPC 路线，无需再创建本节的 Route 资源。已存在同方向、同目标入口的手工道路会保留；本例的 town_workshop_road 因此不会被默认零耗时路线覆盖。具体流程见 [关卡导出按钮](WORLD_GUIDE.md#2-配置关卡与入口)。
 
 ## 5. 主图如何连接
 

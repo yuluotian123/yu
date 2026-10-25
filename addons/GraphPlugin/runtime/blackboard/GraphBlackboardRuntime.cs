@@ -38,9 +38,6 @@ public sealed class GraphBlackboardRuntime
         _globalMap = GlobalBlackboard == null
             ? new Dictionary<string, GraphBlackboardEntry>(System.StringComparer.Ordinal)
             : BuildMap(GlobalBlackboard.Entries);
-
-        if (GlobalBlackboard == null)
-            GD.PushWarning("[GraphBlackboardRuntime] No GraphBlackboardNode was found. Global blackboard reads will use defaults.");
     }
 
     public GraphBlackboardNode GlobalBlackboard { get; }

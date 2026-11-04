@@ -17,7 +17,7 @@ abilities/
 
 player/input/  玩家 InputModule 适配组件
 weapons/       武器定义、动作配置与装备切换组件
-inventory/     武器行囊、装备卸下和像素风背包窗口
+inventory/     武器物品所有权、格子位置与存档
 ai/            NPC 图定义、选择器、GOAP、Flow 执行与当前场景世界组件
 npc/           NPC 导航适配与运行诊断
 world/         世界目录、会话状态、关卡切换与角色世界引用

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_5a46g"]
+
+[resource]
+resource_name = "草药照护户 · 室内 · 世界目录"
+script = ExtResource("1_5a46g")
+LevelId = "forest_house_herbalist"
+SourceSignature = "D4BD17F8DE08AF7606F28589C47A909A9F6B952FEF97D6099858DB1F6AD01797/population-v3/forest_house_herbalist/forest_house_location_herbalist/portal-export-v1"
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.52, 1.25),
+"from_town": Vector3(0, 0.52, 1.25)
+})
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "from_house_herbalist",
+"hours": 0.0,
+"id": "portal/7f4f664d91d891998ca182533f576fd5",
+"name": "TownPortal",
+"position": Vector3(0, 0.45000002, 2.45),
+"to": "209a74242d3e4c8ba415cd6ced08beea"
+}])

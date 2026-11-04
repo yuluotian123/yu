@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_58eo8"]
+
+[resource]
+resource_name = "西田农户 · 室内 · 世界目录"
+script = ExtResource("1_58eo8")
+LevelId = "forest_house_farmer_west"
+SourceSignature = "8746C6A215DA3E65533AD7C1D6405E9DE7A911181D93FB99C41BAA98CC004001/population-v3/forest_house_farmer_west/forest_house_location_farmer_west/portal-export-v1"
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.52, 1.25),
+"from_town": Vector3(0, 0.52, 1.25)
+})
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "from_house_farmer_west",
+"hours": 0.0,
+"id": "portal/c8730c9ca5ec11195450ec4ee3c1931e",
+"name": "TownPortal",
+"position": Vector3(0, 0.45000002, 2.45),
+"to": "209a74242d3e4c8ba415cd6ced08beea"
+}])

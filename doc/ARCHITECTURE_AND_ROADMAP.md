@@ -113,7 +113,7 @@ WorldActor 在现场与轻量代理之间交接角色数据、活动和受支持
 - [AI 定义、运行时与编辑器](../scripts/gamelogic/ai/)、[NPC 导航与诊断](../scripts/gamelogic/npc/)。
 - [世界运行时](../scripts/gamelogic/world/runtime/)、[现场组件](../scripts/gamelogic/world/components/)、[目录编译器](../scripts/gamelogic/world/editor/WorldAuthoringCompiler.cs)。
 - [世界配置资源](../assets/resources/world/)、[NPC 图资源](../assets/resources/npc/)。
-- [NPC 验证器](../scripts/tools/npc/)、[世界验证器](../scripts/tools/world/)；临时夹具和日志位于忽略目录 `.godot/`。
+- 正式运行检查通过主场景、林间镇及 F8 的 NPC／世界诊断页进行；独立验证器已移除。
 
 游戏行为继续使用 GameObject3D／Component3D；框架协调接入 ModuleSystem。不修改 `scripts/generated/config` 中的自动生成代码。
 

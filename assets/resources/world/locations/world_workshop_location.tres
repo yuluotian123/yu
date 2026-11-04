@@ -1,9 +1,12 @@
 [gd_resource type="Resource" script_class="WorldLocationDefinition" format=3 uid="uid://c6xlbrbrmmdjy"]
 
 [ext_resource type="Script" uid="uid://bl2231wu11ow6" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="1_krnde"]
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="1_yif5c"]
 
 [resource]
 resource_name = "小镇仓储间 · 默认地点"
 script = ExtResource("1_krnde")
+Parent = ExtResource("1_yif5c")
+Tags = PackedStringArray("indoor", "forest_village", "household", "storage")
 Id = "be74d513517a4cfabc4a9fbd09e3779a"
 DisplayName = "小镇仓储间"

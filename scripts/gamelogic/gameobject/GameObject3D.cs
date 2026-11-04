@@ -275,7 +275,9 @@ namespace GameLogic
                     continue;
 
                 Component3D instance;
-                if (component.ResourcePath.Contains("::") && component.ResourceLocalToScene)
+                // PackedScene 已为 Local To Scene 资源创建独立实例，其 ResourcePath 可能为空。
+                // 通过所属场景识别，避免再次克隆后 Remote 检查器改到一份未运行的配置。
+                if (component.ResourceLocalToScene && GodotObject.IsInstanceValid(component.GetLocalScene()))
                     instance = component;
                 else
                     instance = component.Clone();

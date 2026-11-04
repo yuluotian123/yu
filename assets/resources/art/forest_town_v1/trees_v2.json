@@ -16,9 +16,9 @@
       "name": "ancient_oak",
       "category": "tree",
       "file": "ancient_oak.glb",
-      "polygons": 3863,
-      "triangles": 7948,
-      "vertices": 15674,
+      "polygons": 3565,
+      "triangles": 7296,
+      "vertices": 7488,
       "collision": [
         {
           "position": [
@@ -36,19 +36,23 @@
       "complete_exterior": false,
       "cutout_sprigs": 935,
       "variant": "buttressed broad oak",
-      "revision": 2,
-      "wood_triangles": 4208,
+      "revision": 4,
+      "wood_triangles": 3556,
       "leaf_sprays": 935,
       "crown_clusters": 19,
-      "authored_height": 14.8
+      "authored_height": 14.8,
+      "root_collar_revision": 3,
+      "bark_scar_revision": 4,
+      "scar_max_relief": 0.003774,
+      "knot_style": "shallow tapered longitudinal scars"
     },
     {
       "name": "branching_oak",
       "category": "tree",
       "file": "branching_oak.glb",
-      "polygons": 3863,
-      "triangles": 7948,
-      "vertices": 15674,
+      "polygons": 3565,
+      "triangles": 7296,
+      "vertices": 7488,
       "collision": [
         {
           "position": [
@@ -66,19 +70,23 @@
       "complete_exterior": false,
       "cutout_sprigs": 935,
       "variant": "forked upright hornbeam",
-      "revision": 2,
-      "wood_triangles": 4208,
+      "revision": 4,
+      "wood_triangles": 3556,
       "leaf_sprays": 935,
       "crown_clusters": 19,
-      "authored_height": 17.2
+      "authored_height": 17.2,
+      "root_collar_revision": 3,
+      "bark_scar_revision": 4,
+      "scar_max_relief": 0.002368,
+      "knot_style": "shallow tapered longitudinal scars"
     },
     {
       "name": "canopy_oak",
       "category": "tree",
       "file": "canopy_oak.glb",
-      "polygons": 3872,
-      "triangles": 7948,
-      "vertices": 15692,
+      "polygons": 3574,
+      "triangles": 7296,
+      "vertices": 7770,
       "collision": [
         {
           "position": [
@@ -96,11 +104,15 @@
       "complete_exterior": false,
       "cutout_sprigs": 1008,
       "variant": "sweeping crooked oak",
-      "revision": 2,
-      "wood_triangles": 3916,
+      "revision": 4,
+      "wood_triangles": 3264,
       "leaf_sprays": 1008,
       "crown_clusters": 16,
-      "authored_height": 11.4
+      "authored_height": 11.4,
+      "root_collar_revision": 3,
+      "bark_scar_revision": 4,
+      "scar_max_relief": 0.002183,
+      "knot_style": "shallow tapered longitudinal scars"
     }
   ],
   "validation": {
@@ -125,5 +137,34 @@
     "new_78_gpu_median_ms": 4.56500005722046,
     "old_48_frame_mean_ms": 5.42126666666667,
     "new_78_frame_mean_ms": 5.41735416666666
+  },
+  "root_repair": {
+    "revision": 3,
+    "method": "continuous welded root collar; short rounded ribs submerge below soil",
+    "upper_branches_and_foliage_preserved": true,
+    "placements_and_collisions_preserved": true,
+    "assets": [
+      {
+        "name": "ancient_oak",
+        "before_triangles": 7948,
+        "after_triangles": 7432,
+        "upper_mesh_position_error": 0.0,
+        "root_surface_radius": 1.704
+      },
+      {
+        "name": "branching_oak",
+        "before_triangles": 7948,
+        "after_triangles": 7432,
+        "upper_mesh_position_error": 0.0,
+        "root_surface_radius": 1.0796
+      },
+      {
+        "name": "canopy_oak",
+        "before_triangles": 7948,
+        "after_triangles": 7432,
+        "upper_mesh_position_error": 0.0,
+        "root_surface_radius": 0.9883
+      }
+    ]
   }
 }

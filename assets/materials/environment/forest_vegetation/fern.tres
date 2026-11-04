@@ -1,0 +1,58 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/leaf_article.gdshader" id="1_pwl4w"]
+
+[sub_resource type="Image" id="Image_2cvxs"]
+data = {
+"data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
+"format": "RGBA8",
+"height": 2,
+"mipmaps": false,
+"width": 2
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_06qnx"]
+image = SubResource("Image_2cvxs")
+
+[resource]
+resource_name = "Forest vegetation - branch volume normals"
+render_priority = 0
+shader = ExtResource("1_pwl4w")
+shader_parameter/weather_wetness = 0.0
+shader_parameter/weather_puddles = 0.0
+shader_parameter/weather_puddles_enabled = false
+shader_parameter/weather_puddle_coverage = 0.55
+shader_parameter/weather_puddle_scale = 0.85
+shader_parameter/weather_darkening = 0.24
+shader_parameter/weather_wet_roughness = 0.14
+shader_parameter/weather_puddle_roughness = 0.045
+shader_parameter/weather_wet_specular = 0.6
+shader_parameter/weather_rain = 0.0
+shader_parameter/weather_ripple_strength = 0.14
+shader_parameter/weather_ripple_scale = 1.7
+shader_parameter/weather_ripple_speed = 1.35
+shader_parameter/weather_snow = 0.0
+shader_parameter/weather_snow_color = Color(0.91, 0.95, 1, 1)
+shader_parameter/weather_snow_roughness = 0.86
+shader_parameter/weather_time = 0.0
+shader_parameter/wet_darkening_strength = 1.0
+shader_parameter/wet_film_strength = 0.35
+shader_parameter/wet_roughness_min = 0.6
+shader_parameter/wet_specular_scale = 1.0
+shader_parameter/wet_puddle_coverage_scale = 1.0
+shader_parameter/leaf_texture = SubResource("ImageTexture_06qnx")
+shader_parameter/alpha_cutoff = 0.4
+shader_parameter/lower_color = Vector3(0.76,0.92,0.91)
+shader_parameter/upper_color = Vector3(0.85,0.98,0.86)
+shader_parameter/normal_roundness = 0.0
+shader_parameter/vertex_color_strength = 1.0
+shader_parameter/directional_shadow_lift = 0.32
+shader_parameter/texture_detail = 0.0
+shader_parameter/gradient_strength = 0.78
+shader_parameter/transmission_strength = 0.03
+shader_parameter/wind_strength = 0.022
+shader_parameter/wind_speed = 0.75
+shader_parameter/painterly_strength = 0.9
+shader_parameter/use_painted_sprays = false
+shader_parameter/canopy_ambient_up = 0.0
+

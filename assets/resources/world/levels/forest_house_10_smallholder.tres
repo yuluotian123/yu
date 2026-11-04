@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://rc72unrkop58"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_house_10_smallholder.tres" id="1_ep2tb"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_8jgmk"]
+
+[resource]
+script = ExtResource("2_8jgmk")
+ScenePath = "res://assets/scenes/levels/forest_village_interiors/10_smallholder.tscn"
+Location = ExtResource("1_ep2tb")
+ExportPortalRoutes = true
+Id = "forest_house_smallholder"
+DisplayName = "小畜养户 · 室内"

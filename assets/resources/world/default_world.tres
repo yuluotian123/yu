@@ -1,10 +1,28 @@
-[gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://biun2wdfs0ui"]
+[gd_resource type="Resource" script_class="WorldDefinition" format=3 uid="uid://durg86tod6rkc"]
 
 [ext_resource type="Resource" uid="uid://tvvnn53j7lvu" path="res://assets/resources/world/levels/forest_town_level.tres" id="2_vi2k3"]
 [ext_resource type="Resource" uid="uid://c60nrvv1uf412" path="res://assets/resources/world/levels/world_workshop.tres" id="4_oek4u"]
+[ext_resource type="Resource" uid="uid://prtbrfmnmn55" path="res://assets/resources/world/levels/forest_house_01_chief.tres" id="5_p0m2d"]
 [ext_resource type="Resource" uid="uid://xec14ets2y0y" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="6_0inog"]
+[ext_resource type="Resource" uid="uid://dqatukpfq225x" path="res://assets/resources/world/levels/forest_house_03_smith.tres" id="6_2rfor"]
+[ext_resource type="Resource" uid="uid://q8jld2i7gjhw" path="res://assets/resources/world/levels/forest_house_04_carpenter.tres" id="7_2xgo5"]
 [ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="7_te4rk"]
+[ext_resource type="Resource" uid="uid://cue2gnjhp47jb" path="res://assets/resources/world/levels/forest_house_05_herbalist.tres" id="8_re158"]
+[ext_resource type="Resource" uid="uid://c4d3ib1q52653" path="res://assets/resources/world/levels/forest_house_06_forester.tres" id="9_x43c0"]
+[ext_resource type="Resource" uid="uid://r1q12rgp2l61" path="res://assets/resources/world/levels/forest_house_07_gatherer.tres" id="10_v8q7b"]
 [ext_resource type="Script" uid="uid://c38ips4bsm7vx" path="res://scripts/gamelogic/world/definitions/WorldRouteDefinition.cs" id="11_vi2k3"]
+[ext_resource type="Resource" uid="uid://c7e5lp4cc8wah" path="res://assets/resources/world/levels/forest_house_08_farmer_east.tres" id="11_wcxs0"]
+[ext_resource type="Resource" uid="uid://cphvqbv70b3nv" path="res://assets/resources/world/levels/forest_house_09_farmer_west.tres" id="12_ivhsu"]
+[ext_resource type="Resource" uid="uid://rc72unrkop58" path="res://assets/resources/world/levels/forest_house_10_smallholder.tres" id="13_iddv8"]
+[ext_resource type="Resource" uid="uid://cpasmauayu3pp" path="res://assets/resources/world/locations/forest_house_01_chief.tres" id="17_u0baw"]
+[ext_resource type="Resource" uid="uid://dh28neykeyaif" path="res://assets/resources/world/locations/forest_house_03_smith.tres" id="18_840wa"]
+[ext_resource type="Resource" uid="uid://ble1esothy5rb" path="res://assets/resources/world/locations/forest_house_04_carpenter.tres" id="19_o32ls"]
+[ext_resource type="Resource" uid="uid://diuvdqqqerorx" path="res://assets/resources/world/locations/forest_house_05_herbalist.tres" id="20_ifde1"]
+[ext_resource type="Resource" uid="uid://dj2soeiu4aq6p" path="res://assets/resources/world/locations/forest_house_06_forester.tres" id="21_3ypbd"]
+[ext_resource type="Resource" uid="uid://d0ebqjot55vov" path="res://assets/resources/world/locations/forest_house_07_gatherer.tres" id="22_n4byw"]
+[ext_resource type="Resource" uid="uid://df5ovatepojcx" path="res://assets/resources/world/locations/forest_house_08_farmer_east.tres" id="23_k8xtv"]
+[ext_resource type="Resource" uid="uid://cu5j55ta7bv0g" path="res://assets/resources/world/locations/forest_house_09_farmer_west.tres" id="24_b151j"]
+[ext_resource type="Resource" uid="uid://bj12o3w3fmql5" path="res://assets/resources/world/locations/forest_house_10_smallholder.tres" id="25_qxaos"]
 [ext_resource type="Resource" uid="uid://banbp5lw4kup7" path="res://assets/resources/world/types/bottle.tres" id="bottle_type"]
 [ext_resource type="Script" uid="uid://s5ves5335ds6" path="res://scripts/gamelogic/timeofday/TimeOfDayProfile.cs" id="calendar_script"]
 [ext_resource type="Script" uid="uid://bumfx6rt7wbfp" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="level_script"]
@@ -17,13 +35,14 @@
 script = ExtResource("calendar_script")
 DayLengthSeconds = 4800.0
 
-[sub_resource type="Resource" id="Resource_oek4u"]
-resource_name = "森林小镇 → 小镇仓储间 · WorkshopPortal"
+[sub_resource type="Resource" id="Resource_p0m2d"]
+resource_name = "森林小镇 → 杂货与待客户 · 室内仓储 · WorkshopPortal"
 script = ExtResource("11_vi2k3")
 From = ExtResource("2_vi2k3")
-FromPosition = Vector3(3, 0.9, 3)
+FromPosition = Vector3(-8.62, 0.5, 11.959999)
 To = ExtResource("4_oek4u")
-ToPosition = Vector3(0, 0.55, 0)
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
 UseExplicitPositions = true
 TravelHours = 0.0
 Bidirectional = false
@@ -31,13 +50,149 @@ SourcePortalId = "portal/d7ebd92d9db44aa89eca566ced0cb332"
 Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/d7ebd92d9db44aa89eca566ced0cb332"
 DisplayName = "WorkshopPortal"
 
-[sub_resource type="Resource" id="Resource_vi2k3"]
-resource_name = "小镇仓储间 → 森林小镇 · TownPortal"
+[sub_resource type="Resource" id="Resource_2rfor"]
+resource_name = "森林小镇 → 村长家 · 室内 · Chief"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(-0.42999998, 0.5, -11.190001)
+To = ExtResource("5_p0m2d")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.35)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/5506f415a5bf927b99f770ab2fa06c58"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/5506f415a5bf927b99f770ab2fa06c58"
+DisplayName = "Chief"
+
+[sub_resource type="Resource" id="Resource_2xgo5"]
+resource_name = "森林小镇 → 工具修补户 · 室内 · Smith"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(15.429999, 0.5, 10.55)
+To = ExtResource("6_2rfor")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/2586243d50f101bd72ff4f11751710c6"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/2586243d50f101bd72ff4f11751710c6"
+DisplayName = "Smith"
+
+[sub_resource type="Resource" id="Resource_re158"]
+resource_name = "森林小镇 → 木工户 · 室内 · Carpenter"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(-20.49, 0.5, -1.2)
+To = ExtResource("7_2xgo5")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/62fde8809bed76eab14baab37dd498fa"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/62fde8809bed76eab14baab37dd498fa"
+DisplayName = "Carpenter"
+
+[sub_resource type="Resource" id="Resource_x43c0"]
+resource_name = "森林小镇 → 草药照护户 · 室内 · Herbalist"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(9.36, 0.5, -11.24)
+To = ExtResource("8_re158")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/ea91c8f5da7a75a4e8d4edb12ccfc5e2"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/ea91c8f5da7a75a4e8d4edb12ccfc5e2"
+DisplayName = "Herbalist"
+
+[sub_resource type="Resource" id="Resource_v8q7b"]
+resource_name = "森林小镇 → 伐木户 · 室内 · Forester"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(-16.913939, 0.5, -12.780921)
+To = ExtResource("9_x43c0")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/bd6ec7ea61f4357214c252a6206c6f8d"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/bd6ec7ea61f4357214c252a6206c6f8d"
+DisplayName = "Forester"
+
+[sub_resource type="Resource" id="Resource_wcxs0"]
+resource_name = "森林小镇 → 猎采户 · 室内 · Gatherer"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(-10.059999, 0.5, -1.8600001)
+To = ExtResource("10_v8q7b")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/a5ea86941e6fe0ba79b3e40e5b249842"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/a5ea86941e6fe0ba79b3e40e5b249842"
+DisplayName = "Gatherer"
+
+[sub_resource type="Resource" id="Resource_ivhsu"]
+resource_name = "森林小镇 → 东田农户 · 室内 · FarmerEast"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(8.58, 0.5, 18)
+To = ExtResource("11_wcxs0")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.45)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/12bb832f099e1e45f46531e40cff1abc"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/12bb832f099e1e45f46531e40cff1abc"
+DisplayName = "FarmerEast"
+
+[sub_resource type="Resource" id="Resource_iddv8"]
+resource_name = "森林小镇 → 西田农户 · 室内 · FarmerWest"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(-7.48, 0.5, 22.15)
+To = ExtResource("12_ivhsu")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/99ab6b5ccdfe3921162ff490c6d6a488"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/99ab6b5ccdfe3921162ff490c6d6a488"
+DisplayName = "FarmerWest"
+
+[sub_resource type="Resource" id="Resource_u0baw"]
+resource_name = "森林小镇 → 小畜养户 · 室内 · Smallholder"
+script = ExtResource("11_vi2k3")
+From = ExtResource("2_vi2k3")
+FromPosition = Vector3(15.279999, 0.5, -2.2299998)
+To = ExtResource("13_iddv8")
+ToEntry = "from_town"
+ToPosition = Vector3(0, 0.52, 1.25)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/6dcb74d998d93b4e8a7920f5b7a9478c"
+Id = "route/209a74242d3e4c8ba415cd6ced08beea/portal/6dcb74d998d93b4e8a7920f5b7a9478c"
+DisplayName = "Smallholder"
+
+[sub_resource type="Resource" id="Resource_840wa"]
+resource_name = "杂货与待客户 · 室内仓储 → 森林小镇 · TownPortal"
 script = ExtResource("11_vi2k3")
 From = ExtResource("4_oek4u")
-FromPosition = Vector3(3, 0.9, 0)
+FromPosition = Vector3(0, 0.45000002, 2.45)
 To = ExtResource("2_vi2k3")
-ToPosition = Vector3(-3, 0.55, 4)
+ToEntry = "from_workshop"
+ToPosition = Vector3(-8.62, 0.535, 12.259999)
 UseExplicitPositions = true
 TravelHours = 0.0
 Bidirectional = false
@@ -45,13 +200,148 @@ SourcePortalId = "portal/f7f5410fafa14b418a392e25a658edb1"
 Id = "route/31a903e2d81e45d0af568c59d0097bc8/portal/f7f5410fafa14b418a392e25a658edb1"
 DisplayName = "TownPortal"
 
+[sub_resource type="Resource" id="Resource_o32ls"]
+resource_name = "村长家 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("5_p0m2d")
+FromPosition = Vector3(0, 0.45000002, 2.5500002)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_chief"
+ToPosition = Vector3(-0.42999998, 0.535, -10.89)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/a6a3a6cc6d993c993b4a68b372923bb7"
+Id = "route/forest_house_chief/portal/a6a3a6cc6d993c993b4a68b372923bb7"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_ifde1"]
+resource_name = "工具修补户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("6_2rfor")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_smith"
+ToPosition = Vector3(15.429999, 0.535, 10.85)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/f489b8d8a6794ea2c8d740b99df08a7a"
+Id = "route/forest_house_smith/portal/f489b8d8a6794ea2c8d740b99df08a7a"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_3ypbd"]
+resource_name = "木工户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("7_2xgo5")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_carpenter"
+ToPosition = Vector3(-20.49, 0.535, -0.9000001)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/45d7b7843a4c6df26a373c5b1608ae2d"
+Id = "route/forest_house_carpenter/portal/45d7b7843a4c6df26a373c5b1608ae2d"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_n4byw"]
+resource_name = "草药照护户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("8_re158")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_herbalist"
+ToPosition = Vector3(9.36, 0.535, -10.94)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/7f4f664d91d891998ca182533f576fd5"
+Id = "route/forest_house_herbalist/portal/7f4f664d91d891998ca182533f576fd5"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_k8xtv"]
+resource_name = "伐木户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("9_x43c0")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_forester"
+ToPosition = Vector3(-16.811335, 0.535, -12.499014)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/d6d68e732a7310d1c0bc5549e0c5081e"
+Id = "route/forest_house_forester/portal/d6d68e732a7310d1c0bc5549e0c5081e"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_b151j"]
+resource_name = "猎采户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("10_v8q7b")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_gatherer"
+ToPosition = Vector3(-10.059999, 0.535, -1.5600002)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/9ec0dc2a2a7627daf664577a0df077cd"
+Id = "route/forest_house_gatherer/portal/9ec0dc2a2a7627daf664577a0df077cd"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_qxaos"]
+resource_name = "东田农户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("11_wcxs0")
+FromPosition = Vector3(0, 0.45000002, 2.65)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_farmer_east"
+ToPosition = Vector3(8.58, 0.535, 18.3)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/a31f0ed733c158f000beff3de887a4ef"
+Id = "route/forest_house_farmer_east/portal/a31f0ed733c158f000beff3de887a4ef"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_vxlex"]
+resource_name = "西田农户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("12_ivhsu")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_farmer_west"
+ToPosition = Vector3(-7.48, 0.535, 22.449999)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/c8730c9ca5ec11195450ec4ee3c1931e"
+Id = "route/forest_house_farmer_west/portal/c8730c9ca5ec11195450ec4ee3c1931e"
+DisplayName = "TownPortal"
+
+[sub_resource type="Resource" id="Resource_i4wfl"]
+resource_name = "小畜养户 · 室内 → 森林小镇 · TownPortal"
+script = ExtResource("11_vi2k3")
+From = ExtResource("13_iddv8")
+FromPosition = Vector3(0, 0.45000002, 2.45)
+To = ExtResource("2_vi2k3")
+ToEntry = "from_house_smallholder"
+ToPosition = Vector3(15.279999, 0.535, -1.9299998)
+UseExplicitPositions = true
+TravelHours = 0.0
+Bidirectional = false
+SourcePortalId = "portal/8e779ea860b234a6fdf4d2116fe4cbe7"
+Id = "route/forest_house_smallholder/portal/8e779ea860b234a6fdf4d2116fe4cbe7"
+DisplayName = "TownPortal"
+
 [resource]
 resource_name = "默认世界"
 script = ExtResource("script")
-Locations = Array[ExtResource("location_script")]([ExtResource("6_0inog"), ExtResource("7_te4rk")])
-Levels = Array[ExtResource("level_script")]([ExtResource("2_vi2k3"), ExtResource("4_oek4u")])
+Locations = Array[ExtResource("location_script")]([ExtResource("6_0inog"), ExtResource("7_te4rk"), ExtResource("17_u0baw"), ExtResource("18_840wa"), ExtResource("19_o32ls"), ExtResource("20_ifde1"), ExtResource("21_3ypbd"), ExtResource("22_n4byw"), ExtResource("23_k8xtv"), ExtResource("24_b151j"), ExtResource("25_qxaos")])
+Levels = Array[ExtResource("level_script")]([ExtResource("2_vi2k3"), ExtResource("4_oek4u"), ExtResource("5_p0m2d"), ExtResource("6_2rfor"), ExtResource("7_2xgo5"), ExtResource("8_re158"), ExtResource("9_x43c0"), ExtResource("10_v8q7b"), ExtResource("11_wcxs0"), ExtResource("12_ivhsu"), ExtResource("13_iddv8")])
 ObjectTypes = Array[ExtResource("type_script")]([ExtResource("storage_type"), ExtResource("bottle_type")])
-Routes = Array[ExtResource("11_vi2k3")]([SubResource("Resource_oek4u"), SubResource("Resource_vi2k3")])
+Routes = Array[ExtResource("11_vi2k3")]([SubResource("Resource_p0m2d"), SubResource("Resource_2rfor"), SubResource("Resource_2xgo5"), SubResource("Resource_re158"), SubResource("Resource_x43c0"), SubResource("Resource_v8q7b"), SubResource("Resource_wcxs0"), SubResource("Resource_ivhsu"), SubResource("Resource_iddv8"), SubResource("Resource_u0baw"), SubResource("Resource_840wa"), SubResource("Resource_o32ls"), SubResource("Resource_ifde1"), SubResource("Resource_3ypbd"), SubResource("Resource_n4byw"), SubResource("Resource_k8xtv"), SubResource("Resource_b151j"), SubResource("Resource_qxaos"), SubResource("Resource_vxlex"), SubResource("Resource_i4wfl")])
 InitialLevel = ExtResource("2_vi2k3")
 Calendar = SubResource("calendar")
 Id = "default_world"

@@ -1,0 +1,148 @@
+{
+  "workflow": "Blender Cycles tangent normal / roughness / emission ORM bake from painted albedo luminance",
+  "size": [
+    2048,
+    2048
+  ],
+  "normal_convention": "OpenGL +Y tangent space",
+  "orm_channels": {
+    "R": "1 (no baked ambient occlusion)",
+    "G": "material roughness",
+    "B": "1 for iron, 0 otherwise"
+  },
+  "charts": [
+    {
+      "kind": "Plaster",
+      "roughness_range": [
+        0.86,
+        0.98
+      ],
+      "bump_depth_m": 0.012
+    },
+    {
+      "kind": "Wood",
+      "roughness_range": [
+        0.7,
+        0.91
+      ],
+      "bump_depth_m": 0.022
+    },
+    {
+      "kind": "WoodLight",
+      "roughness_range": [
+        0.67,
+        0.88
+      ],
+      "bump_depth_m": 0.02
+    },
+    {
+      "kind": "Roof",
+      "roughness_range": [
+        0.64,
+        0.88
+      ],
+      "bump_depth_m": 0.023
+    },
+    {
+      "kind": "Stone",
+      "roughness_range": [
+        0.8,
+        0.98
+      ],
+      "bump_depth_m": 0.035
+    },
+    {
+      "kind": "Slate",
+      "roughness_range": [
+        0.74,
+        0.94
+      ],
+      "bump_depth_m": 0.026
+    },
+    {
+      "kind": "Thatch",
+      "roughness_range": [
+        0.89,
+        0.99
+      ],
+      "bump_depth_m": 0.03
+    },
+    {
+      "kind": "EndGrain",
+      "roughness_range": [
+        0.76,
+        0.94
+      ],
+      "bump_depth_m": 0.025
+    },
+    {
+      "kind": "Plant",
+      "roughness_range": [
+        0.68,
+        0.9
+      ],
+      "bump_depth_m": 0.018
+    },
+    {
+      "kind": "Lichen",
+      "roughness_range": [
+        0.85,
+        0.99
+      ],
+      "bump_depth_m": 0.022
+    },
+    {
+      "kind": "Iron",
+      "roughness_range": [
+        0.39,
+        0.66
+      ],
+      "bump_depth_m": 0.007
+    },
+    {
+      "kind": "RippleGlass",
+      "roughness_range": [
+        0.12,
+        0.29
+      ],
+      "bump_depth_m": 0.003
+    },
+    {
+      "kind": "Turf",
+      "roughness_range": [
+        0.89,
+        0.99
+      ],
+      "bump_depth_m": 0.04
+    },
+    {
+      "kind": "Reed",
+      "roughness_range": [
+        0.82,
+        0.96
+      ],
+      "bump_depth_m": 0.025
+    },
+    {
+      "kind": "Glass",
+      "roughness_range": [
+        0.1,
+        0.23
+      ],
+      "bump_depth_m": 0.002
+    },
+    {
+      "kind": "Soil",
+      "roughness_range": [
+        0.89,
+        0.99
+      ],
+      "bump_depth_m": 0.028
+    }
+  ],
+  "files": [
+    "assets/textures/environment/forest_village/houses/painterly_house_atlas_v3_normal.png",
+    "assets/textures/environment/forest_village/houses/painterly_house_atlas_v3_roughness.png",
+    "assets/textures/environment/forest_village/houses/painterly_house_atlas_v3_orm.png"
+  ]
+}

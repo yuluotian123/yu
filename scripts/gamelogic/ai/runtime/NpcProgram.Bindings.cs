@@ -51,8 +51,6 @@ public sealed partial class NpcProgram
                 Require(inputs.Any(i=>i.Name==move.Input?.Name&&i.Adapter=="point"),"导航能力必须选择本行动的交互点输入："+action.DisplayName);
             if(ability is NpcRoamAction roam&&roam.Input?.Name.Length>0)
                 Require(inputs.Any(i=>i.Name==roam.Input.Name&&i.Adapter=="point"),"附近活动能力的地点输入不存在或类型错误："+action.DisplayName);
-            if(ability is NpcRememberAction remember&&remember.SubjectInput?.Name.Length>0)
-                Require(inputs.Any(i=>i.Name==remember.SubjectInput.Name&&i.Type==CharacterValueType.Symbol),"记忆主题必须选择本行动的文本或对象输入："+action.DisplayName);
         }
         var claims=ReadOnly(action.Inputs.Where(input=>input.IsTarget).SelectMany(input=>input.ResourceRequirements.Select(capability=>
         {

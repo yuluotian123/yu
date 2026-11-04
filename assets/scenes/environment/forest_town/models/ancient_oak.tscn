@@ -8,9 +8,9 @@ size = Vector3(1.836, 10.064, 1.836)
 [node name="AncientOak" type="Node3D" unique_id=1616643208]
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/ancient_oak.glb"
-metadata/source_polygons = 3863
-metadata/triangles = 7948
-metadata/tree_revision = 2
+metadata/source_polygons = 3565
+metadata/triangles = 7296
+metadata/tree_revision = 4
 
 [node name="Model" type="MeshInstance3D" parent="." unique_id=1061906611]
 mesh = ExtResource("1_dlkx2")

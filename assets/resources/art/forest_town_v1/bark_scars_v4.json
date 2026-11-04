@@ -1,0 +1,43 @@
+{
+  "revision": 4,
+  "method": "remove both detached knot tubes; project shallow open tapered scars onto original bark",
+  "foliage_roots_placements_and_collisions_preserved": true,
+  "assets": [
+    {
+      "polygons": 3565,
+      "triangles": 7296,
+      "vertices": 7488,
+      "bark_scar_revision": 4,
+      "removed_tubular_knots": 2,
+      "scar_max_relief": 0.003774,
+      "name": "ancient_oak",
+      "foliage_unchanged": true,
+      "preserved_mesh_position_error": 0.0,
+      "before_triangles": 7432
+    },
+    {
+      "polygons": 3565,
+      "triangles": 7296,
+      "vertices": 7488,
+      "bark_scar_revision": 4,
+      "removed_tubular_knots": 2,
+      "scar_max_relief": 0.002368,
+      "name": "branching_oak",
+      "foliage_unchanged": true,
+      "preserved_mesh_position_error": 0.0,
+      "before_triangles": 7432
+    },
+    {
+      "polygons": 3574,
+      "triangles": 7296,
+      "vertices": 7770,
+      "bark_scar_revision": 4,
+      "removed_tubular_knots": 2,
+      "scar_max_relief": 0.002183,
+      "name": "canopy_oak",
+      "foliage_unchanged": true,
+      "preserved_mesh_position_error": 0.0,
+      "before_triangles": 7432
+    }
+  ]
+}

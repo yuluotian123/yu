@@ -1,0 +1,89 @@
+{
+  "revision": 1,
+  "atlas": "res://assets/textures/environment/forest_village/houses/painterly_house_atlas_v3.res",
+  "seed": 2026102801,
+  "bridge_size": [
+    5.85,
+    0.25,
+    3.276
+  ],
+  "bridge_deck_center": [
+    28.08,
+    -0.11,
+    2.34
+  ],
+  "assets": [
+    {
+      "name": "fence_post",
+      "file": "fence_post.glb",
+      "triangles": 216,
+      "surfaces": [
+        "Wood",
+        "WoodLight"
+      ],
+      "features": [
+        "split oak",
+        "sloped cap",
+        "moss tinted foot",
+        "worn bevels"
+      ],
+      "normal_space": "OpenGL tangent +Y"
+    },
+    {
+      "name": "fence_bay_a",
+      "file": "fence_bay_a.glb",
+      "triangles": 1188,
+      "surfaces": [
+        "WoodLight",
+        "Iron",
+        "Wood"
+      ],
+      "features": [
+        "two mortised rails",
+        "diagonal brace",
+        "forged square pegs",
+        "lengthwise grain"
+      ],
+      "normal_space": "OpenGL tangent +Y"
+    },
+    {
+      "name": "fence_bay_b",
+      "file": "fence_bay_b.glb",
+      "triangles": 1188,
+      "surfaces": [
+        "WoodLight",
+        "Iron",
+        "Wood"
+      ],
+      "features": [
+        "two mortised rails",
+        "diagonal brace",
+        "forged square pegs",
+        "lengthwise grain"
+      ],
+      "normal_space": "OpenGL tangent +Y"
+    },
+    {
+      "name": "creek_bridge",
+      "file": "creek_bridge.glb",
+      "triangles": 16848,
+      "surfaces": [
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Stone"
+      ],
+      "features": [
+        "23 separate deck boards",
+        "three load bearing stringers",
+        "continuous handrails",
+        "mortised braced rails",
+        "forged pegs and deck nails",
+        "stone bank pads",
+        "open creek channel",
+        "flat accessible deck"
+      ],
+      "normal_space": "OpenGL tangent +Y"
+    }
+  ]
+}

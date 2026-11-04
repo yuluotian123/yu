@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bb5vnx2s1p2pj"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/structures/fence_bay_b.mesh.res" id="1_cavb8"]
+
+[node name="FenceBayB" type="Node3D" unique_id=1695516275]
+metadata/asset_category = "finished_timber_structure"
+metadata/source_model = "res://assets/models/environment/forest_village/structures/fence_bay_b.glb"
+metadata/triangles = 1188
+metadata/features = ["two mortised rails", "diagonal brace", "forged square pegs", "lengthwise grain"]
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1664553643]
+mesh = ExtResource("1_cavb8")

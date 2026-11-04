@@ -18,6 +18,12 @@ uniform float weather_snow : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 weather_snow_color : source_color = vec4(0.91, 0.95, 1.0, 1.0);
 uniform float weather_snow_roughness : hint_range(0.4, 1.0) = 0.86;
 uniform float weather_time = 0.0;
+// Authored material response; the weather driver only changes the global inputs.
+uniform float wet_darkening_strength : hint_range(0.0, 1.5) = 1.0;
+uniform float wet_film_strength : hint_range(0.0, 1.0) = 1.0;
+uniform float wet_roughness_min : hint_range(0.0, 1.0) = 0.0;
+uniform float wet_specular_scale : hint_range(0.0, 1.0) = 1.0;
+uniform float wet_puddle_coverage_scale : hint_range(0.0, 1.0) = 1.0;
 varying vec3 weather_position;
 varying float weather_surface_wet;
 varying float weather_puddle_mask;
@@ -71,10 +77,12 @@ float snow_surface_sample(vec3 position, vec3 world_normal) {
 }
 
 vec3 snow_surface_color(vec3 position) {
+	if (weather_snow <= 0.0) { return weather_snow_color.rgb; }
 	return weather_snow_color.rgb * (0.95 + 0.05 * wet_noise(position.xz * 12.0));
 }
 
 vec3 snow_surface_normal(vec3 position, vec3 normal, float cover) {
+	if (cover <= 0.0) { return normal; }
 	vec2 p = position.xz * 9.0;
 	float center = wet_noise(p);
 	vec2 grain = vec2(wet_noise(p + vec2(0.12, 0.0)), wet_noise(p + vec2(0.0, 0.12))) - center;
@@ -91,7 +99,7 @@ vec4 wet_surface_sample(vec3 position, vec3 world_normal) {
 		vec2 p = position.xz * max(weather_puddle_scale, 0.01);
 		// 两层插值噪声集中在中间；先展开其分布，避免小雨量只命中极少数尖峰。
 		float noise = puddle_pattern(p);
-		float threshold = 1.0 - weather_puddle_coverage * weather_puddles;
+		float threshold = 1.0 - weather_puddle_coverage * wet_puddle_coverage_scale * weather_puddles;
 		float shore = max(0.06, fwidth(noise));
 		puddle = smoothstep(threshold - shore, threshold + shore, noise)
 				 * smoothstep(0.02, 0.15, weather_puddles) * smoothstep(0.88, 0.98, up)

@@ -8,14 +8,21 @@ namespace GameLogic;
 public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
 {
     public override int Priority => ComponentPriority.VFX;
-    /// <summary>相对于 CameraRig 的场景 Camera3D 路径。镜头的位置、旋转、投影和 FOV 直接在该节点编辑。</summary>
+    /// <summary>相对于 CameraRig 的场景 Camera3D 路径。投影、Size 和裁切面在该节点编辑；位置和旋转可由本组件接管。</summary>
     [Export] public NodePath CameraPath { get; set; } = new("Camera3D");
     /// <summary>相对于 CameraRig 的初始跟随目标路径，通常为 ../Player；运行时自动等待目标初始化后绑定。</summary>
     [Export] public NodePath TargetPath { get; set; } = new("../Player");
     /// <summary>相对于 CameraRig 的独立构图参照点路径，通常为 ../CameraFramingTarget。它表示编辑镜头时的角色参照位置；只改出生点时保持此参照点不动，镜头会按原构图跟随新落点。不要绑定 Arrival。留空则以激活时目标位置计算偏移，保留当时镜头位置。</summary>
     [Export] public NodePath FramingOriginPath { get; set; } = new("");
-    /// <summary>镜头跟随配置资源：控制死区、响应速度和前视。Spacelevel 使用 hd2d_free_3d.tres；镜头距离、俯角和透视 FOV 在 Camera3D 节点调整。</summary>
+    /// <summary>镜头跟随配置资源：控制死区、响应速度和前视。</summary>
     [Export] public CameraProfile3D Profile { get; set; }
+
+    /// <summary>使用本组件的 CameraOffset 和 CameraRotationDegrees 构图，可在编辑器预览。关闭时保留 Camera3D 的原始构图。</summary>
+    [Export] public bool UseComponentFraming { get; set; }
+    /// <summary>相对于构图参照点（运行时为跟随目标）的世界空间偏移，单位米。改变距离不会改变正交人物大小。</summary>
+    [Export] public Vector3 CameraOffset { get; set; } = new(0f, 5.622f, 12.9845f);
+    /// <summary>世界空间欧拉角，单位度。X 为负时俯视；森林镜头保持 Y/Z 为 0。</summary>
+    [Export] public Vector3 CameraRotationDegrees { get; set; } = new(-20f, 0f, 0f);
 
     public bool HasShot { get; private set; }
     public Node3D FollowTarget => CameraModule.IsLive(_target) ? _target : null;
@@ -40,6 +47,8 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
     private ICameraModule _module;
     private bool _boundOnce;
     private Transform3D _sceneCameraTransform;
+    private Camera3D _previewCamera;
+    private Transform3D _previewOriginal;
 
     public override void OnInit()
     {
@@ -186,8 +195,10 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
     private void Present(Vector2 shake, float roll)
     {
         if (!CameraModule.IsLive(_camera) || _profile == null) return;
-        Vector3 up = _authoredBasis.Y;
-        Vector3 right = _authoredBasis.X;
+        Basis basis = UseComponentFraming ? ComponentBasis() : _authoredBasis;
+        Vector3 offset = UseComponentFraming ? CameraOffset - _profile.BaseOffset : _authoredOffset;
+        Vector3 up = basis.Y;
+        Vector3 right = basis.X;
         Vector3 center = _focus + right * shake.X + up * shake.Y;
         if (_profile.PixelSnap && _camera.Projection == Camera3D.ProjectionType.Orthogonal)
         {
@@ -198,9 +209,39 @@ public partial class SceneCameraComponent3D : Component3D, ICharacterCameraShake
                 + up * (Mathf.Round(screenY / pixel) * pixel - screenY);
         }
         _camera.Size = _viewHeight;
-        _camera.GlobalPosition = center + _authoredOffset;
-        _camera.GlobalBasis = _authoredBasis;
+        _camera.GlobalPosition = center + offset;
+        _camera.GlobalBasis = basis;
         _camera.RotateObjectLocal(Vector3.Back, roll);
+    }
+
+    private Basis ComponentBasis() => Basis.FromEuler(CameraRotationDegrees * (Mathf.Pi / 180f));
+
+    public override void OnEditorUpdate(GameObject3D host)
+    {
+        var camera = host.GetNodeOrNull<Camera3D>(CameraPath);
+        var origin = host.GetNodeOrNull<Node3D>(FramingOriginPath.IsEmpty ? TargetPath : FramingOriginPath);
+        if (!IsActive || !UseComponentFraming || camera == null || origin == null)
+        {
+            RestoreEditorCamera();
+            return;
+        }
+        if (_previewCamera != camera)
+        {
+            RestoreEditorCamera();
+            _previewCamera = camera;
+            _previewOriginal = camera.GlobalTransform;
+        }
+        camera.GlobalTransform = new Transform3D(ComponentBasis(), origin.GlobalPosition + CameraOffset);
+    }
+
+    // 组件保存构图参数，预览不反写 Camera3D 的备用构图，防止重复叠加偏移。
+    public override void OnEditorPreSave(GameObject3D host) => RestoreEditorCamera();
+    public override void OnEditorExit(GameObject3D host) => RestoreEditorCamera();
+
+    private void RestoreEditorCamera()
+    {
+        if (GodotObject.IsInstanceValid(_previewCamera)) _previewCamera.GlobalTransform = _previewOriginal;
+        _previewCamera = null;
     }
 
     public void Shake(CameraShakeProfile profile) { _shake = profile; _shakeElapsed = 0f; }

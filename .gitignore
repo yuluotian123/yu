@@ -5,3 +5,7 @@
 .config-converter/
 /tmp/
 /archives/
+
+# Python tooling caches
+__pycache__/
+*.py[cod]

@@ -18,6 +18,8 @@ public partial class WeatherComponent3D : Component3D
     [Export] public bool DriveFogFromWeather { get; set; } = false;
     /// <summary>显式开启后按阴云程度衰减日月照度。</summary>
     [Export] public bool DriveLightsFromWeather { get; set; } = false;
+    /// <summary>显式开启后按晴空比例的平方衰减日月体积散射；不改变体积雾的开关或密度。</summary>
+    [Export] public bool DriveVolumetricLightFromWeather { get; set; } = false;
     /// <summary>关闭自动天气时的初始天气；自动模式由种子和绝对游戏时间决定。</summary>
     [Export] public WeatherKind InitialWeather { get; set; } = WeatherKind.Clear;
     /// <summary>包含 Rain / Snow 粒子节点的降水场景路径，相对 EnvironmentRig。</summary>
@@ -40,6 +42,7 @@ public partial class WeatherComponent3D : Component3D
     private readonly List<ShaderMaterial> _cloudMaterials = new();
     private bool _hasBaseline;
     private float _baseFogDensity, _baseFogBegin, _baseFogEnd, _baseSun, _baseMoon;
+    private float _baseSunVolumetric, _baseMoonVolumetric;
     // X=阴云，Y=雨，Z=雪；跨天气切换时对当前混合结果插值。
     private Vector3 _blend, _manualFrom;
     private double _manualElapsed, _lastHours;
@@ -172,6 +175,8 @@ public partial class WeatherComponent3D : Component3D
         _baseFogEnd = _environment.FogDepthEnd;
         _baseSun = _sun.LightIntensityLux;
         _baseMoon = _moon.LightIntensityLux;
+        _baseSunVolumetric = _sun.LightVolumetricFogEnergy;
+        _baseMoonVolumetric = _moon.LightVolumetricFogEnergy;
         _hasBaseline = true;
     }
 
@@ -189,6 +194,11 @@ public partial class WeatherComponent3D : Component3D
             if (GodotObject.IsInstanceValid(_sun)) _sun.LightIntensityLux = _baseSun;
             if (GodotObject.IsInstanceValid(_moon)) _moon.LightIntensityLux = _baseMoon;
         }
+        if (DriveVolumetricLightFromWeather)
+        {
+            if (GodotObject.IsInstanceValid(_sun)) _sun.LightVolumetricFogEnergy = _baseSunVolumetric;
+            if (GodotObject.IsInstanceValid(_moon)) _moon.LightVolumetricFogEnergy = _baseMoonVolumetric;
+        }
     }
 
     private void CaptureAndApply() { CaptureBaseline(); if (IsActive) ApplyVisuals(); }
@@ -202,6 +212,13 @@ public partial class WeatherComponent3D : Component3D
             float light = 1 - _blend.X * Mathf.Clamp(Profile.DirectLightLoss, 0, 1);
             _sun.LightIntensityLux = _baseSun * light;
             _moon.LightIntensityLux = _baseMoon * light;
+        }
+        if (DriveVolumetricLightFromWeather)
+        {
+            float clear = 1 - Mathf.Clamp(_blend.X, 0, 1);
+            float scattering = clear * clear;
+            _sun.LightVolumetricFogEnergy = _baseSunVolumetric * scattering;
+            _moon.LightVolumetricFogEnergy = _baseMoonVolumetric * scattering;
         }
         if (DriveFogFromWeather)
         {

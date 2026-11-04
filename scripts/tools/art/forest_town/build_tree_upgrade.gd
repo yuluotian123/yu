@@ -1,9 +1,10 @@
 extends SceneTree
-## Import only the new trees and replace only woodland placements in the authored town.
+## Import trees; --meshes-only preserves the authored forest-town placements.
 
 const MODEL_ROOT := "res://assets/models/environment/forest_town/"
 const SCENE_ROOT := "res://assets/scenes/environment/forest_town/"
 const META_ROOT := "res://assets/resources/art/forest_town_v1/"
+const VALIDATION_PATH := META_ROOT+"godot_validation.json"
 
 func _initialize() -> void:
 	call_deferred("build")
@@ -15,7 +16,9 @@ func save_scene(node: Node, path: String) -> void:
 
 func build() -> void:
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(META_ROOT+"models.json"))
-	var imports: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(META_ROOT+"godot_validation.json"))
+	var imports: Dictionary = {"checks": []}
+	if FileAccess.file_exists(VALIDATION_PATH):
+		imports = JSON.parse_string(FileAccess.get_file_as_string(VALIDATION_PATH))
 	var tree_info := []
 	for asset: Dictionary in manifest.assets:
 		if asset.category != "tree": continue
@@ -30,6 +33,8 @@ func build() -> void:
 		var triangles := 0
 		for surface in model.mesh.get_surface_count():
 			var arrays := model.mesh.surface_get_arrays(surface)
+			assert(arrays[Mesh.ARRAY_COLOR].size() == arrays[Mesh.ARRAY_VERTEX].size())
+			assert(arrays[Mesh.ARRAY_TEX_UV].size() == arrays[Mesh.ARRAY_VERTEX].size())
 			triangles += arrays[Mesh.ARRAY_INDEX].size()/3
 			var imported := model.mesh.surface_get_material(surface)
 			var leaf := imported.resource_name.begins_with("FT_OakSprigs")
@@ -46,13 +51,26 @@ func build() -> void:
 		var prefab: Node3D = load(SCENE_ROOT+"models/"+asset.name+".tscn").instantiate()
 		prefab.get_node("Model").mesh = tree_mesh
 		prefab.set_meta("triangles",triangles)
-		prefab.set_meta("tree_revision",2)
+		prefab.set_meta("source_polygons",int(asset.polygons))
+		prefab.set_meta("tree_revision",int(asset.get("revision",2)))
 		save_scene(prefab,SCENE_ROOT+"models/"+asset.name+".tscn")
 		prefab.free()
 		source.free()
+		var found := false
 		for check: Dictionary in imports.checks:
-			if check.asset == asset.name: check.lod_counts = lod_counts
+			if check.asset == asset.name:
+				check.lod_counts = lod_counts
+				check.triangles = triangles
+				found = true
+		if not found:
+			imports.checks.append({"asset":asset.name,"triangles":triangles,"lod_counts":lod_counts})
 		tree_info.append({"asset":asset.name,"triangles":triangles,"lod_counts":lod_counts})
+	if OS.get_cmdline_user_args().has("--meshes-only") or not FileAccess.file_exists(SCENE_ROOT+"forest_town.tscn"):
+		var output := FileAccess.open(META_ROOT+"tree_validation.json",FileAccess.WRITE)
+		output.store_string(JSON.stringify(imports,"\t"))
+		print("TREE_MESHES_IMPORTED: ",JSON.stringify(tree_info))
+		quit()
+		return
 	var town: Node3D = load(SCENE_ROOT+"forest_town.tscn").instantiate()
 	var trees: Node3D = town.get_node("Trees")
 	for child in trees.get_children(): child.free()

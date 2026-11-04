@@ -1,0 +1,127 @@
+{
+	"bridge_center": "(28.08, 0.0, 2.34)",
+	"existing_rail_collision_preserved": true,
+	"fence_runs": [
+		{
+			"end": "(-4.4, 0.0, -3.0)",
+			"path": "Households/Chief/Fence_2",
+			"start": "(-4.4, 0.0, -6.0)"
+		},
+		{
+			"end": "(4.4, 0.0, -3.0)",
+			"path": "Households/Chief/Fence_3",
+			"start": "(4.4, 0.0, -6.0)"
+		},
+		{
+			"end": "(-4.55, 0.0, -3.0)",
+			"path": "Households/Host/Fence_2",
+			"start": "(-4.55, 0.0, -6.0)"
+		},
+		{
+			"end": "(4.55, 0.0, -3.0)",
+			"path": "Households/Host/Fence_3",
+			"start": "(4.55, 0.0, -6.0)"
+		},
+		{
+			"end": "(-3.8, 0.0, -2.6)",
+			"path": "Households/Smith/Fence_2",
+			"start": "(-3.8, 0.0, -5.6)"
+		},
+		{
+			"end": "(3.8, 0.0, -2.6)",
+			"path": "Households/Smith/Fence_3",
+			"start": "(3.8, 0.0, -5.6)"
+		},
+		{
+			"end": "(-4.0, 0.0, -2.8)",
+			"path": "Households/Carpenter/Fence_2",
+			"start": "(-4.0, 0.0, -5.8)"
+		},
+		{
+			"end": "(4.0, 0.0, -2.8)",
+			"path": "Households/Carpenter/Fence_3",
+			"start": "(4.0, 0.0, -5.8)"
+		},
+		{
+			"end": "(-3.6, 0.0, -2.7)",
+			"path": "Households/Herbalist/Fence_2",
+			"start": "(-3.6, 0.0, -5.7)"
+		},
+		{
+			"end": "(3.6, 0.0, -2.7)",
+			"path": "Households/Herbalist/Fence_3",
+			"start": "(3.6, 0.0, -5.7)"
+		},
+		{
+			"end": "(-3.7, 0.0, -2.7)",
+			"path": "Households/Forester/Fence_2",
+			"start": "(-3.7, 0.0, -5.7)"
+		},
+		{
+			"end": "(3.7, 0.0, -2.7)",
+			"path": "Households/Forester/Fence_3",
+			"start": "(3.7, 0.0, -5.7)"
+		},
+		{
+			"end": "(-3.6, 0.0, -2.6)",
+			"path": "Households/Gatherer/Fence_2",
+			"start": "(-3.6, 0.0, -5.6)"
+		},
+		{
+			"end": "(3.6, 0.0, -2.6)",
+			"path": "Households/Gatherer/Fence_3",
+			"start": "(3.6, 0.0, -5.6)"
+		},
+		{
+			"end": "(-3.7, 0.0, -2.7)",
+			"path": "Households/FarmerEast/Fence_2",
+			"start": "(-3.7, 0.0, -5.7)"
+		},
+		{
+			"end": "(3.7, 0.0, -2.7)",
+			"path": "Households/FarmerEast/Fence_3",
+			"start": "(3.7, 0.0, -5.7)"
+		},
+		{
+			"end": "(-3.8, 0.0, -2.8)",
+			"path": "Households/FarmerWest/Fence_2",
+			"start": "(-3.8, 0.0, -5.8)"
+		},
+		{
+			"end": "(3.8, 0.0, -2.8)",
+			"path": "Households/FarmerWest/Fence_3",
+			"start": "(3.8, 0.0, -5.8)"
+		},
+		{
+			"end": "(-3.7, 0.0, -2.6)",
+			"path": "Households/Smallholder/Fence_2",
+			"start": "(-3.7, 0.0, -5.6)"
+		},
+		{
+			"end": "(3.7, 0.0, -2.6)",
+			"path": "Households/Smallholder/Fence_3",
+			"start": "(3.7, 0.0, -5.6)"
+		},
+		{
+			"end": "(24.18, 0.0, -8.58)",
+			"path": "Production/Fence_14",
+			"start": "(18.72, 0.0, -8.58)"
+		},
+		{
+			"end": "(24.18, 0.0, -18.72)",
+			"path": "Production/Fence_15",
+			"start": "(24.18, 0.0, -8.58)"
+		},
+		{
+			"end": "(17.16, 0.0, -18.72)",
+			"path": "Production/Fence_16",
+			"start": "(24.18, 0.0, -18.72)"
+		},
+		{
+			"end": "(17.16, 0.0, -11.7)",
+			"path": "Production/Fence_17",
+			"start": "(17.16, 0.0, -18.72)"
+		}
+	],
+	"walkable_deck_y": 0.015
+}

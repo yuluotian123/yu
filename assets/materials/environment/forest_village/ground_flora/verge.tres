@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/plant_painterly.gdshader" id="1_plant"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/ground_contact.res" id="painted_floor"]
+
+[resource]
+resource_name = "Forest floor · roadside grass"
+shader = ExtResource("1_plant")
+shader_parameter/palette_strength = 0.0
+shader_parameter/color_saturation = 1.0
+shader_parameter/albedo_value = 0.8
+shader_parameter/wind_strength = 0.0
+shader_parameter/weather_puddles_enabled = false
+shader_parameter/wet_darkening_strength = 0.85
+shader_parameter/wet_film_strength = 0.38
+shader_parameter/wet_roughness_min = 0.65
+shader_parameter/directional_shadow_lift = 0.26
+shader_parameter/painterly_blend = 0.3
+shader_parameter/band_softness = 0.07
+shader_parameter/light_wrap = 0.48
+shader_parameter/floor_color_mix = 0.6
+shader_parameter/grass_normal_blend = 0.78
+shader_parameter/ground_contact_map = ExtResource("painted_floor")
+shader_parameter/ground_contact_rect = Vector4(-40.56,-37.44,81.12,74.88)
+

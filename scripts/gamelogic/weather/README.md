@@ -35,11 +35,15 @@ GDScript / Graph 可通过宿主 `weather` 元数据调用 `SetWeather`、`SetAu
 
 天气组件的 DriveFogFromWeather / DriveLightsFromWeather 默认关闭，保留 Environment 雾参数和日月照度。只有显式开启对应开关后，才通过 EnvironmentApplying / EnvironmentApplied 恢复并叠加雾或灯光数值；雾的开关和模式始终由 Environment 决定。阴云、雨雪粒子和天气表面效果独立更新。回收时只恢复主动接管过的参数。
 
+`DriveVolumetricLightFromWeather` 独立控制日月的 `LightVolumetricFogEnergy`，默认关闭。开启后以场景配置的晴天散射强度为基准，乘以 `(1 - overcast)²`；默认阴天、雨天、雪天分别保留 16%、1%、6.25%，日月照度还会接受已有的直射光衰减。晴天恢复原值，天气过渡沿用阴云混合量。该开关只调节灯光在体积雾中的散射，不开启体积雾，也不修改雾密度、颜色或范围；这些参数仍在原生 Environment / FogVolume 上配置。每次昼夜更新先恢复基准，再捕获并应用天气，重复刷新不会累积衰减，组件销毁时恢复原值。
+
 自动天气由已存档的世界时间重建。手动覆盖、运行时强度调整以及表面含水量、积雪量仅在当前环境生命周期有效，尚未加入存档。当前降水与积雪是视觉效果，尚无室内遮挡、雨滴粒子碰撞、可踩踏雪层、雷电或音效。
 
 ## 湿润与积水
 
-ForestTownLevel 的 EnvironmentRig 还挂载 `WeatherSurfaceComponent3D`，`SurfaceRootPath = ../RPGTown`。它复制作用范围内的材质并绑定原网格，退出/回收时恢复原绑定；贴图、树叶风动与边缘光仍使用原资源。河流、透明玻璃、天空、人物纸片不替换材质。
+ForestTownLevel 的 EnvironmentRig 还挂载 `WeatherSurfaceComponent3D`，`SurfaceRootPath = ../Village`。它复制作用范围内的材质并绑定原网格，退出/回收时恢复原绑定；贴图、树叶风动与边缘光仍使用原资源。河流、透明玻璃、天空、人物纸片不替换材质。
+
+森林聚落的装饰石板与石缝均使用同一 `town_toon.gdshader` 天气流程，接收原生阴影，并在路面自身形成积雪、积水和雨滴涟漪。石缝采用不透明顶点覆盖裁剪，不再用晚于天气/光照处理的透明叠层覆盖地面。石板没有独立碰撞，原地形继续负责行走支撑。
 
 雨雪逐渐加深建筑、路面、道具和植物的底色、降低粗糙度并增加水膜反射。雪天默认按雨天 55% 的程度湿润，并独立积累雪量；雪覆盖的区域转为柔和的粗糙雪面，压制下面的水膜反射。雨天另在启用 `weather_puddles_enabled` 的材质上积水。当前标记铺装石材 `Town_Structures_0.tres` 和路缘石 `Town_Structures_2.tres`，覆盖道路、桥面及路缘石，并根据朝上法线限制积水，墙面和树叶不会变成水塘。建筑与这两个地面材质统一使用 `town_toon.gdshader`；铺装、路缘石通过 `toon_strength = 0` 保留 Burley 漫反射，建筑默认 1。直接光的 Toon 明暗与 PBR 反射分开处理，非金属的天空和 SSR 反射保持有效。
 

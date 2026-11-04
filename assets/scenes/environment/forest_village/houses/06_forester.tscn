@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://c1mbbo3s2vs0v"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/houses/06_forester.mesh.res" id="1_hk2sp"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_py2fl"]
+points = PackedVector3Array(-2.05, 0.05, 1.8, 2.05, 0.05, 1.8, 0, 3.8, 1.8, -2.05, 0.05, -1.8, 2.05, 0.05, -1.8, 0, 3.8, -1.8)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hk2sp"]
+points = PackedVector3Array(-0.615, -0.12, 1.88, -0.615, -0.12, 2.8000002, -0.615, -0.045, 2.8000002, -0.615, 0.23, 2.04, 0.615, -0.12, 1.88, 0.615, -0.12, 2.8000002, 0.615, -0.045, 2.8000002, 0.615, 0.23, 2.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_843qi"]
+size = Vector3(1.15, 0.23, 0.28)
+
+[node name="Forester" type="Node3D" unique_id=488438774]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/06_forester.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/06_forester.png"
+metadata/triangles = 18799
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [0.0, 0.2300000041723251, 1.919999957084656],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "recessed_window", "cut_log_growth_rings_and_hardware"],
+"front": ["door", "recessed_window"],
+"left": ["eave_storage_hatch", "framed_roof_window"],
+"right": ["eave_storage_hatch", "framed_roof_window"]
+}
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=447383540]
+mesh = ExtResource("1_hk2sp")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=540412018]
+collision_mask = 0
+
+[node name="Shape00" type="CollisionShape3D" parent="Collision1" unique_id=1425258713]
+shape = SubResource("ConvexPolygonShape3D_py2fl")
+
+[node name="Shape01" type="CollisionShape3D" parent="Collision1" unique_id=2077394209]
+shape = SubResource("ConvexPolygonShape3D_hk2sp")
+metadata/stair_original_front = 2.64
+metadata/stair_collision_profile = "buried_toe_and_overlapping_crest"
+
+[node name="Shape02" type="CollisionShape3D" parent="Collision1" unique_id=1097973433]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, 1.92)
+shape = SubResource("BoxShape3D_843qi")
+
+[node name="DoorAnchor" type="Marker3D" parent="." unique_id=2026218136]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 1.8)
+
+[node name="ApproachAnchor" type="Marker3D" parent="." unique_id=1496188265]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 3)

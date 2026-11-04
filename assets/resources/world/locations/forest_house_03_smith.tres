@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WorldLocationDefinition" format=3 uid="uid://dh28neykeyaif"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="1_sytxf"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="2_xkkfh"]
+
+[resource]
+script = ExtResource("2_xkkfh")
+Parent = ExtResource("1_sytxf")
+Tags = PackedStringArray("indoor", "forest_village", "household")
+Id = "forest_house_location_smith"
+DisplayName = "工具修补户 · 室内"

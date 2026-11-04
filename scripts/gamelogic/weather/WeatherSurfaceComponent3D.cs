@@ -20,9 +20,13 @@ public partial class WeatherSurfaceComponent3D : Component3D
     private WeatherComponent3D _weather;
     private WorldClock _clock;
     private double _lastHours;
-    private readonly List<(MeshInstance3D Mesh, int Surface, Material Original)> _bindings = new();
+    private readonly List<(GeometryInstance3D Mesh, int Surface, Material Original)> _bindings = new();
     private readonly Dictionary<Material, Material> _copies = new();
     private readonly List<ShaderMaterial> _materials = new();
+    private readonly Dictionary<string, object> _appliedValues = new();
+    private float _standardWetness = float.NaN;
+    private bool _standardSnowLayer;
+    private (float Darkening, float Roughness, float Specular) _standardProfile;
     private readonly List<(StandardMaterial3D Material, Color Albedo, float Roughness, float Specular, ShaderMaterial SnowLayer, Material OriginalNextPass)> _standard = new();
 
     public override void OnInit()
@@ -42,6 +46,11 @@ public partial class WeatherSurfaceComponent3D : Component3D
         using var meshesOwner = (Godot.Collections.Array)meshes;
         foreach (Node node in meshes)
             if (node is MeshInstance3D mesh) BindMesh(mesh);
+        if (scope is MultiMeshInstance3D rootMultiMesh) BindMultiMesh(rootMultiMesh);
+        var instances = scope.FindChildren("*", "MultiMeshInstance3D", true, false);
+        using var instancesOwner = (Godot.Collections.Array)instances;
+        foreach (Node node in instances)
+            if (node is MultiMeshInstance3D instance) BindMultiMesh(instance);
         Owner.SetMeta("weather_surfaces", this);
         ApplyMaterials();
     }
@@ -75,6 +84,7 @@ public partial class WeatherSurfaceComponent3D : Component3D
             string path = shader.Shader?.ResourcePath;
             if (path != "res://assets/shaders/town/town_toon.gdshader"
                 && path != "res://assets/shaders/town/leaf_article.gdshader"
+                && path != "res://assets/shaders/town/grass_tuft.gdshader"
                 && path != "res://assets/shaders/town/plant_painterly.gdshader") return null;
             var copy = (ShaderMaterial)shader.Duplicate();
             _copies[source] = copy;
@@ -98,6 +108,26 @@ public partial class WeatherSurfaceComponent3D : Component3D
             return copy;
         }
         return null;
+    }
+
+    private void BindMultiMesh(MultiMeshInstance3D instance)
+    {
+        // Override the instance, so shared meshes and other weather scopes stay independent.
+        Material source = instance.MaterialOverride ?? instance.Multimesh?.Mesh?.SurfaceGetMaterial(0);
+        var copy = CopyMaterial(source);
+        if (copy == null) return;
+        _bindings.Add((instance, -1, instance.MaterialOverride));
+        instance.MaterialOverride = copy;
+    }
+
+    private void ApplyParameter<[MustBeVariant] T>(string name, T value)
+    {
+        if (_appliedValues.TryGetValue(name, out object previous) && previous is T typed
+            && EqualityComparer<T>.Default.Equals(typed, value)) return;
+        _appliedValues[name] = value;
+        using var uniform = new StringName(name);
+        using var parameter = Variant.From(value);
+        foreach (var material in _materials) material.SetShaderParameter(uniform, parameter);
     }
 
     public override void OnUpdate(double delta)
@@ -153,28 +183,32 @@ public partial class WeatherSurfaceComponent3D : Component3D
         float wetness = profile.WetSurfacesEnabled ? Wetness : 0;
         float puddles = profile.WetSurfacesEnabled ? Puddles : 0;
         float seconds = (float)(_clock.TotalHours * 50 % 1024);
-        foreach (var material in _materials)
-        {
-            material.SetShaderParameter("weather_wetness", wetness);
-            material.SetShaderParameter("weather_puddles", puddles);
-            material.SetShaderParameter("weather_puddle_coverage", Mathf.Clamp(profile.PuddleCoverage, 0, .8f));
-            material.SetShaderParameter("weather_puddle_scale", Mathf.Clamp(profile.PuddleScale, .1f, 4));
-            material.SetShaderParameter("weather_darkening", Mathf.Clamp(profile.WetDarkening, 0, .5f));
-            material.SetShaderParameter("weather_wet_roughness", Mathf.Clamp(profile.WetRoughness, .02f, .6f));
-            material.SetShaderParameter("weather_puddle_roughness", Mathf.Clamp(profile.PuddleRoughness, .02f, .3f));
-            material.SetShaderParameter("weather_wet_specular", Mathf.Clamp(profile.WetSpecular, 0, 1));
-            material.SetShaderParameter("weather_rain", _weather.RainAmount * Mathf.Clamp(profile.Intensity, 0, 1));
-            material.SetShaderParameter("weather_ripple_strength", profile.RainRipplesEnabled ? Mathf.Clamp(profile.RippleStrength, 0, .3f) : 0);
-            material.SetShaderParameter("weather_ripple_scale", Mathf.Clamp(profile.RippleScale, .5f, 4));
-            material.SetShaderParameter("weather_ripple_speed", Mathf.Clamp(profile.RippleSpeed, .2f, 3));
-            material.SetShaderParameter("weather_snow", profile.SnowCoverEnabled ? Snow : 0);
-            material.SetShaderParameter("weather_snow_color", profile.SnowColor);
-            material.SetShaderParameter("weather_snow_roughness", Mathf.Clamp(profile.SnowRoughness, .4f, 1));
-            material.SetShaderParameter("weather_time", seconds);
-        }
+        ApplyParameter("weather_wetness", wetness);
+        ApplyParameter("weather_puddles", puddles);
+        ApplyParameter("weather_puddle_coverage", Mathf.Clamp(profile.PuddleCoverage, 0, .8f));
+        ApplyParameter("weather_puddle_scale", Mathf.Clamp(profile.PuddleScale, .1f, 4));
+        ApplyParameter("weather_darkening", Mathf.Clamp(profile.WetDarkening, 0, .5f));
+        ApplyParameter("weather_wet_roughness", Mathf.Clamp(profile.WetRoughness, .02f, .6f));
+        ApplyParameter("weather_puddle_roughness", Mathf.Clamp(profile.PuddleRoughness, .02f, .3f));
+        ApplyParameter("weather_wet_specular", Mathf.Clamp(profile.WetSpecular, 0, 1));
+        ApplyParameter("weather_rain", _weather.RainAmount * Mathf.Clamp(profile.Intensity, 0, 1));
+        ApplyParameter("weather_ripple_strength", profile.RainRipplesEnabled ? Mathf.Clamp(profile.RippleStrength, 0, .3f) : 0);
+        ApplyParameter("weather_ripple_scale", Mathf.Clamp(profile.RippleScale, .5f, 4));
+        ApplyParameter("weather_ripple_speed", Mathf.Clamp(profile.RippleSpeed, .2f, 3));
+        ApplyParameter("weather_snow", profile.SnowCoverEnabled ? Snow : 0);
+        ApplyParameter("weather_snow_color", profile.SnowColor);
+        ApplyParameter("weather_snow_roughness", Mathf.Clamp(profile.SnowRoughness, .4f, 1));
+        // Only ripple animation consumes time; a dry surface needs no per-frame writes.
+        if (_weather.RainAmount > 0 && profile.RainRipplesEnabled) ApplyParameter("weather_time", seconds);
+        bool snowLayer = profile.SnowCoverEnabled && Snow > .001f;
+        var standardProfile = (profile.WetDarkening, profile.WetRoughness, profile.WetSpecular);
+        if (_standardWetness == wetness && _standardSnowLayer == snowLayer && _standardProfile == standardProfile) return;
+        _standardWetness = wetness;
+        _standardSnowLayer = snowLayer;
+        _standardProfile = standardProfile;
         foreach (var entry in _standard)
         {
-            entry.Material.NextPass = profile.SnowCoverEnabled && Snow > .001f ? entry.SnowLayer : entry.OriginalNextPass;
+            entry.Material.NextPass = snowLayer ? entry.SnowLayer : entry.OriginalNextPass;
             float film = (1 - Mathf.Exp(-4 * wetness)) / (1 - Mathf.Exp(-4));
             float factor = 1 - wetness * Mathf.Clamp(profile.WetDarkening, 0, .5f);
             entry.Material.AlbedoColor = new Color(entry.Albedo.R * factor, entry.Albedo.G * factor, entry.Albedo.B * factor, entry.Albedo.A);
@@ -189,11 +223,14 @@ public partial class WeatherSurfaceComponent3D : Component3D
         {
             if (!GodotObject.IsInstanceValid(entry.Mesh)) continue;
             if (entry.Surface < 0) entry.Mesh.MaterialOverride = entry.Original;
-            else entry.Mesh.SetSurfaceOverrideMaterial(entry.Surface, entry.Original);
+            else if (entry.Mesh is MeshInstance3D mesh) mesh.SetSurfaceOverrideMaterial(entry.Surface, entry.Original);
         }
         _bindings.Clear();
         _copies.Clear();
         _materials.Clear();
+        _appliedValues.Clear();
+        _standardWetness = float.NaN;
+        _standardSnowLayer = false;
         _standard.Clear();
         _clock = null;
         _weather = null;

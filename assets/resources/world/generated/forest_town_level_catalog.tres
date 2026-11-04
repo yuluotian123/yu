@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://cgnrnnfpyvu6l"]
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://c1rjftywmpn7i"]
 
 [ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="1_fly31"]
 [ext_resource type="Resource" uid="uid://ckdg7exkwhywi" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="2_qk01i"]
@@ -9,7 +9,7 @@
 resource_name = "森林小镇 · 世界目录"
 script = ExtResource("4_gs7cx")
 LevelId = "209a74242d3e4c8ba415cd6ced08beea"
-SourceSignature = "54DF347F01395AD4DE1C6E5F26CBFB929E24F71C748FAB617C949110333DF771/population-v3/209a74242d3e4c8ba415cd6ced08beea/6261f7cc6f33405ebc8f6b4eec32bf8c/portal-export-v1"
+SourceSignature = "B8D162F9B665CEEA3E1C5C6B23228BE6D62B89AB28DB5F0CF9FDEAAA0E1161D9/population-v3/209a74242d3e4c8ba415cd6ced08beea/6261f7cc6f33405ebc8f6b4eec32bf8c/portal-export-v1"
 Actors = Array[Dictionary]([{
 "abstract": 45.0,
 "detailed": 30.0,
@@ -26,15 +26,106 @@ Actors = Array[Dictionary]([{
 "speed": 2.2
 }])
 Entrances = Dictionary[String, Vector3]({
-"default": Vector3(-3, 0.55, 4)
+"default": Vector3(1.56, 0.55, 22.62),
+"from_house_carpenter": Vector3(-20.49, 0.535, -0.9000001),
+"from_house_chief": Vector3(-0.42999998, 0.535, -10.89),
+"from_house_farmer_east": Vector3(8.58, 0.535, 18.3),
+"from_house_farmer_west": Vector3(-7.48, 0.535, 22.449999),
+"from_house_forester": Vector3(-16.811335, 0.535, -12.499014),
+"from_house_gatherer": Vector3(-10.059999, 0.535, -1.5600002),
+"from_house_herbalist": Vector3(9.36, 0.535, -10.94),
+"from_house_smallholder": Vector3(15.279999, 0.535, -1.9299998),
+"from_house_smith": Vector3(15.429999, 0.535, 10.85),
+"from_workshop": Vector3(-8.62, 0.535, 12.259999)
 })
 Portals = Array[Dictionary]([{
 "automatic": true,
 "enabled": true,
-"entry": "default",
+"entry": "from_town",
 "hours": 0.0,
 "id": "portal/d7ebd92d9db44aa89eca566ced0cb332",
 "name": "WorkshopPortal",
-"position": Vector3(3, 0.9, 3),
+"position": Vector3(-8.62, 0.5, 11.959999),
 "to": "31a903e2d81e45d0af568c59d0097bc8"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/5506f415a5bf927b99f770ab2fa06c58",
+"name": "Chief",
+"position": Vector3(-0.42999998, 0.5, -11.190001),
+"to": "forest_house_chief"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/2586243d50f101bd72ff4f11751710c6",
+"name": "Smith",
+"position": Vector3(15.429999, 0.5, 10.55),
+"to": "forest_house_smith"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/62fde8809bed76eab14baab37dd498fa",
+"name": "Carpenter",
+"position": Vector3(-20.49, 0.5, -1.2),
+"to": "forest_house_carpenter"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/ea91c8f5da7a75a4e8d4edb12ccfc5e2",
+"name": "Herbalist",
+"position": Vector3(9.36, 0.5, -11.24),
+"to": "forest_house_herbalist"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/bd6ec7ea61f4357214c252a6206c6f8d",
+"name": "Forester",
+"position": Vector3(-16.913939, 0.5, -12.780921),
+"to": "forest_house_forester"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/a5ea86941e6fe0ba79b3e40e5b249842",
+"name": "Gatherer",
+"position": Vector3(-10.059999, 0.5, -1.8600001),
+"to": "forest_house_gatherer"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/12bb832f099e1e45f46531e40cff1abc",
+"name": "FarmerEast",
+"position": Vector3(8.58, 0.5, 18),
+"to": "forest_house_farmer_east"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/99ab6b5ccdfe3921162ff490c6d6a488",
+"name": "FarmerWest",
+"position": Vector3(-7.48, 0.5, 22.15),
+"to": "forest_house_farmer_west"
+}, {
+"automatic": true,
+"enabled": true,
+"entry": "from_town",
+"hours": 0.0,
+"id": "portal/6dcb74d998d93b4e8a7920f5b7a9478c",
+"name": "Smallholder",
+"position": Vector3(15.279999, 0.5, -2.2299998),
+"to": "forest_house_smallholder"
 }])

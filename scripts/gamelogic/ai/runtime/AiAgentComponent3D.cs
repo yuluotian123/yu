@@ -95,9 +95,9 @@ public partial class AiAgentComponent3D : Component3D, ISaveSection, IGraphNodeP
     public double SimulationHours=>ManagedActor?.Hours??World?.Clock.TotalHours??12;
     public double Now=>ManagedActor is {} actor?actor.Hours*World.Session.Population.SecondsPerHour:World?.RuntimeSeconds??0;
     public IEnumerable<Type> GetGraphNodeTypes(GraphAsset graph, GraphAsset root) => graph is NpcGraphAsset
-        ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData)} : Array.Empty<Type>();
+        ? new[]{typeof(NpcRootNodeData),typeof(NpcScheduleNodeData),typeof(NpcPerceptionNodeData),typeof(NpcMemoryNodeData),typeof(NpcPolicyNodeData),typeof(NpcGoalNodeData),typeof(NpcActionNodeData),typeof(NpcTemplateNodeData),typeof(NpcTargetSelectorNodeData),typeof(NpcDialogueNodeData)} : Array.Empty<Type>();
     public IEnumerable<Type> GetGraphActionTypes(GraphAsset graph, GraphAsset root) => graph is FlowGraphAsset && (root is NpcGraphAsset || Graph?.Definitions.OfType<NpcActionDefinition>().Any(a=>a.ExecutionGraph==graph)==true)
-        ? new[]{typeof(NpcMoveToTargetAction),typeof(NpcInteractAction),typeof(NpcWaitAction),typeof(NpcRoamAction),typeof(NpcAbilityAction),typeof(NpcRememberAction),typeof(NpcAdjustRelationAction),typeof(NpcAdjustAffectAction)} : Array.Empty<Type>();
+        ? new[]{typeof(NpcMoveToTargetAction),typeof(NpcInteractAction),typeof(NpcWaitAction),typeof(NpcRoamAction),typeof(NpcAbilityAction),typeof(NpcAdjustRelationAction),typeof(NpcAdjustAffectAction)} : Array.Empty<Type>();
     readonly List<string> _trace=new(),_scores=new();
     readonly Dictionary<string,NpcBoundAction> _grounded=new(StringComparer.Ordinal);
     readonly Queue<NpcBoundAction> _plan=new();

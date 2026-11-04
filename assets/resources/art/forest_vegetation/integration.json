@@ -1,0 +1,13 @@
+{
+  "prefab_replacements": {
+    "ancient_oak": "oak_broad",
+    "branching_oak": "hornbeam_tall",
+    "canopy_oak": "oak_sweeping",
+    "shrub_round": "hazel_round",
+    "shrub_tall": "hazel_tall",
+    "shrub_low": "woodland_low"
+  },
+  "changed_resource_paths": 6,
+  "all_other_scene_bytes_unchanged": true,
+  "baseline_sha256": "bfe6efaf0c9181ee1ece556e951fe18ef56ad8573560aae5ca8b4f61247fae9d"
+}

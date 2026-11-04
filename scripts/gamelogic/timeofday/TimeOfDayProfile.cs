@@ -61,13 +61,15 @@ public partial class TimeOfDayProfile : Resource
     /// <summary>阴影光源角度，与天空太阳大小独立。0 使用清晰的 PCF 阴影；大于 0 开启 PCSS，数值越大半影越宽、越容易显出采样噪点。 仅灯光驱动开启时应用。</summary>
     [Export(PropertyHint.Range, "0,2,0.01")] public float ShadowAngularDistance { get; set; } = 0;
     /// <summary>固定阴影边缘过滤宽度。搭配高质量 PCF 小幅柔化边缘，不使用大面积随机半影。 仅灯光驱动开启时应用。</summary>
-    [Export(PropertyHint.Range, "0,2,0.05")] public float ShadowFilterBlur { get; set; } = 1f;
+    [Export(PropertyHint.Range, "0,8,0.05")] public float ShadowFilterBlur { get; set; } = 1f;
     /// <summary>投影深度偏移；过大会使横梁和脚底阴影脱离物体。与法线偏移一起调整。 仅灯光驱动开启时应用。</summary>
     [Export(PropertyHint.Range, "0,1,0.01")] public float ShadowBias { get; set; } = .05f;
     /// <summary>沿表面法线的阴影偏移；小值保留细结构，避免倾斜表面的边界变形。 仅灯光驱动开启时应用。</summary>
     [Export(PropertyHint.Range, "0,4,0.05")] public float ShadowNormalBias { get; set; } = .5f;
     /// <summary>近景阴影覆盖距离（米）；越大覆盖越远，但近景精度越低。 仅灯光驱动开启时应用。</summary>
     [Export(PropertyHint.Range, "10,200,1")] public float ShadowDistance { get; set; } = 55;
+    /// <summary>级联数量按场景配置；默认四段，紧凑林间关卡可使用两段。</summary>
+    [Export] public DirectionalLight3D.ShadowMode ShadowCascadeMode { get; set; } = DirectionalLight3D.ShadowMode.Parallel4Splits;
     /// <summary>第一段覆盖到角色及近景建筑，避免默认 5.5 米以内的空区域独占最高精度。 仅灯光驱动开启时应用。</summary>
     [Export(PropertyHint.Range, "0.01,0.9,0.01")] public float ShadowSplit1 { get; set; } = .2f;
     /// <summary>第二段级联阴影的距离比例；仅灯光驱动开启时应用，限制在第一段之后。</summary>
@@ -123,11 +125,11 @@ public partial class TimeOfDayProfile : Resource
             moonLight.LightTemperature = 8500;
             moonLight.LightColor = MoonTint;
             sunLight.LightAngularDistance = moonLight.LightAngularDistance = Mathf.Clamp(ShadowAngularDistance, 0, 2);
-            sunLight.ShadowBlur = moonLight.ShadowBlur = Mathf.Clamp(ShadowFilterBlur, 0, 2);
+            sunLight.ShadowBlur = moonLight.ShadowBlur = Mathf.Clamp(ShadowFilterBlur, 0, 8);
             sunLight.ShadowBias = moonLight.ShadowBias = Mathf.Clamp(ShadowBias, 0, 1);
             sunLight.ShadowNormalBias = moonLight.ShadowNormalBias = Mathf.Clamp(ShadowNormalBias, 0, 4);
             sunLight.DirectionalShadowMaxDistance = moonLight.DirectionalShadowMaxDistance = Mathf.Clamp(ShadowDistance, 10, 200);
-            sunLight.DirectionalShadowMode = moonLight.DirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
+            sunLight.DirectionalShadowMode = moonLight.DirectionalShadowMode = ShadowCascadeMode;
             sunLight.DirectionalShadowBlendSplits = moonLight.DirectionalShadowBlendSplits = true;
             sunLight.DirectionalShadowSplit1 = moonLight.DirectionalShadowSplit1 = Mathf.Clamp(ShadowSplit1, .01f, .9f);
             sunLight.DirectionalShadowSplit2 = moonLight.DirectionalShadowSplit2 = Mathf.Clamp(ShadowSplit2, sunLight.DirectionalShadowSplit1 + .01f, .95f);
@@ -223,9 +225,14 @@ public partial class TimeOfDayProfile : Resource
         ApplyLightDirection(moonLight, CelestialMath.Direction(hour, phase, NoonElevation, Azimuth));
     }
 
-    private static void ApplyLightDirection(DirectionalLight3D light, Vector3 direction)
+    private void ApplyLightDirection(DirectionalLight3D light, Vector3 direction)
     {
-        Basis basis = Basis.LookingAt(-direction, Vector3.Up);
+        // 沿固定天球轨道轴构建朝向，避免世界 Up 在高太阳高度时让阴影图额外滚转。
+        // 此轴与整个日月轨道垂直；光照方向不变，正午与原朝向一致。
+        float tilt = Mathf.DegToRad(Mathf.Clamp(NoonElevation, 10, 89));
+        Vector3 orbitUp = new Vector3(0, Mathf.Cos(tilt), -Mathf.Sin(tilt))
+            .Rotated(Vector3.Up, Mathf.DegToRad(Azimuth));
+        Basis basis = Basis.LookingAt(-direction, orbitUp);
         // 暂停和固定编辑器预览时不反复标记灯光变换脏。
         if (light.Basis != basis) light.Basis = basis;
     }

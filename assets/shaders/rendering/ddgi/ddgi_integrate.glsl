@@ -69,10 +69,13 @@ void main() {
 	if (!valid) imageStore(distance_atlas, distance_pixel, vec4(0.0));
 	else if (epochs.y != floatBitsToUint(params.options.z)) {
 		uint count = sample_layout.x;
+		// Visibility interpolates neighboring probes. Distant sky hits must not
+		// inflate local distance variance and wash out nearby occluders.
+		float visibility_distance = params.origin_spacing.w * sqrt(3.0) * 1.5;
 		for (uint id = 0; id < count; id++) {
 			Ray ray = visibility_rays[slot * count + id];
 			float weight = pow(max(dot(distance_direction, ray.direction_backface.xyz), 0.0), 32.0);
-			float distance_to_hit = ray.radiance_distance.w;
+			float distance_to_hit = min(ray.radiance_distance.w, visibility_distance);
 			distance_sum += vec3(distance_to_hit, distance_to_hit * distance_to_hit, 1.0) * weight;
 		}
 		imageStore(distance_atlas, distance_pixel, vec4(distance_sum.xy / max(distance_sum.z, 1e-6), 0.0, 0.0));

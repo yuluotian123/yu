@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://cue2gnjhp47jb"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_house_05_herbalist.tres" id="1_3ottk"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_r0p5p"]
+
+[resource]
+script = ExtResource("2_r0p5p")
+ScenePath = "res://assets/scenes/levels/forest_village_interiors/05_herbalist.tscn"
+Location = ExtResource("1_3ottk")
+ExportPortalRoutes = true
+Id = "forest_house_herbalist"
+DisplayName = "草药照护户 · 室内"

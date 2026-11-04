@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/oak_broad.tscn" id="1_065fl"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/hornbeam_tall.tscn" id="2_1ra1f"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/oak_sweeping.tscn" id="3_tpce3"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/hazel_round.tscn" id="4_judo3"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/hazel_tall.tscn" id="5_n34wh"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/woodland_low.tscn" id="6_11b1e"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/oak_sapling.tscn" id="7_01i4q"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/fern_fan.tscn" id="8_swrlp"]
+
+[sub_resource type="Environment" id="Environment_1qbxx"]
+background_mode = 1
+background_color = Color(0.8509804, 0.83137256, 0.74509805, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.63529414, 0.70980394, 0.70980394, 1)
+ambient_light_energy = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hr2my"]
+albedo_color = Color(0.7176471, 0.6901961, 0.5411765, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4tvfd"]
+size = Vector2(100, 100)
+
+[node name="ForestVegetationReview" type="Node3D" unique_id=83562938]
+
+[node name="@WorldEnvironment@2" type="WorldEnvironment" parent="." unique_id=290317968]
+environment = SubResource("Environment_1qbxx")
+
+[node name="ReviewSun" type="DirectionalLight3D" parent="." unique_id=301545508]
+transform = Transform3D(0.8480481, 0.3938068, -0.35458517, 0, 0.66913056, 0.74314487, 0.52991927, -0.63022256, 0.5674549, 0, 0, 0)
+light_intensity_lux = 2.5
+light_color = Color(1, 0.94509804, 0.84313726, 1)
+light_energy = 1.6
+shadow_enabled = true
+directional_shadow_max_distance = 70.0
+
+[node name="@MeshInstance3D@3" type="MeshInstance3D" parent="." unique_id=1568888634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+material_override = SubResource("StandardMaterial3D_hr2my")
+mesh = SubResource("PlaneMesh_4tvfd")
+
+[node name="oak_broad" type="Node3D" parent="." unique_id=1616643208 instance=ExtResource("1_065fl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -4)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/oak_broad.glb"
+metadata/source_polygons = 6872
+metadata/triangles = 6872
+metadata/tree_revision = 4
+metadata/vegetation_revision = 5
+
+[node name="hornbeam_tall" type="Node3D" parent="." unique_id=1295839888 instance=ExtResource("2_1ra1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/hornbeam_tall.glb"
+metadata/source_polygons = 6872
+metadata/triangles = 6872
+metadata/tree_revision = 4
+metadata/vegetation_revision = 5
+
+[node name="oak_sweeping" type="Node3D" parent="." unique_id=453536558 instance=ExtResource("3_tpce3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -3)
+metadata/asset_category = "tree"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/oak_sweeping.glb"
+metadata/source_polygons = 6116
+metadata/triangles = 6116
+metadata/tree_revision = 4
+metadata/vegetation_revision = 5
+
+[node name="hazel_round" type="Node3D" parent="." unique_id=751294439 instance=ExtResource("4_judo3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 5)
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/hazel_round.glb"
+metadata/source_polygons = 1344
+metadata/triangles = 1344
+metadata/vegetation_revision = 5
+
+[node name="hazel_tall" type="Node3D" parent="." unique_id=1581499022 instance=ExtResource("5_n34wh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 5)
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/hazel_tall.glb"
+metadata/source_polygons = 1344
+metadata/triangles = 1344
+metadata/vegetation_revision = 5
+
+[node name="woodland_low" type="Node3D" parent="." unique_id=1761050187 instance=ExtResource("6_11b1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0, 5)
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/woodland_low.glb"
+metadata/source_polygons = 1792
+metadata/triangles = 1792
+metadata/vegetation_revision = 5
+
+[node name="oak_sapling" type="Node3D" parent="." unique_id=1734278383 instance=ExtResource("7_01i4q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 4)
+metadata/source_model = "res://assets/models/environment/forest_vegetation/oak_sapling.glb"
+metadata/triangles = 3344
+metadata/source_polygons = 3344
+metadata/vegetation_revision = 5
+metadata/asset_category = "tree"
+
+[node name="fern_fan" type="Node3D" parent="." unique_id=1633661713 instance=ExtResource("8_swrlp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+metadata/source_model = "res://assets/models/environment/forest_vegetation/fern_fan.glb"
+metadata/triangles = 1278
+metadata/source_polygons = 1278
+metadata/vegetation_revision = 5
+metadata/asset_category = "plant"
+
+[node name="ReviewCamera" type="Camera3D" parent="." unique_id=1905017409]
+transform = Transform3D(0.8624158, -0.18544205, 0.47100982, 0, 0.93048066, 0.36634105, -0.50620055, -0.31593832, 0.8024612, 27, 29, 44)
+projection = 1
+current = true
+size = 26.0

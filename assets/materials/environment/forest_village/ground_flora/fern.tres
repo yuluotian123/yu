@@ -1,0 +1,53 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://jaa8h55ghud8"]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/plant_painterly.gdshader" id="1_mqbbo"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/ground_contact.res" id="painted_floor"]
+
+[resource]
+resource_name = "Forest floor · painted fern"
+render_priority = 0
+shader = ExtResource("1_mqbbo")
+shader_parameter/weather_wetness = null
+shader_parameter/weather_puddles = null
+shader_parameter/weather_puddles_enabled = false
+shader_parameter/weather_puddle_coverage = null
+shader_parameter/weather_puddle_scale = null
+shader_parameter/weather_darkening = null
+shader_parameter/weather_wet_roughness = null
+shader_parameter/weather_puddle_roughness = null
+shader_parameter/weather_wet_specular = null
+shader_parameter/weather_rain = null
+shader_parameter/weather_ripple_strength = null
+shader_parameter/weather_ripple_scale = null
+shader_parameter/weather_ripple_speed = null
+shader_parameter/weather_snow = null
+shader_parameter/weather_snow_color = null
+shader_parameter/weather_snow_roughness = null
+shader_parameter/weather_time = null
+shader_parameter/wet_darkening_strength = 1.25
+shader_parameter/wet_film_strength = 0.3
+shader_parameter/wet_roughness_min = 0.7
+shader_parameter/wet_specular_scale = 1.0
+shader_parameter/wet_puddle_coverage_scale = 1.0
+shader_parameter/use_leaf_texture = null
+shader_parameter/alpha_cutoff = null
+shader_parameter/palette_strength = 0.0
+shader_parameter/color_saturation = 1.0
+shader_parameter/albedo_value = 1.0
+shader_parameter/canopy_normal_blend = null
+shader_parameter/band_softness = 0.07
+shader_parameter/light_wrap = 0.48
+shader_parameter/shadow_tint = Vector3(0.74, 0.82, 0.66)
+shader_parameter/middle_tint = null
+shader_parameter/light_tint = null
+shader_parameter/painterly_blend = 0.3
+shader_parameter/wind_strength = 0.016
+shader_parameter/wind_speed = null
+shader_parameter/wind_flutter = 0.0
+shader_parameter/grass_normal_blend = 0.35
+shader_parameter/directional_shadow_lift = 0.26
+shader_parameter/floor_color_mix = 0.35
+shader_parameter/ground_contact_map = ExtResource("painted_floor")
+shader_parameter/ground_contact_rect = Vector4(-40.56,-37.44,81.12,74.88)
+

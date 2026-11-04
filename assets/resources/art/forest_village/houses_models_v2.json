@@ -1,0 +1,1793 @@
+{
+  "budget_triangles": 20000,
+  "detail_revision": 3,
+  "coordinate_system": "Blender Z-up, -Y front; GLB exports Godot +Y-up, +Z front",
+  "assets": [
+    {
+      "name": "01_chief",
+      "file": "01_chief.glb",
+      "category": "building",
+      "triangles": 18569,
+      "polygons": 18569,
+      "vertices": 18104,
+      "bounds_blender": [
+        [
+          -3.2127978801727295,
+          -2.6499998569488525,
+          -0.009999997913837433
+        ],
+        [
+          3.3927860260009766,
+          2.4437482357025146,
+          3.25
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            0,
+            1.085,
+            -0.45
+          ],
+          "size": [
+            5.6,
+            1.85,
+            2.6
+          ]
+        },
+        {
+          "position": [
+            2.25,
+            1.06,
+            0.35
+          ],
+          "size": [
+            1.55,
+            1.8,
+            3.7
+          ]
+        },
+        {
+          "position": [
+            -0.45,
+            0.08,
+            1.45
+          ],
+          "size": [
+            5,
+            0.16,
+            1.1
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -0.2500000000000001,
+              0,
+              2.59
+            ],
+            [
+              0.9500000000000001,
+              0,
+              2.59
+            ],
+            [
+              -0.2500000000000001,
+              0,
+              1.9899999999999998
+            ],
+            [
+              0.9500000000000001,
+              0,
+              1.9899999999999998
+            ],
+            [
+              -0.2500000000000001,
+              0.16,
+              1.9899999999999998
+            ],
+            [
+              0.9500000000000001,
+              0.16,
+              1.9899999999999998
+            ]
+          ]
+        }
+      ],
+      "door": [
+        0.35,
+        0.16,
+        0.85
+      ],
+      "approach": [
+        0.35,
+        0.5,
+        2.85
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ],
+        "back": [
+          "recessed_window",
+          "door",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ],
+        "left": [
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "stone_plinth_and_joinery"
+        ],
+        "right": [
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Plaster",
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Roof",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 57244,
+      "removed_hidden_faces": 1110,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": false,
+        "primary_width_m": 0.82,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          0.3499999940395355,
+          0.1599999964237213,
+          0.9700000286102295
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Chief",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/01_chief.png",
+      "design": "横向 L 形议事长屋／低四坡陶瓦顶／通长开放门廊"
+    },
+    {
+      "name": "02_host",
+      "file": "02_host.glb",
+      "category": "building",
+      "triangles": 18713,
+      "polygons": 18713,
+      "vertices": 15359,
+      "bounds_blender": [
+        [
+          -1.8938982486724854,
+          -2.059999942779541,
+          -0.009999997913837433
+        ],
+        [
+          2.4000000953674316,
+          1.8768632411956787,
+          6.0
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            0,
+            0.985,
+            0
+          ],
+          "size": [
+            2.6,
+            1.65,
+            2.7
+          ]
+        },
+        {
+          "position": [
+            0,
+            2.5,
+            0
+          ],
+          "size": [
+            2.9,
+            1.38,
+            2.95
+          ]
+        },
+        {
+          "position": [
+            0,
+            3.85,
+            0
+          ],
+          "size": [
+            3.05,
+            1.32,
+            3.05
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              0.22499999999999998,
+              0,
+              2.09
+            ],
+            [
+              1.255,
+              0,
+              2.09
+            ],
+            [
+              0.22499999999999998,
+              0,
+              1.4899999999999998
+            ],
+            [
+              1.255,
+              0,
+              1.4899999999999998
+            ],
+            [
+              0.22499999999999998,
+              0.16,
+              1.4899999999999998
+            ],
+            [
+              1.255,
+              0.16,
+              1.4899999999999998
+            ]
+          ]
+        },
+        {
+          "position": [
+            0.74,
+            0.08,
+            1.42
+          ],
+          "size": [
+            0.95,
+            0.16,
+            0.1799999999999999
+          ]
+        }
+      ],
+      "door": [
+        0.74,
+        0.16,
+        1.35
+      ],
+      "approach": [
+        0.74,
+        0.5,
+        2.6
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards",
+          "recessed_window",
+          "individual_boards"
+        ],
+        "back": [
+          "storage_door",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards",
+          "recessed_window",
+          "individual_boards",
+          "coopered_storage_barrels"
+        ],
+        "left": [
+          "recessed_window",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards",
+          "recessed_window",
+          "individual_boards"
+        ],
+        "right": [
+          "recessed_window",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards",
+          "door",
+          "individual_boards"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Roof",
+        "Plaster",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 52145,
+      "removed_hidden_faces": 770,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.68,
+        "primary_height_m": 1.42,
+        "stand_point": [
+          0.7400000095367432,
+          0.1599999964237213,
+          1.4700000286102295
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Host",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/02_host.png",
+      "design": "窄高三层前店后宅／挑出上层／截尖山墙与小侧阳台"
+    },
+    {
+      "name": "03_smith",
+      "file": "03_smith.glb",
+      "category": "building",
+      "triangles": 18800,
+      "polygons": 18800,
+      "vertices": 12819,
+      "bounds_blender": [
+        [
+          -2.9600000381469727,
+          -2.2100000381469727,
+          -0.009999997913837433
+        ],
+        [
+          3.7049999237060547,
+          1.9849998950958252,
+          3.630000114440918
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            -0.65,
+            1.085,
+            -0.1
+          ],
+          "size": [
+            3.8,
+            1.85,
+            3.1
+          ]
+        },
+        {
+          "position": [
+            2.67,
+            0.55,
+            -1.3
+          ],
+          "size": [
+            1.1,
+            1.1,
+            0.65
+          ]
+        },
+        {
+          "position": [
+            2.55,
+            0.4,
+            0.15
+          ],
+          "size": [
+            0.65,
+            0.8,
+            0.35
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -1.48,
+              0,
+              2.24
+            ],
+            [
+              -0.41999999999999993,
+              0,
+              2.24
+            ],
+            [
+              -1.48,
+              0,
+              1.6400000000000001
+            ],
+            [
+              -0.41999999999999993,
+              0,
+              1.6400000000000001
+            ],
+            [
+              -1.48,
+              0.16,
+              1.6400000000000001
+            ],
+            [
+              -0.41999999999999993,
+              0.16,
+              1.6400000000000001
+            ]
+          ]
+        },
+        {
+          "position": [
+            -0.95,
+            0.08,
+            1.5450000000000002
+          ],
+          "size": [
+            0.98,
+            0.16,
+            0.2300000000000004
+          ]
+        }
+      ],
+      "door": [
+        -0.95,
+        0.16,
+        1.45
+      ],
+      "approach": [
+        -0.95,
+        0.5,
+        2.75
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "recessed_window",
+          "coursed_masonry"
+        ],
+        "back": [
+          "recessed_window",
+          "coursed_masonry"
+        ],
+        "left": [
+          "recessed_window",
+          "coursed_masonry"
+        ],
+        "right": [
+          "recessed_window",
+          "coursed_masonry",
+          "forged_horn_bellows_and_quench_tub"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Roof",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 23664,
+      "removed_hidden_faces": 258,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.78,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          -0.949999988079071,
+          0.1599999964237213,
+          1.5700000524520874
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Smith",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/03_smith.png",
+      "design": "低矮厚石墙住宅／错层单坡深灰屋顶／粗方烟囱"
+    },
+    {
+      "name": "04_carpenter",
+      "file": "04_carpenter.glb",
+      "category": "building",
+      "triangles": 18800,
+      "polygons": 18800,
+      "vertices": 12776,
+      "bounds_blender": [
+        [
+          -3.2200002670288086,
+          -2.1600000858306885,
+          -0.009999997913837433
+        ],
+        [
+          3.0623371601104736,
+          2.002607822418213,
+          3.6000001430511475
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            -1.95,
+            1.085,
+            -0.2
+          ],
+          "size": [
+            1.9,
+            1.85,
+            2.8
+          ]
+        },
+        {
+          "position": [
+            0.8,
+            0.09,
+            -0.1
+          ],
+          "size": [
+            3.7,
+            0.18,
+            2.9
+          ]
+        },
+        {
+          "position": [
+            0.85,
+            0.45,
+            0.45
+          ],
+          "size": [
+            1.4,
+            0.9,
+            0.55
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -2.3,
+              0,
+              2.19
+            ],
+            [
+              -1.24,
+              0,
+              2.19
+            ],
+            [
+              -2.3,
+              0,
+              1.5899999999999999
+            ],
+            [
+              -1.24,
+              0,
+              1.5899999999999999
+            ],
+            [
+              -2.3,
+              0.16,
+              1.5899999999999999
+            ],
+            [
+              -1.24,
+              0.16,
+              1.5899999999999999
+            ]
+          ]
+        },
+        {
+          "position": [
+            -1.77,
+            0.08,
+            1.395
+          ],
+          "size": [
+            0.98,
+            0.16,
+            0.4300000000000001
+          ]
+        }
+      ],
+      "door": [
+        -1.77,
+        0.16,
+        1.2
+      ],
+      "approach": [
+        -1.77,
+        0.5,
+        2.7
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "individual_boards"
+        ],
+        "back": [
+          "recessed_window",
+          "individual_boards",
+          "recessed_window",
+          "individual_boards",
+          "tool_rail_and_leaning_boards"
+        ],
+        "left": [
+          "recessed_window",
+          "individual_boards"
+        ],
+        "right": [
+          "recessed_window",
+          "individual_boards"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Wood",
+        "Stone",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 33404,
+      "removed_hidden_faces": 209,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.76,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          -1.7699999809265137,
+          0.1599999964237213,
+          1.3200000524520874
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Carpenter",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/04_carpenter.png",
+      "design": "细长木构工棚住宅／不对称盐箱木瓦顶／三开间工作廊"
+    },
+    {
+      "name": "05_herbalist",
+      "file": "05_herbalist.glb",
+      "category": "building",
+      "triangles": 18800,
+      "polygons": 18800,
+      "vertices": 15339,
+      "bounds_blender": [
+        [
+          -2.151301383972168,
+          -2.2300000190734863,
+          -0.009999997913837433
+        ],
+        [
+          3.2495999336242676,
+          2.084048271179199,
+          4.220000267028809
+        ]
+      ],
+      "collision": [
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -0.8500000238418579,
+              0.02,
+              1.4722431898117065
+            ],
+            [
+              0.8500000238418579,
+              0.02,
+              1.4722431898117065
+            ],
+            [
+              1.7000000476837158,
+              0.02,
+              -0.0
+            ],
+            [
+              0.8500000238418579,
+              0.02,
+              -1.4722431898117065
+            ],
+            [
+              -0.8500000238418579,
+              0.02,
+              -1.4722431898117065
+            ],
+            [
+              -1.7000000476837158,
+              0.02,
+              -2.0818995170458873e-16
+            ],
+            [
+              -0.8500000238418579,
+              1.96,
+              1.4722431898117065
+            ],
+            [
+              0.8500000238418579,
+              1.96,
+              1.4722431898117065
+            ],
+            [
+              1.7000000476837158,
+              1.96,
+              -0.0
+            ],
+            [
+              0.8500000238418579,
+              1.96,
+              -1.4722431898117065
+            ],
+            [
+              -0.8500000238418579,
+              1.96,
+              -1.4722431898117065
+            ],
+            [
+              -1.7000000476837158,
+              1.96,
+              -2.0818995170458873e-16
+            ]
+          ]
+        },
+        {
+          "position": [
+            2.1,
+            0.8350000000000001,
+            -0.35
+          ],
+          "size": [
+            1.4,
+            1.35,
+            2.1
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -0.53,
+              0,
+              2.2600000000000002
+            ],
+            [
+              0.53,
+              0,
+              2.2600000000000002
+            ],
+            [
+              -0.53,
+              0,
+              1.6600000000000001
+            ],
+            [
+              0.53,
+              0,
+              1.6600000000000001
+            ],
+            [
+              -0.53,
+              0.16,
+              1.6600000000000001
+            ],
+            [
+              0.53,
+              0.16,
+              1.6600000000000001
+            ]
+          ]
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            1.5660000000000003
+          ],
+          "size": [
+            0.98,
+            0.16,
+            0.2280000000000004
+          ]
+        }
+      ],
+      "door": [
+        0,
+        0.16,
+        1.472
+      ],
+      "approach": [
+        0,
+        0.5,
+        2.8
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ],
+        "back": [
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "herb_pottery_and_water_cask"
+        ],
+        "left": [
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "stone_plinth_and_joinery"
+        ],
+        "right": [
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Plaster",
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Roof",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 37276,
+      "removed_hidden_faces": 252,
+      "entrance_audit": {
+        "marker_error_m": 0.00024318695068359375,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.76,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          0.0,
+          0.1599999964237213,
+          1.5920000076293945
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Herbalist",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/05_herbalist.png",
+      "design": "六边形土坯小屋／高锥形苔绿木瓦顶／低矮附属药房"
+    },
+    {
+      "name": "06_forester",
+      "file": "06_forester.glb",
+      "category": "building",
+      "triangles": 18799,
+      "polygons": 18799,
+      "vertices": 11559,
+      "bounds_blender": [
+        [
+          -2.1827585697174072,
+          -2.6100001335144043,
+          0.0
+        ],
+        [
+          2.1827585697174072,
+          2.2200000286102295,
+          4.049999713897705
+        ]
+      ],
+      "collision": [
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -2.05,
+              0.05,
+              1.8
+            ],
+            [
+              2.05,
+              0.05,
+              1.8
+            ],
+            [
+              0,
+              3.8,
+              1.8
+            ],
+            [
+              -2.05,
+              0.05,
+              -1.8
+            ],
+            [
+              2.05,
+              0.05,
+              -1.8
+            ],
+            [
+              0,
+              3.8,
+              -1.8
+            ]
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -0.615,
+              0,
+              2.64
+            ],
+            [
+              0.615,
+              0,
+              2.64
+            ],
+            [
+              -0.615,
+              0,
+              2.04
+            ],
+            [
+              0.615,
+              0,
+              2.04
+            ],
+            [
+              -0.615,
+              0.23,
+              2.04
+            ],
+            [
+              0.615,
+              0.23,
+              2.04
+            ]
+          ]
+        },
+        {
+          "position": [
+            0,
+            0.115,
+            1.92
+          ],
+          "size": [
+            1.15,
+            0.23,
+            0.27999999999999997
+          ]
+        }
+      ],
+      "door": [
+        0,
+        0.23,
+        1.8
+      ],
+      "approach": [
+        0,
+        0.5,
+        3.0
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window"
+        ],
+        "back": [
+          "recessed_window",
+          "recessed_window",
+          "cut_log_growth_rings_and_hardware"
+        ],
+        "left": [
+          "eave_storage_hatch",
+          "framed_roof_window"
+        ],
+        "right": [
+          "eave_storage_hatch",
+          "framed_roof_window"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Stone",
+        "Roof",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 21783,
+      "removed_hidden_faces": 0,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.78,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          0.0,
+          0.23000000417232513,
+          1.9199999570846558
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Forester",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/06_forester.png",
+      "design": "粗原木三角屋／陡峭 A 字木瓦顶／低石台与窄门廊"
+    },
+    {
+      "name": "07_gatherer",
+      "file": "07_gatherer.glb",
+      "category": "building",
+      "triangles": 18799,
+      "polygons": 18799,
+      "vertices": 12250,
+      "bounds_blender": [
+        [
+          -2.234999895095825,
+          -3.2649998664855957,
+          0.0
+        ],
+        [
+          2.8350000381469727,
+          2.384999990463257,
+          3.147486686706543
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            0,
+            1.6,
+            -0.25
+          ],
+          "size": [
+            3.6,
+            1.7,
+            2.7
+          ]
+        },
+        {
+          "position": [
+            0.3,
+            0.68,
+            1.65
+          ],
+          "size": [
+            4.6,
+            0.14,
+            1.15
+          ]
+        },
+        {
+          "position": [
+            2.15,
+            0.68,
+            -0.25
+          ],
+          "size": [
+            0.7,
+            0.14,
+            3.8
+          ]
+        },
+        {
+          "position": [
+            0,
+            0.68,
+            -1.95
+          ],
+          "size": [
+            3.85,
+            0.14,
+            0.7
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -1.25,
+              0,
+              3.3
+            ],
+            [
+              -0.1499999999999999,
+              0,
+              3.3
+            ],
+            [
+              -1.25,
+              0,
+              2.2249999999999996
+            ],
+            [
+              -0.1499999999999999,
+              0,
+              2.2249999999999996
+            ],
+            [
+              -1.25,
+              0.75,
+              2.2249999999999996
+            ],
+            [
+              -0.1499999999999999,
+              0.75,
+              2.2249999999999996
+            ]
+          ]
+        }
+      ],
+      "door": [
+        -0.7,
+        0.75,
+        1.1
+      ],
+      "approach": [
+        -0.7,
+        0.5,
+        3.6
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "individual_boards"
+        ],
+        "back": [
+          "door",
+          "recessed_window",
+          "individual_boards",
+          "woven_storage_and_post_bindings"
+        ],
+        "left": [
+          "recessed_window",
+          "individual_boards"
+        ],
+        "right": [
+          "recessed_window",
+          "individual_boards"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Wood",
+        "Stone",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 25762,
+      "removed_hidden_faces": 356,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": false,
+        "primary_width_m": 0.75,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          -0.699999988079071,
+          0.75,
+          1.2200000286102295
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Gatherer",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/07_gatherer.png",
+      "design": "小型架高木板屋／单坡树皮顶／外置阶梯和晾晒廊"
+    },
+    {
+      "name": "08_farmer_east",
+      "file": "08_farmer_east.glb",
+      "category": "building",
+      "triangles": 18503,
+      "polygons": 18503,
+      "vertices": 18536,
+      "bounds_blender": [
+        [
+          -3.1063177585601807,
+          -2.005000114440918,
+          -0.009999997913837433
+        ],
+        [
+          3.1184000968933105,
+          2.5734481811523438,
+          2.950000047683716
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            0,
+            1.01,
+            -1.35
+          ],
+          "size": [
+            5.3,
+            1.7,
+            1.4
+          ]
+        },
+        {
+          "position": [
+            -2.0,
+            1.01,
+            0.12
+          ],
+          "size": [
+            1.3,
+            1.7,
+            3.1
+          ]
+        },
+        {
+          "position": [
+            2.0,
+            1.01,
+            0.12
+          ],
+          "size": [
+            1.3,
+            1.7,
+            3.1
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -0.5700000000000001,
+              0,
+              0.08999999999999994
+            ],
+            [
+              0.5700000000000001,
+              0,
+              0.08999999999999994
+            ],
+            [
+              -0.5700000000000001,
+              0,
+              -0.51
+            ],
+            [
+              0.5700000000000001,
+              0,
+              -0.51
+            ],
+            [
+              -0.5700000000000001,
+              0.16,
+              -0.51
+            ],
+            [
+              0.5700000000000001,
+              0.16,
+              -0.51
+            ]
+          ]
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            -0.5800000000000001
+          ],
+          "size": [
+            1.06,
+            0.16,
+            0.1799999999999999
+          ]
+        }
+      ],
+      "door": [
+        0,
+        0.16,
+        -0.65
+      ],
+      "approach": [
+        0,
+        0.5,
+        2.4
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ],
+        "back": [
+          "door",
+          "recessed_window",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "stone_plinth_and_joinery",
+          "stone_plinth_and_joinery",
+          "water_barrel_and_ceramic_planters"
+        ],
+        "left": [
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ],
+        "right": [
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery",
+          "recessed_window",
+          "stone_plinth_and_joinery"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Plaster",
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Roof",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 59244,
+      "removed_hidden_faces": 1166,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.8,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          0.0,
+          0.1599999964237213,
+          -0.5299999713897705
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "FarmerEast",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/08_farmer_east.png",
+      "design": "单层 U 形菜农院／低矮红瓦顶／白灰泥素墙与绿木门"
+    },
+    {
+      "name": "09_farmer_west",
+      "file": "09_farmer_west.glb",
+      "category": "building",
+      "triangles": 18799,
+      "polygons": 18799,
+      "vertices": 17301,
+      "bounds_blender": [
+        [
+          -2.9811573028564453,
+          -2.2100000381469727,
+          -0.009999997913837433
+        ],
+        [
+          3.3499999046325684,
+          2.1034481525421143,
+          4.049999713897705
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            0,
+            1.05,
+            0
+          ],
+          "size": [
+            5.3,
+            1.78,
+            3.1
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              0.56,
+              0,
+              2.24
+            ],
+            [
+              1.6400000000000001,
+              0,
+              2.24
+            ],
+            [
+              0.56,
+              0,
+              1.6400000000000001
+            ],
+            [
+              1.6400000000000001,
+              0,
+              1.6400000000000001
+            ],
+            [
+              0.56,
+              0.16,
+              1.6400000000000001
+            ],
+            [
+              1.6400000000000001,
+              0.16,
+              1.6400000000000001
+            ]
+          ]
+        },
+        {
+          "position": [
+            1.1,
+            0.08,
+            1.5950000000000002
+          ],
+          "size": [
+            1.0,
+            0.16,
+            0.1300000000000003
+          ]
+        }
+      ],
+      "door": [
+        1.1,
+        0.16,
+        1.55
+      ],
+      "approach": [
+        1.1,
+        0.5,
+        2.65
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "storage_door",
+          "recessed_window",
+          "coursed_masonry"
+        ],
+        "back": [
+          "recessed_window",
+          "door",
+          "coursed_masonry",
+          "storage_casks_and_roof_lashings"
+        ],
+        "left": [
+          "recessed_window",
+          "coursed_masonry"
+        ],
+        "right": [
+          "recessed_window",
+          "coursed_masonry",
+          "door"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Thatch",
+        "Plant"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 33122,
+      "removed_hidden_faces": 333,
+      "entrance_audit": {
+        "marker_error_m": 0.0,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.78,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          1.100000023841858,
+          0.1599999964237213,
+          1.6699999570846558
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "FarmerWest",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/09_farmer_west.png",
+      "design": "厚茅草半四坡顶／石墙长屋／谷物阁楼和宽储物门"
+    },
+    {
+      "name": "10_smallholder",
+      "file": "10_smallholder.glb",
+      "category": "building",
+      "triangles": 18656,
+      "polygons": 18656,
+      "vertices": 14304,
+      "bounds_blender": [
+        [
+          -2.6050000190734863,
+          -1.959999918937683,
+          -0.009999997913837433
+        ],
+        [
+          2.908444881439209,
+          2.4129981994628906,
+          3.3500001430511475
+        ]
+      ],
+      "collision": [
+        {
+          "position": [
+            -0.65,
+            1.06,
+            -0.4
+          ],
+          "size": [
+            3.1,
+            1.8,
+            3.1
+          ]
+        },
+        {
+          "position": [
+            1.72,
+            0.86,
+            -0.8
+          ],
+          "size": [
+            1.65,
+            1.4,
+            2.3
+          ]
+        },
+        {
+          "shape": "convex",
+          "points": [
+            [
+              -1.6400000000000001,
+              0,
+              1.99
+            ],
+            [
+              -0.56,
+              0,
+              1.99
+            ],
+            [
+              -1.6400000000000001,
+              0,
+              1.3900000000000001
+            ],
+            [
+              -0.56,
+              0,
+              1.3900000000000001
+            ],
+            [
+              -1.6400000000000001,
+              0.16,
+              1.3900000000000001
+            ],
+            [
+              -0.56,
+              0.16,
+              1.3900000000000001
+            ]
+          ]
+        },
+        {
+          "position": [
+            -1.1,
+            0.08,
+            1.27
+          ],
+          "size": [
+            1.0,
+            0.16,
+            0.2800000000000002
+          ]
+        }
+      ],
+      "door": [
+        -1.1,
+        0.16,
+        1.15
+      ],
+      "approach": [
+        -1.1,
+        0.5,
+        2.45
+      ],
+      "elevation_features": {
+        "front": [
+          "door",
+          "recessed_window",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards"
+        ],
+        "back": [
+          "recessed_window",
+          "coursed_masonry",
+          "door",
+          "individual_boards",
+          "household_pottery_and_cask"
+        ],
+        "left": [
+          "recessed_window",
+          "coursed_masonry",
+          "individual_boards"
+        ],
+        "right": [
+          "recessed_window",
+          "coursed_masonry",
+          "recessed_window",
+          "individual_boards"
+        ]
+      },
+      "complete_exterior": true,
+      "surfaces": [
+        "Stone",
+        "Wood",
+        "WoodLight",
+        "Iron",
+        "Glass",
+        "Turf",
+        "Plant",
+        "Roof"
+      ],
+      "detail_revision": 3,
+      "exterior_only": true,
+      "authoring_triangles": 35945,
+      "removed_hidden_faces": 761,
+      "entrance_audit": {
+        "marker_error_m": 1.1920928955078125e-07,
+        "posts_clear": true,
+        "threshold_supported": true,
+        "landing_added": true,
+        "primary_width_m": 0.78,
+        "primary_height_m": 1.38,
+        "stand_point": [
+          -1.100000023841858,
+          0.1599999964237213,
+          1.2699999809265137
+        ]
+      },
+      "detail_features": [
+        "curved_overlapping_roofing",
+        "chamfered_joinery",
+        "coursed_masonry",
+        "recessed_glazing_and_hardware",
+        "organic_household_props",
+        "all_four_elevations"
+      ],
+      "household": "Smallholder",
+      "concept": "assets/textures/concepts/forest_village/houses_v2/10_smallholder.png",
+      "design": "低矮错层双体住宅／草皮覆顶／石砌起居间与木畜棚"
+    }
+  ]
+}

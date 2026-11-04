@@ -1,0 +1,141 @@
+{
+  "revision": 5,
+  "authoring": "Blender 5.2.3 LTS",
+  "assets": [
+    {
+      "name": "oak_broad",
+      "triangles": 6872,
+      "size": [
+        13.195505142211914,
+        12.814279556274414,
+        14.859474182128906
+      ],
+      "category": "tree",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "oak_broad.glb"
+    },
+    {
+      "name": "hornbeam_tall",
+      "triangles": 6872,
+      "size": [
+        10.710089683532715,
+        9.910462379455566,
+        17.23876953125
+      ],
+      "category": "tree",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "hornbeam_tall.glb"
+    },
+    {
+      "name": "oak_sweeping",
+      "triangles": 6116,
+      "size": [
+        11.465766906738281,
+        11.211491584777832,
+        11.458578109741211
+      ],
+      "category": "tree",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "oak_sweeping.glb"
+    },
+    {
+      "name": "hazel_round",
+      "triangles": 1208,
+      "size": [
+        2.2023632526397705,
+        1.603048324584961,
+        1.211791753768921
+      ],
+      "category": "plant",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "hazel_round.glb"
+    },
+    {
+      "name": "hazel_tall",
+      "triangles": 1208,
+      "size": [
+        1.6657121181488037,
+        0.9505653381347656,
+        1.802859902381897
+      ],
+      "category": "plant",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "hazel_tall.glb"
+    },
+    {
+      "name": "woodland_low",
+      "triangles": 906,
+      "size": [
+        1.7641210556030273,
+        1.2606496810913086,
+        0.6091219186782837
+      ],
+      "category": "plant",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "woodland_low.glb"
+    },
+    {
+      "name": "oak_sapling",
+      "triangles": 3344,
+      "size": [
+        2.5094354152679443,
+        2.454103946685791,
+        3.2671473026275635
+      ],
+      "category": "tree",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "oak_sapling.glb"
+    },
+    {
+      "name": "fern_fan",
+      "triangles": 1278,
+      "size": [
+        1.4194111824035645,
+        1.4153821468353271,
+        0.5457881093025208
+      ],
+      "category": "plant",
+      "root_origin": [
+        0,
+        0,
+        0
+      ],
+      "source": "fern_fan.glb"
+    }
+  ],
+  "references": [
+    "https://www.bilibili.com/video/BV1Knsd6eEKu/",
+    "https://www.bilibili.com/video/BV1HPnU64EBZ/",
+    "https://github.com/nicoo-474/procedural-tree"
+  ],
+  "normal_method": "ellipsoid gradient per branch crown, 18% whole-crown blend; custom corner normals baked into GLB",
+  "character_reference": "res://assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/guard-keyframe-256.png"
+}

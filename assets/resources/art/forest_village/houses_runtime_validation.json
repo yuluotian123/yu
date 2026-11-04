@@ -1,0 +1,76 @@
+{
+	"all_passed": true,
+	"assets": [
+		{
+			"asset": "01_chief",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18569
+		},
+		{
+			"asset": "02_host",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18713
+		},
+		{
+			"asset": "03_smith",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18800
+		},
+		{
+			"asset": "04_carpenter",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18800
+		},
+		{
+			"asset": "05_herbalist",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18800
+		},
+		{
+			"asset": "06_forester",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18799
+		},
+		{
+			"asset": "07_gatherer",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18799
+		},
+		{
+			"asset": "08_farmer_east",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18503
+		},
+		{
+			"asset": "09_farmer_west",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18799
+		},
+		{
+			"asset": "10_smallholder",
+			"entrance_walk": true,
+			"four_views": true,
+			"normal_and_roughness_maps": true,
+			"triangles": 18656
+		}
+	],
+	"failures": 0
+}

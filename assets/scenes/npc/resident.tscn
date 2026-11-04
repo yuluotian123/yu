@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b8lrfl22s2bfx" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_cp75n"]
 [ext_resource type="Script" uid="uid://cpqin6xd785ir" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="2_qx57b"]
-[ext_resource type="Resource" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="3_i7in3"]
+[ext_resource type="Resource" uid="uid://ckdg7exkwhywi" path="res://assets/resources/npc/gray_green_resident/daily_goals.tres" id="3_i7in3"]
 [ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="4_qtaxp"]
 [ext_resource type="Script" uid="uid://dkogus241f503" path="res://scripts/gamelogic/ai/runtime/AiAgentComponent3D.cs" id="5_0m851"]
 [ext_resource type="Script" uid="uid://mkighfttmp75" path="res://scripts/gamelogic/npc/navigation/NpcNavigationComponent3D.cs" id="6_33efu"]
@@ -15,7 +15,7 @@
 [ext_resource type="SpriteFrames" uid="uid://c5nm1610e3h8m" path="res://assets/resources/npc/gray_green_resident/sprite_frames.tres" id="13_w04po"]
 [ext_resource type="Script" uid="uid://8o1dotfiya30" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="character_data_script"]
 [ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="character_profile_gray_green_resident"]
-[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="world_actor"]
+[ext_resource type="Script" uid="uid://b8fgo3t2x2cbe" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="world_actor"]
 
 [sub_resource type="Resource" id="world_actor"]
 script = ExtResource("world_actor")

@@ -6,11 +6,15 @@
 
 ## PC 默认链路
 
+正式森林的 Film 阶段启用 `PixelGridHeight = 360`。它按实际渲染高度选取整数格宽，先读取整格 HDR 颜色，再写回该格的平均结果。每格由一个计算调用独占，屏幕边缘使用裁切后的面积。画面保留连续的照明变化，绘画色阶来自材质。正交视图按世界原点的投影定位像素格，向下看的森林透视镜头用地面到相机高度五分之一处的代表平面补偿平移。不同深度仍有视差。UI 在 3D 合成之后绘制。其他场景默认使用逐像素处理。
+
+在 1440×900 的同一路径上平移镜头，按同一轨迹提取两个树冠区域的连续 48 帧。屏幕固定格的平均帧间差为 3.404、3.058，采用森林参考平面后为 1.425、1.307（8 位显示值）。此数值包含视差和正常的空间采样变化，仅用于该镜头的配对比较。
+
 `不透明物体与天空 → HDR LUT → MSAA 颜色写回（开启 MSAA 时）→ 线性透明合成 → Relink Film + Bloom → Godot Linear / sRGB 输出 → 2D UI`。
 
-关卡使用 `relink_environment.tres`，明确配置 Tonemap = Linear、Exposure = 1、Glow = Off、Adjustment = Off。核查时这些就是当前有效值，本次将默认值显式写入资源，并关闭 ForestTownLevel 的 `DrivePostEffectsFromProfile`，避免昼夜系统再驱动未启用的原生 Adjustment / Glow。`DriveRelinkBloomFromProfile` 继续独立驱动 Relink 泛光；物理相机曝光和日月照明沿用现有设置。
+关卡在 WorldEnvironment 中保存内联 Environment，明确配置 Tonemap = Linear、Exposure = 1、Glow = Off、Adjustment = Off。核查时这些就是当前有效值，本次将默认值显式写入资源，并关闭 ForestTownLevel 的 `DrivePostEffectsFromProfile`，避免昼夜系统再驱动未启用的原生 Adjustment / Glow。`DriveRelinkBloomFromProfile` 继续独立驱动 Relink 泛光；物理相机曝光和日月照明沿用现有设置。
 
-HDR LUT 阶段请求解析后的颜色与深度；Film + Bloom 只请求解析颜色，不请求深度。`Pass` 属性同时设置回调阶段与深度需求，场景内和可复用 Compositor 使用相同配置。电影曲线由 Relink 执行一次，最后的颜色空间转换由 Godot 完成。
+HDR LUT 阶段请求解析后的颜色与深度；Film + Bloom 只请求解析颜色，不请求深度。`Pass` 属性同时设置回调阶段与深度需求，场景内 Compositor 使用该配置。电影曲线由 Relink 执行一次，最后的颜色空间转换由 Godot 完成。
 
 这些是关卡配置，不是每帧强制覆盖。手动启用原生效果仍然有效，F8 会显示叠加状态。关闭 Relink 是旁路其两个阶段，不会自动切换为 AgX 或恢复另一套泛光。
 

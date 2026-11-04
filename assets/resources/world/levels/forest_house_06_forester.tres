@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://c4d3ib1q52653"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_house_06_forester.tres" id="1_sjr4s"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_padaq"]
+
+[resource]
+script = ExtResource("2_padaq")
+ScenePath = "res://assets/scenes/levels/forest_village_interiors/06_forester.tscn"
+Location = ExtResource("1_sjr4s")
+ExportPortalRoutes = true
+Id = "forest_house_forester"
+DisplayName = "伐木户 · 室内"

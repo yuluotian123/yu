@@ -22,6 +22,8 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         }
     }
     [Export] public RelinkPostProcessProfile Profile { get; set; }
+    /// <summary>森林画面的目标逻辑高度。0 使用逐像素电影曲线。</summary>
+    [Export(PropertyHint.Range, "0,1080,1")] public int PixelGridHeight { get; set; }
     private RenderingDevice _rd;
     private Rid _gradeShader, _gradePipeline, _bloomShader, _bloomPipeline, _filmShader, _filmPipeline, _sampler;
     private Rid _copyShader;
@@ -106,7 +108,7 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
                     CopyToMsaa(color, buffers.GetColorLayer(view, true));
             }
             else
-                FilmAndBloom(buffers, color, size, view);
+                FilmAndBloom(buffers, color, size, view, renderData.GetRenderSceneData());
         }
     }
 
@@ -232,7 +234,27 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         return buffers.GetTextureSlice(_context, name, view, 0, 1, 1);
     }
 
-    private void FilmAndBloom(RenderSceneBuffersRD buffers, Rid color, Vector2I size, uint view)
+    private static Vector2I PixelGridStart(RenderSceneData scene, uint view, Vector2I size, int block)
+    {
+        if (block == 1) return Vector2I.Zero;
+        Projection projection = scene.GetViewProjection(view);
+        // Anchor block edges to the projected world origin. A sideways pan then carries the
+        // same samples with the canopy instead of re-binning it against the screen border.
+        Transform3D camera = scene.GetCamTransform();
+        Vector3 origin = camera.AffineInverse().Origin;
+        Vector4 clip = projection * new Vector4(origin.X, origin.Y, origin.Z, 1);
+        float depth = clip.W;
+        // The village floor is at Y=0. Track a plane a fifth of the way up to
+        // the camera: near actor height at street level, within the crown layer overhead.
+        if (!projection.IsOrthogonal() && camera.Origin.Y > 0 && camera.Basis.Z.Y > .05f)
+            depth = .8f * camera.Origin.Y / camera.Basis.Z.Y;
+        if (depth <= .1f) return Vector2I.Zero;
+        int x = Mathf.RoundToInt((clip.X / depth * .5f + .5f) * size.X);
+        int y = Mathf.RoundToInt((clip.Y / depth * .5f + .5f) * size.Y);
+        return new Vector2I(-Mathf.PosMod(-x, block), -Mathf.PosMod(-y, block));
+    }
+
+    private void FilmAndBloom(RenderSceneBuffersRD buffers, Rid color, Vector2I size, uint view, RenderSceneData scene)
     {
         Rid[] levels = new Rid[5];
         Rid source = color;
@@ -254,8 +276,12 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         }
         var uniforms = new Array<RDUniform> { ImageUniform(0, color) };
         for (int i = 0; i < levels.Length; i++) uniforms.Add(SampleUniform(i + 1, levels[i]));
-        Dispatch(_filmShader, _filmPipeline, uniforms, size,
-            new float[] { size.X, size.Y, Mathf.Max(.01f, Profile.Exposure), Profile.BloomEnabled ? Mathf.Clamp(Profile.BloomIntensity, 0, 1) : 0 });
+        int block = PixelGridHeight > 0 ? Math.Clamp(Mathf.RoundToInt((float)size.Y / PixelGridHeight), 1, 12) : 1;
+        Vector2I start = PixelGridStart(scene, view, size, block);
+        var grid = new Vector2I((size.X - start.X + block - 1) / block, (size.Y - start.Y + block - 1) / block);
+        Dispatch(_filmShader, _filmPipeline, uniforms, grid,
+            new float[] { size.X, size.Y, Mathf.Max(.01f, Profile.Exposure), bloomEnabled ? Mathf.Clamp(Profile.BloomIntensity, 0, 1) : 0,
+                block, start.X, start.Y, 0 });
     }
 
     private void BloomPass(Rid source, Rid destination, Vector2I size, int mode)

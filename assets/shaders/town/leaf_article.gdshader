@@ -1,6 +1,7 @@
 shader_type spatial;
 render_mode cull_disabled, alpha_to_coverage;
 #include "res://assets/shaders/weather/wet_surface.gdshaderinc"
+#include "res://assets/shaders/town/camera_near_fade.gdshaderinc"
 
 // Art direction inspired by 岑立: 风格化树——树叶分析与实现.
 // Original Godot implementation: alpha silhouette + volume lighting, no RGB veins.
@@ -11,13 +12,16 @@ uniform vec3 lower_color = vec3(0.110, 0.230, 0.150);
 uniform vec3 upper_color = vec3(0.270, 0.460, 0.180);
 uniform float normal_roundness : hint_range(0.0, 1.0) = 0.68;
 uniform float vertex_color_strength : hint_range(0.0, 1.0) = 0.40;
-uniform float directional_shadow_lift : hint_range(0.0, 0.25) = 0.12;
+uniform float directional_shadow_lift : hint_range(0.0, 0.45) = 0.12;
 uniform float texture_detail : hint_range(0.0, 0.3) = 0.0;
 uniform float gradient_strength : hint_range(0.0, 1.0) = 0.60;
 uniform float transmission_strength : hint_range(0.0, 0.4) = 0.075;
 uniform float wind_strength : hint_range(0.0, 0.1) = 0.018;
 uniform float wind_speed : hint_range(0.0, 3.0) = 0.65;
 uniform float painterly_strength : hint_range(0.0, 1.0) = 0.0;
+uniform bool use_painted_sprays = false;
+uniform float canopy_ambient_up : hint_range(0.0,1.0) = 0.0;
+varying vec3 direct_leaf_normal;
 
 varying float crown_height;
 varying float color_variation;
@@ -39,6 +43,7 @@ void vertex() {
     vec3 volume_normal = normalize(radial * vec3(1.0, 0.85, 1.0));
     NORMAL = normalize(mix(NORMAL, volume_normal, normal_roundness));
     crown_height = clamp((radial.y + 1.05) / 2.9, 0.0, 1.0);
+    if (use_painted_sprays) crown_height = smoothstep(-0.48, 0.65, NORMAL.y);
     color_variation = sin(VERTEX.x * 2.7 + VERTEX.z * 3.1) * 0.016;
     float sway = sin(TIME * wind_speed + VERTEX.x * 0.8 + VERTEX.z * 0.9);
     VERTEX.xz += vec2(sway, sway * 0.35) * wind_strength * UV.y * UV.y;
@@ -46,9 +51,14 @@ void vertex() {
 }
 
 void fragment() {
+    // Both sides represent the same canopy volume. Undo the rasterizer's
+    // double-sided face flip before direct light, GI, rain and snow use NORMAL.
+    if (use_painted_sprays && !FRONT_FACING) NORMAL = -NORMAL;
+    if (camera_occlusion_discard(VERTEX,FRAGCOORD.xy,IN_SHADOW_PASS,PROJECTION_MATRIX,VIEW_MATRIX)) { discard; }
     vec4 mask = texture(leaf_texture, UV);
     // Let MSAA cover subpixel leaf edges; retain cutout depth and shadow casting.
-    ALPHA = mask.a;
+    // Camera fading must not erase the leaf silhouette from the shadow map.
+    ALPHA = (IN_SHADOW_PASS ? 1.0 : ALPHA) * mask.a;
     ALPHA_SCISSOR_THRESHOLD = alpha_cutoff;
     ALPHA_ANTIALIASING_EDGE = alpha_cutoff * 0.6;
     ALPHA_TEXTURE_COORDINATE = UV * vec2(textureSize(leaf_texture, 0));
@@ -59,28 +69,35 @@ void fragment() {
     // 原顶点色只保留局部变化，避免与树冠渐变相乘后暗面发黑。
     ALBEDO = tint * mix(vec3(1.0), COLOR.rgb, vertex_color_strength)
              * (1.0 + color_variation) * mix(1.0, 0.75 + detail, texture_detail);
+    if (use_painted_sprays) ALBEDO *= mix(vec3(0.66, 0.71, 0.75), vec3(1.35, 1.27, 1.13), mask.rgb);
     ROUGHNESS = 1.0;
     SPECULAR = 0.0;
     METALLIC = 0.0;
     vec3 world_normal = normalize((INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
     float snow = snow_surface_sample(weather_position, world_normal);
     vec4 wet = wet_surface_sample(weather_position, world_normal) * (1.0 - snow);
-    weather_surface_wet = wet.x;
+    weather_surface_wet = wet.x * wet_film_strength;
     weather_puddle_mask = 0.0;
-    ALBEDO *= 1.0 - wet.x * weather_darkening * 0.6;
-    ROUGHNESS = mix(ROUGHNESS, 0.32, wet.x);
-    SPECULAR = wet.x * 0.35;
+    ALBEDO *= 1.0 - wet.x * weather_darkening * 0.6 * wet_darkening_strength;
+    ROUGHNESS = mix(ROUGHNESS, max(0.32, wet_roughness_min), weather_surface_wet);
+    SPECULAR = weather_surface_wet * 0.35;
     ALBEDO = mix(ALBEDO, snow_surface_color(weather_position), snow);
     ROUGHNESS = mix(ROUGHNESS, weather_snow_roughness, snow);
     SPECULAR = mix(SPECULAR, 0.28, snow);
-    NORMAL = normalize((VIEW_MATRIX * vec4(snow_surface_normal(weather_position, world_normal, snow), 0.0)).xyz);
+    vec3 surface_normal = snow_surface_normal(weather_position, world_normal, snow);
+    direct_leaf_normal = normalize((VIEW_MATRIX * vec4(surface_normal, 0.0)).xyz);
+    // Lighting a painted spray: model direct light with its branch volume, and
+    // gather diffuse skylight across the clump rather than along each card edge.
+    vec3 ambient_normal = normalize(mix(surface_normal,vec3(0.0,1.0,0.0),canopy_ambient_up));
+    NORMAL = normalize((VIEW_MATRIX * vec4(ambient_normal,0.0)).xyz);
     weather_surface_roughness = ROUGHNESS;
 
 
 }
 
 void light() {
-    float half_lambert = dot(normalize(NORMAL), LIGHT) * 0.5 + 0.5;
+    vec3 n = normalize(direct_leaf_normal);
+    float half_lambert = dot(n, LIGHT) * 0.5 + 0.5;
     float soft_diffuse = mix(0.22, 1.0, smoothstep(0.10, 0.96, half_lambert));
     vec3 shade = mix(vec3(0.72, 0.88, 1.0), vec3(1.03, 1.02, 0.94), half_lambert);
     // 少量树冠透光只用于日月；点光保留距离衰减，不能照亮范围外的树叶。
@@ -90,15 +107,22 @@ void light() {
     if (painterly_strength > 0.0) {
         float middle = smoothstep(0.45, 0.51, half_lambert);
         float bright = smoothstep(0.82, 0.87, half_lambert);
-        vec3 painted = mix(vec3(0.14, 0.33, 0.46), vec3(0.65, 0.82, 0.69), middle);
+        vec3 deep = use_painted_sprays ? vec3(0.38,0.49,0.43) : vec3(0.14,0.33,0.46);
+        vec3 painted = mix(deep, vec3(0.65, 0.82, 0.69), middle);
         painted = mix(painted, vec3(1.08, 1.04, 0.72), bright);
         diffuse = mix(diffuse, painted * diffuse_attenuation, painterly_strength);
+        if (use_painted_sprays && LIGHT_IS_DIRECTIONAL) {
+            // The forest's shadow colour represents broad fill. Multiplying it
+            // by the direct sun-facing toon band again crushes an occluded leaf.
+            vec3 shaded = vec3(0.61,0.82,0.77) * directional_shadow_lift;
+            diffuse = mix(shaded,mix(shade*soft_diffuse,painted,painterly_strength),ATTENUATION);
+        }
     }
-    float back_scatter = pow(clamp(dot(VIEW, -normalize(LIGHT + NORMAL * 0.35)), 0.0, 1.0), 6.0);
+    float back_scatter = pow(clamp(dot(VIEW, -normalize(LIGHT + n * 0.35)), 0.0, 1.0), 6.0);
     vec3 transmission = vec3(1.0, 0.98, 0.82) * back_scatter * transmission_strength * ATTENUATION;
     DIFFUSE_LIGHT += (diffuse + transmission) * LIGHT_COLOR / PI;
     if (weather_surface_wet > 0.0) {
-        SPECULAR_LIGHT += wet_direct_specular(NORMAL, LIGHT, VIEW, LIGHT_COLOR, ATTENUATION, weather_surface_roughness)
+        SPECULAR_LIGHT += wet_direct_specular(n, LIGHT, VIEW, LIGHT_COLOR, ATTENUATION, weather_surface_roughness)
                           * weather_surface_wet * 0.45;
     }
 }

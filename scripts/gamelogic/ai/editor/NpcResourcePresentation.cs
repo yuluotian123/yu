@@ -18,6 +18,7 @@ public static class NpcResourcePresentation
         CharacterScalarDefinition scalar=>scalar.Key,
         NpcScheduleWindow window=>window.WindowId+" · 日程时段",
         CharacterFactDefinition fact=>fact.Key,
+        NpcMemoryEntryDefinition entry=>entry.DisplayName.Length>0?entry.DisplayName:entry.Key,
         CharacterExpressionDefinition=>"公式",
         _=>string.IsNullOrWhiteSpace(resource.ResourceName)?"配置项":resource.ResourceName
     };
@@ -30,6 +31,8 @@ public static class NpcResourcePresentation
         NpcActionDefinition action=>$"行动 · {action.Inputs.Count} 个输入 · {action.Predictions.Count} 个预测效果 · {action.Results.Count} 个结果效果",
         NpcPlanTemplateDefinition plan=>$"计划 · {plan.ActionIds.Length} 个候选行动 · 适用条件与优先级",
         NpcTargetSelectorDefinition=>"目标选择器 · 按世界对象类型、能力、操作及条件筛选；同一节点在本次计划中共享选定目标",
+        NpcMemoryDefinition memory=>$"记忆 · {memory.Entries.Count} 个条目 · 按对象独立记录 · 遗忘时间由各条目配置",
+        NpcMemoryEntryDefinition entry=>$"记忆条目 · 按对象独立记录 · {(entry.LifetimeHours==0?"永久保留":entry.LifetimeHours+" 小时后遗忘")} · 初始值为{(entry.InitialValue?"真":"假")}",
         CharacterNeedDefinition need=>$"需求 · 每小时变化 {need.ChangePerHour:G} · 进入 {(need.HigherIsUrgent?"≥":"≤")} {need.UrgencyEnter:G} · 解除 {(need.HigherIsUrgent?"≤":"≥")} {need.UrgencyExit:G} · 曲线指数 {need.UrgencyExponent:G}",
         NpcActionInputDefinition input=>$"行动输入 · {TypeName(input)} · {(input.IsTarget?"选择器连线":"表达式或常量")} · {input.ResourceRequirements.Length} 项资源要求",
         NpcEffectDefinition effect=>(effect.Mode==NpcEffectMode.Add?"增加/减少：":"设为：")+NpcExpressionPresentation.Format(effect.Value,NpcExpressionEditorCatalog.For(graph,effect)),

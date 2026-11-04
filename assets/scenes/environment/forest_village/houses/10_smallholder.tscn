@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://i1l68dq6wr6h"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/houses/10_smallholder.mesh.res" id="1_bpsee"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h0gia"]
+size = Vector3(3.1, 1.8, 3.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jvvap"]
+size = Vector3(1.65, 1.4, 2.3)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bpsee"]
+points = PackedVector3Array(-1.64, -0.12, 1.23, -1.64, -0.12, 2.15, -1.64, -0.045, 2.15, -1.64, 0.16, 1.39, -0.56000006, -0.12, 1.23, -0.56000006, -0.12, 2.15, -0.56000006, -0.045, 2.15, -0.56000006, 0.16, 1.39)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lieax"]
+size = Vector3(1, 0.16, 0.28)
+
+[node name="Smallholder" type="Node3D" unique_id=1275350507]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/10_smallholder.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/10_smallholder.png"
+metadata/triangles = 18656
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 1.1920929e-07,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [-1.1, 0.16, 1.27],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "coursed_masonry", "door", "individual_boards", "household_pottery_and_cask"],
+"front": ["door", "recessed_window", "coursed_masonry", "recessed_window", "individual_boards"],
+"left": ["recessed_window", "coursed_masonry", "individual_boards"],
+"right": ["recessed_window", "coursed_masonry", "recessed_window", "individual_boards"]
+}
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1311675599]
+mesh = ExtResource("1_bpsee")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=1460839554]
+collision_mask = 0
+
+[node name="Shape00" type="CollisionShape3D" parent="Collision1" unique_id=233583142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 1.06, -0.4)
+shape = SubResource("BoxShape3D_h0gia")
+
+[node name="Shape01" type="CollisionShape3D" parent="Collision1" unique_id=538983827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.72, 0.86, -0.8)
+shape = SubResource("BoxShape3D_jvvap")
+
+[node name="Shape02" type="CollisionShape3D" parent="Collision1" unique_id=1013870675]
+shape = SubResource("ConvexPolygonShape3D_bpsee")
+metadata/stair_original_front = 1.99
+metadata/stair_collision_profile = "buried_toe_and_overlapping_crest"
+
+[node name="Shape03" type="CollisionShape3D" parent="Collision1" unique_id=1911720957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.08, 1.27)
+shape = SubResource("BoxShape3D_lieax")
+
+[node name="DoorAnchor" type="Marker3D" parent="." unique_id=819237828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.16, 1.15)
+
+[node name="ApproachAnchor" type="Marker3D" parent="." unique_id=1528380621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.5, 2.45)

@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_vegetation/woodland_low.mesh.res" id="1_da3h8"]
+
+[node name="ShrubLow" type="Node3D" unique_id=1761050187]
+metadata/asset_category = "plant"
+metadata/source_model = "res://assets/models/environment/forest_vegetation/woodland_low.glb"
+metadata/source_polygons = 906
+metadata/triangles = 906
+metadata/vegetation_revision = 5
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=647498914]
+mesh = ExtResource("1_da3h8")

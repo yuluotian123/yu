@@ -8,6 +8,7 @@ namespace GameLogic.AI;
 
 public sealed record NpcFactSpec(string Key,CharacterValueType Type,double Minimum,double Maximum,double Step,CharacterValue Initial,bool Writable);
 public sealed record NpcNeedSpec(string Id,double Min,double Max,double Initial,bool Higher,double Enter,double Exit,double Exponent);
+public sealed record NpcMemoryEntrySpec(string Key,string Name,bool InitialValue,double LifetimeHours,string LegacyDialogueFlag);
 public sealed record NpcWindowSpec(string Id,double Start,double End,int Priority,IReadOnlyList<string> Tags,string Location="",string LocationBinding="",string Goal="",string Fallback="",IReadOnlyList<string> Operations=null,double Commitment=0,bool Interruptible=true,bool Emergency=false,CharacterExpression Activation=null);
 public sealed record NpcEffect(string Key,NpcEffectMode Mode,CharacterExpression Value);
 public sealed record NpcBindingSpec(string Name,CharacterValueType Type,string Adapter,string SelectorId,CharacterExpression Value,string SelectionNodeId="")
@@ -34,15 +35,13 @@ public sealed partial class NpcProgram
     public readonly List<NpcWindowSpec> Windows = new();
     public readonly List<NpcGoalSpec> Goals = new();
     public readonly Dictionary<string,NpcTargetSelectorSpec> TargetSelectors = new(StringComparer.Ordinal);
-    public readonly List<string> MemoryCategories = new();
+    public readonly Dictionary<string,NpcMemoryEntrySpec> MemoryEntries = new(StringComparer.Ordinal);
     public readonly HashSet<string> KnownKeys = new(StringComparer.Ordinal);
     public NpcPolicy Policy { get; private set; } = new(16,2048,16,4,.8,.2,2,30,45);
     public double ViewRange { get; private set; } = 12;
     public double SenseInterval { get; private set; } = .3;
     public bool LineOfSight { get; private set; } = true;
     public string[] PointTags { get; private set; } = Array.Empty<string>();
-    public int MemoryCapacity { get; private set; } = 32;
-    public double MemoryLifetime { get; private set; } = 24;
     private NpcProgram() { }
     static IReadOnlyList<T> ReadOnly<T>(IEnumerable<T> items) => Array.AsReadOnly(items.ToArray());
     public static NpcProgram Compile(NpcGraphAsset graph,CharacterProfile profile=null)
@@ -70,10 +69,12 @@ public sealed partial class NpcProgram
             var from=graph.FindNodeById(edge.FromNode);var to=graph.FindNodeById(edge.ToNode);
             Require(from!=null&&to!=null,"连线端点丢失。");
             Require(edge.ToPort==0 && (from is NpcRootNodeData && (edge.FromPort==0 && to is NpcDefinitionNodeData and not (NpcGoalNodeData or NpcActionNodeData or NpcTemplateNodeData or NpcTargetSelectorNodeData)
-                || edge.FromPort==1&&to is NpcGoalNodeData || edge.FromPort==2&&to is NpcTargetSelectorNodeData) || from is NpcGoalNodeData&&(edge.FromPort==0&&to is NpcActionNodeData||edge.FromPort==1&&to is NpcTemplateNodeData))
+                || edge.FromPort==1&&to is NpcGoalNodeData || edge.FromPort==2&&to is NpcTargetSelectorNodeData || edge.FromPort==3&&to is NpcDialogueNodeData) || from is NpcGoalNodeData&&(edge.FromPort==0&&to is NpcActionNodeData||edge.FromPort==1&&to is NpcTemplateNodeData))
                 || from is NpcTargetSelectorNodeData&&edge.FromPort==0&&to is NpcActionNodeData action&&action.InputAt(edge.ToPort)!=null,"NPC 连线类型不匹配，或目标输入已被移除/更改来源。");
         }
         Require(active.Where(e=>e.ToPort>0).GroupBy(e=>(e.ToNode,e.ToPort)).All(g=>g.Count()==1),"每个行动输入只能连接一个选择器节点。");
+        var dialogues=NpcDialogueNodeData.Entries(graph).ToArray();
+        Require(dialogues.All(n=>!string.IsNullOrWhiteSpace(n.EntryId))&&dialogues.Select(n=>n.EntryId).Distinct().Count()==dialogues.Length,"NPC 对话入口标识不能为空或重复。");
         NpcDefinitionResource Resolve(NpcDefinitionNodeData node)
         {
             var d=graph.Resolve(node.DefinitionId);Require(d!=null&&node.DefinitionType.IsInstanceOfType(d),$"节点 {node.Id} 的定义未绑定或类型错误。");return d;
@@ -91,13 +92,18 @@ public sealed partial class NpcProgram
                     Require(perception.ViewRange>0&&perception.SenseInterval>0,"感知范围/间隔必须大于零。");
                     p.ViewRange=perception.ViewRange;p.SenseInterval=perception.SenseInterval;p.LineOfSight=perception.RequireLineOfSight;p.PointTags=perception.PointTags.ToArray();break;
                 case NpcMemoryDefinition memory:
-                    p.MemoryCategories.AddRange(memory.Categories);p.MemoryCapacity=memory.Capacity;p.MemoryLifetime=memory.LifetimeHours;Require(p.MemoryCapacity>0&&p.MemoryLifetime>0,"记忆配置无效。");break;
+                    foreach(var entry in memory.Entries)
+                    {
+                        Require(entry!=null&&!string.IsNullOrWhiteSpace(entry.Key)&&entry.Key==entry.Key.Trim()&&!p.MemoryEntries.ContainsKey(entry.Key)
+                            &&double.IsFinite(entry.LifetimeHours)&&entry.LifetimeHours>=0,"记忆条目的键重复、为空或遗忘时长无效。");
+                        p.MemoryEntries.Add(entry.Key,new(entry.Key,entry.DisplayName,entry.InitialValue,entry.LifetimeHours,entry.LegacyDialogueFlag));
+                    }
+                    break;
                 case NpcPolicyDefinition policy:
                     p.Policy=new(policy.NodesPerSlice,policy.MaximumExpanded,policy.MaximumPlanDepth,policy.TargetLimit,policy.CommitmentSeconds,policy.SwitchMargin,policy.RetrySeconds,policy.DetailedDistance,policy.AbstractDistance);
                     Require(p.Policy.Slice>0&&p.Policy.Expanded>0&&p.Policy.Depth>0&&p.Policy.Targets>0&&p.Policy.Retry>0&&p.Policy.Detailed<=p.Policy.Abstract,"决策预算无效。");break;
             }
         }
-        foreach(var key in p.MemoryCategories)p.KnownKeys.Add("memory."+key+".count");
         foreach(var key in new[]{"world.hour","world.rain","self.location","self.level","self.place","action.duration","activity.id","activity.place","activity.active"})p.KnownKeys.Add(key);
         foreach(var selector in active.Where(c=>c.FromNode==root.Id&&c.FromPort==2)
             .Select(c=>(NpcTargetSelectorDefinition)Resolve((NpcTargetSelectorNodeData)graph.FindNodeById(c.ToNode))).Where(s=>s.Enabled).Distinct())

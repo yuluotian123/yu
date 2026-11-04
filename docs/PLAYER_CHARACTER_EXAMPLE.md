@@ -10,7 +10,7 @@
 
 | Priority | 组件 | 配置 |
 | ---: | --- | --- |
-| 110 | `InventoryComponent3D` | 初始物品、背包容量与窗口 |
+| 110 | `InventoryComponent3D` | 初始物品、背包容量与物品状态 |
 | 100 | `PlayerCharacterInputComponent3D` | 无 Move/Jump/Ability Action 字段 |
 | 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
 | 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../assets/resources/abilities/player_ability_set.tres) |
@@ -28,7 +28,7 @@
 ```text
 GameObject3D._Ready
   -> 克隆并按 Priority 排序组件
-  -> Inventory.OnInit: 初始化物品与背包入口
+  -> Inventory.OnInit: 初始化物品与格子位置
   -> Input.OnInit: 获取 IInputModule
   -> CharacterGraph.OnInit: 查找 ICharacterInputProvider，创建 runtime
   -> AbilitySystem.OnInit: 从 AbilitySet 授予冲刺

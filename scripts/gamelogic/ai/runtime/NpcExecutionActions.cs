@@ -89,20 +89,6 @@ public sealed class NpcWaitAction : GraphSharedAction
     }
 }
 
-[GraphCallable("Remember", "NPC/能力", ChineseName="记录记忆")]
-[GraphProvidedBy(typeof(AiAgentComponent3D))]
-public sealed class NpcRememberAction : GraphInstantAction
-{
-    public string Category {get;set;}="";
-    public string Detail {get;set;}="";
-    public NpcInputReference SubjectInput {get;set;}=new(){Name=""};
-    protected override bool Run(GraphActionInvocation invocation)
-    {
-        var c=invocation.Execution.GetUserData<NpcActionContext>();
-        return c!=null&&c.Agent.Decision.Memory.Remember(new(Category,c.Input(SubjectInput.Name).Symbol??"",c.Agent.World.Clock.TotalHours,Detail));
-    }
-}
-
 [GraphCallable("Adjust Relationship", "NPC/能力", ChineseName="改变关系维度")]
 [GraphProvidedBy(typeof(AiAgentComponent3D))]
 public sealed class NpcAdjustRelationAction : GraphInstantAction

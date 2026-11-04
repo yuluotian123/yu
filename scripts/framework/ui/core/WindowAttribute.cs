@@ -10,7 +10,7 @@ namespace Framework.UI
     /// </para>
     /// <example>
     /// <code>
-    /// [Window(UILayer.Normal, "res://assets/ui/main_menu.tscn", fullScreen: true)]
+    /// [Window(UILayer.Normal, "res://assets/scenes/ui/main_menu_window.tscn", fullScreen: true)]
     /// public class MainMenuWindow : UIWindow { }
     /// </code>
     /// </example>

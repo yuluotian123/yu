@@ -1,0 +1,371 @@
+[gd_scene format=3 uid="uid://c0c3w3s0n5mj0"]
+
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/01_chief.tscn" id="1_b337d"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/02_host.tscn" id="2_cpcec"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/03_smith.tscn" id="3_0a21v"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/04_carpenter.tscn" id="4_2guc7"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/05_herbalist.tscn" id="5_6bqov"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/06_forester.tscn" id="6_0sdpg"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/07_gatherer.tscn" id="7_grivt"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/08_farmer_east.tscn" id="8_7fh50"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/09_farmer_west.tscn" id="9_bvyli"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/houses/10_smallholder.tscn" id="10_vm4bj"]
+
+[sub_resource type="Environment" id="Environment_gkw62"]
+background_mode = 1
+background_color = Color(0.23, 0.28, 0.27, 1)
+background_intensity = 22000.0
+ambient_light_source = 2
+ambient_light_color = Color(0.66, 0.76, 0.74, 1)
+ambient_light_energy = 0.75
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_0sovs"]
+exposure_multiplier = 1.2
+exposure_shutter_speed = 81.5719
+
+[node name="ForestVillageHousesV2" type="Node3D" unique_id=987596854]
+editor_description = "第二版十户完整外观模型。可在编辑器中绕行查看正面、背面与两侧；所有模型具有简化碰撞和原生 LOD。"
+
+[node name="Chief" type="Node3D" parent="." unique_id=2120877631 instance=ExtResource("1_b337d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 0)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/01_chief.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/01_chief.png"
+metadata/triangles = 18569
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": false,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.82,
+"stand_point": [0.35, 0.16, 0.9700000286102296],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "door", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"front": ["door", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"left": ["recessed_window", "stone_plinth_and_joinery", "stone_plinth_and_joinery"],
+"right": ["recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"]
+}
+
+[node name="Label00" type="Label3D" parent="." unique_id=2101438742]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -18, 0.05, 4.3)
+pixel_size = 0.01
+text = "01_chief
+18569.0 tris"
+font_size = 40
+
+[node name="Host" type="Node3D" parent="." unique_id=2041928214 instance=ExtResource("2_cpcec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 0)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/02_host.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/02_host.png"
+metadata/triangles = 18713
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.42,
+"primary_width_m": 0.68,
+"stand_point": [0.74, 0.16, 1.47],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["storage_door", "coursed_masonry", "recessed_window", "individual_boards", "recessed_window", "individual_boards", "coopered_storage_barrels"],
+"front": ["door", "recessed_window", "coursed_masonry", "recessed_window", "individual_boards", "recessed_window", "individual_boards"],
+"left": ["recessed_window", "coursed_masonry", "recessed_window", "individual_boards", "recessed_window", "individual_boards"],
+"right": ["recessed_window", "coursed_masonry", "recessed_window", "individual_boards", "door", "individual_boards"]
+}
+
+[node name="Label01" type="Label3D" parent="." unique_id=517190979]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -9, 0.05, 4.3)
+pixel_size = 0.01
+text = "02_host
+18713.0 tris"
+font_size = 40
+
+[node name="Smith" type="Node3D" parent="." unique_id=45940272 instance=ExtResource("3_0a21v")]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/03_smith.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/03_smith.png"
+metadata/triangles = 18800
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [-0.95, 0.16, 1.57],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "coursed_masonry"],
+"front": ["door", "recessed_window", "recessed_window", "coursed_masonry"],
+"left": ["recessed_window", "coursed_masonry"],
+"right": ["recessed_window", "coursed_masonry", "forged_horn_bellows_and_quench_tub"]
+}
+
+[node name="Label02" type="Label3D" parent="." unique_id=953912211]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.05, 4.3)
+pixel_size = 0.01
+text = "03_smith
+18800.0 tris"
+font_size = 40
+
+[node name="Carpenter" type="Node3D" parent="." unique_id=1209564945 instance=ExtResource("4_2guc7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 0)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/04_carpenter.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/04_carpenter.png"
+metadata/triangles = 18800
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.76,
+"stand_point": [-1.77, 0.16, 1.32],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "individual_boards", "recessed_window", "individual_boards", "tool_rail_and_leaning_boards"],
+"front": ["door", "individual_boards"],
+"left": ["recessed_window", "individual_boards"],
+"right": ["recessed_window", "individual_boards"]
+}
+
+[node name="Label03" type="Label3D" parent="." unique_id=1513273275]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 9, 0.05, 4.3)
+pixel_size = 0.01
+text = "04_carpenter
+18800.0 tris"
+font_size = 40
+
+[node name="Herbalist" type="Node3D" parent="." unique_id=371165380 instance=ExtResource("5_6bqov")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/05_herbalist.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/05_herbalist.png"
+metadata/triangles = 18800
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.00024318695068359,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.76,
+"stand_point": [0.0, 0.16, 1.5920000076293943],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "herb_pottery_and_water_cask"],
+"front": ["door", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"left": ["recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "stone_plinth_and_joinery"],
+"right": ["recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"]
+}
+
+[node name="Label04" type="Label3D" parent="." unique_id=1559341210]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 18, 0.05, 4.3)
+pixel_size = 0.01
+text = "05_herbalist
+18800.0 tris"
+font_size = 40
+
+[node name="Forester" type="Node3D" parent="." unique_id=488438774 instance=ExtResource("6_0sdpg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 10)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/06_forester.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/06_forester.png"
+metadata/triangles = 18799
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [0.0, 0.2300000041723251, 1.919999957084656],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "recessed_window", "cut_log_growth_rings_and_hardware"],
+"front": ["door", "recessed_window"],
+"left": ["eave_storage_hatch", "framed_roof_window"],
+"right": ["eave_storage_hatch", "framed_roof_window"]
+}
+
+[node name="Label05" type="Label3D" parent="." unique_id=952477125]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -18, 0.05, 14.3)
+pixel_size = 0.01
+text = "06_forester
+18799.0 tris"
+font_size = 40
+
+[node name="Gatherer" type="Node3D" parent="." unique_id=1416781894 instance=ExtResource("7_grivt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 10)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/07_gatherer.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/07_gatherer.png"
+metadata/triangles = 18799
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": false,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.75,
+"stand_point": [-0.7, 0.75, 1.22],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["door", "recessed_window", "individual_boards", "woven_storage_and_post_bindings"],
+"front": ["door", "recessed_window", "individual_boards"],
+"left": ["recessed_window", "individual_boards"],
+"right": ["recessed_window", "individual_boards"]
+}
+
+[node name="Label06" type="Label3D" parent="." unique_id=1205989314]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -9, 0.05, 14.3)
+pixel_size = 0.01
+text = "07_gatherer
+18799.0 tris"
+font_size = 40
+
+[node name="FarmerEast" type="Node3D" parent="." unique_id=1531291730 instance=ExtResource("8_7fh50")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/08_farmer_east.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/08_farmer_east.png"
+metadata/triangles = 18503
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.8,
+"stand_point": [0.0, 0.16, -0.53],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["door", "recessed_window", "recessed_window", "stone_plinth_and_joinery", "stone_plinth_and_joinery", "stone_plinth_and_joinery", "water_barrel_and_ceramic_planters"],
+"front": ["door", "recessed_window", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"left": ["stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"right": ["stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"]
+}
+
+[node name="Label07" type="Label3D" parent="." unique_id=759174395]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.05, 14.3)
+pixel_size = 0.01
+text = "08_farmer_east
+18503.0 tris"
+font_size = 40
+
+[node name="FarmerWest" type="Node3D" parent="." unique_id=1368902740 instance=ExtResource("9_bvyli")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 10)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/09_farmer_west.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/09_farmer_west.png"
+metadata/triangles = 18799
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [1.1, 0.16, 1.67],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "door", "coursed_masonry", "storage_casks_and_roof_lashings"],
+"front": ["door", "storage_door", "recessed_window", "coursed_masonry"],
+"left": ["recessed_window", "coursed_masonry"],
+"right": ["recessed_window", "coursed_masonry", "door"]
+}
+
+[node name="Label08" type="Label3D" parent="." unique_id=1993244610]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 9, 0.05, 14.3)
+pixel_size = 0.01
+text = "09_farmer_west
+18799.0 tris"
+font_size = 40
+
+[node name="Smallholder" type="Node3D" parent="." unique_id=1275350507 instance=ExtResource("10_vm4bj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 10)
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/10_smallholder.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/10_smallholder.png"
+metadata/triangles = 18656
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 1.1920929e-07,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.78,
+"stand_point": [-1.1, 0.16, 1.27],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["recessed_window", "coursed_masonry", "door", "individual_boards", "household_pottery_and_cask"],
+"front": ["door", "recessed_window", "coursed_masonry", "recessed_window", "individual_boards"],
+"left": ["recessed_window", "coursed_masonry", "individual_boards"],
+"right": ["recessed_window", "coursed_masonry", "recessed_window", "individual_boards"]
+}
+
+[node name="Label09" type="Label3D" parent="." unique_id=644875886]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 18, 0.05, 14.3)
+pixel_size = 0.01
+text = "10_smallholder
+18656.0 tris"
+font_size = 40
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=80349853]
+environment = SubResource("Environment_gkw62")
+camera_attributes = SubResource("CameraAttributesPhysical_0sovs")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1012000278]
+transform = Transform3D(0.8480481, 0.3938068, -0.35458517, 0, 0.66913056, 0.74314487, 0.52991927, -0.63022256, 0.5674549, 0, 0, 0)
+light_color = Color(1, 0.91, 0.76, 1)
+light_energy = 1.6
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=207149839]
+transform = Transform3D(0.9005516, -0.25979614, 0.34858674, 0, 0.80181134, 0.5975773, -0.43474904, -0.5381492, 0.72207254, 14, 25, 34)
+projection = 1
+size = 33.0

@@ -15,22 +15,28 @@ public partial class PlayerWorldInteractionComponent3D : Component3D
     [Export] public NodePath HintPath {get;set;}=new("WorldInteractionHUD/Root/Panel/Content/Hint");
     [Export] public NodePath MessagePath {get;set;}=new("WorldInteractionHUD/Root/Panel/Content/Message");
     [Export] public NodePath ChoicesPath {get;set;}=new("WorldInteractionHUD/Root/Panel/Content/Choices");
+    [Export(PropertyHint.Range,"0.5,8,0.1")] public float DialogueRange {get;set;}=2.4f;
     WorldModule _world;
     IInputModule _input;
+    IDialogueModule _dialogue;
     PlayerCharacterInputComponent3D _playerInput;
     Control _panel;
     Label _hint,_message;
     VBoxContainer _choices;
     WorldInteractionComponent3D _point;
+    AiAgentComponent3D _talkTarget;
+    NpcDialogueNodeData _talkEntry;
     double _refreshAt,_feedbackTime;
     bool _menu;
     public string CurrentPointId=>GodotObject.IsInstanceValid(_point)?_point.PointId:"";
+    public string CurrentDialogueActorId=>_talkTarget?.ActorId??"";
     public string PromptText=>_hint?.Text??"";
     public WorldInteractionResult LastResult {get;private set;}
-    bool Enabled=>IsActive&&!_world.IsSwitching&&_input.IsLayerEnabled("Combat")&&_input.IsLayerEnabled("UI")&&_playerInput is {IsActive:true,GameplayBlocked:false};
+    bool Enabled=>IsActive&&!_dialogue.IsActive&&!_world.IsSwitching&&_input.IsLayerEnabled("Combat")&&_input.IsLayerEnabled("UI")&&_playerInput is {IsActive:true,GameplayBlocked:false};
     public override void OnInit()
     {
         _world=(WorldModule)ModuleSystem.GetModule<IWorldModule>();_input=ModuleSystem.GetModule<IInputModule>();
+        _dialogue=ModuleSystem.GetModule<IDialogueModule>();
         _playerInput=Owner.GetComponent<PlayerCharacterInputComponent3D>();
         WorldCatalog.Require(_playerInput!=null&&InputMap.HasAction(InputAction),"玩家交互缺少输入组件或 InputMap 操作。");
         _panel=Owner.GetNode<Control>(PanelPath);_hint=Owner.GetNode<Label>(HintPath);_message=Owner.GetNode<Label>(MessagePath);_choices=Owner.GetNode<VBoxContainer>(ChoicesPath);
@@ -48,7 +54,7 @@ public partial class PlayerWorldInteractionComponent3D : Component3D
             if(_menu&&focus is Button selected){if(selected.HasMeta("operation"))Interact(selected.GetMeta("operation").AsString());else CloseMenu();}
             else Activate();
         }
-        _panel.Visible=_point!=null||_feedbackTime>0;
+        _panel.Visible=Enabled&&(_point!=null||_talkTarget!=null||_feedbackTime>0);
     }
     public void RefreshTarget()
     {
@@ -58,6 +64,20 @@ public partial class PlayerWorldInteractionComponent3D : Component3D
             .Where(p=>p.IsActive&&p.Operations?.Count>0&&p.ContainsPosition(Owner.GlobalPosition))
             .OrderBy(p=>Owner.GlobalPosition.DistanceSquaredTo(p.UsePosition)).ThenBy(p=>p.PointId,StringComparer.Ordinal)
             .Take(16).FirstOrDefault(p=>WorldInteraction.HasLineOfSight(Owner,p));
+        var talk=environment?.Actors.Values
+            .Where(a=>a.Owner!=Owner&&a.IsActive&&!a.IsWorldProxy&&GodotObject.IsInstanceValid(a.Owner)&&a.Owner.IsInsideTree()
+                &&Owner.GlobalPosition.DistanceSquaredTo(a.Owner.GlobalPosition)<=DialogueRange*DialogueRange
+                &&NpcDialogueNodeData.Entries(a.Graph).Any())
+            .OrderBy(a=>Owner.GlobalPosition.DistanceSquaredTo(a.Owner.GlobalPosition)).ThenBy(a=>a.ActorId,StringComparer.Ordinal)
+            .FirstOrDefault(CanTalkTo);
+        if(talk!=null&&(next==null||Owner.GlobalPosition.DistanceSquaredTo(talk.Owner.GlobalPosition)<=Owner.GlobalPosition.DistanceSquaredTo(next.UsePosition)))
+        {
+            if(_talkTarget!=talk||_point!=null)CloseMenu();
+            _point=null;_talkTarget=talk;_talkEntry=NpcDialogueNodeData.Entries(talk.Graph).First();
+            string name=talk.Character?.Profile?.Identity?.DisplayName??"NPC";
+            _hint.Text=$"[ E ] {name} · {_talkEntry.Label}";return;
+        }
+        _talkTarget=null;_talkEntry=null;
         if(next!=_point){CloseMenu();_point=next;}
         if(_point==null){_hint.Text="";return;}
         var operation=_point.Operations[0];var check=WorldInteraction.Check(Owner,_point,operation.Id);
@@ -65,7 +85,9 @@ public partial class PlayerWorldInteractionComponent3D : Component3D
     }
     public bool Activate()
     {
-        RefreshTarget();if(_point==null)return false;
+        RefreshTarget();
+        if(_talkTarget!=null)return _dialogue.TryStart(_talkTarget.Owner,Owner,_talkEntry.EntryId);
+        if(_point==null)return false;
         if(_point.Operations.Count==1)return Interact(_point.Operations[0].Id);
         OpenMenu();return true;
     }
@@ -98,6 +120,14 @@ public partial class PlayerWorldInteractionComponent3D : Component3D
         if(focus!=null&&_choices.IsAncestorOf(focus))viewport.GuiReleaseFocus();
         foreach(var child in _choices.GetChildren()){_choices.RemoveChild(child);child.QueueFree();}_choices.Hide();
     }
-    void ClearTarget(){CloseMenu();_point=null;if(_hint!=null)_hint.Text="";}
-    public override void OnDestroy(){ClearTarget();_panel?.Hide();_world=null;_input=null;_playerInput=null;}
+    bool CanTalkTo(AiAgentComponent3D target)
+    {
+        var exclude=new Godot.Collections.Array<Rid>();
+        if(Owner.GetComponent<CharacterMovementComponent3D>()?.Body is {} playerBody)exclude.Add(playerBody.GetRid());
+        if(target.Owner.GetComponent<CharacterMovementComponent3D>()?.Body is {} npcBody)exclude.Add(npcBody.GetRid());
+        var ray=PhysicsRayQueryParameters3D.Create(Owner.GlobalPosition+Vector3.Up*.2f,target.Owner.GlobalPosition+Vector3.Up*.2f,uint.MaxValue,exclude);
+        return Owner.GetWorld3D().DirectSpaceState.IntersectRay(ray).Count==0;
+    }
+    void ClearTarget(){CloseMenu();_point=null;_talkTarget=null;_talkEntry=null;if(_hint!=null)_hint.Text="";}
+    public override void OnDestroy(){ClearTarget();_panel?.Hide();_world=null;_input=null;_dialogue=null;_playerInput=null;}
 }

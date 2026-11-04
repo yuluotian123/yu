@@ -91,7 +91,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         _rd = RenderingServer.GetRenderingDevice();
         if (_rd == null || !_rd.HasFeature(RenderingDevice.Features.RayQuery))
         { Fail("Forward+ Vulkan with Ray Query support is required.", true); return false; }
-        foreach (string name in new[] { "trace", "classify", "integrate", "temporal", "debug_sample" })
+        foreach (string name in new[] { "trace", "classify", "integrate", "temporal" })
         {
             using var file = ResourceLoader.Load<RDShaderFile>($"res://assets/shaders/rendering/ddgi/ddgi_{name}.glsl");
             using var spirv = file?.GetSpirV();
@@ -343,7 +343,8 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         DdgiBytes.Vector(writer, s.Origin, s.Spacing);
         writer.Write(s.Counts.X); writer.Write(s.Counts.Y); writer.Write(s.Counts.Z); writer.Write(s.Rays);
         DdgiBytes.Vector(writer, s.Sky, s.MaxDistance);
-        writer.Write(_nextProbe); writer.Write(count); writer.Write(_rotation); writer.Write(_packet.Lights.Length / 32);
+        uint rayPhase = s.StableDirections ? 0x80000000u : (uint)_rotation & 0x7fffffffu;
+        writer.Write(_nextProbe); writer.Write(count); writer.Write(rayPhase); writer.Write(_packet.Lights.Length / 32);
         writer.Write(s.History); writer.Write(_lightingEpoch); writer.Write(_visibilityEpoch); writer.Write((float)phase);
         return stream.ToArray();
     }
@@ -470,37 +471,6 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
             Status("emissive_triangles", emissiveTriangles); Status("emissive_shadow_ray_budget", updated * emissiveSamples);
             using var warnings = new GDictionary(); foreach (var (key, value) in _packet.Warnings) warnings[key] = value; Status("warnings", warnings);
             using var protocols = new GDictionary(); foreach (var (key, value) in _packet.MaterialCounts) protocols[key] = value; Status("material_counts", protocols);
-        }
-    }
-
-    public void DebugReadback(Vector3[] positions, Vector3[] normals)
-        => RenderingServer.CallOnRenderThread(Callable.From(() => Readback(positions, normals)));
-
-    private void Readback(Vector3[] positions, Vector3[] normals)
-    {
-        lock (_gate)
-        {
-            if (_released || !_initialized || _packet == null || positions.Length == 0 || positions.Length != normals.Length)
-            { Status("debug_error", "DDGI is not initialized or sample arrays are invalid"); return; }
-            using var stream = new MemoryStream(); using var writer = new BinaryWriter(stream);
-            for (int i = 0; i < positions.Length; i++) { DdgiBytes.Vector(writer, positions[i]); DdgiBytes.Vector(writer, normals[i]); }
-            Buffer("debug_samples", stream.ToArray()); Buffer("debug_results", new byte[positions.Length * 16]);
-            var s = _packet.Settings;
-            using var constants = new MemoryStream(); using var output = new BinaryWriter(constants);
-            DdgiBytes.Vector(output, s.Origin, s.Spacing); output.Write(s.Counts.X); output.Write(s.Counts.Y); output.Write(s.Counts.Z); output.Write(positions.Length);
-            output.Write(s.NormalBias); output.Write(0f); output.Write(0f); output.Write(0f);
-            if (!Dispatch("debug_sample", new() { Sample(0, _atlas["irradiance"], _sampler), Sample(1, _atlas["distance"], _sampler), Sample(2, _atlas["state"], _sampler),
-                Storage(3, "debug_samples"), Storage(4, "debug_results") }, constants.ToArray(), new((positions.Length + 63) / 64, 1, 1))) return;
-            float[] results = MemoryMarshal.Cast<byte, float>(_rd.BufferGetData(_buffers["debug_results"].Rid)).ToArray();
-            float[] rays = MemoryMarshal.Cast<byte, float>(_rd.BufferGetData(_buffers["rays"].Rid)).ToArray();
-            int hits = 0, backs = 0, valid = 0, relocated = 0;
-            for (int i = 0; i < rays.Length; i += 8) { if (rays[i + 3] < s.MaxDistance - .01) hits++; if (rays[i + 7] > .5) backs++; }
-            float[] states = MemoryMarshal.Cast<byte, float>(_rd.TextureGetData(_atlas["state"], 0)).ToArray();
-            for (int i = 0; i < states.Length; i += 4) { if (states[i + 3] > .5) valid++; if (new Vector3(states[i], states[i + 1], states[i + 2]).Length() > .001) relocated++; }
-            Status("debug_values", results); Status("debug_hits", hits); Status("debug_backfaces", backs); Status("debug_valid_probes", valid); Status("debug_relocated_probes", relocated);
-            byte[] temporal = _rd.BufferGetData(_buffers["temporal"].Rid);
-            Status("debug_history_epoch", BitConverter.ToUInt32(temporal, 0)); Status("debug_sky_change", BitConverter.ToSingle(temporal, 16));
-            Status("debug_serial", _status.ContainsKey("debug_serial") ? _status["debug_serial"].AsInt32() + 1 : 1);
         }
     }
 

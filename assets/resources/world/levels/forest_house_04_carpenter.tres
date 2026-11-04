@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://q8jld2i7gjhw"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_house_04_carpenter.tres" id="1_mjpli"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_ev64v"]
+
+[resource]
+script = ExtResource("2_ev64v")
+ScenePath = "res://assets/scenes/levels/forest_village_interiors/04_carpenter.tscn"
+Location = ExtResource("1_mjpli")
+ExportPortalRoutes = true
+Id = "forest_house_carpenter"
+DisplayName = "木工户 · 室内"

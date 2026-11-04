@@ -20,6 +20,12 @@ RNG = BASE['RNG']
 color = BASE['color']
 LIB = BASE['LIB']
 ORIGINAL = json.loads((META / 'models.json').read_text(encoding='utf8'))
+ROOT_REPAIR = {}
+exec(compile((ROOT / 'scripts/tools/art/forest_town/repair_tree_roots.py').read_text(encoding='utf8'),
+             'repair_tree_roots.py', 'exec'), ROOT_REPAIR)
+BARK_REPAIR = {}
+exec(compile((ROOT / 'scripts/tools/art/forest_town/repair_tree_knots.py').read_text(encoding='utf8'),
+             'repair_tree_knots.py', 'exec'), BARK_REPAIR)
 TREE_SPECS = {
     'ancient_oak': dict(height=14.8, radius=1.02, seed=1041, branches=7, lean=.75, spread=.195, label='buttressed broad oak'),
     'branching_oak': dict(height=17.2, radius=.64, seed=1042, branches=7, lean=.32, spread=.145, label='forked upright hornbeam'),
@@ -134,13 +140,7 @@ def build_tree(name):
             crowns.append((path[-3]+Vector((0,0,height*.035)), size*.94, j))
     crowns.append((stem(.88), Vector((height*.12, height*.105, height*.085)), count))
 
-    # Raised knot rims and a few curved bark ribs provide actual close-range relief.
-    for t, angle in [(.16, phase+.6), (.32, phase+3.4)]:
-        out = Vector((math.cos(angle), math.sin(angle), 0))
-        right = Vector((-math.sin(angle), math.cos(angle), 0))
-        center = stem(t)+out*radius*(.95-t*.8)
-        points = [center+right*math.cos(n*math.tau/12)*radius*.17+Vector((0,0,math.sin(n*math.tau/12)*radius*.29)) for n in range(13)]
-        limb(mesh, points, [radius*.038]*13, 4, angle, .02)
+    # Keep the longitudinal bark ribs; tapered scars are projected after root repair.
     for j in range(3):
         angle = phase+j*1.7
         out = Vector((math.cos(angle), math.sin(angle), 0))
@@ -148,7 +148,8 @@ def build_tree(name):
         limb(mesh, points, [radius*.045*math.sin(math.pi*(k+.5)/7) for k in range(7)], 4, angle, .02)
 
     wood_triangles = sum(len(face)-2 for face in mesh.faces)
-    sprays = (7950-wood_triangles)//4
+    # Keep the authored foliage count/distribution when replacing the old 200-triangle knots.
+    sprays = (7950-wood_triangles-200)//4
     assert sprays >= 750, (name, wood_triangles, sprays)
     # Balanced spiral shells give layered, full crowns instead of isolated leaf paddles.
     for index in range(sprays):
@@ -168,10 +169,14 @@ def build_tree(name):
                    direction*.78+Vector((0,0,.30)), tile=index % 4,
                    rotation=RNG.uniform(0,math.tau), cluster_center=c)
     obj = mesh.emit(name, 'tree', [{'position':[0,height*.34,0], 'size':[radius*1.8,height*.68,radius*1.8]}])
+    root_info = ROOT_REPAIR['repair_tree_roots'](obj, radius)
+    scar_info = BARK_REPAIR['repair_tree_knots'](obj, spec, remove_existing=False)
     info = BASE['MANIFEST']['assets'][-1]
-    info.update({'variant':spec['label'], 'revision':2, 'wood_triangles':wood_triangles,
+    info.update(root_info)
+    info.update(scar_info)
+    info.update({'variant':spec['label'], 'revision':4, 'wood_triangles':scar_info['triangles']-sprays*4,
                  'leaf_sprays':sprays, 'crown_clusters':len(crowns), 'authored_height':height})
-    obj['forest_tree_revision'] = 2
+    obj['forest_tree_revision'] = 4
     obj['tree_variant'] = spec['label']
     print('TREE_DETAIL', json.dumps(info))
     return obj
@@ -255,7 +260,7 @@ def finish_tree_upgrade():
         obj.location = (x,-z,y)
         obj.rotation_euler.z = math.radians(item['rotation_y'])
         obj.scale = (item['scale'],)*3
-        obj['forest_tree_revision'] = 2
+        obj['forest_tree_revision'] = source.get('forest_tree_revision', 3)
     LIB.hide_viewport = False
     LIB.hide_render = False
     stage.hide_viewport = False

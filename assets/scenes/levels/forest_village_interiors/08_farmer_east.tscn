@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://v2hp5wo6ptyo"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_r7atb"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/forest_house_08_farmer_east.tres" id="2_a18gu"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="3_0rjsn"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/runtime/AiWorldComponent3D.cs" id="4_lxodg"]
+[ext_resource type="NavigationMesh" path="res://assets/resources/world/navigation/forest_village_interiors/08_farmer_east.tres" id="5_5kann"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="6_fg5yc"]
+[ext_resource type="Resource" path="res://assets/resources/camera/hd2d_free_3d.tres" id="7_xhelu"]
+[ext_resource type="Script" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="8_aw6k6"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/forest_town_level.tres" id="9_wf1p8"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="10_hl6ho"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/runtime_gm.tscn" id="11_gosja"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="12_rode6"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="13_lgobo"]
+[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/TimeOfDayGmComponent3D.cs" id="14_s41bm"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gm/RenderingGmComponent3D.cs" id="15_j53rx"]
+[ext_resource type="Script" path="res://scripts/gamelogic/weather/WeatherGmComponent3D.cs" id="16_wsjsx"]
+[ext_resource type="Script" path="res://scripts/gamelogic/npc/gm/NpcGmComponent3D.cs" id="17_gpo2c"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldGmComponent3D.cs" id="18_35f25"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/interiors/08_farmer_east.tscn" id="19_2ngw4"]
+
+[sub_resource type="Resource" id="Resource_wovv3"]
+script = ExtResource("3_0rjsn")
+Level = ExtResource("2_a18gu")
+RequireNavigation = true
+
+[sub_resource type="Resource" id="Resource_0qrx8"]
+script = ExtResource("4_lxodg")
+
+[sub_resource type="Resource" id="Resource_lwa7r"]
+script = ExtResource("6_fg5yc")
+
+[sub_resource type="Resource" id="Resource_81lin"]
+script = ExtResource("8_aw6k6")
+FramingOriginPath = NodePath("../CameraFramingTarget")
+Profile = ExtResource("7_xhelu")
+UseComponentFraming = true
+CameraOffset = Vector3(0, 5.2, 7.2)
+CameraRotationDegrees = Vector3(-36, 0, 0)
+
+[sub_resource type="Resource" id="Resource_yhvch"]
+script = ExtResource("10_hl6ho")
+TargetLevel = ExtResource("9_wf1p8")
+TargetEntry = "from_house_farmer_east"
+
+[sub_resource type="Resource" id="Resource_2ed75"]
+script = ExtResource("6_fg5yc")
+Entry = "from_town"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v5v5m"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="shell"]
+script = ExtResource("13_lgobo")
+
+[sub_resource type="Resource" id="gm"]
+script = ExtResource("14_s41bm")
+Embedded = true
+
+[sub_resource type="Resource" id="rendering"]
+script = ExtResource("15_j53rx")
+
+[sub_resource type="Resource" id="weather_gm"]
+script = ExtResource("16_wsjsx")
+
+[sub_resource type="Resource" id="npc_gm"]
+script = ExtResource("17_gpo2c")
+
+[sub_resource type="Resource" id="world_gm"]
+script = ExtResource("18_35f25")
+
+[sub_resource type="Environment" id="Environment_b80pl"]
+background_mode = 1
+background_color = Color(0.13, 0.17, 0.17, 1)
+background_intensity = 1800.0
+ambient_light_source = 2
+ambient_light_color = Color(0.66, 0.73, 0.73, 1)
+ambient_light_energy = 0.75
+tonemap_mode = 2
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_8gvq8"]
+exposure_aperture = 8.0
+exposure_shutter_speed = 30.0
+
+[node name="FarmerEastHouseInterior" type="Node3D" unique_id=417206136]
+editor_description = "东田农户室内：备餐桌、粮袋和蔬菜篮。正门往返，后侧封闭；屋顶和前墙按游戏镜头剖开。"
+script = ExtResource("1_r7atb")
+Components = [SubResource("Resource_wovv3")]
+metadata/household = "FarmerEast"
+
+[node name="World" type="Node3D" parent="." unique_id=1982235812]
+script = ExtResource("1_r7atb")
+Components = [SubResource("Resource_0qrx8")]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=2108437370]
+navigation_mesh = ExtResource("5_5kann")
+
+[node name="EntryDefault" type="Node3D" parent="." unique_id=2118922011]
+script = ExtResource("1_r7atb")
+Components = [SubResource("Resource_lwa7r")]
+
+[node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=721140661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 1.45)
+
+[node name="CameraFramingTarget" type="Marker3D" parent="." unique_id=1398575699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1281367265]
+process_priority = 100
+script = ExtResource("1_r7atb")
+Components = [SubResource("Resource_81lin")]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=353376611]
+transform = Transform3D(1, 0, 0, 0, 0.809017, 0.58778524, 0, -0.58778524, 0.809017, 0, 5.72, 7.2)
+current = true
+fov = 47.0
+near = 0.03
+far = 40.0
+
+[node name="TownPortal" type="Node3D" parent="." unique_id=1728830704]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 2.5)
+script = ExtResource("1_r7atb")
+Components = [SubResource("Resource_yhvch"), SubResource("Resource_2ed75")]
+metadata/_world_placement = "a31f0ed733c158f000beff3de887a4ef"
+
+[node name="Arrival" type="Marker3D" parent="TownPortal" unique_id=750096561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33000004, -1.05)
+
+[node name="Area3D" type="Area3D" parent="TownPortal" unique_id=1260652274]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="TownPortal/Area3D" unique_id=717938572]
+shape = SubResource("BoxShape3D_v5v5m")
+
+[node name="UsePosition" type="Marker3D" parent="TownPortal" unique_id=1582822942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0.15)
+
+[node name="RuntimeGm" type="Node3D" parent="." unique_id=1210845066 instance=ExtResource("11_gosja")]
+process_mode = 3
+script = ExtResource("1_r7atb")
+Components = Array[ExtResource("12_rode6")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm"), SubResource("world_gm")])
+
+[node name="Interior" type="Node3D" parent="." unique_id=1075204443 instance=ExtResource("19_2ngw4")]
+metadata/household = "FarmerEast"
+metadata/theme = "备餐桌、粮袋和蔬菜篮"
+metadata/cutaway_interior = true
+
+[node name="ExitSign" type="Label3D" parent="." unique_id=1556955477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.12, 2.48)
+pixel_size = 0.003
+billboard = 1
+text = "出门"
+
+[node name="EnvironmentRig" type="Node3D" parent="." unique_id=94619709]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=1851992641]
+environment = SubResource("Environment_b80pl")
+camera_attributes = SubResource("CameraAttributesPhysical_8gvq8")
+
+[node name="WindowDaylight" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=123836980]
+transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
+light_intensity_lux = 11000.0
+light_color = Color(0.83, 0.91, 1, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 18.0
+
+[node name="HearthGlow" type="OmniLight3D" parent="EnvironmentRig" unique_id=1977154448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.32, 0.85, -1.9)
+light_intensity_lumens = 1800.0
+light_color = Color(1, 0.59, 0.26, 1)
+shadow_enabled = true
+omni_range = 4.5
+
+[node name="WindowBounce" type="OmniLight3D" parent="EnvironmentRig" unique_id=658474878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.9)
+light_intensity_lumens = 1500.0
+light_color = Color(0.72, 0.86, 1, 1)
+omni_range = 6.0

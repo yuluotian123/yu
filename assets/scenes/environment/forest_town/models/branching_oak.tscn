@@ -8,9 +8,9 @@ size = Vector3(1.152, 11.696, 1.152)
 [node name="BranchingOak" type="Node3D" unique_id=1295839888]
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/branching_oak.glb"
-metadata/source_polygons = 3863
-metadata/triangles = 7948
-metadata/tree_revision = 2
+metadata/source_polygons = 3565
+metadata/triangles = 7296
+metadata/tree_revision = 4
 
 [node name="Model" type="MeshInstance3D" parent="." unique_id=1689728496]
 mesh = ExtResource("1_b681p")

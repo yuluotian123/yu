@@ -10,7 +10,7 @@ namespace GameLogic;
 
 internal readonly record struct DdgiSettings(bool Enabled, bool EnvironmentSky,
     Vector3 Origin, Vector3I Counts, float Spacing, int Rays, int Budget, float History,
-    float MaxDistance, Vector3 Sky, float Energy, float NormalBias, float ViewBias)
+    float MaxDistance, Vector3 Sky, float Energy, float NormalBias, float ViewBias, bool StableDirections)
 {
     public int Total => Counts.X * Counts.Y * Counts.Z;
     public static DdgiSettings From(GDictionary d) => new(d["enabled"].AsBool(),
@@ -18,7 +18,8 @@ internal readonly record struct DdgiSettings(bool Enabled, bool EnvironmentSky,
         d["origin"].AsVector3(), d["counts"].AsVector3I(), d["spacing"].AsSingle(),
         d["rays"].AsInt32(), d["budget"].AsInt32(), d["history"].AsSingle(),
         d["max_distance"].AsSingle(), d["sky"].AsVector3(), d["energy"].AsSingle(),
-        d["normal_bias"].AsSingle(), d["view_bias"].AsSingle());
+        d["normal_bias"].AsSingle(), d["view_bias"].AsSingle(),
+        d.ContainsKey("stable_directions") && d["stable_directions"].AsBool());
 }
 
 internal sealed record DdgiGeometry(string Key, byte[] Positions, int VertexCount, byte[] Indices, int IndexCount, byte[] Triangles);
@@ -60,6 +61,37 @@ internal sealed class DdgiSceneCapture
     private readonly Dictionary<string, DdgiGeometry> _meshes = new();
     private readonly Dictionary<string, byte[]> _textures = new();
     private readonly HashSet<ulong> _usedResources = new();
+    private readonly List<Node3D> _captureNodes = new();
+    private Node3D _captureRoot;
+    private SceneTree _tree;
+    private bool _nodesDirty = true;
+
+    private void MarkNodesDirty() => _nodesDirty = true;
+
+    private void RefreshNodes(Node3D root)
+    {
+        if (_captureRoot != root)
+        {
+            if (GodotObject.IsInstanceValid(_tree)) _tree.TreeChanged -= MarkNodesDirty;
+            _captureRoot = root;
+            _tree = root.GetTree();
+            _tree.TreeChanged += MarkNodesDirty;
+            _nodesDirty = true;
+        }
+        if (!_nodesDirty) return;
+        _captureNodes.Clear();
+        var pending = new Stack<Node>(); pending.Push(root);
+        while (pending.TryPop(out Node node))
+        {
+            if (node.GetMeta("ddgi_skip_subtree", false).AsBool()) continue;
+            var children = node.GetChildren();
+            using var childrenOwner = (Godot.Collections.Array)children;
+            foreach (Node child in children) pending.Push(child);
+            if (node is MeshInstance3D or DirectionalLight3D or MultiMeshInstance3D)
+                _captureNodes.Add((Node3D)node);
+        }
+        _nodesDirty = false;
+    }
 
     private static byte[] CreateWhiteTexture()
     {
@@ -199,6 +231,17 @@ internal sealed class DdgiSceneCapture
                 detail = Param(material, "texture_detail", .62f);
                 saturation = Param(material, "color_saturation", 1.02f);
                 vertexColor = Param(material, "use_vertex_color", false);
+                if (Param(material, "paint_floor_from_contact", false))
+                {
+                    var map = Param<Texture2D>(material, "ground_contact_map", null);
+                    int mapLayer = Texture(map, packet, true);
+                    if (map != null && mapLayer >= 0)
+                    {
+                        // This is a linear world-space albedo map; the data texture array preserves it.
+                        foliage = new(mapLayer, 0, 1, 0);
+                        lower = Param(material, "ground_contact_rect", Vector4.Zero);
+                    }
+                }
                 if (Param(material, "use_orm_texture", false))
                 { orm = Texture(Param<Texture2D>(material, "orm_texture", null), packet, true); if (orm < 0) return null; }
                 if (Param(material, "emission_luminance_units", false)) emission /= Mathf.Max(e.Dot(new(.2126f, .7152f, .0722f)), 1e-6f);
@@ -213,7 +256,8 @@ internal sealed class DdgiSceneCapture
                     foliage = new(Param(material, "palette_strength", .72f), Param(material, "color_saturation", 1.02f), Param(material, "albedo_value", .92f), useTexture ? Param(material, "canopy_normal_blend", .76f) : 0);
                 else
                 {
-                    foliage = new(Param(material, "texture_detail", 0f), Param(material, "normal_roundness", .68f), 0, 0);
+                    foliage = new(Param(material, "texture_detail", 0f), Param(material, "normal_roundness", .68f),
+                        Param(material, "use_painted_sprays", false) ? 1 : 0, 0);
                     Vector3 low = Param(material, "lower_color", new Vector3(.110f, .230f, .150f)), high = Param(material, "upper_color", new Vector3(.270f, .460f, .180f));
                     lower = new(low.X, low.Y, low.Z, Param(material, "gradient_strength", .60f));
                     upper = new(high.X, high.Y, high.Z, Param(material, "vertex_color_strength", .40f));
@@ -255,20 +299,21 @@ internal sealed class DdgiSceneCapture
         using var emitters = new MemoryStream(); using var emitterWriter = new BinaryWriter(emitters);
         emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0);
         int emitterCount = 0;
-        var pending = new Stack<Node>(); pending.Push(root);
+        RefreshNodes(root);
         bool physical = ProjectSettings.GetSetting("rendering/lights_and_shadows/use_physical_light_units", false).AsBool();
-        while (pending.TryPop(out Node node))
+        foreach (Node3D node in _captureNodes)
         {
-            var children = node.GetChildren();
-            using (var childrenOwner = (Godot.Collections.Array)children) foreach (Node child in children) pending.Push(child);
-            if (node is MultiMeshInstance3D) packet.Warnings["multimesh"] = "MultiMesh instances need a GI proxy.";
+            if (!GodotObject.IsInstanceValid(node)) continue;
+            if (node is MultiMeshInstance3D && node.GetMeta("ddgi_contribute", true).AsBool())
+                packet.Warnings["multimesh"] = "MultiMesh instances need a GI proxy.";
             if (node is DirectionalLight3D light && light.IsVisibleInTree() && light.LightIndirectEnergy > 0)
             {
                 Vector3 direction = light.GlobalBasis.Z.Normalized(); Color c = light.LightColor.SrgbToLinear();
                 float energy = light.LightEnergy * light.LightIndirectEnergy * (light.LightNegative ? -1 : 1) * (physical ? light.LightIntensityLux : Mathf.Pi);
                 DdgiBytes.Vector(lightWriter, direction); DdgiBytes.Vector(lightWriter, new Vector3(c.R, c.G, c.B) * energy);
             }
-            if (node is not MeshInstance3D instance || !instance.IsVisibleInTree() || instance.Mesh == null) continue;
+            if (node is not MeshInstance3D instance || !instance.IsVisibleInTree()
+                || !instance.GetMeta("ddgi_contribute", true).AsBool() || instance.Mesh == null) continue;
             bool deformed = instance.Skin != null || (!instance.Skeleton.IsEmpty && instance.GetNodeOrNull(instance.Skeleton) is Skeleton3D);
             if (instance.Mesh is ArrayMesh mesh)
                 for (int shape = 0; shape < mesh.GetBlendShapeCount(); shape++) deformed |= Mathf.Abs(instance.GetBlendShapeValue(shape)) > .0001;
@@ -277,7 +322,6 @@ internal sealed class DdgiSceneCapture
             for (int surface = 0; surface < instance.Mesh.GetSurfaceCount(); surface++)
             {
                 Material material = instance.GetActiveMaterial(surface);
-                if (!instance.GetMeta("ddgi_contribute", true).AsBool()) continue;
                 byte[] bytes;
                 if (material == null)
                     bytes = defaultMaterial ??= MaterialData(null, packet, physical);
@@ -328,6 +372,8 @@ internal sealed class DdgiSceneCapture
 
     public void Clear()
     {
+        if (GodotObject.IsInstanceValid(_tree)) _tree.TreeChanged -= MarkNodesDirty;
+        _tree = null; _captureRoot = null; _captureNodes.Clear(); _nodesDirty = true;
         foreach (var watch in _watched.Values)
             if (GodotObject.IsInstanceValid(watch.Resource)) watch.Resource.Changed -= watch.Changed;
         _watched.Clear(); _versions.Clear(); _meshes.Clear(); _textures.Clear();

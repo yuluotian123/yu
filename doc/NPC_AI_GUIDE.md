@@ -52,7 +52,7 @@ AI 图只保留：
 | --- | --- |
 | 日程窗口 | 当前允许采用的行为时段 |
 | 感知 | 视距、检测间隔、视线、对象标签和已知交互点 |
-| 记忆 | AI 事件记忆类别、容量与有效期 |
+| 记忆 | 统一的记忆条目：键、显示名、初始值与每条遗忘时间，按对象分别记录 |
 | 决策预算 | 搜索节点数、深度、候选数量、承诺时间、切换差值、重试与 LOD |
 | Goal / Plan / Action / 选择器 | 行为选择、规划与执行 |
 
@@ -112,7 +112,7 @@ Action 使用通用结构，按需配置零个或多个输入，不再提供“�
 
 效果支持 Set 或 Add，可修改已声明的私有事实、需求和对象适配器提供的可写成员。打开效果条目，点击“修改参数”从当前可写列表选择，点击“效果值”配置表达式。数值才支持 Add；布尔、文本支持 Set。`self.location` 只出现在预测效果中。多个输入指向同一对象时，效果按稳定对象标识累计；全部类型、范围、成功条件和资源占用验证通过后才提交。取消或失败不提交尚未完成的 Results。
 
-执行图内“前往输入地点”“附近活动或原地踏步”“记录记忆”的输入引用也按名称选择。能力节点只负责引擎执行，需求变化、天气条件、成本等由外层配置决定。当前还提供等待、Ability、关系和情绪能力；它们由 AI 组件提供，复用 GraphActionTask 的 Tick/Cancel 生命周期。记忆、关系、情绪等即时能力在执行时生效；需要整体提交的数据放在 Results 中。
+执行图内“前往输入地点”“附近活动或原地踏步”的输入引用也按名称选择。能力节点只负责引擎执行，需求变化、天气条件、成本等由外层配置决定。当前还提供等待、Ability、关系和情绪能力；它们由 AI 组件提供，复用 GraphActionTask 的 Tick/Cancel 生命周期。关系、情绪等即时能力在执行时生效；需要整体提交的数据放在 Results 中。
 
 “附近活动或原地踏步”使用现有导航和行走动画：Radius 大于 0 时在输入地点附近移动，范围受交互区域限制；无地点输入时以自身为中心。Radius 为 0 时原地播放动画。Seconds 在此节点填写常量或公式，结束、取消时释放动画请求并停止导航。“等待图内时长”同样在节点的 Seconds 配置实际秒数；旧 DurationOverride 字段已移除。
 
@@ -222,7 +222,6 @@ NpcActionInputDefinition 保存输入类型、名称、稳定身份、普通参�
 | `personality.<dimension>`、`preference.<key>` | 配置的标量类型 |
 | `trait.<id>`、`schedule.<tag>` | 布尔 |
 | `affect.<dimension>`、`relations.<dimension>.max` | 数值 |
-| `memory.<category>.count` | 数值 |
 | `private.<key>` | 声明的布尔、数值或符号 |
 | `world.hour / rain` | 数值 |
 | `activity.id / place / active` | 符号 / 符号 / 布尔 |
@@ -232,6 +231,8 @@ NpcActionInputDefinition 保存输入类型、名称、稳定身份、普通参�
 | `self.location`、`action.duration` | 符号、数值 |
 
 需求在运行时连续变化，搜索时按需求范围的 1/20 投影。私有数值事实用配置的 Step 离散化，避免连续值搜索空间无限增长。不要用小于搜索精度的差值作为完成条件。
+
+记忆统一在「记忆规则 → Entries」定义，由 `NpcMemoryEntryDefinition` 配置键、显示名、布尔初始值与遗忘时间。运行时按「条目键 + 对象身份」保存值和时间，重复写入会覆盖；0 小时永久保留，正数到期后恢复初始值。对话条件与写入节点直接选择这些条目，其他业务可使用 `NpcMemoryModel.TryRead/Write` 访问同一份记忆。NPC 的 F8 状态页显示统一记忆。旧分类计数与事件记录动作已移除；存档写 `memory_entries`，读取兼容旧 `memory_facts`。对话配置见 [NPC 对话](../scripts/gamelogic/dialogue/README.md)。
 
 ## 场景、存档和预算
 
@@ -257,7 +258,7 @@ NpcActionInputDefinition 保存输入类型、名称、稳定身份、普通参�
 
 添加 WorldActor 后，上述数据统一由世界名册持有，运行时自动关闭角色、位置和 Agent 自己的重复存档注册。跨关卡移动继续使用同一移动节点，不需要另配 Plan 变量或另一个行动图。
 
-技能、动画、副作用记忆／关系／情绪节点、自定义节点、条件分支、并行和子图仍可正常执行；包含这些内容的行动存档时明确标记 `Replan:UnsupportedExecution`，读取后重新规划。不会把任意执行图假定为可安全恢复。
+技能、动画、关系／情绪节点、自定义节点、条件分支、并行和子图仍可正常执行；包含这些内容的行动存档时明确标记 `Replan:UnsupportedExecution`，读取后重新规划。不会把任意执行图假定为可安全恢复。
 
 ### 保存内容与恢复规则
 
@@ -283,10 +284,6 @@ NPC agent section 使用 schema 3；旧 schema 不恢复行动，重新规划。
 
 **按库存计算取货数量**：图内计算 `units = min(input.target.stock, 2)`，等待 `units * 5` 秒，再请求同一目标的 `take_stock(units)`。等待 4 秒保存后，冻结的数量仍为 2，总时长仍为 10 秒；恢复后再等 6 秒，成功时才扣库存。库存不足时操作失败并重规划。
 
-### 验证
-
-构建后运行 `scripts/tools/npc/action_checkpoint_validation.tscn`，成功标记为 `NPC_ACTION_CHECKPOINTS_OK`。2026-10-23 已通过 55 项，覆盖计时与本图数值恢复、共享目标、提交边界、占用冲突、失效回退、双 NPC 隔离、本地导航、配置资源重载，以及真实关卡往返、继续游戏和实时读档。资源、存档与日志位于忽略目录 `.godot/npc-checkpoint-validation/`。
-
 ## NPC GM
 
 运行后按 F8 → NPC，顶部显示世界时钟、NPC 运行/待机数、交互点数和规划耗时。先选择角色，再查看五个页签：
@@ -311,17 +308,6 @@ NPC agent section 使用 schema 3；旧 schema 不恢复行动，重新规划。
 
 本版尚未包含图内运行状态着色、配置预演面板和通用角色/威胁传感器。当前运行诊断位于 F8 的 NPC 页，世界人口及旅行诊断位于世界页；其他扩展继续通过通用提供者和适配器实现。
 
-## 选择器连线回归验证
+## 运行检查
 
-`scripts/tools/npc/graph_values_validation.tscn` 新增 47 项图参数回归，覆盖常量／公式、本图变量、自动操作与数量筛选、候选截断、库存与液体预测、时长成本、类型与分支校验、保存重载、编辑器入口、双 NPC 隔离、精度、取消、最终校验和幂等提交；成功输出 `NPC_GRAPH_VALUES_OK`。临时资源及日志位于 `.godot/npc-graph-values-validation/`。
-
-构建后，用当前项目对应的 Godot Mono 引擎运行：
-
-```powershell
-dotnet build yu.csproj --no-restore
-& '<Godot Mono 引擎路径>' --headless --path . --rendering-method gl_compatibility --audio-driver Dummy res://scripts/tools/npc/selector_binding_validation.tscn
-```
-
-成功时输出 `NPC_SELECTOR_BINDINGS_OK`。2026-10-22 通过 100 项，覆盖分支选择、状态去重、节点共享/独立、固定对象及角色参数来源、类型／能力／操作筛选、实例操作覆盖、目录知识权限、只读快照、普通输入、退役字段移除、条件字段显隐、名称选择、现有角色图加载、手动 Plan 行动范围、反复增减输入后的端口数量、排序与撤销的连线重映射、原生画布同步、保存重载、复制粘贴、双 NPC 隔离、执行中目标／操作失效，以及完成/取消/暂停后的绑定清理。夹具不改变关卡或角色资源；临时保存文件位于 `.godot/npc-selector-validation/`。F8 的 NPC 状态页另有“共享目标”摘要，可查看当前执行计划选定的节点目标。
-
-示例角色图正在编辑时，可将已提交的两份示例图复制到忽略目录，再在测试命令末尾传入 `-- --scaffold-root=res://.godot/<夹具目录>`；该目录下保持 `gray_green_resident/npc_graph.tres` 和 `ochre_courier/npc_graph.tres` 两条相对路径。本次 100 项使用已提交的示例副本，保留工作区正在编辑的角色图；其余检查使用当前代码与临时夹具。
+运行 `dotnet build yu.csproj` 后，从主场景进入林间镇，使用 F8 的 NPC 页检查计划、共享目标、行动恢复与记忆。修改需求后观察喝水、取货和跨关卡；途中保存并继续，确认行动、资源和目标绑定恢复。独立验证器和测试夹具已移除。

@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://dwpdqkggifyyq"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/houses/08_farmer_east.mesh.res" id="1_80fa8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ophy7"]
+size = Vector3(5.3, 1.7, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hy0j3"]
+size = Vector3(1.3, 1.7, 3.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o2mis"]
+size = Vector3(1.3, 1.7, 3.1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_80fa8"]
+points = PackedVector3Array(-0.57, -0.12, -0.67, -0.57, -0.12, 0.25000003, -0.57, -0.045, 0.25000003, -0.57, 0.16, -0.51, 0.57, -0.12, -0.67, 0.57, -0.12, 0.25000003, 0.57, -0.045, 0.25000003, 0.57, 0.16, -0.51)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hn87f"]
+size = Vector3(1.06, 0.16, 0.18)
+
+[node name="FarmerEast" type="Node3D" unique_id=1531291730]
+metadata/asset_category = "building"
+metadata/source_model = "res://assets/models/environment/forest_village/houses/08_farmer_east.glb"
+metadata/concept = "res://assets/textures/concepts/forest_village/houses_v2/08_farmer_east.png"
+metadata/triangles = 18503
+metadata/complete_exterior = true
+metadata/detail_revision = 3.0
+metadata/detail_features = ["curved_overlapping_roofing", "chamfered_joinery", "coursed_masonry", "recessed_glazing_and_hardware", "organic_household_props", "all_four_elevations"]
+metadata/exterior_only = true
+metadata/entrance_audit = {
+"landing_added": true,
+"marker_error_m": 0.0,
+"posts_clear": true,
+"primary_height_m": 1.38,
+"primary_width_m": 0.8,
+"stand_point": [0.0, 0.16, -0.53],
+"threshold_supported": true
+}
+metadata/elevation_features = {
+"back": ["door", "recessed_window", "recessed_window", "stone_plinth_and_joinery", "stone_plinth_and_joinery", "stone_plinth_and_joinery", "water_barrel_and_ceramic_planters"],
+"front": ["door", "recessed_window", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"left": ["stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"],
+"right": ["stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery", "recessed_window", "stone_plinth_and_joinery"]
+}
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1688376203]
+mesh = ExtResource("1_80fa8")
+
+[node name="Collision1" type="StaticBody3D" parent="." unique_id=525512804]
+collision_mask = 0
+
+[node name="Shape00" type="CollisionShape3D" parent="Collision1" unique_id=288250511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, -1.35)
+shape = SubResource("BoxShape3D_ophy7")
+
+[node name="Shape01" type="CollisionShape3D" parent="Collision1" unique_id=210834471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.01, 0.12)
+shape = SubResource("BoxShape3D_hy0j3")
+
+[node name="Shape02" type="CollisionShape3D" parent="Collision1" unique_id=332851659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.01, 0.12)
+shape = SubResource("BoxShape3D_o2mis")
+
+[node name="Shape03" type="CollisionShape3D" parent="Collision1" unique_id=1409256236]
+shape = SubResource("ConvexPolygonShape3D_80fa8")
+metadata/stair_original_front = 0.09000003
+metadata/stair_collision_profile = "buried_toe_and_overlapping_crest"
+
+[node name="Shape04" type="CollisionShape3D" parent="Collision1" unique_id=4368919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, -0.58)
+shape = SubResource("BoxShape3D_hn87f")
+
+[node name="DoorAnchor" type="Marker3D" parent="." unique_id=1620272926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.65)
+
+[node name="ApproachAnchor" type="Marker3D" parent="." unique_id=284727351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 2.4)

@@ -1,0 +1,14 @@
+[gd_resource type="NavigationMesh" format=3 uid="uid://crivhx4buio3s"]
+
+[resource]
+vertices = PackedVector3Array(-2.1200001, 0.100000024, -1.4000001, -2.3600001, 0.25000003, -1.6400001, -2.6000001, 0.100000024, -1.4000001, -2.6000001, 0.100000024, -1.0400002, -1.6400001, 0.100000024, -1.0400002, -1.4000001, 0.100000024, 1.3599997, -0.44000006, 0.100000024, 2.08, 1.2399998, 0.100000024, 1, 1.2399998, 0.100000024, -0.44000006, -1.4000001, 0.100000024, -0.8000002, -1.52, 0.100000024, -1.4000001, -1.6400001, 0.100000024, 1.5999999, -2.6000001, 0.100000024, 1.5999999, -2.6000001, 0.100000024, 2.08, 1.7199998, 0.100000024, 2.08, 1.5999999, 0.100000024, 1.2399998, -0.32000017, 0.100000024, 2.3199997, 1.48, 0.100000024, -0.6800003, 1.3599997, 0.100000024, -1.6400001, -1.28, 0.100000024, -2.1200001, 1.1199999, 0.100000024, -2.1200001, 2.56, 0.100000024, -0.6800003, 2.56, 0.100000024, -1.6400001, -2.6000001, 0.70000005, -0.32000017, -2.6000001, 0.70000005, 0.87999964, -2.1200001, 0.70000005, 0.87999964, -2.1200001, 0.70000005, -0.32000017, 1.96, 0.75, 0.03999996, 1.96, 0.75, 0.52, 2.44, 0.75, 0.52, 2.44, 0.75, 0.03999996)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(6, 5, 7), PackedInt32Array(7, 5, 8), PackedInt32Array(8, 5, 9), PackedInt32Array(0, 10, 4), PackedInt32Array(9, 4, 10), PackedInt32Array(12, 11, 13), PackedInt32Array(13, 11, 6), PackedInt32Array(15, 14, 7), PackedInt32Array(7, 14, 16), PackedInt32Array(7, 16, 6), PackedInt32Array(18, 17, 8), PackedInt32Array(5, 6, 11), PackedInt32Array(10, 19, 9), PackedInt32Array(9, 19, 20), PackedInt32Array(9, 20, 18), PackedInt32Array(9, 18, 8), PackedInt32Array(21, 17, 22), PackedInt32Array(22, 17, 18), PackedInt32Array(26, 25, 23), PackedInt32Array(23, 25, 24), PackedInt32Array(30, 29, 27), PackedInt32Array(27, 29, 28)]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+cell_size = 0.12
+cell_height = 0.05
+agent_height = 1.0
+agent_radius = 0.25
+agent_max_climb = 0.22
+region_min_size = 1.0
+filter_baking_aabb = AABB(-5, -0.4, -5, 10, 1.7, 10)

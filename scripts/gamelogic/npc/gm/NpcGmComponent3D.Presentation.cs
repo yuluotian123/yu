@@ -119,8 +119,18 @@ public partial class NpcGmComponent3D
         text.AppendLine("\n参数\n" + string.Join("\n", a.Program.Parameters.Select(x => x.Key + " = " + x.Value)));
         text.AppendLine($"\n关系联系人：{a.State.Relations.Contacts.Count}");
         foreach (var contact in a.State.Relations.Contacts) text.AppendLine(contact.Key + "：" + string.Join("，", contact.Value.Select(x => Feature(x.Key) + " = " + x.Value.ToString("0.###"))));
-        text.AppendLine($"\nAI 记忆：{a.Decision?.Memory.Entries.Count}");
-        if (a.Decision != null) foreach (var entry in a.Decision.Memory.Entries.TakeLast(8)) text.AppendLine($"{entry.Hours:0.00}h · {entry.Category} · {entry.Subject} · {entry.Detail}");
+        if (a.Decision != null)
+        {
+            var memory = a.Decision.Memory;
+            text.AppendLine($"\n记忆：{memory.Entries.Count} 条记录 / {memory.Definitions.Count} 个条目");
+            foreach (var definition in memory.Definitions.Values)
+            {
+                string name = definition.Name.Length > 0 ? definition.Name : definition.Key;
+                var records = memory.Entries.Where(e => e.Key == definition.Key).TakeLast(8).ToArray();
+                if (records.Length == 0) text.AppendLine($"{name} [{definition.Key}] · 尚未记录 · 初始值 {(definition.InitialValue ? "真" : "假")}");
+                foreach (var entry in records) text.AppendLine($"{name} [{entry.Key}] = {(entry.Value ? "真" : "假")} · 对象 {entry.Subject} · {entry.Hours:0.00}h");
+            }
+        }
         return text.ToString();
     }
     string Points(AiAgentComponent3D a)

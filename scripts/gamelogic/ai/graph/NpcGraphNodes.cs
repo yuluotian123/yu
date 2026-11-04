@@ -16,8 +16,9 @@ public class NpcRootNodeData : GraphNodeData
         return GetDisplayName();
     }
     public override string GetCategory() => "NPC";
-    public override int GetOutputCount() => 3;
-    public override string GetOutputPortName(int port) => port switch {0=>"模块",1=>"目标",_=>"目标选择器"};
+    public override int GetOutputCount() => 4;
+    public override string GetOutputPortName(int port) => port switch {0=>"模块",1=>"目标",2=>"目标选择器",_=>"对话"};
+    public override int GetOutputPortType(int port) => port==3?NpcDialogueNodeData.PortType:0;
     public override Color GetNodeColor() => new(.3f,.7f,.65f);
     public override GodotObject GetInspectorObject(GraphAsset graph) => graph;
     public override void CreateNodeUI(GraphEditorContext context) => context.GraphNode.AddChild(new Label { Text="决策规则、目标与计划",CustomMinimumSize=new(190,28) });

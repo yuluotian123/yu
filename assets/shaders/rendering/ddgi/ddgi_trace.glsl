@@ -65,8 +65,13 @@ vec3 hit_color(Material material, Triangle triangle, vec3 weights, vec4 texel) {
 	}
 	vec3 local = (triangle.a * weights.x + triangle.b * weights.y + triangle.c * weights.z).xyz;
 	float height = clamp((local.y - gi_crown_center(local).y + 1.05) / 2.9, 0.0, 1.0);
+	if (material.foliage.z > .5) {
+		vec3 n = normalize((triangle.na*weights.x+triangle.nb*weights.y+triangle.nc*weights.z).xyz);
+		height = smoothstep(-.48,.65,n.y);
+	}
 	float gradient = mix(.5, smoothstep(.02, .96, height), material.lower.w);
-	return mix(material.lower.rgb, material.upper.rgb, gradient) * mix(vec3(1.0), vertex_color, material.upper.w)
+	vec3 paint = material.foliage.z > .5 ? mix(vec3(.66,.71,.75),vec3(1.35,1.27,1.13),texel.rgb) : vec3(1.0);
+	return paint * mix(material.lower.rgb, material.upper.rgb, gradient) * mix(vec3(1.0), vertex_color, material.upper.w)
 		* (1.0 + sin(local.x * 2.7 + local.z * 3.1) * .016)
 		* mix(1.0, .75 + dot(texel.rgb, vec3(.2126, .7152, .0722)), material.foliage.x);
 }
@@ -137,7 +142,11 @@ void main() {
 	uint sample_id = fixed_ray ? ray_id : ray_id - 32u;
 	uint sample_count = visibility_pass ? params.counts_rays.w : (fixed_ray ? min(32u, params.counts_rays.w) : params.counts_rays.w - 32u);
 	float y = 1.0 - 2.0 * (float(sample_id) + 0.5) / float(sample_count);
-	float angle = float(sample_id) * 2.39996322973 + (fixed_ray ? 0.0 : float(params.batch.z % 1024u) * 0.754877666);
+	// Stable quadrature per probe: relighting still runs for every scheduled batch,
+	// but static illumination does not vary as successive batches revisit the cell.
+	uint phase = (probe*2654435761u) >> 16u;
+	float rotation = (params.batch.z & 0x80000000u) != 0u ? float(phase)*(6.2831853/65536.0) : float(params.batch.z % 1024u)*0.754877666;
+	float angle = float(sample_id) * 2.39996322973 + (fixed_ray ? 0.0 : rotation);
 	vec3 direction = vec3(cos(angle) * sqrt(max(0.0, 1.0 - y * y)), y, sin(angle) * sqrt(max(0.0, 1.0 - y * y)));
 	rayQueryEXT query;
 	rayQueryInitializeEXT(query, scene, 0, 255, position, 0.002, direction, params.sky_distance.w);
@@ -175,6 +184,10 @@ void main() {
 		vec3 albedo = hit_color(material, triangle, weights, hit_texel(material, uv));
 		int kind = int(material.detail_vertex_kind_orm.z);
 		vec3 hit = position + direction * distance_to_hit;
+		if (kind == 1 && material.foliage.z > .5) {
+			vec2 ground_uv = clamp((hit.xz-material.lower.xy)/material.lower.zw,vec2(0.0),vec2(1.0));
+			albedo = textureLod(material_data_textures,vec3(ground_uv,material.foliage.x),0.0).rgb;
+		}
 		vec3 emission = material.emission_metallic.rgb;
 		float metallic = material.emission_metallic.w;
 		if (kind > 0) {
@@ -188,7 +201,9 @@ void main() {
 			normal = normalize(transpose(mat3(rayQueryGetIntersectionWorldToObjectEXT(query, true))) * local_normal);
 			if (kind >= 2) {
 				backface = 0.0; // Thin leaf cards are two-sided, not solid probe interiors.
-				if (dot(normal, direction) > 0.0) normal = -normal;
+				if (material.foliage.z < .5 || kind != 3) {
+					if (dot(normal, direction) > 0.0) normal = -normal;
+				}
 			}
 			float snow = gi_snow(hit, normal, material.weather.z);
 			vec2 wet = gi_wet(hit, normal, material) * (1.0 - snow);

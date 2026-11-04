@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://bval3v32co6id"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/interiors/09_farmer_west.mesh.res" id="1_sw4s7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ry0on"]
+size = Vector3(6.6, 0.3, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yr7ql"]
+size = Vector3(2.58, 2.26, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7sa7p"]
+size = Vector3(2.58, 2.26, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_plfdd"]
+size = Vector3(1.24, 0.86, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3746n"]
+size = Vector3(1.24, 0.56, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m7naa"]
+size = Vector3(0.14, 2.26, 4.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8w5f1"]
+size = Vector3(2.54, 2, 0.16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ihkwf"]
+size = Vector3(0.14, 2.26, 4.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ff5yb"]
+size = Vector3(2.54, 2, 0.16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p8t64"]
+size = Vector3(1.3, 2, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uibey"]
+size = Vector3(1.1, 0.16, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3x6ed"]
+size = Vector3(1.1, 0.6, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1jxao"]
+size = Vector3(1.25, 0.18, 0.72)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lm87h"]
+size = Vector3(1.12, 0.9, 0.24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25a5d"]
+size = Vector3(0.22, 0.57, 0.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y1bjq"]
+size = Vector3(0.22, 0.57, 0.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ht66t"]
+size = Vector3(1.15, 0.66, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kg1hx"]
+size = Vector3(0.35, 0.38, 0.33)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5ujnh"]
+size = Vector3(1.35, 1.58, 0.44)
+
+[node name="FarmerWestInterior" type="Node3D" unique_id=90321973]
+metadata/household = "FarmerWest"
+metadata/theme = "家庭长桌、织架和谷物储备"
+metadata/cutaway_interior = true
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=706310147]
+mesh = ExtResource("1_sw4s7")
+
+[node name="Collision" type="StaticBody3D" parent="." unique_id=1824554157]
+collision_mask = 0
+
+[node name="Shape000" type="CollisionShape3D" parent="Collision" unique_id=1630270794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+shape = SubResource("BoxShape3D_ry0on")
+
+[node name="Shape001" type="CollisionShape3D" parent="Collision" unique_id=929292317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91, 1.13, -2.4)
+shape = SubResource("BoxShape3D_yr7ql")
+
+[node name="Shape002" type="CollisionShape3D" parent="Collision" unique_id=561009827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91, 1.13, -2.4)
+shape = SubResource("BoxShape3D_7sa7p")
+
+[node name="Shape003" type="CollisionShape3D" parent="Collision" unique_id=181099580]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, -2.4)
+shape = SubResource("BoxShape3D_plfdd")
+
+[node name="Shape004" type="CollisionShape3D" parent="Collision" unique_id=671403730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.98, -2.4)
+shape = SubResource("BoxShape3D_3746n")
+
+[node name="Shape005" type="CollisionShape3D" parent="Collision" unique_id=1985653313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 1.13, 0)
+shape = SubResource("BoxShape3D_m7naa")
+
+[node name="Shape006" type="CollisionShape3D" parent="Collision" unique_id=760472739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.93, 1, 2.4)
+shape = SubResource("BoxShape3D_8w5f1")
+
+[node name="Shape007" type="CollisionShape3D" parent="Collision" unique_id=1539756695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.13, 0)
+shape = SubResource("BoxShape3D_ihkwf")
+
+[node name="Shape008" type="CollisionShape3D" parent="Collision" unique_id=774052794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93, 1, 2.4)
+shape = SubResource("BoxShape3D_ff5yb")
+
+[node name="Shape009" type="CollisionShape3D" parent="Collision" unique_id=1078482949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2.58)
+shape = SubResource("BoxShape3D_p8t64")
+
+[node name="Shape010" type="CollisionShape3D" parent="Collision" unique_id=2127805040]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.26, 0.25)
+shape = SubResource("BoxShape3D_uibey")
+
+[node name="Shape011" type="CollisionShape3D" parent="Collision" unique_id=727810972]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.3, 0.25)
+shape = SubResource("BoxShape3D_3x6ed")
+
+[node name="Shape012" type="CollisionShape3D" parent="Collision" unique_id=1867692570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.42, 0.09, -1.92)
+shape = SubResource("BoxShape3D_1jxao")
+
+[node name="Shape013" type="CollisionShape3D" parent="Collision" unique_id=352970858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.42, 0.52, -2.16)
+shape = SubResource("BoxShape3D_lm87h")
+
+[node name="Shape014" type="CollisionShape3D" parent="Collision" unique_id=40879451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.88, 0.46, -1.87)
+shape = SubResource("BoxShape3D_25a5d")
+
+[node name="Shape015" type="CollisionShape3D" parent="Collision" unique_id=1024136644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.96, 0.46, -1.87)
+shape = SubResource("BoxShape3D_y1bjq")
+
+[node name="Shape016" type="CollisionShape3D" parent="Collision" unique_id=432353004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28, 0.33, 0.3)
+shape = SubResource("BoxShape3D_ht66t")
+
+[node name="Shape017" type="CollisionShape3D" parent="Collision" unique_id=477159877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28, 0.19, 1.22)
+shape = SubResource("BoxShape3D_kg1hx")
+
+[node name="Shape018" type="CollisionShape3D" parent="Collision" unique_id=1675734966]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 0.79, -2.05)
+shape = SubResource("BoxShape3D_5ujnh")

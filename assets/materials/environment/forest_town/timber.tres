@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://b43hdjjtmu25e"]
 
 [ext_resource type="Shader" uid="uid://bmsxj3pag3e0h" path="res://assets/shaders/town/town_toon.gdshader" id="1_7pqv7"]
-[ext_resource type="Texture2D" uid="uid://dq1puy05lgj8b" path="res://assets/textures/environment/forest_town/painterly_atlas_v3.res" id="2_4jjn5"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_town/painterly_atlas_v4.res" id="2_7pqv7"]
 [ext_resource type="Texture2D" path="res://assets/textures/rendering/ggx_energy.res" id="3_7kpjo"]
 
 [resource]
@@ -34,14 +34,21 @@ shader_parameter/painterly_dapple_strength = 0.0
 shader_parameter/painterly_dapple_scale = 0.18
 shader_parameter/painterly_shadow_lift = 0.18
 shader_parameter/painterly_path_clearance = 0.0
-shader_parameter/painterly_atlas = ExtResource("2_4jjn5")
-shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/painterly_atlas = ExtResource("2_7pqv7")
+shader_parameter/base_color = Color(1.1, 0.98, 0.83, 1)
 shader_parameter/use_texture = true
-shader_parameter/albedo_texture = ExtResource("2_4jjn5")
+shader_parameter/albedo_texture = ExtResource("2_7pqv7")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
-shader_parameter/texture_detail = 0.68
+shader_parameter/texture_detail = 0.64
 shader_parameter/use_vertex_color = true
-shader_parameter/color_saturation = 1.0
+shader_parameter/use_vertex_coverage = false
+shader_parameter/vertex_coverage_cutoff = 0.32
+shader_parameter/use_ground_contact = false
+shader_parameter/ground_contact_rect = Vector4(0, 0, 1, 1)
+shader_parameter/ground_contact_from_vertex = false
+shader_parameter/ground_contact_height = 0.38
+shader_parameter/ground_contact_strength = 1.0
+shader_parameter/color_saturation = 1.08
 shader_parameter/uv_scale = Vector2(1, 1)
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/emission_color = Vector3(0, 0, 0)

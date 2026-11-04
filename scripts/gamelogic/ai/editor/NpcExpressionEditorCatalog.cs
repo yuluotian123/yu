@@ -61,9 +61,6 @@ public static class NpcExpressionEditorCatalog
                 case CharacterRelationsDefinition relations:
                     foreach (var p in features.Where(d=>d.Kind==CharacterFeatureKind.Relation)) Add("relations." + p.DefinitionId + ".max", FeatureName(p) + " · 最高值", "关系", CharacterValueType.Number);
                     break;
-                case NpcMemoryDefinition memory:
-                    foreach (var category in memory.Categories) Add("memory." + category + ".count", category + " · 条数", "记忆", CharacterValueType.Number);
-                    break;
             }
         }
         Add("world.hour", "当前小时", "世界", CharacterValueType.Number);

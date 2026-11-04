@@ -34,6 +34,7 @@
 [ext_resource type="Script" uid="uid://b46qqxhbsd4xn" path="res://scripts/gamelogic/world/components/WorldGmComponent3D.cs" id="32_0x6cs"]
 [ext_resource type="Script" uid="uid://bvu87kbykbhnp" path="res://scripts/gamelogic/ai/runtime/AiWorldComponent3D.cs" id="33_mmr44"]
 [ext_resource type="Script" uid="uid://b8fgo3t2x2cbe" path="res://scripts/gamelogic/world/components/WorldActorComponent3D.cs" id="34_553iy"]
+[ext_resource type="NavigationMesh" uid="uid://d01kbr6c2fpnf" path="res://assets/resources/world/navigation/forest_town.tres" id="35_40ply"]
 [ext_resource type="Script" uid="uid://clmpu7rarhk0c" path="res://scripts/gamelogic/character/data/CharacterScalarDefinition.cs" id="35_bctqq"]
 [ext_resource type="Resource" uid="uid://bocagbavfjedp" path="res://assets/resources/character/gray_green_resident/profile.tres" id="36_6r85h"]
 [ext_resource type="Script" uid="uid://8o1dotfiya30" path="res://scripts/gamelogic/character/data/CharacterDataComponent3D.cs" id="37_1uuhk"]
@@ -50,11 +51,23 @@
 [ext_resource type="Resource" uid="uid://du4opl34fkii6" path="res://assets/resources/character/ochre_courier/profile.tres" id="48_o32mn"]
 [ext_resource type="Resource" uid="uid://cd8d8t8r5wfwd" path="res://assets/resources/npc/ochre_courier/npc_graph.tres" id="49_w4x6r"]
 [ext_resource type="SpriteFrames" uid="uid://b6rnygkfwdhp4" path="res://assets/resources/npc/ochre_courier/sprite_frames.tres" id="50_yv21s"]
-[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_town/forest_town.tscn" id="51_f2ac5"]
+[ext_resource type="PackedScene" uid="uid://cxltjp0e35rye" path="res://assets/scenes/environment/forest_village_whitebox/forest_village_whitebox.tscn" id="52_uofgj"]
+[ext_resource type="Resource" uid="uid://prtbrfmnmn55" path="res://assets/resources/world/levels/forest_house_01_chief.tres" id="55_xmdvv"]
+[ext_resource type="Resource" uid="uid://dqatukpfq225x" path="res://assets/resources/world/levels/forest_house_03_smith.tres" id="56_l8ega"]
+[ext_resource type="Resource" uid="uid://q8jld2i7gjhw" path="res://assets/resources/world/levels/forest_house_04_carpenter.tres" id="57_o65tm"]
+[ext_resource type="Resource" uid="uid://cue2gnjhp47jb" path="res://assets/resources/world/levels/forest_house_05_herbalist.tres" id="58_kttuj"]
+[ext_resource type="Resource" uid="uid://c4d3ib1q52653" path="res://assets/resources/world/levels/forest_house_06_forester.tres" id="59_e4r7r"]
+[ext_resource type="Resource" uid="uid://r1q12rgp2l61" path="res://assets/resources/world/levels/forest_house_07_gatherer.tres" id="60_no8qj"]
+[ext_resource type="Resource" uid="uid://c7e5lp4cc8wah" path="res://assets/resources/world/levels/forest_house_08_farmer_east.tres" id="61_ecxb5"]
+[ext_resource type="Resource" uid="uid://cphvqbv70b3nv" path="res://assets/resources/world/levels/forest_house_09_farmer_west.tres" id="62_ccyt7"]
+[ext_resource type="Resource" uid="uid://rc72unrkop58" path="res://assets/resources/world/levels/forest_house_10_smallholder.tres" id="63_m5vwk"]
+[ext_resource type="Script" uid="uid://evtyltjm4nk" path="res://scripts/gamelogic/camera/CameraOcclusionComponent3D.cs" id="camera_occlusion"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village_light_shafts.tscn" id="forest_light_shafts"]
 
 [sub_resource type="Resource" id="Resource_ng12b"]
 script = ExtResource("4_dhhqu")
 Level = ExtResource("3_ng12b")
+RequireNavigation = true
 
 [sub_resource type="Resource" id="environment_profile"]
 script = ExtResource("9_ai2dc")
@@ -67,25 +80,32 @@ DriveExposureFromProfile = true
 DriveLightSettingsFromProfile = true
 DriveSkyProjectionFromProfile = true
 MoonTint = Color(0.78, 0.82, 1, 1)
-NoonTemperature = 5900.0
+NoonTemperature = 5300.0
 NoonSunTint = Color(1, 0.99, 0.97, 1)
+ShadowFilterBlur = 6.0
+ShadowDistance = 80.0
+ShadowSplit2 = 0.42
+ShadowSplit3 = 0.72
 BlendNightPostEffects = true
-DayZenith = Color(0.045, 0.24, 0.72, 1)
-DayHorizon = Color(0.34, 0.68, 0.94, 1)
-DayGround = Color(0.48, 0.7, 0.88, 1)
+DayZenith = Color(0.24, 0.42, 0.52, 1)
+DayHorizon = Color(0.5, 0.66, 0.68, 1)
+DayGround = Color(0.42, 0.5, 0.36, 1)
 NightZenith = Color(0.09, 0.075, 0.24, 1)
 NightHorizon = Color(0.24, 0.23, 0.46, 1)
+DaySkyIntensity = 45000.0
 NightSkyIntensity = 8.0
 StarIntensity = 1.25
 MoonHaloStrength = 0.18
 HorizonHaze = 0.22
 HorizonSoftness = 0.24
 MieStrength = 0.1
-FogStart = 35.0
-FogEnd = 240.0
+FogStart = 39.0
+FogEnd = 244.0
 FogOpacity = 0.38
 FogHeightDensity = 0.0
 BlendNightFog = true
+NightFogStart = 18.0
+NightFogEnd = 154.0
 NightFogHeightDensity = 0.0
 CloudTimeline = ExtResource("6_kb0tv")
 HighCloudTimeline = ExtResource("7_xstv4")
@@ -108,16 +128,18 @@ Profile = ExtResource("11_yw17n")
 Automatic = false
 DriveFogFromWeather = true
 DriveLightsFromWeather = true
+DriveVolumetricLightFromWeather = true
 
 [sub_resource type="Resource" id="weather_surfaces"]
 script = ExtResource("13_2kyth")
+SurfaceRootPath = NodePath("../Village")
 
 [sub_resource type="Resource" id="ddgi"]
 script = ExtResource("15_8mmme")
 Profile = ExtResource("14_mh63b")
 GeometryRoot = NodePath("..")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6imi7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xmdvv"]
 resource_local_to_scene = true
 shader = ExtResource("17_qml60")
 shader_parameter/ibl_strength = 1.0
@@ -125,9 +147,9 @@ shader_parameter/weather_overcast = 0.0
 shader_parameter/weather_sky_loss = 0.35
 shader_parameter/cloud_radiance_enabled = false
 shader_parameter/cloud_radiance_revision = 0.0
-shader_parameter/day_zenith = Color(0.045, 0.24, 0.72, 1)
-shader_parameter/day_horizon = Color(0.34, 0.68, 0.94, 1)
-shader_parameter/day_ground = Color(0.48, 0.7, 0.88, 1)
+shader_parameter/day_zenith = Color(0.24, 0.42, 0.52, 1)
+shader_parameter/day_horizon = Color(0.5, 0.66, 0.68, 1)
+shader_parameter/day_ground = Color(0.42, 0.5, 0.36, 1)
 shader_parameter/sunset_horizon = Color(1, 0.44, 0.22, 1)
 shader_parameter/night_zenith = Color(0.09, 0.075, 0.24, 1)
 shader_parameter/night_horizon = Color(0.24, 0.23, 0.46, 1)
@@ -148,16 +170,16 @@ shader_parameter/horizon_softness = 0.24
 shader_parameter/mie_strength = 0.1
 shader_parameter/mie_anisotropy = 0.76
 
-[sub_resource type="Sky" id="Sky_0d36c"]
+[sub_resource type="Sky" id="Sky_l8ega"]
 resource_local_to_scene = true
-sky_material = SubResource("ShaderMaterial_6imi7")
+sky_material = SubResource("ShaderMaterial_xmdvv")
 process_mode = 3
 
-[sub_resource type="Environment" id="Environment_mih7a"]
+[sub_resource type="Environment" id="Environment_o65tm"]
 resource_local_to_scene = true
 background_mode = 2
-background_intensity = 26000.0
-sky = SubResource("Sky_0d36c")
+background_intensity = 45000.0
+sky = SubResource("Sky_l8ega")
 ambient_light_source = 3
 ambient_light_energy = 0.35000002
 reflected_light_source = 2
@@ -181,12 +203,18 @@ fog_aerial_perspective = 1.0
 fog_sky_affect = 0.0
 fog_height = -9.0
 fog_depth_curve = 1.15
-fog_depth_begin = 35.0
-fog_depth_end = 240.0
+fog_depth_begin = 39.0
+fog_depth_end = 244.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_gi_inject = 0.0
+volumetric_fog_length = 60.0
+volumetric_fog_detail_spread = 1.5
+volumetric_fog_temporal_reprojection_enabled = false
 adjustment_contrast = 1.04
 adjustment_saturation = 1.08
 
-[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_j785m"]
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_kttuj"]
 resource_local_to_scene = true
 exposure_multiplier = 1.2
 frustum_focus_distance = 9.0
@@ -215,38 +243,38 @@ needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("19_flsdq")
 Profile = ExtResource("18_ialnm")
+PixelGridHeight = 360
 
 [sub_resource type="Compositor" id="Compositor_qk2pt"]
 compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource("film")])
 
-[sub_resource type="Resource" id="camera_controller"]
+[sub_resource type="Resource" id="Resource_e4r7r"]
+resource_local_to_scene = true
 script = ExtResource("22_6txhy")
 FramingOriginPath = NodePath("../CameraFramingTarget")
 Profile = ExtResource("21_i4cks")
+UseComponentFraming = true
+CameraOffset = Vector3(0, 3, 7)
 
-[sub_resource type="StandardMaterial3D" id="material_Ground"]
-albedo_color = Color(0.65, 0.67, 0.7, 1)
-roughness = 0.85
-
-[sub_resource type="BoxMesh" id="mesh_Ground"]
-material = SubResource("material_Ground")
-size = Vector3(40, 1, 30)
-
-[sub_resource type="BoxShape3D" id="shape_Ground"]
-size = Vector3(40, 1, 30)
+[sub_resource type="Resource" id="Resource_no8qj"]
+resource_local_to_scene = true
+script = ExtResource("camera_occlusion")
+OccluderRootPath = NodePath("../Village")
 
 [sub_resource type="Resource" id="world_spawn"]
 script = ExtResource("23_dimth")
 
-[sub_resource type="Resource" id="world_transition"]
+[sub_resource type="Resource" id="Resource_ecxb5"]
 script = ExtResource("25_tvavt")
 TargetLevel = ExtResource("24_uofgj")
+TargetEntry = "from_town"
 
-[sub_resource type="BoxShape3D" id="world_portal_shape"]
-size = Vector3(1.2, 2, 1.2)
+[sub_resource type="Resource" id="Resource_ccyt7"]
+script = ExtResource("23_dimth")
+Entry = "from_workshop"
 
-[sub_resource type="BoxMesh" id="world_portal_mesh"]
-size = Vector3(0.2, 1.8, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_m5vwk"]
+size = Vector3(0.82, 1.65, 0.36)
 
 [sub_resource type="Resource" id="shell"]
 script = ExtResource("27_dn66n")
@@ -269,12 +297,6 @@ script = ExtResource("32_0x6cs")
 
 [sub_resource type="Resource" id="whitebox_world"]
 script = ExtResource("33_mmr44")
-
-[sub_resource type="NavigationMesh" id="whitebox_navigation"]
-vertices = PackedVector3Array(-19.5, 0, -14.5, -19.5, 0, 14.5, 19.5, 0, 14.5, 19.5, 0, -14.5)
-polygons = [PackedInt32Array(0, 1, 2, 3)]
-agent_height = 0.8
-agent_radius = 0.3
 
 [sub_resource type="Resource" id="resident_world_actor"]
 script = ExtResource("34_553iy")
@@ -343,8 +365,116 @@ script = ExtResource("45_x7h4q")
 [sub_resource type="Resource" id="npc_character_save"]
 script = ExtResource("46_ivfsh")
 
+[sub_resource type="Resource" id="Resource_ndc6c"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("55_xmdvv")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_j1sqh"]
+script = ExtResource("23_dimth")
+Entry = "from_house_chief"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lj6ab"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_82wa4"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("56_l8ega")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_vhme1"]
+script = ExtResource("23_dimth")
+Entry = "from_house_smith"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_atmqq"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_4vq52"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("57_o65tm")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_jsbvg"]
+script = ExtResource("23_dimth")
+Entry = "from_house_carpenter"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bsnf"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_31u3y"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("58_kttuj")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_3qoly"]
+script = ExtResource("23_dimth")
+Entry = "from_house_herbalist"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lnrbq"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_ppb0v"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("59_e4r7r")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_k6w0n"]
+script = ExtResource("23_dimth")
+Entry = "from_house_forester"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xuaid"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_7wjm2"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("60_no8qj")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_igfg8"]
+script = ExtResource("23_dimth")
+Entry = "from_house_gatherer"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q5hvm"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_c23tq"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("61_ecxb5")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_0awk6"]
+script = ExtResource("23_dimth")
+Entry = "from_house_farmer_east"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yfi66"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_uhepm"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("62_ccyt7")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_kx1rm"]
+script = ExtResource("23_dimth")
+Entry = "from_house_farmer_west"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jfxh4"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="Resource_m1erj"]
+script = ExtResource("25_tvavt")
+TargetLevel = ExtResource("63_m5vwk")
+TargetEntry = "from_town"
+
+[sub_resource type="Resource" id="Resource_rla0f"]
+script = ExtResource("23_dimth")
+Entry = "from_house_smallholder"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bbore"]
+size = Vector3(0.82, 1.65, 0.36)
+
 [node name="ForestTownLevel" type="Node3D" unique_id=1386970310 groups=["gameplay_level"]]
-editor_description = "森林小镇关卡：参考 scene-concept.png 的构图、暖色建筑与青绿森林。所有房屋为完整四面外观模型，分别维护；独立关卡包含角色、相机、天气、世界入口与 NPC 行为配置。"
+editor_description = "正式森林关卡：十户林间聚落，村长家、公共井、穿林小径与溪桥。沿用世界身份、角色、天气与跨关卡入口。"
 script = ExtResource("1_ueglv")
 Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_ng12b")])
 
@@ -356,43 +486,49 @@ Components = Array[ExtResource("2_jbaxf")]([SubResource("controller"), SubResour
 
 [node name="Precipitation" parent="EnvironmentRig" unique_id=1523133243 instance=ExtResource("16_aa5yu")]
 
+[node name="ForestLightShafts" parent="EnvironmentRig" unique_id=961027016 instance=ExtResource("forest_light_shafts")]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=594835174]
-environment = SubResource("Environment_mih7a")
-camera_attributes = SubResource("CameraAttributesPhysical_j785m")
+environment = SubResource("Environment_o65tm")
+camera_attributes = SubResource("CameraAttributesPhysical_kttuj")
 compositor = SubResource("Compositor_qk2pt")
 
 [node name="Sun" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=1850925047]
 physics_interpolation_mode = 2
-transform = Transform3D(0.9063077, 0.40821803, -0.109381706, 0, 0.25881904, 0.9659258, 0.42261842, -0.875426, 0.23456971, 0, 0, 0)
+transform = Transform3D(0.90630776, 0.40821794, -0.109381706, 3.7252907e-08, 0.25881904, 0.9659258, 0.4226183, -0.87542605, 0.23456971, 0, 0, 0)
 light_intensity_lux = 120000.0
-light_temperature = 5900.0
+light_temperature = 5300.0
 light_color = Color(1, 0.99, 0.97, 1)
 light_indirect_energy = 0.75
+light_volumetric_fog_energy = 6.0
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5
+shadow_blur = 6.0
 directional_shadow_split_1 = 0.2
-directional_shadow_split_2 = 0.4
-directional_shadow_split_3 = 0.7
+directional_shadow_split_2 = 0.42
+directional_shadow_split_3 = 0.72
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 55.0
+directional_shadow_max_distance = 80.0
 
 [node name="Moon" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=310034368]
 physics_interpolation_mode = 2
-transform = Transform3D(-0.9063079, 0.40821782, 0.10938164, 0, 0.2588191, -0.9659259, -0.42261815, -0.87542623, -0.23456976, 0, 0, 0)
+transform = Transform3D(-0.9063078, 0.40821794, 0.10938164, 3.7252903e-08, 0.2588191, -0.9659259, -0.4226183, -0.8754262, -0.23456976, 0, 0, 0)
 visible = false
 light_intensity_lux = 0.0
 light_temperature = 8500.0
 light_color = Color(0.78, 0.82, 1, 1)
 light_indirect_energy = 0.75
+light_volumetric_fog_energy = 0.0
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_normal_bias = 0.5
+shadow_blur = 6.0
 directional_shadow_split_1 = 0.2
-directional_shadow_split_2 = 0.4
-directional_shadow_split_3 = 0.7
+directional_shadow_split_2 = 0.42
+directional_shadow_split_3 = 0.72
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 55.0
+directional_shadow_max_distance = 80.0
 
 [node name="OriginalClouds" parent="EnvironmentRig" unique_id=1997370813 instance=ExtResource("20_atre4")]
 transform = Transform3D(-0.79863536, 0, 0.601815, 0, 1, 0, -0.601815, 0, -0.79863536, 0, 0, 0)
@@ -400,64 +536,46 @@ transform = Transform3D(-0.79863536, 0, 0.601815, 0, 1, 0, -0.601815, 0, -0.7986
 [node name="CameraRig" type="Node3D" parent="." unique_id=1603033638]
 process_priority = 100
 physics_interpolation_mode = 2
-editor_description = "场景镜头控制器。展开 Components > SceneCameraComponent3D > Profile 调整跟随参数。X/Y/Z 对应世界左右/上下/前后，距离单位为米。DeadZone 越大越允许角色自由移动；FollowSmooth 越大跟随越快，0 表示直接到位。距离、俯角、FOV 请在子节点 Camera3D 调整。详见 res://docs/art/hd2d_camera.md。"
+editor_description = "SceneCameraComponent3D：CameraOffset/CameraRotationDegrees 管理镜头位置和角度。CameraOcclusionComponent3D 管理遮挡物整体隐藏和镜头穿入保护；近处渐隐仅用于正交模式。"
 script = ExtResource("1_ueglv")
-Components = Array[ExtResource("2_jbaxf")]([SubResource("camera_controller")])
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_e4r7r"), SubResource("Resource_no8qj")])
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=106388751]
-editor_description = "偏横版近景镜头：透视 FOV=30°，Rotation Degrees.X=-4.1°（轻微俯视），拍摄距离约 9 米。人物位于屏幕中心下方，天空和云保留在上半部。
-Transform/Position：沿镜头局部 Z 轴向负方向移动可拉近，向正方向移动可拉远；这是实际拍摄距离。Rotation Degrees.X 越接近 0 越平视，越负越俯视。
-FOV：仅透视生效，越小人物越大、视野越窄；越大视野越广。默认 Keep Aspect=Keep Height 时表示竖直视角。
-Size=7：仅正交/视锥投影生效，越小人物越大；不影响透视。Far=500：最远可见距离（米），减小可能裁掉远处天空或云。
-白盒初始构图位置为 (0, 2.0033, 11.8033)，视线高于角色中心，人物约在画面高度的三分之二处。保持角度和 Z 距离时，提高 Position.Y 会让人物更靠下，降低则让人物上移。运行时保留场景镜头角度和相对偏移，随角色平移；请在停止游戏时编辑。跟随死区、平滑及前视在 CameraRig 的 Profile 中调整。"
-transform = Transform3D(1, 0, 0, 0, 0.99744076, 0.07149744, 0, -0.07149744, 0.99744076, 0, 2.003256, 11.8033285)
+editor_description = "透视步行镜头。FOV 调整视野；位置和角度在 CameraRig / SceneCameraComponent3D 调整。Size 仅用于正交备用。"
+transform = Transform3D(1, 0, 0, 0, 0.9396927, 0.34202015, 0, -0.34202015, 0.9396927, 1.56, 3.55, 30.62)
 current = true
-fov = 30.0
-size = 7.0
-far = 500.0
-
-[node name="Ground" type="Node3D" parent="." unique_id=1104172541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-script = ExtResource("1_ueglv")
-
-[node name="Visual" type="MeshInstance3D" parent="Ground" unique_id=1118407196]
-visible = false
-mesh = SubResource("mesh_Ground")
-
-[node name="GameplayBody" type="StaticBody3D" parent="Ground" unique_id=1042351921 groups=["player_ground"]]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GameplayBody" unique_id=1569614293]
-shape = SubResource("shape_Ground")
+fov = 35.0
+size = 5.8
+near = 0.001
+far = 204.0
 
 [node name="EntryDefault" type="Node3D" parent="." unique_id=1339547343]
 script = ExtResource("1_ueglv")
 Components = Array[ExtResource("2_jbaxf")]([SubResource("world_spawn")])
 
 [node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1050733781]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.55, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56, 0.55, 22.62)
 
-[node name="WorkshopPortal" type="Node3D" parent="." unique_id=1881525]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 3)
+[node name="WorkshopPortal" type="Node3D" parent="." unique_id=1881525 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.62, 0.84000003, 11.01)
 script = ExtResource("1_ueglv")
-Components = Array[ExtResource("2_jbaxf")]([SubResource("world_transition")])
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_ecxb5"), SubResource("Resource_ccyt7")])
 metadata/_world_placement = "d7ebd92d9db44aa89eca566ced0cb332"
+metadata/household = "Host"
+metadata/interior_name = "杂货与待客户"
 
-[node name="Area3D" type="Area3D" parent="WorkshopPortal" unique_id=714242435]
+[node name="Arrival" type="Marker3D" parent="WorkshopPortal" unique_id=1225349735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.249999)
+
+[node name="Area3D" type="Area3D" parent="WorkshopPortal" unique_id=1313537650]
 collision_layer = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WorkshopPortal/Area3D" unique_id=1130577865]
-shape = SubResource("world_portal_shape")
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="WorkshopPortal/Area3D" unique_id=799369659]
+shape = SubResource("BoxShape3D_m5vwk")
 
-[node name="Door" type="MeshInstance3D" parent="WorkshopPortal" unique_id=145801013]
-mesh = SubResource("world_portal_mesh")
-
-[node name="Label3D" type="Label3D" parent="WorkshopPortal" unique_id=1018903333]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
-billboard = 1
-text = "仓储间入口"
-font_size = 40
+[node name="UsePosition" type="Marker3D" parent="WorkshopPortal" unique_id=98012142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 0.94999886)
 
 [node name="RuntimeGm" parent="." unique_id=1779226142 instance=ExtResource("26_wy1je")]
 Components = Array[ExtResource("2_jbaxf")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm"), SubResource("world_gm")])
@@ -468,7 +586,7 @@ PersistentId = "whitebox_npc_world"
 Components = Array[ExtResource("2_jbaxf")]([SubResource("whitebox_world")])
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=500483842]
-navigation_mesh = SubResource("whitebox_navigation")
+navigation_mesh = ExtResource("35_40ply")
 
 [node name="Resident" type="Node3D" parent="." unique_id=1331650095]
 editor_description = "正式关卡世界居民 town_resident_01：从小镇前往工坊喝水、取货；配置步骤见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
@@ -504,7 +622,7 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="CameraFramingTarget" type="Marker3D" parent="." unique_id=889559128]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56, 0.55, 22.62)
 
 [node name="Courier" type="Node3D" parent="." unique_id=411204691]
 editor_description = "ochre_courier：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
@@ -539,4 +657,195 @@ sprite_frames = ExtResource("50_yv21s")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="RPGTown" parent="." unique_id=2016566930 instance=ExtResource("51_f2ac5")]
+[node name="Village" parent="." unique_id=1580126404 instance=ExtResource("52_uofgj")]
+
+[node name="HouseEntrances" type="Node3D" parent="." unique_id=852799950]
+
+[node name="Chief" type="Node3D" parent="HouseEntrances" unique_id=1649361347 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42999998, 0.84000003, -12.889999)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_ndc6c"), SubResource("Resource_j1sqh")])
+metadata/_world_placement = "5506f415a5bf927b99f770ab2fa06c58"
+metadata/household = "Chief"
+metadata/interior_name = "村长家"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Chief" unique_id=2137732159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.999999)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Chief" unique_id=1572041372]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Chief/Area3D" unique_id=1215904652]
+shape = SubResource("BoxShape3D_lj6ab")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Chief" unique_id=1746373570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 1.6999989)
+
+[node name="Smith" type="Node3D" parent="HouseEntrances" unique_id=1764602259 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.429999, 0.84000003, 9.55)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_82wa4"), SubResource("Resource_vhme1")])
+metadata/_world_placement = "2586243d50f101bd72ff4f11751710c6"
+metadata/household = "Smith"
+metadata/interior_name = "工具修补户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Smith" unique_id=2073299651]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.3000002)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Smith" unique_id=1397229179]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Smith/Area3D" unique_id=1767333090]
+shape = SubResource("BoxShape3D_atmqq")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Smith" unique_id=1277267549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 1)
+
+[node name="Carpenter" type="Node3D" parent="HouseEntrances" unique_id=40395433 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.49, 0.84000003, -2.4)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_4vq52"), SubResource("Resource_jsbvg")])
+metadata/_world_placement = "62fde8809bed76eab14baab37dd498fa"
+metadata/household = "Carpenter"
+metadata/interior_name = "木工户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Carpenter" unique_id=1205564589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.5)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Carpenter" unique_id=1973202502]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Carpenter/Area3D" unique_id=71965310]
+shape = SubResource("BoxShape3D_1bsnf")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Carpenter" unique_id=1826317976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 1.2)
+
+[node name="Herbalist" type="Node3D" parent="HouseEntrances" unique_id=1983346166 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.36, 0.84000003, -12.268)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_31u3y"), SubResource("Resource_3qoly")])
+metadata/_world_placement = "ea91c8f5da7a75a4e8d4edb12ccfc5e2"
+metadata/household = "Herbalist"
+metadata/interior_name = "草药照护户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Herbalist" unique_id=824053857]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.3280001)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Herbalist" unique_id=1638406317]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Herbalist/Area3D" unique_id=1519243330]
+shape = SubResource("BoxShape3D_lnrbq")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Herbalist" unique_id=1344743168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 1.0279999)
+
+[node name="Forester" type="Node3D" parent="HouseEntrances" unique_id=1820339423 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, -17.221758, 0.91, -13.626646)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_ppb0v"), SubResource("Resource_k6w0n")])
+metadata/_world_placement = "bd6ec7ea61f4357214c252a6206c6f8d"
+metadata/household = "Forester"
+metadata/interior_name = "伐木户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Forester" unique_id=919994005]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -9.536743e-07, -0.375, 1.2000008)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Forester" unique_id=2045520796]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Forester/Area3D" unique_id=1876194356]
+shape = SubResource("BoxShape3D_xuaid")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Forester" unique_id=344175142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.41000003, 0.9000015)
+
+[node name="Gatherer" type="Node3D" parent="HouseEntrances" unique_id=683989086 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.059999, 1.4300001, -4.06)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_7wjm2"), SubResource("Resource_igfg8")])
+metadata/_world_placement = "a5ea86941e6fe0ba79b3e40e5b249842"
+metadata/household = "Gatherer"
+metadata/interior_name = "猎采户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Gatherer" unique_id=798180825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.89500004, 2.4999998)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Gatherer" unique_id=1761860523]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Gatherer/Area3D" unique_id=1427840133]
+shape = SubResource("BoxShape3D_q5hvm")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Gatherer" unique_id=2051938548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.93000007, 2.1999998)
+
+[node name="FarmerEast" type="Node3D" parent="HouseEntrances" unique_id=1653738307 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.58, 0.84000003, 15.250001)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_c23tq"), SubResource("Resource_0awk6")])
+metadata/_world_placement = "12bb832f099e1e45f46531e40cff1abc"
+metadata/household = "FarmerEast"
+metadata/interior_name = "东田农户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/FarmerEast" unique_id=278768863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 3.0499983)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/FarmerEast" unique_id=2000037056]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/FarmerEast/Area3D" unique_id=2057737184]
+shape = SubResource("BoxShape3D_yfi66")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/FarmerEast" unique_id=1149090122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 2.749999)
+
+[node name="FarmerWest" type="Node3D" parent="HouseEntrances" unique_id=597692911 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.48, 0.84000003, 21.349998)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_uhepm"), SubResource("Resource_kx1rm")])
+metadata/_world_placement = "99ab6b5ccdfe3921162ff490c6d6a488"
+metadata/household = "FarmerWest"
+metadata/interior_name = "西田农户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/FarmerWest" unique_id=865946834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.1000004)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/FarmerWest" unique_id=132289975]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/FarmerWest/Area3D" unique_id=452660234]
+shape = SubResource("BoxShape3D_jfxh4")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/FarmerWest" unique_id=685225185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 0.80000114)
+
+[node name="Smallholder" type="Node3D" parent="HouseEntrances" unique_id=1829779314 groups=["forest_house_entrance"]]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.279999, 0.84000003, -3.2299998)
+script = ExtResource("1_ueglv")
+Components = Array[ExtResource("2_jbaxf")]([SubResource("Resource_m1erj"), SubResource("Resource_rla0f")])
+metadata/_world_placement = "6dcb74d998d93b4e8a7920f5b7a9478c"
+metadata/household = "Smallholder"
+metadata/interior_name = "小畜养户"
+
+[node name="Arrival" type="Marker3D" parent="HouseEntrances/Smallholder" unique_id=614710370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 1.3)
+
+[node name="Area3D" type="Area3D" parent="HouseEntrances/Smallholder" unique_id=681371659]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="HouseEntrances/Smallholder/Area3D" unique_id=1775722692]
+shape = SubResource("BoxShape3D_bbore")
+
+[node name="UsePosition" type="Marker3D" parent="HouseEntrances/Smallholder" unique_id=1886404735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34000003, 1)

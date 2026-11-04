@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://8ikyeo6dimwl"]
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://bcp7kqfp4hh2b"]
 
 [ext_resource type="Resource" uid="uid://b2gm3rndyq1u8" path="res://assets/resources/world/types/storage.tres" id="1_36cn7"]
 [ext_resource type="Resource" uid="uid://c6xlbrbrmmdjy" path="res://assets/resources/world/locations/world_workshop_location.tres" id="2_hbg1c"]
@@ -50,17 +50,17 @@ script = ExtResource("6_xb8iv")
 Operations = Array[ExtResource("4_wo1pi")]([SubResource("pour_liquid")])
 
 [resource]
-resource_name = "小镇仓储间 · 世界目录"
+resource_name = "杂货与待客户 · 室内仓储 · 世界目录"
 script = ExtResource("13_0kaw4")
 LevelId = "31a903e2d81e45d0af568c59d0097bc8"
-SourceSignature = "18672DFBA8DB4DB8F1B5839BB6D444B44607C01CB5EF488D7B79674CDD1F09B8/population-v3/31a903e2d81e45d0af568c59d0097bc8/be74d513517a4cfabc4a9fbd09e3779a/portal-export-v1"
+SourceSignature = "3F8AB46684E66805AA5BC322C6C56ADD355CA5F4DE1F9EBE4751873550E82344/population-v3/31a903e2d81e45d0af568c59d0097bc8/be74d513517a4cfabc4a9fbd09e3779a/portal-export-v1"
 Entries = Array[Dictionary]([{
 "capabilities": Array[ExtResource("3_nsrow")]([SubResource("interaction"), SubResource("stock_override"), SubResource("capacity"), SubResource("hours")]),
 "id": "world/4b208b24b610436cbc5b418b7cc0c455",
 "location": ExtResource("2_hbg1c"),
 "name": "仓储间储物箱",
 "owner": "",
-"position": Vector3(0, 0, -1.1),
+"position": Vector3(1.1, 0, 1.88),
 "tags": PackedStringArray(),
 "type": ExtResource("1_36cn7")
 }, {
@@ -69,7 +69,7 @@ Entries = Array[Dictionary]([{
 "location": ExtResource("2_hbg1c"),
 "name": "仓储间储物箱",
 "owner": "",
-"position": Vector3(-4, 0, -1.1),
+"position": Vector3(1.1800001, 0, -1.08),
 "tags": PackedStringArray(),
 "type": ExtResource("1_36cn7")
 }, {
@@ -78,20 +78,21 @@ Entries = Array[Dictionary]([{
 "location": ExtResource("2_hbg1c"),
 "name": "水瓶",
 "owner": "",
-"position": Vector3(2, 0, -1.45),
+"position": Vector3(0, 0, -1.45),
 "tags": PackedStringArray("drinking_water"),
 "type": ExtResource("10_ydkd4")
 }])
 Entrances = Dictionary[String, Vector3]({
-"default": Vector3(0, 0.55, 0)
+"default": Vector3(0, 0.52, 1.25),
+"from_town": Vector3(0, 0.52, 1.25)
 })
 Portals = Array[Dictionary]([{
 "automatic": true,
 "enabled": true,
-"entry": "default",
+"entry": "from_workshop",
 "hours": 0.0,
 "id": "portal/f7f5410fafa14b418a392e25a658edb1",
 "name": "TownPortal",
-"position": Vector3(3, 0.9, 0),
+"position": Vector3(0, 0.45000002, 2.45),
 "to": "209a74242d3e4c8ba415cd6ced08beea"
 }])

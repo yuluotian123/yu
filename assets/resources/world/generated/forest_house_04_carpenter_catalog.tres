@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_0nasx"]
+
+[resource]
+resource_name = "木工户 · 室内 · 世界目录"
+script = ExtResource("1_0nasx")
+LevelId = "forest_house_carpenter"
+SourceSignature = "CB2BFD55878BCAE2861E88ABAEE95A9B7FEE4319B7C5FA278322F2DD32FB474F/population-v3/forest_house_carpenter/forest_house_location_carpenter/portal-export-v1"
+Entrances = Dictionary[String, Vector3]({
+"default": Vector3(0, 0.52, 1.25),
+"from_town": Vector3(0, 0.52, 1.25)
+})
+Portals = Array[Dictionary]([{
+"automatic": true,
+"enabled": true,
+"entry": "from_house_carpenter",
+"hours": 0.0,
+"id": "portal/45d7b7843a4c6df26a373c5b1608ae2d",
+"name": "TownPortal",
+"position": Vector3(0, 0.45000002, 2.45),
+"to": "209a74242d3e4c8ba415cd6ced08beea"
+}])

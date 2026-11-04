@@ -1,0 +1,75 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://n8h4ac6xppid"]
+
+[ext_resource type="Shader" path="res://assets/shaders/town/town_toon.gdshader" id="1_hg80g"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/house.res" id="2_aicul"]
+[ext_resource type="Texture2D" path="res://assets/textures/rendering/ggx_energy.res" id="3_614sn"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/house_normal.res" id="4_5whdi"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/house_roughness.res" id="5_2q35y"]
+
+[resource]
+resource_name = "Forest village structures · Iron"
+render_priority = 0
+shader = ExtResource("1_hg80g")
+shader_parameter/weather_wetness = 0.0
+shader_parameter/weather_puddles = 0.0
+shader_parameter/weather_puddles_enabled = false
+shader_parameter/weather_puddle_coverage = 0.55
+shader_parameter/weather_puddle_scale = 0.85
+shader_parameter/weather_darkening = 0.24
+shader_parameter/weather_wet_roughness = 0.14
+shader_parameter/weather_puddle_roughness = 0.045
+shader_parameter/weather_wet_specular = 0.6
+shader_parameter/weather_rain = 0.0
+shader_parameter/weather_ripple_strength = 0.14
+shader_parameter/weather_ripple_scale = 1.7
+shader_parameter/weather_ripple_speed = 1.35
+shader_parameter/weather_snow = 0.0
+shader_parameter/weather_snow_color = Color(0.91, 0.95, 1, 1)
+shader_parameter/weather_snow_roughness = 0.86
+shader_parameter/weather_time = 0.0
+shader_parameter/wet_darkening_strength = 0.9
+shader_parameter/wet_film_strength = 0.13
+shader_parameter/wet_roughness_min = 0.82
+shader_parameter/wet_specular_scale = 1.0
+shader_parameter/wet_puddle_coverage_scale = 1.0
+shader_parameter/ggx_energy_lut = ExtResource("3_614sn")
+shader_parameter/toon_strength = 0.92
+shader_parameter/toon_softness = 0.22
+shader_parameter/painterly_strength = 0.94
+shader_parameter/painterly_light_wrap = 0.56
+shader_parameter/painterly_dapple_strength = 0.0
+shader_parameter/painterly_dapple_scale = 0.18
+shader_parameter/painterly_shadow_lift = 0.105
+shader_parameter/painterly_path_clearance = 0.0
+shader_parameter/painterly_atlas = ExtResource("2_aicul")
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/use_texture = true
+shader_parameter/albedo_texture = ExtResource("2_aicul")
+shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
+shader_parameter/texture_detail = 0.28
+shader_parameter/use_vertex_color = true
+shader_parameter/use_vertex_coverage = false
+shader_parameter/vertex_coverage_cutoff = 0.32
+shader_parameter/use_ground_contact = false
+shader_parameter/ground_contact_rect = Vector4(0, 0, 1, 1)
+shader_parameter/ground_contact_from_vertex = false
+shader_parameter/ground_contact_height = 0.38
+shader_parameter/ground_contact_strength = 1.0
+shader_parameter/color_saturation = 0.95
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/emission_color = Vector3(0, 0, 0)
+shader_parameter/emission_luminance_units = false
+shader_parameter/emission_intensity = 1.0
+shader_parameter/surface_roughness = 1.0
+shader_parameter/surface_metallic = 0.55
+shader_parameter/specular_strength = 0.35
+shader_parameter/use_orm_texture = false
+shader_parameter/use_roughness_texture = true
+shader_parameter/roughness_texture = ExtResource("5_2q35y")
+shader_parameter/ao_light_affect = 0.0
+shader_parameter/use_normal_texture = true
+shader_parameter/normal_texture = ExtResource("4_5whdi")
+shader_parameter/normal_scale = 0.1
+shader_parameter/pixel_brush = true
+

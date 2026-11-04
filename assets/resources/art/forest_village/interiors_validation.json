@@ -1,0 +1,78 @@
+{
+  "all_passed": true,
+  "checks": 193,
+  "houses": [
+    {
+      "name": "01_chief",
+      "household": "Chief",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "02_host",
+      "household": "Host",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "03_smith",
+      "household": "Smith",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "04_carpenter",
+      "household": "Carpenter",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "05_herbalist",
+      "household": "Herbalist",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "06_forester",
+      "household": "Forester",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "07_gatherer",
+      "household": "Gatherer",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "08_farmer_east",
+      "household": "FarmerEast",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "09_farmer_west",
+      "household": "FarmerWest",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    },
+    {
+      "name": "10_smallholder",
+      "household": "Smallholder",
+      "automatic_entry": true,
+      "automatic_return": true,
+      "arrival_clear": true
+    }
+  ],
+  "legacy_storage_preserved": true,
+  "rear_exits": 0
+}

@@ -10,6 +10,7 @@ uniform vec4 reflection_color : source_color = vec4(0.12, 0.32, 0.33, 1.0);
 uniform vec4 ripple_color : source_color = vec4(0.57, 0.76, 0.69, 1.0);
 uniform vec4 foam_color : source_color = vec4(0.83, 0.87, 0.70, 1.0);
 uniform float flow_speed : hint_range(0.0, 1.0) = 0.22;
+uniform vec2 flow_direction = vec2(1.0, 0.0);
 uniform float river_width = 4.8;
 uniform float wave_height : hint_range(0.0, 0.05) = 0.008;
 uniform float foam_width : hint_range(0.01, 0.2) = 0.045;
@@ -17,6 +18,11 @@ uniform float ripple_strength : hint_range(0.0, 1.0) = 0.43;
 uniform float reflection_strength : hint_range(0.0, 1.0) = 0.32;
 uniform float surface_roughness : hint_range(0.1, 1.0) = 0.58;
 varying vec3 river_position;
+
+vec2 river_coordinates(vec2 world_position) {
+	vec2 along = flow_direction / max(length(flow_direction), 0.0001);
+	return vec2(dot(world_position, along), dot(world_position, vec2(-along.y, along.x)));
+}
 
 float hash21(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -32,14 +38,15 @@ float painted_noise(vec2 p) {
 
 void vertex() {
 	vec3 world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec2 river = river_coordinates(world.xz);
 	float shore_fade = smoothstep(0.0, 0.12, UV.y);
-	VERTEX.y += sin(world.x * 2.3 + world.z * 4.0 - TIME * 0.8) * wave_height * shore_fade;
+	VERTEX.y += sin(river.x * 2.3 + river.y * 4.0 - TIME * 0.8) * wave_height * shore_fade;
 	river_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 }
 
 void fragment() {
 	// Spatial stepping keeps strokes crisp without reducing the game's resolution.
-	vec2 p = floor(river_position.xz * 36.0) / 36.0;
+	vec2 p = floor(river_coordinates(river_position.xz) * 36.0) / 36.0;
 	float t = TIME * flow_speed;
 	vec2 flow = p - vec2(t, t * 0.07);
 	float broad = painted_noise(flow * vec2(0.72, 2.4));
@@ -74,7 +81,9 @@ void fragment() {
 	METALLIC = 0.0;
 	float nx = cos(p.x * 2.3 + p.y * 4.0 - TIME * 0.8) * 0.018;
 	float nz = sin(p.y * 13.0 + p.x * 1.4 - t) * 0.025;
-	NORMAL = normalize((VIEW_MATRIX * vec4(normalize(vec3(nx, 1.0, nz)), 0.0)).xyz);
+	vec2 along = flow_direction / max(length(flow_direction), 0.0001);
+	vec2 slope = along * nx + vec2(-along.y, along.x) * nz;
+	NORMAL = normalize((VIEW_MATRIX * vec4(normalize(vec3(slope.x, 1.0, slope.y)), 0.0)).xyz);
 }
 
 void light() {

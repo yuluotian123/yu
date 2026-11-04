@@ -167,6 +167,9 @@ func build() -> void:
 	save_resource(bark, MATERIAL_ROOT + "bark.tres")
 	save_resource(hero_bark, MATERIAL_ROOT + "bark_hero.tres")
 	save_resource(ground, MATERIAL_ROOT + "ground.tres")
+	var surface_palette := preload("res://scripts/tools/art/forest_town/material_palette.gd").new()
+	surface_palette.prepare_textures()
+	surface_palette.apply()
 	var river: ShaderMaterial = load(MATERIAL_ROOT + "river.tres")
 	var categories: Dictionary = {}
 	for asset: Dictionary in manifest.assets:

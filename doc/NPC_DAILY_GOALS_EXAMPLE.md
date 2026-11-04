@@ -282,15 +282,6 @@ SuccessConditions 在 Results 提交前检查，所以不要把“口渴已经�
 | GOAP 说无解 | 是否漏配角色 Predictions，移动是否预测 self.location；饮水瓶余量是否至少 0.25（玩家和 NPC 共用） |
 | 出生初值与文档不同 | 是否继续了旧存档；旧状态优先于 Profile 初值 |
 
-## 12. 自动验证
+## 12. 运行检查
 
-[daily_goals_validation.tscn](../scripts/tools/npc/daily_goals_validation.tscn) 使用正式世界定义、正式关卡、实际居民图与 Profile，验证远处旅行与两种交互、资源扣减、现场生成与再次喝水、返回原关卡以及存档恢复。测试存档写入忽略目录 `.godot/npc-daily-goals/saves`。
-
-```powershell
-dotnet build yu.csproj --no-restore
-& '<本项目 Godot Mono 路径>' --headless --path . --rendering-method gl_compatibility --audio-driver Dummy --fixed-fps 60 res://scripts/tools/npc/daily_goals_validation.tscn
-```
-
-成功标记为 `NPC_DAILY_GOALS_OK`。测试还检查居民现场走到小镇出发点、恢复现场时不在场景原点产生临时碰撞、现场再次取货，以及玩家耗尽共用水瓶后解渴无解、冷却倒计时和补水后自动恢复。headless 检查验证行为与场景接线；DDGI 需要正常 Forward+ Vulkan 渲染环境，不能用 headless 的 DDGI 提示判断正式画面是否正常。
-
-2026-10-24 已通过：本例 31 项（包含共用水瓶耗尽与补水恢复）、选择器绑定 100 项、图参数 47 项、世界模拟 44 项，以及名册逐帧预算压力测试。另在正常 Vulkan 模式检查正式小镇画面，DDGI 状态为 running。
+构建项目后从主菜单开始新游戏，在 F8 的 NPC 页提高居民需求，观察喝水、前往仓储间取货及返回林间镇。检查共用水瓶和库存扣减，途中保存并继续，确认行动与资源恢复。耗尽水瓶后补水，确认居民能从失败冷却中恢复。独立验证场景与测试存档已移除。

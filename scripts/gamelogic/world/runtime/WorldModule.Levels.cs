@@ -28,7 +28,7 @@ public sealed partial class WorldModule
     public async Task<bool> OpenAsync(Node parent,WorldDefinition definition,bool resume=true,string slot="default",CancellationToken cancellation=default)
     {
         Close();Configure(definition);_objects.Clear();_resumeLevel="";_resumeTransform=null;_restoreRequested=false;
-        _save.ResetSession();ModuleSystem.GetModule<ITimeOfDayModule>().ResetCalendar();
+        _save.ResetSession();ModuleSystem.GetModule<IDialogueModule>().ResetSession();ModuleSystem.GetModule<ITimeOfDayModule>().ResetCalendar();
         if(resume&&_save.Exists(slot)&&!_save.Load(slot)){LastError="存档无法读取。";return false;}
         WorldCatalog.Require(GodotObject.IsInstanceValid(parent)&&parent.IsInsideTree(),"世界宿主不在场景树中。");
         string level=_resumeLevel.Length>0?_resumeLevel:definition.InitialLevel?.Id;

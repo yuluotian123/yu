@@ -2,6 +2,7 @@ shader_type spatial;
 // Keep Forward+'s PBR reflection path; Toon affects direct diffuse lighting only.
 render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 #include "res://assets/shaders/weather/wet_surface.gdshaderinc"
+#include "res://assets/shaders/town/camera_near_fade.gdshaderinc"
 
 // Offline Godot 4.6.1 DFG energy integral (128x128, linear RH).
 uniform sampler2D ggx_energy_lut : hint_default_white, filter_linear, repeat_disable;
@@ -20,14 +21,27 @@ varying float town_specular;
 varying float town_toon_width;
 varying float town_toon_amount;
 varying float town_painted_mask;
+varying float town_ground_blend;
 
 // 底色保留原模型配色。纹理均值与细节混合，减弱照片式碎纹理；不改变 UV。
 uniform vec4 base_color : source_color = vec4(1.0);
 uniform bool use_texture = false;
+uniform bool pixel_brush = false;
+uniform bool paint_floor_from_contact = false;
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform vec3 texture_average = vec3(0.4);
 uniform float texture_detail : hint_range(0.0, 1.0) = 0.62;
 uniform bool use_vertex_color = false;
+// Optional road boundary coverage; stay in the opaque depth/shadow/SSR pass.
+uniform bool use_vertex_coverage = false;
+uniform float vertex_coverage_cutoff : hint_range(0.0, 1.0) = 0.32;
+// Scene-local contact treatment. The map is baked from the actual terrain albedo.
+uniform bool use_ground_contact = false;
+uniform sampler2D ground_contact_map : filter_linear, repeat_disable;
+uniform vec4 ground_contact_rect = vec4(0.0, 0.0, 1.0, 1.0);
+uniform bool ground_contact_from_vertex = false;
+uniform float ground_contact_height = 0.38;
+uniform float ground_contact_strength : hint_range(0.0, 1.0) = 1.0;
 uniform float color_saturation : hint_range(0.0, 2.0) = 1.02;
 uniform vec2 uv_scale = vec2(1.0);
 uniform vec2 uv_offset = vec2(0.0);
@@ -42,6 +56,8 @@ uniform float specular_strength : hint_range(0.0, 1.0) = 0.5;
 uniform bool use_orm_texture = false;
 // Linear data: R = ambient occlusion, G = roughness, B = metallic.
 uniform sampler2D orm_texture : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform bool use_roughness_texture = false;
+uniform sampler2D roughness_texture : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform float ao_light_affect : hint_range(0.0, 1.0) = 0.0;
 uniform bool use_normal_texture = false;
 uniform sampler2D normal_texture : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
@@ -53,11 +69,38 @@ void vertex() {
 }
 
 void fragment() {
+	if (camera_occlusion_discard(VERTEX,FRAGCOORD.xy,IN_SHADOW_PASS,PROJECTION_MATRIX,VIEW_MATRIX)) { discard; }
+	if (use_vertex_coverage && COLOR.a < vertex_coverage_cutoff) { discard; }
 	vec3 color = base_color.rgb;
-	if (use_texture) color *= mix(texture_average, texture(albedo_texture, UV).rgb, texture_detail);
+	if (use_texture) {
+		vec2 brush_uv = UV;
+		if (pixel_brush) {
+			vec2 grid = vec2(textureSize(albedo_texture,0)) * 0.25;
+			brush_uv = (floor(UV*grid)+0.5)/grid;
+		}
+		color *= mix(texture_average, textureGrad(albedo_texture, brush_uv, dFdx(UV),dFdy(UV)).rgb, texture_detail);
+	}
 	if (use_vertex_color) color *= COLOR.rgb;
+	town_ground_blend = 0.0;
+	if (use_ground_contact) {
+		vec2 contact_uv = (weather_position.xz - ground_contact_rect.xy) / ground_contact_rect.zw;
+		float brush = sin(weather_position.x * 15.3 + sin(weather_position.z * 9.7))
+				* sin(weather_position.z * 12.1 + weather_position.x * 3.9);
+		float edge = ground_contact_height * (0.78 + brush * 0.22);
+		town_ground_blend = ground_contact_from_vertex
+				? 1.0 - smoothstep(0.02, 0.94, COLOR.a)
+				: 1.0 - smoothstep(0.015, edge, weather_position.y);
+		town_ground_blend *= ground_contact_strength;
+		color = mix(color, texture(ground_contact_map, contact_uv).rgb, town_ground_blend);
+		vec3 ground_normal = (VIEW_MATRIX * vec4(0.0, 1.0, 0.0, 0.0)).xyz;
+		NORMAL = normalize(mix(NORMAL, ground_normal, town_ground_blend * town_ground_blend));
+	}
 	float grey = dot(color, vec3(0.2126, 0.7152, 0.0722));
 	ALBEDO = clamp(mix(vec3(grey), color, color_saturation), vec3(0.0), vec3(1.0));
+	if (paint_floor_from_contact) {
+		vec2 map_uv = (weather_position.xz-ground_contact_rect.xy)/ground_contact_rect.zw;
+		ALBEDO = texture(ground_contact_map,map_uv).rgb;
+	}
 	ROUGHNESS = surface_roughness;
 	SPECULAR = specular_strength;
 	METALLIC = surface_metallic;
@@ -69,7 +112,8 @@ void fragment() {
 		ROUGHNESS *= orm.g;
 		METALLIC *= orm.b;
 	}
-	town_toon_width = max(ROUGHNESS * toon_softness, 0.01);
+	if (use_roughness_texture) ROUGHNESS = surface_roughness * texture(roughness_texture, UV).r;
+	town_toon_width = max(ROUGHNESS * mix(toon_softness, 0.42, town_ground_blend), 0.01);
 	town_painted_mask = 1.0;
 	if (painterly_strength > 0.0 && painterly_dapple_strength > 0.0) {
 		// A painted canopy mask belongs to this surface material; it never changes
@@ -94,13 +138,13 @@ void fragment() {
 	vec4 wet = wet_surface_sample(weather_position, world_normal);
 	wet *= 1.0 - snow;
 	// 水底石材比薄水膜更暗，维持俯视时的水岸对比；倒影仍由原生反射计算。
-	ALBEDO *= (1.0 - wet.x * weather_darkening) * (1.0 - wet.y * 0.35);
-	float film = wet_film_amount(wet.x);
-	ROUGHNESS = mix(ROUGHNESS, min(ROUGHNESS, weather_wet_roughness), film);
+	ALBEDO *= (1.0 - wet.x * weather_darkening * wet_darkening_strength) * (1.0 - wet.y * 0.35);
+	float film = wet_film_amount(wet.x) * wet_film_strength;
+	ROUGHNESS = mix(ROUGHNESS, min(ROUGHNESS, max(weather_wet_roughness, wet_roughness_min)), film);
 	ROUGHNESS = mix(ROUGHNESS, weather_puddle_roughness, wet.y);
-	SPECULAR = mix(SPECULAR, weather_wet_specular, max(film, wet.y));
+	SPECULAR = mix(SPECULAR, weather_wet_specular * wet_specular_scale, max(film, wet.y));
 	METALLIC *= 1.0 - wet.y;
-	town_toon_amount = toon_strength * (1.0 - wet.y);
+	town_toon_amount = mix(toon_strength, 1.0, town_ground_blend) * (1.0 - wet.y);
 	vec3 water_normal = normalize((VIEW_MATRIX * vec4(wet.z, 1.0, wet.w, 0.0)).xyz);
 	NORMAL = normalize(mix(NORMAL, water_normal, wet.y * 0.96));
 	ALBEDO = mix(ALBEDO, snow_surface_color(weather_position), snow);
@@ -114,7 +158,7 @@ void fragment() {
 	// Forward+ reconstructs the RG normal with the same TBN path as StandardMaterial3D.
 	// Puddles and snow cover the base material's small-scale normal detail.
 	NORMAL_MAP = use_normal_texture ? texture(normal_texture, UV).rgb : vec3(0.5, 0.5, 1.0);
-	NORMAL_MAP_DEPTH = use_normal_texture ? normal_scale * (1.0 - wet.y * 0.96) * (1.0 - snow) : 0.0;
+	NORMAL_MAP_DEPTH = use_normal_texture ? normal_scale * (1.0 - town_ground_blend) * (1.0 - wet.y * 0.96) * (1.0 - snow) : 0.0;
 }
 
 float town_pow5(float value) {
@@ -138,13 +182,15 @@ void light() {
 	float native_diffuse = mix(burley, toon, town_toon_amount);
 	vec3 diffuse = vec3(native_diffuse) * ATTENUATION;
 	if (painterly_strength > 0.0) {
-		float facing = clamp((nl + painterly_light_wrap) / (1.0 + painterly_light_wrap), 0.0, 1.0);
+		float light_wrap = mix(painterly_light_wrap, 0.9, town_ground_blend);
+		float facing = clamp((nl + light_wrap) / (1.0 + light_wrap), 0.0, 1.0);
 		float middle = smoothstep(0.22, 0.32, facing);
 		float bright = smoothstep(0.65, 0.73, facing);
 		vec3 painted = mix(vec3(0.19, 0.28, 0.36), vec3(0.76, 0.75, 0.67), middle);
 		painted = mix(painted, vec3(1.04, 1.00, 0.85), bright);
 		if (LIGHT_IS_DIRECTIONAL) painted *= town_painted_mask;
-		float painted_attenuation = LIGHT_IS_DIRECTIONAL ? mix(painterly_shadow_lift, 1.0, ATTENUATION) : ATTENUATION;
+		float edge_lift = pixel_brush ? 0.26 : 0.0;
+		float painted_attenuation = LIGHT_IS_DIRECTIONAL ? mix(mix(painterly_shadow_lift,edge_lift,town_ground_blend),1.0,ATTENUATION) : ATTENUATION;
 		diffuse = mix(diffuse, painted * painted_attenuation, painterly_strength);
 	}
 	DIFFUSE_LIGHT += LIGHT_COLOR * diffuse / PI;

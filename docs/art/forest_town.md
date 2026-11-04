@@ -1,19 +1,23 @@
 # 森林小镇
 
-`assets/scenes/levels/forest_town_level.tscn` 是独立的正式小镇关卡，直接保存角色、相机、天气、DDGI、世界入口及 Resident 的生活行为图，并实例化 `environment/forest_town/forest_town.tscn`。不再继承白盒场景。美术生成脚本只更新小镇环境及模型，不重写正式关卡。喝水、取货与跨关卡配置见 [完整示例](../../doc/NPC_DAILY_GOALS_EXAMPLE.md)。
+`assets/scenes/levels/forest_town_level.tscn` 已直接替换为[十户森林聚落](forest_village_whitebox.md)，实例化 `environment/forest_village_whitebox/forest_village_whitebox.tscn`。旧临河小镇布局已移除；关卡路径、UID、世界 ID、角色、天气、DDGI、世界入口及 Resident 生活行为配置沿用。默认出生点移到聚落南入口，仓储间入口位于杂货与待客户门前，导航按新聚落碰撞重新烘焙。喝水、取货与跨关卡配置见 [完整示例](../../doc/NPC_DAILY_GOALS_EXAMPLE.md)。
+
+当前十户建筑使用[第二版概念房屋模型](forest_village_houses.md)，共十种不同体量与屋顶结构，已制作侧面、背面、碰撞及 LOD。下文旧八栋建筑的制作与统计保留为共享森林资产的历史记录。
+
+以下模型制作、材质与性能记录说明共享森林资产；原临河布局及其性能数据属于历史记录。旧 `build_scene.gd` 的临河布局生成配方不再用于正式关卡。更新聚落布局后，用 `forest_village_whitebox/replace_forest_level.gd` 同步正式关卡、入口和导航，再通过关卡配置导出刷新世界目录。
 
 参考原画：`assets/textures/concepts/environments/forest_town_v1/scene-concept.png`。场景在固定 Godot 相机与环境下重建；材质使用手绘笔触、分区配色和绘画式直接光照。
 
 ## 独立模型与面数
 
-所有物件在 Blender MCP 中制作，分别导出 GLB 和 Godot 模型场景。八栋建筑都有完整四面外墙、完整屋顶、侧后方门窗与梁柱；没有用单面立面或背景图片代替完整建筑。树木使用连续弯曲环线制作树干、渐细主枝、二三级分叉、曲线根部和树结；独立的叶簇曲面附着于枝梢。灌木使用弯曲枝条和带透明轮廓的橡树叶簇。
+所有物件在 Blender MCP 中制作，分别导出 GLB 和 Godot 模型场景。八栋建筑都有完整四面外墙、完整屋顶、侧后方门窗与梁柱；没有用单面立面或背景图片代替完整建筑。树木使用连续弯曲环线制作树干、渐细主枝、二三级分叉和曲线根部，树皮有贴合表面的浅疤痕；独立的叶簇曲面附着于枝梢。灌木使用弯曲枝条和带透明轮廓的橡树叶簇。
 
 预算同时检查 Blender 多边形与 Godot 导入后三角面，均不超过 8000。重复物件共享对应的独立模型。
 
 | 模型 | 独立种类 | 每个模型三角面 |
 | --- | ---: | ---: |
 | 完整建筑 | 8 | 4959–6249 |
-| 树木 | 3 | 7948 |
+| 树木 | 3 | 7296 |
 | 灌木 | 4 | 2520 |
 | 蕨类 / 林间花草 | 2 | 126 / 840 |
 | 横向带叶枝梢 | 1 | 1544 |
@@ -25,11 +29,15 @@
 
 ## 树木细化与林区密度（2026-10-21）
 
-当前只使用三个独立树型：粗根宽冠古橡树 `ancient_oak`、挺拔分叉树 `branching_oak` 和弯干舒展树 `canopy_oak`。模型采用 24 边树干截面、连续输运环线法线、根部外扩、二三级枝梢、树结凸缘和树皮起伏；树冠从原来的 572–660 簇增加为每棵 935–1008 个四三角面叶簇，围绕 16–19 组不对称枝梢体积排列。每种完整近景模型均为 7948 个三角面，仍低于 8000 上限；沿用现有灰度叶簇贴图、顶点配色和真实树冠阴影。
+当前只使用三个独立树型：粗根宽冠古橡树 `ancient_oak`、挺拔分叉树 `branching_oak` 和弯干舒展树 `canopy_oak`。模型采用 24 边树干截面、连续输运环线法线、根部外扩、二三级枝梢和树皮起伏；树冠从原来的 572–660 簇增加为每棵 935–1008 个四三角面叶簇，围绕 16–19 组不对称枝梢体积排列。2026-10-25 修整根部后为 7432 个三角面；2026-10-26 移除每种树的两个独立圆管树结，改成沿原树皮投射、两端收窄的浅纵向疤痕，完整近景模型为 7296 个三角面。疤痕最大起伏约 2–4 毫米，复用命中处的树皮 UV、顶点色和法线，避免浮起的圆环轮廓。树冠与其他保留面的顶点位置保持原样，沿用现有灰度叶簇贴图、顶点配色和真实树冠阴影。
 
-原有 48 棵树改用这三种树型，侧后方增加 30 棵，合计 78 棵。新增树干避开建筑碰撞范围和主通路，通过旋转、缩放与错列打破重复；全部非树物件的摆放保持一致。旧 `forest_column`、`understory_oak` 资源保留在源文件和磁盘中作为历史资产，当前场景不再引用。
+该修整由 `scripts/tools/art/forest_town/repair_tree_knots.py` 完成，完整生成器也复用它，不再生成闭合圆管。检查记录保存在 `assets/resources/art/forest_town_v1/bark_scars_v4.json`；Blender 源文件、三个 GLB、运行时网格、LOD 与模型场景已同步更新。导入时使用 `build_tree_upgrade.gd -- --meshes-only`，保留村庄摆放与碰撞。
 
-三种树都带原生距离 LOD，各表面的附加 LOD 数为 `[4,1]`，完整细节保留为 LOD0。RTX 5080、1920×1080、主菜单启动 ForestTownLevel、解除帧率上限的同机固定镜头对照：旧 48 棵树 GPU 中位耗时约 4.51 ms，新 78 棵树约 4.57–4.58 ms；完整帧平均耗时由约 5.42 ms 变为 5.42–5.54 ms。该对照保留相机、灯光、阴影质量、DDGI 和后处理配置，不代表所有位置和设备的表现。独立运行截图、对照脚本和采样位于 `.godot/forest-town/trees-v2-*.png`、`check_trees_v2.gd`、`trees-v2-runtime.json`；源资产统计在 `trees_v2.json`。
+三种树的独立长尖根已在 Blender 中替换为与树干焊接的一体根盘，五条短而圆的根脊从树干平滑展开，并在接近地面处没入土中。根部以上的网格位置、UV 和顶点色逐面核对一致，摆放与树干碰撞沿用原值。源文件与独立 GLB / `.mesh.res` 均已更新；修整记录见 `roots_v3.json`，当前导入与 LOD 检查见 `tree_validation.json`。`repair_tree_roots.py` 已接入树木生成脚本，重新生成时也会应用这项修整。
+
+原有 48 棵树改用这三种树型，侧后方增加 30 棵，合计 78 棵。新增树干避开建筑碰撞范围和主通路，通过旋转、缩放与错列打破重复；全部非树物件的摆放保持一致。旧 `forest_column`、`understory_oak` 等未使用的独立导出资源已移除，可编辑原始模型仍保存在 Blender 源文件中。
+
+三种树都带原生距离 LOD，各表面的附加 LOD 数为 `[4,1]`，完整细节保留为 LOD0。RTX 5080、1920×1080、主菜单启动 ForestTownLevel、解除帧率上限的同机固定镜头对照：旧 48 棵树 GPU 中位耗时约 4.51 ms，新 78 棵树约 4.57–4.58 ms；完整帧平均耗时由约 5.42 ms 变为 5.42–5.54 ms。该对照保留相机、灯光、阴影质量、DDGI 和后处理配置，不代表所有位置和设备的表现。源资产统计在 `trees_v2.json`。
 
 ## 建筑与街道层次
 
@@ -40,7 +48,7 @@
 ## 材质与贴图
 
 - 材质在 `assets/materials/environment/forest_town/`。建筑、树皮、地面使用现有 `town_toon.gdshader`；叶簇使用现有 `leaf_article.gdshader`，保留原生光照、天气与 DDGI 材质协议。树皮和树叶分别绑定到同一独立模型的两个网格表面。
-- 当前手绘灰度图集为 `assets/textures/environment/forest_town/painterly_atlas_v3.png`，实际尺寸 **1254×1254**。16 个分区覆盖灰泥、木材、屋瓦、石材、树皮、泥土、叶片、苔藓、玻璃与树冠光斑遮罩；旧 `painted_atlas.png` 保留为早期版本。
+- 当前手绘灰度图集为 `assets/textures/environment/forest_town/painterly_atlas_v3.png`，实际尺寸 **1254×1254**。16 个分区覆盖灰泥、木材、屋瓦、石材、树皮、泥土、叶片、苔藓、玻璃与树冠光斑遮罩；早期 `painted_atlas` 与重复导出贴图已移除。
 - 颜色来自模型的 `Palette` 顶点色，灰泥、木材、屋瓦、石材与玻璃分表面绑定材质。暖灰泥使用较高的材质阴影抬升，深木框、窗玻璃和前景右屋使用较低值，保持明暗对比；背景与前景植物采用不同顶点色。地面使用连续空间顶点色消除方格感。
 - `town_toon.gdshader` 和 `leaf_article.gdshader` 新增可选 `painterly_strength`，默认 0，保留其他材质原有行为。森林材质启用分段直接光照；原生高光、天气和 DDGI 材质提取协议继续沿用。
 - 树荫使用实际树冠、枝干与太阳原生级联阴影。叶簇通过 `ALPHA_SCISSOR_THRESHOLD` 裁出纹理中的透明空隙，实际叶片轮廓参与投影。小镇 9 个接收材质的 `painterly_dapple_strength` 均为 0，停用此前按世界坐标平铺的模拟树荫；`build_scene.gd` 同步保持为 0。树下保留斑驳阴影，开阔街道和河岸不再附加无对应树冠的暗块。此次不增加投影网格或光源，也不调整相机、灯光、阴影质量、DDGI 和后处理参数。
@@ -68,6 +76,8 @@ Blender 文件：`assets/models/environment/forest_town/source/forest_town.blend
 
 完整重建基础模型和河流后，再执行 `upgrade_trees.py` 的定义，依次调用 `build_tree('ancient_oak')`、`build_tree('branching_oak')`、`build_tree('canopy_oak')` 和 `finish_tree_upgrade()`。通过 MCP 分多次调用时，把执行命名空间保存在 `bpy.app.driver_namespace` 中。树木更新脚本保留非树资产和布置，重复执行不累积新增树木。只更新树木时使用 `build_tree_upgrade.gd` 导入三个 GLB、生成原生 LOD 并替换场景的 `Trees` 子树，避免重建其他模型和材质。
 
+仅修整共享树模型时，在导入命令末尾追加 `-- --meshes-only`，更新网格及模型预制场景，保留森林小镇和聚落中的所有实例位置。
+
 然后通过同一 Blender MCP 执行 `scripts/tools/art/forest_town/add_river.py`，切出前景河岸并导出独立河流资产。该脚本保留 `FT_GroundBeforeRiver` 源网格，可重复执行，不会累积裁剪或重复散布。若完整重建基础模型，应先执行 `finish()` 再执行河流脚本。
 
 在项目根目录使用当前 Godot 4.8 引擎运行：
@@ -76,25 +86,13 @@ Blender 文件：`assets/models/environment/forest_town/source/forest_town.blend
 $forestEngine = 'D:\DCC\Godot_4.8\bin\ddgi_scene\godot.windows.editor.x86_64.mono.ddgi_scene.console.exe'
 & $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/build_scene.gd --quit-after 600
 & $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/build_tree_upgrade.gd --quit-after 600
-& $forestEngine --headless --path . --script res://scripts/tools/art/forest_town/validate_scene.gd --quit-after 600
-& $forestEngine --path . --rendering-driver vulkan --script res://scripts/tools/art/forest_town/capture_scene.gd
 ```
 
-构建脚本直接读取最新 GLB，并保存带 UV、顶点色和逐表面材质的共享网格与独立模型场景，避免另一个开着的编辑器保留旧导入缓存。实机截图写入忽略目录 `.godot/forest-town/godot-composition.png`，不覆盖参考原画。截图同时将实际 DDGI 状态写入 `.godot/forest-town/ddgi-status.json`。
+构建脚本直接读取最新 GLB，并保存带 UV、顶点色和逐表面材质的共享网格与独立模型场景，避免另一个开着的编辑器保留旧导入缓存。正式画面通过主场景进入林间镇检查。
 
-`editor_sync.gd` 只用于把新布局同步到当前编辑器的 `RPGTown` 节点：先保存带时间戳的子树快照，再替换该子树，校验其他同级节点及其变换均未变化。快照在 `.godot/forest-town/editor-town-before-<时间>.tscn`；新实例不挂工具脚本。它不重载整个 `forest_town_level.tscn`。若编辑器已自动刷新外部场景，无须再替换。Blender 预览镜头复制固定 Godot 镜头以便检查构图，不反写 Godot 相机。
+## 运行检查
 
-仅同步树木时调用 `sync_authored_trees()`：先保存小镇快照，只替换 `Trees` 下的实例，校验其他分组、其子节点及变换保持不变，随后自动移除临时同步脚本。
-
-## 验证
-
-31 个当前模型的实际导入面数、UV、顶点色、叶簇表面与树木 LOD 均已检查，记录在 `godot_validation.json`。此前相机与环境基准、完整建筑实例、材质绑定、地面碰撞、建筑阻挡、角色落地、台阶坡面、高处街道支撑、水面 UV 方向、河岸碰撞、三种树型、加密树木实例和新增树干落地合计 102 项检查通过，记录在 `assets/resources/art/forest_town_v1/scene_validation.json`。现有验证改为检查独立关卡，运行结果写入 `.godot/forest-town/scene_validation.json`。此前通过真实主菜单按钮触发关卡加载，并验证退出后再次进入；实际 Forward+ / Vulkan 渲染中水面采样确认发生动画。河流和该轮树木更新均未修改 C# 或渲染器参数。
-
-2026-10-24 独立关卡修复：保留场景 UID、1024 个实例化节点、相机与环境配置，以及已编辑的入口和门坐标。当前编辑器可正常打开；场景验证 104 项、NPC 日常 Goal 31 项通过，主菜单新游戏、跨关卡、存档继续、GM 删档及重开流程通过。验证使用无头兼容渲染，不包含本轮 DDGI 画面验收；日志位于 `.godot/forest-town-repair/`。
-
-`material_scope_validation.json` 是此前只改材质阶段的历史记录；随后获得模型和摆放调整授权，最新范围与结果记录在 `reconstruction_v4.json`。
-
-运行日志仍可能包含本机证书、MCP 注册表写权限、未配置全局黑板，以及退出时既有资源清理提示；这些不属于材质或模型校验结果。
+构建后从主菜单进入林间镇，检查建筑与地面碰撞、角色落地、阶梯坡面、高处街道支撑、水面动画、树冠阴影，以及 NPC 对话和往返仓储间。使用 Forward+ Vulkan 检查 DDGI 和后处理。独立验证器、旧验证报告与临时编辑器同步脚本已移除，模型生成和导入工具保留。
 
 ## 性能定位（2026-10-21）
 
@@ -113,9 +111,4 @@ RTX 5080、当前定制 Godot 4.8、1920×1080、主菜单启动 ForestTownLevel
 
 恢复项目原有 120 FPS 上限和 VSync 后，360 帧采样平均约 117 FPS。优化后仍有少量约 40 ms 的长帧，尚未消除所有卡顿；场景、材质效果、分辨率、抗锯齿、阴影、后处理及 DDGI 质量配置均未调整。以上是静止镜头的本机测试，不代表所有位置或其他设备的帧率。
 
-原始采样与临时隔离脚本位于忽略目录 `.godot/forest-town/profile-*.json`、`profile_scene.gd`。共享材质、颜色和天气逐帧变化、纹理层复用、空材质以及不支持着色器的 12 项回归检查可运行：
-
-```powershell
-dotnet build yu.csproj
-& $forestEngine --headless --path . --script res://scripts/tools/rendering/validate_ddgi_capture.gd --quit-after 300
-```
+以上性能采样为历史基线；后续使用正式关卡和 profiler 重新测量。

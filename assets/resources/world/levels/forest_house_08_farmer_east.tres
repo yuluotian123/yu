@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldLevelDefinition" format=3 uid="uid://c7e5lp4cc8wah"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_house_08_farmer_east.tres" id="1_b214e"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelDefinition.cs" id="2_wbmsd"]
+
+[resource]
+script = ExtResource("2_wbmsd")
+ScenePath = "res://assets/scenes/levels/forest_village_interiors/08_farmer_east.tscn"
+Location = ExtResource("1_b214e")
+ExportPortalRoutes = true
+Id = "forest_house_farmer_east"
+DisplayName = "东田农户 · 室内"

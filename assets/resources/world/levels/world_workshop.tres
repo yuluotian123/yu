@@ -10,4 +10,4 @@ ScenePath = "res://assets/scenes/levels/world_workshop.tscn"
 Location = ExtResource("1_qkxms")
 ExportPortalRoutes = true
 Id = "31a903e2d81e45d0af568c59d0097bc8"
-DisplayName = "小镇仓储间"
+DisplayName = "杂货与待客户 · 室内仓储"

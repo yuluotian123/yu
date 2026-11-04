@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WorldLocationDefinition" format=3 uid="uid://bj12o3w3fmql5"]
+
+[ext_resource type="Resource" path="res://assets/resources/world/locations/forest_town_level_location.tres" id="1_bfb6a"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLocationDefinition.cs" id="2_ejsvj"]
+
+[resource]
+script = ExtResource("2_ejsvj")
+Parent = ExtResource("1_bfb6a")
+Tags = PackedStringArray("indoor", "forest_village", "household")
+Id = "forest_house_location_smallholder"
+DisplayName = "小畜养户 · 室内"

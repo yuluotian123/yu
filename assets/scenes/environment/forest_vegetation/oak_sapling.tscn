@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_vegetation/oak_sapling.mesh.res" id="1_lf3ov"]
+
+[node name="OakSapling" type="Node3D" unique_id=2028668963]
+metadata/source_model = "res://assets/models/environment/forest_vegetation/oak_sapling.glb"
+metadata/triangles = 3344
+metadata/source_polygons = 3344
+metadata/vegetation_revision = 5
+metadata/asset_category = "tree"
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1749229178]
+mesh = ExtResource("1_lf3ov")

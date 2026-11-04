@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dxibw700xljc1"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/structures/creek_bridge.mesh.res" id="1_1jhka"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sirkf"]
+size = Vector3(5.85, 0.25, 3.276)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nelhw"]
+size = Vector3(5.772, 0.12, 0.09)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_slyut"]
+size = Vector3(5.772, 0.12, 0.09)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2xma4"]
+size = Vector3(5.772, 0.12, 0.09)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s3cve"]
+size = Vector3(5.772, 0.12, 0.09)
+
+[node name="CreekBridge" type="Node3D" unique_id=1808224433]
+metadata/asset_category = "finished_timber_structure"
+metadata/source_model = "res://assets/models/environment/forest_village/structures/creek_bridge.glb"
+metadata/triangles = 16848
+metadata/features = ["23 separate deck boards", "three load bearing stringers", "continuous handrails", "mortised braced rails", "forged pegs and deck nails", "stone bank pads", "open creek channel", "flat accessible deck"]
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1611521390]
+mesh = ExtResource("1_1jhka")
+
+[node name="Collision" type="StaticBody3D" parent="." unique_id=882151446]
+collision_mask = 0
+
+[node name="Deck" type="CollisionShape3D" parent="Collision" unique_id=1261289023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
+shape = SubResource("BoxShape3D_sirkf")
+
+[node name="Rail-1_0" type="CollisionShape3D" parent="Collision" unique_id=305235317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -1.716)
+shape = SubResource("BoxShape3D_nelhw")
+
+[node name="Rail-1_1" type="CollisionShape3D" parent="Collision" unique_id=1924001693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.73, -1.716)
+shape = SubResource("BoxShape3D_slyut")
+
+[node name="Rail1_0" type="CollisionShape3D" parent="Collision" unique_id=805016224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 1.716)
+shape = SubResource("BoxShape3D_2xma4")
+
+[node name="Rail1_1" type="CollisionShape3D" parent="Collision" unique_id=248014098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.73, 1.716)
+shape = SubResource("BoxShape3D_s3cve")

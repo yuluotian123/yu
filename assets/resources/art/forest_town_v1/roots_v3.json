@@ -1,0 +1,29 @@
+{
+  "revision": 3,
+  "method": "continuous welded root collar; short rounded ribs submerge below soil",
+  "upper_branches_and_foliage_preserved": true,
+  "placements_and_collisions_preserved": true,
+  "assets": [
+    {
+      "name": "ancient_oak",
+      "before_triangles": 7948,
+      "after_triangles": 7432,
+      "upper_mesh_position_error": 0.0,
+      "root_surface_radius": 1.704
+    },
+    {
+      "name": "branching_oak",
+      "before_triangles": 7948,
+      "after_triangles": 7432,
+      "upper_mesh_position_error": 0.0,
+      "root_surface_radius": 1.0796
+    },
+    {
+      "name": "canopy_oak",
+      "before_triangles": 7948,
+      "after_triangles": 7432,
+      "upper_mesh_position_error": 0.0,
+      "root_surface_radius": 0.9883
+    }
+  ]
+}

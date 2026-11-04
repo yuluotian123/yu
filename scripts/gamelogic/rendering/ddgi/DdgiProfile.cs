@@ -13,6 +13,8 @@ public partial class DdgiProfile : Resource
     [Export(PropertyHint.Range, "32,512,32")] public int RaysPerProbe { get; set; } = 128;
     [Export(PropertyHint.Range, "1,4096,1")] public int ProbesPerFrame { get; set; } = 48;
     [Export(PropertyHint.Range, "0,0.99,0.01")] public float Hysteresis { get; set; } = .9f;
+    /// <summary>每个探针使用固定的辐射射线方向。仍会追踪光源、天空和几何变化。</summary>
+    [Export] public bool StableSampleDirections { get; set; }
     [Export(PropertyHint.Range, "1,100,1")] public float MaxRayDistance { get; set; } = 30;
     [Export] public Color SkyRadiance { get; set; } = new(.035f, .045f, .07f);
     [Export] public bool UseEnvironmentSky { get; set; } = true;
@@ -29,6 +31,7 @@ public partial class DdgiProfile : Resource
         ["rays"] = Mathf.Clamp(RaysPerProbe, 32, 512),
         ["budget"] = Mathf.Clamp(ProbesPerFrame, 1, 4096),
         ["history"] = Mathf.Clamp(Hysteresis, 0, .99f),
+        ["stable_directions"] = StableSampleDirections,
         ["max_distance"] = Mathf.Clamp(MaxRayDistance, 1, 100),
         ["sky"] = new Vector3(SkyRadiance.R, SkyRadiance.G, SkyRadiance.B),
         ["environment_sky"] = UseEnvironmentSky,

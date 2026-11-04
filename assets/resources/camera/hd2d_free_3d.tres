@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1")
 DeadZone = Vector3(0.32, 0.4, 0.32)
+PixelSnap = true
 FollowSmooth = Vector3(7, 4, 7)
 LookAheadDistance = 0.3
 VerticalVelocityLookDistance = 0.08

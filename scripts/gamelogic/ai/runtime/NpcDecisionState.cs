@@ -29,7 +29,6 @@ public sealed class NpcDecisionState
             if(key=="needs."+n.Id+".urgent")return CharacterValue.Bool(_urgent.GetValueOrDefault(n.Id));
             if(key=="needs."+n.Id+".urgency")return CharacterValue.Numeric(Math.Pow(Math.Clamp(n.Higher?(_character.Needs.Values[n.Id]-n.Min)/(n.Max-n.Min):(n.Max-_character.Needs.Values[n.Id])/(n.Max-n.Min),0,1),n.Exponent));
         }
-        if(key.StartsWith("memory.")&&key.EndsWith(".count"))return CharacterValue.Numeric(Memory.Entries.Count(e=>e.Category==key[7..^6]));
         if(key.StartsWith("schedule."))
         {
             string tag=key[9..];double hour=double.IsFinite(_character.LastHours)?_character.LastHours%24:12;
@@ -39,12 +38,12 @@ public sealed class NpcDecisionState
         }
         return _character.Read(key);
     }
-    public JsonObject Capture()=>new(){["urgent"]=JsonSerializer.SerializeToNode(_urgent),["memory"]=JsonSerializer.SerializeToNode(Memory.Entries)};
+    public JsonObject Capture()=>new(){["urgent"]=JsonSerializer.SerializeToNode(_urgent),["memory_entries"]=JsonSerializer.SerializeToNode(Memory.Entries)};
     public void Restore(JsonObject data)
     {
-        var memory=data?["memory"]?.Deserialize<List<NpcMemoryEntry>>()??new();
+        // The previous dialogue-memory payload has the same entry shape.
+        var entries=(data?["memory_entries"]??data?["memory_facts"])?.Deserialize<List<NpcMemoryEntry>>()??new();
         var urgent=data?["urgent"]?.Deserialize<Dictionary<string,bool>>()??new();
-        NpcProgram.Require(memory.Count<=_program.MemoryCapacity&&memory.All(m=>m!=null&&_program.MemoryCategories.Contains(m.Category)&&double.IsFinite(m.Hours)),"AI 记忆存档无效。");
-        Memory.Entries.Clear();Memory.Entries.AddRange(memory);_urgent.Clear();foreach(var n in _program.Needs)_urgent[n.Id]=urgent.GetValueOrDefault(n.Id);Refresh();
+        Memory.Restore(entries);_urgent.Clear();foreach(var n in _program.Needs)_urgent[n.Id]=urgent.GetValueOrDefault(n.Id);Refresh();
     }
 }

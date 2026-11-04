@@ -1,0 +1,28 @@
+{
+	"checks": [
+		{
+			"asset": "ancient_oak",
+			"lod_counts": [
+				4,
+				1
+			],
+			"triangles": 7296
+		},
+		{
+			"asset": "branching_oak",
+			"lod_counts": [
+				4,
+				1
+			],
+			"triangles": 7296
+		},
+		{
+			"asset": "canopy_oak",
+			"lod_counts": [
+				4,
+				1
+			],
+			"triangles": 7296
+		}
+	]
+}

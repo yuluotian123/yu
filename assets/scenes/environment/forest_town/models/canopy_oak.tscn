@@ -8,9 +8,9 @@ size = Vector3(1.062, 7.752, 1.062)
 [node name="CanopyOak" type="Node3D" unique_id=453536558]
 metadata/asset_category = "tree"
 metadata/source_model = "res://assets/models/environment/forest_town/canopy_oak.glb"
-metadata/source_polygons = 3872
-metadata/triangles = 7948
-metadata/tree_revision = 2
+metadata/source_polygons = 3574
+metadata/triangles = 7296
+metadata/tree_revision = 4
 
 [node name="Model" type="MeshInstance3D" parent="." unique_id=1527239519]
 mesh = ExtResource("1_k7pbi")

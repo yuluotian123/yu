@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://dsl6qmxy65on3"]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/GameObject3D.cs" id="1_nb7oa"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/forest_house_10_smallholder.tres" id="2_fldo6"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldLevelContextComponent3D.cs" id="3_wg1ne"]
+[ext_resource type="Script" path="res://scripts/gamelogic/ai/runtime/AiWorldComponent3D.cs" id="4_6wqxq"]
+[ext_resource type="NavigationMesh" path="res://assets/resources/world/navigation/forest_village_interiors/10_smallholder.tres" id="5_e46dd"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldSpawnPointComponent3D.cs" id="6_0705v"]
+[ext_resource type="Resource" path="res://assets/resources/camera/hd2d_free_3d.tres" id="7_1gr80"]
+[ext_resource type="Script" path="res://scripts/gamelogic/camera/SceneCameraComponent3D.cs" id="8_8hw6u"]
+[ext_resource type="Resource" path="res://assets/resources/world/levels/forest_town_level.tres" id="9_1sofo"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldTransitionComponent3D.cs" id="10_id1xr"]
+[ext_resource type="PackedScene" path="res://assets/scenes/ui/runtime_gm.tscn" id="11_p7cef"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gameobject/Component3D.cs" id="12_d1te6"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gm/RuntimeGmComponent3D.cs" id="13_735ma"]
+[ext_resource type="Script" path="res://scripts/gamelogic/timeofday/TimeOfDayGmComponent3D.cs" id="14_t4tkw"]
+[ext_resource type="Script" path="res://scripts/gamelogic/gm/RenderingGmComponent3D.cs" id="15_x10ex"]
+[ext_resource type="Script" path="res://scripts/gamelogic/weather/WeatherGmComponent3D.cs" id="16_1wxe6"]
+[ext_resource type="Script" path="res://scripts/gamelogic/npc/gm/NpcGmComponent3D.cs" id="17_s2ooe"]
+[ext_resource type="Script" path="res://scripts/gamelogic/world/components/WorldGmComponent3D.cs" id="18_tqdak"]
+[ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_village/interiors/10_smallholder.tscn" id="19_buhrn"]
+
+[sub_resource type="Resource" id="Resource_nrx37"]
+script = ExtResource("3_wg1ne")
+Level = ExtResource("2_fldo6")
+RequireNavigation = true
+
+[sub_resource type="Resource" id="Resource_30d21"]
+script = ExtResource("4_6wqxq")
+
+[sub_resource type="Resource" id="Resource_08gd5"]
+script = ExtResource("6_0705v")
+
+[sub_resource type="Resource" id="Resource_w6odw"]
+script = ExtResource("8_8hw6u")
+FramingOriginPath = NodePath("../CameraFramingTarget")
+Profile = ExtResource("7_1gr80")
+UseComponentFraming = true
+CameraOffset = Vector3(0, 5.2, 7.2)
+CameraRotationDegrees = Vector3(-36, 0, 0)
+
+[sub_resource type="Resource" id="Resource_qwwo4"]
+script = ExtResource("10_id1xr")
+TargetLevel = ExtResource("9_1sofo")
+TargetEntry = "from_house_smallholder"
+
+[sub_resource type="Resource" id="Resource_54rjt"]
+script = ExtResource("6_0705v")
+Entry = "from_town"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4lac"]
+size = Vector3(0.82, 1.65, 0.36)
+
+[sub_resource type="Resource" id="shell"]
+script = ExtResource("13_735ma")
+
+[sub_resource type="Resource" id="gm"]
+script = ExtResource("14_t4tkw")
+Embedded = true
+
+[sub_resource type="Resource" id="rendering"]
+script = ExtResource("15_x10ex")
+
+[sub_resource type="Resource" id="weather_gm"]
+script = ExtResource("16_1wxe6")
+
+[sub_resource type="Resource" id="npc_gm"]
+script = ExtResource("17_s2ooe")
+
+[sub_resource type="Resource" id="world_gm"]
+script = ExtResource("18_tqdak")
+
+[sub_resource type="Environment" id="Environment_er4kf"]
+background_mode = 1
+background_color = Color(0.13, 0.17, 0.17, 1)
+background_intensity = 1800.0
+ambient_light_source = 2
+ambient_light_color = Color(0.66, 0.73, 0.73, 1)
+ambient_light_energy = 0.75
+tonemap_mode = 2
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_856c5"]
+exposure_aperture = 8.0
+exposure_shutter_speed = 30.0
+
+[node name="SmallholderHouseInterior" type="Node3D" unique_id=2128393136]
+editor_description = "小畜养户室内：蜂蜜罐、饲料箱与蜂框台。正门往返，后侧封闭；屋顶和前墙按游戏镜头剖开。"
+script = ExtResource("1_nb7oa")
+Components = [SubResource("Resource_nrx37")]
+metadata/household = "Smallholder"
+
+[node name="World" type="Node3D" parent="." unique_id=2082336118]
+script = ExtResource("1_nb7oa")
+Components = [SubResource("Resource_30d21")]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=1255648731]
+navigation_mesh = ExtResource("5_e46dd")
+
+[node name="EntryDefault" type="Node3D" parent="." unique_id=1396755185]
+script = ExtResource("1_nb7oa")
+Components = [SubResource("Resource_08gd5")]
+
+[node name="Arrival" type="Marker3D" parent="EntryDefault" unique_id=1044440683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 1.25)
+
+[node name="CameraFramingTarget" type="Marker3D" parent="." unique_id=1692924628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1525181762]
+process_priority = 100
+script = ExtResource("1_nb7oa")
+Components = [SubResource("Resource_w6odw")]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1654827649]
+transform = Transform3D(1, 0, 0, 0, 0.809017, 0.58778524, 0, -0.58778524, 0.809017, 0, 5.72, 7.2)
+current = true
+fov = 47.0
+near = 0.03
+far = 40.0
+
+[node name="TownPortal" type="Node3D" parent="." unique_id=953347345]
+editor_description = "正门自动进入；触发区贴合门槛，返回落点位于触发区外。后侧不开通路。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 2.3)
+script = ExtResource("1_nb7oa")
+Components = [SubResource("Resource_qwwo4"), SubResource("Resource_54rjt")]
+metadata/_world_placement = "8e779ea860b234a6fdf4d2116fe4cbe7"
+
+[node name="Arrival" type="Marker3D" parent="TownPortal" unique_id=1358988723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33000004, -1.05)
+
+[node name="Area3D" type="Area3D" parent="TownPortal" unique_id=515756972]
+collision_layer = 0
+
+[node name="DoorwayTrigger" type="CollisionShape3D" parent="TownPortal/Area3D" unique_id=958190236]
+shape = SubResource("BoxShape3D_g4lac")
+
+[node name="UsePosition" type="Marker3D" parent="TownPortal" unique_id=501143096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0.15)
+
+[node name="RuntimeGm" type="Node3D" parent="." unique_id=1210845066 instance=ExtResource("11_p7cef")]
+process_mode = 3
+script = ExtResource("1_nb7oa")
+Components = Array[ExtResource("12_d1te6")]([SubResource("shell"), SubResource("gm"), SubResource("rendering"), SubResource("weather_gm"), SubResource("npc_gm"), SubResource("world_gm")])
+
+[node name="Interior" type="Node3D" parent="." unique_id=2116317718 instance=ExtResource("19_buhrn")]
+metadata/household = "Smallholder"
+metadata/theme = "蜂蜜罐、饲料箱与蜂框台"
+metadata/cutaway_interior = true
+
+[node name="ExitSign" type="Label3D" parent="." unique_id=233418841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.12, 2.28)
+pixel_size = 0.003
+billboard = 1
+text = "出门"
+
+[node name="EnvironmentRig" type="Node3D" parent="." unique_id=1690299022]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EnvironmentRig" unique_id=1722087756]
+environment = SubResource("Environment_er4kf")
+camera_attributes = SubResource("CameraAttributesPhysical_856c5")
+
+[node name="WindowDaylight" type="DirectionalLight3D" parent="EnvironmentRig" unique_id=639221761]
+transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
+light_intensity_lux = 11000.0
+light_color = Color(0.83, 0.91, 1, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 18.0
+
+[node name="HearthGlow" type="OmniLight3D" parent="EnvironmentRig" unique_id=361438328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02, 0.85, -1.7)
+light_intensity_lumens = 1800.0
+light_color = Color(1, 0.59, 0.26, 1)
+shadow_enabled = true
+omni_range = 4.5
+
+[node name="WindowBounce" type="OmniLight3D" parent="EnvironmentRig" unique_id=1376510691]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.7)
+light_intensity_lumens = 1500.0
+light_color = Color(0.72, 0.86, 1, 1)
+omni_range = 6.0

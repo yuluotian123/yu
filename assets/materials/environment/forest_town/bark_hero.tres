@@ -1,8 +1,10 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://h0182c6001g6"]
 
 [ext_resource type="Shader" uid="uid://bmsxj3pag3e0h" path="res://assets/shaders/town/town_toon.gdshader" id="1_f4sjj"]
-[ext_resource type="Texture2D" uid="uid://dq1puy05lgj8b" path="res://assets/textures/environment/forest_town/painterly_atlas_v3.res" id="2_deuhg"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_town/bark_painted_v4.res" id="2_deuhg"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_town/painterly_atlas_v4.res" id="2_f4sjj"]
 [ext_resource type="Texture2D" path="res://assets/textures/rendering/ggx_energy.res" id="3_f6jyg"]
+[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_town/bark_painted_v4_normal.res" id="4_f6jyg"]
 
 [resource]
 resource_name = "Forest Town · sun brushed ancient oak"
@@ -25,6 +27,11 @@ shader_parameter/weather_snow = 0.0
 shader_parameter/weather_snow_color = Color(0.91, 0.95, 1, 1)
 shader_parameter/weather_snow_roughness = 0.86
 shader_parameter/weather_time = 0.0
+shader_parameter/wet_darkening_strength = 0.8
+shader_parameter/wet_film_strength = 0.08
+shader_parameter/wet_roughness_min = 0.82
+shader_parameter/wet_specular_scale = 1.0
+shader_parameter/wet_puddle_coverage_scale = 1.0
 shader_parameter/ggx_energy_lut = ExtResource("3_f6jyg")
 shader_parameter/toon_strength = 0.85
 shader_parameter/toon_softness = 0.55
@@ -34,16 +41,23 @@ shader_parameter/painterly_dapple_strength = 0.0
 shader_parameter/painterly_dapple_scale = 0.18
 shader_parameter/painterly_shadow_lift = 0.34
 shader_parameter/painterly_path_clearance = 0.0
-shader_parameter/painterly_atlas = ExtResource("2_deuhg")
-shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/painterly_atlas = ExtResource("2_f4sjj")
+shader_parameter/base_color = Color(1.08, 1.02, 0.93, 1)
 shader_parameter/use_texture = true
 shader_parameter/albedo_texture = ExtResource("2_deuhg")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
-shader_parameter/texture_detail = 0.68
+shader_parameter/texture_detail = 0.78
 shader_parameter/use_vertex_color = true
-shader_parameter/color_saturation = 1.0
-shader_parameter/uv_scale = Vector2(1, 1)
-shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/use_vertex_coverage = false
+shader_parameter/vertex_coverage_cutoff = 0.32
+shader_parameter/use_ground_contact = false
+shader_parameter/ground_contact_rect = Vector4(0, 0, 1, 1)
+shader_parameter/ground_contact_from_vertex = false
+shader_parameter/ground_contact_height = 0.38
+shader_parameter/ground_contact_strength = 1.0
+shader_parameter/color_saturation = 0.88
+shader_parameter/uv_scale = Vector2(4.0983605, 4.0983605)
+shader_parameter/uv_offset = Vector2(-1.0368851, -1.0368851)
 shader_parameter/emission_color = Vector3(0, 0, 0)
 shader_parameter/emission_luminance_units = false
 shader_parameter/emission_intensity = 1.0
@@ -52,5 +66,6 @@ shader_parameter/surface_metallic = 0.0
 shader_parameter/specular_strength = 0.02
 shader_parameter/use_orm_texture = false
 shader_parameter/ao_light_affect = 0.0
-shader_parameter/use_normal_texture = false
-shader_parameter/normal_scale = 1.0
+shader_parameter/use_normal_texture = true
+shader_parameter/normal_texture = ExtResource("4_f6jyg")
+shader_parameter/normal_scale = 0.65

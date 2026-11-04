@@ -2,7 +2,7 @@
 
 昼夜组件持续更新世界时钟、日月方向、天空配色与云动画。原生 Environment、相机和灯光参数默认由场景资源控制；SSAO、SSIL、SDFGI、SSR、Glow、Adjustment、雾和自动曝光开关均可独立编辑。
 
-`TimeOfDayModule` 管理全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期更新环境。ForestTownLevel 引用 `relink_environment.tres` / `day_night_camera_attributes.tres` 和独立 Relink Compositor；模板位于 `res://assets/scenes/environment/day_night_environment.tscn`。这些资源的原生效果设置不会因组件刷新或 Relink 开关而自动改写。
+`TimeOfDayModule` 管理全局 `WorldClock`，`DayNightEnvironmentComponent3D` 按 EC 生命周期更新环境。ForestTownLevel 使用内联 Environment、`day_night_camera_attributes.tres` 和场景内 Relink Compositor；模板位于 `res://assets/scenes/environment/day_night_environment.tscn`。这些资源的原生效果设置不会因组件刷新或 Relink 开关而自动改写。
 
 默认 20 分钟一个游戏日、初始满月、29.53059 天一个月相周期。模板及当前关卡默认 12:00，可通过 Profile 的 StartHour 覆盖。时间受游戏速度影响，游戏暂停、时钟暂停或没有环境宿主时停止推进。返回菜单和切换关卡保留日历。旧存档没有时间数据时使用默认值。
 
@@ -28,6 +28,8 @@
 Profile 保留原有关卡的雾、曝光、灯光与泛光参考值；只有显式开启对应驱动后才应用数值。Relink 与原生后处理完全独立，切换 Relink 不再关闭原生 Glow / Adjustment 或改写 Tonemap / Exposure。
 
 日月方向和天空动画遵循世界时钟；灯光能量倍率、间接光倍率及相机曝光互不绑定，默认直接编辑场景中的灯光与 CameraAttributes。
+
+日月灯光朝向以垂直于天球轨道的固定轴构建 Basis，保留原光照方向，避免使用世界 Up 时阴影图随高空太阳额外滚转。连续推进、编辑器预览和主动跳时共用此计算。`ShadowFilterBlur` 支持 0–8；森林关卡使用 High PCF 和 6.0 过滤宽度，只柔化投影边界，未启用全画面 TAA。当前正交镜头的阴影覆盖由相机远裁剪决定，`ShadowDistance` 主要适用于透视镜头。原生静止镜头对照入口为 `scripts/tools/rendering/validate_forest_shadow_stability.gd`，记录方向一致性、墙面/树干/道路的时间变化及配对 GPU 开销；输出位于 `.godot/forest-shadow-stability/`。
 
 DriveExposureFromProfile 默认关闭，保留手动 CameraAttributes；原生 AutoExposure 开关始终独立。灯罩材质和自发光仍由对应资源控制。
 

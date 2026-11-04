@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://cxlo78735nv4m"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/interiors/07_gatherer.mesh.res" id="1_ex3he"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tk6aj"]
+size = Vector3(5.4, 0.3, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4qakw"]
+size = Vector3(1.98, 2.26, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6kc46"]
+size = Vector3(1.98, 2.26, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ppmtn"]
+size = Vector3(1.24, 0.86, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7e1bv"]
+size = Vector3(1.24, 0.56, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ycsyp"]
+size = Vector3(0.14, 2.26, 4.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bevew"]
+size = Vector3(1.94, 2, 0.16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b2gkm"]
+size = Vector3(0.14, 2.26, 4.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uadro"]
+size = Vector3(1.94, 2, 0.16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xja84"]
+size = Vector3(1.3, 2, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_owmsr"]
+size = Vector3(1.1, 0.16, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lpw3b"]
+size = Vector3(1.1, 0.6, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pyomd"]
+size = Vector3(1.25, 0.18, 0.72)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c0baf"]
+size = Vector3(1.12, 0.9, 0.24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uunwd"]
+size = Vector3(0.22, 0.57, 0.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7gqge"]
+size = Vector3(0.22, 0.57, 0.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i0kdv"]
+size = Vector3(1.15, 0.66, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_msc8d"]
+size = Vector3(0.35, 0.38, 0.33)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a2h36"]
+size = Vector3(1.35, 1.58, 0.44)
+
+[node name="GathererInterior" type="Node3D" unique_id=1192882510]
+metadata/household = "Gatherer"
+metadata/theme = "猎采架、晾晒物与采集篮"
+metadata/cutaway_interior = true
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1914338366]
+mesh = ExtResource("1_ex3he")
+
+[node name="Collision" type="StaticBody3D" parent="." unique_id=1942205118]
+collision_mask = 0
+
+[node name="Shape000" type="CollisionShape3D" parent="Collision" unique_id=1896530287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+shape = SubResource("BoxShape3D_tk6aj")
+
+[node name="Shape001" type="CollisionShape3D" parent="Collision" unique_id=1982455513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61, 1.13, -2.4)
+shape = SubResource("BoxShape3D_4qakw")
+
+[node name="Shape002" type="CollisionShape3D" parent="Collision" unique_id=854277487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61, 1.13, -2.4)
+shape = SubResource("BoxShape3D_6kc46")
+
+[node name="Shape003" type="CollisionShape3D" parent="Collision" unique_id=696722331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, -2.4)
+shape = SubResource("BoxShape3D_ppmtn")
+
+[node name="Shape004" type="CollisionShape3D" parent="Collision" unique_id=1308486314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.98, -2.4)
+shape = SubResource("BoxShape3D_7e1bv")
+
+[node name="Shape005" type="CollisionShape3D" parent="Collision" unique_id=824362237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 1.13, 0)
+shape = SubResource("BoxShape3D_ycsyp")
+
+[node name="Shape006" type="CollisionShape3D" parent="Collision" unique_id=224032240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.63, 1, 2.4)
+shape = SubResource("BoxShape3D_bevew")
+
+[node name="Shape007" type="CollisionShape3D" parent="Collision" unique_id=1364313166]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 1.13, 0)
+shape = SubResource("BoxShape3D_b2gkm")
+
+[node name="Shape008" type="CollisionShape3D" parent="Collision" unique_id=1679940410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.63, 1, 2.4)
+shape = SubResource("BoxShape3D_uadro")
+
+[node name="Shape009" type="CollisionShape3D" parent="Collision" unique_id=2037518130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2.58)
+shape = SubResource("BoxShape3D_xja84")
+
+[node name="Shape010" type="CollisionShape3D" parent="Collision" unique_id=472243589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88, 0.26, 0.25)
+shape = SubResource("BoxShape3D_owmsr")
+
+[node name="Shape011" type="CollisionShape3D" parent="Collision" unique_id=324963119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88, 0.3, 0.25)
+shape = SubResource("BoxShape3D_lpw3b")
+
+[node name="Shape012" type="CollisionShape3D" parent="Collision" unique_id=69333989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.82, 0.09, -1.92)
+shape = SubResource("BoxShape3D_pyomd")
+
+[node name="Shape013" type="CollisionShape3D" parent="Collision" unique_id=462117957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.82, 0.52, -2.16)
+shape = SubResource("BoxShape3D_c0baf")
+
+[node name="Shape014" type="CollisionShape3D" parent="Collision" unique_id=657170595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28, 0.46, -1.87)
+shape = SubResource("BoxShape3D_uunwd")
+
+[node name="Shape015" type="CollisionShape3D" parent="Collision" unique_id=831205039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36, 0.46, -1.87)
+shape = SubResource("BoxShape3D_7gqge")
+
+[node name="Shape016" type="CollisionShape3D" parent="Collision" unique_id=2096053361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 0.33, 0.3)
+shape = SubResource("BoxShape3D_i0kdv")
+
+[node name="Shape017" type="CollisionShape3D" parent="Collision" unique_id=2047009988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 0.19, 1.22)
+shape = SubResource("BoxShape3D_msc8d")
+
+[node name="Shape018" type="CollisionShape3D" parent="Collision" unique_id=1816471510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.79, -2.05)
+shape = SubResource("BoxShape3D_a2h36")

@@ -1,0 +1,77 @@
+{
+	"assets": [
+		{
+			"asset": "oak_broad",
+			"lod_counts": [
+				5,
+				1
+			],
+			"triangles": 6872,
+			"unit_normals": true
+		},
+		{
+			"asset": "hornbeam_tall",
+			"lod_counts": [
+				5,
+				1
+			],
+			"triangles": 6872,
+			"unit_normals": true
+		},
+		{
+			"asset": "oak_sweeping",
+			"lod_counts": [
+				5,
+				1
+			],
+			"triangles": 6116,
+			"unit_normals": true
+		},
+		{
+			"asset": "hazel_round",
+			"lod_counts": [
+				3,
+				2
+			],
+			"triangles": 1208,
+			"unit_normals": true
+		},
+		{
+			"asset": "hazel_tall",
+			"lod_counts": [
+				4,
+				1
+			],
+			"triangles": 1208,
+			"unit_normals": true
+		},
+		{
+			"asset": "woodland_low",
+			"lod_counts": [
+				3,
+				1
+			],
+			"triangles": 906,
+			"unit_normals": true
+		},
+		{
+			"asset": "oak_sapling",
+			"lod_counts": [
+				4,
+				1
+			],
+			"triangles": 3344,
+			"unit_normals": true
+		},
+		{
+			"asset": "fern_fan",
+			"lod_counts": [
+				2,
+				1
+			],
+			"triangles": 1278,
+			"unit_normals": true
+		}
+	],
+	"placements_changed": false
+}

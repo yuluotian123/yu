@@ -40,11 +40,11 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 
 1. 先把关卡保存为 Scene，放好出生点及 Arrival。新关卡的 Level 可以留空。
 2. 点击导出。编辑器创建或复用关卡记录，自动绑定当前 Scene，必要时创建默认地点，登记关卡引用的对象类型和地点，并保存场景、入口／对象／NPC 目录。只有一个出生点时自动采用它；多个出生点需要有与 DefaultEntry 匹配的入口。
-3. 两端关卡分别导出后，在现有 `WorldTransitionComponent3D` 选择 TargetLevel 和 TargetEntry。再导出一次，会根据自动触发的门生成 NPC 单向路线；返回门生成返回路线，无需另建 Route 资源或手填 Routes 数组。
+3. 两端关卡分别导出后，在现有 `WorldTransitionComponent3D` 选择 TargetLevel，再从 TargetEntry 的下拉列表选择目标关卡的出生点 Entry。每个切换点独立指定目标入口，进入同一个关卡也可以落在不同位置。列表来自目标关卡已导出的入口目录；也可手动填写新键，并在运行前导出目标关卡。再导出一次，会根据自动触发的门生成 NPC 单向路线；返回门生成返回路线，无需另建 Route 资源或手填 Routes 数组。
 4. 门的 `NpcTravelHours` 默认 0，表示即时跨门；需要抽象道路耗时才设置游戏小时。NPC 仍会花时间走到门口和从落点走到目标。出发位置使用门下的 UsePosition 标记，未提供时使用门宿主位置；应放在导航可达处。目的地使用 TargetEntry 对应的 Arrival。
 5. 首次导出之后，保存关卡、运行和导出游戏会继续同步自动路线。移动门或目标入口会更新坐标，改名保持身份，复制门获得独立身份，删除门移除它生成的路线。
 
-正式小镇与仓储间已按此流程从空登记表重新生成：2 个关卡、2 个默认地点、3 个对象、1 名世界 NPC、2 个入口和 2 条门路线。旧手工路线已移除。本次清理改变了关卡和地点身份，体验新配置请选择“新游戏”；正常重复导出保持身份稳定。
+正式小镇与仓储间包含 2 个关卡、2 个默认地点、3 个对象、1 名世界 NPC、4 个出生入口和 2 条门路线。每关保留 `default`，现有往返门各有专用落点。旧手工路线已移除；正常重复导出保持身份稳定。
 
 关卡／默认地点资源保存在世界配置所在目录的 `levels/`、`locations/`；自动路线作为世界配置的内嵌资源保存。重复导出更新原记录；将已有场景另存为新关卡会创建独立关卡记录，避免改掉原关卡的路径。场景尚未保存时，按钮会提示先保存。
 
@@ -59,6 +59,15 @@ F8 →“世界与关卡”可选择目标关卡和入口，查看对象已加�
 3. 创建出生点 GameObject3D，添加 `WorldSpawnPointComponent3D`。Entry 填稳定入口键，在 MarkerPath 指定原生 Marker3D（默认 `Arrival`）。标记的位置及朝向决定落点。
 4. 使用导航的关卡开启 RequireNavigation，并设置 NavigationRegionPath。切换会等待导航就绪，缺失或超时回退。仅玩家测试且无导航的关卡可关闭。
 5. 创建门 GameObject3D，添加 `WorldTransitionComponent3D`。配置 TargetLevel、TargetEntry、AreaPath，Area3D 的碰撞掩码包含玩家物理层。Automatic 开启时玩家进入触发；关闭时由交互调用 `Activate()`。
+
+现有门的配置如下：
+
+| 出发切换点 | 目标关卡 | TargetEntry | 目标落点 |
+| --- | --- | --- | --- |
+| 森林 `WorkshopPortal` | 小镇仓储间 | `from_town` | 工坊 `TownPortal/Arrival` |
+| 工坊 `TownPortal` | 森林小镇 | `from_workshop` | 森林 `WorkshopPortal/Arrival` |
+
+切换点宿主可以同时挂 `WorldSpawnPointComponent3D`，用其子节点 `Arrival` 标记从另一关返回的位置。现有两扇门已经这样配置；移动门或 Arrival 后保存／导出即可同步，默认出生点不受影响。Arrival 应放在门外的安全位置，避开触发区域和障碍物。新增其他连接时，为目标落点配置关卡内唯一的 Entry，再在来源门的 TargetEntry 选择它。
 
 每个关卡的入口键、宿主 PersistentId 和交互点身份必须各自唯一。入口不能靠同名节点猜测。切换会保留同一个玩家实例，同步物理、导航与镜头，并提供 750 ms 落地重触发保护。重复请求被拒绝；取消只作用于准备阶段。提交安排在 ProcessFrame，避免从 Area3D 物理回调直接修改物理树。
 
@@ -132,7 +141,7 @@ RequireCapacity 表示此操作必须申请使用名额；开启时类型必须�
 
 区域支持 Box、Sphere、Cylinder、Capsule，以及多个 CollisionShape3D 的并集，支持节点的旋转和缩放。禁用形状不参加判断。角色的世界位置必须位于至少一个启用形状内。区域不用物理碰撞层或 BodyEntered 事件判定权限，因此示例关闭 Monitoring 并将碰撞层／掩码设为 0；实体碰撞仍单独配置。UsePosition 仅用于自动移动，玩家与 NPC 都可以从区域的其他位置执行交互。
 
-玩家场景挂载 PlayerWorldInteractionComponent3D，并连接 WorldInteractionHUD 的 Panel、Hint、Message、Choices 节点。InputAction 为 `player_interact`，InputMap 使用物理 E 键。目标提示每 0.1 秒更新，使用区域覆盖的空间格子查询；执行时立即重新检查。背包的 GameplayBlocked、GM 的输入层以及其他 UI 焦点都会阻止玩家操作。按住 E 不重复执行。
+玩家场景挂载 PlayerWorldInteractionComponent3D，并连接 WorldInteractionHUD 的 Panel、Hint、Message、Choices 节点。InputAction 为 `player_interact`，InputMap 使用物理 E 键。目标提示每 0.1 秒更新，使用区域覆盖的空间格子查询；执行时立即重新检查。对话的 GameplayBlocked、GM 的输入层以及其他 UI 焦点都会阻止玩家操作。按住 E 不重复执行。
 
 玩家与 NPC 都通过 `WorldInteraction.Check / Execute`。统一检查角色身份、当前关卡、已加载实例、对象状态、所有权、区域、遮挡、能力、容量和业务余量。执行临时申请容量并在结束后释放；角色已经持有的租约保留给原行动管理。操作失败不能产生部分业务修改。
 
@@ -344,14 +353,7 @@ WorldPopulation：唯一角色身份、逻辑位置、旅行和事件队列
 
 F8 世界页展示角色名册、Detailed／Distant／Transit、逻辑关卡、积压和事件耗时；NPC 页可看当前活动、目标绑定和行动恢复事件。角色显示候选采用关卡空间格及有限关注集合，不每帧扫描整个人口寻找附近角色；初次建立代理、完整存档和诊断统计仍与总角色数相关。
 
-构建后运行：
-
-```powershell
-dotnet build yu.csproj --no-restore
-& '<Godot Mono 引擎路径>' --headless --path . --rendering-method gl_compatibility --audio-driver Dummy res://scripts/tools/world/world_simulation_validation.tscn
-```
-
-2026-10-23：44 项通过，覆盖三关卡两段路线、嵌套入口坐标、角色实例配置覆盖、新游戏日历起点、活动公式编辑器、途中保存、继续游戏和实时读档、离屏工作、容量竞争、到达生成、返回原关卡防重复、观测到期、封路／路线知识、活动承诺／紧急中断／回退及有界补算。临时夹具、日志与存档位于 `.godot/world-simulation-validation/`。
+离屏旅行、存档恢复与活动诊断可在正式关卡中通过 F8 世界页和 NPC 页检查。
 
 本机 headless 基础测试：24 名 NPC、快进 4 游戏小时、每切片最多 4 事件，全部取货完成，库存从 60 变为 12；手动采样的事件切片 P95 约 **1.09 ms**，population 序列化文本约 **18.3 KiB**。这只测简单串行旅行与取货，不包括完整人群玩法、渲染、显存、全部存档和 Scene 实例化峰值。默认 128 事件的预算需在目标硬件另测，不能据此承诺数千角色容量。
 
@@ -380,7 +382,7 @@ dotnet build yu.csproj --no-restore
 
 查询返回全部匹配记录，重复查询 20 次测缓存，尚未包括每个 NPC 的知识过滤、导航与 GOAP。样本很短，较小目录均值较高与 JIT、计时噪声有关，不代表规模反转。
 
-以下 NPC 表保留能力组合重构时的基线，并非本次选择器筛选扩展的复测。`world_population_validation.tscn` 固定 32 个现场点，每组同时触发 3 轮“选择目标 → 两步行动”，使用真实导航估算和规划调度。每帧统计角色状态、AI 更新与模块处理的 CPU；首组包含预热，未包含绘制、动画或实际旅行。
+以下 NPC 表保留能力组合重构时的基线，并非本次选择器筛选扩展的复测。历史基线使用 32 个现场点，每组同时触发 3 轮“选择目标 → 两步行动”，使用真实导航估算和规划调度。每帧统计角色状态、AI 更新与模块处理的 CPU；首组包含预热，未包含绘制、动画或实际旅行。
 
 | NPC | 3 轮完成帧数 | CPU P95 | CPU P99 | 托管分配／帧 |
 | --- | --- | --- | --- | --- |
@@ -390,18 +392,8 @@ dotnet build yu.csproj --no-restore
 
 三组均完成，没有规划饥饿；路径峰值 8、射线峰值 32。结果同时暴露了候选构建、GOAP 状态复制和执行快照的分配及耗时，首组有明显预热峰值。该实现是有测量依据的首期功能基线，尚不能据此承诺商业项目的人群容量。后续性能工作应先用 profiler 拆分这些峰值，再考虑快照复用、进一步分帧及状态表示优化，不能只调低软预算数值。
 
-## 验证
+## 运行检查
 
-2026-10-24：正式 NPC 日常 Goal 验证增至 40 项，覆盖初始关卡出生、走向出口、未完成行动的离屏／现场交接，以及逐物理帧的移动连续性。本次 60 Hz 验证采样 679 次，最大水平步长 0.037 m；检查点 55 项、世界模拟 44 项、世界框架 55 项与正式关卡／菜单／存档流程回归通过。
+先运行 `dotnet build yu.csproj`，再从主菜单开始新游戏，检查林间镇与仓储间的门、世界交互、NPC 旅行、返回主菜单及继续存档。编辑关卡后重新导出世界配置，确认目录和路线同步。独立测试场景、自动验证驱动与测试夹具已移除；上文性能数字保留为历史参考。
 
-2026-10-24：`scripts/tools/world/world_level_export_validation.tscn` 通过 24 项，覆盖关卡／地点／类型／NPC 自动登记、单向门、返回门、零耗时、坐标更新、复制删除、嵌套 Scene 复用、手工路线保护、另存关卡与重复导出。先运行该场景生成夹具，再运行 `--editor --headless --script res://scripts/tools/world/world_level_export_editor_validation.gd`，通过 4 项实际编辑器检查，验证导出调用编辑器保存、Scene 和路线坐标一致以及连续导出。相关回归另有自动身份 14 项、世界模拟 44 项、正式 NPC 日常 Goal 31 项通过。编辑器无头缩略图仍有 Dummy 纹理诊断，不影响保存结果和断言。
-
-`world_authoring_validation.tscn` 已通过 14 项，覆盖自动补齐能力、模板无全局身份、嵌套实例、复制顺序、改名移动、撤销重做、重开、生成目录、类型更新和独立状态；`scripts/tools/world/world_framework_validation.tscn` 已通过 55 项，覆盖目录、库存往返、卸载角色、知识权限、Unknown、独立复制、销毁禁用、空间更新、继续游戏、实时读档、失败回退、取消、会话替换、加载界面、进度完成及目录规模查询。`world_capability_validation.tscn` 已通过 20 项，覆盖能力组合、缺失能力、覆盖与独立复制、现场同步、液体事务、延迟恢复本地类型、租约重置、旧版本拒绝。`world_interaction_validation.tscn` 已通过 37 项，覆盖物理 E 输入、区域不同位置、大区域索引、操作列表、遮挡／权限／容量、NPC 公共操作提交、禁止直接写目标、独立复制及存档。`world_production_validation.tscn` 使用真实城镇、工坊、玩家、GM、物理触发门与存档，并验证库存覆盖、瓶子液体余量保存、主菜单新游戏／返回／继续链路。`world_population_validation.tscn` 提供上表压力测试。原有 `scripts/tools/npc/selector_binding_validation.tscn` 已通过 100 项，继续验证共享目标及图编辑。
-
-先运行自动身份验证生成忽略目录中的夹具，再用编辑器模式执行 `--editor --headless --script res://scripts/tools/world/world_authoring_editor_validation.gd`，已通过 13 项实际编辑器检查：后台标签页保存时补齐缺失组件、保留交互参数、连续编译与构建保留已打开场景资源、同一 Type 增删能力后同步，以及复制时保留原身份。无头缩略图生成会报告 Dummy 纹理为空。
-
-使用项目配套的 DDGI 引擎。世界无头逻辑验证可以用兼容渲染；实际场景中的 DDGI 会提示需要 Forward+ Vulkan Ray Query，这类运行不验证画面。测试文件及日志写在 `.godot/world-validation/`，不会改正式存档。
-
-当前无头日志仍有系统证书、MCP 注册权限及退出时 RefCounted 存活提示；首期真实场景验证曾以 verbose 检查退出对象，本次能力重构尚未重复完整内存审计。以上通过结果指逻辑断言通过，不能作为渲染、长期内存稳定或零泄漏验收。
-
-目录规模验证在退出前显式等待托管终结器。本机引擎在未排空终结器时曾于退出阶段的 `godotsharp_array_destroy` 崩溃；提前排空时同一组断言和进程退出均通过。该处理只用于测试清理，不在游戏循环或世界模块中强制 GC；引擎退出时序和完整内存审计仍需单独跟进。
+实际画面使用项目配套的 Forward+ Vulkan 引擎检查。无头兼容渲染只适合检查资源和逻辑，不能验收 DDGI、阴影与后处理。

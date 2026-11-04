@@ -1,0 +1,8 @@
+{
+	"all_passed": true,
+	"checks": 598,
+	"failures": 0,
+	"fence_runs": 24,
+	"isolated_normal_ab_total_difference": 6.76078433543444,
+	"runtime_materials": 4
+}

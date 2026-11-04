@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://d1bldm7ipjrut"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/structures/fence_post.mesh.res" id="1_p6jom"]
+
+[node name="FencePost" type="Node3D" unique_id=1486781018]
+metadata/asset_category = "finished_timber_structure"
+metadata/source_model = "res://assets/models/environment/forest_village/structures/fence_post.glb"
+metadata/triangles = 216
+metadata/features = ["split oak", "sloped cap", "moss tinted foot", "worn bevels"]
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=1728567043]
+mesh = ExtResource("1_p6jom")

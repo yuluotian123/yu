@@ -5,8 +5,11 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("profile")
-Origin = Vector3(-24, 0, -24)
-ProbeCounts = Vector3i(27, 8, 27)
-Spacing = 2.0
-ProbesPerFrame = 256
+Origin = Vector3(-40, -1.8, -38)
+ProbeCounts = Vector3i(32, 9, 30)
+Spacing = 2.6
+ProbesPerFrame = 512
+StableSampleDirections = true
 MaxRayDistance = 100.0
+SkyRadiance = Color(0.594852, 0.77083325, 0.70339155, 1)
+Energy = 2.5

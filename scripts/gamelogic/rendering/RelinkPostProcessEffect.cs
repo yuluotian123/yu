@@ -25,6 +25,7 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
     /// <summary>森林画面的目标逻辑高度。0 使用逐像素电影曲线。</summary>
     [Export(PropertyHint.Range, "0,1080,1")] public int PixelGridHeight { get; set; }
     private RenderingDevice _rd;
+    private RefCounted _gpuCleanup;
     private Rid _gradeShader, _gradePipeline, _bloomShader, _bloomPipeline, _filmShader, _filmPipeline, _sampler;
     private Rid _copyShader;
     private readonly System.Collections.Generic.Dictionary<long, Rid> _copyPipelines = new();
@@ -117,6 +118,11 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         _rd ??= RenderingServer.GetRenderingDevice();
         if (_rd == null) return false;
         if (_sampler.IsValid) return true;
+        // Prepare the native cleanup callback while the loader is alive. Editor
+        // shutdown may dispose ResourceLoader before this effect's Dispose runs.
+        using var cleanupScript = ResourceLoader.Load<GDScript>("res://scripts/gamelogic/rendering/relink_gpu_cleanup.gd");
+        using var cleanupInstance = cleanupScript.New();
+        _gpuCleanup = cleanupInstance.As<RefCounted>();
         _context = new StringName($"relink_post_{GetInstanceId()}");
         using var sampler = new RDSamplerState
         {
@@ -325,8 +331,10 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
 
     public void ReleaseGpuResources()
     {
-        if (_rd == null) return;
         if (!_sampler.IsValid && _viewports.Count == 0) return;
+        using var cleanup = _gpuCleanup;
+        _gpuCleanup = null;
+        if (!GodotObject.IsInstanceValid(cleanup) || !GodotObject.IsInstanceValid(_rd)) return;
         var owned = new System.Collections.Generic.List<Rid>(_copyPipelines.Values);
         owned.AddRange(new[] { _gradePipeline, _bloomPipeline, _filmPipeline, _gradeShader, _bloomShader, _filmShader, _copyShader, _sampler });
         _copyPipelines.Clear();
@@ -337,9 +345,6 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         _gradePipeline = _bloomPipeline = _filmPipeline = _gradeShader = _bloomShader = _filmShader = _sampler = default;
         _copyShader = default;
         _failed = false;
-        using var script = ResourceLoader.Load<GDScript>("res://scripts/gamelogic/rendering/relink_gpu_cleanup.gd");
-        using var instance = script.New();
-        using var cleanup = instance.As<RefCounted>();
         cleanup.Set("device", _rd);
         cleanup.Set("context", context);
         // 属性保留原生数组；C# 包装器在入队前释放，避免终结器在退出后持有 GPU 缓冲。
@@ -387,6 +392,7 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         _copyPipelines.Clear();
         _viewports.Clear();
         _rd = null;
+        _gpuCleanup = null;
         _failed = false;
     }
 

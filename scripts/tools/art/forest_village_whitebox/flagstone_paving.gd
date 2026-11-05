@@ -94,6 +94,9 @@ func build(parent: Node, earth: ShaderMaterial) -> void:
 	# Use the same opaque weather-capable ground shader for the exposed joints.
 	var soil := earth.duplicate() as ShaderMaterial
 	soil.resource_name = "Forest path · weathered earth joints"
+	soil.set_shader_parameter("weather_puddles_enabled",true)
+	soil.set_shader_parameter("wet_specular_scale",0.48)
+	soil.set_shader_parameter("wet_puddle_coverage_scale",0.48)
 	soil.set_shader_parameter("base_color",Color(1.08,1.0,0.86))
 	soil.set_shader_parameter("use_vertex_coverage",true)
 	soil.set_shader_parameter("vertex_coverage_cutoff",0.005)
@@ -105,6 +108,7 @@ func build(parent: Node, earth: ShaderMaterial) -> void:
 		wear[Vector2i(roundi(vertices[i].x/GRID),roundi(vertices[i].z/GRID))] = colors[i].a
 	var material := earth.duplicate() as ShaderMaterial
 	material.resource_name = "Forest village · worn grey flagstone"
+	material.set_shader_parameter("weather_puddles_enabled",false)
 	material.set_shader_parameter("painterly_shadow_lift",0.05)
 	material.set_shader_parameter("base_color",Color(1.10,1.04,0.94))
 	material.set_shader_parameter("color_saturation",0.90)

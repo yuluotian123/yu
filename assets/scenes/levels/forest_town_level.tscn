@@ -243,7 +243,7 @@ needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("19_flsdq")
 Profile = ExtResource("18_ialnm")
-PixelGridHeight = 360
+PixelGridHeight = 270
 
 [sub_resource type="Compositor" id="Compositor_qk2pt"]
 compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource("film")])

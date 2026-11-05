@@ -151,9 +151,10 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
     public override void OnEditorExit(GameObject3D host)
     {
         RestoreEditorCameras(host.GetInstanceId());
+        ReleasePostEffects(host.GetNodeOrNull<WorldEnvironment>(EnvironmentPath));
     }
 
-    public override void OnEditorPreSave(GameObject3D host) => OnEditorExit(host);
+    public override void OnEditorPreSave(GameObject3D host) => RestoreEditorCameras(host.GetInstanceId());
     public void OnBeforeSerialize() { if (Engine.IsEditorHint()) RestoreEditorCameras(_editorHostId); }
     public void OnAfterDeserialize() { }
 
@@ -341,20 +342,20 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
 
     private void OnClockChanged(WorldTimeState _) => _dirty = true;
 
+    private static void ReleasePostEffects(WorldEnvironment world)
+    {
+        if (!GodotObject.IsInstanceValid(world) || world.Compositor == null) return;
+        var effects = world.Compositor.CompositorEffects;
+        using var effectsOwner = (Godot.Collections.Array)effects;
+        foreach (CompositorEffect effect in effects)
+            if (effect is RelinkPostProcessEffect relink) relink.ReleaseGpuResources();
+    }
+
     public override void OnDestroy()
     {
         _cloudRadiance.Release();
         _cloudRadianceElapsed = 0;
-        if (GodotObject.IsInstanceValid(_world) && _world.Compositor != null)
-        {
-            var effects = _world.Compositor.CompositorEffects;
-            using var effectsOwner = (Godot.Collections.Array)effects;
-            foreach (CompositorEffect effect in effects)
-                if (effect is RelinkPostProcessEffect relink)
-                {
-                    relink.ReleaseGpuResources();
-                }
-        }
+        ReleasePostEffects(_world);
         if (_time != null)
         {
             _time.Clock.Changed -= OnClockChanged;

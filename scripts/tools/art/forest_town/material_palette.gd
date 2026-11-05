@@ -129,6 +129,9 @@ func apply() -> void:
 	grass.set_shader_parameter("color_saturation",1.08)
 	grass.set_shader_parameter("texture_detail",0.52)
 	apply_surface_response(grass,"soil")
+	grass.set_shader_parameter("weather_puddles_enabled",true)
+	grass.set_shader_parameter("wet_specular_scale",0.48)
+	grass.set_shader_parameter("wet_puddle_coverage_scale",0.48)
 	DirAccess.make_dir_recursive_absolute(GRASS.get_base_dir())
 	save_resource(grass,GRASS)
 

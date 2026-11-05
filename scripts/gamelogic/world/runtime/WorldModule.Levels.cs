@@ -260,7 +260,9 @@ public sealed partial class WorldModule
         Player.GetComponent<NpcNavigationComponent3D>()?.Stop();Player.ResetPhysicsInterpolation();
         ModuleSystem.GetModule<ICameraModule>().Follow(Player,true);
     }
-    public void Close()
+    public void Close() => Close(false);
+
+    private void Close(bool shuttingDown)
     {
         ++_operation;_transition?.Cancel();_transition=null;_loading?.Dispose();_loading=null;_committing=false;_restoreRequested=false;
         _loadingUi?.CloseUI<LevelLoadingWindow>();
@@ -269,7 +271,17 @@ public sealed partial class WorldModule
         Population?.Close();
         if(_ownsLevel&&GodotObject.IsInstanceValid(_activeLevel))_activeLevel.Free();
         if(GodotObject.IsInstanceValid(_sessionRoot))ModuleSystem.GetModule<ITimeOfDayModule>().Detach(_sessionRoot);
-        if(GodotObject.IsInstanceValid(_sessionRoot))_sessionRoot.Free();
+        if(GodotObject.IsInstanceValid(_sessionRoot))
+        {
+            if(shuttingDown)
+            {
+                // StandaloneModules exits while the viewport is removing children. Destroy
+                // actors while their modules are available, then retire the empty sibling safely.
+                if(GodotObject.IsInstanceValid(_actorsRoot))_actorsRoot.Free();
+                _sessionRoot.QueueFree();
+            }
+            else _sessionRoot.Free();
+        }
         _activeHandle?.Dispose();_playerHandle?.Dispose();_activeHandle=_playerHandle=null;
         _activeLevel=null;_sessionRoot=_actorsRoot=_levelsRoot=null;Player=null;CurrentContext=null;CurrentLevelId="";_ownsLevel=false;
         _objects.Clear();_localDefinitions.Clear();Status="未进入世界";

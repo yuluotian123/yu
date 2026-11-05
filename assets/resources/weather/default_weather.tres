@@ -5,4 +5,5 @@
 [resource]
 script = ExtResource("1")
 RainOpacity = 0.6
+PuddleRoughness = 0.17
 RippleStrength = 0.25

@@ -166,5 +166,5 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
         WorldCatalog.Require(v.All(float.IsFinite),"玩家变换包含非有限数值。");
         return new(new Basis(new(v[0],v[1],v[2]),new(v[3],v[4],v[5]),new(v[6],v[7],v[8])),new(v[9],v[10],v[11]));
     }
-    public override void Shutdown(){Close();_save?.UnregisterSection(this);_levels.Clear();_points.Clear();_instances.Clear();_localDefinitions.Clear();_environments.Clear();}
+    public override void Shutdown(){Close(true);_save?.UnregisterSection(this);_levels.Clear();_points.Clear();_instances.Clear();_localDefinitions.Clear();_environments.Clear();}
 }

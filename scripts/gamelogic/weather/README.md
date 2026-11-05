@@ -43,7 +43,7 @@ GDScript / Graph 可通过宿主 `weather` 元数据调用 `SetWeather`、`SetAu
 
 ForestTownLevel 的 EnvironmentRig 还挂载 `WeatherSurfaceComponent3D`，`SurfaceRootPath = ../Village`。它复制作用范围内的材质并绑定原网格，退出/回收时恢复原绑定；贴图、树叶风动与边缘光仍使用原资源。河流、透明玻璃、天空、人物纸片不替换材质。
 
-森林聚落的装饰石板与石缝均使用同一 `town_toon.gdshader` 天气流程，接收原生阴影，并在路面自身形成积雪、积水和雨滴涟漪。石缝采用不透明顶点覆盖裁剪，不再用晚于天气/光照处理的透明叠层覆盖地面。石板没有独立碰撞，原地形继续负责行走支撑。
+森林聚落共用 `town_toon.gdshader`。降雨时泥地和石缝使用相同的世界坐标积水掩码，水面形成涟漪。凸起的装饰石板只受雨水浸湿。石缝采用不透明顶点覆盖裁剪，原地形继续负责行走支撑。
 
 雨雪逐渐加深建筑、路面、道具和植物的底色、降低粗糙度并增加水膜反射。雪天默认按雨天 55% 的程度湿润，并独立积累雪量；雪覆盖的区域转为柔和的粗糙雪面，压制下面的水膜反射。雨天另在启用 `weather_puddles_enabled` 的材质上积水。当前标记铺装石材 `Town_Structures_0.tres` 和路缘石 `Town_Structures_2.tres`，覆盖道路、桥面及路缘石，并根据朝上法线限制积水，墙面和树叶不会变成水塘。建筑与这两个地面材质统一使用 `town_toon.gdshader`；铺装、路缘石通过 `toon_strength = 0` 保留 Burley 漫反射，建筑默认 1。直接光的 Toon 明暗与 PBR 反射分开处理，非金属的天空和 SSR 反射保持有效。
 
@@ -56,7 +56,7 @@ Profile 的 `Wet Surfaces (Game Hours)` 可以调整：
 - `DryingHours = 1.5` / `PuddleDryingHours = 3`：停雨后表面约 75 秒、积水约 150 秒的衰减时间。
 - 这些值是指数变化的时间常数，经过一个时间常数变化约 63%；强度越小，最终湿润和积水越少。上述秒数按时钟默认 1200 秒一天换算；当前 ForestTownLevel 的 `DayLengthSeconds = 4800`，对应时间为四倍，积水时间常数为 120 秒。暂停时通过 GM「地面积水」直接预览。
 - `WetDarkening`、`PuddleCoverage`、`PuddleScale`：湿润压暗量、局部积水覆盖率和形状大小。
-- `WetRoughness = 0.14` / `PuddleRoughness = 0.045`：建筑、路面及标准 PBR 表面的水膜/积水目标粗糙度。水膜使用归一化指数响应；含水量 0.8 时，原粗糙度为 1 的表面降至约 0.16，而非旧算法的 0.42。植物保留较柔和的原有湿润高光。
+- 水膜的目标粗糙度为 `WetRoughness = 0.14`。森林使用的 `default_weather.tres` 将积水粗糙度设为 `PuddleRoughness = 0.17`，使倒影略微散开。泥地和石缝的覆盖系数均为 0.48。
 - `WetSpecular = 0.6`：上述水膜的非金属反射强度，沿用 Godot specular 语义；0.354 约对应物理水的正面 2% 反射，默认增强到约 5.8% 以适配卡通路面。积水的直接高光由统一 Shader 计算 Fresnel，天空/SSR 的 Fresnel 由原生 PBR 计算；干燥时恢复原材质的 specular。
 - `PuddleCoverage` 默认 0.62，可增加局部积水面积；不改变水膜的反射来源。
 - `SnowWetness`：雪天湿润比例；`WetSurfacesEnabled`：开关。

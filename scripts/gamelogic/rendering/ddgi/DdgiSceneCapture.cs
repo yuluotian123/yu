@@ -273,7 +273,8 @@ internal sealed class DdgiSceneCapture
             if (kind > 0)
             {
                 weather = new(Param(material, "weather_wetness", 0f), Param(material, "weather_puddles", 0f), Param(material, "weather_snow", 0f), Param(material, "weather_darkening", .24f));
-                puddles = new(Param(material, "weather_puddles_enabled", false) ? 1 : 0, Param(material, "weather_puddle_coverage", .55f), Param(material, "weather_puddle_scale", .85f), 0);
+                float coverage = Param(material, "weather_puddle_coverage", .55f) * Param(material, "wet_puddle_coverage_scale", 1f);
+                puddles = new(Param(material, "weather_puddles_enabled", false) ? 1 : 0, coverage, Param(material, "weather_puddle_scale", .85f), 0);
                 snowColor = Param(material, "weather_snow_color", new Color(.91f, .95f, 1)).SrgbToLinear();
             }
         }

@@ -22,6 +22,8 @@ namespace Framework.UI
         public override void OnInit()
         {
             _resource = ModuleSystem.GetModule<IResourceModule>();
+            // UI subscriptions must be removed before the event module shuts down.
+            ModuleSystem.GetModule<IEventModule>();
             _tree = Engine.GetMainLoop() as SceneTree;
 
             // Directly running a gameplay scene has no bootstrap Root/UICanvas.

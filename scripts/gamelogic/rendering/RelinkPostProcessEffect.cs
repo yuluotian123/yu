@@ -17,13 +17,27 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         {
             _pass = value;
             EffectCallbackType = value == PassKind.ColorGrade ? EffectCallbackTypeEnum.PreTransparent : EffectCallbackTypeEnum.PostTransparent;
-            AccessResolvedDepth = value == PassKind.ColorGrade;
+            AccessResolvedDepth = value == PassKind.ColorGrade || _pixelGridHeight > 0;
             ResourceName = value == PassKind.ColorGrade ? "Relink · HDR LUT (Before Transparency)" : "Relink · Film + Bloom (After Transparency)";
         }
     }
     [Export] public RelinkPostProcessProfile Profile { get; set; }
     /// <summary>森林画面的目标逻辑高度。0 使用逐像素电影曲线。</summary>
-    [Export(PropertyHint.Range, "0,1080,1")] public int PixelGridHeight { get; set; }
+    private int _pixelGridHeight;
+    [Export(PropertyHint.Range, "0,1080,1")] public int PixelGridHeight
+    {
+        get => _pixelGridHeight;
+        set
+        {
+            _pixelGridHeight = value;
+            AccessResolvedDepth = _pass == PassKind.ColorGrade || value > 0;
+        }
+    }
+    internal const string CharacterSpriteGroup = "relink_character_sprites";
+    private readonly record struct SpriteQuad(Vector3 Origin, Vector3 Up, Rect2 Bounds);
+    private volatile SpriteQuad[] _sprites = System.Array.Empty<SpriteQuad>();
+    private Rid _spriteBuffer;
+    private int _spriteCapacity;
     private RenderingDevice _rd;
     private RefCounted _gpuCleanup;
     private Rid _gradeShader, _gradePipeline, _bloomShader, _bloomPipeline, _filmShader, _filmPipeline, _sampler;
@@ -38,6 +52,33 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
     public bool HasShaderError => _failed;
     public long GetRenderCount() => System.Threading.Interlocked.Read(ref _renderCount);
     public string GetRenderStatus() => _renderStatus;
+
+    // Snapshot the live billboard frames on the scene thread. Each view uses its own projection.
+    internal static void CaptureCharacterSprites(WorldEnvironment world)
+    {
+        if (world?.Compositor == null) return;
+        var effects = world.Compositor.CompositorEffects;
+        using var effectsOwner = (Godot.Collections.Array)effects;
+        foreach (var effect in effects)
+        {
+            if (effect is not RelinkPostProcessEffect film || film.Pass != PassKind.FilmAndBloom || film.PixelGridHeight <= 0) continue;
+            var quads = new System.Collections.Generic.List<SpriteQuad>();
+            var nodes = world.GetTree().GetNodesInGroup(CharacterSpriteGroup);
+            var sceneWorld = world.GetViewport().FindWorld3D();
+            using var nodesOwner = (Godot.Collections.Array)nodes;
+            foreach (var node in nodes)
+            {
+                if (node is not AnimatedSprite3D sprite || !sprite.IsVisibleInTree() || sprite.GetWorld3D() != sceneWorld
+                    || sprite.Billboard != BaseMaterial3D.BillboardModeEnum.FixedY || sprite.Axis != Vector3.Axis.Z) continue;
+                Transform3D pose = sprite.IsPhysicsInterpolatedAndEnabled() ? sprite.GetGlobalTransformInterpolated() : sprite.GlobalTransform;
+                Aabb box = sprite.GetAabb();
+                Vector2 scale = new(pose.Basis.X.Length(), pose.Basis.Y.Length());
+                quads.Add(new(pose.Origin, pose.Basis.Y.Normalized(), new Rect2(new Vector2(box.Position.X, box.Position.Y) * scale,
+                    new Vector2(box.Size.X, box.Size.Y) * scale)));
+            }
+            film._sprites = quads.ToArray();
+        }
+    }
 
     /// <summary>运行时隔离当前合成器的可变参数，同时保留两个阶段对同一 Profile 的共享。</summary>
     public static void MakeProfilesLocal(Compositor compositor)
@@ -283,11 +324,73 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         var uniforms = new Array<RDUniform> { ImageUniform(0, color) };
         for (int i = 0; i < levels.Length; i++) uniforms.Add(SampleUniform(i + 1, levels[i]));
         int block = PixelGridHeight > 0 ? Math.Clamp(Mathf.RoundToInt((float)size.Y / PixelGridHeight), 1, 12) : 1;
+        Rid depth = block > 1 ? buffers.GetDepthLayer(view, false) : default;
+        int spriteCount = BindCharacterPlanes(uniforms, scene, view, depth.IsValid);
+        uniforms.Add(SampleUniform(6, depth.IsValid ? depth : color));
         Vector2I start = PixelGridStart(scene, view, size, block);
         var grid = new Vector2I((size.X - start.X + block - 1) / block, (size.Y - start.Y + block - 1) / block);
         Dispatch(_filmShader, _filmPipeline, uniforms, grid,
             new float[] { size.X, size.Y, Mathf.Max(.01f, Profile.Exposure), bloomEnabled ? Mathf.Clamp(Profile.BloomIntensity, 0, 1) : 0,
-                block, start.X, start.Y, 0 });
+                block, start.X, start.Y, spriteCount });
+    }
+
+    private int BindCharacterPlanes(Array<RDUniform> uniforms, RenderSceneData scene, uint view, bool needPlanes)
+    {
+        var quads = needPlanes ? _sprites : System.Array.Empty<SpriteQuad>();
+        float[] data = new float[quads.Length * 8];
+        var camera = scene.GetCamTransform();
+        var inverse = camera.AffineInverse();
+        var eye = scene.GetViewEyeOffset(view);
+        var projection = scene.GetViewProjection(view);
+        int count = 0;
+        foreach (var quad in quads)
+        {
+            Vector3 right = quad.Up.Cross(camera.Basis.X.Cross(quad.Up)).Normalized();
+            Vector4 Project(Vector2 xy)
+            {
+                Vector3 p = inverse * (quad.Origin + right * xy.X + quad.Up * xy.Y) - eye;
+                return projection * new Vector4(p.X, p.Y, p.Z, 1);
+            }
+            Vector2 start = quad.Bounds.Position, end = quad.Bounds.End;
+            Vector4 a = Project(start), b = Project(new(end.X, start.Y)), c = Project(new(start.X, end.Y)), d = Project(end);
+            if (Mathf.Min(Mathf.Min(a.W, b.W), Mathf.Min(c.W, d.W)) <= 0.0001f) continue;
+            a /= a.W;
+            b /= b.W;
+            c /= c.W;
+            d /= d.W;
+            Vector3 u = new(b.X - a.X, b.Y - a.Y, b.Z - a.Z);
+            Vector3 v = new(c.X - a.X, c.Y - a.Y, c.Z - a.Z);
+            Vector3 plane = u.Cross(v);
+            if (Mathf.Abs(plane.Z) < 1e-9f) continue;
+            // Device depth is affine in screen x/y over the sprite quad.
+            float dx = -plane.X / plane.Z, dy = -plane.Y / plane.Z;
+            int i = count * 8;
+            data[i] = Mathf.Min(Mathf.Min(a.X, b.X), Mathf.Min(c.X, d.X));
+            data[i + 1] = Mathf.Min(Mathf.Min(a.Y, b.Y), Mathf.Min(c.Y, d.Y));
+            data[i + 2] = Mathf.Max(Mathf.Max(a.X, b.X), Mathf.Max(c.X, d.X));
+            data[i + 3] = Mathf.Max(Mathf.Max(a.Y, b.Y), Mathf.Max(c.Y, d.Y));
+            data[i + 4] = dx;
+            data[i + 5] = dy;
+            data[i + 6] = a.Z - dx * a.X - dy * a.Y;
+            count++;
+        }
+        int byteCount = Math.Max(32, count * 32);
+        if (!_spriteBuffer.IsValid || _spriteCapacity < byteCount)
+        {
+            if (_spriteBuffer.IsValid) _rd.FreeRid(_spriteBuffer);
+            _spriteBuffer = _rd.StorageBufferCreate((uint)byteCount);
+            _spriteCapacity = byteCount;
+        }
+        if (count > 0)
+        {
+            byte[] bytes = new byte[byteCount];
+            System.Buffer.BlockCopy(data, 0, bytes, 0, byteCount);
+            _rd.BufferUpdate(_spriteBuffer, 0, (uint)byteCount, bytes);
+        }
+        var planes = new RDUniform { UniformType = RenderingDevice.UniformType.StorageBuffer, Binding = 7 };
+        planes.AddId(_spriteBuffer);
+        uniforms.Add(planes);
+        return count;
     }
 
     private void BloomPass(Rid source, Rid destination, Vector2I size, int mode)
@@ -336,6 +439,8 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         _gpuCleanup = null;
         if (!GodotObject.IsInstanceValid(cleanup) || !GodotObject.IsInstanceValid(_rd)) return;
         var owned = new System.Collections.Generic.List<Rid>(_copyPipelines.Values);
+        owned.Add(_spriteBuffer);
+        _spriteBuffer = default;
         owned.AddRange(new[] { _gradePipeline, _bloomPipeline, _filmPipeline, _gradeShader, _bloomShader, _filmShader, _copyShader, _sampler });
         _copyPipelines.Clear();
         WeakRef[] viewports = new WeakRef[_viewports.Count];
@@ -393,6 +498,7 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         _viewports.Clear();
         _rd = null;
         _gpuCleanup = null;
+        _spriteBuffer = default;
         _failed = false;
     }
 

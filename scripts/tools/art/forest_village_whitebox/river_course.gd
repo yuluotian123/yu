@@ -6,6 +6,8 @@ const BASE_WIDTH := 3.12
 const TOP_MARGIN := 0.40
 const LAND_OVERLAP := 0.08
 const WATER_OVERLAP := 0.035
+const CLIP_STEP := 0.1
+const CLIP_GUARD := 0.005
 var exclusions: Dictionary = {}
 
 func banks(z: float) -> Vector2:
@@ -29,12 +31,15 @@ func land_polygons(polygon: PackedVector2Array, margin := TOP_MARGIN) -> Array:
 	if max_x < 24.5 or min_x > 31.8: return [polygon]
 	if not exclusions.has(margin):
 		var mask := PackedVector2Array()
-		for i in range(181):
-			var z := -45.0+i*.5
-			mask.append(Vector2(banks(z).x-margin,z))
-		for i in range(180,-1,-1):
-			var z := -45.0+i*.5
-			mask.append(Vector2(banks(z).y+margin,z))
+		# Short chords and an outward guard keep the curved bank clear between samples,
+		# including the tight bend where the washing landing joins the natural shore.
+		var steps := ceili(90.0/CLIP_STEP)
+		for i in range(steps+1):
+			var z := -45.0+i*CLIP_STEP
+			mask.append(Vector2(banks(z).x-margin-CLIP_GUARD,z))
+		for i in range(steps,-1,-1):
+			var z := -45.0+i*CLIP_STEP
+			mask.append(Vector2(banks(z).y+margin+CLIP_GUARD,z))
 		exclusions[margin] = mask
 	return Geometry2D.clip_polygons(polygon,exclusions[margin])
 

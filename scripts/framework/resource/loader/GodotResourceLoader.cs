@@ -13,6 +13,8 @@ namespace Framework
         private readonly Dictionary<string, ResourceLoadTask> _allTasks;
         private readonly Queue<string> _waitingQueue;
         private readonly List<string> _completedPaths;
+        private readonly HashSet<string> _preparedDependencies = new();
+        private readonly List<Script> _scriptDependencies = new();
 
         public GodotResourceLoader(int maxConcurrent = 8)
         {
@@ -106,14 +108,54 @@ namespace Framework
             foreach (var task in taskSnapshot)
                 task.CancelAll(reason);
 
+            // Cancelling our handles does not cancel Godot's native worker. Drain
+            // started requests before the engine tears down scripts and materials.
+            foreach (var task in taskSnapshot)
+            {
+                if (!task.IsStarted || ResourceLoader.LoadThreadedGetStatus(task.Path) == ResourceLoader.ThreadLoadStatus.InvalidResource)
+                    continue;
+                // The result may share its managed wrapper with another owner.
+                // Consume the request without disposing that shared resource.
+                _ = ResourceLoader.LoadThreadedGet(task.Path);
+            }
+
             _allTasks.Clear();
             _waitingQueue.Clear();
             _completedPaths.Clear();
             _activeCount = 0;
+            _preparedDependencies.Clear();
+            _scriptDependencies.Clear();
+        }
+
+        private void PrepareScriptDependencies(string path)
+        {
+            if (!_preparedDependencies.Add(path)) return;
+            if (path.EndsWith(".cs", System.StringComparison.OrdinalIgnoreCase))
+            {
+                // Register C# exports on the scene thread before a worker constructs
+                // resources that use them. Keep scripts alive for this loader session.
+                var script = ResourceLoader.Load<Script>(path);
+                if (script != null)
+                {
+                    using var properties = (Godot.Collections.Array)script.GetScriptPropertyList();
+                    _scriptDependencies.Add(script);
+                }
+                return;
+            }
+            string extension = path.GetExtension().ToLowerInvariant();
+            if (extension is not ("tscn" or "tres" or "res")) return;
+            foreach (string dependency in ResourceLoader.GetDependencies(path))
+            {
+                // With UIDs Godot returns uid::::fallback_path; older assets return paths.
+                int separator = dependency.LastIndexOf("::", System.StringComparison.Ordinal);
+                string source = separator >= 0 ? dependency[(separator + 2)..] : dependency;
+                PrepareScriptDependencies(source);
+            }
         }
 
         private void StartTask(ResourceLoadTask task, string typeHint = "")
         {
+            PrepareScriptDependencies(task.Path);
             // C# script-backed typed arrays must finish dependency registration in order.
             // The request remains asynchronous; nested dependency workers can race script registration.
             var err = ResourceLoader.LoadThreadedRequest(task.Path, typeHint, useSubThreads: false);

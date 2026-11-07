@@ -68,6 +68,8 @@ namespace GameLogic
             _sprite = Owner.GetNodeOrNull<AnimatedSprite3D>(SpritePath);
             if (_sprite == null)
                 Debugger.Warn("[CharacterAnimationComponent3D] Missing AnimatedSprite3D.");
+            else
+                _sprite.AddToGroup(RelinkPostProcessEffect.CharacterSpriteGroup);
             AnimationInstance = new CharacterAnimationInstance();
             AnimationInstance.Initialize(Owner, LocomotionGraph, new AnimatedSprite3DPlaybackBackend(_sprite));
             if (LocomotionRuntime != null)
@@ -81,9 +83,18 @@ namespace GameLogic
 
         public override void OnDestroy()
         {
+            if (GodotObject.IsInstanceValid(_sprite) && _sprite.IsInGroup(RelinkPostProcessEffect.CharacterSpriteGroup))
+                _sprite.RemoveFromGroup(RelinkPostProcessEffect.CharacterSpriteGroup);
             AnimationInstance?.Dispose();
             AnimationInstance = null;
             _sprite = null;
+        }
+
+        public override void OnEditorUpdate(GameObject3D host)
+        {
+            var sprite = host.GetNodeOrNull<AnimatedSprite3D>(SpritePath);
+            if (sprite != null && !sprite.IsInGroup(RelinkPostProcessEffect.CharacterSpriteGroup))
+                sprite.AddToGroup(RelinkPostProcessEffect.CharacterSpriteGroup);
         }
 
         public void RequestAnimation(

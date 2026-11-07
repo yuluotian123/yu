@@ -2,6 +2,8 @@
 
 Resource Module 封装 Godot 资源加载、异步句柄、引用归还、LRU 缓存、场景实例化和运行时 profiler。业务代码应通过 `IResourceModule` 管理长期资源，避免散落 `ResourceLoader.Load()`。
 
+异步请求开始前，加载器在场景线程注册资源依赖中的 C# 脚本，并在本次加载器生命周期内保留脚本引用，避免原生工作线程首次注册导出属性时留下无主对象。纹理、网格和场景数据仍异步加载。关闭加载器时先取消业务句柄，再收尾已启动的原生加载，防止引擎退出时仍在解析场景；共享资源交还正常引用管理，不手动 Dispose。
+
 ## 核心类型
 
 - `IResourceModule` / `ResourceModule`：加载、释放、缓存和 profiler 入口。

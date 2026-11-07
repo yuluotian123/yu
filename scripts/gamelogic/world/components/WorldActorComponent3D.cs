@@ -22,5 +22,8 @@ public partial class WorldActorComponent3D : Component3D
         if(Owner.GetComponent<CharacterPersistenceComponent3D>() is {} persistence)persistence.Persist=false;
         ((WorldModule)ModuleSystem.GetModule<IWorldModule>()).Population?.Bind(this);
     }
-    public override void OnDestroy()=>((WorldModule)ModuleSystem.GetModule<IWorldModule>()).Population?.Unbind(this);
+    public override void OnDestroy()
+    {
+        if(ModuleSystem.TryGetModule<IWorldModule>(out var world))((WorldModule)world).Population?.Unbind(this);
+    }
 }

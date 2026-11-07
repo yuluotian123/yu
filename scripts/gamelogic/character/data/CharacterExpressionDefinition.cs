@@ -15,7 +15,10 @@ public partial class CharacterExpressionDefinition : Resource
     [Export] public double Number {get;set;}
     [Export] public bool Boolean {get;set;}
     [Export] public string Symbol {get;set;}="";
-    [Export] public Godot.Collections.Array<CharacterExpressionDefinition> Inputs {get;set;}=new();
+    private Godot.Collections.Array<CharacterExpressionDefinition> _inputs;
+    // A typed array in this script's export defaults retains the script itself.
+    // Allocate it per resource instead, so the native script cache can release it.
+    [Export] public Godot.Collections.Array<CharacterExpressionDefinition> Inputs {get=>_inputs??=new();set=>_inputs=value;}
     public override void _ValidateProperty(Godot.Collections.Dictionary property)
     {
         string name=property["name"].AsString();

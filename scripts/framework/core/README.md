@@ -19,6 +19,8 @@ IEventModule events = ModuleSystem.GetModule<IEventModule>();
 
 `GetModule<T>()` 只接受接口。首次请求时创建实现并调用 `OnInit()`，后续返回同一实例。
 
+组件销毁时需要注销状态，使用 `TryGetModule<T>(out var module)` 查询现有实例。它不会初始化模块；即使模块先于场景关闭，也不会在退出途中重新创建 UI 或资源缓存。
+
 自定义实现无法按命名约定发现时，可以显式注册：
 
 ```csharp

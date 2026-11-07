@@ -49,7 +49,11 @@ public partial class WorldObjectComponent3D : Component3D
         host??=Owner;if(host!=null)foreach(var point in components.OfType<WorldInteractionComponent3D>())point.ValidatePlacement(host);
     }
     internal void BindState(WorldObjectState state)=>State=state;
-    public override void OnDestroy(){Session.UnregisterObject(this);State=null;}
+    public override void OnDestroy()
+    {
+        if(ModuleSystem.TryGetModule<IWorldModule>(out var world))((WorldModule)world).UnregisterObject(this);
+        State=null;
+    }
 #if TOOLS
     GameObject3D _editorHost;
     readonly Dictionary<ulong,int> _editorSignatures=new();

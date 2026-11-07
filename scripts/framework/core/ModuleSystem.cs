@@ -58,6 +58,14 @@ namespace Framework
             }
         }
 
+        // Teardown must not lazily recreate dependencies that have already shut down.
+        public static bool TryGetModule<T>(out T module) where T : class
+        {
+            ValidateContract(typeof(T));
+            module = _moduleMaps.TryGetValue(typeof(T), out var existing) ? (T)(object)existing : null;
+            return module != null;
+        }
+
         public static T GetModule<T>() where T : class
         {
             Type contract = typeof(T);

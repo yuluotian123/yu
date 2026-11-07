@@ -74,5 +74,9 @@ public partial class CharacterDataComponent3D : Component3D, ISaveSection
         if(version!=SchemaVersion||State==null)return;
         State.Restore(data);WorldKnowledge.Restore(data["world_knowledge"] as JsonObject);Restored?.Invoke();
     }
-    public override void OnDestroy(){if(Persist)ModuleSystem.GetModule<ISaveModule>()?.UnregisterSection(this);Restored=null;State=null;}
+    public override void OnDestroy()
+    {
+        if(Persist&&ModuleSystem.TryGetModule<ISaveModule>(out var save))save.UnregisterSection(this);
+        Restored=null;State=null;
+    }
 }

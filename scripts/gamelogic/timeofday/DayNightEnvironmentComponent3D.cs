@@ -63,6 +63,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
         }
         if (_editorHostId != 0 && _editorHostId != host.GetInstanceId()) RestoreEditorCameras(_editorHostId);
         _editorHostId = host.GetInstanceId();
+        RelinkPostProcessEffect.CaptureCharacterSprites(world);
         double hour = Profile.StartHour;
         Profile.ApplyAtmosphere(world.Environment, sky, hour);
         Profile.ApplyLighting(world.Environment, sun, moon, world.CameraAttributes as CameraAttributesPhysical, hour, Profile.StartLunarPhase);
@@ -207,6 +208,7 @@ public partial class DayNightEnvironmentComponent3D : Component3D, ISerializatio
     public override void OnUpdate(double delta)
     {
         if (_time == null) return;
+        RelinkPostProcessEffect.CaptureCharacterSprites(_world);
         // 阴影方向逐帧更新；快进时环境也必须跟上游戏时间，避免 10 Hz 光强台阶。
         WorldTimeState state = _time.Clock.State;
         _profile.ApplyLightDirections(_sun, _moon, state.Hour, state.LunarPhase);

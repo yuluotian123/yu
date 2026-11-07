@@ -56,7 +56,11 @@ func run() -> void:
 	assert(ddgi != null)
 	var profile: Resource = ddgi.get("Profile")
 	assert(is_equal_approx(float(profile.get("Energy")),2.5))
-	assert(is_equal_approx(float(profile.get("Spacing")),2.6))
+	var probe_counts: Vector3i = profile.get("ProbeCounts")
+	var probe_bounds := AABB(profile.get("Origin"), Vector3(probe_counts - Vector3i.ONE) * float(profile.get("Spacing")))
+	for instance: GeometryInstance3D in scene.get_node("Village").find_children("*", "GeometryInstance3D", true, false):
+		if instance.is_visible_in_tree():
+			assert(probe_bounds.encloses(instance.global_transform * instance.get_aabb()), "Outside forest DDGI: %s" % instance.get_path())
 	var day: Resource = rig.get_meta("time_of_day")
 	for light_name in ["Sun","Moon"]:
 		var light: DirectionalLight3D = rig.get_node(light_name)
@@ -165,8 +169,23 @@ func run() -> void:
 	assert(stones.multimesh.instance_count == 40 and stones.multimesh.buffer.size() == 40*12)
 	assert(stones.find_children("*","CollisionShape3D",true,false).is_empty())
 	var litter: MeshInstance3D = village.get_node("GroundContact/RootLitter")
-	for vertex: Vector3 in litter.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]:
-		assert(course.dry(Vector2(vertex.x,vertex.z),.395),"Root litter must remain outside the river bank")
+	var litter_arrays := litter.mesh.surface_get_arrays(0)
+	var litter_vertices: PackedVector3Array = litter_arrays[Mesh.ARRAY_VERTEX]
+	for vertex: Vector3 in litter_vertices:
+		assert(course.dry(Vector2(vertex.x,vertex.z),.395),"Root litter must remain outside the river bank: %s" % vertex)
+	var litter_indices: PackedInt32Array = litter_arrays[Mesh.ARRAY_INDEX]
+	if litter_indices.is_empty():
+		litter_indices.resize(litter_vertices.size())
+		for i in litter_indices.size(): litter_indices[i] = i
+	for i in range(0,litter_indices.size(),3):
+		for edge in 3:
+			var a := litter_vertices[litter_indices[i+edge]]
+			var b := litter_vertices[litter_indices[i+(edge+1)%3]]
+			if maxf(a.x,b.x) < 24.5 or minf(a.x,b.x) > 31.8: continue
+			var steps := maxi(1,ceili(a.distance_to(b)/.05))
+			for step in range(1,steps):
+				var point := a.lerp(b,float(step)/steps)
+				assert(course.dry(Vector2(point.x,point.z),.395),"Root litter edge must remain outside the curved bank: %s" % point)
 	camera.position = Vector3(28.2,4.3,34.5)
 	camera.look_at(Vector3(27.9,-.15,20.0),Vector3.UP)
 	await frames(90)

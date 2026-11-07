@@ -33,7 +33,7 @@ namespace GameLogic
 
         public override void OnDestroy()
         {
-            ModuleSystem.GetModule<ISaveModule>()?.UnregisterSection(this);
+            if (ModuleSystem.TryGetModule<ISaveModule>(out var save)) save.UnregisterSection(this);
         }
 
         public JsonObject Capture()

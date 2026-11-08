@@ -1,6 +1,6 @@
 {
   "model": "Local MiniMax H3 int8 8-step, 512x512 24fps; no partner API",
-  "static_images": "Built-in imagegen: weapon-only edits of katana_v3 guard, follow and apex",
+  "static_images": "内置生图基于当时主角姿势进行武器替换；旧太刀参考已按清理要求删除，保留大剑成稿与制作源。",
   "jobs": [
     {
       "action": "idle",
@@ -69,19 +69,16 @@
   "static_sources": [
     {
       "pose": "guard",
-      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/guard-master.png",
       "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/guard-master.png",
       "purpose": "weapon-only edit; preserve current katana player identity"
     },
     {
       "pose": "follow",
-      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/follow-master.png",
       "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/follow-master.png",
       "purpose": "weapon-only edit; preserve current katana player identity"
     },
     {
       "pose": "apex",
-      "identity_reference": "assets/textures/sprites/amber_fox_style_v2/katana_v3/sources/apex-master.png",
       "edited_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/sources/apex-master.png",
       "purpose": "weapon-only edit; preserve current katana player identity"
     }

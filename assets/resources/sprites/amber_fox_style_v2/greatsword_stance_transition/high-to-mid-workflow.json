@@ -1,0 +1,284 @@
+{
+  "92": {
+    "inputs": {
+      "filename_prefix": "video/greatsword_transition_high_mid_aligned",
+      "format": "mov",
+      "video": [
+        "105:91",
+        0
+      ],
+      "format.codec": "prores"
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "114": {
+    "inputs": {
+      "image": "high-transition-input.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "105:11": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "105:10": {
+    "inputs": {
+      "samples": [
+        "105:14",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "105:17": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "105:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "105:122",
+        0
+      ],
+      "steps": [
+        "105:123",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "105:14": {
+    "inputs": {
+      "noise": [
+        "105:15",
+        0
+      ],
+      "guider": [
+        "105:16",
+        0
+      ],
+      "sampler": [
+        "105:17",
+        0
+      ],
+      "sigmas": [
+        "105:9",
+        0
+      ],
+      "latent_image": [
+        "105:104",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "105:16": {
+    "inputs": {
+      "model": [
+        "105:122",
+        0
+      ],
+      "conditioning": [
+        "105:104",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "105:6": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "105:13": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "105:15": {
+    "inputs": {
+      "noise_seed": 20261108110
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "105:91": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": 10,
+      "color_space": "sRGB",
+      "chroma_subsampling": "auto",
+      "codec": "none",
+      "images": [
+        "105:10",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "105:104": {
+    "inputs": {
+      "prompt": "One short controlled two-handed GREATSWORD GUARD CHANGE from the EXACT first pose to the EXACT last pose. A single smooth deliberate regrip-free sword reposition, NOT an attack. Move the rigid blade on a continuous short arc with both hands attached to the same handle in the same order. Bend elbows naturally, keep both wrists inside the cream sleeves. Move arms and shoulders, with a tiny balanced torso adjustment; feet remain planted. End firmly in the provided final pose. No extra swing, flourish, step, anticipation pause, blink or facial movement. Same gold fox-eared girl, tiny closed mouth, ONE golden tail with cream tip, pouch on screen-right hip. Preserve the coherent coarse PIXEL ART clusters, colors, face and clothing. Exactly one rigid straight gray-blue greatsword, constant width and length, gold straight guard, brown short handle. No bending, melting, morphing, duplicate sword, detached hands, jitter, trails, blur, glow, gradients or smooth painted detail. Camera completely locked, full character, constant size and baseline. Pure solid green RGB(0,255,0) background. No floor, shadow or camera motion. The supplied first and last images are strict pose constraints. Transition from high guard to mid guard. The character body scale is IDENTICAL in both endpoints. The feet must remain at exactly the same screen coordinates throughout. Raise or lower the sword by the shortest path in FRONT of the upper torso, without winding up or rotating it around the whole body. The sword tip stays fully inside the padded canvas. Movement begins immediately and spans the whole clip with no long freeze at either end.",
+      "clip": [
+        "105:13",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ],
+      "width": 640,
+      "height": 768,
+      "length": 22,
+      "first_frame": [
+        "114",
+        0
+      ],
+      "last_frame": [
+        "115",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ImageToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Image to Video"
+    }
+  },
+  "105:121": {
+    "inputs": {
+      "lora_name": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+      "strength_model": 1,
+      "model": [
+        "105:6",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "105:122": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:6",
+        0
+      ],
+      "on_true": [
+        "105:121",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Model)"
+    }
+  },
+  "105:123": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:124",
+        0
+      ],
+      "on_true": [
+        "105:125",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Steps)"
+    }
+  },
+  "105:124": {
+    "inputs": {
+      "value": 28
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:125": {
+    "inputs": {
+      "value": 28
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:126": {
+    "inputs": {
+      "value": false
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Boolean (Enable Lightning LoRA)"
+    }
+  },
+  "115": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-transition-input.png"
+    }
+  }
+}

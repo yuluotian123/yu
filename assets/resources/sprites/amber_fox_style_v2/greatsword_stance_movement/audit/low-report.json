@@ -1,0 +1,3727 @@
+{
+  "source_video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\greatsword_stance_movement\\low.mov",
+  "source_fps": 24.0,
+  "declared_output_fps": 24.28571428571429,
+  "declared_duration_seconds": 1.4,
+  "frame_size": [
+    320,
+    384
+  ],
+  "frame_count": 34,
+  "independent_masks_declared": false,
+  "expected_mask_source": null,
+  "errors": [],
+  "review_items": [
+    "Whole-silhouette retention has no independent expected mask",
+    "frame 0: face: incomplete_retention_coverage",
+    "frame 0: hair: incomplete_retention_coverage",
+    "frame 0: torso: incomplete_retention_coverage",
+    "frame 0: legs: incomplete_retention_coverage",
+    "frame 0: tail: incomplete_retention_coverage",
+    "frame 0: hands: incomplete_retention_coverage",
+    "frame 0: weapon: incomplete_retention_coverage",
+    "frame 1: face: incomplete_retention_coverage",
+    "frame 1: hair: incomplete_retention_coverage",
+    "frame 1: torso: incomplete_retention_coverage",
+    "frame 1: legs: incomplete_retention_coverage",
+    "frame 1: tail: incomplete_retention_coverage",
+    "frame 1: hands: incomplete_retention_coverage",
+    "frame 1: weapon: incomplete_retention_coverage",
+    "frame 2: face: incomplete_retention_coverage",
+    "frame 2: hair: incomplete_retention_coverage",
+    "frame 2: torso: incomplete_retention_coverage",
+    "frame 2: legs: incomplete_retention_coverage",
+    "frame 2: tail: incomplete_retention_coverage",
+    "frame 2: hands: incomplete_retention_coverage",
+    "frame 2: weapon: incomplete_retention_coverage",
+    "frame 3: face: incomplete_retention_coverage",
+    "frame 3: hair: incomplete_retention_coverage",
+    "frame 3: torso: incomplete_retention_coverage",
+    "frame 3: legs: incomplete_retention_coverage",
+    "frame 3: tail: incomplete_retention_coverage",
+    "frame 3: hands: incomplete_retention_coverage",
+    "frame 3: weapon: incomplete_retention_coverage",
+    "frame 4: face: incomplete_retention_coverage",
+    "frame 4: hair: incomplete_retention_coverage",
+    "frame 4: torso: incomplete_retention_coverage",
+    "frame 4: legs: incomplete_retention_coverage",
+    "frame 4: tail: incomplete_retention_coverage",
+    "frame 4: hands: incomplete_retention_coverage",
+    "frame 4: weapon: incomplete_retention_coverage",
+    "frame 5: face: incomplete_retention_coverage",
+    "frame 5: hair: incomplete_retention_coverage",
+    "frame 5: torso: incomplete_retention_coverage",
+    "frame 5: legs: incomplete_retention_coverage",
+    "frame 5: tail: incomplete_retention_coverage",
+    "frame 5: hands: incomplete_retention_coverage",
+    "frame 5: weapon: incomplete_retention_coverage",
+    "frame 6: face: incomplete_retention_coverage",
+    "frame 6: hair: incomplete_retention_coverage",
+    "frame 6: torso: incomplete_retention_coverage",
+    "frame 6: legs: incomplete_retention_coverage",
+    "frame 6: tail: incomplete_retention_coverage",
+    "frame 6: hands: incomplete_retention_coverage",
+    "frame 6: weapon: incomplete_retention_coverage",
+    "frame 7: face: incomplete_retention_coverage",
+    "frame 7: hair: incomplete_retention_coverage",
+    "frame 7: torso: incomplete_retention_coverage",
+    "frame 7: legs: incomplete_retention_coverage",
+    "frame 7: tail: incomplete_retention_coverage",
+    "frame 7: hands: incomplete_retention_coverage",
+    "frame 7: weapon: incomplete_retention_coverage",
+    "frame 8: face: incomplete_retention_coverage",
+    "frame 8: hair: incomplete_retention_coverage",
+    "frame 8: torso: incomplete_retention_coverage",
+    "frame 8: legs: incomplete_retention_coverage",
+    "frame 8: tail: incomplete_retention_coverage",
+    "frame 8: hands: incomplete_retention_coverage",
+    "frame 8: weapon: incomplete_retention_coverage",
+    "frame 9: face: incomplete_retention_coverage",
+    "frame 9: hair: incomplete_retention_coverage",
+    "frame 9: torso: incomplete_retention_coverage",
+    "frame 9: legs: incomplete_retention_coverage",
+    "frame 9: tail: incomplete_retention_coverage",
+    "frame 9: hands: incomplete_retention_coverage",
+    "frame 9: weapon: incomplete_retention_coverage",
+    "frame 10: face: incomplete_retention_coverage",
+    "frame 10: hair: incomplete_retention_coverage",
+    "frame 10: torso: incomplete_retention_coverage",
+    "frame 10: legs: incomplete_retention_coverage",
+    "frame 10: tail: incomplete_retention_coverage",
+    "frame 10: hands: incomplete_retention_coverage",
+    "frame 10: weapon: incomplete_retention_coverage",
+    "frame 11: face: incomplete_retention_coverage",
+    "frame 11: hair: incomplete_retention_coverage",
+    "frame 11: torso: incomplete_retention_coverage",
+    "frame 11: legs: incomplete_retention_coverage",
+    "frame 11: tail: incomplete_retention_coverage",
+    "frame 11: hands: incomplete_retention_coverage",
+    "frame 11: weapon: incomplete_retention_coverage",
+    "frame 12: face: incomplete_retention_coverage",
+    "frame 12: hair: incomplete_retention_coverage",
+    "frame 12: torso: incomplete_retention_coverage",
+    "frame 12: legs: incomplete_retention_coverage",
+    "frame 12: tail: incomplete_retention_coverage",
+    "frame 12: hands: incomplete_retention_coverage",
+    "frame 12: weapon: incomplete_retention_coverage",
+    "frame 13: face: incomplete_retention_coverage",
+    "frame 13: hair: incomplete_retention_coverage",
+    "frame 13: torso: incomplete_retention_coverage",
+    "frame 13: legs: incomplete_retention_coverage",
+    "frame 13: tail: incomplete_retention_coverage",
+    "frame 13: hands: incomplete_retention_coverage",
+    "frame 13: weapon: incomplete_retention_coverage",
+    "frame 14: face: incomplete_retention_coverage",
+    "frame 14: hair: incomplete_retention_coverage",
+    "frame 14: torso: incomplete_retention_coverage",
+    "frame 14: legs: incomplete_retention_coverage",
+    "frame 14: tail: incomplete_retention_coverage",
+    "frame 14: hands: incomplete_retention_coverage",
+    "frame 14: weapon: incomplete_retention_coverage",
+    "frame 15: face: incomplete_retention_coverage",
+    "frame 15: hair: incomplete_retention_coverage",
+    "frame 15: torso: incomplete_retention_coverage",
+    "frame 15: legs: incomplete_retention_coverage",
+    "frame 15: tail: incomplete_retention_coverage",
+    "frame 15: hands: incomplete_retention_coverage",
+    "frame 15: weapon: incomplete_retention_coverage",
+    "frame 16: face: incomplete_retention_coverage",
+    "frame 16: hair: incomplete_retention_coverage",
+    "frame 16: torso: incomplete_retention_coverage",
+    "frame 16: legs: incomplete_retention_coverage",
+    "frame 16: tail: incomplete_retention_coverage",
+    "frame 16: hands: incomplete_retention_coverage",
+    "frame 16: weapon: incomplete_retention_coverage",
+    "frame 17: face: incomplete_retention_coverage",
+    "frame 17: hair: incomplete_retention_coverage",
+    "frame 17: torso: incomplete_retention_coverage",
+    "frame 17: legs: incomplete_retention_coverage",
+    "frame 17: tail: incomplete_retention_coverage",
+    "frame 17: hands: incomplete_retention_coverage",
+    "frame 17: weapon: incomplete_retention_coverage",
+    "frame 18: face: incomplete_retention_coverage",
+    "frame 18: hair: incomplete_retention_coverage",
+    "frame 18: torso: incomplete_retention_coverage",
+    "frame 18: legs: incomplete_retention_coverage",
+    "frame 18: tail: incomplete_retention_coverage",
+    "frame 18: hands: incomplete_retention_coverage",
+    "frame 18: weapon: incomplete_retention_coverage",
+    "frame 19: face: incomplete_retention_coverage",
+    "frame 19: hair: incomplete_retention_coverage",
+    "frame 19: torso: incomplete_retention_coverage",
+    "frame 19: legs: incomplete_retention_coverage",
+    "frame 19: tail: incomplete_retention_coverage",
+    "frame 19: hands: incomplete_retention_coverage",
+    "frame 19: weapon: incomplete_retention_coverage",
+    "frame 20: face: incomplete_retention_coverage",
+    "frame 20: hair: incomplete_retention_coverage",
+    "frame 20: torso: incomplete_retention_coverage",
+    "frame 20: legs: incomplete_retention_coverage",
+    "frame 20: tail: incomplete_retention_coverage",
+    "frame 20: hands: incomplete_retention_coverage",
+    "frame 20: weapon: incomplete_retention_coverage",
+    "frame 21: face: incomplete_retention_coverage",
+    "frame 21: hair: incomplete_retention_coverage",
+    "frame 21: torso: incomplete_retention_coverage",
+    "frame 21: legs: incomplete_retention_coverage",
+    "frame 21: tail: incomplete_retention_coverage",
+    "frame 21: hands: incomplete_retention_coverage",
+    "frame 21: weapon: incomplete_retention_coverage",
+    "frame 22: face: incomplete_retention_coverage",
+    "frame 22: hair: incomplete_retention_coverage",
+    "frame 22: torso: incomplete_retention_coverage",
+    "frame 22: legs: incomplete_retention_coverage",
+    "frame 22: tail: incomplete_retention_coverage",
+    "frame 22: hands: incomplete_retention_coverage",
+    "frame 22: weapon: incomplete_retention_coverage",
+    "frame 23: face: incomplete_retention_coverage",
+    "frame 23: hair: incomplete_retention_coverage",
+    "frame 23: torso: incomplete_retention_coverage",
+    "frame 23: legs: incomplete_retention_coverage",
+    "frame 23: tail: incomplete_retention_coverage",
+    "frame 23: hands: incomplete_retention_coverage",
+    "frame 23: weapon: incomplete_retention_coverage",
+    "frame 24: face: incomplete_retention_coverage",
+    "frame 24: hair: incomplete_retention_coverage",
+    "frame 24: torso: incomplete_retention_coverage",
+    "frame 24: legs: incomplete_retention_coverage",
+    "frame 24: tail: incomplete_retention_coverage",
+    "frame 24: hands: incomplete_retention_coverage",
+    "frame 24: weapon: incomplete_retention_coverage",
+    "frame 25: face: incomplete_retention_coverage",
+    "frame 25: hair: incomplete_retention_coverage",
+    "frame 25: torso: incomplete_retention_coverage",
+    "frame 25: legs: incomplete_retention_coverage",
+    "frame 25: tail: incomplete_retention_coverage",
+    "frame 25: hands: incomplete_retention_coverage",
+    "frame 25: weapon: incomplete_retention_coverage",
+    "frame 26: face: incomplete_retention_coverage",
+    "frame 26: hair: incomplete_retention_coverage",
+    "frame 26: torso: incomplete_retention_coverage",
+    "frame 26: legs: incomplete_retention_coverage",
+    "frame 26: tail: incomplete_retention_coverage",
+    "frame 26: hands: incomplete_retention_coverage",
+    "frame 26: weapon: incomplete_retention_coverage",
+    "frame 27: face: incomplete_retention_coverage",
+    "frame 27: hair: incomplete_retention_coverage",
+    "frame 27: torso: incomplete_retention_coverage",
+    "frame 27: legs: incomplete_retention_coverage",
+    "frame 27: tail: incomplete_retention_coverage",
+    "frame 27: hands: incomplete_retention_coverage",
+    "frame 27: weapon: incomplete_retention_coverage",
+    "frame 28: face: incomplete_retention_coverage",
+    "frame 28: hair: incomplete_retention_coverage",
+    "frame 28: torso: incomplete_retention_coverage",
+    "frame 28: legs: incomplete_retention_coverage",
+    "frame 28: tail: incomplete_retention_coverage",
+    "frame 28: hands: incomplete_retention_coverage",
+    "frame 28: weapon: incomplete_retention_coverage",
+    "frame 29: face: incomplete_retention_coverage",
+    "frame 29: hair: incomplete_retention_coverage",
+    "frame 29: torso: incomplete_retention_coverage",
+    "frame 29: legs: incomplete_retention_coverage",
+    "frame 29: tail: incomplete_retention_coverage",
+    "frame 29: hands: incomplete_retention_coverage",
+    "frame 29: weapon: incomplete_retention_coverage",
+    "frame 30: face: incomplete_retention_coverage",
+    "frame 30: hair: incomplete_retention_coverage",
+    "frame 30: torso: incomplete_retention_coverage",
+    "frame 30: legs: incomplete_retention_coverage",
+    "frame 30: tail: incomplete_retention_coverage",
+    "frame 30: hands: incomplete_retention_coverage",
+    "frame 30: weapon: incomplete_retention_coverage",
+    "frame 31: face: incomplete_retention_coverage",
+    "frame 31: hair: incomplete_retention_coverage",
+    "frame 31: torso: incomplete_retention_coverage",
+    "frame 31: legs: incomplete_retention_coverage",
+    "frame 31: tail: incomplete_retention_coverage",
+    "frame 31: hands: incomplete_retention_coverage",
+    "frame 31: weapon: incomplete_retention_coverage",
+    "frame 32: face: incomplete_retention_coverage",
+    "frame 32: hair: incomplete_retention_coverage",
+    "frame 32: torso: incomplete_retention_coverage",
+    "frame 32: legs: incomplete_retention_coverage",
+    "frame 32: tail: incomplete_retention_coverage",
+    "frame 32: hands: incomplete_retention_coverage",
+    "frame 32: weapon: incomplete_retention_coverage",
+    "frame 33: face: incomplete_retention_coverage",
+    "frame 33: hair: incomplete_retention_coverage",
+    "frame 33: torso: incomplete_retention_coverage",
+    "frame 33: legs: incomplete_retention_coverage",
+    "frame 33: tail: incomplete_retention_coverage",
+    "frame 33: hands: incomplete_retention_coverage",
+    "frame 33: weapon: incomplete_retention_coverage"
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source_frame": 17,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_000.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1897,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1950,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3337,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1579,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2397,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2683,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4463,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 1,
+      "source_frame": 18,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_001.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1835,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1885,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3235,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1309,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2390,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2913,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4333,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 2,
+      "source_frame": 19,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_002.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1834,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1884,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3233,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1307,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2389,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2914,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4326,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 3,
+      "source_frame": 20,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_003.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1836,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1886,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3236,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1283,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2378,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2924,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4324,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 4,
+      "source_frame": 21,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_004.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1838,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1888,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3239,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1246,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2344,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2932,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4319,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 5,
+      "source_frame": 22,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_005.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1925,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1977,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3181,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1289,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2301,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2787,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4280,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 6,
+      "source_frame": 23,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_006.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1927,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1977,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3182,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1293,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2314,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2780,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4278,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 7,
+      "source_frame": 24,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_007.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1970,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2018,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3369,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1722,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2520,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2556,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4455,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 8,
+      "source_frame": 25,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_008.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1977,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2024,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3371,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1726,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2525,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2555,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4457,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 9,
+      "source_frame": 26,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_009.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1994,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2042,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3390,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1739,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2534,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2555,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4471,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 10,
+      "source_frame": 27,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_010.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2012,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2063,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3172,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1937,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2558,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2393,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4492,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 11,
+      "source_frame": 28,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_011.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2013,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2062,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3171,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1937,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2558,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2389,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4491,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 12,
+      "source_frame": 29,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_012.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2012,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2063,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3178,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1929,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2551,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2395,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4495,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 13,
+      "source_frame": 30,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_013.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1970,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2018,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3296,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1823,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2504,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2496,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4488,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 14,
+      "source_frame": 31,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_014.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1960,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2009,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3279,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1785,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2468,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2504,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4450,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 15,
+      "source_frame": 32,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_015.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1931,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1979,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3289,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1707,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2513,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2676,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4581,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 16,
+      "source_frame": 33,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_016.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1928,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1978,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3287,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1643,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2451,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2678,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4518,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 17,
+      "source_frame": 34,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_017.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1930,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1981,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3284,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1633,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2440,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2675,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4508,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 18,
+      "source_frame": 35,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_018.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1858,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1911,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3276,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1595,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2351,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2675,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4415,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 19,
+      "source_frame": 36,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_019.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1841,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1890,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3196,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1261,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2365,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2929,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4281,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 20,
+      "source_frame": 37,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_020.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1837,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1885,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3194,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1264,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2365,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2927,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4275,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 21,
+      "source_frame": 38,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_021.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1837,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1887,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3193,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1264,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2363,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2928,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4278,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 22,
+      "source_frame": 39,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_022.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1925,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1975,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3080,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1190,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2201,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2785,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4169,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 23,
+      "source_frame": 40,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_023.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1925,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1978,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3075,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1177,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2182,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2781,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4154,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 24,
+      "source_frame": 41,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_024.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1928,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1977,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3077,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1178,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2185,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2775,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4145,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 25,
+      "source_frame": 42,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_025.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1961,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2008,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3305,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1872,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2660,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2538,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4558,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 26,
+      "source_frame": 43,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_026.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1962,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2009,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3316,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1885,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2666,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2544,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4575,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 27,
+      "source_frame": 44,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_027.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1983,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2031,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3313,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1888,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2668,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2544,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4586,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 28,
+      "source_frame": 45,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_028.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2011,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2061,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3327,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1983,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2598,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2401,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4551,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 29,
+      "source_frame": 46,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_029.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2031,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2081,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3327,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1992,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2608,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2404,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4570,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 30,
+      "source_frame": 47,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_030.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2011,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2061,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3284,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1947,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2565,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2394,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4513,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 31,
+      "source_frame": 48,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_031.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1976,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2023,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3397,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1812,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2526,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2540,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 32,
+      "source_frame": 49,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_032.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1958,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2007,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3391,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1808,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2512,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2535,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4537,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 33,
+      "source_frame": 50,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_movement\\low\\frames\\move_033.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            125,
+            170,
+            195,
+            235
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1954,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            108,
+            150,
+            204,
+            236
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2003,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            116,
+            210,
+            212,
+            289
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3395,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            94,
+            265,
+            230,
+            360
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 1792,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail": {
+          "bounds": [
+            70,
+            247,
+            185,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2498,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands": {
+          "bounds": [
+            101,
+            201,
+            198,
+            266
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2541,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "weapon": {
+          "bounds": [
+            103,
+            200,
+            285,
+            334
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4531,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail: incomplete_retention_coverage",
+        "hands: incomplete_retention_coverage",
+        "weapon: incomplete_retention_coverage"
+      ]
+    }
+  ],
+  "status": "needs_visual_review",
+  "visual_review_required": true
+}

@@ -1,0 +1,10 @@
+{
+  "status": "reviewed_intentional_edits",
+  "frames": 36,
+  "source_difference_report": "high-source-differences.json",
+  "original_video_rgb_match": false,
+  "unchanged_region_and_repaired_layer_validation": "../media-validation.json",
+  "lower_body_validation": "../guard-repair-validation.json",
+  "manual_review": "All 48 high-stance frames reviewed: shoulders, sleeves, both hands, continuous hilt, blade, face, lower body and loop seam.",
+  "independent_full_silhouette_mask": false
+}

@@ -27,6 +27,7 @@ namespace GameLogic
 
         private readonly InputTracker _tracker = new InputTracker();
         private readonly InputLayerManager _layerManager = new InputLayerManager();
+        private readonly List<(string Action, InputLayer Layer, ulong PhysicsFrame)> _pendingPhysicsConsumes = new();
         
         // 有效 action 缓存只保留可正常参与运行时查询的解析结果：
         // 1. RawActionName 是 Godot InputMap 里的真实 action 名。
@@ -58,6 +59,7 @@ namespace GameLogic
         public override void Shutdown()
         {
             _tracker.Clear();
+            _pendingPhysicsConsumes.Clear();
             _layerManager.ClearAllHeldLocks();
             _layerManager.ReplaceActionGroups(new Dictionary<string, HashSet<string>>(StringComparer.Ordinal));
             _parsedActions.Clear();
@@ -75,6 +77,15 @@ namespace GameLogic
 
             _tracker.Update(_currentTime, realElapseSeconds);
             _layerManager.ClearAllConsumed();
+            // A render-frame reset must not expose an edge already consumed by UI
+            // before the character graph has polled its next physics frame.
+            ulong physicsFrame = Engine.GetPhysicsFrames();
+            for (int i = _pendingPhysicsConsumes.Count - 1; i >= 0; i--)
+            {
+                var pending = _pendingPhysicsConsumes[i];
+                if (physicsFrame > pending.PhysicsFrame) _pendingPhysicsConsumes.RemoveAt(i);
+                else _layerManager.ConsumeAction(pending.Layer, pending.Action);
+            }
             _layerManager.UpdateHeldLocks(IsActionStillActive);
             RecordInputEvents();
         }
@@ -152,6 +163,8 @@ namespace GameLogic
                 return false;
 
             _layerManager.ConsumeAction(layer, actionInfo.BaseActionName);
+            _pendingPhysicsConsumes.Add((actionInfo.BaseActionName, layer,
+                Engine.GetPhysicsFrames() + (Engine.IsInPhysicsFrame() ? 0UL : 1UL)));
             return true;
         }
 

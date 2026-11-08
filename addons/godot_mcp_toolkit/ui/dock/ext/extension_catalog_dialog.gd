@@ -123,7 +123,7 @@ func _build_ui() -> void:
 
 	var extend_btn := Button.new()
 	extend_btn.text = "Open Extending Guide"
-	var guide_path := "res://addons/godot_mcp_toolkit/docs/extending.md"
+	var guide_path := "res://docs/tools/godot-mcp/extending.md"
 	extend_btn.pressed.connect(func(): OS.shell_open(ProjectSettings.globalize_path(guide_path)))
 	outer.add_child(extend_btn)
 

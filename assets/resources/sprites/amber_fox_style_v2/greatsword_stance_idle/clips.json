@@ -1,0 +1,32 @@
+[
+  {
+    "key": "high",
+    "animation": "idle_high",
+    "frames": 72,
+    "fps": 24,
+    "loop": true,
+    "duration_seconds": 3,
+    "prefix": "idle",
+    "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/high"
+  },
+  {
+    "key": "mid",
+    "animation": "idle_mid",
+    "frames": 72,
+    "fps": 24,
+    "loop": true,
+    "duration_seconds": 3,
+    "prefix": "idle",
+    "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/mid"
+  },
+  {
+    "key": "low",
+    "animation": "idle_low",
+    "frames": 72,
+    "fps": 24,
+    "loop": true,
+    "duration_seconds": 3,
+    "prefix": "idle",
+    "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/low"
+  }
+]

@@ -126,7 +126,7 @@ func _spec_welcome() -> Dictionary:
 			+ "Some tools can modify your project or execute arbitrary code.\n\n"
 			+ "Risk is communicated per-tool via MCP annotations.\n"
 			+ "For details and copy-pasteable agent blocking configs, see:\n"
-			+ "  addons/godot_mcp_toolkit/docs/security-recommendations.md\n\n"
+			+ "  docs/tools/godot-mcp/security-recommendations.md\n\n"
 			+ "All tools are available by default. Use your agent's\n"
 			+ "allowlist/blocklist to restrict specific tools if needed."),
 		"ok_label": "Next",
@@ -270,7 +270,7 @@ func _on_custom_action(action: StringName, dialog: AcceptDialog) -> void:
 			if _dialog_presenter != null:
 				_dialog_presenter.show_info(_server)
 		"open_security":
-			var doc_path := "res://addons/godot_mcp_toolkit/docs/security-recommendations.md"
+			var doc_path := "res://docs/tools/godot-mcp/security-recommendations.md"
 			var global_path := ProjectSettings.globalize_path(doc_path)
 			OS.shell_open(global_path)
 

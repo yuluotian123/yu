@@ -22,8 +22,11 @@ namespace GameLogic
         private InventoryComponent3D _inventory;
         private AnimatedSprite3D _profileSprite;
         private readonly Dictionary<string, WeaponDefinition> _catalog = new(StringComparer.Ordinal);
+        private readonly Dictionary<WeaponAnimationProfile, SpriteFrames> _playbackFrames = new();
         private int _currentSlot = -1;
         private int _pendingSlot = -1;
+        private const string TransitionRequest = "weapon:stance-transition";
+        private string _transitionAnimation = string.Empty;
 
         public IReadOnlyList<WeaponDefinition> Slots => _slots;
         public int CurrentSlot => _currentSlot;
@@ -31,9 +34,17 @@ namespace GameLogic
         public WeaponDefinition CurrentWeapon => _currentSlot >= 0 && _currentSlot < _slots.Count ? _slots[_currentSlot] : null;
         [GraphValue("CurrentWeaponId", Access = GraphValueAccess.ReadOnly)]
         public string CurrentWeaponId => CurrentWeapon?.WeaponId ?? string.Empty;
+        [GraphValue("CurrentStance", Access = GraphValueAccess.ReadOnly)]
+        public string CurrentStance { get; private set; } = string.Empty;
+        public string PendingStance { get; private set; } = string.Empty;
+        public string TransitionTarget { get; private set; } = string.Empty;
+        [GraphValue("IsTransitioning", Access = GraphValueAccess.ReadOnly)]
+        public bool IsTransitioning => !string.IsNullOrEmpty(TransitionTarget);
+        public event Action<string> StanceSwitchStarted;
+        public event Action<string> StanceChanged;
         public event Action<WeaponDefinition> WeaponChanged;
         public event Action LoadoutChanged;
-        public bool IsBusy => IsAbilityRunning();
+        public bool IsBusy => IsAbilityRunning() || IsTransitioning;
 
         public override void OnInit()
         {
@@ -43,6 +54,9 @@ namespace GameLogic
             _inventory = Owner.GetComponent<InventoryComponent3D>();
             _slots.Clear();
             _catalog.Clear();
+            _playbackFrames.Clear();
+            CurrentStance = PendingStance = string.Empty;
+            TransitionTarget = _transitionAnimation = string.Empty;
             for (int i = 0; i < WeaponSlotCount; i++) _slots.Add(null);
             _currentSlot = _pendingSlot = -1;
             if (_abilities == null || _animation?.Sprite == null)
@@ -53,6 +67,9 @@ namespace GameLogic
 
             _profileSprite = _animation.Sprite;
             _profileSprite.AnimationChanged += RefreshVisualGeometry;
+            _profileSprite.AnimationFinished += OnTransitionFinished;
+            _abilities.AbilityCancelled += OnAbilityCancelled;
+            _abilities.AbilityActivated += OnAbilityActivated;
 
             var ids = new HashSet<string>(StringComparer.Ordinal);
             foreach (WeaponDefinition weapon in Weapons.Concat(_inventory?.Items ?? Array.Empty<WeaponDefinition>()))
@@ -60,7 +77,7 @@ namespace GameLogic
                 if (weapon != null && ids.Contains(weapon.WeaponId)) continue;
                 if (weapon == null || string.IsNullOrWhiteSpace(weapon.WeaponId) ||
                     weapon.PrimaryAttack?.Graph == null || string.IsNullOrWhiteSpace(weapon.PrimaryAttack.AbilityId) ||
-                    weapon.AnimationProfile?.IsValid() != true || !ids.Add(weapon.WeaponId))
+                    weapon.AnimationProfile?.IsValid() != true || !weapon.HasValidStances() || !ids.Add(weapon.WeaponId))
                 {
                     GD.PushWarning("[WeaponEquipmentComponent3D] Skipped an invalid or duplicate weapon definition.");
                     continue;
@@ -81,13 +98,26 @@ namespace GameLogic
 
         public override void OnDestroy()
         {
+            CancelTransition();
             if (GodotObject.IsInstanceValid(_profileSprite))
+            {
                 _profileSprite.AnimationChanged -= RefreshVisualGeometry;
+                _profileSprite.AnimationFinished -= OnTransitionFinished;
+            }
+            if (_abilities != null)
+            {
+                _abilities.AbilityCancelled -= OnAbilityCancelled;
+                _abilities.AbilityActivated -= OnAbilityActivated;
+            }
             _profileSprite = null;
             WeaponChanged = null;
             LoadoutChanged = null;
+            StanceChanged = null;
+            StanceSwitchStarted = null;
             _slots.Clear();
             _catalog.Clear();
+            _playbackFrames.Clear();
+            CurrentStance = PendingStance = string.Empty;
             _currentSlot = _pendingSlot = -1;
             _abilities = null;
             _animation = null;
@@ -99,8 +129,90 @@ namespace GameLogic
         public bool TryPrimaryAttack()
         {
             FlushPendingSwitch();
-            return CurrentWeapon != null && _abilities.TryActivateAbility(
+            return !IsTransitioning && CurrentWeapon != null && _abilities.TryActivateAbility(
                 CurrentWeapon.PrimaryAttack.AbilityId, "EquippedWeapon") == AbilityActivationResult.Activated;
+        }
+
+        [GraphAction("RequestStance", DisplayName = "切换武器架势")]
+        public bool RequestStance(string stance)
+        {
+            if (string.IsNullOrWhiteSpace(stance) || CurrentWeapon?.StanceIdleAnimations.ContainsKey(stance) != true)
+                return false;
+            if (IsTransitioning)
+            {
+                // Finish the visible motion before taking the latest requested edge.
+                PendingStance = stance == TransitionTarget ? string.Empty : stance;
+                return true;
+            }
+            if (stance == CurrentStance)
+            {
+                PendingStance = string.Empty;
+                return true;
+            }
+            if (IsAbilityRunning() || _movement?.IsOnFloor == false)
+            {
+                PendingStance = stance;
+                return true;
+            }
+            StartStanceTransition(stance);
+            return true;
+        }
+
+        private void ApplyStance(string stance, bool refreshPlayback = true)
+        {
+            CurrentStance = stance;
+            string idle = CurrentWeapon?.StanceIdleAnimations.TryGetValue(stance, out string value) == true ? value : null;
+            string move = CurrentWeapon?.StanceMoveAnimations.TryGetValue(stance, out string moveValue) == true ? moveValue : null;
+            string start = CurrentWeapon?.StanceMoveStartAnimations.TryGetValue(stance, out string startValue) == true ? startValue : null;
+            _animation.SetAnimationAlias("idle", idle, false);
+            _animation.SetAnimationAlias("run", move, false);
+            _animation.AnimationInstance?.SetAnimationLeadIn("run", start);
+            if (refreshPlayback) _animation.AnimationInstance?.RefreshPlayback();
+            StanceChanged?.Invoke(stance);
+        }
+
+        private void OnAbilityCancelled(AbilityRuntime runtime) => PendingStance = string.Empty;
+
+        private void StartStanceTransition(string stance)
+        {
+            PendingStance = string.Empty;
+            if (stance == CurrentStance) return;
+            if (!CurrentWeapon.StanceTransitions.TryGetValue(CurrentStance + ">" + stance, out string clip))
+            {
+                ApplyStance(stance);
+                StanceSwitchStarted?.Invoke(stance);
+                return;
+            }
+            TransitionTarget = stance;
+            _transitionAnimation = clip;
+            _movement?.SetControlLock(TransitionRequest, true, true, 50);
+            _animation.RequestAnimation(TransitionRequest, clip, 50);
+            _animation.AnimationInstance?.RefreshPlayback();
+            StanceSwitchStarted?.Invoke(stance);
+        }
+
+        private void OnTransitionFinished()
+        {
+            if (!IsTransitioning || _profileSprite.Animation != _transitionAnimation) return;
+            string target = TransitionTarget;
+            CancelTransition();
+            ApplyStance(target);
+            FlushPendingSwitch();
+        }
+
+        private void CancelTransition()
+        {
+            TransitionTarget = _transitionAnimation = string.Empty;
+            _animation?.ClearAnimationRequest(TransitionRequest);
+            _movement?.ClearControlLock(TransitionRequest);
+        }
+
+        private void OnAbilityActivated(AbilityRuntime runtime)
+        {
+            // Abilities activated outside the weapon input (e.g. a forced hurt) take precedence.
+            if (!IsTransitioning) return;
+            CancelTransition();
+            PendingStance = string.Empty;
         }
 
         [GraphAction("RequestNextWeapon", DisplayName = "切换下一把武器")]
@@ -127,7 +239,7 @@ namespace GameLogic
                 LoadoutChanged?.Invoke();
                 return true;
             }
-            if (IsAbilityRunning())
+            if (IsBusy)
             {
                 _pendingSlot = slot;
                 LoadoutChanged?.Invoke();
@@ -142,7 +254,7 @@ namespace GameLogic
         {
             if (string.IsNullOrWhiteSpace(weaponId) || IsBusy || _inventory?.Contains(weaponId) == false) return false;
             WeaponDefinition weapon = _inventory?.Find(weaponId) ?? _catalog.GetValueOrDefault(weaponId);
-            if (weapon?.AnimationProfile?.IsValid() != true || weapon.PrimaryAttack?.Graph == null) return false;
+            if (weapon?.AnimationProfile?.IsValid() != true || weapon.PrimaryAttack?.Graph == null || !weapon.HasValidStances()) return false;
             int existing = FindEquippedSlot(weaponId);
             if (slot < 0 && existing >= 0) return !activate || RequestEquipSlot(existing);
             if (slot < 0) slot = _slots.FindIndex(item => item == null);
@@ -172,7 +284,7 @@ namespace GameLogic
             var slots = new JsonArray();
             foreach (WeaponDefinition weapon in _slots)
                 slots.Add(weapon == null ? null : JsonValue.Create(weapon.WeaponId));
-            return new JsonObject { ["loadout_version"] = 1, ["equipped_weapon_id"] = CurrentWeaponId, ["slots"] = slots };
+            return new JsonObject { ["loadout_version"] = 1, ["equipped_weapon_id"] = CurrentWeaponId, ["slots"] = slots, ["stance"] = CurrentStance };
         }
 
         public void RestoreDurableState(JsonObject state)
@@ -182,7 +294,9 @@ namespace GameLogic
             // Loading restores durable state, not an in-progress attack or queued switch.
             foreach (AbilityRuntime runtime in _abilities.ActiveAbilities.ToArray())
                 _abilities.CancelAbility(runtime.AbilityId, "Load");
+            CancelTransition();
             _pendingSlot = -1;
+            PendingStance = string.Empty;
             if (state?["slots"] is JsonArray savedSlots)
             {
                 var ordered = new List<WeaponDefinition>();
@@ -219,6 +333,9 @@ namespace GameLogic
             }
             int slot = _slots.FindIndex(item => item != null && item.WeaponId == equipped);
             ApplySlot(slot >= 0 ? slot : DefaultSlot());
+            if (state?["stance"] is JsonValue savedStance && savedStance.TryGetValue(out string stance) &&
+                CurrentWeapon?.StanceIdleAnimations.ContainsKey(stance) == true)
+                ApplyStance(stance);
         }
 
         private int DefaultSlot()
@@ -231,8 +348,10 @@ namespace GameLogic
 
         private void FlushPendingSwitch()
         {
-            if (_pendingSlot >= 0 && !IsAbilityRunning())
-                ApplySlot(_pendingSlot);
+            if (IsBusy) return;
+            if (_pendingSlot >= 0) ApplySlot(_pendingSlot);
+            if (!string.IsNullOrEmpty(PendingStance) && _movement?.IsOnFloor != false)
+                StartStanceTransition(PendingStance);
         }
 
         private bool ApplySlot(int slot)
@@ -243,7 +362,13 @@ namespace GameLogic
             if (profile?.IsValid() != true) return false;
             _currentSlot = slot;
             _pendingSlot = -1;
-            _animation.ReplaceSpriteFrames(profile.Frames);
+            PendingStance = string.Empty;
+            CancelTransition();
+            // Install the alias and frame set atomically; stance weapons have no legacy idle.
+            ApplyStance(CurrentWeapon.StanceIdleAnimations.Count > 0 ? CurrentWeapon.DefaultStance : string.Empty, false);
+            if (!_playbackFrames.TryGetValue(profile, out SpriteFrames frames))
+                _playbackFrames[profile] = frames = profile.CreatePlaybackFrames();
+            _animation.ReplaceSpriteFrames(frames);
             RefreshVisualGeometry();
             WeaponChanged?.Invoke(CurrentWeapon);
             LoadoutChanged?.Invoke();
@@ -256,12 +381,13 @@ namespace GameLogic
             if (profile == null || !GodotObject.IsInstanceValid(_profileSprite)) return;
             float pixelSize = profile.PixelSizeFor(_profileSprite.Animation);
             Vector2I anchor = profile.FootAnchorFor(_profileSprite.Animation);
+            Vector2I frameSize = profile.FrameSizeFor(_profileSprite.Animation);
             float halfHeight = _movement?.HalfHeight ?? 0.468f;
             _profileSprite.PixelSize = pixelSize;
             _profileSprite.Scale = Vector3.One * profile.VisualScale;
             _profileSprite.Position = new Vector3(
-                (profile.FrameSize.X * 0.5f - anchor.X) * pixelSize * profile.VisualScale,
-                (anchor.Y - profile.FrameSize.Y * 0.5f) * pixelSize * profile.VisualScale - halfHeight, 0f);
+                (frameSize.X * 0.5f - anchor.X) * pixelSize * profile.VisualScale,
+                (anchor.Y - frameSize.Y * 0.5f) * pixelSize * profile.VisualScale - halfHeight, 0f);
         }
     }
 }

@@ -1,0 +1,17 @@
+{
+  "animations": [
+    "run_high",
+    "run_low",
+    "run_mid",
+    "run_start_high",
+    "run_start_mid"
+  ],
+  "checked_frames": 130,
+  "frame_size": [
+    320,
+    384
+  ],
+  "loop_modes_match_manifest": true,
+  "ok": true,
+  "visible_rgb_and_alpha_exact": true
+}

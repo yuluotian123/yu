@@ -4,11 +4,6 @@ const MODELS := "res://assets/models/environment/forest_vegetation/"
 const SCENES := "res://assets/scenes/environment/forest_vegetation/"
 const MATS := "res://assets/materials/environment/forest_vegetation/"
 const META := "res://assets/resources/art/forest_vegetation/"
-const OLD := "res://assets/scenes/environment/forest_town/models/"
-const REPLACEMENTS := {
-	"ancient_oak": "oak_broad", "branching_oak": "hornbeam_tall", "canopy_oak": "oak_sweeping",
-	"shrub_round": "hazel_round", "shrub_tall": "hazel_tall", "shrub_low": "woodland_low"
-}
 
 func _initialize() -> void:
 	run.call_deferred()
@@ -92,9 +87,9 @@ func run() -> void:
 		assert(ResourceSaver.save(native,MODELS+asset+".mesh.res") == OK)
 		native.take_over_path(MODELS+asset+".mesh.res")
 		var prefab: Node3D
-		var previous: Variant = REPLACEMENTS.find_key(asset)
-		if previous != null:
-			prefab = load(OLD+previous+".tscn").instantiate()
+		# Preserve the current prefab's authored collision and placement metadata.
+		if ResourceLoader.exists(SCENES+asset+".tscn"):
+			prefab = load(SCENES+asset+".tscn").instantiate()
 			prefab.get_node("Model").mesh = native
 		else:
 			prefab = Node3D.new()

@@ -1,0 +1,12 @@
+{
+  "checked_frames": 54,
+  "directed_edges": 6,
+  "fps": 62.4,
+  "frame_size": [
+    320,
+    384
+  ],
+  "idle_endpoints_exact": true,
+  "ok": true,
+  "visible_rgb_and_alpha_exact": true
+}

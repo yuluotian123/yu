@@ -1,16 +1,16 @@
-2026-11-04 当前版本采用[角色配套版森林植被](forest_vegetation.md)和像素表面图集。路肩由实际石路覆盖向草甸衰减，5,531 丛立体草使用 361 个分块。三种灌木共 488 丛，采用较小、通透的错层枝扇及共享的树叶光照材质。正式关卡启用[场景坐标像素取样](relink_post.md)。下文较早的草密度和分块统计保留为历史制作记录。
+2026-11-04 当前版本采用[角色配套版森林植被](forest_vegetation.md)和像素表面图集。路肩由实际石路覆盖向草甸衰减，5,531 丛立体草使用 361 个分块。三种灌木共 488 丛，采用较小、通透的错层枝扇及共享的树叶光照材质。正式关卡启用[场景坐标像素取样](../rendering/relink-post.md)。下文较早的草密度和分块统计保留为历史制作记录。
 
 森林聚落已替换正式森林关卡 `res://assets/scenes/levels/forest_town_level.tscn` 的旧布局，沿用原关卡世界身份、角色、天气、NPC 和仓储间往返入口。默认从南入口开始，镜头使用聚落步行构图，标注默认隐藏；基于新场景碰撞烘焙的导航覆盖十户住宅。场景可直接编辑，房屋、植被、河水和路面已复用森林资源；24 段栅栏与溪流木桥已替换为[带法线与粗糙度的正式木构模型](forest_village_structures.md)，其余公共设施与生产道具仍保留部分布局白模。
 
 十户已接入[独立室内与正门往返](forest_village_interiors.md)。杂货户沿用原仓储关卡、对象与世界身份，入口触发区改为贴合门槛；后侧不开通路。门前楼梯已按实际玩家方形碰撞体修整为连续缓坡，无需跳跃，返回点位于楼梯外的平地。
 
-正式关卡的天气表面作用于 `../Village`。DDGI 探针覆盖两岸可行走地面、十户住宅和外围林带，最外侧树冠也留有采样余量。具体布局见 [DDGI 配置](ddgi_implementation.md)。
+正式关卡的天气表面作用于 `../Village`。DDGI 探针覆盖两岸可行走地面、十户住宅和外围林带，最外侧树冠也留有采样余量。具体布局见 [DDGI 配置](../rendering/ddgi-implementation.md)。
 
 正式关卡的林下照明以“暖日照、低饱和蓝绿阴影”为目标。DDGI 间接光倍率由 0.25 调至 2.5，白天天空亮度端点为 45000；天顶、地平线与下半球采用较柔和的蓝灰、青灰和林地绿，正午太阳色温为 5300K。昼夜配置与场景静态天空、太阳数值保持同步。保留真实树冠遮挡、接触阴影及既有曝光、LUT、天气驱动；暗部通过环境辐照恢复层次，不依赖地表自发光。仅提高天空亮度会使角色精灵泛白，因此同时控制天空强度与 DDGI 倍率。
 
-材质 v4 使用暖米色墙面、橙陶瓦、褐色木构、灰米色石板和黄绿林地，树皮保留冷灰暗面并加入浅苔藓色块。新版图集位于 `assets/textures/environment/forest_town/painterly_atlas_v4.png`，专用树皮为同目录 `bark_painted_v4.png`；均用内置 imagegen 生成，最终提示词分别保存在本目录的 `forest_village_materials_v4.prompt.txt` 与 `forest_village_bark_v4.prompt.txt`。运行时使用带 mipmap、可供 DDGI 读取的原生 `.res` 纹理。
+材质 v4 使用暖米色墙面、橙陶瓦、褐色木构、灰米色石板和黄绿林地，树皮保留冷灰暗面并加入浅苔藓色块。新版图集位于 `assets/textures/environment/forest_town/painterly_atlas_v4.png`，专用树皮为同目录 `bark_painted_v4.png`；均用内置 imagegen 生成，最终提示词分别保存在`docs/art/prompts/` 中的 `forest_village_materials_v4.prompt.txt` 与 `forest_village_bark_v4.prompt.txt`。运行时使用带 mipmap、可供 DDGI 读取的原生 `.res` 纹理。
 
-灌木底部亮青边缘由 DDGI 的局部可见性统计误差放大：距离矩曾直接使用最远 100 米的天空 miss，与近处叶片混合后产生过大的方差，削弱遮蔽。现在只在可见性积分中将距离限制到探针单元对角线的 1.5 倍；辐射追踪距离、天空强度、GI 倍率与叶片原色保持原配置。灌木已恢复原始顶点色，撤回按高度压暗底色的补偿。实现和验证入口见 `docs/art/ddgi_implementation.md`。
+灌木底部亮青边缘由 DDGI 的局部可见性统计误差放大：距离矩曾直接使用最远 100 米的天空 miss，与近处叶片混合后产生过大的方差，削弱遮蔽。现在只在可见性积分中将距离限制到探针单元对角线的 1.5 倍；辐射追踪距离、天空强度、GI 倍率与叶片原色保持原配置。灌木已恢复原始顶点色，撤回按高度压暗底色的补偿。实现和验证入口见 `docs/rendering/ddgi-implementation.md`。
 
 草地使用独立的 `assets/materials/environment/forest_village/grass.tres` 与 `assets/textures/environment/forest_village/groundcover_v4.res`，UV 按每米 0.85 次连续平铺，避免在地形各网格上拉伸图集单元；石板与石缝保留各自的暖灰、土色参数。树皮从原图集 UV 解码后采样专用贴图，不修改模型或树结修复。材质仍使用原生受光和既有积雪、湿润、积水、涟漪流程。地面接触图按实际材质的纹理平铺、底色和饱和度重新烘焙；草簇直接使用烘焙色，避免二次叠加草地染色。
 
@@ -48,15 +48,14 @@ DDGI 捕获缓存相关节点列表，SceneTree 的层级变化会使其失效�
 
 视觉目标参考《原神》《鸣潮》的连续草地覆盖、成片色彩和风动。资料入口包括 [GDC 的《原神》动漫风格开放世界分享](https://www.youtube.com/watch?v=-JFyAdI_rO8)、[库洛在 UFSH2023 的多平台效果与性能分享](https://www.bilibili.com/video/BV1BK411v7FY/)，以及 [Igor Pontes 自述的鸣潮风格草地复现](https://igotmello.artstation.com/projects/QK32mE)。后者明确公开了渐变/高度图配色、顶点驱动风动和实例化裁剪，属于作者自己的复现，不能当作《鸣潮》的内部实现。当前项目采用自己的原生几何分块、叶片 LOD、地表采色和既有 DDGI/天气管线；上述密度、尺寸、法线及风动数值均为本关卡调校结果。
 
-只重建本轮材质与贴图接线时运行 `res://scripts/tools/art/forest_village_whitebox/rebuild_materials.gd`。它复用 `forest_town/material_palette.gd`、现有石板与接触过渡工具，保留建筑、树木、河水、路网和碰撞。完整森林资源生成器也调用同一材质配置。
+只重建本轮材质与贴图接线时运行 `res://scripts/tools/art/forest_village_whitebox/rebuild_materials.gd`。它复用 `forest_town/material_palette.gd`、现有石板与接触过渡工具，保留建筑、树木、河水、路网和碰撞。植被、房屋和地表工具复用同一材质配置。
 
 聚落位于连续森林内部，十户住宅占据林冠下的小块林隙。保留住宅与角色尺度，地面范围约 81 × 75 米；274 棵高约 12–18 米的乔木构成连续林冠，其中 60 棵位于住户之间，林下另有 488 丛灌木。门前、工作院、井边与菜地保留必要空地，其余土地由森林贯穿。道路的中心通行带约 0.9–1.6 米宽，路肩渐隐到林地。树干有碰撞，树木接入原有持续遮挡渐隐组件。
 
-植被已在 2026-11-03 切换为[角色配套版森林植被](forest_vegetation.md)：`res://assets/scenes/environment/forest_vegetation/` 下的 `oak_broad`、`hornbeam_tall`、`oak_sweeping` 三种乔木，以及 `hazel_round`、`hazel_tall`、`woodland_low` 三种灌木。新模型在 Blender 中独立制作，使用分枝体积法线、简化叶簇剪影和暖褐树干。274 棵树及 488 丛灌木只更换六处 PackedScene 资源引用；摆放、实例缩放、树干碰撞、道路与导航沿用。旧 `forest_town/models/` 模型作为历史资产保留，下文旧根部修整记录针对旧模型。
+植被已在 2026-11-03 切换为[角色配套版森林植被](forest_vegetation.md)：`res://assets/scenes/environment/forest_vegetation/` 下的 `oak_broad`、`hornbeam_tall`、`oak_sweeping` 三种乔木，以及 `hazel_round`、`hazel_tall`、`woodland_low` 三种灌木。新模型在 Blender 中独立制作，使用分枝体积法线、简化叶簇剪影和暖褐树干。274 棵树及 488 丛灌木只更换六处 PackedScene 资源引用；摆放、实例缩放、树干碰撞、道路与导航沿用。旧植被模型已清理，维护与重建使用当前植被目录。
 
-三种树的根部已在 Blender 中修整为与树干连成一体的低矮根盘，短圆根脊渐入土中，去掉原先伸出很远的尖根。随后移除树干上两个独立的圆管树结，改为贴合原树皮、两端收窄的浅纵向疤痕，最大起伏约 2–4 毫米。共享树模型、LOD 与源文件已同步更新到森林关卡；树冠、枝条、叶片及现有种植位置保留，每种树的近景三角面数由 7948 经根部修整降为 7432，再降为 7296。
 
-十户住宅已依据第二版概念图替换为[十栋独立房屋模型](forest_village_houses.md)，场景位于 `assets/scenes/environment/forest_village/houses/`。村长长屋、窄高杂货楼、石砌修补屋、开放木工棚、六角草药屋、A 字原木屋、架高猎采屋、U 形农院、茅草长屋和草皮覆顶屋各有完整四面外观、独立简化碰撞与原生 LOD。单栋 4,136–7,824 三角面，合计 57,255；复用原有手绘着色、DDGI、雨雪和相机遮挡流程。住户和门前标记保持既有变换；村长家在院内向 +X 适配偏移 0.5 米，避开一棵现有树干。杂货户仓储间传送门、返回落点和路线身份沿用。地被已按新碰撞更新，导航重新烘焙；60 项通行检查及 13 条导航连接通过。旧七种共享房型仍作为历史森林资产保留。
+十户住宅已依据第二版概念图替换为[十栋独立房屋模型](forest_village_houses.md)，场景位于 `assets/scenes/environment/forest_village/houses/`。村长长屋、窄高杂货楼、石砌修补屋、开放木工棚、六角草药屋、A 字原木屋、架高猎采屋、U 形农院、茅草长屋和草皮覆顶屋各有完整四面外观、独立简化碰撞与原生 LOD。单栋 4,136–7,824 三角面，合计 57,255；复用原有手绘着色、DDGI、雨雪和相机遮挡流程。住户和门前标记保持既有变换；村长家在院内向 +X 适配偏移 0.5 米，避开一棵现有树干。杂货户仓储间传送门、返回落点和路线身份沿用。地被已按新碰撞更新，导航重新烘焙；60 项通行检查及 13 条导航连接通过。旧七种共享房型已清理。
 
 路网沿用 `Paths` 下可编辑的 `Path3D` 曲线，路径、门前小空地、公共井周边与晒场相连，木桥单独保留。当前铺设 1187 块不规则灰色石板，带薄侧面和磨圆斜边，大小、色调略有变化，石缝保留约 4.4 厘米泥土。边缘石板更小、更低并有少量缺口，路肩高度逐渐落入草地。石板按 6 米区域合并为 60 个网格；全部仅作地形装饰，没有碰撞体，角色继续由原地形承载。树木、灌木和房屋位置沿用。
 
@@ -110,7 +109,7 @@ DDGI 捕获缓存相关节点列表，SceneTree 的层级变化会使其失效�
 
 仅更新石板铺装及地面接缝时运行 `res://scripts/tools/art/forest_village_whitebox/rebuild_paving.gd`；它读取现有路网的覆盖数据，更新 `Paths/Flagstones`、石缝材质、树皮低位过渡与 `GroundContact` 装饰，保留房屋、树木、灌木等摆放。铺装算法在 `flagstone_paving.gd`，接缝处理在 `ground_contact.gd`，完整生成器也复用同一实现。
 
-当前镜头的最终美术概念图为 `assets/textures/concepts/forest_village/final_level_camera_v1.png`，由 imagegen 以实机镜头和现有狐耳剑士图为参考生成；提示词保存在 `docs/art/forest_village_concept_v1.prompt.txt`。它用于美术方向参考。
+当前镜头的最终美术概念图为 `assets/textures/concepts/forest_village/final_level_camera_v1.png`，由 imagegen 以实机镜头和现有狐耳剑士图为参考生成；提示词保存在 `docs/art/prompts/forest_village_concept_v1.prompt.txt`。它用于美术方向参考。
 
 正式关卡的林间光束使用原生体积雾：`EnvironmentRig/ForestLightShafts` 实例化 `assets/scenes/environment/forest_village_light_shafts.tscn`，在路口、井边、北侧林道、西侧林道和溪边布置 5 个厚实、柔边的局部 FogVolume。全局体积雾密度为 0，局部密度 0.022，太阳体积散射能量 6；树冠和建筑的实际阴影切出光束，方向跟随昼夜太阳。当前计算镜头前 60 米（原 56 米加正交相机后移补偿 4 米），沿用默认 64/64 体素网格、空间过滤和 0.9 时域重投影；不增加投影灯，不向体积雾注入环境光或 GI，不开启画面 TAA。近地路径与前景保持清楚，原有远景深度雾继续独立使用。
 
@@ -120,7 +119,7 @@ DDGI 捕获缓存相关节点列表，SceneTree 的层级变化会使其失效�
 
 布局更新后运行 `res://scripts/tools/art/forest_village_whitebox/replace_forest_level.gd`，把环境应用到原正式关卡、更新出生点与门口位置、重新烘焙 `res://assets/resources/world/navigation/forest_town.tres`；然后在正式关卡根节点的世界组件上导出关卡配置，刷新入口和 NPC 路线目录。正式关卡沿用原菜单和世界入口，预览场景仍供 F1/F2/F3 检查布局。
 
-仅对现有布局应用入口朝向时，可运行 `res://scripts/tools/art/forest_village_whitebox/reframe_village.gd`，保留现有树木、河道与房屋位置，重建门前铺装和地被避让；随后仍需运行正式关卡替换、导航和目录导出流程。当前正式镜头为正交 Size 5.8，20° 俯角；位置 CameraOffset 与角度 CameraRotationDegrees 统一在 SceneCameraComponent3D 调整。CameraOcclusionComponent3D 对持续完全遮挡角色的树木、房屋进行整体隐藏，同一物体的全部子网格同步渐隐，保留碰撞、阴影和 GI；NearFadeDistance 独立管理近处 1.5 米的表面渐隐。详细参数见 `docs/art/hd2d_camera.md`。入口调整后原生验证通过 60/60 项布局检查和 13 条导航连接；八处原生试拍覆盖出生点、六处转向入口与村长家。
+仅对现有布局应用入口朝向时，可运行 `res://scripts/tools/art/forest_village_whitebox/reframe_village.gd`，保留现有树木、河道与房屋位置，重建门前铺装和地被避让；随后仍需运行正式关卡替换、导航和目录导出流程。当前正式镜头为正交 Size 5.8，20° 俯角；位置 CameraOffset 与角度 CameraRotationDegrees 统一在 SceneCameraComponent3D 调整。CameraOcclusionComponent3D 对持续完全遮挡角色的树木、房屋进行整体隐藏，同一物体的全部子网格同步渐隐，保留碰撞、阴影和 GI；NearFadeDistance 独立管理近处 1.5 米的表面渐隐。详细参数见 `docs/rendering/hd2d-camera.md`。入口调整后原生验证通过 60/60 项布局检查和 13 条导航连接；八处原生试拍覆盖出生点、六处转向入口与村长家。
 
 仅更新导航时运行 `res://scripts/tools/art/forest_village_whitebox/rebuild_navigation.gd`，不会重写场景摆放。它与替换工具共用 `village_navigation.gd`：只解析物理碰撞，使用 0.05 米高度体素；项目默认导航地图的 `cell_height` 同步为 0.05 米。旧的 0.2 米体素让平地上的导航点抬高到约 0.3 米，超过 NPC 的 0.2 米路径点到达容差，导致居民在首点附近反复折返；重新烘焙后该段路径高度约 0.1 米，沿用原 NPC 导航逻辑即可通行。工具保存前检查十户门前、居民出生点、桥面和东岸共 13 条连接。
 

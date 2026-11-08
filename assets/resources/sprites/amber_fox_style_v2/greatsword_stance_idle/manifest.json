@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "status": "三段待机已接入武器架势切换",
+  "attacks": "本次三段攻击被否定并删除，待重新设计",
+  "method": "沿用选定的 ComfyUI 视频整理稿，在 Aseprite 中加大呼吸与尾摆",
+  "canvas": [
+    320,
+    384
+  ],
+  "foot_anchor": [
+    160,
+    347
+  ],
+  "fps": 24,
+  "frames_per_pose": 72,
+  "duration_seconds": 3,
+  "loop": true,
+  "clips": [
+    {
+      "key": "high",
+      "animation": "idle_high",
+      "frames": 72,
+      "fps": 24,
+      "loop": true,
+      "duration_seconds": 3,
+      "prefix": "idle",
+      "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/high"
+    },
+    {
+      "key": "mid",
+      "animation": "idle_mid",
+      "frames": 72,
+      "fps": 24,
+      "loop": true,
+      "duration_seconds": 3,
+      "prefix": "idle",
+      "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/mid"
+    },
+    {
+      "key": "low",
+      "animation": "idle_low",
+      "frames": 72,
+      "fps": 24,
+      "loop": true,
+      "duration_seconds": 3,
+      "prefix": "idle",
+      "texture_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/low"
+    }
+  ],
+  "runtime_replaced": true,
+  "previews": {
+    "idle": "greatsword-stance-idle-current.gif",
+    "static": "greatsword-stances.png"
+  },
+  "sources": "sources.json",
+  "motion": "motion.json",
+  "verification": "media-validation.json",
+  "note": "PNG/APNG 为像素基准；GIF 仅供观看。自动核验没有独立全轮廓标注。"
+}

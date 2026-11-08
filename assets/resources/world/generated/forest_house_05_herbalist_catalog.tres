@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3]
+[gd_resource type="Resource" script_class="WorldLevelCatalog" format=3 uid="uid://cbfwhp3xgxy7y"]
 
-[ext_resource type="Script" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_5a46g"]
+[ext_resource type="Script" uid="uid://dbd1xblidldp0" path="res://scripts/gamelogic/world/definitions/WorldLevelCatalog.cs" id="1_5a46g"]
 
 [resource]
 resource_name = "草药照护户 · 室内 · 世界目录"

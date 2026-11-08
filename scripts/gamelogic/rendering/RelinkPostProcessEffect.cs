@@ -34,7 +34,8 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
         }
     }
     internal const string CharacterSpriteGroup = "relink_character_sprites";
-    private readonly record struct SpriteQuad(Vector3 Origin, Vector3 Up, Rect2 Bounds);
+    internal const string DetailParticleGroup = "relink_detail_particles";
+    private readonly record struct SpriteQuad(Vector3 Origin, Vector3 Up, Rect2 Bounds, float DepthPadding = 0);
     private volatile SpriteQuad[] _sprites = System.Array.Empty<SpriteQuad>();
     private Rid _spriteBuffer;
     private int _spriteCapacity;
@@ -75,6 +76,21 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
                 Vector2 scale = new(pose.Basis.X.Length(), pose.Basis.Y.Length());
                 quads.Add(new(pose.Origin, pose.Basis.Y.Normalized(), new Rect2(new Vector2(box.Position.X, box.Position.Y) * scale,
                     new Vector2(box.Size.X, box.Size.Y) * scale)));
+            }
+            var particles = world.GetTree().GetNodesInGroup(DetailParticleGroup);
+            using var particlesOwner = (Godot.Collections.Array)particles;
+            foreach (var node in particles)
+            {
+                if (node is not CpuParticles3D emitter || !emitter.IsVisibleInTree() || emitter.GetWorld3D() != sceneWorld) continue;
+                Aabb box = emitter.CaptureAabb();
+                if (box.Size == Vector3.Zero) continue;
+                Transform3D pose = emitter.GlobalTransform;
+                Vector2 scale = new(pose.Basis.X.Length(), pose.Basis.Y.Length());
+                float centerZ = box.GetCenter().Z;
+                // Particles move through a shallow volume; only matching written depth is exempt.
+                float padding = (box.Size.Z + (emitter.Mesh?.GetAabb().Size.Y ?? 0)) * .5f * pose.Basis.Z.Length();
+                quads.Add(new(pose * new Vector3(0, 0, centerZ), pose.Basis.Y.Normalized(),
+                    new Rect2(new Vector2(box.Position.X, box.Position.Y) * scale, new Vector2(box.Size.X, box.Size.Y) * scale), padding));
             }
             film._sprites = quads.ToArray();
         }
@@ -127,7 +143,10 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
     {
         System.Threading.Interlocked.Increment(ref _renderCount);
         if (effectCallbackType != (int)EffectCallbackType || Profile == null || !Profile.Active || _failed) return;
-        if (renderData.GetRenderSceneBuffers() is not RenderSceneBuffersRD buffers) return;
+        // Drop the managed reference on the render thread, before a viewport can be destroyed.
+        // Otherwise the GC finalizer may become the last owner and free its GPU RIDs off-thread.
+        using var sceneBuffers = renderData.GetRenderSceneBuffers();
+        if (sceneBuffers is not RenderSceneBuffersRD buffers) return;
         Vector2I size = buffers.GetInternalSize();
         if (size.X < 1 || size.Y < 1 || !Initialize()) return;
         // 两个阶段都登记，包括关闭 Bloom 或只启用 LUT 的情况。
@@ -372,6 +391,13 @@ public partial class RelinkPostProcessEffect : CompositorEffect, ISerializationL
             data[i + 4] = dx;
             data[i + 5] = dy;
             data[i + 6] = a.Z - dx * a.X - dy * a.Y;
+            if (quad.DepthPadding > 0)
+            {
+                Vector3 center = inverse * quad.Origin - eye;
+                Vector4 near = projection * new Vector4(center.X, center.Y, center.Z + quad.DepthPadding, 1);
+                Vector4 far = projection * new Vector4(center.X, center.Y, center.Z - quad.DepthPadding, 1);
+                if (near.W > 0 && far.W > 0) data[i + 7] = Mathf.Abs(near.Z / near.W - far.Z / far.W);
+            }
             count++;
         }
         int byteCount = Math.Max(32, count * 32);

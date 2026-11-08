@@ -95,7 +95,7 @@ func show_info(server: Node) -> void:
 		+ "     Runtime server available; editor MCP commands limited to the host.\n\n"
 		+ "C:  Same directory, two editors — NOT SUPPORTED\n"
 		+ "     Port collision and registry overwrite; use Pattern A instead.\n\n"
-		+ "See addons/godot_mcp_toolkit/docs/multi-instance.md for full details."))
+		+ "See docs/tools/godot-mcp/multi-instance.md for full details."))
 
 	var readonly_content := DockSectionCard.make_collapsible(mid, "Read-Only Mode", false)
 	_add_note_label(readonly_content, (
@@ -118,7 +118,7 @@ func show_info(server: Node) -> void:
 		+ "and export stripping."))
 	var open_compat_btn := Button.new()
 	open_compat_btn.text = "Open Compatibility Guide"
-	var compat_doc := "res://addons/godot_mcp_toolkit/docs/compatibility.md"
+	var compat_doc := "res://docs/tools/godot-mcp/compatibility.md"
 	open_compat_btn.pressed.connect(func(): OS.shell_open(ProjectSettings.globalize_path(compat_doc)))
 	compat_content.add_child(open_compat_btn)
 
@@ -136,7 +136,7 @@ func show_info(server: Node) -> void:
 		+ "The dock's 'Companion Skills' button opens this same folder."))
 	var open_skills_btn := Button.new()
 	open_skills_btn.text = "Open Skills Folder"
-	var skills_dir := "res://addons/godot_mcp_toolkit/CompanionSkills"
+	var skills_dir := "res://docs/tools/godot-mcp/skills"
 	open_skills_btn.pressed.connect(func(): OS.shell_open(ProjectSettings.globalize_path(skills_dir)))
 	skills_content.add_child(open_skills_btn)
 

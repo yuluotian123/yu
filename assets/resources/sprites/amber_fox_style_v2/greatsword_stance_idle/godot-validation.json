@@ -1,0 +1,16 @@
+{
+  "animations": [
+    "idle_high",
+    "idle_low",
+    "idle_mid"
+  ],
+  "checked_frames": 216,
+  "frame_size": [
+    320,
+    384
+  ],
+  "ok": true,
+  "runtime_replaced": true,
+  "runtime_resource_loadable": true,
+  "visible_rgb_and_alpha_exact": true
+}

@@ -1,0 +1,490 @@
+{
+  "92": {
+    "inputs": {
+      "filename_prefix": "video/greatsword_stance_idle_mid",
+      "format": "mov",
+      "video": [
+        "105:91",
+        0
+      ],
+      "format.codec": "prores"
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "114": {
+    "inputs": {
+      "image": "mid-input.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "115": {
+    "inputs": {
+      "aspect_ratio": "1:1 (Square)",
+      "megapixels": 0.25,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Resolution Selector"
+    }
+  },
+  "300": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-half.png"
+    },
+    "_meta": {
+      "title": "当前角色 half 参考"
+    }
+  },
+  "301": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "image": [
+        "300",
+        0
+      ],
+      "frame_idx": 18,
+      "positive": [
+        "105:104",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "第 18 帧姿势约束"
+    }
+  },
+  "302": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-peak.png"
+    },
+    "_meta": {
+      "title": "当前角色 peak 参考"
+    }
+  },
+  "303": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "image": [
+        "302",
+        0
+      ],
+      "frame_idx": 36,
+      "positive": [
+        "301",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "第 36 帧姿势约束"
+    }
+  },
+  "304": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-blink.png"
+    },
+    "_meta": {
+      "title": "当前角色 blink 参考"
+    }
+  },
+  "305": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "image": [
+        "304",
+        0
+      ],
+      "frame_idx": 42,
+      "positive": [
+        "303",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "第 42 帧姿势约束"
+    }
+  },
+  "306": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-reopen.png"
+    },
+    "_meta": {
+      "title": "当前角色 reopen 参考"
+    }
+  },
+  "307": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "image": [
+        "306",
+        0
+      ],
+      "frame_idx": 46,
+      "positive": [
+        "305",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "第 46 帧姿势约束"
+    }
+  },
+  "308": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mid-half.png"
+    },
+    "_meta": {
+      "title": "当前角色 half 参考"
+    }
+  },
+  "309": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "image": [
+        "308",
+        0
+      ],
+      "frame_idx": 54,
+      "positive": [
+        "307",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "第 54 帧姿势约束"
+    }
+  },
+  "105:11": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "105:10": {
+    "inputs": {
+      "samples": [
+        "105:14",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "105:17": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "105:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "105:122",
+        0
+      ],
+      "steps": [
+        "105:123",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "105:14": {
+    "inputs": {
+      "noise": [
+        "105:15",
+        0
+      ],
+      "guider": [
+        "105:16",
+        0
+      ],
+      "sampler": [
+        "105:17",
+        0
+      ],
+      "sigmas": [
+        "105:9",
+        0
+      ],
+      "latent_image": [
+        "105:104",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "105:16": {
+    "inputs": {
+      "model": [
+        "105:122",
+        0
+      ],
+      "conditioning": [
+        "309",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "105:6": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "105:13": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "105:15": {
+    "inputs": {
+      "noise_seed": 2026110811
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "105:91": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": 10,
+      "color_space": "sRGB",
+      "chroma_subsampling": "auto",
+      "codec": "none",
+      "images": [
+        "105:10",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "105:104": {
+    "inputs": {
+      "prompt": "A seamless 3-second pixel-art battle idle loop of EXACTLY the fox-eared girl and greatsword in the supplied image. Remain in this precise stance with the same facing direction and the same hand positions. One gentle, clearly visible inhale and exhale: shoulders, cape, torso and arms rise together by about one to two native 256px pixels and smoothly settle. Preserve chest shape and clothing volume; no local breast expansion or bouncing. Keep feet planted in their exact original positions. The sword is heavy and rigid: allow only the tiny whole-weapon motion following its gripping hand, with constant length, width, shape and straight central axis. Never change the grip or the pose. Keep the small closed-mouth smile. Make one short natural blink at the closed-eye guide around frame 42, immediately reopen at frame 46; eyes are open at all other times. Subtle delayed follow-through in short ponytail ends, short cape edge and the single hanging tail, at most two native pixels. Return smoothly to the exact first pose, matching movement at the seam. No step, lunge, attack, stance switch, rotation, large sway or dramatic pose.\nThe reference is a native 256x256 game sprite enlarged exactly 2x. Preserve its identity and original block-pixel aesthetic: large connected color clusters, hard pixel edges, no fine strands, new highlights, smooth gradients, heavy outlines, blur, texture crawling or noisy shading. Preserve original eyes, mouth, golden bob and one side ponytail, connected low hair crown and brown-tipped fox ears, short yellow cape, cream tunic, brown straps, pouch, brown legwear and gold-trimmed boots. Only ONE golden tail with the original cream tip, kept hanging down in its reference silhouette; never make a round raised tail, second tail or a long cape. Keep the exact gray-blue greatsword with pale edges and central ridge, straight gold guard, normal brown grip and small gold pommel. Avoid frame-to-frame contour flicker, isolated edge pixels, holes, green spill, breathing edges and changing pixel detail. Stable locked camera, framing, light, scale and canvas position. Entire character, ears, feet, tail and weapon remain inside the image. Pure uniform green RGB(0,255,0) background, no shadow or ground. Silent.\nHIGH GUARD: both hands remain at the screen-left shoulder, sword held diagonally toward upper-right behind the head, face looking right. Preserve this direction exactly. Hold the wide supporting foot stance steadily; keep the low hanging tail between and behind the legs.",
+      "clip": [
+        "105:13",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ],
+      "width": [
+        "115",
+        0
+      ],
+      "height": [
+        "115",
+        1
+      ],
+      "length": [
+        "105:107",
+        1
+      ],
+      "first_frame": [
+        "114",
+        0
+      ],
+      "last_frame": [
+        "114",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ImageToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Image to Video"
+    }
+  },
+  "105:107": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "105:111",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "105:111": {
+    "inputs": {
+      "value": 3
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "Float (duration)"
+    }
+  },
+  "105:121": {
+    "inputs": {
+      "lora_name": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+      "strength_model": 1,
+      "model": [
+        "105:6",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "105:122": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:6",
+        0
+      ],
+      "on_true": [
+        "105:121",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Model)"
+    }
+  },
+  "105:123": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:124",
+        0
+      ],
+      "on_true": [
+        "105:125",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Steps)"
+    }
+  },
+  "105:124": {
+    "inputs": {
+      "value": 28
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:125": {
+    "inputs": {
+      "value": 8
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:126": {
+    "inputs": {
+      "value": false
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Boolean (Enable Lightning LoRA)"
+    }
+  }
+}

@@ -4,12 +4,13 @@
   "request": "房屋之间差别大一点",
   "tool_mode": "built-in image_gen",
   "completed_count": 10,
-  "image_dimensions": [1536, 1024],
+  "image_dimensions": [
+    1536,
+    1024
+  ],
   "use_case": "stylized-concept",
   "status": "Architectural redesign concepts; stronger massing, roof, storey, material and facade differences. Existing level scenes unchanged.",
-  "reference": "assets/textures/concepts/forest_village/final_level_camera_v1.png",
   "sources": [
-    "assets/resources/art/forest_village/houses_v1_generation.json",
     "docs/art/forest_village_whitebox.md"
   ],
   "households": [
@@ -113,5 +114,6 @@
       "prompt": "Household: 10 小畜养户.\nDESIGN PRIORITY — A LOW TWO-VOLUME TURF-ROOFED SMALLHOLDER'S HOME. Two compact OFFSET adjoining rectangular volumes, one slightly taller warm-grey STONE living room and one lower dark PLANK utility wing, each exactly one storey, form a stepped low silhouette. Both have visibly THICK GRASS-TURF ROOFS resting on exposed log rafters, with softly green planted surfaces and earth-layer eave edges; low shallow slopes with no pronounced triangular facade. Main stone volume has an off-center simple rectangular wood door, a small square domestic window and a squat broad stone chimney. The lower board wing reads as a modest household utility shelter, not a giant barn. A clean narrow SIDE PATH separates the domestic entry from a small fenced animal enclosure with a tiny shelter and feeding trough, only three small chickens allowed. Exactly THREE modest bee boxes at the distant woodland edge, separate from house and animal pen. Strong visual identity is the squat stepped stone-and-board blocks under living green roofs, not a cream Tudor cottage or hobbit door.\n\nUse case: stylized-concept.\nAsset type: individual household architectural redesign concept for the yu forest village, V2 with radically clearer silhouette differences; one landscape 3:2 image.\nInput image 1 is ONLY the approved reference for chunky pixel-painted rendering, rich but grouped foliage, warm sunlight and cool teal shadow. Its repetitive tall cream-and-brown triangular-gabled architecture MUST NOT determine this new design. The architectural specification above takes priority.\nContext: modest homes with household side activities in one small ten-household village inside a continuous mature oak forest. Shared local craft: hand-hewn timber, fieldstone foundations, earth/lime plaster where specified, simple joinery and human-scale doors. House materials and roofs vary by household rather than every home using the same half-timber cottage kit. Keep a grounded rural woodland culture, compact and affordable, no palace or massive commercial complex.\nStyle: polished environment concept art with broad edited pixel clusters and stepped painted planes, readable geometry, confident distinctive silhouette, grouped highlights and shadows. Same stylization as reference, not a photograph, clay render or shiny 3D toy. Fine detail restrained so architecture dominates props.\nComposition: entire main building and roof visible with comfortable margins, front three-quarter view slightly above door height. House occupies 60–70 percent of frame, modest functional yard in foreground, a few mature oaks behind, no trunk hiding the building. One coherent illustration, not a sheet of panels. Ground continues naturally to frame edges; a narrow broken flagstone footpath joins the front door, graded soil/moss/fern edges. Midday warm leaf-filtered sun with readable muted blue-green shade. Background quieter than building. No characters, text, logos, watermarks, labels, UI, floating islands, cutaway bases, giant mushrooms, magic, treehouses, modern machinery or metal sheet roofs.\nQuality check: building must be identifiable from its outline even when props are hidden. Do not add a generic two-storey cream half-timber cottage behind the specified building. All parts constitute one home, with ancillary small work structures only if specified.",
       "file": "assets/textures/concepts/forest_village/houses_v2/10_smallholder.png"
     }
-  ]
+  ],
+  "reference_note": "Created from the original forest-village camera reference; that superseded capture was removed during project cleanup."
 }

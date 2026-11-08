@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://b2deqdiifhipy" path="res://assets/materials/environment/forest_village/grass.tres" id="1_00b82"]
 [ext_resource type="Shader" uid="uid://ch0pwcr1xm24s" path="res://assets/shaders/town/forest_river.gdshader" id="2_osgts"]
-[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/terrain.res" id="4_sgmo0"]
+[ext_resource type="Texture2D" uid="uid://cj0nsiu0f66mc" path="res://assets/textures/environment/forest_village/character_style/terrain.res" id="4_sgmo0"]
 [ext_resource type="Shader" uid="uid://bmsxj3pag3e0h" path="res://assets/shaders/town/town_toon.gdshader" id="5_00b82"]
 [ext_resource type="Texture2D" uid="uid://d4ifnwfusrlx1" path="res://assets/textures/environment/forest_village/ground_contact.res" id="6_00b82"]
 [ext_resource type="Texture2D" path="res://assets/textures/rendering/ggx_energy.res" id="6_sgmo0"]
@@ -22,9 +22,9 @@
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/oak_sweeping.tscn" id="14_tc8bn"]
 [ext_resource type="PackedScene" uid="uid://dwpdqkggifyyq" path="res://assets/scenes/environment/forest_village/houses/08_farmer_east.tscn" id="15_pnpyg"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/hazel_round.tscn" id="15_qgkci"]
-[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/bark.res" id="15_sgmo0"]
+[ext_resource type="Texture2D" uid="uid://csui008bybyr5" path="res://assets/textures/environment/forest_village/character_style/bark.res" id="15_sgmo0"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/hazel_tall.tscn" id="16_6qv75"]
-[ext_resource type="Texture2D" path="res://assets/textures/environment/forest_village/character_style/bark_normal.res" id="16_iblv3"]
+[ext_resource type="Texture2D" uid="uid://bc6uiuyenm4bf" path="res://assets/textures/environment/forest_village/character_style/bark_normal.res" id="16_iblv3"]
 [ext_resource type="PackedScene" uid="uid://bjyuqm30wkvp1" path="res://assets/scenes/environment/forest_village/houses/09_farmer_west.tscn" id="16_ue208"]
 [ext_resource type="PackedScene" path="res://assets/scenes/environment/forest_vegetation/woodland_low.tscn" id="17_3dv85"]
 [ext_resource type="PackedScene" uid="uid://i1l68dq6wr6h" path="res://assets/scenes/environment/forest_village/houses/10_smallholder.tscn" id="17_iblv3"]
@@ -547,7 +547,7 @@
 [ext_resource type="MultiMesh" uid="uid://hv0aa3i8bsc" path="res://assets/models/environment/forest_village/ground_flora/patch_grass_9_4.multimesh.res" id="391_80jga"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_6.mesh.res" id="391_ht24f"]
 [ext_resource type="MultiMesh" uid="uid://v4qtjqkbpluf" path="res://assets/models/environment/forest_village/ground_flora/patch_grass_9_5.multimesh.res" id="392_ek7l2"]
-[ext_resource type="MultiMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_grass_9_9.multimesh.res" id="392_fhqo8"]
+[ext_resource type="MultiMesh" uid="uid://ddgb35x00vope" path="res://assets/models/environment/forest_village/ground_flora/patch_grass_9_9.multimesh.res" id="392_fhqo8"]
 [ext_resource type="MultiMesh" uid="uid://sg3xolipw2ax" path="res://assets/models/environment/forest_village/ground_flora/patch_grass_9_6.multimesh.res" id="393_wokj7"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_-5.mesh.res" id="393_ynoh0"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-6.mesh.res" id="394_044kh"]
@@ -595,7 +595,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_-5.mesh.res" id="428_o0wlm"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_-5.mesh.res" id="429_v8llp"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-5.mesh.res" id="430_dbmul"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-2_1.mesh.res" id="434_vw56d"]
+[ext_resource type="ArrayMesh" uid="uid://bi2k8h4eax1oc" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-2_1.mesh.res" id="434_vw56d"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_5.mesh.res" id="438_xoag8"]
 [ext_resource type="ArrayMesh" uid="uid://dm4smnqoqhai3" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_0.mesh.res" id="441_u1suy"]
 [ext_resource type="ArrayMesh" uid="uid://dgss2l51h1gwj" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-3_0.mesh.res" id="443_tx7rn"]
@@ -603,12 +603,12 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_-5.mesh.res" id="446_n52bf"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_-5.mesh.res" id="447_jrqrb"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_5.mesh.res" id="449_24flq"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-4.mesh.res" id="449_iwhkh"]
+[ext_resource type="ArrayMesh" uid="uid://7p0wujkxx6dg" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-4.mesh.res" id="449_iwhkh"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_5.mesh.res" id="450_0f6xo"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-4.mesh.res" id="450_rhpxo"]
+[ext_resource type="ArrayMesh" uid="uid://c11tu6mnjfsy4" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-4.mesh.res" id="450_rhpxo"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_5.mesh.res" id="451_0hapr"]
 [ext_resource type="ArrayMesh" uid="uid://nyrupqht7ujt" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_-3.mesh.res" id="451_aivis"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-1_-3.mesh.res" id="451_ob38r"]
+[ext_resource type="ArrayMesh" uid="uid://du0218yv6phvv" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-1_-3.mesh.res" id="451_ob38r"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_-3.mesh.res" id="454_stgfm"]
 [ext_resource type="ArrayMesh" uid="uid://bxqfk1m07mnk8" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_2.mesh.res" id="456_u1suy"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_5.mesh.res" id="457_ijybd"]
@@ -617,51 +617,51 @@
 [ext_resource type="ArrayMesh" uid="uid://bei0wo2gc6o52" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_4.mesh.res" id="463_ygcmo"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-5.mesh.res" id="464_x0ifv"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_5.mesh.res" id="465_05d8u"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-1.mesh.res" id="466_23678"]
+[ext_resource type="ArrayMesh" uid="uid://cgl72c3eid8ep" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-1.mesh.res" id="466_23678"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_5.mesh.res" id="466_i2gii"]
 [ext_resource type="ArrayMesh" uid="uid://ceuokreqptea8" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-2_4.mesh.res" id="466_ob38r"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_1.mesh.res" id="468_dfagw"]
+[ext_resource type="ArrayMesh" uid="uid://b1lyfl2qx1xhs" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_1.mesh.res" id="468_dfagw"]
 [ext_resource type="ArrayMesh" uid="uid://cjn5bthj0tqvh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-2.mesh.res" id="470_etgoi"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_2.mesh.res" id="471_m04os"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_3.mesh.res" id="472_dcwny"]
+[ext_resource type="ArrayMesh" uid="uid://h3xic8gif6lr" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_2.mesh.res" id="471_m04os"]
+[ext_resource type="ArrayMesh" uid="uid://cl1dte8x74ssv" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_3.mesh.res" id="472_dcwny"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_-5.mesh.res" id="473_cxscw"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_5.mesh.res" id="476_k44aj"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_4.mesh.res" id="477_mut3f"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_5.mesh.res" id="478_xlkjd"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_-3.mesh.res" id="479_pnpyg"]
+[ext_resource type="ArrayMesh" uid="uid://cv7j2vnmirbwr" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_-3.mesh.res" id="479_pnpyg"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_5.mesh.res" id="482_g1ms3"]
 [ext_resource type="ArrayMesh" uid="uid://55pt7027b107" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-4.mesh.res" id="485_23678"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-2.mesh.res" id="485_ue208"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_-1.mesh.res" id="487_iblv3"]
+[ext_resource type="ArrayMesh" uid="uid://b2n3ruai5o5dh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-2.mesh.res" id="485_ue208"]
+[ext_resource type="ArrayMesh" uid="uid://bti8pnjia33c5" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_-1.mesh.res" id="487_iblv3"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-4.mesh.res" id="488_axklo"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-1.mesh.res" id="493_swvpc"]
+[ext_resource type="ArrayMesh" uid="uid://bic6o8m732llm" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-1.mesh.res" id="493_swvpc"]
 [ext_resource type="ArrayMesh" uid="uid://b8u424t61oumj" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-3.mesh.res" id="497_ygcmo"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-3.mesh.res" id="500_j6a18"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_-3.mesh.res" id="501_b6xfo"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_4.mesh.res" id="502_ghmtt"]
+[ext_resource type="ArrayMesh" uid="uid://bbuh1hy0jihoh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_4.mesh.res" id="502_ghmtt"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_5_-4.mesh.res" id="505_xsnxc"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_3.mesh.res" id="508_stgfm"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_3.mesh.res" id="510_rgo3m"]
+[ext_resource type="ArrayMesh" uid="uid://div1k6ogyosgf" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_3.mesh.res" id="508_stgfm"]
+[ext_resource type="ArrayMesh" uid="uid://b707kh5vta8yf" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_3.mesh.res" id="510_rgo3m"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-2_6.mesh.res" id="510_wxq40"]
 [ext_resource type="ArrayMesh" uid="uid://ek46xlpvcebr" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_1.mesh.res" id="514_b6xfo"]
 [ext_resource type="ArrayMesh" uid="uid://ce5aqex6av6d8" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_2.mesh.res" id="514_dfagw"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_0.mesh.res" id="514_viosi"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_0.mesh.res" id="515_q6bd6"]
+[ext_resource type="ArrayMesh" uid="uid://dsg2tqd8oi3ir" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_0.mesh.res" id="514_viosi"]
+[ext_resource type="ArrayMesh" uid="uid://ct5fc22m44ics" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_0.mesh.res" id="515_q6bd6"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_5_2.mesh.res" id="518_hfqeg"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-1.mesh.res" id="519_ftql0"]
+[ext_resource type="ArrayMesh" uid="uid://cwejoiw086suh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-1.mesh.res" id="519_ftql0"]
 [ext_resource type="ArrayMesh" uid="uid://bhbgexcnfcrgx" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_0_6.mesh.res" id="520_5b1gr"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_5_3.mesh.res" id="520_5rt7b"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_4.mesh.res" id="521_aivis"]
+[ext_resource type="ArrayMesh" uid="uid://bhbypdxme0vui" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_4.mesh.res" id="521_aivis"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_5_2.mesh.res" id="522_uu2ko"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_5_3.mesh.res" id="523_ekn5u"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_5_4.mesh.res" id="524_md3ol"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_-2.mesh.res" id="527_j6a18"]
+[ext_resource type="ArrayMesh" uid="uid://blg8wudg0y40n" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_-2.mesh.res" id="527_j6a18"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_5_4.mesh.res" id="528_j1lj0"]
 [ext_resource type="ArrayMesh" uid="uid://ctfq6jvm5o6v" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_2.mesh.res" id="529_m04os"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-6.mesh.res" id="532_r12cf"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_-7.mesh.res" id="534_7k86x"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-5.mesh.res" id="536_kbads"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_3.mesh.res" id="537_b6xfo"]
+[ext_resource type="ArrayMesh" uid="uid://br76awb6ychal" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_3.mesh.res" id="537_b6xfo"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-4.mesh.res" id="538_bqt6d"]
 [ext_resource type="ArrayMesh" uid="uid://c8odhmb47gq3y" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_0.mesh.res" id="538_iqxp1"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_5_-3.mesh.res" id="540_rh43a"]
@@ -669,16 +669,16 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-3.mesh.res" id="542_52lxm"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-3.mesh.res" id="543_im4o1"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-1.mesh.res" id="544_tgjtp"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-6.mesh.res" id="546_cf1cg"]
+[ext_resource type="ArrayMesh" uid="uid://bshkcryag7mlu" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-6.mesh.res" id="546_cf1cg"]
 [ext_resource type="ArrayMesh" uid="uid://dmqnjnuiuh1w8" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_2.mesh.res" id="546_wis6d"]
 [ext_resource type="ArrayMesh" uid="uid://38huitqkqblv" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_4_-2.mesh.res" id="547_1x7tm"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-5.mesh.res" id="547_cq6ql"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-1.mesh.res" id="547_t7lbo"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_1.mesh.res" id="548_nb74y"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_1.mesh.res" id="549_c8iae"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_-5.mesh.res" id="550_1m6ft"]
+[ext_resource type="ArrayMesh" uid="uid://bq64a68jm8ku3" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_-5.mesh.res" id="550_1m6ft"]
 [ext_resource type="ArrayMesh" uid="uid://bq762tvt1476n" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_3.mesh.res" id="550_girq8"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_-4.mesh.res" id="551_iqxp1"]
+[ext_resource type="ArrayMesh" uid="uid://cto1733t8fq50" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_-4.mesh.res" id="551_iqxp1"]
 [ext_resource type="ArrayMesh" uid="uid://cad8u351svweg" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_1.mesh.res" id="551_u1suy"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_2.mesh.res" id="552_jmoq3"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_2.mesh.res" id="553_48w7w"]
@@ -689,20 +689,20 @@
 [ext_resource type="ArrayMesh" uid="uid://d3qp83k3umd76" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-7_-4.mesh.res" id="558_iblv3"]
 [ext_resource type="ArrayMesh" uid="uid://cefqv3su5hbbq" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_-5.mesh.res" id="559_ypwor"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_5.mesh.res" id="560_cqxkc"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-3.mesh.res" id="561_wis6d"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-2.mesh.res" id="565_u1suy"]
+[ext_resource type="ArrayMesh" uid="uid://cp508knnayhoa" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-3.mesh.res" id="561_wis6d"]
+[ext_resource type="ArrayMesh" uid="uid://cremyn0ow6m4" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_-2.mesh.res" id="565_u1suy"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_-2.mesh.res" id="567_7txd3"]
 [ext_resource type="ArrayMesh" uid="uid://boxymlep67wib" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_0.mesh.res" id="567_swvpc"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_-7.mesh.res" id="570_4cq00"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_-4.mesh.res" id="570_srtth"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_2.mesh.res" id="576_tx7rn"]
+[ext_resource type="ArrayMesh" uid="uid://buqx3rxcksxdu" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-8_2.mesh.res" id="576_tx7rn"]
 [ext_resource type="ArrayMesh" uid="uid://is72s8ai5uhw" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_3.mesh.res" id="578_rgo3m"]
 [ext_resource type="ArrayMesh" uid="uid://c0ws6wvhaail4" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_4.mesh.res" id="581_viosi"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_3.mesh.res" id="582_l6vik"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_4.mesh.res" id="583_ypwor"]
+[ext_resource type="ArrayMesh" uid="uid://cbcwnpdex5lfh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-7_4.mesh.res" id="583_ypwor"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_5.mesh.res" id="585_tam2o"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_6.mesh.res" id="587_im4o1"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-8_6.mesh.res" id="588_ygcmo"]
+[ext_resource type="ArrayMesh" uid="uid://bxffjj4ad6nqk" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-8_6.mesh.res" id="588_ygcmo"]
 [ext_resource type="ArrayMesh" uid="uid://c82lik84hgou4" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-8_6.mesh.res" id="590_q6bd6"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-2.mesh.res" id="591_j0ixf"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-8_5.mesh.res" id="592_675to"]
@@ -740,7 +740,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_4.mesh.res" id="622_b6ppi"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-3.mesh.res" id="623_isu20"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-5_-2.mesh.res" id="624_hgmkj"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-6_6.mesh.res" id="624_puo43"]
+[ext_resource type="ArrayMesh" uid="uid://dqjqgg3qptjj7" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-6_6.mesh.res" id="624_puo43"]
 [ext_resource type="ArrayMesh" uid="uid://i5bxrcqlikqq" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-6_-5.mesh.res" id="625_cf1cg"]
 [ext_resource type="ArrayMesh" uid="uid://c6ufeer85mpdt" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-4.mesh.res" id="626_mvg7j"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-7_-7.mesh.res" id="626_qhkg7"]
@@ -769,7 +769,7 @@
 [ext_resource type="ArrayMesh" uid="uid://b63fj2by2ot53" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-5_-1.mesh.res" id="652_1m6ft"]
 [ext_resource type="ArrayMesh" uid="uid://bg3c8dlndgch6" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-5.mesh.res" id="657_h8fw2"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-5_0.mesh.res" id="662_1fi5c"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-5_-7.mesh.res" id="662_etgoi"]
+[ext_resource type="ArrayMesh" uid="uid://klhr7uwfjh11" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-5_-7.mesh.res" id="662_etgoi"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_4.mesh.res" id="663_j5b4x"]
 [ext_resource type="ArrayMesh" uid="uid://dhdxff7y1p83e" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-5_6.mesh.res" id="666_1x7tm"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_5_6.mesh.res" id="668_6d0oa"]
@@ -783,7 +783,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_-7.mesh.res" id="684_t176n"]
 [ext_resource type="ArrayMesh" uid="uid://cbfdu380vk20j" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_1.mesh.res" id="685_o21s2"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-4_-6.mesh.res" id="686_5a5k4"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_6.mesh.res" id="688_7txd3"]
+[ext_resource type="ArrayMesh" uid="uid://csxe0kp53ej8l" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_6.mesh.res" id="688_7txd3"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-3_-7.mesh.res" id="689_ruq75"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_5.mesh.res" id="692_ou54m"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_6.mesh.res" id="694_bs0r4"]
@@ -793,7 +793,7 @@
 [ext_resource type="ArrayMesh" uid="uid://c0x2tcq3f0v63" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-3_6.mesh.res" id="703_t176n"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-2.mesh.res" id="704_onf7h"]
 [ext_resource type="ArrayMesh" uid="uid://dlc7fv0rbhyqj" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_-7.mesh.res" id="708_etchb"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-6.mesh.res" id="712_g2qh7"]
+[ext_resource type="ArrayMesh" uid="uid://bo7hjrk35q77b" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-6.mesh.res" id="712_g2qh7"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_-7.mesh.res" id="712_pg3xq"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-2_-7.mesh.res" id="713_v8rv2"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_0.mesh.res" id="713_xoa6p"]
@@ -805,7 +805,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-2_-6.mesh.res" id="721_hun83"]
 [ext_resource type="ArrayMesh" uid="uid://cmuytgw34oxqi" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-1_-7.mesh.res" id="721_ypwor"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_6.mesh.res" id="724_u3rtn"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-7.mesh.res" id="726_l6vik"]
+[ext_resource type="ArrayMesh" uid="uid://dlb035ybt53sd" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_-7.mesh.res" id="726_l6vik"]
 [ext_resource type="ArrayMesh" uid="uid://dt0mugq7teni0" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_-1_6.mesh.res" id="730_u1suy"]
 [ext_resource type="ArrayMesh" uid="uid://dskpooy23thxw" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_0_5.mesh.res" id="732_puo43"]
 [ext_resource type="ArrayMesh" uid="uid://bt2glahuyyyo4" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-5.mesh.res" id="733_nqcnl"]
@@ -813,7 +813,7 @@
 [ext_resource type="ArrayMesh" uid="uid://l16kuw85ga7o" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_-7.mesh.res" id="738_u2hiu"]
 [ext_resource type="ArrayMesh" uid="uid://dauuqenbkmn13" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_6.mesh.res" id="740_wis6d"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_4.mesh.res" id="746_q3t3s"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_-7.mesh.res" id="749_girq8"]
+[ext_resource type="ArrayMesh" uid="uid://xainhtodxajw" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_-7.mesh.res" id="749_girq8"]
 [ext_resource type="ArrayMesh" uid="uid://cvqieuja4ihou" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_6.mesh.res" id="750_tx7rn"]
 [ext_resource type="ArrayMesh" uid="uid://dw4fmxgl01cbj" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_-7.mesh.res" id="754_cgy0u"]
 [ext_resource type="ArrayMesh" uid="uid://dyk1tjjef8po5" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_1_-4.mesh.res" id="754_ypwor"]
@@ -821,20 +821,20 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_1_-6.mesh.res" id="762_bvg02"]
 [ext_resource type="ArrayMesh" uid="uid://dlg4pvtenw26x" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_-7.mesh.res" id="763_q3t3s"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_1_6.mesh.res" id="765_rrt3h"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_5.mesh.res" id="769_6j6q4"]
+[ext_resource type="ArrayMesh" uid="uid://d01b388ilgk35" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_5.mesh.res" id="769_6j6q4"]
 [ext_resource type="ArrayMesh" uid="uid://cql3c8pnmkc5" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_2_6.mesh.res" id="771_n8ivo"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_6.mesh.res" id="772_1x7tm"]
+[ext_resource type="ArrayMesh" uid="uid://c4bbcvvo5w3e4" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_6.mesh.res" id="772_1x7tm"]
 [ext_resource type="ArrayMesh" uid="uid://2grrlpyj55ql" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_2_6.mesh.res" id="772_qhm06"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_-7.mesh.res" id="775_8xjl1"]
+[ext_resource type="ArrayMesh" uid="uid://c0emkvbmhk7j8" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_-7.mesh.res" id="775_8xjl1"]
 [ext_resource type="ArrayMesh" uid="uid://bfaqshui76cem" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_-5.mesh.res" id="778_7txd3"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-3.mesh.res" id="778_dmlix"]
+[ext_resource type="ArrayMesh" uid="uid://doqpvfb8s16ke" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-3.mesh.res" id="778_dmlix"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-2.mesh.res" id="779_swa0a"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_3_-7.mesh.res" id="781_vcfd4"]
 [ext_resource type="ArrayMesh" uid="uid://buj875fesufo8" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_3_-7.mesh.res" id="782_g2qh7"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_4.mesh.res" id="783_t176n"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_4_4.mesh.res" id="784_ou54m"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_6.mesh.res" id="785_nqcnl"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_5.mesh.res" id="786_ulr0r"]
+[ext_resource type="ArrayMesh" uid="uid://bf37y1npvuih6" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_4.mesh.res" id="783_t176n"]
+[ext_resource type="ArrayMesh" uid="uid://b2g721igq3ky4" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_4_4.mesh.res" id="784_ou54m"]
+[ext_resource type="ArrayMesh" uid="uid://bjy4n3ig4axo1" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_6.mesh.res" id="785_nqcnl"]
+[ext_resource type="ArrayMesh" uid="uid://bnuelnghtlig7" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_5.mesh.res" id="786_ulr0r"]
 [ext_resource type="ArrayMesh" uid="uid://bglt70o0lh8mh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_4_4.mesh.res" id="788_etgoi"]
 [ext_resource type="ArrayMesh" uid="uid://bnxucyng3cf12" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_-6.mesh.res" id="789_675to"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_5_-4.mesh.res" id="796_qot2c"]
@@ -850,54 +850,54 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_5.mesh.res" id="849_jk2k3"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_5_6.mesh.res" id="852_cgy0u"]
 [ext_resource type="ArrayMesh" uid="uid://qo28re338h3d" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_3.mesh.res" id="852_g2qh7"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_6.mesh.res" id="852_pg3xq"]
+[ext_resource type="ArrayMesh" uid="uid://cyeijvb0pmior" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_6_6.mesh.res" id="852_pg3xq"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-6.mesh.res" id="857_mhitf"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-5.mesh.res" id="860_q3t3s"]
+[ext_resource type="ArrayMesh" uid="uid://dsytbhufencph" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-5.mesh.res" id="860_q3t3s"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_1.mesh.res" id="861_7oc6o"]
 [ext_resource type="ArrayMesh" uid="uid://b4urwj8bkb0f6" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_4.mesh.res" id="861_mhitf"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-4.mesh.res" id="861_n8ivo"]
+[ext_resource type="ArrayMesh" uid="uid://cg4bxub3kxoje" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-4.mesh.res" id="861_n8ivo"]
 [ext_resource type="ArrayMesh" uid="uid://efmv01k7d7kw" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-7.mesh.res" id="862_8xjl1"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_-4.mesh.res" id="863_3gdq7"]
 [ext_resource type="ArrayMesh" uid="uid://bhnrs2cydkwfn" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_-6.mesh.res" id="863_l6vik"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_-5.mesh.res" id="863_qhm06"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-3.mesh.res" id="865_675to"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_-3.mesh.res" id="866_1ldif"]
+[ext_resource type="ArrayMesh" uid="uid://2y3o5xtq4ch8" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_-5.mesh.res" id="863_qhm06"]
+[ext_resource type="ArrayMesh" uid="uid://defhulw6i3tij" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-3.mesh.res" id="865_675to"]
+[ext_resource type="ArrayMesh" uid="uid://b5jte22502d0n" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_-3.mesh.res" id="866_1ldif"]
 [ext_resource type="ArrayMesh" uid="uid://dwtn1e77uadc1" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_-4.mesh.res" id="866_girq8"]
 [ext_resource type="ArrayMesh" uid="uid://bklow7kr1a3s7" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-7.mesh.res" id="868_wh5qn"]
 [ext_resource type="ArrayMesh" uid="uid://b5u6ni0rflbjq" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_6_-6.mesh.res" id="869_60dxn"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-1.mesh.res" id="871_gtu2j"]
+[ext_resource type="ArrayMesh" uid="uid://bjknp4v8o886s" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_-1.mesh.res" id="871_gtu2j"]
 [ext_resource type="ArrayMesh" uid="uid://bsp5mbp4h6pvl" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_6_-2.mesh.res" id="874_dqmew"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_0.mesh.res" id="874_swa0a"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_-1.mesh.res" id="875_1fi5c"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_1.mesh.res" id="879_7l2lm"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_2.mesh.res" id="881_v85gx"]
+[ext_resource type="ArrayMesh" uid="uid://bdlxd4xykmc3o" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_0.mesh.res" id="874_swa0a"]
+[ext_resource type="ArrayMesh" uid="uid://ci6mspuvackan" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_-1.mesh.res" id="875_1fi5c"]
+[ext_resource type="ArrayMesh" uid="uid://cm2wnl51256bo" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_1.mesh.res" id="879_7l2lm"]
+[ext_resource type="ArrayMesh" uid="uid://fdnkhq4514i8" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_2.mesh.res" id="881_v85gx"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_1.mesh.res" id="882_52ksr"]
 [ext_resource type="ArrayMesh" uid="uid://cr5p65jc4hvon" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_3.mesh.res" id="882_dmlix"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_2.mesh.res" id="882_etchb"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_3.mesh.res" id="884_u3rtn"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_4.mesh.res" id="885_qot2c"]
+[ext_resource type="ArrayMesh" uid="uid://do5a5ugsiqonw" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_2.mesh.res" id="882_etchb"]
+[ext_resource type="ArrayMesh" uid="uid://ca1rd1s0tko76" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_3.mesh.res" id="884_u3rtn"]
+[ext_resource type="ArrayMesh" uid="uid://dmj2uhc36g62j" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_7_4.mesh.res" id="885_qot2c"]
 [ext_resource type="ArrayMesh" uid="uid://coq3cqxa8ryq1" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_0.mesh.res" id="885_u2hiu"]
 [ext_resource type="ArrayMesh" uid="uid://lve3vdt1i33i" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_0.mesh.res" id="886_x5b4a"]
 [ext_resource type="ArrayMesh" uid="uid://bmmtm05nore1h" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_1.mesh.res" id="889_cgy0u"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_6.mesh.res" id="889_u2hiu"]
+[ext_resource type="ArrayMesh" uid="uid://c3cpuj3ntonk7" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_6.mesh.res" id="889_u2hiu"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-2_1.mesh.res" id="892_76wy6"]
 [ext_resource type="ArrayMesh" uid="uid://c7jk477hmi661" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_2.mesh.res" id="893_wh5qn"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_4.mesh.res" id="894_2lo57"]
 [ext_resource type="ArrayMesh" uid="uid://b0f18k2rgdq4q" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_7_5.mesh.res" id="895_3gdq7"]
 [ext_resource type="ArrayMesh" uid="uid://c7wpxyscdfs8b" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-4_-1.mesh.res" id="896_76wy6"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_4_3.mesh.res" id="896_jk2k3"]
+[ext_resource type="ArrayMesh" uid="uid://c4wfp62yyslpr" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_4_3.mesh.res" id="896_jk2k3"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_fern_7_5.mesh.res" id="897_bdqxq"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-4_-1.mesh.res" id="897_x5b4a"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_3.mesh.res" id="902_cgy0u"]
+[ext_resource type="ArrayMesh" uid="uid://b76h0rpenayb2" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_3.mesh.res" id="902_cgy0u"]
 [ext_resource type="ArrayMesh" uid="uid://uxsyve5hwsm2" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_3.mesh.res" id="904_1lvke"]
 [ext_resource type="ArrayMesh" uid="uid://nmcvaapr1dxy" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_-2.mesh.res" id="905_2lo57"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_-1.mesh.res" id="905_mhitf"]
+[ext_resource type="ArrayMesh" uid="uid://ch5b2xiryak16" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-3_-1.mesh.res" id="905_mhitf"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_5_0.mesh.res" id="912_efg0t"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_1.mesh.res" id="918_wh5qn"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_-1.mesh.res" id="919_60dxn"]
+[ext_resource type="ArrayMesh" uid="uid://ccq8f37184q8r" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_1.mesh.res" id="918_wh5qn"]
+[ext_resource type="ArrayMesh" uid="uid://bpdn02yoe26mx" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_-1.mesh.res" id="919_60dxn"]
 [ext_resource type="ArrayMesh" uid="uid://ctpfk8ciam8w" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_2_-2.mesh.res" id="919_t176n"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_-1.mesh.res" id="921_3gdq7"]
-[ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_2.mesh.res" id="922_4yeic"]
+[ext_resource type="ArrayMesh" uid="uid://btxdjhry72ojl" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-2_-1.mesh.res" id="921_3gdq7"]
+[ext_resource type="ArrayMesh" uid="uid://bxk3s1p10ewkf" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_4_2.mesh.res" id="922_4yeic"]
 [ext_resource type="ArrayMesh" uid="uid://te0xwj4dhg1o" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_3.mesh.res" id="924_ou54m"]
 [ext_resource type="ArrayMesh" uid="uid://8jeukhm30ixm" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-1_-1.mesh.res" id="927_efg0t"]
 [ext_resource type="ArrayMesh" uid="uid://b03nw1pnxmbg3" path="res://assets/models/environment/forest_village/ground_flora/patch_flowers_-2_-1.mesh.res" id="929_ulr0r"]
@@ -934,7 +934,6 @@
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_-5_-5.mesh.res" id="1058_tvouj"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_3_-1.mesh.res" id="1060_i2h1n"]
 [ext_resource type="ArrayMesh" path="res://assets/models/environment/forest_village/ground_flora/patch_rosette_0_6.mesh.res" id="1062_gbwkf"]
-
 [ext_resource type="Material" path="res://assets/materials/environment/forest_village/ground_flora/verge.tres" id="painted_verge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cpvwt"]
@@ -1017,10 +1016,10 @@ shader_parameter/painterly_dapple_scale = 0.16
 shader_parameter/painterly_shadow_lift = 0.075
 shader_parameter/painterly_path_clearance = 1.0
 shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
-shader_parameter/base_color = Color(0.99,1.01,1.04,1)
+shader_parameter/base_color = Color(0.99, 1.01, 1.04, 1)
 shader_parameter/use_texture = false
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("4_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.54
@@ -1069,12 +1068,12 @@ data = PackedVector3Array(25.9963, -0.007999999, -37.44, 26.3163, -0.12, -37.44,
 resource_name = "Forest stream · varied width and curved shoreline"
 render_priority = 0
 shader = ExtResource("2_osgts")
-shader_parameter/deep_color = Color(0.16,0.32,0.34,1)
-shader_parameter/middle_color = Color(0.30,0.45,0.40,1)
-shader_parameter/shallow_color = Color(0.56,0.63,0.48,1)
+shader_parameter/deep_color = Color(0.16, 0.32, 0.34, 1)
+shader_parameter/middle_color = Color(0.3, 0.45, 0.4, 1)
+shader_parameter/shallow_color = Color(0.56, 0.63, 0.48, 1)
 shader_parameter/reflection_color = Color(0.12, 0.32, 0.33, 1)
 shader_parameter/ripple_color = Color(0.57, 0.76, 0.69, 1)
-shader_parameter/foam_color = Color(0.83,0.81,0.64,1)
+shader_parameter/foam_color = Color(0.83, 0.81, 0.64, 1)
 shader_parameter/flow_speed = 0.22
 shader_parameter/flow_direction = Vector2(0, 1)
 shader_parameter/river_width = 3.12
@@ -1134,10 +1133,10 @@ shader_parameter/painterly_dapple_scale = 0.18
 shader_parameter/painterly_shadow_lift = 0.075
 shader_parameter/painterly_path_clearance = 0.0
 shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
-shader_parameter/base_color = Color(0.99,1.01,1.04,1)
+shader_parameter/base_color = Color(0.99, 1.01, 1.04, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("4_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.54
@@ -1447,10 +1446,10 @@ shader_parameter/painterly_dapple_scale = 0.16
 shader_parameter/painterly_shadow_lift = 0.075
 shader_parameter/painterly_path_clearance = 1.0
 shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
-shader_parameter/base_color = Color(0.99,1.01,1.04,1)
+shader_parameter/base_color = Color(0.99, 1.01, 1.04, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("4_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.54
@@ -1528,10 +1527,10 @@ shader_parameter/painterly_dapple_scale = 0.16
 shader_parameter/painterly_shadow_lift = 0.075
 shader_parameter/painterly_path_clearance = 1.0
 shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
-shader_parameter/base_color = Color(0.99,1.01,1.04,1)
+shader_parameter/base_color = Color(0.99, 1.01, 1.04, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("4_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.54
@@ -2335,37 +2334,16 @@ size = Vector3(0.117000006, 2.2, 0.117000006)
 [sub_resource type="BoxMesh" id="BoxMesh_q0k5s"]
 size = Vector3(2.0279999, 0.18, 0.1404)
 
-[sub_resource type="BoxMesh" id="BoxMesh_8rdml"]
-size = Vector3(1.7939999, 0.45, 0.35099998)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_fcefp"]
-size = Vector3(1.7939999, 0.45, 0.35099998)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_7q3l7"]
-size = Vector3(1.7939999, 0.45, 0.35099998)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_f455c"]
-size = Vector3(1.7939999, 0.45, 0.35099998)
-
-[sub_resource type="BoxMesh" id="BoxMesh_gryup"]
-size = Vector3(1.17, 1.2, 0.0936)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cg6ss"]
 resource_name = "Whitebox soil"
 albedo_color = Color(0.46, 0.47, 0.38, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_8ygdj"]
-size = Vector3(7.0199995, 0.06, 5.46)
+[sub_resource type="BoxMesh" id="BoxMesh_j6u8r"]
+size = Vector3(4.68, 0.06, 3.12)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqbfy"]
 resource_name = "Whitebox crop"
 albedo_color = Color(0.53, 0.58, 0.45, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_alcfr"]
-size = Vector3(0.6435, 0.16, 4.86)
-
-[sub_resource type="BoxMesh" id="BoxMesh_j6u8r"]
-size = Vector3(4.68, 0.06, 3.12)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3ildi"]
 size = Vector3(0.51479995, 0.16, 2.52)
@@ -2375,64 +2353,6 @@ size = Vector3(3.12, 0.06, 3.8999999)
 
 [sub_resource type="BoxMesh" id="BoxMesh_vjlxn"]
 size = Vector3(0.429, 0.16, 3.3)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_d8apw"]
-top_radius = 0.26
-bottom_radius = 0.26
-height = 4.2
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_lpo6d"]
-top_radius = 0.26
-bottom_radius = 0.26
-height = 4.2
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_uh4p7"]
-top_radius = 0.26
-bottom_radius = 0.26
-height = 4.2
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_pqvvu"]
-top_radius = 0.26
-bottom_radius = 0.26
-height = 4.2
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_dwnt6"]
-top_radius = 0.26
-bottom_radius = 0.26
-height = 4.2
-radial_segments = 12
-
-[sub_resource type="BoxMesh" id="BoxMesh_iachn"]
-size = Vector3(2.6520002, 0.9, 0.70199996)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_iw4ko"]
-size = Vector3(2.6520002, 0.9, 0.70199996)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ic6mt"]
-size = Vector3(4.68, 0.03, 5.46)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_je4xx"]
-resource_name = "Whitebox roof"
-albedo_color = Color(0.46, 0.49, 0.48, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_xk50i"]
-size = Vector3(1.092, 1, 1.0139999)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_piuus"]
-size = Vector3(1.092, 1, 1.0139999)
-
-[sub_resource type="BoxMesh" id="BoxMesh_iwrsy"]
-size = Vector3(0.624, 2.2, 0.624)
-
-[sub_resource type="BoxMesh" id="BoxMesh_vb7q7"]
-size = Vector3(0.70199996, 0.8, 0.39)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_5oim0"]
-size = Vector3(0.70199996, 0.8, 0.39)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ldif"]
 size = Vector3(5.460001, 0.12, 0.09)
@@ -2457,12 +2377,6 @@ size = Vector3(7.0199995, 0.12, 0.09)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_u3rtn"]
 size = Vector3(7.0199995, 0.12, 0.09)
-
-[sub_resource type="BoxMesh" id="BoxMesh_w5724"]
-size = Vector3(0.546, 0.8, 0.546)
-
-[sub_resource type="BoxMesh" id="BoxMesh_anu8i"]
-size = Vector3(1.7160001, 0.12, 2.34)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_52ksr"]
 resource_name = "Forest Town · curved woodland bark · moss at terrain contact"
@@ -2503,7 +2417,7 @@ shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
 shader_parameter/base_color = Color(1.08, 1.02, 0.93, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("15_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.78
@@ -2574,7 +2488,7 @@ shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
 shader_parameter/base_color = Color(1.08, 1.02, 0.93, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("15_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.78
@@ -2645,10 +2559,10 @@ shader_parameter/painterly_dapple_scale = 0.16
 shader_parameter/painterly_shadow_lift = 0.075
 shader_parameter/painterly_path_clearance = 1.0
 shader_parameter/painterly_atlas = ExtResource("4_sgmo0")
-shader_parameter/base_color = Color(0.99,1.01,1.04,1)
+shader_parameter/base_color = Color(0.99, 1.01, 1.04, 1)
 shader_parameter/use_texture = true
 shader_parameter/pixel_brush = true
-shader_parameter/paint_floor_from_contact = null
+shader_parameter/paint_floor_from_contact = false
 shader_parameter/albedo_texture = ExtResource("4_sgmo0")
 shader_parameter/texture_average = Vector3(0.93, 0.93, 0.93)
 shader_parameter/texture_detail = 0.54
@@ -4990,119 +4904,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.56, 2.25, -1.56)
 material_override = SubResource("StandardMaterial3D_3n42a")
 mesh = SubResource("BoxMesh_q0k5s")
 
-[node name="Bench" type="MeshInstance3D" parent="Commons" unique_id=787182717]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 0.225, 1.56)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("BoxMesh_8rdml")
-
-[node name="Collision" type="StaticBody3D" parent="Commons/Bench" unique_id=796013600]
-collision_mask = 0
-
-[node name="@CollisionShape3D@68" type="CollisionShape3D" parent="Commons/Bench/Collision" unique_id=337098404]
-shape = SubResource("BoxShape3D_fcefp")
-
-[node name="@MeshInstance3D@69" type="MeshInstance3D" parent="Commons" unique_id=803867606]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12, 0.225, -5.46)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("BoxMesh_8rdml")
-
-[node name="Collision" type="StaticBody3D" parent="Commons/@MeshInstance3D@69" unique_id=182366552]
-collision_mask = 0
-
-[node name="@CollisionShape3D@70" type="CollisionShape3D" parent="Commons/@MeshInstance3D@69/Collision" unique_id=1810938460]
-shape = SubResource("BoxShape3D_7q3l7")
-
-[node name="@MeshInstance3D@71" type="MeshInstance3D" parent="Commons" unique_id=548272106]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.12, 0.225, -3.9)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("BoxMesh_8rdml")
-
-[node name="Collision" type="StaticBody3D" parent="Commons/@MeshInstance3D@71" unique_id=1247759494]
-collision_mask = 0
-
-[node name="@CollisionShape3D@72" type="CollisionShape3D" parent="Commons/@MeshInstance3D@71/Collision" unique_id=2033393926]
-shape = SubResource("BoxShape3D_f455c")
-
-[node name="NoticeBoard" type="MeshInstance3D" parent="Commons" unique_id=987979008]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 1.4, -7.8)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("BoxMesh_gryup")
-
 [node name="Production" type="Node3D" parent="." unique_id=1987618720]
-
-[node name="WestFields" type="Node3D" parent="Production" unique_id=1315890452]
-
-[node name="Soil" type="MeshInstance3D" parent="Production/WestFields" unique_id=1866827980]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.16, 0.035, 21.84)
-material_override = SubResource("StandardMaterial3D_cg6ss")
-mesh = SubResource("BoxMesh_8ygdj")
-
-[node name="Bed_00" type="MeshInstance3D" parent="Production/WestFields" unique_id=158564557]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.085, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_01" type="MeshInstance3D" parent="Production/WestFields" unique_id=1657973592]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.914999, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_02" type="MeshInstance3D" parent="Production/WestFields" unique_id=166285110]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.744999, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_03" type="MeshInstance3D" parent="Production/WestFields" unique_id=1367711068]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.575, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_04" type="MeshInstance3D" parent="Production/WestFields" unique_id=552027948]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.405, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_05" type="MeshInstance3D" parent="Production/WestFields" unique_id=1207479326]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.235001, 0.12, 21.84)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="EastFields" type="Node3D" parent="Production" unique_id=776057935]
-
-[node name="Soil" type="MeshInstance3D" parent="Production/EastFields" unique_id=650513391]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.16, 0.035, 21.06)
-material_override = SubResource("StandardMaterial3D_cg6ss")
-mesh = SubResource("BoxMesh_8ygdj")
-
-[node name="Bed_00" type="MeshInstance3D" parent="Production/EastFields" unique_id=207860986]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.235001, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_01" type="MeshInstance3D" parent="Production/EastFields" unique_id=40732876]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.405, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_02" type="MeshInstance3D" parent="Production/EastFields" unique_id=556867205]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.575, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_03" type="MeshInstance3D" parent="Production/EastFields" unique_id=955967413]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.744999, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_04" type="MeshInstance3D" parent="Production/EastFields" unique_id=261388971]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.914999, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
-
-[node name="Bed_05" type="MeshInstance3D" parent="Production/EastFields" unique_id=86618516]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.085, 0.12, 21.06)
-material_override = SubResource("StandardMaterial3D_kqbfy")
-mesh = SubResource("BoxMesh_alcfr")
 
 [node name="HerbGarden" type="Node3D" parent="Production" unique_id=654196977]
 
@@ -5162,74 +4964,6 @@ mesh = SubResource("BoxMesh_vjlxn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.26, 0.12, 14.82)
 material_override = SubResource("StandardMaterial3D_kqbfy")
 mesh = SubResource("BoxMesh_vjlxn")
-
-[node name="Timber" type="MeshInstance3D" parent="Production" unique_id=254858003]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -24.18, 0.28, -4.992)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("CylinderMesh_d8apw")
-
-[node name="@MeshInstance3D@73" type="MeshInstance3D" parent="Production" unique_id=1178228513]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -24.18, 0.78, -4.524)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("CylinderMesh_lpo6d")
-
-[node name="@MeshInstance3D@74" type="MeshInstance3D" parent="Production" unique_id=2071497466]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -24.18, 0.28, -4.0559998)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("CylinderMesh_uh4p7")
-
-[node name="@MeshInstance3D@75" type="MeshInstance3D" parent="Production" unique_id=1981420370]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -24.18, 0.78, -3.5879998)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("CylinderMesh_pqvvu")
-
-[node name="@MeshInstance3D@76" type="MeshInstance3D" parent="Production" unique_id=944402967]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -24.18, 0.28, -3.12)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("CylinderMesh_dwnt6")
-
-[node name="SawBench" type="MeshInstance3D" parent="Production" unique_id=739844655]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.01, 0.45, 0)
-material_override = SubResource("StandardMaterial3D_3n42a")
-mesh = SubResource("BoxMesh_iachn")
-
-[node name="Collision" type="StaticBody3D" parent="Production/SawBench" unique_id=425209882]
-collision_mask = 0
-
-[node name="@CollisionShape3D@77" type="CollisionShape3D" parent="Production/SawBench/Collision" unique_id=1791901969]
-shape = SubResource("BoxShape3D_iw4ko")
-
-[node name="ForgeApron" type="MeshInstance3D" parent="Production" unique_id=1291674067]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.06, 0.025, 8.58)
-material_override = SubResource("StandardMaterial3D_e8i6g")
-mesh = SubResource("BoxMesh_ic6mt")
-
-[node name="Forge" type="MeshInstance3D" parent="Production" unique_id=531741373]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.28, 0.5, 7.8)
-material_override = SubResource("StandardMaterial3D_je4xx")
-mesh = SubResource("BoxMesh_xk50i")
-
-[node name="Collision" type="StaticBody3D" parent="Production/Forge" unique_id=424737815]
-collision_mask = 0
-
-[node name="@CollisionShape3D@78" type="CollisionShape3D" parent="Production/Forge/Collision" unique_id=1179214099]
-shape = SubResource("BoxShape3D_piuus")
-
-[node name="ForgeHood" type="MeshInstance3D" parent="Production" unique_id=1843505457]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.28, 1.4, 7.4880004)
-material_override = SubResource("StandardMaterial3D_e8i6g")
-mesh = SubResource("BoxMesh_iwrsy")
-
-[node name="Anvil" type="MeshInstance3D" parent="Production" unique_id=445082969]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.84, 0.4, 9.36)
-material_override = SubResource("StandardMaterial3D_cpvwt")
-mesh = SubResource("BoxMesh_vb7q7")
-
-[node name="Collision" type="StaticBody3D" parent="Production/Anvil" unique_id=1743056313]
-collision_mask = 0
-
-[node name="@CollisionShape3D@79" type="CollisionShape3D" parent="Production/Anvil/Collision" unique_id=1937353990]
-shape = SubResource("BoxShape3D_5oim0")
 
 [node name="Fence_14" type="Node3D" parent="Production" unique_id=394790276]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.72, 0, -8.58)
@@ -5439,28 +5173,8 @@ shape = SubResource("BoxShape3D_etchb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5099998, 0.73, 0)
 shape = SubResource("BoxShape3D_u3rtn")
 
-[node name="Beehive" type="MeshInstance3D" parent="Production" unique_id=1988888953]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.72, 0.4, -17.16)
-material_override = SubResource("StandardMaterial3D_hi0y6")
-mesh = SubResource("BoxMesh_w5724")
-
-[node name="@MeshInstance3D@92" type="MeshInstance3D" parent="Production" unique_id=297997625]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.812, 0.4, -17.16)
-material_override = SubResource("StandardMaterial3D_hi0y6")
-mesh = SubResource("BoxMesh_w5724")
-
-[node name="@MeshInstance3D@93" type="MeshInstance3D" parent="Production" unique_id=108484000]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.904, 0.4, -17.16)
-material_override = SubResource("StandardMaterial3D_hi0y6")
-mesh = SubResource("BoxMesh_w5724")
-
 [node name="Bridge" parent="." unique_id=1808224433 instance=ExtResource("21_m04os")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.08, 0, 2.34)
-
-[node name="WashLanding" type="MeshInstance3D" parent="." unique_id=1832510797]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.74, 0.02, 16.38)
-material_override = SubResource("StandardMaterial3D_e8i6g")
-mesh = SubResource("BoxMesh_anu8i")
 
 [node name="Forest" type="Node3D" parent="." unique_id=685518286]
 
@@ -7418,7 +7132,7 @@ shape = SubResource("BoxShape3D_vfy6q")
 transform = Transform3D(-1.1825396, 0, -0.03456387, 0, 1.1830446, 0, 0.03456387, 0, -1.1825396, 25.740046, 0, 25.091566)
 
 [node name="Model" parent="Forest/ContinuousWoodland/Tree_217" index="0" unique_id=1061906611]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.47155365, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0838737, -0.5459858, 0.031679153)
 surface_material_override/0 = SubResource("ShaderMaterial_fn03r")
 
 [node name="@CollisionShape3D@11" parent="Forest/ContinuousWoodland/Tree_217/Collision1" parent_id_path=PackedInt32Array(1589640832, 1772130836) index="0" unique_id=1582217921]

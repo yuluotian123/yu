@@ -65,7 +65,7 @@ var _bound_port_provider: Callable = Callable()
 ## The GDScript LSP endpoint THIS editor's setting points at (default
 ## 127.0.0.1:6005). A --lsp-port override is invisible here — the engine consumes
 ## it before OS.get_cmdline_args() and never writes it to the setting — so that
-## case rides GODOT_MCP_LSP_PORT on the server (see docs/multi-instance.md).
+## case rides GODOT_MCP_LSP_PORT on the server (see docs/tools/godot-mcp/multi-instance.md).
 ## Static + editor-only (names EditorInterface); the registry callers pass the
 ## result into register()/ensure_registered() so registry_client.gd stays
 ## editor-clean for the Mode-B runtime autoload.

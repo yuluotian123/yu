@@ -13,9 +13,9 @@ namespace GameLogic
         public override void OnInit() => _input = ModuleSystem.GetModule<IInputModule>();
         public override void OnDestroy() => _input = null;
 
-        public bool IsPressed(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsPressed(action, handlerLayer) == true;
-        public bool IsJustPressed(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsJustPressed(action, handlerLayer) == true;
-        public bool IsJustReleased(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsJustReleased(action, handlerLayer) == true;
+        public bool IsPressed(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsPressed(action, handlerLayer, filterConsumed: true) == true;
+        public bool IsJustPressed(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsJustPressed(action, handlerLayer, filterConsumed: true) == true;
+        public bool IsJustReleased(string action, string handlerLayer = null) => !GameplayBlocked && _input?.IsJustReleased(action, handlerLayer, filterConsumed: true) == true;
         public bool IsBuffered(string action, float bufferTime) => !GameplayBlocked && _input?.IsBuffered(action, bufferTime) == true;
         public float GetActionStrength(string action, string handlerLayer = null) => GameplayBlocked ? 0f : _input?.GetActionStrength(action, handlerLayer) ?? 0f;
         public float GetHoldTime(string action) => GameplayBlocked ? 0f : _input?.GetHoldTime(action) ?? 0f;

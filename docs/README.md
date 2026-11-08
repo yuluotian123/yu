@@ -1,38 +1,54 @@
-# NPC、AI 与 World 文档
+# 项目文档
 
-更新：2026-10-24。NPC 行为、AI 图、行动恢复、世界对象、关卡切换及离屏模拟统一在本目录维护。
+Godot C# 游戏项目的统一文档入口。当前引擎与构建方式见[引擎构建与启动](tools/engine.md)。
 
-## 阅读顺序
+## 项目与框架
 
-| 手册 | 内容 |
+| 文档 | 内容 |
 | --- | --- |
-| [正式关卡：居民喝水与取货完整示例](NPC_DAILY_GOALS_EXAMPLE.md) | WorldActor、世界知识、道路、对象、两个 Goal、手动 Plan、选择器及四个 Action 的逐项实配 |
-| [NPC 与 AI 配置](NPC_AI_GUIDE.md) | 角色图、Goal、手动 Plan、Action、选择器连线、表达式、行动检查点及 NPC GM |
-| [世界、关卡与 NPC 模拟配置](WORLD_GUIDE.md) | 地点与对象类型、可复用 Scene、交互区域、知识、关卡切换、角色名册、道路、活动与离屏模拟 |
-| [架构与后续工作](ARCHITECTURE_AND_ROADMAP.md) | 组件职责、状态所有权、生命周期、实现边界、代码入口及尚未实施的范围 |
+| [项目架构](architecture/project.md) | 目录、模块、启动流程与开发入口 |
+| [EC 框架](architecture/ec-framework.md) | GameObject / Component 生命周期、顺序与场景接线 |
+| [编码约定](architecture/coding-patterns.md) | Godot C#、资源与模块集成 |
+| [框架手册](framework/README.md) | 核心、事件、资源、配置、UI、对象池、流程与工具 |
+| [图系统](graph/README.md) | 图编辑器、节点扩展、序列化与运行时 |
+| [世界架构](architecture/world.md) | 状态归属、生命周期、关卡与离屏模拟 |
 
-制作新关卡时先读世界手册的目录、入口和对象配置；制作 NPC 行为时先读 NPC／AI 手册。需要 NPC 跨关卡活动时，再按世界手册的角色 Scene、道路、活动与离屏配置接入。
+## 玩法与配置
 
-## 常见入口
-
-| 要做的事 | 从这里开始 |
+| 文档 | 内容 |
 | --- | --- |
-| 配置 Goal、Plan 和 Action | [图的连接](NPC_AI_GUIDE.md#图的连接)、[配置计划](NPC_AI_GUIDE.md#配置计划) |
-| 多个 Action 共用目标 | [选择器与输入](NPC_AI_GUIDE.md#配置选择器与输入) |
-| 配置取货数量、等待时间及公式 | [数量、时长与图内计算](NPC_AI_GUIDE.md#数量时长与图内计算) |
-| 保存旅行或休息进度 | [行动检查点与恢复](NPC_AI_GUIDE.md#行动检查点与恢复) |
-| 制作可复用的箱子、床或瓶子 | [对象类型与能力](WORLD_GUIDE.md#3-按类型能力配置对象) |
-| 配置交互区域与玩家 E 键 | [操作与交互区域](WORLD_GUIDE.md#配置操作与交互区域) |
-| 配置玩家关卡切换 | [关卡与入口](WORLD_GUIDE.md#2-配置关卡与入口) |
-| 配置 NPC 自主旅行、上班和离屏活动 | [NPC 旅行、活动与离屏模拟](WORLD_GUIDE.md#npc-旅行活动与离屏模拟) |
-| 查看性能基线与验证入口 | [现场与目录性能](WORLD_GUIDE.md#状态与性能)、[离屏预算与验收](WORLD_GUIDE.md#6-离屏预算诊断和验收) |
-| 理解 WorldActor 为什么存在 | [组件与系统职责](ARCHITECTURE_AND_ROADMAP.md#组件与系统职责) |
+| [角色系统](gameplay/characters.md)、[主角人物档案](characters/protagonist.md) | 角色组件、主角设定与完整动作预览 |
+| [角色图](gameplay/character-graphs.md)、[角色数据](gameplay/character-data.md) | 输入、行为图与属性配置 |
+| [世界与关卡](gameplay/world.md) | 对象、交互、入口、道路、角色名册与离屏模拟 |
+| [NPC 与 AI](gameplay/npc-ai.md)、[居民日常示例](gameplay/npc-daily-goals.md) | Goal、Plan、Action、选择器及完整配置 |
+| [能力](gameplay/abilities.md)、[武器与背包](gameplay/weapons.md) | Timeline、装备、攻击与物品实例 |
+| [大剑架势切换](gameplay/combat-stances.md) | 三段直选、过渡、外置粒子与 Weapon/Ability 接口 |
+| [输入](gameplay/input.md)、[HFSM](gameplay/hfsm.md) | 操作绑定与分层状态机 |
+| [对话](gameplay/dialogue.md)、[任务](gameplay/missions.md)、[存档](gameplay/saves.md) | 对话内容、任务推进与持久化 |
 
-## 相关基础资料
+## 美术与渲染
 
-- [通用角色数据](../scripts/gamelogic/character/data/CHARACTER_DATA_GUIDE.md)：需求、性格、关系、情绪与业务事实。
-- [角色系统](../docs/CHARACTER_SYSTEM.md)：玩家与 NPC 共用的执行层。
-- [通用图动作](../docs/GRAPH_BASIC_ACTIONS.md)：Flow 基础节点和执行规则。
-- [居民美术](../docs/art/npc_resident.md)、[跑腿员美术](../docs/art/npc_courier.md)：角色素材与制作记录。
+[美术制作入口](art/README.md)汇总场景、房屋、植被、角色与生成提示词。
 
-文档中的性能和回归数字保留原测试日期。本次整理不代表重新进行了完整运行时或目标硬件验收。新增配置说明应更新对应手册及本页入口，避免再次散落到实现目录。
+| 文档 | 内容 |
+| --- | --- |
+| [相机系统](rendering/camera.md)、[HD-2D 相机](rendering/hd2d-camera.md) | 运行时架构与场景构图 |
+| [DDGI](rendering/ddgi-implementation.md) | 引擎实现、场景接线、参数与验证 |
+| [场景表面](rendering/town-rendering.md)、[后处理](rendering/relink-post.md) | 材质、光照、像素取样与颜色处理 |
+| [双手大剑移动参考](art/greatsword-movement-references.md) | 持剑步法参考、三段移动约束与来源 |
+| [天空与云](rendering/sky-clouds.md)、[昼夜](rendering/time-of-day.md)、[天气](rendering/weather.md) | 环境渲染与运行时驱动 |
+
+## 开发工具与许可
+
+- [配置编辑器](tools/config-editor.md)、[运行时调试面板](tools/runtime-gm.md)
+- [架势资源清理与提交检查](tools/project-cleanup-2026-11-09.md)
+- [Godot MCP 工具包](tools/godot-mcp/README.md)、[工具包配套技能](tools/godot-mcp/skills/)
+- [项目许可中文说明](licenses/project-LICENSE.zh-CN.md)、[Godot MCP 许可](licenses/godot-mcp-LICENSE)、[第三方归属](licenses/godot-mcp-attributions.md)
+
+## 维护约定
+
+项目说明、模块手册、工具指南与提示词统一放在 `docs/`，从本索引或对应目录索引链接，不在源码和资源目录重复维护。许可证原文集中在 `docs/licenses/`。
+
+临时日志、截图、验证脚本与生成中间文件使用被忽略的 `.godot/<任务名>/`，完成后清理。保留仍使用的美术源文件、Godot 导入缓存和构建依赖；代码删除前检查动态加载、图节点注册与制作工具引用。
+
+项目自身文档统一使用简体中文，代码标识符、命令和路径保持原样；MCP 配套文档按原版保留。主角需求与改动统一维护在[主角人物档案](characters/protagonist.md)，跳跃只展示完整动作。

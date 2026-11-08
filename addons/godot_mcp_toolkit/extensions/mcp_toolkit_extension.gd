@@ -14,7 +14,7 @@ extends RefCounted
 ## (C# cannot inherit this GDScript base). Only direct subclasses are discovered —
 ## multi-level inheritance is intentionally unsupported.[br]
 ## [br]
-## See [code]addons/godot_mcp_toolkit/docs/extending.md[/code] for full
+## See [code]docs/tools/godot-mcp/extending.md[/code] for full
 ## documentation.
 
 

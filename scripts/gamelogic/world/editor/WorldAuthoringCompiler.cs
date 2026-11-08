@@ -103,7 +103,8 @@ public static class WorldAuthoringCompiler
         if(level.ExportPortalRoutes)signature+="/portal-export-v1";
         if(ResourceLoader.Exists(level.CatalogPath))
         {
-            var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
+            // Inspect disk without resetting C# resources held by editor tabs or the GC.
+            var old=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Ignore);
             if(old?.SourceSignature==signature&&old.Version==1&&old.LevelId==level.Id&&old.ResourceName==level.DisplayName+" · 世界目录"&&ReadableEntries(old,level))return;
         }
         bool hasWorldNodes=Relevant(level.ScenePath,relevant);
@@ -144,8 +145,14 @@ public static class WorldAuthoringCompiler
             WorldCatalog.Require(ReadableEntries(catalog,level),"场景引用尚未解析，保留已有世界目录："+level.DisplayName);
             DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(level.CatalogPath.GetBaseDir()));
             WorldCatalog.Require(ResourceSaver.Save(catalog,level.CatalogPath)==Error.Ok,"自动世界目录保存失败："+level.DisplayName);
-            // Replace an existing cached resource so runtime and inspectors immediately see the new directory.
-            _=ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath,cacheMode:ResourceLoader.CacheMode.Replace);
+            // Publish fields without asking the native loader to reset a live C# script instance.
+            if(ResourceLoader.HasCached(level.CatalogPath)&&ResourceLoader.Load<WorldLevelCatalog>(level.CatalogPath) is {} cached)
+            {
+                cached.Version=catalog.Version;cached.LevelId=catalog.LevelId;cached.SourceSignature=catalog.SourceSignature;
+                cached.ResourceName=catalog.ResourceName;cached.Entries=catalog.Entries;cached.Actors=catalog.Actors;
+                cached.Entrances=catalog.Entrances;cached.Portals=catalog.Portals;cached.EmitChanged();
+            }
+            else catalog.TakeOverPath(level.CatalogPath);
         }
         finally{root?.Free();}
     }

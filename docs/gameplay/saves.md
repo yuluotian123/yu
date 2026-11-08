@@ -1,0 +1,66 @@
+<a id="save-module"></a>
+# 存档模块
+
+Save Module 把所有已注册的 `ISaveable` 对象写入同一个 JSON 存档槽，并在加载时按 `SaveKey` 把数据恢复到对应对象。
+
+## 核心类型
+
+- `ISaveModule`：注册、保存、加载、删除和查询存档槽。
+- `ISaveable`：可存档对象协议。
+- `SaveModule`：注册表和文件读写实现。
+- `AutoStateSerializer`：对象状态序列化。
+- `SerializationComponent2D/3D`：场景对象快照辅助。
+
+## 注册可存档对象
+
+```csharp
+ISaveModule saves = ModuleSystem.GetModule<ISaveModule>();
+saves.Register(playerSaveData);
+
+saves.Save(slot1);
+bool loaded = saves.Load(slot1);
+
+saves.Unregister(playerSaveData);
+```
+
+每个 `ISaveable.SaveKey` 必须唯一。保存时先调用对象的 `Save()`，再序列化其状态；加载时先回写字段，再调用对象的 `Load()`。
+
+## 文件格式
+
+当前路径为：
+
+```text
+user://saves/{slot}.json
+```
+
+顶层包含 `meta`、`legacy` 和 `sections`。旧对象按 `SaveKey` 存在 `legacy` 中，`ISaveSection` 按分组和稳定 ID 存在 `sections` 中。
+
+## 生命周期约定
+
+- 长生命周期系统在初始化时注册，在关闭时取消注册。
+- `ISaveable` 应在加载前注册；`ISaveSection` 可在关卡创建后注册，自动恢复待应用状态。
+- 世界切换卸载前调用 `CheckpointSections()`，保留已卸载角色的最新分区；Save 合并它们和当前活动分区，避免只保存最后一个关卡。`ResetSession()` 在新游戏前清理缓存，不删除磁盘槽。
+- 世界对象状态只由 `world/session` 保存，现场点不再另外注册世界分区；世界时钟仍为 `world/time_of_day`。运行时 Load 会取消行动并请求恢复保存的关卡和玩家位置。
+- `world/session` 当前 schema 2，按对象的实际能力集合保存各能力的版本与状态。没有库存能力的对象不写库存字段；容量租约不持久化。旧 schema 1 直接拒绝，不做转换。
+- 删除存档前应停止可能同时进行的保存操作。
+- 新版本增加字段时提供默认值；删除或改名字段时需要迁移。
+
+## 当前注意事项
+
+- 正式写入 `user://saves`，读取依次尝试主文件、`.bak` 和旧 `res://saves`。
+- 非法 slot 名称抛出 `ArgumentException`，不会转为默认槽后覆盖其他存档。
+- 保存先写同目录临时文件并刷盘，再原子替换。原主文件损坏时保留已有备份。
+- JSON 或分区结构损坏时尝试下一个文件；无法读取时返回 `false`。未来格式版本拒绝加载。
+- 单个对象序列化失败可能影响整槽保存，需要错误隔离和结果对象。
+- 分区内部字段迁移与恢复期间的业务异常回滚仍需补充；当前备份回退只覆盖文件读取和通用结构校验。
+
+<a id="save-v2"></a>
+## 第 2 版存档格式
+
+第 2 版存档写入 `user://saves/{slot}.json`，并保留 `res://saves` 作为旧存档的只读回退目录。根对象包含 `meta`、`legacy` 和 `sections`。角色状态通过 `ISaveSection` 注册，按分区格式版本保存在 `sections.characters/{PersistentId}`。
+
+角色分区 schema 4 增加 `equipment`：保存当前武器 ID 和槽位顺序，恢复装备后再恢复能力冷却。旧档默认大剑，原 `attack` 冷却迁移到 `greatsword_attack`；坐标仍遵循 schema 1/2 的一次性像素转米规则。切换队列和未完成动作不持久化。详见 [武器系统](weapons.md)。
+
+schema 5 增加 `inventory.weapon_ids`；可选 `inventory.positions` 保存拖拽后的行囊格子位置，旧档缺少此字段时按物品顺序排列。装备 `loadout_version = 1` 区分显式空槽与旧档默认装备。恢复顺序为行囊、装备、能力冷却，保留卸下的武器与空槽；禁止全卸下，无效的全空装备恢复一把已有武器。GM JSON 校验接受 schema 1–5。详见 [背包系统](weapons.md)。
+
+写入先使用临时文件，再备份并替换原文件。关卡场景创建前也可安全读取角色存档：`SaveModule` 暂存待恢复分区，在场景初始化、`CharacterPersistenceComponent3D` 注册时应用。

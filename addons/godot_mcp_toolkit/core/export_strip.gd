@@ -2,7 +2,7 @@
 extends EditorExportPlugin
 ## Auto-strips godot_mcp_toolkit addon files, GDScript extensions, and
 ## res://.mcp.json from exported builds. C# extensions compile into .NET
-## assemblies and cannot be stripped per-class — see docs/extending.md.
+## assemblies and cannot be stripped per-class — see docs/tools/godot-mcp/extending.md.
 ## Registered by plugin.gd; prevents MCP code shipping in game PCKs.
 ##
 ## Binary-token script export modes (Godot 4.3+ default) compile addon/extension
@@ -142,7 +142,7 @@ static func _compute_strip_paths(classes: Array) -> Dictionary:
 #                    → no warning (excluding the addon is exactly what we advise).
 #   ext leaked    =  extension paths computed in _export_begin that never reached
 #                    _export_file. (A manually-excluded single extension also
-#                    reads as "unseen" — documented caveat in docs/extending.md.)
+#                    reads as "unseen" — documented caveat in docs/tools/godot-mcp/extending.md.)
 # Returns {warn, addon_leaked, leaked_ext_count, message}.
 static func _decide_warning(saw_addon_script: bool, saw_addon_nonscript: bool, extension_strip_paths: Dictionary, seen_ext: Dictionary) -> Dictionary:
 	var addon_leaked := saw_addon_nonscript and not saw_addon_script

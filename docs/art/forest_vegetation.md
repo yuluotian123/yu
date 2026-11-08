@@ -44,8 +44,8 @@
 
 原生 ImporterMesh 生成距离 LOD，树皮表面为 4–5 层附加 LOD，叶卡表面为 1 层；蕨类为 2/1 层。所有模型完整细节少于 8000 三角面。树叶采用深度裁切、原生阴影和轻微风动，没有使用透明混合排序。
 
-导入工具为 `import_vegetation.gd`，切换工具为 `install_into_village.py`。后者对六处路径以外的场景内容做逐字节校验，初始备份在 `.godot/vegetation_v5/`。`forest_village_whitebox/build_village.gd` 与现有验证器的模型来源已同步，后续重建仍使用新植被。
+导入工具为 `import_vegetation.gd`，重新导入时复用当前场景的碰撞和元数据。`forest_village_whitebox/build_village.gd` 与验证器直接引用现有植被，不再需要一次性路径迁移脚本。
 
-复建顺序：Blender 后台运行 `build_vegetation.py`；Godot headless 运行 `import_vegetation.gd`；Python 运行 `install_into_village.py`。`review_vegetation.gd` 在原生 Vulkan 中生成总览与人物同框预览。渲染预览、日志和一次性检查放在忽略目录 `.godot/vegetation_v5/`。
+复建顺序：Blender 后台运行 `build_vegetation.py`；Godot headless 运行 `import_vegetation.gd`。`review_vegetation.gd` 在原生 Vulkan 中生成总览与人物同框预览。渲染预览、日志和一次性检查放在忽略目录 `.godot/vegetation_v5/`。
 
-导入检查逐表面核对顶点色、UV、单位长度法线、三角面预算与 LOD；现有村落通行验证 60/60 通过。渲染总览与人物对照已目视检查。完整森林场景使用 `D:/DCC/Godot_4.8/bin/shadow_tent/Godot.windows.editor.x86_64.mono.ddgi_scene.console.exe` 验证：274 棵树全部来自新预制体、制作法线保留、叶片风动启用，雨天含水量与雪天积雪参数绑定通过；晴雨场景截图在 `.godot/vegetation_v5/forest_dry.png`、`forest_rain.png`。不要使用 `bin/` 根目录的旧版 GodotSharp API 检验当前 DDGI，否则会出现 `GetDdgiSky` 方法缺失。此套资源的美术细节由项目实际灯光与曝光决定，独立总览使用自己的检视灯光。
+导入检查逐表面核对顶点色、UV、单位长度法线、三角面预算与 LOD；现有村落通行验证 60/60 通过。渲染总览与人物对照已目视检查。完整森林场景使用 `D:/DCC/Godot_4.8/bin/shadow_tent/Godot.windows.editor.x86_64.mono.ddgi_scene.console.exe` 验证：274 棵树全部来自新预制体、制作法线保留、叶片风动启用，雨天含水量与雪天积雪参数绑定通过。不要使用 `bin/` 根目录的旧版 GodotSharp API 检验当前 DDGI，否则会出现 `GetDdgiSky` 方法缺失。此套资源的美术细节由项目实际灯光与曝光决定，独立总览使用自己的检视灯光。

@@ -1,0 +1,418 @@
+{
+  "92": {
+    "inputs": {
+      "filename_prefix": "video/greatsword_stance_idle_high",
+      "format": "mov",
+      "video": [
+        "105:91",
+        0
+      ],
+      "format.codec": "prores"
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "114": {
+    "inputs": {
+      "image": "high-input.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "105:11": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "105:10": {
+    "inputs": {
+      "samples": [
+        "105:14",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "105:17": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "105:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "105:122",
+        0
+      ],
+      "steps": [
+        "105:123",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "105:14": {
+    "inputs": {
+      "noise": [
+        "105:15",
+        0
+      ],
+      "guider": [
+        "105:16",
+        0
+      ],
+      "sampler": [
+        "105:17",
+        0
+      ],
+      "sigmas": [
+        "105:9",
+        0
+      ],
+      "latent_image": [
+        "105:104",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "105:16": {
+    "inputs": {
+      "model": [
+        "105:122",
+        0
+      ],
+      "conditioning": [
+        "309",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "105:6": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "105:13": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "105:15": {
+    "inputs": {
+      "noise_seed": 2026110841
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "105:91": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": 10,
+      "color_space": "sRGB",
+      "chroma_subsampling": "auto",
+      "codec": "none",
+      "images": [
+        "105:10",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "105:104": {
+    "inputs": {
+      "prompt": "A seamless THREE-SECOND battle idle loop, not an attack. One visible but gentle breath lifts shoulders, upper torso, cape and BOTH gripping arms together by only one to two native pixels, then settles smoothly. Chest volume stays constant, no breast bounce. Both elbows remain naturally bent and the sword follows the hands as one rigid object. Feet remain still. The single tail has a gentle delayed sway of about THREE native pixels at its tip while the root stays stable. One short natural blink at the closed-eye guide near frame42; reopen immediately at frame46. Eyes open otherwise. Keep the tiny closed mouth. First and last images and motion match seamlessly. No pose switch, step, lunge or swing.\nHIGH STANCE: two-handed bent-elbow guard above and slightly in front of the forehead, blade almost upright and leaning screen-left. Start and finish in this exact overhead guard.\nExactly the same fox-eared girl, face, proportions, short gold cape, cream LONG SLEEVES all the way to the wrists, short travel tunic, brown belt and pouch on the SAME screen-right hip, dark brown legwear, gold-trimmed boots, short gold bob and side ponytail, brown-tipped ears, ONE gold tail with cream tip. Tiny TWO-PIXEL closed smile; never open the mouth, enlarge the mouth, grin or speak. Preserve the original face and coherent coarse pixel blocks. Fixed identity and warm palette throughout. No smooth painting, gradients, fabric texture, new detail, thin stray hair, continuous dark outline, glow or antialiasing. Stable clean edges with no crawling, flicker, halo or green spill.\nExactly ONE rigid gray-blue greatsword with pale blade edges and center ridge, straight gold guard, short brown handle and small gold pommel. CONSTANT blade length, width and silhouette. Both hands grip the same short handle in the SAME order at all times; wrists remain visibly connected to long sleeves. Steel stays gray-blue, never white, yellow or transparent. No weapon bending, morphing, duplication, changing hands, detached fists or gaps at the wrist. No particles, trails, flashes or motion blur.\nNative pixel sprite canvas256x384 enlarged exactly2x to512x768. Keep the same body scale and feet baseline at native y347. Use upper empty space only for the sword. Locked orthographic three-quarter front camera, face toward screen right. No zoom, camera motion, back view, scale change, recentering, crop or cinematic lighting. Full sword, feet, head and tail remain inside the frame. Pure uniform RGB(0,255,0) green background, no floor, shadow or sound.",
+      "clip": [
+        "105:13",
+        0
+      ],
+      "vae": [
+        "105:11",
+        0
+      ],
+      "width": 512,
+      "height": 768,
+      "length": 73,
+      "first_frame": [
+        "114",
+        0
+      ],
+      "last_frame": [
+        "114",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ImageToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Image to Video"
+    }
+  },
+  "105:121": {
+    "inputs": {
+      "lora_name": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+      "strength_model": 1,
+      "model": [
+        "105:6",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "105:122": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:6",
+        0
+      ],
+      "on_true": [
+        "105:121",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Model)"
+    }
+  },
+  "105:123": {
+    "inputs": {
+      "switch": [
+        "105:126",
+        0
+      ],
+      "on_false": [
+        "105:124",
+        0
+      ],
+      "on_true": [
+        "105:125",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Steps)"
+    }
+  },
+  "105:124": {
+    "inputs": {
+      "value": 28
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:125": {
+    "inputs": {
+      "value": 28
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "105:126": {
+    "inputs": {
+      "value": false
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Boolean (Enable Lightning LoRA)"
+    }
+  },
+  "300": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "high-half.png"
+    }
+  },
+  "301": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "positive": [
+        "105:104",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "frame_idx": 18,
+      "vae": [
+        "105:11",
+        0
+      ],
+      "image": [
+        "300",
+        0
+      ]
+    }
+  },
+  "302": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "high-peak.png"
+    }
+  },
+  "303": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "positive": [
+        "301",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "frame_idx": 36,
+      "vae": [
+        "105:11",
+        0
+      ],
+      "image": [
+        "302",
+        0
+      ]
+    }
+  },
+  "304": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "high-blink.png"
+    }
+  },
+  "305": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "positive": [
+        "303",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "frame_idx": 42,
+      "vae": [
+        "105:11",
+        0
+      ],
+      "image": [
+        "304",
+        0
+      ]
+    }
+  },
+  "306": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "high-reopen.png"
+    }
+  },
+  "307": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "positive": [
+        "305",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "frame_idx": 46,
+      "vae": [
+        "105:11",
+        0
+      ],
+      "image": [
+        "306",
+        0
+      ]
+    }
+  },
+  "308": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "high-half.png"
+    }
+  },
+  "309": {
+    "class_type": "MiniMaxH3AddGuide",
+    "inputs": {
+      "positive": [
+        "307",
+        0
+      ],
+      "latent": [
+        "105:104",
+        1
+      ],
+      "frame_idx": 54,
+      "vae": [
+        "105:11",
+        0
+      ],
+      "image": [
+        "308",
+        0
+      ]
+    }
+  }
+}

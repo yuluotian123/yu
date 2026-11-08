@@ -251,10 +251,10 @@ compositor_effects = Array[CompositorEffect]([SubResource("grade"), SubResource(
 [sub_resource type="Resource" id="Resource_e4r7r"]
 resource_local_to_scene = true
 script = ExtResource("22_6txhy")
-FramingOriginPath = NodePath("../CameraFramingTarget")
 Profile = ExtResource("21_i4cks")
 UseComponentFraming = true
-CameraOffset = Vector3(0, 3, 7)
+CameraOffset = Vector3(0, 3.5, 8)
+CameraRotationDegrees = Vector3(-25, 0, 0)
 
 [sub_resource type="Resource" id="Resource_no8qj"]
 resource_local_to_scene = true
@@ -298,6 +298,39 @@ script = ExtResource("32_0x6cs")
 [sub_resource type="Resource" id="whitebox_world"]
 script = ExtResource("33_mmr44")
 
+[sub_resource type="Resource" id="character_data_ochre_courier"]
+script = ExtResource("37_1uuhk")
+Profile = ExtResource("48_o32mn")
+
+[sub_resource type="Resource" id="ochre_courier_agent"]
+script = ExtResource("39_i75ou")
+Graph = ExtResource("49_w4x6r")
+
+[sub_resource type="Resource" id="npc_navigation"]
+script = ExtResource("40_4vq3v")
+
+[sub_resource type="Resource" id="npc_move_profile"]
+script = ExtResource("41_sfmgt")
+MoveSpeed = 2.2
+
+[sub_resource type="Resource" id="npc_movement"]
+script = ExtResource("42_d0qfs")
+Profile = SubResource("npc_move_profile")
+MovementSpace = 1
+
+[sub_resource type="Resource" id="npc_animation"]
+script = ExtResource("44_1qxs0")
+LocomotionGraph = ExtResource("43_77yxe")
+
+[sub_resource type="Resource" id="npc_abilities"]
+script = ExtResource("45_x7h4q")
+
+[sub_resource type="Resource" id="npc_character_save"]
+script = ExtResource("46_ivfsh")
+
+[sub_resource type="BoxShape3D" id="npc_body"]
+size = Vector3(0.4, 0.72, 0.4)
+
 [sub_resource type="Resource" id="resident_world_actor"]
 script = ExtResource("34_553iy")
 ScenePathOverride = "res://assets/scenes/npc/resident.tscn"
@@ -330,39 +363,6 @@ LocomotionGraph = ExtResource("43_77yxe")
 script = ExtResource("45_x7h4q")
 
 [sub_resource type="Resource" id="resident_persistence"]
-script = ExtResource("46_ivfsh")
-
-[sub_resource type="BoxShape3D" id="npc_body"]
-size = Vector3(0.4, 0.72, 0.4)
-
-[sub_resource type="Resource" id="character_data_ochre_courier"]
-script = ExtResource("37_1uuhk")
-Profile = ExtResource("48_o32mn")
-
-[sub_resource type="Resource" id="ochre_courier_agent"]
-script = ExtResource("39_i75ou")
-Graph = ExtResource("49_w4x6r")
-
-[sub_resource type="Resource" id="npc_navigation"]
-script = ExtResource("40_4vq3v")
-
-[sub_resource type="Resource" id="npc_move_profile"]
-script = ExtResource("41_sfmgt")
-MoveSpeed = 2.2
-
-[sub_resource type="Resource" id="npc_movement"]
-script = ExtResource("42_d0qfs")
-Profile = SubResource("npc_move_profile")
-MovementSpace = 1
-
-[sub_resource type="Resource" id="npc_animation"]
-script = ExtResource("44_1qxs0")
-LocomotionGraph = ExtResource("43_77yxe")
-
-[sub_resource type="Resource" id="npc_abilities"]
-script = ExtResource("45_x7h4q")
-
-[sub_resource type="Resource" id="npc_character_save"]
 script = ExtResource("46_ivfsh")
 
 [sub_resource type="Resource" id="Resource_ndc6c"]
@@ -588,42 +588,6 @@ Components = Array[ExtResource("2_jbaxf")]([SubResource("whitebox_world")])
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="World" unique_id=500483842]
 navigation_mesh = ExtResource("35_40ply")
 
-[node name="Resident" type="Node3D" parent="." unique_id=1331650095]
-editor_description = "正式关卡世界居民 town_resident_01：从小镇前往工坊喝水、取货；配置步骤见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.42, 1.5)
-script = ExtResource("1_ueglv")
-PersistentId = "town_resident_01"
-Components = Array[ExtResource("2_jbaxf")]([SubResource("resident_world_actor"), SubResource("resident_character_data"), SubResource("resident_ai"), SubResource("resident_navigation"), SubResource("resident_movement"), SubResource("resident_animation"), SubResource("resident_abilities"), SubResource("resident_persistence")])
-
-[node name="PhysicsBody" type="CharacterBody3D" parent="Resident" unique_id=1888120704]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Resident/PhysicsBody" unique_id=1951845494]
-shape = SubResource("npc_body")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Resident/PhysicsBody" unique_id=95934908]
-path_desired_distance = 0.2
-target_desired_distance = 0.25
-height = 0.72
-radius = 0.23
-neighbor_distance = 2.0
-max_neighbors = 6
-
-[node name="VisualRoot" type="Node3D" parent="Resident" unique_id=1801187863]
-
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Resident/VisualRoot" unique_id=1749183551]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
-pixel_size = 0.0032142857
-billboard = 2
-shaded = true
-alpha_cut = 1
-texture_filter = 0
-sprite_frames = ExtResource("47_dl86u")
-animation = &"idle"
-autoplay = "idle"
-
-[node name="CameraFramingTarget" type="Marker3D" parent="." unique_id=889559128]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56, 0.55, 22.62)
-
 [node name="Courier" type="Node3D" parent="." unique_id=411204691]
 editor_description = "ochre_courier：保留角色与 AI 基础模块，当前没有生活目标、行动或地点引用。"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.42, 1.5)
@@ -654,6 +618,39 @@ shaded = true
 alpha_cut = 1
 texture_filter = 0
 sprite_frames = ExtResource("50_yv21s")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Resident" type="Node3D" parent="." unique_id=1331650095]
+editor_description = "正式关卡世界居民 town_resident_01：从小镇前往工坊喝水、取货；配置步骤见 doc/NPC_DAILY_GOALS_EXAMPLE.md。"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.42, 1.5)
+script = ExtResource("1_ueglv")
+PersistentId = "town_resident_01"
+Components = Array[ExtResource("2_jbaxf")]([SubResource("resident_world_actor"), SubResource("resident_character_data"), SubResource("resident_ai"), SubResource("resident_navigation"), SubResource("resident_movement"), SubResource("resident_animation"), SubResource("resident_abilities"), SubResource("resident_persistence")])
+
+[node name="PhysicsBody" type="CharacterBody3D" parent="Resident" unique_id=1888120704]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Resident/PhysicsBody" unique_id=1951845494]
+shape = SubResource("npc_body")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Resident/PhysicsBody" unique_id=95934908]
+path_desired_distance = 0.2
+target_desired_distance = 0.25
+height = 0.72
+radius = 0.23
+neighbor_distance = 2.0
+max_neighbors = 6
+
+[node name="VisualRoot" type="Node3D" parent="Resident" unique_id=1801187863]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Resident/VisualRoot" unique_id=1749183551]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.108, 0)
+pixel_size = 0.0032142857
+billboard = 2
+shaded = true
+alpha_cut = 1
+texture_filter = 0
+sprite_frames = ExtResource("47_dl86u")
 animation = &"idle"
 autoplay = "idle"
 

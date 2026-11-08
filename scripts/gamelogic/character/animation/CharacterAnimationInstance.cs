@@ -24,6 +24,8 @@ namespace GameLogic
         }
 
         private readonly Dictionary<string, AnimationRequest> _animationRequests = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> _animationAliases = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> _animationLeadIns = new(StringComparer.Ordinal);
         private readonly Dictionary<string, object> _variables = new(StringComparer.Ordinal);
         private readonly Dictionary<string, string> _variableSources = new(StringComparer.Ordinal);
         private readonly HashSet<string> _missingAnimationWarnings = new(StringComparer.Ordinal);
@@ -31,6 +33,7 @@ namespace GameLogic
         private bool _backendWarningShown;
         private string _activeRequestKey = string.Empty;
         private string _activeAnimation = string.Empty;
+        private string _activeResolvedAnimation = string.Empty;
         private int _activeRequestPriority;
 
         public IGameObject Owner { get; private set; }
@@ -95,6 +98,8 @@ namespace GameLogic
             PlaybackBackend = null;
             Owner = null;
             _animationRequests.Clear();
+            _animationAliases.Clear();
+            _animationLeadIns.Clear();
             _variables.Clear();
             _variableSources.Clear();
             _missingAnimationWarnings.Clear();
@@ -102,6 +107,7 @@ namespace GameLogic
             _backendWarningShown = false;
             _activeRequestKey = string.Empty;
             _activeAnimation = string.Empty;
+            _activeResolvedAnimation = string.Empty;
             _activeRequestPriority = 0;
         }
 
@@ -150,8 +156,28 @@ namespace GameLogic
             // Same-named clips in a replacement frame set still need an explicit restart.
             _activeRequestKey = string.Empty;
             _activeAnimation = string.Empty;
+            _activeResolvedAnimation = string.Empty;
             _missingAnimationWarnings.Clear();
             ApplyBestAnimationRequest();
+        }
+
+        public void SetAnimationAlias(string animation, string replacement, bool refreshPlayback = true)
+        {
+            if (string.IsNullOrWhiteSpace(animation)) return;
+            if (string.IsNullOrWhiteSpace(replacement)) _animationAliases.Remove(animation);
+            else _animationAliases[animation] = replacement;
+            if (refreshPlayback) ApplyBestAnimationRequest();
+        }
+
+        private string ResolveAnimation(string animation) => _animationAliases.GetValueOrDefault(animation, animation);
+
+        // An optional one-shot runs once before the requested loop. It uses the same
+        // request priority, so stopping, jumping or an ability can interrupt normally.
+        public void SetAnimationLeadIn(string animation, string leadIn)
+        {
+            if (string.IsNullOrWhiteSpace(animation)) return;
+            if (string.IsNullOrWhiteSpace(leadIn)) _animationLeadIns.Remove(animation);
+            else _animationLeadIns[animation] = leadIn;
         }
 
         private void CaptureVariables()
@@ -181,7 +207,7 @@ namespace GameLogic
             AnimationRequest best = null;
             foreach (AnimationRequest request in _animationRequests.Values)
             {
-                if (!CanPlayAnimation(request.Animation))
+                if (!CanPlayAnimation(ResolveAnimation(request.Animation)))
                     continue;
                 if (best == null || request.Priority > best.Priority ||
                     request.Priority == best.Priority && request.Sequence > best.Sequence)
@@ -192,20 +218,33 @@ namespace GameLogic
             {
                 _activeRequestKey = string.Empty;
                 _activeAnimation = string.Empty;
+                _activeResolvedAnimation = string.Empty;
                 _activeRequestPriority = 0;
                 PlaybackBackend?.Stop();
                 return;
             }
 
             bool sameRequest = _activeRequestKey == best.Key;
-            bool sameAnimation = _activeAnimation == best.Animation;
+            string resolvedAnimation = ResolveAnimation(best.Animation);
+            bool sameTarget = _activeResolvedAnimation == resolvedAnimation;
+            string previousAnimation = _activeAnimation;
+            if (!sameRequest || !sameTarget)
+            {
+                _activeAnimation = _animationLeadIns.TryGetValue(best.Animation, out string leadIn) &&
+                    CanPlayAnimation(leadIn) ? leadIn : resolvedAnimation;
+            }
+            else if (_activeAnimation != resolvedAnimation && PlaybackBackend?.IsPlaying == false)
+            {
+                _activeAnimation = resolvedAnimation;
+            }
+            bool sameAnimation = previousAnimation == _activeAnimation;
             _activeRequestKey = best.Key;
-            _activeAnimation = best.Animation;
+            _activeResolvedAnimation = resolvedAnimation;
             _activeRequestPriority = best.Priority;
             bool restart = sameRequest && sameAnimation
                 ? false
                 : !sameAnimation || best.RestartIfPlaying;
-            PlaybackBackend?.Play(best.Animation, best.Speed, best.FromEnd, restart);
+            PlaybackBackend?.Play(_activeAnimation, best.Speed, best.FromEnd, restart);
         }
 
         private bool CanPlayAnimation(string animation)

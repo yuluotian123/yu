@@ -6,7 +6,7 @@ using GameLogic;
 public partial class WorldAuthoringPlugin : EditorPlugin
 {
 	Node _root;
-	bool _queued,_compiling;
+	bool _queued,_compiling,_compileQueued;
 	WorldCatalogExport _export;
 	public override void _EnterTree()
 	{
@@ -17,6 +17,7 @@ public partial class WorldAuthoringPlugin : EditorPlugin
 	{
 		SceneChanged-=OnSceneChanged;SceneSaved-=OnSaved;ResourceSaved-=OnResourceSaved;GetTree().NodeAdded-=OnAdded;
 		WorldAuthoringCompiler.Forget(_root);if(_export!=null)RemoveExportPlugin(_export);
+		_compileQueued=false;_root=null;
 	}
 	void OnSceneChanged(Node root){_root=root;QueuePrepare();}
 	void OnAdded(Node node){if(_root!=null&&(_root==node||_root.IsAncestorOf(node)))QueuePrepare();}
@@ -26,18 +27,25 @@ public partial class WorldAuthoringPlugin : EditorPlugin
 		try{if(WorldAuthoringCompiler.Prepare(_root))EditorInterface.Singleton.MarkSceneAsUnsaved();}
 		catch(Exception error){GD.PushError("世界对象配置："+error.Message);}
 	}
-	void OnSaved(string path){if(!_compiling)Callable.From(()=>Compile()).CallDeferred();}
+	void OnSaved(string path)=>QueueCompile();
+	void QueueCompile()
+	{
+		if(_compiling||_compileQueued)return;_compileQueued=true;
+		Callable.From(()=>{if(_compileQueued&&IsInsideTree())Compile();}).CallDeferred();
+	}
 	void OnResourceSaved(Resource resource)
 	{if(resource is WorldObjectTypeDefinition or WorldCapabilityDefinition or WorldDefinition or WorldLevelDefinition or WorldLocationDefinition)OnSaved(resource.ResourcePath);}
 	bool Compile()
 	{
+		_compileQueued=false;
 		if(_compiling||WorldLevelExporter.IsExporting)return true;_compiling=true;
 		try{WorldAuthoringCompiler.CompileAll();return true;}
 		catch(Exception error){GD.PushError("世界目录生成失败："+error.Message);return false;}
 		finally{_compiling=false;}
 	}
 	public override void _ApplyChanges()=>Prepare();
-	public override void _SaveExternalData(){Compile();}
+	// Save hooks and SceneSaved belong to one transaction; compile the saved scene once.
+	public override void _SaveExternalData()=>QueueCompile();
 	// Godot autosaves before build callbacks. Saving again here stops play and nests editor progress tasks.
 	public override bool _Build(){Prepare();return Compile();}
 }

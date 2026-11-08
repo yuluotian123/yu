@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-09",
+  "revision": 12,
+  "request": "脚没问题了，上端的手臂，手和剑这块不太对",
+  "method": "Preserved v11 ComfyUI walk. Built-in imagegen repaired the arm/hand reference; Aseprite applied a connected arm/hilt/approved-blade layer with measured shoulder translation.",
+  "observed": [
+    "Both hands wrap a continuous hilt; two bent forearms and sleeves remain connected.",
+    "Approved idle blade and crossguard pixels move with the hands without angle/shape drift.",
+    "Pixels from y=245 downward and face features match v11; mid/low/mid_start PNGs are byte-identical."
+  ],
+  "limits": [
+    "Local sprite repair, not skeletal animation or a new ComfyUI video. The repaired guard is held as one shape; no independent elbow articulation.",
+    "Raw-video reports retain expected RGB differences in edited regions. No independent full-silhouette mask.",
+    "Previous v11 shutdown access violation remains unresolved; v12 full-suite and capture processes exited normally."
+  ],
+  "validation": {
+    "build_exit_code": 0,
+    "build_warnings": 8,
+    "full_gameplay_suite": "PASS",
+    "full_gameplay_exit_code": 0,
+    "capture_exit_code": 0,
+    "imported_frames": 130,
+    "pixel_validation": {
+      "animations": [
+        "run_high",
+        "run_low",
+        "run_mid",
+        "run_start_high",
+        "run_start_mid"
+      ],
+      "checked_frames": 130,
+      "frame_size": [
+        320,
+        384
+      ],
+      "loop_modes_match_manifest": true,
+      "ok": true,
+      "visible_rgb_and_alpha_exact": true
+    },
+    "guard_validation": {
+      "high": {
+        "frames": 36,
+        "lower_body_rgba_unchanged": true,
+        "face_features_unchanged": true,
+        "entire_clip_byte_identical": false,
+        "changed_pixels_total": 173868,
+        "original_video_audit_errors": 216,
+        "source_difference_reason": "Documented arm/hand/weapon edits; exact reconstruction and unchanged-region checks are in media-validation.json."
+      },
+      "mid": {
+        "frames": 36,
+        "lower_body_rgba_unchanged": true,
+        "face_features_unchanged": true,
+        "entire_clip_byte_identical": true,
+        "changed_pixels_total": 0
+      },
+      "low": {
+        "frames": 34,
+        "lower_body_rgba_unchanged": true,
+        "face_features_unchanged": true,
+        "entire_clip_byte_identical": true,
+        "changed_pixels_total": 0
+      },
+      "high_start": {
+        "frames": 12,
+        "lower_body_rgba_unchanged": true,
+        "face_features_unchanged": true,
+        "entire_clip_byte_identical": false,
+        "changed_pixels_total": 48613,
+        "original_video_audit_errors": 72,
+        "source_difference_reason": "Documented arm/hand/weapon edits; exact reconstruction and unchanged-region checks are in media-validation.json."
+      },
+      "mid_start": {
+        "frames": 12,
+        "lower_body_rgba_unchanged": true,
+        "face_features_unchanged": true,
+        "entire_clip_byte_identical": true,
+        "changed_pixels_total": 0
+      }
+    },
+    "gif_validation": {
+      "greatsword-stance-guard-repair-v12.gif": {
+        "frames": 210,
+        "duration_ms": 7000
+      },
+      "greatsword-stance-guard-repair-runtime-v12.gif": {
+        "frames": 150,
+        "duration_ms": 5000
+      }
+    },
+    "runtime_warnings": "Existing Vulkan RID cleanup warnings at shutdown."
+  }
+}

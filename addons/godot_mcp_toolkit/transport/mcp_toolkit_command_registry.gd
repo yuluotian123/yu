@@ -50,7 +50,7 @@ var _version_blocked: Dictionary = {}  # method -> {min, max, engine}
 # the guard protects against accidental collision, not deliberate post-load adds).
 # The loader drains _ext_load_refused after register() and surfaces the error to the
 # editor only — never into the MCP response stream. See extension_loader.gd and
-# docs/extending.md (collision policy: first-loaded wins within the load window).
+# docs/tools/godot-mcp/extending.md (collision policy: first-loaded wins within the load window).
 var _ext_load_guard_active := false
 var _ext_load_refused: Array[Dictionary] = []  # [{method, description}]
 

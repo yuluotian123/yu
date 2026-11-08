@@ -29,108 +29,6 @@
     }
   },
   "animations": {
-    "idle": {
-      "frames": [
-        [
-          "idle",
-          0
-        ],
-        [
-          "idle",
-          3
-        ],
-        [
-          "idle",
-          6
-        ],
-        [
-          "idle",
-          9
-        ],
-        [
-          "idle",
-          12
-        ],
-        [
-          "idle",
-          15
-        ],
-        [
-          "idle",
-          18
-        ],
-        [
-          "idle",
-          21
-        ],
-        [
-          "idle",
-          24
-        ],
-        [
-          "idle",
-          27
-        ],
-        [
-          "idle",
-          30
-        ],
-        [
-          "idle",
-          33
-        ],
-        [
-          "idle",
-          36
-        ],
-        [
-          "idle",
-          39
-        ],
-        [
-          "idle",
-          42
-        ],
-        [
-          "idle",
-          45
-        ],
-        [
-          "idle",
-          48
-        ],
-        [
-          "idle",
-          51
-        ],
-        [
-          "idle",
-          54
-        ],
-        [
-          "idle",
-          57
-        ],
-        [
-          "idle",
-          60
-        ],
-        [
-          "idle",
-          63
-        ],
-        [
-          "idle",
-          66
-        ],
-        [
-          "idle",
-          69
-        ]
-      ],
-      "fps": 8,
-      "loop": true
-    },
     "run": {
       "frames": [
         [
@@ -629,7 +527,7 @@
     }
   },
   "selection_notes": {
-    "identity": "Current katana_v3 character only; all new static poses are weapon-only edits of corresponding katana masters.",
+    "identity": "沿用制作时主角的人设，对各姿势仅替换武器。旧太刀参考已删除，保留当前大剑输出与源文件。",
     "attack": "Fast cut deliberately jumps from clean load source15 to clean finish source30; excluded source16-29 with unstable blade / generated white fan. Independent runtime trail supplies the fast arc. Endpoints reuse the new shared-character idle0 exactly.",
     "run": "Three full 12-source-frame stride periods; source12..46 by2, 18 frames at12fps.",
     "jump": "Retains load, tucked apex, extension, compression and recovery; physics supplies world displacement."

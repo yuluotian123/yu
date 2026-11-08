@@ -113,6 +113,9 @@ namespace GameLogic
             AnimationInstance?.ClearAnimationRequest(key);
         }
 
+        public void SetAnimationAlias(string animation, string replacement, bool refreshPlayback = true) =>
+            AnimationInstance?.SetAnimationAlias(animation, replacement, refreshPlayback);
+
         public void ReplaceSpriteFrames(SpriteFrames frames)
         {
             if (_sprite == null || frames == null)

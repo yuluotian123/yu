@@ -1,0 +1,91 @@
+{
+  "video": "../../../../../videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
+  "frames": "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start/frames/move_*.png",
+  "source_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "frame_size": [
+    320,
+    384
+  ],
+  "output_fps": 36.0,
+  "binary_alpha": true,
+  "preserve_inset": 3,
+  "rgb_tolerance": 0,
+  "regions": [
+    {
+      "name": "face",
+      "bounds": [
+        119,
+        160,
+        216,
+        242
+      ]
+    },
+    {
+      "name": "hair",
+      "bounds": [
+        100,
+        146,
+        217,
+        245
+      ]
+    },
+    {
+      "name": "torso",
+      "bounds": [
+        108,
+        208,
+        224,
+        293
+      ]
+    },
+    {
+      "name": "legs",
+      "bounds": [
+        85,
+        263,
+        247,
+        365
+      ]
+    },
+    {
+      "name": "tail",
+      "bounds": [
+        35,
+        238,
+        194,
+        350
+      ]
+    },
+    {
+      "name": "hands",
+      "bounds": [
+        90,
+        145,
+        232,
+        269
+      ]
+    },
+    {
+      "name": "weapon",
+      "bounds": [
+        35,
+        25,
+        275,
+        270
+      ]
+    }
+  ]
+}

@@ -349,16 +349,15 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         return stream.ToArray();
     }
 
-    private void Publish(RenderData data)
+    private void Publish(RenderSceneBuffersRD buffers)
     {
-        if (data.GetRenderSceneBuffers() is not RenderSceneBuffersRD buffers) return;
         var s = _packet.Settings;
         buffers.SetDdgi(_atlas["irradiance"], _atlas["distance"], _atlas["state"], s.Origin, s.Spacing, s.Counts, s.Energy, s.NormalBias, s.ViewBias);
     }
 
-    private void PrepareSky(RenderData renderData)
+    private void PrepareSky(RenderSceneBuffersRD buffers)
     {
-        using GDictionary data = _packet.Settings.EnvironmentSky && renderData.GetRenderSceneBuffers() is RenderSceneBuffersRD buffers ? buffers.GetDdgiSky() : new();
+        using GDictionary data = _packet.Settings.EnvironmentSky ? buffers.GetDdgiSky() : new();
         bool active = data.Count > 0 && _rd.TextureIsValid(data["texture"].AsRid());
         _skyTexture = active ? data["texture"].AsRid() : _skyFallback;
         Basis rotation = active ? data["rotation"].AsBasis() : Basis.Identity;
@@ -413,9 +412,12 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         lock (_gate)
         {
             if (type != (int)EffectCallbackTypeEnum.PreOpaque || _released || !_initialized || _packet == null || !_packet.Settings.Enabled || !_tlas.IsValid || _status["state"].AsString() == "failed") return;
+            // A managed buffer reference must not survive into GC after its viewport is freed.
+            using var sceneBuffers = data.GetRenderSceneBuffers();
+            if (sceneBuffers is not RenderSceneBuffersRD buffers) return;
             ulong frame = (ulong)Engine.GetFramesDrawn();
-            if (_lastFrame == frame || FreezeUpdates) { Publish(data); return; }
-            _lastFrame = frame; PrepareSky(data);
+            if (_lastFrame == frame || FreezeUpdates) { Publish(buffers); return; }
+            _lastFrame = frame; PrepareSky(buffers);
             var s = _packet.Settings;
             bool catchUp = NeedsLightingCatchUp(s);
             if (catchUp) s = s with { History = 0 };
@@ -463,7 +465,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
                 _nextProbe = (_nextProbe + batchCount) % s.Total; remaining -= batchCount;
             }
             _rd.CaptureTimestamp(tag + "end");
-            _rotation++; Publish(data);
+            _rotation++; Publish(buffers);
             Status("state", "running"); Status("updates", _rotation); Status("generation", _generation); Status("instances", _packet.Instances.Count);
             Status("blas", _geometry.Count); Status("probes", s.Total); Status("rays_per_update", updated * s.Rays); Status("next_probe", _nextProbe); Status("ray_query", true);
             Status("lighting_epoch", _lightingEpoch); Status("visibility_epoch", _visibilityEpoch); Status("history_weight", s.History);

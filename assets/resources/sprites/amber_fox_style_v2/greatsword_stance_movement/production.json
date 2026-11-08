@@ -1,0 +1,402 @@
+{
+  "date": "2026-11-09",
+  "revision": 12,
+  "preview": "greatsword-stance-guard-repair-v12.gif",
+  "preview_duration_seconds": 7,
+  "clips": [
+    {
+      "stance": "high",
+      "fps": 36.0,
+      "job": "3bcbf775-e75f-4f61-902b-307d77b45afe",
+      "seed": 202611091101,
+      "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
+      "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/source-rgb",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-prompt.txt",
+      "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/sources/input.png",
+      "audit_regions": {
+        "face": [
+          119,
+          160,
+          216,
+          242
+        ],
+        "hair": [
+          100,
+          146,
+          217,
+          245
+        ],
+        "torso": [
+          108,
+          208,
+          224,
+          293
+        ],
+        "legs": [
+          85,
+          263,
+          247,
+          365
+        ],
+        "tail": [
+          35,
+          238,
+          194,
+          350
+        ],
+        "hands": [
+          90,
+          145,
+          232,
+          269
+        ],
+        "weapon": [
+          35,
+          25,
+          275,
+          270
+        ]
+      },
+      "indices": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "duration_seconds": 1.0,
+      "selection": "Continuous v11 source frames 12..47; v12 repairs only the raised arms, hands and sword with one shoulder-following layer. Waist, hips, legs and timing retain the accepted v11 output.",
+      "guard_repair_config": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-guard-repair.json"
+    },
+    {
+      "stance": "mid",
+      "fps": 36.0,
+      "job": "1366a8c0-0edb-41df-9926-0d2abd5f3801",
+      "seed": 202611091102,
+      "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
+      "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid/source-rgb",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid-prompt.txt",
+      "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid/sources/input.png",
+      "audit_regions": {
+        "face": [
+          119,
+          160,
+          216,
+          242
+        ],
+        "hair": [
+          100,
+          146,
+          217,
+          245
+        ],
+        "torso": [
+          108,
+          208,
+          224,
+          293
+        ],
+        "legs": [
+          85,
+          263,
+          247,
+          365
+        ],
+        "tail": [
+          35,
+          238,
+          194,
+          350
+        ],
+        "hands": [
+          90,
+          145,
+          232,
+          269
+        ],
+        "weapon": [
+          35,
+          25,
+          275,
+          270
+        ]
+      },
+      "indices": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "duration_seconds": 1.0,
+      "selection": "Continuous three-quarter walk cycle 12..47, with restrained shoulder/pelvis twist. Preserve source motion and pixels; no warping or static overlays."
+    },
+    {
+      "stance": "low",
+      "indices": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "fps": 24.28571428571429,
+      "duration_seconds": 1.4,
+      "selection": "Continuous complete grounded pacing cycle 17..50. Source 51 matches the low double-support/pass pose at 17; retains both weight transfers and a near-floor boot recovery without frame skipping.",
+      "job": "1131491c-6114-4b6b-bb66-0d4592256b3f",
+      "seed": 20261108805,
+      "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/low.mov",
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/low.mov",
+      "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/low/source-rgb",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/low-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/low-prompt.txt",
+      "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/low/sources/input.png"
+    },
+    {
+      "stance": "high",
+      "fps": 36.0,
+      "job": "3bcbf775-e75f-4f61-902b-307d77b45afe",
+      "seed": 202611091101,
+      "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
+      "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start/source-rgb",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start-prompt.txt",
+      "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start/sources/input.png",
+      "audit_regions": {
+        "face": [
+          119,
+          160,
+          216,
+          242
+        ],
+        "hair": [
+          100,
+          146,
+          217,
+          245
+        ],
+        "torso": [
+          108,
+          208,
+          224,
+          293
+        ],
+        "legs": [
+          85,
+          263,
+          247,
+          365
+        ],
+        "tail": [
+          35,
+          238,
+          194,
+          350
+        ],
+        "hands": [
+          90,
+          145,
+          232,
+          269
+        ],
+        "weapon": [
+          35,
+          25,
+          275,
+          270
+        ]
+      },
+      "asset": "high_start",
+      "animation": "run_start_high",
+      "loop": false,
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "duration_seconds": 0.3333333333333333,
+      "selection": "Continuous v11 source frames 0..11; v12 repairs only the raised arms, hands and sword with one shoulder-following layer. Waist, hips, legs and timing retain the accepted v11 output.",
+      "guard_repair_config": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-guard-repair.json"
+    },
+    {
+      "stance": "mid",
+      "fps": 36.0,
+      "job": "1366a8c0-0edb-41df-9926-0d2abd5f3801",
+      "seed": 202611091102,
+      "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
+      "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start/source-rgb",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start-prompt.txt",
+      "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start/sources/input.png",
+      "audit_regions": {
+        "face": [
+          119,
+          160,
+          216,
+          242
+        ],
+        "hair": [
+          100,
+          146,
+          217,
+          245
+        ],
+        "torso": [
+          108,
+          208,
+          224,
+          293
+        ],
+        "legs": [
+          85,
+          263,
+          247,
+          365
+        ],
+        "tail": [
+          35,
+          238,
+          194,
+          350
+        ],
+        "hands": [
+          90,
+          145,
+          232,
+          269
+        ],
+        "weapon": [
+          35,
+          25,
+          275,
+          270
+        ]
+      },
+      "asset": "mid_start",
+      "animation": "run_start_mid",
+      "loop": false,
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "duration_seconds": 0.3333333333333333,
+      "selection": "Continuous startup frames 0..11: small weight transfer and initial step while retaining three-quarter facing. Continues immediately at source frame 12."
+    }
+  ]
+}

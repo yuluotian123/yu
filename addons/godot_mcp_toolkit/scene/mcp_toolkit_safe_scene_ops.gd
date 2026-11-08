@@ -10,8 +10,8 @@ extends RefCounted
 ## corrupting an in-flight import or another save. From GDScript, [code]await[/code]
 ## [method save_scene] for the result inline; from a synchronous caller (notably a
 ## C# handler that cannot await), call [method queue_save] and poll
-## [method check_save]. See [code]docs/extending.md[/code] and
-## [code]docs/advanced_configuration.md[/code].[br]
+## [method check_save]. See [code]docs/tools/godot-mcp/extending.md[/code] and
+## [code]docs/tools/godot-mcp/advanced_configuration.md[/code].[br]
 ## [br]
 ## Example (GDScript handler):
 ## [codeblock]

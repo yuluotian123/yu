@@ -36,8 +36,8 @@ vec3 film_color(vec3 color, vec2 uv, bool pixelated) {
 	return result;
 }
 
-// The opaque-depth prepass includes alpha-tested sprite pixels; a wall in front of
-// a sprite and the transparent corners of a frame retain the background grid.
+// Alpha-tested sprites and depth-writing detail particles retain their fine pixels.
+// Transparent corners and walls in front still use the background grid.
 bool contains_character(ivec2 pixel, ivec2 extent) {
 	vec2 ndc_step = 2.0 / params.settings.xy;
 	vec2 lo = (vec2(pixel) + 0.5) * ndc_step - 1.0;
@@ -51,7 +51,8 @@ bool contains_character(ivec2 pixel, ivec2 extent) {
 				if (any(lessThan(ndc, sprite.bounds.xy)) || any(greaterThan(ndc, sprite.bounds.zw))) continue;
 				float expected = dot(sprite.depth.xy, ndc) + sprite.depth.z;
 				float actual = texelFetch(scene_depth, pixel + ivec2(x, y), 0).r;
-				float tolerance = max(1e-8, abs(expected) * 0.002) + dot(abs(sprite.depth.xy), ndc_step);
+				// Orthographic reverse-Z stays near 1: a percentage allowance would admit walls metres away.
+				float tolerance = max(2e-7, abs(expected) * 2e-6) + dot(abs(sprite.depth.xy), ndc_step) + sprite.depth.w;
 				if (actual > 0.0 && abs(actual - expected) <= tolerance) return true;
 			}
 		}

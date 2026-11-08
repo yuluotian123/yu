@@ -673,7 +673,7 @@ static func should_disarm_tooltip_uaf(engine_ver: String) -> bool:
 ## would let tree churn re-add and re-arm a slot. A later human undo/redo replays the set
 ## outside this guard, exposing it exactly like any inspector edit — out of scope here
 ## (cured upstream in 4.4). Any new tool or extension that writes editor_description MUST
-## call this (see docs/extending.md).
+## call this (see docs/tools/godot-mcp/extending.md).
 static func disarm_tooltip_uaf(node: Object, property: String) -> void:
 	if property != "editor_description":
 		return

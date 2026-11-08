@@ -312,7 +312,7 @@ func _on_regen_token() -> void:
 # ---------------------------------------------------------------------------
 
 func _open_companion_skills() -> void:
-	var skills_dir := "res://addons/godot_mcp_toolkit/CompanionSkills"
+	var skills_dir := "res://docs/tools/godot-mcp/skills"
 	var global_path := ProjectSettings.globalize_path(skills_dir)
 	OS.shell_open(global_path)
 

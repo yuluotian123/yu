@@ -1,0 +1,41 @@
+{
+  "high": {
+    "frames": 36,
+    "lower_body_rgba_unchanged": true,
+    "face_features_unchanged": true,
+    "entire_clip_byte_identical": false,
+    "changed_pixels_total": 173868,
+    "original_video_audit_errors": 216,
+    "source_difference_reason": "Documented arm/hand/weapon edits; exact reconstruction and unchanged-region checks are in media-validation.json."
+  },
+  "mid": {
+    "frames": 36,
+    "lower_body_rgba_unchanged": true,
+    "face_features_unchanged": true,
+    "entire_clip_byte_identical": true,
+    "changed_pixels_total": 0
+  },
+  "low": {
+    "frames": 34,
+    "lower_body_rgba_unchanged": true,
+    "face_features_unchanged": true,
+    "entire_clip_byte_identical": true,
+    "changed_pixels_total": 0
+  },
+  "high_start": {
+    "frames": 12,
+    "lower_body_rgba_unchanged": true,
+    "face_features_unchanged": true,
+    "entire_clip_byte_identical": false,
+    "changed_pixels_total": 48613,
+    "original_video_audit_errors": 72,
+    "source_difference_reason": "Documented arm/hand/weapon edits; exact reconstruction and unchanged-region checks are in media-validation.json."
+  },
+  "mid_start": {
+    "frames": 12,
+    "lower_body_rgba_unchanged": true,
+    "face_features_unchanged": true,
+    "entire_clip_byte_identical": true,
+    "changed_pixels_total": 0
+  }
+}

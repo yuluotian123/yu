@@ -1,0 +1,385 @@
+{
+  "schema": 1,
+  "description": "Imagegen local high-guard arm/hilt correction with the approved idle sword; one connected arm/hand/weapon layer follows source shoulder translation. Source lower body is retained exactly.",
+  "layer": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/sources/guard-layer.png",
+  "erase_rows": [
+    [
+      0,
+      160,
+      90
+    ],
+    [
+      160,
+      176,
+      170
+    ],
+    [
+      176,
+      209,
+      177
+    ],
+    [
+      209,
+      217,
+      174
+    ],
+    [
+      217,
+      227,
+      163
+    ],
+    [
+      227,
+      235,
+      171
+    ],
+    [
+      235,
+      240,
+      179
+    ]
+  ],
+  "erase_right": 219,
+  "preserve_below_y": 245,
+  "tracks": [
+    {
+      "source_frame": 0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 2,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 3,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 4,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 5,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 6,
+      "offset": [
+        0,
+        -3
+      ]
+    },
+    {
+      "source_frame": 7,
+      "offset": [
+        0,
+        -3
+      ]
+    },
+    {
+      "source_frame": 8,
+      "offset": [
+        0,
+        -9
+      ]
+    },
+    {
+      "source_frame": 9,
+      "offset": [
+        0,
+        -14
+      ]
+    },
+    {
+      "source_frame": 10,
+      "offset": [
+        0,
+        -14
+      ]
+    },
+    {
+      "source_frame": 11,
+      "offset": [
+        0,
+        -14
+      ]
+    },
+    {
+      "source_frame": 12,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 13,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 14,
+      "offset": [
+        0,
+        -13
+      ]
+    },
+    {
+      "source_frame": 15,
+      "offset": [
+        0,
+        -12
+      ]
+    },
+    {
+      "source_frame": 16,
+      "offset": [
+        0,
+        -10
+      ]
+    },
+    {
+      "source_frame": 17,
+      "offset": [
+        0,
+        -10
+      ]
+    },
+    {
+      "source_frame": 18,
+      "offset": [
+        0,
+        -3
+      ]
+    },
+    {
+      "source_frame": 19,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 20,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 21,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 22,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 23,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 24,
+      "offset": [
+        0,
+        -7
+      ]
+    },
+    {
+      "source_frame": 25,
+      "offset": [
+        0,
+        -7
+      ]
+    },
+    {
+      "source_frame": 26,
+      "offset": [
+        0,
+        -12
+      ]
+    },
+    {
+      "source_frame": 27,
+      "offset": [
+        0,
+        -12
+      ]
+    },
+    {
+      "source_frame": 28,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 29,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 30,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 31,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 32,
+      "offset": [
+        0,
+        -14
+      ]
+    },
+    {
+      "source_frame": 33,
+      "offset": [
+        0,
+        -14
+      ]
+    },
+    {
+      "source_frame": 34,
+      "offset": [
+        0,
+        -10
+      ]
+    },
+    {
+      "source_frame": 35,
+      "offset": [
+        0,
+        -10
+      ]
+    },
+    {
+      "source_frame": 36,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 37,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 38,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 39,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "source_frame": 40,
+      "offset": [
+        0,
+        -1
+      ]
+    },
+    {
+      "source_frame": 41,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 42,
+      "offset": [
+        0,
+        -2
+      ]
+    },
+    {
+      "source_frame": 43,
+      "offset": [
+        0,
+        -8
+      ]
+    },
+    {
+      "source_frame": 44,
+      "offset": [
+        0,
+        -10
+      ]
+    },
+    {
+      "source_frame": 45,
+      "offset": [
+        0,
+        -13
+      ]
+    },
+    {
+      "source_frame": 46,
+      "offset": [
+        0,
+        -15
+      ]
+    },
+    {
+      "source_frame": 47,
+      "offset": [
+        0,
+        -15
+      ]
+    }
+  ],
+  "authoring": "guard-reference.aseprite contains the applied transparent layer; raw generated reference and edit prompt retained beside it.",
+  "prompt": "docs/art/prompts/greatsword-high-guard-repair.prompt.txt",
+  "image_generation_tool": "built-in imagegen"
+}

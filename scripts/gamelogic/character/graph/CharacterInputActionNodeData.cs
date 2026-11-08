@@ -16,6 +16,8 @@ namespace GameLogic
     {
         public string ActionName { get; set; } = string.Empty;
         public string HandlerLayer { get; set; } = string.Empty;
+        public string RequiredAction { get; set; } = string.Empty;
+        public string ExcludedAction { get; set; } = string.Empty;
         public string NegativeAction { get; set; } = string.Empty;
         public string PositiveAction { get; set; } = string.Empty;
         public CharacterInputTriggerMode TriggerMode { get; set; } = CharacterInputTriggerMode.Pressed;
@@ -42,6 +44,11 @@ namespace GameLogic
         public bool IsTriggered(ICharacterInputProvider provider)
         {
             if (provider == null)
+                return false;
+            if (!string.IsNullOrWhiteSpace(RequiredAction) && !provider.IsPressed(RequiredAction, HandlerLayer))
+                return false;
+            if (!string.IsNullOrWhiteSpace(ExcludedAction) &&
+                (provider.IsPressed(ExcludedAction, HandlerLayer) || provider.IsJustPressed(ExcludedAction, HandlerLayer)))
                 return false;
 
             return TriggerMode switch
@@ -142,6 +149,8 @@ namespace GameLogic
                         AddFloatField(fields, "按住秒数", HoldTime, value => { HoldTime = value; Changed(); });
                 }
                 Text("HandlerLayer", "输入层（可选）", HandlerLayer, value => HandlerLayer = value);
+                Text("RequiredAction", "需按住的组合键（可选）", RequiredAction, value => RequiredAction = value);
+                Text("ExcludedAction", "按住时禁用的组合键（可选）", ExcludedAction, value => ExcludedAction = value);
                 AddCheckBox(fields, "消费输入", ConsumeInput, value => { ConsumeInput = value; Changed(); });
             }
             mode.ItemSelected += index =>

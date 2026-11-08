@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://diehi88p8r2qd" path="res://assets/resources/weapons/greatsword_attack.tres" id="2_attack"]
 [ext_resource type="Resource" uid="uid://11v7tj2mtho3" path="res://assets/resources/weapons/greatsword_animation.tres" id="3_animation"]
 [ext_resource type="Texture2D" uid="uid://cj1tmd8ss1bo8" path="res://assets/textures/ui/inventory/greatsword.svg" id="4_icon"]
-[ext_resource type="Texture2D" path="res://assets/textures/sprites/amber_fox_style_v2/full_256/gs/portrait.png" id="5_portrait"]
+[ext_resource type="Texture2D" uid="uid://dt7jq23n1jdd" path="res://assets/textures/sprites/amber_fox_style_v2/full_256/gs/portrait.png" id="5_portrait"]
 
 [resource]
 script = ExtResource("1_script")
@@ -12,6 +12,28 @@ WeaponId = "greatsword"
 DisplayName = "大剑"
 PrimaryAttack = ExtResource("2_attack")
 AnimationProfile = ExtResource("3_animation")
+StanceIdleAnimations = Dictionary[String, String]({
+"high": "idle_high",
+"low": "idle_low",
+"mid": "idle_mid"
+})
+StanceMoveAnimations = Dictionary[String, String]({
+"high": "run_high",
+"low": "run_low",
+"mid": "run_mid"
+})
+StanceMoveStartAnimations = Dictionary[String, String]({
+"high": "run_start_high",
+"mid": "run_start_mid"
+})
+StanceTransitions = Dictionary[String, String]({
+"high>low": "stance_high_to_low",
+"high>mid": "stance_high_to_mid",
+"low>high": "stance_low_to_high",
+"low>mid": "stance_low_to_mid",
+"mid>high": "stance_mid_to_high",
+"mid>low": "stance_mid_to_low"
+})
 Icon = ExtResource("4_icon")
 Portrait = ExtResource("5_portrait")
 Description = "宽厚的剑刃带来沉稳的挥砍。适合把握时机、正面迎击。"

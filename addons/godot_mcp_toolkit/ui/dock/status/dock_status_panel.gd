@@ -196,7 +196,7 @@ func refresh_lsp() -> void:
 				_lsp_label.tooltip_text = (
 					"Another editor owns the machine-wide GDScript LSP port, so this editor's "
 					+ "LSP tools are unavailable. Give each editor a distinct --lsp-port + "
-					+ "GODOT_MCP_LSP_PORT. See docs/multi-instance.md.")
+					+ "GODOT_MCP_LSP_PORT. See docs/tools/godot-mcp/multi-instance.md.")
 			_:  # "unavailable" / unknown
 				_lsp_label.text = "LSP: %d ⚠ unavailable" % port
 				_lsp_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2))

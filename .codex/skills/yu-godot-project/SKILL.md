@@ -14,7 +14,7 @@ Use this skill to get oriented in the yu Godot.NET project before changing code.
 - This project's gameplay uses an entity-component (EC) framework. Keep behavior in `Component2D` or `Component3D` resources attached to `GameObject2D` or `GameObject3D` hosts.
 - Do not implement gameplay, presentation synchronization, platform behavior, or camera control as standalone scripts inheriting directly from `Node`, `Node2D`, `Node3D`, `Camera3D`, or physics bodies. Use components to control those native child nodes. Preserve the EC structure during 2D/3D migrations.
 - SpaceLevel uses native 3D physics with 2D sprite artwork. Keep SideView and Free3D as movement constraints on the same Component3D implementation; do not restore the former 2D-to-3D projection bridge.
-- Before changing a host, component, or gameplay scene, read [references/ec-framework.md](references/ec-framework.md) for lifecycle, ordering, ownership, and scene wiring.
+- Before changing a host, component, or gameplay scene, read [EC framework](../../../docs/architecture/ec-framework.md) for lifecycle, ordering, ownership, and scene wiring.
 - This rule concerns gameplay behavior. Existing framework infrastructure, editor plugins, test runners, and UI framework classes may retain their required Godot/framework bases.
 
 ## Asset Layout
@@ -32,15 +32,17 @@ Put game art under one type-first tree; use domain subfolders such as town, envi
 
 - Classify `.tres` / `.res` by resource type, not extension alone. Scene-local inline subresources may stay in scenes. Do not create feature folders that mix shaders, textures, models, and documentation again.
 - Move `.uid` and `.import` sidecars with their source, preserving UIDs and import options. Update serialized references, shader includes, C#/GDScript dynamic load paths, and tooling output paths. Respect relative texture URIs in imported models.
-- Keep maintained art/rendering guidance in `docs/art/`; keep module documentation beside its code. Third-party addon files retain their package layout and licenses under `addons/`.
+- Keep all project, module, art, rendering, and addon documentation under `docs/`, indexed by `docs/README.md`. Preserve license texts in `docs/licenses/`. This SKILL.md is the tool discovery entry point; supporting guides live in `docs/architecture/`.
 - Put disposable captures, logs, and probes under ignored `.godot/<task>/`, not the root or `assets/`. Preserve engine-managed import/build caches and useful source artwork. Recoverable worktree archives belong in ignored `archives/worktrees/`.
 - After a migration, rescan/reimport assets and verify references, resource loading, and affected runtime scenes; a C# build alone does not validate Godot paths.
 
 ## Workflow
 
+- 涉及主角设定、外观、动作或玩法的任务，先阅读 `docs/characters/protagonist.md` 及其中的新需求。完成后同步设定图、动作 GIF、参数和改动记录，保留用户未处理的原始需求。主角当前仅使用大剑；跳跃文档只保留完整动作，不展示分段版本。
+
 - Start by searching with `rg` and reading the nearby implementation before editing.
-- Load `references/project-map.md` when you need the project layout, build targets, namespaces, or subsystem entry points.
-- Load `references/coding-patterns.md` when adding or changing C# code, Godot nodes/resources, generated config, or framework integrations.
+- Load `../../../docs/architecture/project.md` when you need the project layout, build targets, namespaces, or subsystem entry points.
+- Load `../../../docs/architecture/coding-patterns.md` when adding or changing C# code, Godot nodes/resources, generated config, or framework integrations.
 - Keep framework code under `Framework` boundaries and gameplay code under `GameLogic` unless existing code shows a more specific pattern.
 - Reuse existing modules and helpers before adding new services or abstractions.
 - After code changes, run `dotnet build yu.csproj` from the repository root when feasible.

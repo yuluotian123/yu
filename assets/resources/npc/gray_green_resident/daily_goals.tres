@@ -47,15 +47,18 @@ DefinitionId = "gray_green_resident.NpcPolicyNodeData"
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "needs.thirst.urgent"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_d3y20"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "needs.thirst.value"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_dbjrw"]
 script = ExtResource("5_68nev")
 Number = 0.25
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_2e5sv"]
 script = ExtResource("5_68nev")
@@ -65,15 +68,18 @@ Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_d3y20"), SubResour
 [sub_resource type="Resource" id="Resource_f5x4j"]
 script = ExtResource("5_68nev")
 Number = 100.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_am4jf"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "needs.thirst.urgency"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_vp81e"]
 script = ExtResource("5_68nev")
 Number = 100.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_uehp0"]
 script = ExtResource("5_68nev")
@@ -116,15 +122,18 @@ DisplayName = "工坊饮水源"
 [sub_resource type="Resource" id="Resource_mtlvl"]
 script = ExtResource("5_68nev")
 Number = 1.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_fhjuk"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.travel_hours"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_0uflv"]
 script = ExtResource("5_68nev")
 Number = 10.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_uhx0t"]
 script = ExtResource("5_68nev")
@@ -150,6 +159,7 @@ InputId = "ec4f862a895f4b98aaba3382e92d4d49"
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.id"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_3pykf"]
 script = ExtResource("12_cq2dx")
@@ -160,6 +170,7 @@ Value = SubResource("Resource_ky52f")
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_jikfn"]
 script = ExtResource("13_djx3r")
@@ -175,6 +186,7 @@ DisplayName = "前往饮水源"
 [sub_resource type="Resource" id="Resource_utmyi"]
 script = ExtResource("5_68nev")
 Number = 1.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_ygoxy"]
 script = ExtResource("10_q0fio")
@@ -190,15 +202,18 @@ InputId = "8b9451ca54b044c0841f8c19d083fe4c"
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_4th20"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.liquid"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_oyj4s"]
 script = ExtResource("5_68nev")
 Number = 0.25
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_1qx3l"]
 script = ExtResource("5_68nev")
@@ -213,6 +228,7 @@ Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_yss8r"), SubResour
 [sub_resource type="Resource" id="Resource_d7r5c"]
 script = ExtResource("5_68nev")
 Number = 0.2
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_s2bdf"]
 script = ExtResource("12_cq2dx")
@@ -222,6 +238,7 @@ Value = SubResource("Resource_d7r5c")
 [sub_resource type="Resource" id="Resource_tc7au"]
 script = ExtResource("5_68nev")
 Number = 0.2
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_mgji0"]
 script = ExtResource("12_cq2dx")
@@ -232,6 +249,7 @@ Value = SubResource("Resource_tc7au")
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_j4ldf"]
 script = ExtResource("13_djx3r")
@@ -250,10 +268,12 @@ DisplayName = "喝水"
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "private.cargo"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_fu38d"]
 script = ExtResource("5_68nev")
 Number = 2.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_7dnoo"]
 script = ExtResource("5_68nev")
@@ -264,10 +284,12 @@ Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_0inhs"), SubResour
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "private.cargo"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_2ot3o"]
 script = ExtResource("5_68nev")
 Number = 2.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_7m4kj"]
 script = ExtResource("5_68nev")
@@ -277,6 +299,7 @@ Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_bgbd1"), SubResour
 [sub_resource type="Resource" id="Resource_m4v2t"]
 script = ExtResource("5_68nev")
 Number = 20.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_u01at"]
 script = ExtResource("6_twfag")
@@ -309,15 +332,18 @@ DisplayName = "工坊货源"
 [sub_resource type="Resource" id="Resource_oei2k"]
 script = ExtResource("5_68nev")
 Number = 1.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_yrkun"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.travel_hours"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_uhriq"]
 script = ExtResource("5_68nev")
 Number = 10.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_5vjq3"]
 script = ExtResource("5_68nev")
@@ -343,6 +369,7 @@ InputId = "11b6ecd6be1d49bab526f62021f98e05"
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.id"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_bm802"]
 script = ExtResource("12_cq2dx")
@@ -353,6 +380,7 @@ Value = SubResource("Resource_lgwxs")
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.destination.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_3vt7m"]
 script = ExtResource("13_djx3r")
@@ -368,6 +396,7 @@ DisplayName = "前往货源"
 [sub_resource type="Resource" id="Resource_boha7"]
 script = ExtResource("5_68nev")
 Number = 1.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_0kwl5"]
 script = ExtResource("10_q0fio")
@@ -384,15 +413,18 @@ ResourceRequirements = PackedStringArray("capacity")
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_h0dkr"]
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.stock"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_6hvvb"]
 script = ExtResource("5_68nev")
 Number = 2.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_a0hlp"]
 script = ExtResource("5_68nev")
@@ -407,6 +439,7 @@ Inputs = Array[ExtResource("5_68nev")]([SubResource("Resource_l1wsu"), SubResour
 [sub_resource type="Resource" id="Resource_iw8ep"]
 script = ExtResource("5_68nev")
 Number = 2.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_bsavj"]
 script = ExtResource("12_cq2dx")
@@ -417,6 +450,7 @@ Value = SubResource("Resource_iw8ep")
 [sub_resource type="Resource" id="Resource_i2ux0"]
 script = ExtResource("5_68nev")
 Number = 2.0
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_1affb"]
 script = ExtResource("12_cq2dx")
@@ -428,6 +462,7 @@ Value = SubResource("Resource_i2ux0")
 script = ExtResource("5_68nev")
 Kind = 1
 Key = "input.source.at"
+Inputs = Array[ExtResource("5_68nev")]([])
 
 [sub_resource type="Resource" id="Resource_2r7ge"]
 script = ExtResource("13_djx3r")

@@ -1,0 +1,335 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cabb428vii7al"]
+
+[ext_resource type="Texture2D" uid="uid://fqmsn73i3fpn" path="res://assets/textures/sprites/amber_fox_style_v2/greatsword_stance_transition/high-mid/transition-atlas.png" id="atlas1"]
+[ext_resource type="Texture2D" uid="uid://dgiog76v8wiuk" path="res://assets/textures/sprites/amber_fox_style_v2/greatsword_stance_transition/mid-low/transition-atlas.png" id="atlas2"]
+[ext_resource type="Texture2D" uid="uid://bex5pfuacx120" path="res://assets/textures/sprites/amber_fox_style_v2/greatsword_stance_transition/high-low/transition-atlas.png" id="atlas3"]
+
+[sub_resource type="AtlasTexture" id="pair3_1"]
+atlas = ExtResource("atlas3")
+region = Rect2(0, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_2"]
+atlas = ExtResource("atlas3")
+region = Rect2(320, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_3"]
+atlas = ExtResource("atlas3")
+region = Rect2(640, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_4"]
+atlas = ExtResource("atlas3")
+region = Rect2(960, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_5"]
+atlas = ExtResource("atlas3")
+region = Rect2(1280, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_6"]
+atlas = ExtResource("atlas3")
+region = Rect2(0, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_7"]
+atlas = ExtResource("atlas3")
+region = Rect2(320, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_8"]
+atlas = ExtResource("atlas3")
+region = Rect2(640, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_9"]
+atlas = ExtResource("atlas3")
+region = Rect2(960, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair3_10"]
+atlas = ExtResource("atlas3")
+region = Rect2(1280, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_1"]
+atlas = ExtResource("atlas1")
+region = Rect2(0, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_2"]
+atlas = ExtResource("atlas1")
+region = Rect2(320, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_3"]
+atlas = ExtResource("atlas1")
+region = Rect2(640, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_4"]
+atlas = ExtResource("atlas1")
+region = Rect2(960, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_5"]
+atlas = ExtResource("atlas1")
+region = Rect2(1280, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_6"]
+atlas = ExtResource("atlas1")
+region = Rect2(0, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair1_7"]
+atlas = ExtResource("atlas1")
+region = Rect2(320, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_10"]
+atlas = ExtResource("atlas2")
+region = Rect2(1280, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_9"]
+atlas = ExtResource("atlas2")
+region = Rect2(960, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_8"]
+atlas = ExtResource("atlas2")
+region = Rect2(640, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_7"]
+atlas = ExtResource("atlas2")
+region = Rect2(320, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_6"]
+atlas = ExtResource("atlas2")
+region = Rect2(0, 384, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_5"]
+atlas = ExtResource("atlas2")
+region = Rect2(1280, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_4"]
+atlas = ExtResource("atlas2")
+region = Rect2(960, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_3"]
+atlas = ExtResource("atlas2")
+region = Rect2(640, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_2"]
+atlas = ExtResource("atlas2")
+region = Rect2(320, 0, 320, 384)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="pair2_1"]
+atlas = ExtResource("atlas2")
+region = Rect2(0, 0, 320, 384)
+filter_clip = true
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair3_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_10")
+}],
+"loop": 0,
+"name": &"stance_high_to_low",
+"speed": 62.4
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair1_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_7")
+}],
+"loop": 0,
+"name": &"stance_high_to_mid",
+"speed": 62.4
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair3_10")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair3_1")
+}],
+"loop": 0,
+"name": &"stance_low_to_high",
+"speed": 62.4
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair2_10")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_1")
+}],
+"loop": 0,
+"name": &"stance_low_to_mid",
+"speed": 62.4
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair1_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair1_1")
+}],
+"loop": 0,
+"name": &"stance_mid_to_high",
+"speed": 62.4
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("pair2_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("pair2_10")
+}],
+"loop": 0,
+"name": &"stance_mid_to_low",
+"speed": 62.4
+}]

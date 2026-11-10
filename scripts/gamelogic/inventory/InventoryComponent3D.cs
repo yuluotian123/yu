@@ -34,7 +34,7 @@ public partial class InventoryComponent3D : Component3D
     {
         if (weapon == null || string.IsNullOrWhiteSpace(weapon.WeaponId) || weapon.AnimationProfile?.IsValid() != true ||
             weapon.PrimaryAttack?.Graph == null || string.IsNullOrWhiteSpace(weapon.PrimaryAttack.AbilityId) ||
-            Contains(weapon.WeaponId) || _items.Count >= Capacity)
+            !weapon.HasValidStances() || Contains(weapon.WeaponId) || _items.Count >= Capacity)
             return false;
         _items.Add(weapon);
         _cellPositions[weapon.WeaponId] = Enumerable.Range(0, Capacity).First(index => !_cellPositions.ContainsValue(index));

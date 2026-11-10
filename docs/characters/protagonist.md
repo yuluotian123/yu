@@ -1,6 +1,6 @@
 # 主角人物档案
 
-更新：2026-11-09。主角的人设、动作和新需求统一在本页维护。
+更新：2026-11-10。主角的人设、动作和新需求统一在本页维护。
 
 ## 人设
 
@@ -19,18 +19,17 @@
 
 ## 动作
 
-**工程约定：跳跃只展示完整动作。** 三段待机、持剑移动及六向换势已接入游戏，默认中段；完整跳跃和游戏现用普攻沿用运行资源。旧 idle 动画条目已移除。
+**工程约定：跳跃只展示完整动作。** 三段待机、持剑移动、各段一招普攻及六向换势已接入游戏，默认中段；完整跳跃沿用原资源。旧 idle 动画条目已移除。
 
 <!-- BEGIN GENERATED ACTIONS -->
 
 | 动作 | GIF | 动作相关信息 |
 | --- | --- | --- |
 | 三段待机 | ![上、中、下段待机](media/protagonist/greatsword-stance-idle-current.gif) | 各 72 帧 · 24 fps · 3 秒循环<br>已加大肩部起伏与尾摆；保留眨眼，脚底不增加位移 |
-| 三段攻击 | 暂缓 | 先完成三段移动；后续每段一招普攻，按新动作确定时长与冷却 |
+| 三段攻击 | ![上、中、下段普攻](media/protagonist/greatsword-stance-attacks-v4.gif) | 上段下劈 29 帧 / 0.680 秒；中段横扫 26 帧 / 0.540 秒；下段前刺 18 帧 / 0.474 秒<br>逐帧变速；收招后可再次攻击 |
 | 架势过渡 | ![六向架势切换](media/protagonist/greatsword-stance-transitions-62fps.gif) | 上↔中 7 帧 / 0.112 秒，中↔下及上↔下 10 帧 / 0.160 秒；均为 62.4 fps |
-| 三段移动 | ![三段移动 v12](media/protagonist/greatsword-stance-guard-repair-v12.gif) | 上、中段保留三分之四朝向、轻微身体扭转<br>循环各 36 帧 / 36 fps / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 1.4 秒 |
+| 三段移动 | ![上、中、下段持剑移动](media/protagonist/greatsword-stance-low-speed-v13.gif) | 保留已确认的全部人物和剑像素，下段步频提高约 27%。上、中段循环各 36 帧 / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 1.1 秒。 |
 | 完整跳跃 | ![主角完整跳跃](media/protagonist/greatsword-jump.gif) | 15 帧 · 18 fps · 0.833 秒<br>跳高约 0.6 米；全程可平移 |
-| 游戏现用普攻 | ![主角普攻](media/protagonist/greatsword-attack.gif) | 30 帧 · 25 fps · 1.2 秒<br>冷却 1.35 秒 |
 | 受击 | ![主角受击](media/protagonist/greatsword-hurt.gif) | 8 帧 · 20 fps · 0.4 秒<br>已有素材，当前玩家图未接入 |
 | 倒地 | ![主角倒地](media/protagonist/greatsword-death.gif) | 16 帧 · 24 fps · 0.667 秒<br>已有素材，当前玩家图未接入 |
 
@@ -46,18 +45,26 @@
 
 - **待机幅度**：沿用当前视频动作，在 Aseprite 中额外增加最多 2 个原生像素的上身起伏；头、肩、手和剑一起移动，胸部不单独鼓起。尾尖额外增加上段左右各 5 像素、中下段各 3 像素的弯摆；中下段叠加原有摆动后约左右各 6 像素。尾根不增加横移，尾摆峰值滞后呼吸 9 帧。
 - **节奏与对齐**：三段均为 72 帧、24 fps、3 秒循环，共 216 帧。画布 320×384，脚底锚点 (160,347)；人物比例不变，脚底不增加位移。
-- **持剑移动**：当前 v12 保留用户确认的脚步和轻微身体扭转，只修正上段手臂、手与剑。双手握在连续剑柄上，前后臂的袖口与手腕相连；采用已确认待机的剑刃和护手，随双手及肩部整体起伏。局部握剑基准由 imagegen 修正，再由 Aseprite 应用到原 ComfyUI 序列。上、中段循环各 36 帧 / 36 fps / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 1.4 秒。
+- **持剑移动**：当前 v13 沿用 v12 的全部人物和剑像素，将下段循环从 1.4 秒缩短到 1.1 秒，步频提高约 27%。上段双手握在连续剑柄上，前后臂的袖口与手腕相连；采用已确认待机的剑刃和护手，随双手及肩部整体起伏。局部握剑基准由 imagegen 修正，再由 Aseprite 应用到原 ComfyUI 序列。上、中段循环各 36 帧 / 36 fps / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 30.909091 fps / 1.1 秒。
 
-![Godot 实际渲染：修正上段握剑](media/protagonist/greatsword-stance-guard-repair-runtime-v12.gif)
+![Godot 实际渲染：加快下段脚步](media/protagonist/greatsword-stance-low-speed-runtime-v13.gif)
 
 共 130 帧。上段 48 帧已逐帧检查双手、袖口、握柄和肩部衔接；腰胯、腿脚从 y=245 起与 v11 逐像素一致，五官局部也未变化。中、下段及中段起步 PNG 与 v11 逐文件一致。上段原视频对比保留有意修改造成的颜色差异，另有修补层和未修改区域的精确核验。该版本仍是序列帧，握剑部分作为一组稳定形状运动，没有增加独立肘关节动画。
 
-本轮构建、130 帧 Godot 导入核验、完整武器/架势玩法检查和实际录制均完成，进程退出码为 0。构建保留 8 条既有字段警告，录制保留既有 RID 清理警告；v11 的退出访问异常未在本轮复现，尚未确认修复。检查摘要见[视觉复核记录](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/visual-review.json)。
+v12 已通过构建和完整武器/架势玩法检查。v13 只调整下段播放时间，已核对全部 130 张交付帧及图集与 v12 一致，并完成 Godot 导入帧率、像素检查和实际录制。步频调整时未重复构建与完整玩法检查；本次接入三段攻击后已重新通过构建及完整检查。v11 的退出访问异常尚未确认修复。检查摘要见[视觉复核记录](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/visual-review.json)。
 
-- **三段攻击**：历史失败资源和未采用试稿已清理；本轮先制作移动。后续每段一招普攻，从各自架势起刀并收回；不沿用旧动作时长和冷却。
+- **三段攻击 v4**：上段下劈 29 帧 / 0.680 秒，中段横扫 26 帧 / 0.540 秒，下段前刺 18 帧 / 0.474 秒。蓄力分别延长至 340 / 270 / 220 毫秒，其中蓄满姿势停留 130 / 90 / 90 毫秒；保持 68 / 48 / 54 毫秒的快速出手，再在落点顿帧 80 / 62 / 46 毫秒后回架。顿帧通过原帧时长控制，人物和剑一起停住。参见[动作参考与取舍](../art/greatsword-attack-references.md)。
+
+![Godot 实际渲染：下劈、横扫与前刺，先右后左](media/protagonist/greatsword-stance-attacks-runtime-v4.gif)
+
+v4 仅调整时间，73 张交付帧和三张图集与 v3 逐像素一致，保持相同角色、服装与大剑，首尾与各自原始待机的 alpha 和可见 RGB 完全一致。中段横扫有一帧朝向镜头的剑身透视缩短，随后在水平面完成向前横切；下段以蹬地、屈膝和腰肩前送完成平刺，不再上撩。下段终点先局部校正剑刃，再作为生成端点，参考图中人物、手和握柄像素不变。带闪光、剑身延长、弯曲或出框的生成片段已排除。
+
+像素与导入核验覆盖全部交付帧、透明度、颜色和逐帧时间。自动审计没有独立全轮廓标注；细微透视与轮廓变化仍存在，数值通过不能替代目视复核。
+
+**刀光**由独立 `CPUParticles3D` 实时生成：下劈沿前方落刀弧，横扫沿腰胸水平剑路，前刺沿剑尖前送轨迹。按实际动画时间标定，120 Hz 补齐快速运动的发射位置，亮片约 65 毫秒、碎光约 170 毫秒淡出；碎光随剑尖运动方向飞散。准备和回架不发射，左右正确镜像，取消、结束、换武器及回收会清理。详见[武器刀光配置](../gameplay/weapons.md#攻击刀光)。
 - **完整跳跃**：约 0.6 米，松键可截短上升；起跳、腾空和落地均可左右、前后及斜向平移。GIF 时长不等于实际腾空时间。
-- **游戏现用普攻**：时长 1.20 秒、冷却 1.35 秒，期间限制移动和跳跃。伤害、命中判定和连招尚未接入。
-- **架势切换**：恢复 Shift + 滚轮上／左键／滚轮下直选上／中／下段；普通左键普攻。手柄 R1/RB + △/Y、□/X、×/A 同样直选。换势完成后进入目标待机，地面短暂站稳，跳跃和技能中排队；连续输入只执行最后一个目标，无额外冷却。实际换势开始时播放 0.32 秒周身细小金色粒子，贴近身体微微上飘并淡出。本轮不加入残心、精力、属性相性或三段独立攻击。详见[架势切换](../gameplay/combat-stances.md)。
+- **普攻执行**：武器的 `StancePrimaryAttacks` 选择三招独立 Ability；各自时间轴播放 `attack_high/mid/low`。冷却覆盖完整动作，收招后可再攻击，期间限制移动和跳跃。换势请求在技能结束后执行；伤害、命中判定和连招尚未接入。
+- **架势切换**：恢复 Shift + 滚轮上／左键／滚轮下直选上／中／下段；普通左键普攻。手柄 R1/RB + △/Y、□/X、×/A 同样直选。换势完成后进入目标待机，地面短暂站稳，跳跃和技能中排队；连续输入只执行最后一个目标，无额外冷却。实际换势开始时播放 0.32 秒周身细小金色粒子，贴近身体微微上飘并淡出。不加入残心、精力或属性相性。详见[架势切换](../gameplay/combat-stances.md)。
 - **过渡资源**：使用三条动作正反向覆盖六个方向；与 idle 同为 320×384、脚底 (160,347)。[资源及源帧记录](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_transition/manifest.json)。
 - **其他能力**：仅装备大剑，冲刺已移除；三段持剑移动已接入，四向朝向仍暂缓。
 
@@ -79,14 +86,24 @@
 - [三段静帧源文件](../../assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/sources/stances.aseprite) · [武器母版](../../assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/sources/greatsword-master.aseprite)。各架势目录保留透明 PNG 序列、图集及实际使用的制作基准 `source.aseprite`。
 - [三段待机 Godot 资源](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/sprite_frames.tres) · [幅度参数](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/motion.json) · [制作清单](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/manifest.json)。仅包含 `idle_high`、`idle_mid`、`idle_low`。
 - [选定视频、输入、工作流和种子](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/sources.json) · [中文制作说明](../art/prompts/protagonist-idle.prompt.txt) · [像素核验](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/media-validation.json) · [Godot 导入核验](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_idle/godot-validation.json)。PNG/APNG 为像素基准，GIF 仅供观看；自动检查未包含独立全轮廓标注。
-- [游戏现用动作](../../assets/resources/sprites/amber_fox_style_v2/greatsword_v4/sprite_frames.tres) · [大剑配置](../../assets/resources/weapons/greatsword_animation.tres)。基础跑步、跳跃和攻击为 256×256、脚底 (128,219)；新 idle 与过渡已按脚底对齐。
-- [三段移动资源与帧映射](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/manifest.json) · [当前资源目录](../../assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/) · [制作配置](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/production.json)。v12：上、中段起步均为 0–11、循环 12–47；下段沿用 17–50。帧号从 0 开始，起步与对应循环直接连续。
+- [游戏现用动作](../../assets/resources/sprites/amber_fox_style_v2/greatsword_v4/sprite_frames.tres) · [大剑配置](../../assets/resources/weapons/greatsword_animation.tres)。基础备用动作和跳跃为 256×256、脚底 (128,219)；三段攻击为 512×384、脚底 (256,347)，与 idle、移动及过渡按脚底对齐。
+- [三段移动资源与帧映射](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/manifest.json) · [当前资源目录](../../assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/) · [制作配置](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/production.json)。v13：上、中段起步均为 0–11、循环 12–47；下段沿用 17–50，只调整帧率。帧号从 0 开始，起步与对应循环直接连续。
 - [移动导入核验](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/godot-validation.json) · [人物复核](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/visual-review.json)。每段保留原始 RGB、透明 PNG、无损 APNG、Aseprite、精简全帧对照和核验记录；工作流、提示词、种子与原视频已归档。上段另有握剑修补层和逐帧位移配置。
+- [三段攻击资源与帧映射](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/manifest.json) · [制作配置、视频及种子](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json) · [逐帧复核](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/visual-review.json)。各段保留原视频、推理输入、工作流、透明 PNG、APNG、Aseprite 和全帧对照。
 - 后续修改同步本页图片、GIF 和参数。[动作表同步工具](../../scripts/tools/art/export_protagonist_docs.lua)只更新上方自动生成区，保留用户添加的需求。
 
 </details>
 
 ### 新需求与状态
+
+- **蓄力与顿帧**：“我希望蓄力久一点，加入一些顿帧调节节奏”——v4 已延长三招蓄力，并在蓄满姿势与出手落点加入短暂停顿；挥出速度保持 v3，技能与冷却同步为 0.680 / 0.540 / 0.474 秒。
+
+- **攻击方向与力度**：“首先，中段应该是横扫，不是上刺，下端应该是刺向前方而不是上方；其次，动作整体缺乏力量感，速度感叶不够”——已改为中段横扫、下段低位前刺；当前 v4 保留快速出手，按最新反馈延长蓄力并加入顿帧。
+- **幅度与刀光**：“现在的各个架势的攻击动作，希望幅度和张力大一点，然后攻击都是往前方攻击，加上刀光，刀光用粒子特效做”——已接入独立粒子刀光；当前剑路与节奏见上两条反馈。
+- **一致性与清理**：“做动画的时候注意人物和剑的一致性；做完之后把文档更新，把所有无用资源，文档，代码都删掉”——已逐帧复核角色与剑，更新当前参数、预览和制作说明；清理替换下来的攻击视频、过时工作流与预览、多余帧、无引用的旧网格刀光代码及临时脚本，保留现用资源及其重建来源。
+- **三段普攻**：“把三个阶段的攻击都做了，找点参考”——已参考双手大剑演示并接入武器选招与独立 Ability；当前 v4 共 73 帧；方向、逐帧时间与导入像素已核验。
+
+- **下段步频**：“下段的脚步速度有点慢”——v13 将下段 34 帧循环由 1.4 秒改为 1.1 秒，步频提高约 27%；逐帧保留原有脚步、腰胯与持剑画面，上、中段播放时间不变。
 
 - **上段握剑修正**：“脚没问题了，上端的手臂，手和剑这块不太对”——v12 已修正双手握柄、手腕与屈肘连接；保留已确认脚步，并通过逐像素核对。
 
@@ -108,8 +125,8 @@
 
 - **上一轮提速与腿部复查**：“移动动画是不是得快点，然后再检查一波腿部动作”——整体循环缩短至约 0.75–0.79 秒；重做上段多余收脚，删掉下段重复抬腿保持帧，并逐帧检查膝部、靴子、支撑交替和循环接缝。下段一次新稿上浮更明显，已舍弃，最终沿用较稳定原稿的精选帧。
 
-- **当前制作顺序**：“给每个架势做一套攻击和移动”，选择“每段一招普攻＋移动循环”；随后“先找点参考再生成动作，先做移动动作”“找那种双手剑的参考”——已参考双手宽刃大剑移动，完成三段移动，保留各段持剑位置；攻击暂缓。[参考与动作约束](../art/greatsword-movement-references.md)。
-- **新动作节奏**：“不用参考现在的时长和cd”——后续新攻击按动作自身的准备、出手与收招确定时长；旧普攻参数只记录当前运行状态，不是制作限制。
+- **当前制作顺序**：“给每个架势做一套攻击和移动”，选择“每段一招普攻＋移动循环”；随后“先找点参考再生成动作，先做移动动作”“找那种双手剑的参考”——已参考双手宽刃大剑移动，完成三段移动，保留各段持剑位置；现按最新要求补齐三段普攻。[参考与动作约束](../art/greatsword-movement-references.md)。
+- **新动作节奏**：“不用参考现在的时长和cd”——新三段攻击已按准备、出手与收招重新定时，旧 1.20 秒 / 1.35 秒参数已替换。
 - **保存崩溃**：“保存场景修改的时候”——已定位保存回调中编译/资源释放与 C# 包装对象回收的相关崩溃，改为去重延后编译并保留缓存资源身份，完成 12 次保存／24 次编译压力检查。另有一次原生文档扫描异常，不能归为同一问题；见[排查记录](../tools/godot-save-crash-2026-11-08.md)。
 - **粒子后处理**：“这个粒子特效好像被像素滤镜影响了”——已让小粒子保留细节，并验证遮挡；上方预览更新为实际森林镜头。
 
@@ -122,10 +139,10 @@
 
 - **本轮调整**：“idle 感觉幅度有点太小了”“然后把 idle 幅度加大一点”——已加大三段呼吸与尾摆，保留小嘴、眨眼和脚底位置。
 - **已清理**：“攻击则是完全不行”“临时资源、历史资源和其他参考资源用不到的都删了，没用的脚本也都删了”——删除失败攻击和旧制作链，只保留当前三段待机的必要源文件及游戏仍使用的资源。
-- **待重做**：“把三个架势的 idle 和 attack 都做了，步幅差异别太大”——待机已调整；攻击需重新设计，三段步幅保持接近。
+- **已补齐**：“把三个架势的 idle 和 attack 都做了，步幅差异别太大”——三段待机与普攻已接入；按后续要求，攻击加大身体前倾与伸臂，支撑脚保持在原地附近。
 - **已接入**：“加入一个架势切换的系统，告诉我该怎么接入”；“先只做架势切换”；“切换是不是可以和仁王一样的键位”；“旧idle可以去了”；“几个架势之间切换我希望有过度动作”——三段待机、仁王式组合键和六向过渡已接入，旧 idle 动画条目已移除。
 - **本轮范围已收敛**：“查看现在的三段idle动作……尽量和skill以及weapon系统结合紧密一点”；“架势的逻辑……直接参考仁王2和浪人崛起”——见[架势切换实现](../gameplay/combat-stances.md)。武器管理架势与过渡资源，Ability 保持技能执行与冷却；残心和属性机制暂不制作。
-- **待制作**：“你得按中段架势来做移动和攻击啊”——须从当前双手肩前中段起步、起刀并回到同一架势；旧单手中段已删除。
+- **已接入**：“你得按中段架势来做移动和攻击啊”——中段移动和横扫均从当前双手肩侧架势开始并收回；旧单手中段已删除。
 - **暂缓**：“按 idle 的人设重新生成跑步动画，这次跑步时步幅别那么大，偏慢跑”，随后“算了，你先别生成”；四向朝向保留斜向移动的方案也暂缓。
 
 > 可直接在这里追加主角需求，或引用上方 GIF 指出要调整的位置。
@@ -148,3 +165,7 @@
 | 2026-11-09 | v10 上、中段改为先侧身再走；新增一次性起步片段，步行各 24 帧 / 1 秒，下段保留；117 帧导入核验、完整玩法检查与运行录制通过 |
 | 2026-11-09 | v11 收小转向，保留三分之四朝向和轻微腰肩扭转；上、中段各 36 帧循环、12 帧起步。130 帧导入核验与播放断言通过；检查退出时资源释放异常，实际录制退出正常 |
 | 2026-11-09 | v12 局部修正上段手臂、双手与剑；保留腿脚像素，完整玩法检查及录制正常退出；清理历史预览和制作中间文件 |
+| 2026-11-09 | v13 下段步频提高约 27%，34 帧循环由 1.4 秒缩短至 1.1 秒；人物与剑 PNG 全部保留，更新预览与 Godot 资源并核验 |
+| 2026-11-10 | 攻击 v2：重做三段大幅前方挥砍，189 帧，时长 0.937 / 0.827 / 0.862 秒；接入独立粒子刀光，核验双向、取消与回收，更新预览并清理旧制作文件 |
+| 2026-11-10 | 攻击 v3：中段改为横扫、下段改为低位前刺；三招重设为 0.420 / 0.354 / 0.324 秒，独立粒子跟随新剑路，保留 73 张交付帧并清理被替换素材 |
+| 2026-11-10 | 攻击 v4：三招蓄力延长至 340 / 270 / 220 毫秒，加入蓄满及落点顿帧；挥出速度与全部像素保持 v3，完整时长 0.680 / 0.540 / 0.474 秒；同步技能、预览与核验 |

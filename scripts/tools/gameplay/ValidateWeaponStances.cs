@@ -30,7 +30,7 @@ public partial class ValidateWeaponStances : Node3D
             _animation = _player.GetComponent<CharacterAnimationComponent3D>();
             await Frames(30);
             if (OS.GetCmdlineUserArgs().Contains("--capture") || OS.GetCmdlineUserArgs().Contains("--forest-capture") ||
-                OS.GetCmdlineUserArgs().Contains("--movement-capture"))
+                OS.GetCmdlineUserArgs().Contains("--movement-capture") || OS.GetCmdlineUserArgs().Contains("--attack-capture"))
             {
                 // Fixed-fps capture uses simulation time; ability cooldown checks below use the live clock.
                 var previewOther = CreatePlayer("PreviewPlaceholder", new Vector3(8, 0, 0));
@@ -56,6 +56,8 @@ public partial class ValidateWeaponStances : Node3D
             {
                 GD.Print("MOVEMENT_START_CHECK: PASS"); GetTree().Quit(); return;
             }
+            await CheckStanceAttacks();
+            await CheckAttackParticles();
 
             await MouseTap(MouseButton.WheelUp);
             ExpectIdle("mid");
@@ -90,8 +92,8 @@ public partial class ValidateWeaponStances : Node3D
             await Frames(2);
 
             await MouseTap(MouseButton.Left);
-            AbilityRuntime attack = _abilities.GetRuntime("greatsword_attack");
-            Check(attack.IsRunning && _animation.ActiveAnimation == "attack", "plain click still attacks");
+            AbilityRuntime attack = _abilities.GetRuntime(_equipment.CurrentPrimaryAttack.AbilityId);
+            Check(attack.IsRunning && _animation.ActiveAnimation == "attack_mid", "plain click attacks from the current guard");
             double cooldown = attack.CooldownReadyTime;
             ulong version = attack.ActivationVersion;
             KeyInput(Key.Shift, true);
@@ -101,20 +103,21 @@ public partial class ValidateWeaponStances : Node3D
             Check(_equipment.PendingStance == string.Empty, "selecting current stance cancels queued target");
             await MouseTap(MouseButton.WheelDown, true);
             Check(_equipment.CurrentStance == "mid" && _equipment.PendingStance == "low", "attack queues last stance");
-            Check(_animation.ActiveAnimation == "attack" && attack.IsRunning, "stance input preserves active attack");
+            Check(_animation.ActiveAnimation == "attack_mid" && attack.IsRunning, "stance input preserves active attack");
             KeyInput(Key.Shift, false);
-            await ToSignal(GetTree().CreateTimer(1.5), SceneTreeTimer.SignalName.Timeout);
+            await WaitForAttack(attack);
             await SettleStance();
             ExpectIdle("low");
             Check(attack.CooldownReadyTime == cooldown && attack.ActivationVersion == version, "switch preserves skill cooldown and activation");
             Check(ReferenceEquals(frames, _animation.Sprite.SpriteFrames), "switch does not replace playback frames");
 
             Check(_equipment.TryPrimaryAttack(), "attack available after cooldown");
+            string interruptedAttackId = _equipment.CurrentPrimaryAttack.AbilityId;
             _equipment.RequestStance("high");
             _equipment.RequestStance("low");
             Check(_equipment.PendingStance == string.Empty, "requesting current stance clears pending switch");
             _equipment.RequestStance("high");
-            _abilities.CancelAbility("greatsword_attack", "Validation");
+            _abilities.CancelAbility(interruptedAttackId, "Validation");
             await Frames(3);
             ExpectIdle("low");
             Check(_equipment.PendingStance == string.Empty, "interrupt clears pending switch");
@@ -290,11 +293,21 @@ public partial class ValidateWeaponStances : Node3D
             Check(other.GetComponent<WeaponEquipmentComponent3D>().CurrentStance == "mid", "instances have independent stances");
             Check(!other.GetComponent<StanceSwitchEffectComponent3D>().IsPlaying &&
                 other.GetComponent<CharacterAnimationComponent3D>().Sprite.MaterialOverlay == null, "flash is local to the switching character");
+            Check(!other.GetComponent<WeaponAttackEffectComponent3D>().IsPlaying &&
+                !ReferenceEquals(_player.GetNode("WeaponAttackEffect"), other.GetNode("WeaponAttackEffect")),
+                "sword particle pools belong to individual actors");
             Check(_equipment.CurrentWeapon.AnimationProfile.AdditionalFrames.GetAnimationNames().Length == 3, "shared art remains unchanged");
             Check(!_equipment.CurrentWeapon.AnimationProfile.Frames.HasAnimation("idle_high"), "base frames are not mutated");
             Check(!_equipment.CurrentWeapon.AnimationProfile.Frames.HasAnimation("run_high") &&
                 _equipment.CurrentWeapon.AnimationProfile.ActionFrames.GetAnimationNames().Length == 5,
                 "stance movement composition leaves shared base and action resources unchanged");
+            Check(!_equipment.CurrentWeapon.AnimationProfile.Frames.HasAnimation("attack_high") &&
+                _equipment.CurrentWeapon.AnimationProfile.AttackFrames.GetAnimationNames().Length == 3,
+                "stance attacks leave shared base resources unchanged");
+            foreach (var definition in _equipment.CurrentWeapon.StancePrimaryAttacks.Values)
+                Check(!ReferenceEquals(_abilities.GetRuntime(definition.AbilityId),
+                    other.GetComponent<AbilitySystemComponent3D>().GetRuntime(definition.AbilityId)),
+                    "stance attack runtimes belong to individual actors");
             _player.OnRecycle();
             _player.OnSpawn();
             await Frames(10);
@@ -302,10 +315,16 @@ public partial class ValidateWeaponStances : Node3D
             Check(_equipment.PendingStance == string.Empty, "recycle clears transient stance");
             Check(!_equipment.IsTransitioning && !_player.GetComponent<CharacterMovementComponent3D>().MovementLocked, "recycle releases transition lock");
             Check(!effect.IsPlaying && _animation.Sprite.MaterialOverlay == null, "recycle clears the flash");
+            Check(!_player.GetComponent<WeaponAttackEffectComponent3D>().IsPlaying,
+                "recycle clears the sword light");
             var children = _player.GetChildren();
             using (var childrenOwner = (Godot.Collections.Array)children)
                 Check(children.Count(child => child.Name == "StanceSwitchEffect") == 1,
                     "recycle creates exactly one external effect instance");
+            var attackChildren = _player.GetChildren();
+            using (var attackChildrenOwner = (Godot.Collections.Array)attackChildren)
+                Check(attackChildren.Count(child => child.Name == "WeaponAttackEffect") == 1,
+                    "recycle creates exactly one sword particle pool");
             foreach (string source in new[] { "high", "mid", "low" })
                 foreach (string target in new[] { "high", "mid", "low" })
                 {
@@ -382,29 +401,67 @@ public partial class ValidateWeaponStances : Node3D
             } }
         };
         AddChild(_previewWorld);
-        var camera = new Camera3D { Projection = Camera3D.ProjectionType.Orthogonal, Size = 2.3f, Position = new Vector3(0, 1.0f, 7), Current = true };
+        bool captureAttacks = OS.GetCmdlineUserArgs().Contains("--attack-capture");
+        var camera = new Camera3D { Projection = Camera3D.ProjectionType.Orthogonal, Size = captureAttacks ? 3.4f : 2.3f, Position = new Vector3(0, 1.0f, 7), Current = true };
         AddChild(camera);
         var overlay = new CanvasLayer();
         AddChild(overlay);
         string[] names = { "high", "mid", "low" };
+        string[] attackLabels = { "HIGH / DOWN CUT", "MID / SWEEP", "LOW / THRUST" };
         var actors = new GameObject3D[names.Length];
         var labels = new Label[names.Length];
         for (int i = 0; i < names.Length; i++)
         {
-            GameObject3D actor = CreatePlayer("Preview" + i, new Vector3((i - 1) * 1.15f, 0, 0));
+            GameObject3D actor = CreatePlayer("Preview" + i, new Vector3((i - 1) * (captureAttacks ? 1.8f : 1.15f), 0, 0));
             actors[i] = actor;
             actor.GetComponent<PlayerCharacterInputComponent3D>().GameplayBlocked = true;
             actor.GetComponent<WeaponEquipmentComponent3D>().RequestStance(names[i]);
             AnimatedSprite3D sprite = actor.GetComponent<CharacterAnimationComponent3D>().Sprite;
             sprite.Shaded = false;
             sprite.Modulate = Colors.White;
-            var label = new Label { Text = names[i].ToUpperInvariant(), Position = new Vector2(130 + i * 365, 28) };
+            Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+            float labelX = captureAttacks ? viewportSize.X * .5f + (i - 1) * 1.8f / camera.Size * viewportSize.Y - 110 : 130 + i * 365;
+            var label = new Label { Text = captureAttacks ? attackLabels[i] : names[i].ToUpperInvariant(), Position = new Vector2(labelX, 28) };
             labels[i] = label;
             label.AddThemeFontSizeOverride("font_size", 24);
             label.AddThemeColorOverride("font_color", new Color(0.28f, 0.3f, 0.35f));
             overlay.AddChild(label);
         }
         await Frames(30);
+        if (captureAttacks)
+        {
+            string attackFolder = "res://.godot/stance-actions/runtime-attacks";
+            DirAccess.MakeDirRecursiveAbsolute(ProjectSettings.GlobalizePath(attackFolder));
+            var trace = new JsonArray();
+            bool leftFacing = OS.GetCmdlineUserArgs().Contains("--left-facing");
+            if (leftFacing)
+                foreach (var actor in actors) actor.GetComponent<CharacterMovementComponent3D>().RestoreFacing(-1);
+            for (int frame = 0; frame < 120; frame++)
+            {
+                if (frame == 15 || frame == 75)
+                    foreach (var actor in actors)
+                        Check(actor.GetComponent<WeaponEquipmentComponent3D>().TryPrimaryAttack(), "preview starts the stance ability");
+                await Frames(1);
+                await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+                using var image = GetViewport().GetTexture().GetImage();
+                Check(image.SavePng(attackFolder + $"/frame-{frame:D3}.png") == Error.Ok, "attack preview frame saved");
+                var actorFrames = new JsonArray();
+                foreach (var actor in actors)
+                {
+                    var animation = actor.GetComponent<CharacterAnimationComponent3D>();
+                    var effect = actor.GetComponent<WeaponAttackEffectComponent3D>();
+                    actorFrames.Add(new JsonObject { ["animation"] = animation.ActiveAnimation.ToString(),
+                        ["frame"] = animation.Sprite.Frame, ["progress"] = animation.Sprite.FrameProgress,
+                        ["particle_bursts"] = effect.EmittedBursts, ["effect_active"] = effect.IsPlaying,
+                        ["facing"] = actor.GetComponent<CharacterMovementComponent3D>().Facing });
+                }
+                trace.Add(new JsonObject { ["capture_frame"] = frame, ["actors"] = actorFrames });
+            }
+            using var traceFile = FileAccess.Open(attackFolder + "/frames.json", FileAccess.ModeFlags.Write);
+            traceFile.StoreString(trace.ToJsonString());
+            GD.Print("STANCE_CHECK: attack capture " + ProjectSettings.GlobalizePath(attackFolder));
+            return;
+        }
         if (OS.GetCmdlineUserArgs().Contains("--movement-capture"))
         {
             string movementFolder = "res://.godot/stance-actions/runtime-movement";
@@ -491,6 +548,97 @@ public partial class ValidateWeaponStances : Node3D
             Check(image.SavePng(folder + $"/frame-{frame:D3}.png") == Error.Ok, "forest preview saved");
         }
         GD.Print("STANCE_CHECK: authored forest particle capture " + ProjectSettings.GlobalizePath(folder));
+    }
+
+    private async Task CheckStanceAttacks()
+    {
+        var weapon = _equipment.CurrentWeapon;
+        Check(weapon.StancePrimaryAttacks.Count == 3, "weapon supplies an ability for every stance");
+        Check(weapon.StancePrimaryAttacks.Values.Select(ability => ability.AbilityId).Distinct().Count() == 3,
+            "stance abilities have independent stable IDs");
+        foreach (string stance in new[] { "high", "mid", "low" })
+        {
+            _equipment.RequestStance(stance);
+            await SettleStance();
+            AbilityResource definition = weapon.StancePrimaryAttacks[stance];
+            AbilityRuntime runtime = _abilities.GetRuntime(definition.AbilityId);
+            Check(runtime != null && ReferenceEquals(_equipment.CurrentPrimaryAttack, definition),
+                stance + " selects the already granted skill");
+            Check(weapon.AnimationProfile.IsOneShot("attack_" + stance), stance + " attack is a one-shot");
+            await MouseTap(MouseButton.Left);
+            Check(runtime.IsRunning && _animation.ActiveAnimation == "attack_" + stance,
+                stance + " click plays its own attack through the ability system");
+            Check(_player.GetComponent<CharacterMovementComponent3D>().MovementLocked, "attack holds movement until recovery");
+            Check(!_equipment.TryPrimaryAttack(), "repeated click cannot restart an active attack");
+            ExpectFootBaseline();
+            double cooldown = runtime.CooldownReadyTime;
+            await WaitForAttack(runtime);
+            ExpectIdle(stance);
+            Check(!_player.GetComponent<CharacterMovementComponent3D>().MovementLocked, "recovery releases movement");
+            Check(runtime.CooldownReadyTime == cooldown, "finishing the skill does not reset its cooldown");
+            Check(ReferenceEquals(runtime, _abilities.GetRuntime(definition.AbilityId)), "skill runtime survives stance use");
+        }
+        _equipment.RequestStance("mid");
+        await SettleStance();
+        GD.Print("STANCE_ATTACK_CHECK: PASS (high, mid, low; selection, animation, recovery, locking, runtime identity)");
+    }
+
+    private async Task WaitForAttack(AbilityRuntime runtime)
+    {
+        for (int i = 0; i < 300 && runtime.IsRunning; i++) await Frames(1);
+        Check(!runtime.IsRunning, "attack completes within five seconds");
+        await Frames(2);
+    }
+
+    private async Task CheckAttackParticles()
+    {
+        var effect = _player.GetComponent<WeaponAttackEffectComponent3D>();
+        var movement = _player.GetComponent<CharacterMovementComponent3D>();
+        Check(effect != null && !effect.IsPlaying, "attack particles are separate and idle outside attacks");
+        foreach (string stance in new[] { "high", "mid", "low" })
+        foreach (int facing in new[] { 1, -1 })
+        {
+            _equipment.RequestStance(stance);
+            await SettleStance();
+            movement.RestoreFacing(facing);
+            AbilityRuntime runtime = _abilities.GetRuntime(_equipment.CurrentPrimaryAttack.AbilityId);
+            for (int i = 0; i < 180 && _abilities.CanActivateAbility(runtime.AbilityId) != AbilityActivationResult.Activated; i++)
+                await Frames(1);
+            Check(_equipment.TryPrimaryAttack(), "particle check starts " + stance);
+            Check(effect.IsPlaying && effect.AttackFacing == facing && effect.EmittedBursts == 0,
+                "windup captures facing without lighting the sword early");
+            KeyInput(facing > 0 ? Key.A : Key.D, true);
+            for (int i = 0; i < 180 && effect.EmittedBursts == 0 && runtime.IsRunning; i++) await Frames(1);
+            KeyInput(facing > 0 ? Key.A : Key.D, false);
+            Check(effect.EmittedBursts > 0 && movement.Facing == facing, "forward strike emits particles and does not turn mid-swing");
+            var visual = _player.GetNode<Node3D>("WeaponAttackEffect");
+            bool visibleBlade = false;
+            var bursts = visual.GetChildren();
+            using var burstsOwner = (Godot.Collections.Array)bursts;
+            foreach (Node3D burst in bursts)
+            {
+                if (!burst.Visible) continue;
+                visibleBlade = true;
+                foreach (Vector3 point in burst.GetNode<CpuParticles3D>("Blade").EmissionPoints)
+                    Check(point.X * facing >= -0.005f, "blade light stays in the facing hemisphere");
+            }
+            Check(visibleBlade && visual.Visible, "strike has visible independent particle emitters");
+            if (facing < 0)
+            {
+                _abilities.CancelAbility(runtime.AbilityId, "ParticleCancellationCheck");
+                Check(!effect.IsPlaying && !visual.Visible, "cancellation clears the light immediately");
+                await Frames(3);
+            }
+            else
+            {
+                await WaitForAttack(runtime);
+                Check(!effect.IsPlaying && !visual.Visible, "recovery leaves no particles behind");
+            }
+        }
+        movement.RestoreFacing(1);
+        _equipment.RequestStance("mid");
+        await SettleStance();
+        GD.Print("ATTACK_PARTICLE_CHECK: PASS (all stances, both facings, forward emission, windup, completion, cancellation)");
     }
 
     private async Task CheckMovementLeadIns()

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WeaponAttackTrail" format=3]
+
+[ext_resource type="Script" path="res://scripts/gamelogic/weapons/WeaponAttackTrail.cs" id="script"]
+
+[resource]
+script = ExtResource("script")
+AbilityId = "greatsword_attack_high"
+Animation = &"attack_high"
+Frames = PackedFloat32Array(340, 348, 356, 364, 372, 380, 388, 408)
+BladePoses = PackedVector4Array(326, 179, 328, 76, 342, 199, 382, 103, 351, 226, 418, 152, 357, 255, 453, 218, 358, 255, 454, 217, 355, 276, 456, 267, 352, 292, 454, 311, 352, 292, 454, 311)

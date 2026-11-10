@@ -1,0 +1,103 @@
+{
+  "video": "../../../../../videos/characters/amber_fox_style_v2/greatsword_stance_attack/low.mkv",
+  "frames": [
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_001.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_002.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_003.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_004.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_005.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_006.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_007.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_008.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_009.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_010.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_011.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_012.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_013.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_014.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_015.png",
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/frames/attack_016.png"
+  ],
+  "source_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "frame_size": [
+    512,
+    384
+  ],
+  "binary_alpha": true,
+  "preserve_inset": 3,
+  "rgb_tolerance": 0,
+  "timing_note": "Variable frame durations; full timing is in manifest.json. Endpoints come from the original idle and are checked separately in media-validation.json.",
+  "regions": [
+    {
+      "name": "face",
+      "bounds": [
+        205,
+        150,
+        365,
+        270
+      ]
+    },
+    {
+      "name": "hair",
+      "bounds": [
+        180,
+        130,
+        370,
+        270
+      ]
+    },
+    {
+      "name": "torso",
+      "bounds": [
+        180,
+        190,
+        370,
+        315
+      ]
+    },
+    {
+      "name": "hands_and_weapon",
+      "bounds": [
+        45,
+        10,
+        490,
+        345
+      ]
+    },
+    {
+      "name": "legs",
+      "bounds": [
+        170,
+        265,
+        365,
+        365
+      ]
+    },
+    {
+      "name": "tail_and_pouch",
+      "bounds": [
+        135,
+        225,
+        370,
+        355
+      ]
+    }
+  ]
+}

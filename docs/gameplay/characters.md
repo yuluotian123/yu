@@ -258,7 +258,7 @@ GameObject3D._Ready
   -> 首次 Update/PhysicsUpdate: CharacterGraph 触发 BeginPlay
 ```
 
-CharacterGraph 不负责 Grant Ability。基础 AbilitySet 当前为空；武器装备组件授予 `greatsword_attack`。玩家没有冲刺输入或冲刺能力；请求未授予的 AbilityId 时，AbilitySystem 返回 `NotGranted`。
+CharacterGraph 不负责 Grant Ability。基础 AbilitySet 当前为空；武器装备组件一次授予 `greatsword_attack_high`、`greatsword_attack`（中段）及 `greatsword_attack_low`，按当前架势选招。玩家没有冲刺输入或冲刺能力；请求未授予的 AbilityId 时，AbilitySystem 返回 `NotGranted`。
 
 ### 移动输入
 
@@ -318,7 +318,7 @@ CharacterGraph 只提交“想跳”的意图。是否在地面、是否处于 C
 ```text
 Pressed(player_attack)
   -> WeaponEquipment.TryPrimaryAttack()
-  -> AbilitySystem.TryActivateAbility(CurrentWeapon.PrimaryAttack.AbilityId)
+  -> AbilitySystem.TryActivateAbility(CurrentPrimaryAttack.AbilityId)
   -> Grant / Cooldown / Priority 检查
   -> 注册移动与跳跃锁
   -> Attack Ability Timeline

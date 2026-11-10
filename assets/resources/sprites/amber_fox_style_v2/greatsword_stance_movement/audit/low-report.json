@@ -1,8 +1,8 @@
 {
   "source_video": "D:\\Project\\GitHub\\yu\\assets\\videos\\characters\\amber_fox_style_v2\\greatsword_stance_movement\\low.mov",
   "source_fps": 24.0,
-  "declared_output_fps": 24.28571428571429,
-  "declared_duration_seconds": 1.4,
+  "declared_output_fps": 30.909090909090907,
+  "declared_duration_seconds": 1.1,
   "frame_size": [
     320,
     384

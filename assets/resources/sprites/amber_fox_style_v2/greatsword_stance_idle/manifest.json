@@ -1,7 +1,7 @@
 {
   "date": "2026-11-08",
   "status": "三段待机已接入武器架势切换",
-  "attacks": "本次三段攻击被否定并删除，待重新设计",
+  "attacks": "2026-11-08 的旧三段攻击被否定并删除；2026-11-10 已重新生成并接入，见 ../greatsword_stance_attack/manifest.json",
   "method": "沿用选定的 ComfyUI 视频整理稿，在 Aseprite 中加大呼吸与尾摆",
   "canvas": [
     320,

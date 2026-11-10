@@ -5,12 +5,19 @@
 [ext_resource type="Resource" uid="uid://11v7tj2mtho3" path="res://assets/resources/weapons/greatsword_animation.tres" id="3_animation"]
 [ext_resource type="Texture2D" uid="uid://cj1tmd8ss1bo8" path="res://assets/textures/ui/inventory/greatsword.svg" id="4_icon"]
 [ext_resource type="Texture2D" uid="uid://dt7jq23n1jdd" path="res://assets/textures/sprites/amber_fox_style_v2/full_256/gs/portrait.png" id="5_portrait"]
+[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_high.tres" id="6_high_attack"]
+[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_low.tres" id="7_low_attack"]
 
 [resource]
 script = ExtResource("1_script")
 WeaponId = "greatsword"
 DisplayName = "大剑"
 PrimaryAttack = ExtResource("2_attack")
+StancePrimaryAttacks = Dictionary[String, Resource]({
+"high": ExtResource("6_high_attack"),
+"mid": ExtResource("2_attack"),
+"low": ExtResource("7_low_attack")
+})
 AnimationProfile = ExtResource("3_animation")
 StanceIdleAnimations = Dictionary[String, String]({
 "high": "idle_high",

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cg2ytousxnyt1" path="res://scripts/gamelogic/abilities/runtime/AbilityResource.cs" id="1_script"]
 [ext_resource type="Script" uid="uid://cu4j2jbm2g1tr" path="res://scripts/gamelogic/abilities/runtime/AbilityActivationPolicy.cs" id="2_policy"]
-[ext_resource type="Resource" uid="uid://cgdj4r8or0bw8" path="res://assets/resources/weapons/greatsword_attack_timeline.tres" id="3_timeline"]
+[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_timeline.tres" id="3_timeline"]
 
 [sub_resource type="Resource" id="attack_policy"]
 script = ExtResource("2_policy")
@@ -13,7 +13,7 @@ BlocksJump = true
 [resource]
 script = ExtResource("1_script")
 AbilityId = "greatsword_attack"
-DisplayName = "大剑斩击"
-Cooldown = 1.35
+DisplayName = "中段横扫"
+Cooldown = 0.54
 ActivationPolicy = SubResource("attack_policy")
 Graph = ExtResource("3_timeline")

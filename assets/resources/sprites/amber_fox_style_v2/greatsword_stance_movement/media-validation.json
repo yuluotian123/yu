@@ -41,8 +41,8 @@
   },
   "low": {
     "frames": 34,
-    "fps": 24.28571428571429,
-    "duration": 1.4,
+    "fps": 30.909090909090907,
+    "duration": 1.1,
     "loop": true,
     "visible_rgb_exact_from_video_decode": true,
     "binary_alpha": true,

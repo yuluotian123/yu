@@ -32,6 +32,7 @@ namespace GameLogic
         public int CurrentSlot => _currentSlot;
         public int PendingSlot => _pendingSlot;
         public WeaponDefinition CurrentWeapon => _currentSlot >= 0 && _currentSlot < _slots.Count ? _slots[_currentSlot] : null;
+        public AbilityResource CurrentPrimaryAttack => CurrentWeapon?.PrimaryAttackFor(CurrentStance);
         [GraphValue("CurrentWeaponId", Access = GraphValueAccess.ReadOnly)]
         public string CurrentWeaponId => CurrentWeapon?.WeaponId ?? string.Empty;
         [GraphValue("CurrentStance", Access = GraphValueAccess.ReadOnly)]
@@ -83,7 +84,7 @@ namespace GameLogic
                     continue;
                 }
                 // Grant once. Switching must never recreate a runtime or reset its cooldown.
-                if (_abilities.GetRuntime(weapon.PrimaryAttack.AbilityId) != null || _abilities.GrantAbility(weapon.PrimaryAttack))
+                if (GrantWeaponAttacks(weapon))
                     _catalog[weapon.WeaponId] = weapon;
             }
             int initialSlot = 0;
@@ -129,8 +130,16 @@ namespace GameLogic
         public bool TryPrimaryAttack()
         {
             FlushPendingSwitch();
-            return !IsTransitioning && CurrentWeapon != null && _abilities.TryActivateAbility(
-                CurrentWeapon.PrimaryAttack.AbilityId, "EquippedWeapon") == AbilityActivationResult.Activated;
+            AbilityResource attack = CurrentPrimaryAttack;
+            return !IsTransitioning && attack != null && _abilities.TryActivateAbility(
+                attack.AbilityId, "EquippedWeapon") == AbilityActivationResult.Activated;
+        }
+
+        private bool GrantWeaponAttacks(WeaponDefinition weapon)
+        {
+            foreach (var attack in weapon.GetPrimaryAttacks())
+                if (_abilities.GetRuntime(attack.AbilityId) == null && !_abilities.GrantAbility(attack)) return false;
+            return true;
         }
 
         [GraphAction("RequestStance", DisplayName = "切换武器架势")]
@@ -260,7 +269,7 @@ namespace GameLogic
             if (slot < 0) slot = _slots.FindIndex(item => item == null);
             if (slot < 0) slot = Math.Max(0, _currentSlot);
             if (slot >= _slots.Count) return false;
-            if (_abilities.GetRuntime(weapon.PrimaryAttack.AbilityId) == null && !_abilities.GrantAbility(weapon.PrimaryAttack)) return false;
+            if (!GrantWeaponAttacks(weapon)) return false;
             string previouslyHeld = CurrentWeaponId;
             _catalog[weaponId] = weapon;
             if (existing >= 0 && existing != slot) _slots[existing] = _slots[slot];

@@ -1117,8 +1117,8 @@
     },
     {
       "asset": "low",
-      "duration": 1.4,
-      "fps": 24.28571428571429,
+      "duration": 1.1,
+      "fps": 30.909090909090907,
       "frames": 34,
       "loop": true,
       "name": "run_low",
@@ -1968,6 +1968,6 @@
   ],
   "model": "MiniMax H3 local int8, 28 steps, acceleration LoRA disabled",
   "reference_document": "docs/art/greatsword-movement-references.md",
-  "revision": 12,
+  "revision": 13,
   "schema": 1
 }

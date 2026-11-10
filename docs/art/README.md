@@ -11,6 +11,7 @@
 | [森林植被](forest_vegetation.md) | 当前乔木、灌木、制作法线与导入流程 |
 | [主角人物档案](../characters/protagonist.md) | 主角设定图、完整动作 GIF 与新需求 |
 | [双手大剑移动参考](greatsword-movement-references.md) | 持剑步法、来源和三段移动约束 |
+| [双手大剑攻击参考](greatsword-attack-references.md) | 三段普攻的动作来源、出刀设计与制作约束 |
 | [信使](npc_courier.md)、[居民](npc_resident.md) | NPC 角色资源与生产流程 |
 | [生成提示词](prompts/) | 图像与动作的中文提示词 |
 

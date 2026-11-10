@@ -1,0 +1,677 @@
+{
+  "date": "2026-11-10",
+  "revision": 4,
+  "status": "manually_reviewed_integrated_and_verified",
+  "requests": [
+    "现在的各个架势的攻击动作，希望幅度和张力大一点，然后攻击都是往前方攻击，加上刀光，刀光用粒子特效做",
+    "做动画的时候注意人物和剑的一致性；做完之后把文档更新，把所有无用资源，文档，代码都删掉",
+    "首先，中段应该是横扫，不是上刺，下端应该是刺向前方而不是上方；其次，动作整体缺乏力量感，速度感叶不够",
+    "我希望蓄力久一点，加入一些顿帧调节节奏"
+  ],
+  "method": "Local ComfyUI MiniMax H3 int8, 28 steps, no acceleration LoRA; horizontal endpoint guided takes; localized low-thrust blade design correction, original body pixels preserved; lossless FFV1 assembly; Aseprite alpha and variable timing; CPUParticles3D light. v4 changes timing only; 1 ms uniform runtime ticks share the original atlas poses to preserve authored holds.",
+  "frames": {
+    "high": 29,
+    "mid": 26,
+    "low": 18
+  },
+  "duration_seconds": {
+    "high": 0.68,
+    "mid": 0.54,
+    "low": 0.474
+  },
+  "release_seconds": {
+    "high": 0.068,
+    "low": 0.054,
+    "mid": 0.048
+  },
+  "manual_review": {
+    "scope": "v4 runtime review of loaded poses, release, contact holds and recovery, both facings. All 73 source poses and 3 atlases have exact RGBA equality with the previously reviewed v3 artwork; no new anatomy or sword pixels.",
+    "regions": [
+      "face, hair, ears",
+      "outfit, shoulders and waist",
+      "hands, continuous hilt and guard",
+      "single blade and tip",
+      "support legs and feet",
+      "tail and pouch",
+      "canvas edges and idle endpoints"
+    ],
+    "observed": [
+      "Longer windup distinguishes the loaded-pose hold from the rapid release; contact holds pause character and sword together.",
+      "Mid horizontal sweep, low forward thrust and high down-cut retain the original v3 sword paths.",
+      "Loaded-pose holds emit no particles. Contact holds do not keep emitting; existing particles fade naturally.",
+      "Both facings and both repeated attacks retain correct facing and return to idle with effects cleared."
+    ],
+    "runtime_contact_sheet": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/review/runtime-motion.png"
+  },
+  "rejected_source_frames": {
+    "high": {
+      "high-clean.mov": {
+        "10-19": "baked white blade smear"
+      },
+      "high-cut.mov": {
+        "11": "duplicate blade"
+      }
+    },
+    "mid": {
+      "mid-clean.mov": {
+        "14": "excessive blade shortening during windup",
+        "60-61": "clipped tip"
+      },
+      "mid-sweep.mov": {
+        "0-3": "duplicate windup already represented by source; front-facing pivot uses original mid-clean frame 17"
+      }
+    },
+    "low": {
+      "low-thrust.mov": {
+        "13-62": "foreshortened then growing blade; selected only initial preparation; contact frame16 used solely as body reference for corrected endpoint"
+      },
+      "low-drive.mov": {
+        "2-9": "wide or bent interpolated blade",
+        "16-21": "unneeded hold and slight tip height drift"
+      },
+      "low-return.mov": {
+        "5": "bent blade"
+      }
+    }
+  },
+  "source_join": {
+    "all_three_clips": "FFV1 RGB lossless; every assembled frame compared to decoded selected source parts",
+    "visible_rgb_unchanged": true
+  },
+  "keyframe_correction": {
+    "low_contact": {
+      "body_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust.mov",
+      "frame": 16,
+      "imagegen_reference": "low-thrust frame 12",
+      "design": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/blade-design-original.png",
+      "native_result": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/contact-corrected.png",
+      "edited_rectangle": [
+        341,
+        232,
+        471,
+        283
+      ],
+      "outside_rectangle_rgb_exact": true,
+      "method": "Imagegen blade-only design; Aseprite nearest resize to 512x384, copy blade region three pixels upward over old blade; all body pixels preserved. Used only as video endpoint."
+    }
+  },
+  "validation": {
+    "build": {
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 0,
+      "incremental": true
+    },
+    "gameplay": {
+      "exit_code": 0,
+      "checks": [
+        "STANCE_ATTACK_CHECK: PASS (high, mid, low; selection, animation, recovery, locking, runtime identity)",
+        "ATTACK_PARTICLE_CHECK: PASS (all stances, both facings, forward emission, windup, completion, cancellation)",
+        "STANCE_CHECK: keyboard and controller chords passed",
+        "STANCE_CHECK: native Nioh mouse chords passed",
+        "STANCE_CHECK: quick-release Shift-wheel chord passed",
+        "STANCE_CHECK: attack, locomotion, geometry, persistence and instance isolation passed",
+        "STANCE_CHECK: PASS"
+      ]
+    },
+    "godot_art": {
+      "checked_frames": 73,
+      "durations": {
+        "attack_high": 0.68,
+        "attack_low": 0.474,
+        "attack_mid": 0.54
+      },
+      "frame_size": [
+        512,
+        384
+      ],
+      "ok": true,
+      "one_shot": true,
+      "per_frame_timing_exact": true,
+      "rhythm": {
+        "high": {
+          "impact_hold_seconds": 0.08,
+          "loaded_hold_seconds": 0.13,
+          "windup_seconds": 0.34
+        },
+        "low": {
+          "impact_hold_seconds": 0.046,
+          "loaded_hold_seconds": 0.09,
+          "windup_seconds": 0.22
+        },
+        "mid": {
+          "impact_hold_seconds": 0.062,
+          "loaded_hold_seconds": 0.09,
+          "windup_seconds": 0.27
+        }
+      },
+      "runtime_ticks": 1694,
+      "strikes": {
+        "high": {
+          "forward": true,
+          "seconds": 0.068,
+          "tip_y_span": 235.0
+        },
+        "low": {
+          "forward": true,
+          "seconds": 0.054,
+          "tip_y_span": 17.0
+        },
+        "mid": {
+          "forward": true,
+          "seconds": 0.048,
+          "tip_y_span": 6.0
+        }
+      },
+      "visible_rgb_and_alpha_exact": true
+    },
+    "pixel_audits": {
+      "high": {
+        "frames": 27,
+        "errors": 0,
+        "status": "needs_visual_review",
+        "independent_full_silhouette_mask": false
+      },
+      "mid": {
+        "frames": 24,
+        "errors": 0,
+        "status": "needs_visual_review",
+        "independent_full_silhouette_mask": false
+      },
+      "low": {
+        "frames": 16,
+        "errors": 0,
+        "status": "needs_visual_review",
+        "independent_full_silhouette_mask": false
+      }
+    },
+    "runtime": {
+      "right": "STANCE_CAPTURE: PASS",
+      "left": "STANCE_CAPTURE: PASS",
+      "summary": {
+        "right": {
+          "high": {
+            "facing": 1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 35,
+                "completed_capture_frame": 55,
+                "emitted_bursts": 9,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      24,
+                      25,
+                      26,
+                      27,
+                      28,
+                      29,
+                      30,
+                      31
+                    ],
+                    "duration_ms": 130,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      39,
+                      40,
+                      41,
+                      42,
+                      43
+                    ],
+                    "duration_ms": 80,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 95,
+                "completed_capture_frame": 115,
+                "emitted_bursts": 9,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      84,
+                      85,
+                      86,
+                      87,
+                      88,
+                      89,
+                      90,
+                      91
+                    ],
+                    "duration_ms": 130,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      99,
+                      100,
+                      101,
+                      102,
+                      103
+                    ],
+                    "duration_ms": 80,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          },
+          "mid": {
+            "facing": 1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 31,
+                "completed_capture_frame": 47,
+                "emitted_bursts": 6,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      25,
+                      26,
+                      27,
+                      28,
+                      29,
+                      30
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      34,
+                      35,
+                      36
+                    ],
+                    "duration_ms": 62,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 91,
+                "completed_capture_frame": 107,
+                "emitted_bursts": 6,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      85,
+                      86,
+                      87,
+                      88,
+                      89,
+                      90
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      94,
+                      95,
+                      96
+                    ],
+                    "duration_ms": 62,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          },
+          "low": {
+            "facing": 1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 28,
+                "completed_capture_frame": 43,
+                "emitted_bursts": 7,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      22,
+                      23,
+                      24,
+                      25,
+                      26,
+                      27
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      31,
+                      32,
+                      33
+                    ],
+                    "duration_ms": 46,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 88,
+                "completed_capture_frame": 103,
+                "emitted_bursts": 7,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      82,
+                      83,
+                      84,
+                      85,
+                      86,
+                      87
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      91,
+                      92,
+                      93
+                    ],
+                    "duration_ms": 46,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "left": {
+          "high": {
+            "facing": -1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 35,
+                "completed_capture_frame": 55,
+                "emitted_bursts": 9,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      24,
+                      25,
+                      26,
+                      27,
+                      28,
+                      29,
+                      30,
+                      31
+                    ],
+                    "duration_ms": 130,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      39,
+                      40,
+                      41,
+                      42,
+                      43
+                    ],
+                    "duration_ms": 80,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 95,
+                "completed_capture_frame": 115,
+                "emitted_bursts": 9,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      84,
+                      85,
+                      86,
+                      87,
+                      88,
+                      89,
+                      90,
+                      91
+                    ],
+                    "duration_ms": 130,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      99,
+                      100,
+                      101,
+                      102,
+                      103
+                    ],
+                    "duration_ms": 80,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          },
+          "mid": {
+            "facing": -1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 31,
+                "completed_capture_frame": 47,
+                "emitted_bursts": 6,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      25,
+                      26,
+                      27,
+                      28,
+                      29,
+                      30
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      34,
+                      35,
+                      36
+                    ],
+                    "duration_ms": 62,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 91,
+                "completed_capture_frame": 107,
+                "emitted_bursts": 6,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      85,
+                      86,
+                      87,
+                      88,
+                      89,
+                      90
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      94,
+                      95,
+                      96
+                    ],
+                    "duration_ms": 62,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          },
+          "low": {
+            "facing": -1,
+            "attacks": [
+              {
+                "started_capture_frame": 15,
+                "first_particle_capture_frame": 28,
+                "completed_capture_frame": 43,
+                "emitted_bursts": 7,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      22,
+                      23,
+                      24,
+                      25,
+                      26,
+                      27
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      31,
+                      32,
+                      33
+                    ],
+                    "duration_ms": 46,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              },
+              {
+                "started_capture_frame": 75,
+                "first_particle_capture_frame": 88,
+                "completed_capture_frame": 103,
+                "emitted_bursts": 7,
+                "max_clock_delta_error_ms": 2.6666679531217596E-08,
+                "holds": {
+                  "windup": {
+                    "capture_frames": [
+                      82,
+                      83,
+                      84,
+                      85,
+                      86,
+                      87
+                    ],
+                    "duration_ms": 90,
+                    "no_new_particle_bursts": true
+                  },
+                  "impact": {
+                    "capture_frames": [
+                      91,
+                      92,
+                      93
+                    ],
+                    "duration_ms": 46,
+                    "no_new_particle_bursts": true
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "gifs": {
+      "greatsword-stance-attacks-v4.gif": {
+        "frames": 120,
+        "duration_ms": 4000,
+        "sha256": "108c91ca38e767f6840ec728a9d61ee464379c5df05396061d4fa16972c3c56f"
+      },
+      "greatsword-stance-attacks-runtime-v4.gif": {
+        "frames": 120,
+        "duration_ms": 4000,
+        "sha256": "da312f567b255bb5934c4ddb330409496e5c0aad7f083947e1858892502a8ad2"
+      }
+    },
+    "artwork_unchanged_from_revision_3": {
+      "pose_frames": 73,
+      "atlases": 3,
+      "rgba_exact": true
+    }
+  },
+  "limits": [
+    "No independent full-silhouette masks; numeric audit is complemented by manual review, not an anatomy guarantee.",
+    "Small generated contour/perspective variations remain; mid sweep includes one deliberately foreshortened pivot pose. The sword is sprite artwork, not a rigid skeletal mesh.",
+    "Damage, hitboxes and combos remain outside this animation update.",
+    "Sandbox root-certificate, MCP registry and shader-cache write warnings remain; final checks exited normally."
+  ],
+  "cleanup": {
+    "scope": "Superseded v3 preview GIFs and this timing revision scratch; all unchanged source artwork retained.",
+    "removed_previews": [
+      {
+        "file": "greatsword-stance-attacks-v3.gif",
+        "bytes": 1042501
+      },
+      {
+        "file": "greatsword-stance-attacks-runtime-v3.gif",
+        "bytes": 4341944
+      }
+    ],
+    "removed_task_scratch": [
+      {
+        "bytes": 14109021.0,
+        "path": ".godot/stance-attacks-v4",
+        "files": 128
+      },
+      {
+        "bytes": 13692917.0,
+        "path": ".godot/stance-actions/runtime-attacks",
+        "files": 121
+      }
+    ]
+  },
+  "rhythm": {
+    "high": {
+      "impact_hold_seconds": 0.08,
+      "loaded_hold_seconds": 0.13,
+      "windup_seconds": 0.34
+    },
+    "low": {
+      "impact_hold_seconds": 0.046,
+      "loaded_hold_seconds": 0.09,
+      "windup_seconds": 0.22
+    },
+    "mid": {
+      "impact_hold_seconds": 0.062,
+      "loaded_hold_seconds": 0.09,
+      "windup_seconds": 0.27
+    }
+  },
+  "timing_fix": {
+    "observed": "Native variable-duration playback consumed part of the new hold using the previous pose speed.",
+    "solution": "Export uniform 1 ms SpriteFrames ticks referencing the same AtlasTexture; map blade keys to tick indices.",
+    "verified": "Every sampled playback-clock increment equals the fixed render delta; both holds, both facings, two attacks each.",
+    "unique_pose_textures": 73,
+    "runtime_ticks": 1694
+  }
+}

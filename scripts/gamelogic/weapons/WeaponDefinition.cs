@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
@@ -11,6 +12,7 @@ namespace GameLogic
         [Export] public string DisplayName { get; set; } = string.Empty;
         [Export] public WeaponCategory Category { get; set; }
         [Export] public AbilityResource PrimaryAttack { get; set; }
+        [Export] public Godot.Collections.Dictionary<string, AbilityResource> StancePrimaryAttacks { get; set; } = new();
         [Export] public WeaponAnimationProfile AnimationProfile { get; set; }
         [Export] public string DefaultStance { get; set; } = "mid";
         [Export] public Godot.Collections.Dictionary<string, string> StanceIdleAnimations { get; set; } = new();
@@ -22,15 +24,32 @@ namespace GameLogic
         [Export] public Texture2D Portrait { get; set; }
         [Export(PropertyHint.MultilineText)] public string Description { get; set; } = string.Empty;
 
+        public AbilityResource PrimaryAttackFor(string stance) =>
+            stance != null && StancePrimaryAttacks.TryGetValue(stance, out var attack) ? attack : PrimaryAttack;
+
+        public IEnumerable<AbilityResource> GetPrimaryAttacks()
+        {
+            yield return PrimaryAttack;
+            foreach (var attack in StancePrimaryAttacks.Values)
+                if (attack != PrimaryAttack) yield return attack;
+        }
+
         public bool HasValidStances()
         {
             if (StanceIdleAnimations.Count == 0) return AnimationProfile?.HasAnimation("idle") == true && StanceTransitions.Count == 0
-                && StanceMoveAnimations.Count == 0 && StanceMoveStartAnimations.Count == 0;
+                && StanceMoveAnimations.Count == 0 && StanceMoveStartAnimations.Count == 0 && StancePrimaryAttacks.Count == 0;
             if (!StanceIdleAnimations.ContainsKey(DefaultStance)) return false;
             foreach (var stance in StanceIdleAnimations)
                 if (string.IsNullOrWhiteSpace(stance.Key) || string.IsNullOrWhiteSpace(stance.Value) ||
                     AnimationProfile?.HasAnimation(stance.Value) != true)
                     return false;
+            if (StancePrimaryAttacks.Count > 0)
+            {
+                if (StancePrimaryAttacks.Count != StanceIdleAnimations.Count) return false;
+                foreach (string stance in StanceIdleAnimations.Keys)
+                    if (!StancePrimaryAttacks.TryGetValue(stance, out var attack) ||
+                        attack?.Graph == null || string.IsNullOrWhiteSpace(attack.AbilityId)) return false;
+            }
             if (StanceMoveAnimations.Count > 0)
             {
                 if (StanceMoveAnimations.Count != StanceIdleAnimations.Count) return false;

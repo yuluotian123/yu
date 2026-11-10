@@ -88,6 +88,48 @@
         "duration_ms": 5000
       }
     },
-    "runtime_warnings": "Existing Vulkan RID cleanup warnings at shutdown."
+    "runtime_warnings": "Existing Vulkan RID cleanup warnings at shutdown.",
+    "baseline_revision": 12,
+    "historical_preview_note": "v12 preview files were superseded by the v13 timing previews and removed; validation values above are historical records."
+  },
+  "timing_update": {
+    "revision": 13,
+    "date": "2026-11-09",
+    "request": "下段的脚步速度有点慢",
+    "low_frames": 34,
+    "old_loop_seconds": 1.4,
+    "loop_seconds": 1.1,
+    "fps": 30.909090909090907,
+    "speed_multiplier": 1.2727272727272725,
+    "all_130_delivery_pngs_and_5_atlases_byte_identical_to_v12": true,
+    "other_clip_timing_unchanged": true,
+    "apng_pixel_and_timing_check": "PASS",
+    "godot_pixel_and_timing_check": "PASS",
+    "imported_frames": 130,
+    "godot_check_exit_code": 0,
+    "runtime_capture": "PASS",
+    "capture_exit_code": 0,
+    "runtime_low_period_frames_at_30fps": 33,
+    "runtime_low_period_seconds": 1.1,
+    "runtime_repeated_pose_mean_absolute_rgb_difference": 3.8042765315492588e-06,
+    "build_and_full_gameplay_suite": "Not rerun; timing-only asset update. Previous revision results above.",
+    "runtime_warnings": "Existing Vulkan RID cleanup warnings and sandbox MCP registry/root certificate messages.",
+    "gif_validation": {
+      "greatsword-stance-low-speed-v13.gif": {
+        "frames": 210,
+        "duration_ms": 7000
+      },
+      "greatsword-stance-low-speed-runtime-v13.gif": {
+        "frames": 150,
+        "duration_ms": 5000
+      }
+    },
+    "followup_gameplay_validation": {
+      "date": "2026-11-10",
+      "build_exit_code": 0,
+      "full_gameplay_suite": "PASS",
+      "full_gameplay_exit_code": 0,
+      "evidence": "../greatsword_stance_attack/visual-review.json"
+    }
   }
 }

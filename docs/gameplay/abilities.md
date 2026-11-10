@@ -42,6 +42,7 @@ CharacterGraph 不授予 Ability，也不拥有 Timeline 数据。当前玩家�
 
 现有资源：
 
-- [大剑普攻](../../assets/resources/weapons/greatsword_attack.tres)
-- [大剑普攻时间轴](../../assets/resources/weapons/greatsword_attack_timeline.tres)
+- [中段横扫](../../assets/resources/weapons/greatsword_attack.tres)及其[时间轴](../../assets/resources/weapons/greatsword_attack_timeline.tres)，保留 `greatsword_attack` ID
+- [上段下劈](../../assets/resources/weapons/greatsword_attack_high.tres)及其[时间轴](../../assets/resources/weapons/greatsword_attack_high_timeline.tres)
+- [下段前刺](../../assets/resources/weapons/greatsword_attack_low.tres)及其[时间轴](../../assets/resources/weapons/greatsword_attack_low_timeline.tres)
 - [玩家基础能力集](../../assets/resources/abilities/player_ability_set.tres)

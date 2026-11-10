@@ -22,6 +22,8 @@
 [ext_resource type="Resource" uid="uid://b7dyeq2jcvjxl" path="res://assets/resources/character/player/profile.tres" id="character_profile_player"]
 [ext_resource type="PackedScene" path="res://assets/scenes/vfx/stance_switch_particles.tscn" id="stance_effect_scene"]
 [ext_resource type="Script" uid="uid://dox854q44vpex" path="res://scripts/gamelogic/weapons/StanceSwitchEffectComponent3D.cs" id="stance_effect_script"]
+[ext_resource type="Script" path="res://scripts/gamelogic/weapons/WeaponAttackEffectComponent3D.cs" id="attack_effect_script"]
+[ext_resource type="PackedScene" path="res://assets/scenes/vfx/greatsword_attack_particles.tscn" id="attack_effect_scene"]
 [ext_resource type="PackedScene" path="res://assets/scenes/ui/world_interaction_hud.tscn" id="world_interaction_hud"]
 [ext_resource type="Script" uid="uid://snljhur7pc0n" path="res://scripts/gamelogic/player/interaction/PlayerWorldInteractionComponent3D.cs" id="world_interaction_script"]
 
@@ -77,6 +79,10 @@ Weapons = Array[ExtResource("30_weapon_definition")]([ExtResource("28_greatsword
 script = ExtResource("stance_effect_script")
 EffectScene = ExtResource("stance_effect_scene")
 
+[sub_resource type="Resource" id="sub_attack_effect"]
+script = ExtResource("attack_effect_script")
+EffectScene = ExtResource("attack_effect_scene")
+
 [sub_resource type="Resource" id="sub_inventory"]
 script = ExtResource("31_inventory")
 StartingWeapons = Array[ExtResource("30_weapon_definition")]([ExtResource("28_greatsword")])
@@ -93,7 +99,7 @@ size = Vector3(0.468, 0.936, 0.468)
 [node name="Player" type="Node3D" unique_id=587364041]
 script = ExtResource("1_gobj")
 PersistentId = "player"
-Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_stance_effect"), SubResource("sub_inventory"), SubResource("sub_persistence"), SubResource("world_interaction")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_stance_effect"), SubResource("sub_attack_effect"), SubResource("sub_inventory"), SubResource("sub_persistence"), SubResource("world_interaction")])
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=817041810]
 

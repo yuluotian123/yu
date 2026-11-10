@@ -1,0 +1,35 @@
+{
+  "high": {
+    "frames": 29,
+    "duration_seconds": 0.68,
+    "all_video_frames_retained_in_order": true,
+    "visible_video_rgb_exact": true,
+    "binary_alpha": true,
+    "idle_endpoints_alpha_and_visible_rgb_exact": true,
+    "atlas_rgba_exact": true,
+    "apng_rgba_and_frame_times_exact": true,
+    "independent_full_silhouette_mask": false
+  },
+  "mid": {
+    "frames": 26,
+    "duration_seconds": 0.54,
+    "all_video_frames_retained_in_order": true,
+    "visible_video_rgb_exact": true,
+    "binary_alpha": true,
+    "idle_endpoints_alpha_and_visible_rgb_exact": true,
+    "atlas_rgba_exact": true,
+    "apng_rgba_and_frame_times_exact": true,
+    "independent_full_silhouette_mask": false
+  },
+  "low": {
+    "frames": 18,
+    "duration_seconds": 0.474,
+    "all_video_frames_retained_in_order": true,
+    "visible_video_rgb_exact": true,
+    "binary_alpha": true,
+    "idle_endpoints_alpha_and_visible_rgb_exact": true,
+    "atlas_rgba_exact": true,
+    "apng_rgba_and_frame_times_exact": true,
+    "independent_full_silhouette_mask": false
+  }
+}

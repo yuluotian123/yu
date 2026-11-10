@@ -1,7 +1,7 @@
 {
   "date": "2026-11-09",
-  "revision": 12,
-  "preview": "greatsword-stance-guard-repair-v12.gif",
+  "revision": 13,
+  "preview": "greatsword-stance-low-speed-v13.gif",
   "preview_duration_seconds": 7,
   "clips": [
     {
@@ -235,8 +235,8 @@
         49,
         50
       ],
-      "fps": 24.28571428571429,
-      "duration_seconds": 1.4,
+      "fps": 30.909090909090907,
+      "duration_seconds": 1.1,
       "selection": "Continuous complete grounded pacing cycle 17..50. Source 51 matches the low double-support/pass pose at 17; retains both weight transfers and a near-floor boot recovery without frame skipping.",
       "job": "1131491c-6114-4b6b-bb66-0d4592256b3f",
       "seed": 20261108805,

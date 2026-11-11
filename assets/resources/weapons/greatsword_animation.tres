@@ -6,10 +6,6 @@
 [ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_transition/sprite_frames.tres" id="4_transitions"]
 [ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/sprite_frames.tres" id="5_movement"]
 [ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/sprite_frames.tres" id="6_attacks"]
-[ext_resource type="Script" path="res://scripts/gamelogic/weapons/WeaponAttackTrail.cs" id="trail_type"]
-[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_high_trail.tres" id="high_trail"]
-[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_mid_trail.tres" id="mid_trail"]
-[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_low_trail.tres" id="low_trail"]
 
 [resource]
 script = ExtResource("1_script")
@@ -18,7 +14,6 @@ AdditionalFrames = ExtResource("3_stances")
 TransitionFrames = ExtResource("4_transitions")
 ActionFrames = ExtResource("5_movement")
 AttackFrames = ExtResource("6_attacks")
-AttackTrails = Array[ExtResource("trail_type")]([ExtResource("high_trail"), ExtResource("mid_trail"), ExtResource("low_trail")])
 FrameSize = Vector2i(256, 256)
 FootAnchor = Vector2i(128, 219)
 PixelSize = 0.004137931

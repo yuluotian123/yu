@@ -4,6 +4,7 @@ import binascii
 import hashlib
 import json
 import os
+import re
 import struct
 import zlib
 from pathlib import Path
@@ -25,7 +26,7 @@ def write_json(path, value):
 
 def prepare(config):
     for spec in config['clips']:
-        out = TEX / spec['stance'] / 'source-rgb'
+        out = TEX / spec.get('key', spec['stance']) / 'source-rgb'
         out.mkdir(parents=True, exist_ok=True)
         (out / '.gdignore').touch()
         wanted = set(spec['indices'])
@@ -62,7 +63,7 @@ def assemble(config):
             assert len(decoded) == len(frames)
             assert all(np.array_equal(frame.to_ndarray(format='rgb24'), expected) for frame, expected in zip(decoded, frames))
         spec['source_video_sha256'] = hashlib.sha256(target.read_bytes()).hexdigest()
-        print(f'{spec["stance"]}: assembled {len(frames)} exact RGB frames')
+        print(f'{spec.get("key", spec["stance"])}: assembled {len(frames)} exact RGB frames')
 
 
 def pack_apng(path, frames, times):
@@ -87,36 +88,103 @@ def pack_apng(path, frames, times):
             assert abs(check.info['duration'] - times[n]) < 0.001
 
 
+def update_ability_timelines(config, manifest):
+    """Keep authored Timeline clips on the same clock as their source poses."""
+    records = {clip['key']: clip['records'] for clip in manifest['clips']}
+    for stance in ('high', 'mid', 'low'):
+        specs = [spec for spec in config['clips'] if spec['stance'] == stance]
+        base = 'greatsword_attack' + ('' if stance == 'mid' else '_' + stance)
+        path = ROOT / 'assets/resources/weapons' / (base + '_timeline.tres')
+        header, encoded = path.read_text(encoding='utf-8').split('GraphJson = ', 1)
+        graph = json.loads(json.loads(encoded.strip()))
+        nodes = {node['Id']: node for node in graph['Nodes']}
+        assert nodes['entry']['$type'] == 'yu:GameLogic.AbilityInputNodeData'
+        for spec in specs:
+            step = spec['step']
+            poses = records[spec['key']]
+            link = spec.get('link_time_ms', spec['duration_ms']) / 1000
+            hit = nodes[f'hit_{step}']
+            hit['Duration'] = link
+            for track in hit['Tracks']:
+                for clip in track['Clips']:
+                    kind = clip['Action']['$type'].split('.')[-1]
+                    if kind == 'AbilityPlayAnimationAction':
+                        track['Name'], clip['Name'] = '动画', '完整普攻' if len(specs) == 1 else f'第{step}击'
+                        clip['Duration'] = link
+                    elif kind == 'AbilityAttackTrailAction':
+                        track['Name'], clip['Name'] = '刀光粒子', '挥出与落点'
+                        first = spec['indices'].index(spec['blade_keys'][0][0])
+                        start = poses[first]['runtime_first_frame'] / 1000
+                        impact = poses[spec['holds']['impact_frame']]
+                        end = (impact['runtime_first_frame'] + impact['duration_ms']) / 1000
+                        clip['StartTime'] = start
+                        clip['Duration'] = round(end - start, 3)
+                        assert end <= link
+                    elif kind == 'AbilityInputWindowAction':
+                        track['Name'], clip['Name'] = '续招输入', '缓存下一次普攻'
+                        window = min(spec.get('input_window_ms', 320) / 1000, link - .04)
+                        clip['StartTime'], clip['Duration'] = round(link - window, 3), window
+            if 'link_time_ms' in spec:
+                recovery = nodes[f'recover_{step}']
+                duration = round(spec['duration_ms'] / 1000 - link, 3)
+                assert duration > 0
+                recovery['Duration'] = duration
+                track = recovery['Tracks'][0]
+                track['Name'] = '动画'
+                clip = track['Clips'][0]
+                clip['Name'], clip['Duration'] = f'第{step}击收招', duration
+                assert not clip['Action']['RestartIfPlaying']
+        # Return inputs are single-connection ports, including optional combo exits.
+        for step in (spec['step'] for spec in specs):
+            assert sum(edge['ToNode'] == f'finished_{step}' for edge in graph['Connections']) == 1
+        encoded = json.dumps(json.dumps(graph, ensure_ascii=False, separators=(',', ':')), ensure_ascii=False)
+        path.write_text(header + 'GraphJson = ' + encoded + '\n', encoding='utf-8')
+        ability = path.with_name(base + '.tres')
+        text = ability.read_text(encoding='utf-8')
+        text = re.sub(r'Cooldown = [^\n]+', f'Cooldown = {specs[0]["duration_ms"] / 1000}', text)
+        ability.write_text(text, encoding='utf-8')
+
+
 def package(config):
     manifest = json.loads((META / 'manifest.json').read_text(encoding='utf-8'))
+    corrections = json.loads((ROOT / config['pixel_corrections']).read_text(encoding='utf-8'))['clips'] if config.get('pixel_corrections') else {}
     validation = {}
     w, h = config['canvas']; ox, oy = config['idle_offset']
     for spec, clip in zip(config['clips'], manifest['clips']):
-        stance = spec['stance']; path = TEX / stance
+        stance = spec['stance']; key = spec.get('key', stance); path = TEX / key
         frames = [Image.open(path / 'frames' / f'attack_{n:03d}.png').convert('RGBA') for n in range(len(spec['indices']))]
         atlas = np.array(Image.open(path / 'attack-atlas.png').convert('RGBA'))
         idle = np.array(Image.open(ROOT / spec['idle_frame']).convert('RGBA'))
         endpoint = np.zeros((h, w, 4), dtype=np.uint8)
         endpoint[oy:oy+idle.shape[0], ox:ox+idle.shape[1]] = idle
+        startpoint = np.array(Image.open(ROOT / spec['start_frame']).convert('RGBA')) if spec.get('start_frame') else endpoint
         times = [record['duration_ms'] for record in clip['records']]
         assert sum(times) == spec['duration_ms'] and clip['duration'] == sum(times)/1000
         for n, (im, record) in enumerate(zip(frames, clip['records'])):
             rgba = np.array(im); foreground = rgba[:, :, 3] > 0
             assert np.isin(rgba[:, :, 3], [0, 255]).all()
-            if record['source_kind'] == 'idle_endpoint':
-                assert np.array_equal(rgba[:, :, 3], endpoint[:, :, 3])
-                assert np.array_equal(rgba[foreground], endpoint[foreground])
+            if record['source_kind'] != 'video':
+                expected = startpoint if n == 0 else endpoint
+                assert np.array_equal(rgba[:, :, 3], expected[:, :, 3])
+                assert np.array_equal(rgba[foreground], expected[foreground])
             else:
                 rgb = np.array(Image.open(path / 'source-rgb' / f"{record['video_frame']:03d}.png").convert('RGB'))
                 rgb16 = rgb.astype(np.int16)
                 expected_alpha = ~((rgb16[:, :, 1]-rgb16[:, :, 0] > config['chroma_dominance']) & (rgb16[:, :, 1]-rgb16[:, :, 2] > config['chroma_dominance']))
+                edit = corrections.get(key, {}).get(str(n), {})
+                for x, y in edit.get('erase', []):
+                    expected_alpha[y, x] = False
+                expected_rgb = rgb.copy()
+                for x, y, r, g, b, a in edit.get('restore', []):
+                    expected_alpha[y, x] = a > 0
+                    expected_rgb[y, x] = [r, g, b]
                 assert np.array_equal(foreground, expected_alpha)
-                assert np.array_equal(rgba[foreground, :3], rgb[foreground])
+                assert np.array_equal(rgba[foreground, :3], expected_rgb[foreground])
             assert np.array_equal(atlas[n//6*h:(n//6+1)*h, n%6*w:(n%6+1)*w], rgba)
             record['sha256'] = hashlib.sha256((path / 'frames' / f'attack_{n:03d}.png').read_bytes()).hexdigest()
         pack_apng(path / 'attack.apng', frames, times)
-        # 原视频负责中间动作；首尾另与原始 idle 的 alpha 和可见颜色逐像素核验。
-        audit_path = META / 'audit' / f'{stance}.json'
+        # 中间帧与视频一致；首帧承接待机或上一击落点，末帧回到原始待机。
+        audit_path = META / 'audit' / f'{key}.json'
         relative = lambda p: Path(os.path.relpath(p, audit_path.parent)).as_posix()
         selected = [r for r in clip['records'] if r['source_kind'] == 'video']
         regions = {
@@ -129,13 +197,15 @@ def package(config):
             'frames': [relative(path / 'frames' / f"attack_{r['frame']:03d}.png") for r in selected],
             'source_indices': [r['video_frame'] for r in selected], 'frame_size': config['canvas'],
             'binary_alpha': True, 'preserve_inset': 3, 'rgb_tolerance': 0,
-            'timing_note': 'Variable frame durations; full timing is in manifest.json. Endpoints come from the original idle and are checked separately in media-validation.json.',
-            'regions': [{'name': name, 'bounds': bounds} for name, bounds in regions.items()],
+            'timing_note': 'Variable frame durations; full timing is in manifest.json. Start/contact and idle endpoints are checked separately in media-validation.json.',
+            'regions': spec.get('audit_regions', [{'name': name, 'bounds': bounds} for name, bounds in regions.items()]),
         })
-        validation[stance] = {'frames': len(frames), 'duration_seconds': sum(times)/1000,
+        validation[key] = {'frames': len(frames), 'duration_seconds': sum(times)/1000,
             'all_video_frames_retained_in_order': spec['indices'] == list(range(len(frames))),
-            'visible_video_rgb_exact': True, 'binary_alpha': True,
-            'idle_endpoints_alpha_and_visible_rgb_exact': True, 'atlas_rgba_exact': True,
+            'visible_video_rgb_exact_except_recorded_repairs': True,
+            'recorded_rgb_repair_pixels': sum(len(edit.get('restore', [])) for edit in corrections.get(key, {}).values()),
+            'recorded_matte_edits_exact': True, 'binary_alpha': True,
+            'start_and_idle_endpoints_alpha_and_visible_rgb_exact': True, 'atlas_rgba_exact': True,
             'apng_rgba_and_frame_times_exact': True, 'independent_full_silhouette_mask': False}
         if spec.get('blade_keys'):
             keys = spec['blade_keys']
@@ -148,11 +218,13 @@ def package(config):
             trail = ('[gd_resource type="Resource" script_class="WeaponAttackTrail" format=3]\n\n'
                      '[ext_resource type="Script" path="res://scripts/gamelogic/weapons/WeaponAttackTrail.cs" id="script"]\n\n'
                      '[resource]\nscript = ExtResource("script")\n'
-                     f'AbilityId = "{spec["ability_id"]}"\nAnimation = &"attack_{stance}"\n'
-                     f'Frames = PackedFloat32Array({frame_keys})\nBladePoses = PackedVector4Array({poses})\n')
-            (ROOT / f'assets/resources/weapons/greatsword_attack_{stance}_trail.tres').write_text(trail, encoding='utf-8')
+                     f'Animation = &"attack_{key}"\n'
+                     f'Frames = PackedFloat32Array({frame_keys})\nBladePoses = PackedVector4Array({poses})\n'
+                     f'FinishStrength = {spec.get("finish_strength", 1.0)}\n')
+            (ROOT / f'assets/resources/weapons/greatsword_attack_{key}_trail.tres').write_text(trail, encoding='utf-8')
     write_json(META / 'manifest.json', manifest)
     write_json(META / 'media-validation.json', validation)
+    update_ability_timelines(config, manifest)
     print(json.dumps(validation, ensure_ascii=False))
 
 

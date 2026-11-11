@@ -27,6 +27,7 @@ namespace GameLogic
         private int _pendingSlot = -1;
         private const string TransitionRequest = "weapon:stance-transition";
         private string _transitionAnimation = string.Empty;
+        private FlowGraphRuntime _stanceEffectRuntime;
 
         public IReadOnlyList<WeaponDefinition> Slots => _slots;
         public int CurrentSlot => _currentSlot;
@@ -95,10 +96,16 @@ namespace GameLogic
             ApplySlot(DefaultSlot());
         }
 
-        public override void OnPhysicsUpdate(double delta) => FlushPendingSwitch();
+        public override void OnPhysicsUpdate(double delta)
+        {
+            _stanceEffectRuntime?.Update(delta);
+            if (_stanceEffectRuntime?.IsCompleted == true) StopStanceEffect();
+            FlushPendingSwitch();
+        }
 
         public override void OnDestroy()
         {
+            StopStanceEffect();
             CancelTransition();
             if (GodotObject.IsInstanceValid(_profileSprite))
             {
@@ -131,9 +138,14 @@ namespace GameLogic
         {
             FlushPendingSwitch();
             AbilityResource attack = CurrentPrimaryAttack;
+            AbilityRuntime runtime = attack == null ? null : _abilities.GetRuntime(attack.AbilityId);
+            if (!IsTransitioning && runtime?.IsRunning == true)
+                return string.IsNullOrEmpty(PendingStance) && _pendingSlot < 0 && runtime.TryBufferInput("primary_attack");
             return !IsTransitioning && attack != null && _abilities.TryActivateAbility(
                 attack.AbilityId, "EquippedWeapon") == AbilityActivationResult.Activated;
         }
+
+        public bool CanRequestPrimaryAttack => !IsTransitioning && string.IsNullOrEmpty(PendingStance) && _pendingSlot < 0;
 
         private bool GrantWeaponAttacks(WeaponDefinition weapon)
         {
@@ -147,6 +159,7 @@ namespace GameLogic
         {
             if (string.IsNullOrWhiteSpace(stance) || CurrentWeapon?.StanceIdleAnimations.ContainsKey(stance) != true)
                 return false;
+            if (stance != CurrentStance) _abilities.GetRuntime(CurrentPrimaryAttack?.AbilityId)?.ClearInputWindows();
             if (IsTransitioning)
             {
                 // Finish the visible motion before taking the latest requested edge.
@@ -189,6 +202,7 @@ namespace GameLogic
             if (!CurrentWeapon.StanceTransitions.TryGetValue(CurrentStance + ">" + stance, out string clip))
             {
                 ApplyStance(stance);
+                PlayStanceEffect();
                 StanceSwitchStarted?.Invoke(stance);
                 return;
             }
@@ -197,7 +211,26 @@ namespace GameLogic
             _movement?.SetControlLock(TransitionRequest, true, true, 50);
             _animation.RequestAnimation(TransitionRequest, clip, 50);
             _animation.AnimationInstance?.RefreshPlayback();
+            PlayStanceEffect();
             StanceSwitchStarted?.Invoke(stance);
+        }
+
+        private void PlayStanceEffect()
+        {
+            StopStanceEffect();
+            var graph = CurrentWeapon?.StanceEffectGraph;
+            if (graph == null) return;
+            var context = new GraphExecutionContext(graph, new GraphBlackboardRuntime());
+            context.UserData.Add(Owner);
+            context.UserData.Add(_abilities);
+            _stanceEffectRuntime = new FlowGraphRuntime(graph, context);
+            if (!_stanceEffectRuntime.Start()) StopStanceEffect();
+        }
+
+        private void StopStanceEffect()
+        {
+            _stanceEffectRuntime?.Stop();
+            _stanceEffectRuntime = null;
         }
 
         private void OnTransitionFinished()
@@ -220,6 +253,7 @@ namespace GameLogic
         {
             // Abilities activated outside the weapon input (e.g. a forced hurt) take precedence.
             if (!IsTransitioning) return;
+            StopStanceEffect();
             CancelTransition();
             PendingStance = string.Empty;
         }
@@ -250,6 +284,7 @@ namespace GameLogic
             }
             if (IsBusy)
             {
+                _abilities.GetRuntime(CurrentPrimaryAttack?.AbilityId)?.ClearInputWindows();
                 _pendingSlot = slot;
                 LoadoutChanged?.Invoke();
                 return true;
@@ -369,6 +404,8 @@ namespace GameLogic
                 return false;
             WeaponAnimationProfile profile = _slots[slot]?.AnimationProfile;
             if (profile?.IsValid() != true) return false;
+            StopStanceEffect();
+            _abilities?.Effects?.Clear();
             _currentSlot = slot;
             _pendingSlot = -1;
             PendingStance = string.Empty;

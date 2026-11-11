@@ -37,7 +37,7 @@
         "ver": "0.33.0"
       },
       "widgets_values": [
-        "video/stance_attack_low-return_v3",
+        "video/stance_v5_low-return",
         "mov",
         "prores"
       ],
@@ -82,7 +82,7 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "low-thrust-end-input.png",
+        "v5-low-return-start.png",
         "image"
       ],
       "widgets_values_named": {
@@ -195,11 +195,11 @@
         "previewExposures": []
       },
       "widgets_values": [
-        "Fixed-camera animation study of the exact pixel character in the first and last image. Flat empty chroma green background in every frame. Identical face, amber eyes, gold hair, ears, cream clothing, brown boots, tail and body proportions. One rigid long gray-blue sword with thin pale edges, central ridge and gold crossguard; two hands grip the same connected handle. Preserve a constant blade length and width: the sword moves as a single solid object, never changing size. Crisp contiguous pixel blocks. Full body and entire sword remain inside frame. Starting in the extended low lunge in image one, retract the same sword directly LEFT toward her waist along its horizontal axis. Bend the elbows and shift her body weight back, then settle into exactly the diagonal low guard of the final image. Keep the steel sword a solid rigid object of constant length and width at all times. Keep the tip level during retraction; only after her hands reach the torso may the blade tilt down to match the final guard. Front leg straightens naturally, tail follows the body and settles. Feet keep their ground line. Only the character and physical sword are visible, empty green background, plain natural movement, no additional graphics or lighting.",
+        "Only the smooth recovery from the deep low forward lunge in the first image to the original crossed-arm low guard in the second image. Pull the horizontal sword and both hands straight back to the waist while the hips retreat and the front knee straightens. Then rotate the same rigid sword gently to the diagonally-down position across the front of the torso. Both hands remain connected to the brown grip under the gold guard; both arms and wrists are continuous. The single tail swings slightly after the body. A slow clean physical motion study between the two exact reference poses. One rigid straight gray-blue steel sword with gold crossguard and continuous brown handle, unchanged length and width, attached to the same two hands at every moment. Preserve the exact golden fox girl's face, hair, ears, cream fully covered tunic, brown trousers, boots, belt and single tail. Both arms have connected sleeves, wrists and hands. Same pixel-art clusters and original scale, full character and whole sword inside the frame. Fixed camera. Pure flat green background directly surrounds the body and the crisp steel sword, no added visual shapes, no glow, no trails, no blur, no white arcs. Show clear distinct poses. Finish exactly on the second image.",
         1024,
         768,
-        0.8,
-        202611100315,
+        1.5,
+        202611100525,
         "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
         "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
         "minimax_h3_video_vae_int8_convrot.safetensors",
@@ -432,7 +432,7 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "stance-attack-low-v1.png",
+        "v5-low-return-end.png",
         "image"
       ],
       "widgets_values_named": {

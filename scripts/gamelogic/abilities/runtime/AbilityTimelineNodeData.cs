@@ -13,7 +13,7 @@ namespace GameLogic
         {
             base.Validate(graph, result);
             if (graph is not AbilityFlowGraphAsset abilityGraph ||
-                abilityGraph.Nodes.OfType<FlowEntryNodeData>().Any())
+                abilityGraph.Nodes.Any(node => node is FlowEntryNodeData or AbilityInputNodeData))
                 return;
 
             List<AbilityTimelineNodeData> timelines = abilityGraph.Nodes.OfType<AbilityTimelineNodeData>().ToList();

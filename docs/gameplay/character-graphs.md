@@ -22,8 +22,8 @@ CharacterGraph --------------------> AbilitySystem
 | --- | --- | ---: |
 | `PlayerCharacterInputComponent3D` | 将输入模块转换为 `ICharacterInputProvider` | 100 |
 | `AiAgentComponent3D` | 驱动 NPC 图、GOAP 与行动 Flow，调用共享执行能力 | 100 |
-| `CharacterGraphComponent3D` | 执行玩家输入、生命周期和 Ability 编排 | 90 |
-| `AbilitySystemComponent3D` | 授权、冷却、优先级、打断和 Ability 运行时 | 55 |
+| `CharacterGraphComponent3D` | 武器技能注册、移动/跳跃/架势输入和生命周期 | 90 |
+| `AbilitySystemComponent3D` | 技能输入、授权、冷却、优先级、打断和 Ability 运行时 | 55 |
 | `CharacterMovementComponent3D` | 消费移动命令、处理跳跃/重力并移动 `CharacterBody3D` | 50 |
 | `CharacterAnimationComponent3D` | 运行 Locomotion HFSM 并选择 `AnimatedSprite3D` 动画 | 20 |
 
@@ -36,8 +36,8 @@ NPC 通过 Goal、Plan、Action 和选择器配置决策，执行流程见 [NPC 
 1. 创建 `GameObject3D`，并添加 `CharacterMovementComponent3D`、`CharacterAnimationComponent3D`、`AbilitySystemComponent3D`、`PlayerCharacterInputComponent3D` 和 `CharacterGraphComponent3D`。
 2. 在 Movement 中配置 `BodyPath`、`VisualRootPath`、速度、跳跃和重力参数。
 3. 在 Animation 中配置 `SpritePath` 和 `LocomotionGraph`。
-4. 在 AbilitySystem 中配置 `AbilitySet`，确保 CharacterGraph 使用的每个 `AbilityId` 都已授予。
-5. 在 CharacterGraph 中配置输入节点、Ability 节点和组件 Action 节点。
+4. 在 CharacterGraph 注册武器技能；通用角色也可在 AbilitySystem 配置 `AbilitySet`。
+5. 在武器技能图内配置攻击输入和 Timeline；需要连招时可加入输入窗口与条件分支。当前三架势均为单次普攻。CharacterGraph 保留移动、跳跃和架势输入与组件 Action 节点。
 
 玩家场景示例：[player.tscn](../../assets/scenes/player.tscn)。
 
@@ -55,12 +55,16 @@ Pressed(player_jump)
 Released(player_jump)
 	-> Component Call: SetJumpSustain(false)
 
-Pressed(player_attack) -> Component Call: WeaponEquipment.TryPrimaryAttack
+Pressed(player_stance_high/mid/low) -> WeaponEquipment.RequestStance
+
+Register Ability -> 大剑 WeaponDefinition（一个节点展开三套普攻，没有执行连线）
+
+武器技能图：Ability Input(player_attack) -> Timeline -> 续招条件 -> 下一击 / 收招
 ```
 
 `Axis1D` 会先应用死区、阈值、缩放和反向设置，再将有符号值传给 Movement。跳跃按下和松开应使用两个输入节点：`RequestJumpStart` 是一次性请求，`SetJumpSustain` 负责持续状态。
 
-当前玩家不配置冲刺输入或 Ability 节点。
+当前玩家不配置冲刺输入。架势切换不注册为技能；一个注册节点引用武器配置，自动展开三套武器普攻。
 
 <a id="ability"></a>
 ## 能力
@@ -69,13 +73,13 @@ Ability 由 `AbilityResource`、`AbilitySetResource` 和 `AbilityFlowGraphAsset`
 
 1. 创建 Ability FlowGraph 和 Timeline。
 2. 创建 `AbilityResource`，设置稳定的 `AbilityId`、冷却和激活策略。
-3. 将 Ability 加入角色的 `AbilitySet`。
-4. 在 CharacterGraph 中添加对应 Ability 节点并连接输入。
-5. 需要打断或完成后联动时，添加 `Interrupt` 或 `Completion` 关系。
+3. 将武器 Ability 注册到 CharacterGraph；其他角色可继续使用 `AbilitySet`。
+4. 武器输入在 Ability 图内连接 Timeline，条件检查当前装备与架势；Shift + 左键通过排除 `player_stance_mid` 避免误触普攻。
+5. 续招窗口和消费条件均在 Ability 图内。旧 Activate Ability 节点及 Interrupt/Completion 关系仍供其他图使用。
 
 Ability Timeline 可以请求动画、速度覆盖、移动锁、镜头效果和事件。AbilitySystem 会再次检查授权、冷却、并发和优先级，因此 CharacterGraph 的关系边不是最终授权来源。
 
-需要组件的 Ability Action 使用显式组件引用。可以独立创建节点的 Action 通过 `Component Reference` 节点连入 `Component` 端口；Timeline Clip、Marker 等嵌套 Action 直接将右侧 `Components` 面板中的组件拖到 Action Inspector。Action 不会再隐式搜索宿主组件。
+需要组件的通用 Ability Action 使用显式组件引用。可以独立创建节点的 Action 通过 `Component Reference` 节点连入 `Component` 端口；Timeline Clip、Marker 等嵌套 Action 可将右侧 `Components` 面板中的组件拖到 Action Inspector。Weapon Trail、Particle Scene 和输入窗口使用技能执行上下文中的运行时，不要求 Player 挂载额外特效组件。
 
 <a id="locomotion-animgraph"></a>
 ## 移动动画图

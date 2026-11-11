@@ -13,7 +13,6 @@ namespace GameLogic
         [Export] public SpriteFrames TransitionFrames { get; set; }
         [Export] public SpriteFrames ActionFrames { get; set; }
         [Export] public SpriteFrames AttackFrames { get; set; }
-        [Export] public Godot.Collections.Array<WeaponAttackTrail> AttackTrails { get; set; } = new();
         [Export] public Vector2I FrameSize { get; set; } = new(224, 224);
         [Export] public Vector2I FootAnchor { get; set; } = new(112, 192);
         [Export] public float PixelSize { get; set; } = 0.0075f;

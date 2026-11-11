@@ -97,7 +97,9 @@ Pressed(player_jump)
 Released(player_jump)
     -> SetJumpSustain(false)
 
-Pressed(player_attack) -> WeaponEquipment.TryPrimaryAttack()
+Pressed(player_stance_high/mid/low) -> WeaponEquipment.RequestStance()
+
+Register Ability -> 武器配置自动展开三套普攻（一个注册节点）；攻击输入、动画和粒子位于各自技能图
 ```
 
 CharacterGraph 的 Action 菜单隐藏组件 Call/Get/Set 包装和 Use Ability。组件操作使用直接成员节点；技能激活使用专用节点，确保打断窗口与关系规则生效。其他 Flow 与行为树仍可使用这些通用动作。旧的 Character 移动节点、专用 Sequence/WaitEvent 类型和加载时兼容迁移代码已删除。
@@ -233,13 +235,13 @@ NPC 的行动能力调用与玩家图相同的 Movement 和 AbilitySystem API，
 | 110 | `InventoryComponent3D` | 初始物品、背包容量与物品状态 |
 | 100 | `PlayerCharacterInputComponent3D` | 无 Move/Jump/Ability Action 字段 |
 | 90 | `CharacterGraphComponent3D` | `player.tscn` 内联 CharacterGraph |
-| 55 | `AbilitySystemComponent3D` | [player_ability_set.tres](../../assets/resources/abilities/player_ability_set.tres) |
+| 55 | `AbilitySystemComponent3D` | 接收角色图注册的武器技能，轮询技能输入并管理运行时与粒子 |
 | 50 | `CharacterMovementComponent3D` | 移速、跳跃、重力、Body 路径 |
 | 20 | `CharacterAnimationComponent3D` | `player.tscn` 内嵌 Locomotion HFSM |
 | 10 | `WeaponEquipmentComponent3D` | 初始装备槽、默认武器 |
 | 最后 | `CharacterPersistenceComponent3D` | 存档 |
 
-输入组件需要暴露在场景中，因为它是玩家与 InputModule 的设备边界；但它不暴露 `MoveAction`、`JumpAction` 或技能数组。所有逻辑 Action 映射都在 CharacterGraph 资源中编辑。
+输入组件是玩家与 InputModule 的设备边界，不暴露 `MoveAction`、`JumpAction` 或技能数组。移动、跳跃和架势输入在 CharacterGraph 编辑；武器普攻的逻辑 Action 与续招规则在 AbilityFlowGraph 编辑。Player 不挂载额外的攻击或换势特效组件。
 
 相机直接放在关卡的 CameraRig/Camera3D 中，Player 不包含相机。CameraRig 的 SceneCameraComponent3D 自动绑定 Player 并处理跟随，ICameraModule 只路由控制接口。参见 [场景相机](../rendering/camera.md)。
 
@@ -250,8 +252,8 @@ GameObject3D._Ready
   -> 克隆并按 Priority 排序组件
   -> Inventory.OnInit: 初始化物品与格子位置
   -> Input.OnInit: 获取 IInputModule
-  -> CharacterGraph.OnInit: 查找 ICharacterInputProvider，创建 runtime
-  -> AbilitySystem.OnInit: 读取基础 AbilitySet（当前为空）
+  -> CharacterGraph.OnInit: 一个武器注册节点展开三套技能，创建 runtime
+  -> AbilitySystem.OnInit: 获取输入接口并创建独立表现运行时
   -> Movement.OnInit: 绑定 CharacterBody3D
   -> Animation.OnInit: 启动 Locomotion HFSM
   -> WeaponEquipment.OnInit: 授予武器普攻，应用初始装备与外观
@@ -316,21 +318,21 @@ CharacterGraph 只提交“想跳”的意图。是否在地面、是否处于 C
 - [大剑普攻](../../assets/resources/weapons/greatsword_attack.tres)及其[时间轴](../../assets/resources/weapons/greatsword_attack_timeline.tres)
 
 ```text
-Pressed(player_attack)
-  -> WeaponEquipment.TryPrimaryAttack()
-  -> AbilitySystem.TryActivateAbility(CurrentPrimaryAttack.AbilityId)
+Ability Input(player_attack)，条件为当前装备与架势，排除切中段输入
+  -> AbilitySystem.TryActivateAbility（当前单段普攻不接受运行中续招）
   -> Grant / Cooldown / Priority 检查
   -> 注册移动与跳跃锁
   -> Attack Ability Timeline
-       |-- Animation Track
+       |-- 完整攻击与收势 Animation / Weapon Trail
+       |-- Return
        +-- Complete 或 Cancel 清理
 ```
 
-普攻使用组件方法调用节点，返回值表示是否成功激活能力；攻击时间轴由 AbilitySystem 继续更新。当前玩家只装备大剑，没有武器切换输入。
+普攻在技能图内处理输入、完整单段动画及粒子时段；角色图只注册对应武器技能。输入窗口与续招条件仍可用于以后配置连招。`TryPrimaryAttack` 保留为 AI、工具或其他调用者的通用入口。当前玩家只装备大剑，没有武器切换输入。
 
 ### 扩展能力与仲裁
 
-Interrupt/Completion 关系以 `CharacterAbilityNode` 的 AbilityId 匹配源能力，不能从 `TryPrimaryAttack` 这样的组件调用节点建立。未来增加武器普攻打断时，需要先接通武器技能与关系节点的映射。
+Interrupt/Completion 关系仍以 `CharacterAbilityNode` 的 AbilityId 匹配源能力，供显式激活节点使用。当前玩家每个架势的一次完整攻击在 AbilityFlowGraph 内编排，通用连招窗口和分支逻辑继续保留；Register Ability 节点不参与执行连线。
 
 Ability 节点的 `Activated` 输出在启动成功时执行。节点保持活动直到 Ability 完成或取消，再从 `Completed` 或 `Cancelled` 输出继续；冷却或裁决失败从 `Rejected` 输出继续。
 

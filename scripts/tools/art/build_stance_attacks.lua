@@ -1,4 +1,4 @@
--- 按制作配置封装三段攻击，以逐帧时间调节蓄力、出手和顿帧，首尾使用对应待机。
+-- 按制作配置封装各架势攻击；单击完整回架，配置续招时从上一击落点接入。
 local here=debug.getinfo(1,'S').source:gsub('^@',''):gsub('\\','/')
 local root=app.params.project or assert(here:match('^(.*)/scripts/tools/art/[^/]+$'))
 local function read(p)local f=assert(io.open(p,'rb'));local s=f:read('*a');f:close();return s end
@@ -15,6 +15,7 @@ local group='amber_fox_style_v2/greatsword_stance_attack/'
 local meta=root..'/assets/resources/sprites/'..group
 local tex=root..'/assets/textures/sprites/'..group
 local config=editable(json.decode(read(app.params.config or meta..'production.json')))
+local corrections=config.pixel_corrections and editable(json.decode(read(root..'/'..config.pixel_corrections))).clips or {}
 local W,H=config.canvas[1],config.canvas[2]
 -- Uniform 1 ms playback ticks avoid AnimatedSprite3D consuming a new frame
 -- with the previous frame's speed when a short pose enters a long hold.
@@ -39,15 +40,16 @@ local subs,animations,previewClips={},{},{}
 local manifest={schema=1,date=config.date,revision=config.revision,canvas=config.canvas,foot_anchor=config.foot_anchor,preview=config.preview,
  model='Local MiniMax H3 int8; 28 steps; acceleration LoRA disabled',
  reference_document='docs/art/greatsword-attack-references.md',
- alpha='Green chroma dominance > '..config.chroma_dominance..'; retained video RGB is unchanged. Original idle supplies both endpoints.',
+ alpha='Green chroma dominance > '..config.chroma_dominance..'; reviewed local matte and steel pinhole edits are recorded in pixel-corrections.json. Other retained video RGB is unchanged. Followups start on the preceding contact pose; every clip ends at the original idle.',
  timing='Selected source poses stay in order; authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json.',clips={}}
 for s,spec in ipairs(config.clips)do
- local stance=spec.stance;local name='attack_'..stance;local path=tex..stance..'/'
+ local stance=spec.stance;local key=spec.key or stance;local name='attack_'..key;local path=tex..key..'/'
  for _,dir in ipairs({'frames/','source-rgb/','sources/','review/'})do
   app.fs.makeAllDirectories(path..dir);write(path..dir..'.gdignore','')
  end
  local endpoint=Image(W,H,ColorMode.RGB)
  endpoint:drawImage(Image{fromFile=root..'/'..spec.idle_frame},Point(config.idle_offset[1],config.idle_offset[2]))
+ local startpoint=spec.start_frame and Image{fromFile=root..'/'..spec.start_frame}or endpoint
  local frames,durations,records,refs={},{},{},{}
  local sprite=Sprite(W,H,ColorMode.RGB);sprite.layers[1].name='双手大剑攻击 · 源帧与待机端点'
  local atlas=Image(W*6,H*math.ceil(#spec.indices/6),ColorMode.RGB)
@@ -59,7 +61,12 @@ for s,spec in ipairs(config.clips)do
   local isEndpoint=i==1 or i==#spec.indices
   local rgb=Image{fromFile=path..'source-rgb/'..string.format('%03d.png',index)}
   assert(rgb.width==W and rgb.height==H)
-  local im=isEndpoint and Image(endpoint)or keyed(rgb)
+  local im=isEndpoint and Image(i==1 and startpoint or endpoint)or keyed(rgb)
+  local edit=not isEndpoint and corrections[key] and corrections[key][tostring(n)]
+  if edit then
+   for _,p in ipairs(edit.erase)do im:putPixel(p[1],p[2],0)end
+   for _,p in ipairs(edit.restore)do im:putPixel(p[1],p[2],pc.rgba(p[3],p[4],p[5],p[6]))end
+  end
   local left,top,right,bottom,count=W,H,-1,-1,0
   for y=0,H-1 do for x=0,W-1 do if pc.rgbaA(im:getPixel(x,y))>0 then
    left=math.min(left,x);top=math.min(top,y);right=math.max(right,x);bottom=math.max(bottom,y);count=count+1
@@ -72,31 +79,43 @@ for s,spec in ipairs(config.clips)do
   subs[#subs+1]=string.format('[sub_resource type="AtlasTexture" id="%s"]\natlas = ExtResource("atlas%d")\nregion = Rect2(%d, %d, %d, %d)\nfilter_clip = true\n',id,s,n%6*W,math.floor(n/6)*H,W,H)
   local firstTick=#refs
   for tick=1,ms do refs[#refs+1]=string.format('{"duration": 1, "texture": SubResource("%s")}',id)end
-  records[i]={frame=n,video_frame=index,source_kind=isEndpoint and'idle_endpoint'or'video',duration_ms=ms,
+  records[i]={frame=n,video_frame=index,source_kind=isEndpoint and(i==1 and spec.start_frame and'contact_endpoint'or'idle_endpoint')or'video',duration_ms=ms,
    runtime_first_frame=firstTick,runtime_frames=ms,bounds={left,top,right+1,bottom+1},opaque_pixels=count}
  end
  assert(total==spec.duration_ms,'Configured clip length differs from its frame timings')
  atlas:saveAs(path..'attack-atlas.png');sprite:saveAs(path..'sources/attack.aseprite');sprite:close()
- lines[#lines+1]=string.format('[ext_resource type="Texture2D" path="res://assets/textures/sprites/%s%s/attack-atlas.png" id="atlas%d"]',group,stance,s)
+ lines[#lines+1]=string.format('[ext_resource type="Texture2D" path="res://assets/textures/sprites/%s%s/attack-atlas.png" id="atlas%d"]',group,key,s)
  animations[#animations+1]=string.format('{"frames": [%s], "loop": 0, "name": &"%s", "speed": %.9g}',table.concat(refs,', '),name,runtimeFps)
- manifest.clips[s]={name=name,stance=stance,frames=#frames,fps=spec.fps,duration=total/1000,loop=false,
+ manifest.clips[s]={name=name,key=key,stance=stance,step=spec.step or 1,frames=#frames,fps=spec.fps,duration=total/1000,loop=false,
   source_video=spec.video,prompt_id=spec.job,seed=spec.seed,source_parts=spec.source_parts,holds=spec.holds,
-  runtime_fps=runtimeFps,runtime_frames=#refs,records=records}
- previewClips[s]={frames=frames,durations=durations,endpoint=endpoint,total=total}
+  link_time_ms=spec.link_time_ms,start_frame=spec.start_frame,runtime_fps=runtimeFps,runtime_frames=#refs,records=records}
+ previewClips[s]={stance=stance,frames=frames,durations=durations,endpoint=endpoint,total=spec.link_time_ms or total}
  print(name..': '..#frames..' frames, '..total..' ms; complete margins and original idle endpoints')
 end
 lines[#lines+1]='';lines[#lines+1]=table.concat(subs,'\n')
 lines[#lines+1]='[resource]\nanimations = ['..table.concat(animations,',\n')..']\n'
 write(meta..'sprite_frames.tres',table.concat(lines,'\n'));write(meta..'manifest.json',json.encode(manifest))
-local preview=Sprite(W*#previewClips,H,ColorMode.RGB);local previous=0
-for n=0,119 do
- local time=(n/30*1000)%1000-200
- local im=Image(W*#previewClips,H,ColorMode.RGB);im:clear(pc.rgba(28,31,39,255))
- for s,clip in ipairs(previewClips)do
-  local chosen=clip.endpoint;local elapsed=0
-  if time>=0 and time<clip.total then for i,ms in ipairs(clip.durations)do
-   elapsed=elapsed+ms;if time<elapsed then chosen=clip.frames[i]break end
-  end end
+local groups={};local longest=0
+for _,stance in ipairs({'high','mid','low'})do
+ local group={clips={},total=0}
+ for _,clip in ipairs(previewClips)do if clip.stance==stance then group.clips[#group.clips+1]=clip;group.total=group.total+clip.total end end
+ groups[#groups+1]=group;longest=math.max(longest,group.total)
+end
+local cycle=math.ceil((longest+450)/1000*30)*1000/30
+local preview=Sprite(W*3,H,ColorMode.RGB);local previous=0
+for n=0,math.floor(cycle/1000*30)*2-1 do
+ local time=(n/30*1000)%cycle-200
+ local im=Image(W*3,H,ColorMode.RGB);im:clear(pc.rgba(28,31,39,255))
+ for s,group in ipairs(groups)do
+  local chosen=group.clips[1].endpoint;local offset=0
+  for _,clip in ipairs(group.clips)do
+   if time>=offset and time<offset+clip.total then
+    local elapsed=offset
+    for i,ms in ipairs(clip.durations)do elapsed=elapsed+ms;if time<elapsed then chosen=clip.frames[i]break end end
+    break
+   end
+   offset=offset+clip.total
+  end
   im:drawImage(chosen,Point((s-1)*W,0))
  end
  local ticks=math.floor((n+1)/30*100+.5);put(preview,n+1,im,(ticks-previous)*10);previous=ticks

@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("script")
-AbilityId = "greatsword_attack_low"
 Animation = &"attack_low"
-Frames = PackedFloat32Array(220, 232, 244, 256, 274)
-BladePoses = PackedVector4Array(225, 269, 340, 264, 314, 267, 418, 274, 315, 266, 419, 273, 336, 257, 441, 257, 337, 257, 443, 257)
+Frames = PackedFloat32Array(360, 384, 408)
+BladePoses = PackedVector4Array(205, 247, 301, 251, 335, 267, 458, 267, 378, 267, 498, 267)
+FinishStrength = 1.35

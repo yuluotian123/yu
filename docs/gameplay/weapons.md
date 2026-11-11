@@ -2,33 +2,36 @@
 
 主角当前仅使用大剑，初始物品和装备均只有大剑，第二个装备槽为空。左键触发大剑普攻，玩家不再绑定武器切换操作。人物设定和动作预览统一见[主角人物档案](../characters/protagonist.md)。
 
-上、中、下段如何结合 Weapon 与 Skill/Ability，见[大剑架势接入方案](combat-stances.md)。三段各有待机、移动和一招普攻，默认中段；Shift + 滚轮上／左键／滚轮下直选上／中／下段。普通左键使用当前架势的普攻，手柄采用 R1/RB 配合上、左、下三个面键直选。换势无额外冷却，开始时播放 0.32 秒周身细小金色粒子。
+上、中、下段如何结合 Weapon 与 Skill/Ability，见[大剑架势接入方案](combat-stances.md)。三段各有待机、移动和单次普攻，默认中段；Shift + 滚轮上／左键／滚轮下直选上／中／下段。普通左键使用当前架势的完整普攻，攻击中连点或按住不会续招；手柄换势入口暂时移除。换势无额外冷却，开始时播放 0.32 秒周身细小金色粒子。
 
-| 武器 | 能力 ID | 动作时长 | 冷却 |
-| --- | --- | --- | --- |
-| 上段下劈 | `greatsword_attack_high` | 0.680 秒 | 0.680 秒 |
-| 中段横扫 | `greatsword_attack` | 0.540 秒 | 0.540 秒 |
-| 下段前刺 | `greatsword_attack_low` | 0.474 秒 | 0.474 秒 |
+| 架势 | 能力 ID | 技能图 |
+| --- | --- | --- |
+| 上段 | `greatsword_attack_high` | [上段重劈](../../assets/resources/weapons/greatsword_attack_high_timeline.tres) |
+| 中段 | `greatsword_attack` | [中段横扫](../../assets/resources/weapons/greatsword_attack_timeline.tres) |
+| 下段 | `greatsword_attack_low` | [下段前刺](../../assets/resources/weapons/greatsword_attack_low_timeline.tres) |
 
-大剑攻击从各自架势起刀并收回，放大蓄力、伸臂、前倾与落刀幅度，出手集中在角色朝向的前方。有效出手为 68 / 48 / 54 毫秒，蓄力为 340 / 270 / 220 毫秒，含 130 / 90 / 90 毫秒蓄满顿帧；落点再顿 80 / 62 / 46 毫秒，以慢蓄、快出和短停区分重量；中段在腰胸高度横扫，下段剑身基本平行地面前刺。动作期间阻止移动和跳跃；冷却覆盖完整动作，收招后可再次攻击。刀光由独立粒子组件跟随剑刃，换势粒子仍由外置场景控制。当前伤害、命中判定与连招尚未接入。
+左键启动一次完整普攻；攻击中连点或按住不续招，完整收势后再次点击才启动新攻击。每个架势的技能图只有输入、Timeline 和结束三个节点；通用连招窗口及条件节点继续保留。上段向前重劈、中段横扫、下段低位前刺。动作、蓄满和落点停留的实际时间统一记录在[制作配置](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json)和技能 Timeline 中。当前伤害与命中判定尚未接入。
 
 ## 资源与组件
 
 - [大剑定义](../../assets/resources/weapons/greatsword.tres)引用攻击能力和动画配置。`WeaponDefinition` 为共享只读配置；`WeaponAnimationProfile` 保存 SpriteFrames、画布、脚底锚点和像素比例。
 - `StanceMoveAnimations` 将各段映射为 `run_high/mid/low`；配置非空时必须覆盖全部架势且引用循环动画，留空则继续使用基础 `run`。`ActionFrames` 保存独立动作集，与基础、待机和过渡资源按装备实例合成。切换时同时更新 `idle` 和 `run` 的别名，再刷新一次播放。
 - `WeaponEquipmentComponent3D : Component3D` 在动画组件初始化后、持久化注册前初始化。实例独立维护两个固定槽位、当前槽位、架势、换势动作和待切换请求；通用装备 API 保留，当前玩家只配置大剑。
-- CharacterGraph 将 `player_attack` 连接到 `TryPrimaryAttack`，排除 `player_stance_mid`，避免 Shift + 左键误触普攻。键鼠 `player_stance_high/mid/low` 和手柄三组 modifier 节点均调用 `RequestStance`。`StanceSwitchEffectComponent3D` 监听实际换势开始，触发每个角色独立的周身粒子场景。玩家不绑定武器切换和冲刺。
+- CharacterGraph 用一个注册节点引用武器配置，展开三套普攻；移动、跳跃和架势切换保留原来的输入与组件调用节点，架势切换不注册为能力。每个攻击技能图的 `AbilityInputNodeData` 监听 `player_attack`，排除 `player_stance_mid`，并用 `AbilityCurrentWeaponAttackCondition` 选择当前武器、当前已完成架势的技能。玩家不绑定武器切换和冲刺。
 - `StancePrimaryAttacks` 为各段配置独立 AbilityResource，初始化及装备时一次授予；`CurrentPrimaryAttack` 按当前已完成的架势选择技能。未配置该映射的武器回退到 `PrimaryAttack`，映射非空时须覆盖全部架势。中段保留旧 ID `greatsword_attack` 兼容存档。
-- 基础 AbilitySet 为空，装备组件授予三招大剑普攻。`AttackFrames` 提供独立攻击帧集并按装备实例合成；切换架势不重建能力实例或刷新冷却，攻击期间的有效换势等待收招。
+- 当前玩家通过一个 `CharacterRegisterAbilityNodeData` 的 `SourcePath` 引用大剑定义，统一注册其普攻；装备初始化的授予操作幂等，继续支持非玩家入口。`AttackFrames` 提供九个攻击动画并按装备实例合成；切换架势不重建能力实例或刷新冷却，攻击期间的有效换势等待收招。
+- 每击的 Timeline 同时编排动画、刀光与续招窗口。条件节点消费一次缓存后进入下一击，否则进入保持同一动画播放进度的收招段。三个结束分支各用独立 Return 节点，避免多个连接挤入只允许一条连接的输入端口。
 - 当前动画和显示规格以[主角人物档案](../characters/protagonist.md)及[大剑动画配置](../../assets/resources/weapons/greatsword_animation.tres)为准。
 
 三段移动沿用短步幅与同一套移动物理；新攻击按准备、出手和回架独立定时。动作依据和来源见[双手大剑攻击参考](../art/greatsword-attack-references.md)。
 
 ### 攻击刀光
 
-`WeaponAnimationProfile.AttackTrails` 为每招指定 `WeaponAttackTrail`：能力 ID、动画名，以及原生画布坐标中的剑刃根部／剑尖关键帧。关键帧时间由 SpriteFrames 的实际逐帧时长换算，变速播放时仍与挥刀一致。动画组件使原生精灵先于宿主更新，刀光随后读取当帧姿势，避免高速挥刀时落后一帧；移除动画组件时恢复原处理优先级。只标定向前挥出的部分，蓄力和回架不发射刀光。
+每击的 `AbilityAttackTrailAction` Timeline 片段直接引用特效场景和 `WeaponAttackTrail`。轨迹资源保存动画名及原生画布坐标中的剑刃根部／剑尖关键帧；动画配置不再保存 `AttackTrails`。关键帧时间由 SpriteFrames 的实际逐帧时长换算，变速播放时仍与挥刀一致。动画组件使原生精灵先于宿主更新，刀光随后读取当帧姿势，避免高速挥刀时落后一帧；移除动画组件时恢复原处理优先级。只标定向前挥出的部分，蓄力和回架不发射刀光。
 
-[WeaponAttackEffectComponent3D](../../scripts/gamelogic/weapons/WeaponAttackEffectComponent3D.cs) 管理独立的 [CPUParticles3D 场景](../../assets/scenes/vfx/greatsword_attack_particles.tscn)。剑刃上密集短寿命亮片形成刀光，末端少量金色碎屑继续飞散；粒子在出手位置留痕，120 Hz 沿实际剑路补齐发射位置，亮片 65 毫秒、碎屑 170 毫秒淡出，碎屑速度方向跟随剑尖运动；左右朝向只镜像一次。场景使用现有 `relink_detail_particles` 深度匹配，保留像素后处理中的细小亮芯并接受场景遮挡。取消、完成、换武器及销毁都会清理特效；角色贴图和材质无需增加光效。
+[AbilityEffectPlayer3D](../../scripts/gamelogic/abilities/runtime/AbilityEffectPlayer3D.cs) 由 `AbilitySystemComponent3D` 按角色实例持有，通过普通 C# 辅助类 `WeaponTrailPlayer3D` 管理 [CPUParticles3D 场景](../../assets/scenes/vfx/greatsword_attack_particles.tscn)。剑刃上密集短寿命亮片形成刀光，末端少量金色碎屑继续飞散；粒子在出手位置留痕，120 Hz 沿实际剑路补齐发射位置，亮片 55 毫秒、碎屑 170 毫秒淡出，碎屑速度方向跟随剑尖运动；左右朝向只镜像一次。v8 加密短促刀光并加强一次性的落点闪光，落点停顿期间不重复发射。正常片段结束允许尾迹淡出，取消、能力结束、换武器及销毁清理特效。角色贴图和材质无需增加光效，玩家不再挂载旧的攻击或换势特效组件。
+
+换势仍由武器组件实际开始过渡时播放 [StanceEffectGraph](../../assets/resources/weapons/greatsword_stance_effect.tres)，其中 `AbilityParticleSceneAction` Timeline 片段控制周身粒子。这张图没有输入节点和 Ability 注册，不参与普攻的运行状态或冷却。
 
 ## 物品所有权与行囊
 
@@ -46,4 +49,4 @@
 
 ## 验证
 
-运行 `weapon_stances.tscn` 检查三段左键选招、收招回待机、移动锁释放、重复点击、换势排队及角色实例隔离；`-- --attack-capture` 单独录制三招预览。完整存档格式见[存档系统](saves.md)。
+运行 `weapon_stances.tscn` 检查三架势真实左键单击、连点/按住不续招、完整收势及下一次点击；另用内存图验证保留的连招框架，包括 1/2/3 段分支、每窗口一次缓存与取消清理。也覆盖技能图端口、注册范围、移动锁释放、换势排队及角色实例隔离。`-- --attack-capture` 单独录制三架势普攻预览。完整存档格式见[存档系统](saves.md)。

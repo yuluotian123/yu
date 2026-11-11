@@ -32,6 +32,15 @@ namespace GameLogic
                 return;
             }
             _graph.InitializeComponentArguments();
+            if (!_graph.Validate(out var validation))
+            {
+                Godot.GD.PushWarning("[CharacterGraphRuntime] 图验证失败，无法启动：\n" + validation.ToDisplayText());
+                _stopped = true;
+                return;
+            }
+            foreach (var registration in _graph.Nodes.OfType<CharacterRegisterAbilityNodeData>())
+                foreach (var ability in registration.GetAbilities())
+                    _abilities?.GrantAbility(ability);
             _blackboard.PushLocal(graph);
             _context.UserData.Add(this);
             if (owner != null)

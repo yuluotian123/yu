@@ -5,18 +5,20 @@
 [ext_resource type="Resource" uid="uid://11v7tj2mtho3" path="res://assets/resources/weapons/greatsword_animation.tres" id="3_animation"]
 [ext_resource type="Texture2D" uid="uid://cj1tmd8ss1bo8" path="res://assets/textures/ui/inventory/greatsword.svg" id="4_icon"]
 [ext_resource type="Texture2D" uid="uid://dt7jq23n1jdd" path="res://assets/textures/sprites/amber_fox_style_v2/full_256/gs/portrait.png" id="5_portrait"]
-[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_high.tres" id="6_high_attack"]
-[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_attack_low.tres" id="7_low_attack"]
+[ext_resource type="Script" uid="uid://cg2ytousxnyt1" path="res://scripts/gamelogic/abilities/runtime/AbilityResource.cs" id="6_a5kyl"]
+[ext_resource type="Resource" uid="uid://q0n071dm2e62" path="res://assets/resources/weapons/greatsword_attack_high.tres" id="6_high_attack"]
+[ext_resource type="Resource" uid="uid://clxxl1tugfcwj" path="res://assets/resources/weapons/greatsword_attack_low.tres" id="7_low_attack"]
+[ext_resource type="Resource" path="res://assets/resources/weapons/greatsword_stance_effect.tres" id="stance_effect_graph"]
 
 [resource]
 script = ExtResource("1_script")
 WeaponId = "greatsword"
 DisplayName = "大剑"
 PrimaryAttack = ExtResource("2_attack")
-StancePrimaryAttacks = Dictionary[String, Resource]({
+StancePrimaryAttacks = Dictionary[String, ExtResource("6_a5kyl")]({
 "high": ExtResource("6_high_attack"),
-"mid": ExtResource("2_attack"),
-"low": ExtResource("7_low_attack")
+"low": ExtResource("7_low_attack"),
+"mid": ExtResource("2_attack")
 })
 AnimationProfile = ExtResource("3_animation")
 StanceIdleAnimations = Dictionary[String, String]({
@@ -41,6 +43,7 @@ StanceTransitions = Dictionary[String, String]({
 "mid>high": "stance_mid_to_high",
 "mid>low": "stance_mid_to_low"
 })
+StanceEffectGraph = ExtResource("stance_effect_graph")
 Icon = ExtResource("4_icon")
 Portrait = ExtResource("5_portrait")
 Description = "宽厚的剑刃带来沉稳的挥砍。适合把握时机、正面迎击。"

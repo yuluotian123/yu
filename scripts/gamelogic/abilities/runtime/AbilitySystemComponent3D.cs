@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 using Godot;
 
@@ -14,6 +15,8 @@ namespace GameLogic
         private readonly Dictionary<string, AbilityRuntime> _runtimes = new(StringComparer.Ordinal);
         private readonly List<AbilityRuntime> _active = new();
         private CharacterMovementComponent3D _movement;
+        private ICharacterInputProvider _input;
+        public AbilityEffectPlayer3D Effects { get; private set; }
 
         public override int Priority => ComponentPriority.Movement + 5;
         public IReadOnlyList<AbilityRuntime> ActiveAbilities => _active;
@@ -26,11 +29,14 @@ namespace GameLogic
         public override void OnInit()
         {
             _movement = Owner?.GetComponent<CharacterMovementComponent3D>();
+            _input = Owner?.GetAllComponents().OfType<ICharacterInputProvider>().FirstOrDefault();
+            Effects = new AbilityEffectPlayer3D(Owner);
             GrantAbilitySet(AbilitySet);
         }
 
         public override void OnPhysicsUpdate(double delta)
         {
+            PollInputs();
             for (int i = _active.Count - 1; i >= 0; i--)
             {
                 AbilityRuntime runtime = _active[i];
@@ -44,6 +50,29 @@ namespace GameLogic
             }
         }
 
+        public override void OnUpdate(double delta) => Effects?.Update(delta);
+
+        private void PollInputs()
+        {
+            if (_input == null) return;
+            foreach (AbilityResource ability in _granted.Values.ToArray())
+            {
+                if (ability.Graph == null) continue;
+                AbilityRuntime runtime = GetRuntime(ability.AbilityId);
+                foreach (AbilityInputNodeData node in ability.Graph.Nodes.OfType<AbilityInputNodeData>())
+                {
+                    if (!node.IsEligible(runtime.InputContext) || !node.IsTriggered(_input)) continue;
+                    float value = node.ReadValue(_input);
+                    if (runtime.IsRunning && !string.IsNullOrWhiteSpace(node.BufferedInput))
+                        runtime.TryBufferInput(node.BufferedInput);
+                    else if (!runtime.IsRunning)
+                    {
+                        TryActivateAbility(runtime.AbilityId, "AbilityInput", inputNode: node, inputValue: value);
+                    }
+                }
+            }
+        }
+
         public override void OnDestroy()
         {
             for (int i = _active.Count - 1; i >= 0; i--)
@@ -54,6 +83,9 @@ namespace GameLogic
             _active.Clear();
             _runtimes.Clear();
             _granted.Clear();
+            Effects?.Dispose();
+            Effects = null;
+            _input = null;
             _movement = null;
         }
 
@@ -85,7 +117,9 @@ namespace GameLogic
         public AbilityActivationResult TryActivateAbility(
             string abilityId,
             string source = "CharacterGraph",
-            int? requestPriority = null)
+            int? requestPriority = null,
+            AbilityInputNodeData inputNode = null,
+            float inputValue = 0f)
         {
             AbilityActivationResult validation = ValidateActivation(
                 abilityId,
@@ -115,7 +149,7 @@ namespace GameLogic
                 AbilitySystem = this,
                 Source = source ?? string.Empty
             };
-            if (!runtime.Start(context, GetTimeSeconds()))
+            if (!runtime.Start(context, GetTimeSeconds(), inputNode, inputValue))
             {
                 AbilityRejected?.Invoke(abilityId, AbilityActivationResult.InvalidContext);
                 return AbilityActivationResult.InvalidContext;

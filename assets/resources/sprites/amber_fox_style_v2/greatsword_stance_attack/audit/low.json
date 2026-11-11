@@ -43,7 +43,7 @@
   "binary_alpha": true,
   "preserve_inset": 3,
   "rgb_tolerance": 0,
-  "timing_note": "Variable frame durations; full timing is in manifest.json. Endpoints come from the original idle and are checked separately in media-validation.json.",
+  "timing_note": "Variable frame durations; full timing is in manifest.json. Start/contact and idle endpoints are checked separately in media-validation.json.",
   "regions": [
     {
       "name": "face",

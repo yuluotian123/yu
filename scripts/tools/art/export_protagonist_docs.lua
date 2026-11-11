@@ -128,19 +128,30 @@ if manifest.previews.stance_attacks then
   for key, value in pairs(manifest.previews.stance_attacks) do attack_preview[key] = value end
 end
 attack_preview.file = attacks.preview
+attack_preview.revision = attacks.revision
+attack_preview.combo_seconds = nil
+attack_preview.runtime_file = attacks.preview:gsub("attacks%-v", "attacks-runtime-v"):gsub("combos%-v", "combos-runtime-v")
 attack_preview.clips = {}
 local attack_notes = {}
 local stance_labels = {high="上段下劈",mid="中段横扫",low="下段前刺"}
 for _, clip in ipairs(attacks.clips) do
-  attack_preview.clips[clip.stance] = {frames=clip.frames,duration_seconds=clip.duration,variable_frame_times=true}
-  attack_notes[#attack_notes+1] = string.format("%s %d 帧 / %.3f 秒",stance_labels[clip.stance],clip.frames,clip.duration)
+  attack_preview.clips[clip.key or clip.stance] = {frames=clip.frames,duration_seconds=clip.duration,variable_frame_times=true}
+end
+for _, stance in ipairs({"high","mid","low"}) do
+  local duration, count = 0, 0
+  for _, clip in ipairs(attacks.clips) do if clip.stance == stance then
+    duration = duration + (clip.link_time_ms and clip.link_time_ms / 1000 or clip.duration)
+    count = count + 1
+  end end
+  local action = count == 1 and "单次普攻" or string.format("%d 连击",count)
+  attack_notes[#attack_notes+1] = string.format("%s %s / %.3f 秒",stance_labels[stance],action,duration)
 end
 attack_preview.runtime_replaced = true
 manifest.previews.stance_attacks = attack_preview
 assert(app.fs.isFile(output .. "/" .. attack_preview.file), "当前三段攻击预览缺失")
 local rows = {"| 动作 | GIF | 动作相关信息 |", "| --- | --- | --- |"}
 rows[#rows+1] = string.format("| 三段待机 | ![上、中、下段待机](media/protagonist/%s) | 各 72 帧 · 24 fps · 3 秒循环<br>已加大肩部起伏与尾摆；保留眨眼，脚底不增加位移 |", idle_preview.file)
-rows[#rows+1] = string.format("| 三段攻击 | ![上、中、下段普攻](media/protagonist/%s) | %s<br>逐帧变速；收招后可再次攻击 |",attack_preview.file,table.concat(attack_notes,"；"))
+rows[#rows+1] = string.format("| 三架势攻击 | ![上、中、下架势普攻](media/protagonist/%s) | %s<br>点击左键执行完整攻击与收势 |",attack_preview.file,table.concat(attack_notes,"；"))
 rows[#rows+1] = "| 架势过渡 | ![六向架势切换](media/protagonist/greatsword-stance-transitions-62fps.gif) | 上↔中 7 帧 / 0.112 秒，中↔下及上↔下 10 帧 / 0.160 秒；均为 62.4 fps |"
 for _, name in ipairs(order) do
   if name == "run" and manifest.previews.stance_movement then

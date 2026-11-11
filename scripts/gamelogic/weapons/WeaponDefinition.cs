@@ -20,6 +20,7 @@ namespace GameLogic
         [Export] public Godot.Collections.Dictionary<string, string> StanceMoveStartAnimations { get; set; } = new();
         // Directed edges, for example "high>mid". Empty keeps legacy weapons instant.
         [Export] public Godot.Collections.Dictionary<string, string> StanceTransitions { get; set; } = new();
+        [Export] public AbilityFlowGraphAsset StanceEffectGraph { get; set; }
         [Export] public Texture2D Icon { get; set; }
         [Export] public Texture2D Portrait { get; set; }
         [Export(PropertyHint.MultilineText)] public string Description { get; set; } = string.Empty;

@@ -1,9 +1,9 @@
 {
-  "checked_frames": 73,
+  "checked_frames": 59,
   "durations": {
-    "attack_high": 0.68,
-    "attack_low": 0.474,
-    "attack_mid": 0.54
+    "attack_high": 0.934000000000001,
+    "attack_low": 0.941000000000001,
+    "attack_mid": 0.928000000000001
   },
   "frame_size": [
     512,
@@ -14,32 +14,32 @@
   "per_frame_timing_exact": true,
   "rhythm": {
     "high": {
-      "impact_hold_seconds": 0.08,
-      "loaded_hold_seconds": 0.13,
-      "windup_seconds": 0.34
+      "impact_hold_seconds": 0.14,
+      "loaded_hold_seconds": 0.17,
+      "windup_seconds": 0.38
     },
     "low": {
-      "impact_hold_seconds": 0.046,
-      "loaded_hold_seconds": 0.09,
-      "windup_seconds": 0.22
+      "impact_hold_seconds": 0.145,
+      "loaded_hold_seconds": 0.18,
+      "windup_seconds": 0.36
     },
     "mid": {
-      "impact_hold_seconds": 0.062,
-      "loaded_hold_seconds": 0.09,
-      "windup_seconds": 0.27
+      "impact_hold_seconds": 0.13,
+      "loaded_hold_seconds": 0.17,
+      "windup_seconds": 0.356
     }
   },
-  "runtime_ticks": 1694,
+  "runtime_ticks": 2803,
   "strikes": {
     "high": {
       "forward": true,
-      "seconds": 0.068,
+      "seconds": 0.06,
       "tip_y_span": 235.0
     },
     "low": {
       "forward": true,
-      "seconds": 0.054,
-      "tip_y_span": 17.0
+      "seconds": 0.048,
+      "tip_y_span": 16.0
     },
     "mid": {
       "forward": true,

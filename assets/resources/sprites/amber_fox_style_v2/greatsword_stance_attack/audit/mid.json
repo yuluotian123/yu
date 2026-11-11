@@ -18,13 +18,7 @@
     "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_015.png",
     "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_016.png",
     "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_017.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_018.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_019.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_020.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_021.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_022.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_023.png",
-    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_024.png"
+    "../../../../../textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/frames/attack_018.png"
   ],
   "source_indices": [
     1,
@@ -44,13 +38,7 @@
     15,
     16,
     17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24
+    18
   ],
   "frame_size": [
     512,
@@ -59,7 +47,7 @@
   "binary_alpha": true,
   "preserve_inset": 3,
   "rgb_tolerance": 0,
-  "timing_note": "Variable frame durations; full timing is in manifest.json. Endpoints come from the original idle and are checked separately in media-validation.json.",
+  "timing_note": "Variable frame durations; full timing is in manifest.json. Start/contact and idle endpoints are checked separately in media-validation.json.",
   "regions": [
     {
       "name": "face",

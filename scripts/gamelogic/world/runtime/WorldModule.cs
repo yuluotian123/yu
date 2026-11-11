@@ -20,7 +20,19 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     public string Status {get;private set;}="未进入世界";
     public string LastError {get;private set;}="";
     public float Progress=>IsSwitching?Mathf.Clamp(_loadProgress+(_loading?.Progress??0)*_loadWeight,0,1):1;
-    public GameObject3D Player {get;private set;}
+    GameObject3D _player;
+    Transform3D? _lastPlayerTransform;
+    public GameObject3D Player
+    {
+        get=>_player;
+        private set
+        {
+            if(ReferenceEquals(_player,value))return;
+            if(GodotObject.IsInstanceValid(_player))_player.TreeExiting-=RememberPlayerTransform;
+            _player=value;_lastPlayerTransform=null;
+            if(GodotObject.IsInstanceValid(_player))_player.TreeExiting+=RememberPlayerTransform;
+        }
+    }
     public WorldLevelContextComponent3D CurrentContext {get;private set;}
     public double RuntimeSeconds {get;private set;}
     public int PathQueriesLastFrame {get;private set;}
@@ -137,10 +149,16 @@ public sealed partial class WorldModule : Module,IWorldModule,ISaveSection,IProc
     }
     internal void UnregisterContext(WorldLevelContextComponent3D context)
     {if(_levels.GetValueOrDefault(context.Owner.GetInstanceId()).Context==context)_levels.Remove(context.Owner.GetInstanceId());}
+    void RememberPlayerTransform()
+    {
+        // TreeExiting still has a valid world transform; RootModule shutdown runs after the children exit.
+        if(GodotObject.IsInstanceValid(Player)&&Player.IsInsideTree())_lastPlayerTransform=Player.GlobalTransform;
+    }
     public JsonObject Capture()
     {
+        RememberPlayerTransform();
         var objects=new JsonObject();foreach(var entry in _objects)objects[entry.Key]=entry.Value.Capture();
-        return new(){["world_id"]=_definition?.Id??"",["level"]=CurrentLevelId,["player_transform"]=Player!=null?WriteTransform(Player.GlobalTransform):null,["objects"]=objects,
+        return new(){["world_id"]=_definition?.Id??"",["level"]=CurrentLevelId,["player_transform"]=_lastPlayerTransform is {} transform?WriteTransform(transform):null,["objects"]=objects,
             ["population"]=Population?.Capture(),["closed_routes"]=new JsonArray((Routes?.Closed??Array.Empty<string>()).Select(id=>(JsonNode)JsonValue.Create(id)).ToArray())};
     }
     public void Restore(JsonObject state,int version)

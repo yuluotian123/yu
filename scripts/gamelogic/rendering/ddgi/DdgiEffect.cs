@@ -17,7 +17,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
     [Export] public bool FreezeUpdates { get; set; }
     private readonly object _gate = new();
     private readonly DdgiSceneCapture _capture = new();
-    private readonly GDictionary _status = new() { ["state"] = "waiting", ["updates"] = 0, ["instances"] = 0, ["blas"] = 0 };
+    private readonly GDictionary _status = new() { ["state"] = "waiting", ["updates"] = 0, ["instances"] = 0, ["blas"] = 0, ["native_receiver"] = false };
     private DdgiPacket _pending, _packet;
     private RenderingDevice _rd;
     private bool _initialized, _released;
@@ -46,6 +46,10 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
     private Vector3 _renderedConstantSky;
     private bool _hasRenderedLighting;
     private long? _pendingSkyRelight;
+    private bool _captureEnabled;
+    private int _relightRemaining;
+    private DdgiSettings _renderSettings;
+    private int _localInvalidations;
 
     public DdgiEffect()
     {
@@ -56,7 +60,14 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
     public GDictionary GetStatus() { lock (_gate) return _status.Duplicate(true); }
     private void Status(string key, Variant value) => _status[key] = value;
     private void Fail(string message, bool unsupported = false)
-    { Status("state", unsupported ? "unsupported" : "failed"); Status("error", message); GD.PushError("[DDGI] " + message); }
+    { ResetActivity(unsupported ? "unsupported" : "failed"); Status("error", message); GD.PushError("[DDGI] " + message); }
+
+    private void ResetActivity(string state)
+    {
+        Status("state", state); Status("native_receiver", false); Status("updated_probes", 0);
+        Status("rays_per_update", 0); Status("gpu_update_ms", 0.0); Status("capture_cpu_ms", 0.0);
+        Status("lighting_catch_up", false); Status("emissive_shadow_ray_budget", 0);
+    }
 
     public void CaptureScene(Node3D root, GDictionary configuration)
     {
@@ -68,8 +79,15 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
             if (_status["state"].AsString() != "unsupported" &&
                 (!native || (settings.EnvironmentSky && !ClassDB.ClassHasMethod("RenderSceneBuffersRD", "get_ddgi_sky"))))
                 Fail("Required DDGI engine API is unavailable. Save and reopen with scripts/tools/engine/launch_godot.ps1. Current executable: " + OS.GetExecutablePath(), true);
-            Status("native_receiver_available", native); Status("native_receiver", native);
-            if (_status["state"].AsString() is "unsupported" or "failed") settings = settings with { Enabled = false };
+            Status("native_receiver_available", native);
+            string state = _status["state"].AsString();
+            _captureEnabled = settings.Enabled && Enabled && state is not ("unsupported" or "failed");
+            if (!_captureEnabled)
+            {
+                _pending = null;
+                ResetActivity(state is "unsupported" or "failed" ? state : "disabled");
+                return;
+            }
         }
         long captureStart = Stopwatch.GetTimestamp();
         var packet = _capture.Capture(root, settings);
@@ -79,6 +97,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         {
             _pending = packet;
             Status("capture_cpu_ms", captureMs);
+            Status("capture_reused_scene", packet.ReusedScene);
         }
         // Allocate before depth/opaque lists are prepared; only update existing caches in PreOpaque.
         RenderingServer.CallOnRenderThread(Callable.From(PrepareRender));
@@ -91,7 +110,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         _rd = RenderingServer.GetRenderingDevice();
         if (_rd == null || !_rd.HasFeature(RenderingDevice.Features.RayQuery))
         { Fail("Forward+ Vulkan with Ray Query support is required.", true); return false; }
-        foreach (string name in new[] { "trace", "classify", "integrate", "temporal" })
+        foreach (string name in new[] { "trace", "classify", "integrate", "temporal", "invalidate", "rescale" })
         {
             using var file = ResourceLoader.Load<RDShaderFile>($"res://assets/shaders/rendering/ddgi/ddgi_{name}.glsl");
             using var spirv = file?.GetSpirV();
@@ -147,21 +166,44 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         };
         using var view = new RDTextureView();
         Rid texture = _rd.TextureCreate(description, view);
-        _rd.TextureClear(texture, new Color(0, 0, 0, 0), 0, 1, 0, 1);
+        if (texture.IsValid) _rd.TextureClear(texture, new Color(0, 0, 0, 0), 0, 1, 0, 1);
         return texture;
     }
 
-    private void SetupAtlas(DdgiSettings settings)
+    internal static DdgiSettings FitAtlas(DdgiSettings settings, int maxSize)
+    {
+        Vector3I counts = settings.Counts;
+        if (counts.X * counts.Z * 18 <= maxSize && counts.Y * 18 <= maxSize) return settings;
+        if (maxSize < 72) throw new InvalidOperationException("DDGI requires a minimum 72-pixel texture dimension.");
+        Vector3 extent = (Vector3)(counts - Vector3I.One) * settings.Spacing;
+        Vector3I best = new(2, Math.Min(counts.Y, maxSize / 18), 2);
+        float spacing = float.PositiveInfinity;
+        for (int x = 2; x <= counts.X; x++)
+            for (int z = 2; z <= counts.Z && x * z * 18 <= maxSize; z++)
+            {
+                float candidate = Math.Max(settings.Spacing, Math.Max(extent.X / (x - 1), Math.Max(extent.Y / (best.Y - 1), extent.Z / (z - 1))));
+                if (candidate < spacing || (candidate == spacing && x * z > best.X * best.Z))
+                { spacing = candidate; best = new(x, best.Y, z); }
+            }
+        Vector3 origin = settings.Origin + (extent - (Vector3)(best - Vector3I.One) * spacing) * .5f;
+        return settings with { Counts = best, Spacing = spacing, Origin = origin };
+    }
+
+    private bool SetupAtlas(DdgiSettings settings)
     {
         string key = $"{settings.Origin}:{settings.Counts}:{settings.Spacing}:{settings.Rays}";
-        if (key == _topology) return;
-        foreach (Rid texture in _atlas.Values) _rd.FreeRid(texture);
+        if (key == _topology) return true;
+        foreach (Rid texture in _atlas.Values) if (texture.IsValid) _rd.FreeRid(texture);
+        _atlas.Clear();
         Vector3I c = settings.Counts;
         _atlas["irradiance"] = NewTexture(c.X * c.Z * 10, c.Y * 10, RenderingDevice.DataFormat.R16G16B16A16Sfloat);
         _atlas["distance"] = NewTexture(c.X * c.Z * 18, c.Y * 18, RenderingDevice.DataFormat.R32G32Sfloat);
         _atlas["state"] = NewTexture(c.X * c.Z, c.Y, RenderingDevice.DataFormat.R32G32B32A32Sfloat);
         _atlas["epochs"] = NewTexture(c.X * c.Z, c.Y, RenderingDevice.DataFormat.R32G32Uint);
+        if (_atlas.Values.Any(texture => !texture.IsValid)) { Fail("DDGI probe texture allocation failed."); return false; }
         _topology = key; _nextProbe = 0; _lightingEpoch++; _visibilityEpoch++; _generation++;
+        _relightRemaining = 0;
+        return true;
     }
 
     private bool UpdateGeometry(DdgiPacket packet, out bool changed)
@@ -219,7 +261,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         return _rd.TextureCreate(format, view, data);
     }
 
-    private static bool Discontinuous(byte[] previous, byte[] current)
+    private static bool Discontinuous(ReadOnlySpan<byte> previous, ReadOnlySpan<byte> current)
     {
         if (previous.Length != current.Length) return true;
         var a = MemoryMarshal.Cast<byte, float>(previous);
@@ -229,7 +271,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         return false;
     }
 
-    private static bool AlphaChanged(byte[] previous, byte[] current)
+    private static bool AlphaChanged(ReadOnlySpan<byte> previous, ReadOnlySpan<byte> current)
     {
         if (previous.Length != current.Length) return true;
         var a = MemoryMarshal.Cast<byte, float>(previous);
@@ -250,8 +292,26 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         bool instancesChanged = geometryChanged || !_lastInstances.SequenceEqual(packet.Instances) || !_tlas.IsValid;
         bool materialsChanged = !_lastMaterials.AsSpan().SequenceEqual(packet.Materials), lightsChanged = !_lastLights.AsSpan().SequenceEqual(packet.Lights);
         bool colorsChanged = !_colorKeys.SequenceEqual(packet.TextureKeys), dataChanged = !_dataKeys.SequenceEqual(packet.DataKeys);
-        bool visibilityChanged = instancesChanged || colorsChanged || AlphaChanged(_lastMaterials, packet.Materials) || _lighting.Distance != packet.Settings.MaxDistance;
-        bool lightingJump = visibilityChanged || dataChanged || Discontinuous(_lastMaterials, packet.Materials) || Discontinuous(_lastLights, packet.Lights);
+        bool visibilityChanged = colorsChanged || _lighting.Distance != packet.Settings.MaxDistance;
+        bool lightingJump = visibilityChanged || dataChanged || Discontinuous(_lastLights, packet.Lights);
+        var regions = new List<Aabb>();
+        if (!visibilityChanged && (instancesChanged || materialsChanged))
+        {
+            var previous = _lastInstances.ToDictionary(item => (item.NodeId, item.Surface));
+            foreach (var current in packet.Instances)
+            {
+                if (!previous.Remove((current.NodeId, current.Surface), out var old)) { regions.Add(current.Bounds); continue; }
+                if (old.Key != current.Key || old.Transform != current.Transform)
+                { regions.Add(old.Bounds); regions.Add(current.Bounds); }
+                else
+                {
+                    var before = _lastMaterials.AsSpan(old.Material * DdgiSceneCapture.MaterialStride, DdgiSceneCapture.MaterialStride);
+                    var after = packet.Materials.AsSpan(current.Material * DdgiSceneCapture.MaterialStride, DdgiSceneCapture.MaterialStride);
+                    if (AlphaChanged(before, after) || Discontinuous(before, after)) regions.Add(current.Bounds);
+                }
+            }
+            foreach (var removed in previous.Values) regions.Add(removed.Bounds);
+        }
         if (instancesChanged)
         {
             int count = packet.Instances.Count;
@@ -300,7 +360,42 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         { _generation++; _lighting = lighting; }
         if (visibilityChanged) _visibilityEpoch++;
         if (lightingJump) _lightingEpoch++;
+        Status("local_invalidated_probes", 0);
+        if (regions.Count > 0 && !InvalidateRegions(regions)) return false;
         return true;
+    }
+
+    private bool InvalidateRegions(List<Aabb> regions)
+    {
+        var s = _renderSettings;
+        var flags = new uint[s.Total];
+        int affected = 0;
+        // Distance moments are capped at 1.5 cell diagonals. Include possible
+        // relocation offsets; distant radiance continues its regular history updates.
+        float radius = s.Spacing * Mathf.Sqrt(3) * 1.95f;
+        foreach (Aabb region in regions)
+        {
+            Aabb expanded = region.Grow(radius);
+            Vector3 minimum = (expanded.Position - s.Origin) / s.Spacing;
+            Vector3 maximum = (expanded.End - s.Origin) / s.Spacing;
+            int x0 = Math.Max(0, Mathf.CeilToInt(minimum.X)), x1 = Math.Min(s.Counts.X - 1, Mathf.FloorToInt(maximum.X));
+            int y0 = Math.Max(0, Mathf.CeilToInt(minimum.Y)), y1 = Math.Min(s.Counts.Y - 1, Mathf.FloorToInt(maximum.Y));
+            int z0 = Math.Max(0, Mathf.CeilToInt(minimum.Z)), z1 = Math.Min(s.Counts.Z - 1, Mathf.FloorToInt(maximum.Z));
+            for (int y = y0; y <= y1; y++)
+                for (int z = z0; z <= z1; z++)
+                    for (int x = x0; x <= x1; x++)
+                    {
+                        int index = x + s.Counts.X * (z + s.Counts.Z * y);
+                        if (flags[index] == 0) { flags[index] = 1; affected++; }
+                    }
+            if (affected == s.Total) break;
+        }
+        Status("local_invalidated_probes", affected);
+        if (affected == 0) return true;
+        Status("local_invalidations", ++_localInvalidations);
+        Buffer("invalidations", DdgiBytes.Of(flags));
+        return Dispatch("invalidate", new() { Image(0, "epochs"), Storage(1, "invalidations") },
+            Constants(s, s.Total), new((s.Total + 63) / 64, 1, 1));
     }
 
     private void PrepareRender()
@@ -309,8 +404,11 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         {
             if (_released) return;
             if (_pending != null) { _packet = _pending; _pending = null; }
-            if (_packet == null || !_packet.Settings.Enabled || !Initialize()) return;
-            SetupAtlas(_packet.Settings); UpdateScene(_packet);
+            if (!_captureEnabled || _packet == null || !Initialize()) return;
+            _renderSettings = FitAtlas(_packet.Settings, (int)_rd.LimitGet(RenderingDevice.Limit.MaxTextureSize2D));
+            Status("atlas_adapted", _renderSettings.Counts != _packet.Settings.Counts);
+            Status("effective_counts", _renderSettings.Counts); Status("effective_spacing", _renderSettings.Spacing);
+            if (SetupAtlas(_renderSettings)) UpdateScene(_packet);
         }
     }
 
@@ -351,7 +449,7 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
 
     private void Publish(RenderSceneBuffersRD buffers)
     {
-        var s = _packet.Settings;
+        var s = _renderSettings;
         buffers.SetDdgi(_atlas["irradiance"], _atlas["distance"], _atlas["state"], s.Origin, s.Spacing, s.Counts, s.Energy, s.NormalBias, s.ViewBias);
     }
 
@@ -383,14 +481,21 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
         Storage(12, "emitters"), Storage(13, "emissive_samples")
     };
 
-    private bool NeedsLightingCatchUp(DdgiSettings settings)
+    private bool NeedsLightingCatchUp(DdgiSettings settings, out float radianceScale)
     {
         bool changed = false;
+        radianceScale = 1;
         if (_hasRenderedLighting)
         {
             // More than 0.05 stops per rendered update overwhelms a budgeted history round.
             if (settings.EnvironmentSky && float.IsFinite(_packet.SkyEnergy) && float.IsFinite(_renderedSkyEnergy))
-                changed = Mathf.Abs(Mathf.Log(Mathf.Max(_packet.SkyEnergy, 1e-6f) / Mathf.Max(_renderedSkyEnergy, 1e-6f)) / Mathf.Log(2)) > .05f;
+            {
+                float ratio = Mathf.Max(_packet.SkyEnergy, 1e-6f) / Mathf.Max(_renderedSkyEnergy, 1e-6f);
+                changed = Mathf.Abs(Mathf.Log(ratio) / Mathf.Log(2)) > .05f;
+                // Prevent stale bright daytime probes from being amplified by night
+                // exposure while the bounded relight round catches up.
+                if (changed && ratio < 1) radianceScale = ratio;
+            }
             if (!settings.EnvironmentSky)
                 changed |= (_renderedConstantSky - settings.Sky).Length() > .05f * Mathf.Max(1e-6f, Mathf.Max(_renderedConstantSky.Length(), settings.Sky.Length()));
             changed |= Discontinuous(_renderedLights, _packet.Lights);
@@ -411,17 +516,22 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
     {
         lock (_gate)
         {
-            if (type != (int)EffectCallbackTypeEnum.PreOpaque || _released || !_initialized || _packet == null || !_packet.Settings.Enabled || !_tlas.IsValid || _status["state"].AsString() == "failed") return;
+            if (type != (int)EffectCallbackTypeEnum.PreOpaque || _released || !_initialized || !_captureEnabled || _packet == null || !_tlas.IsValid || _status["state"].AsString() == "failed") return;
             // A managed buffer reference must not survive into GC after its viewport is freed.
             using var sceneBuffers = data.GetRenderSceneBuffers();
             if (sceneBuffers is not RenderSceneBuffersRD buffers) return;
             ulong frame = (ulong)Engine.GetFramesDrawn();
             if (_lastFrame == frame || FreezeUpdates) { Publish(buffers); return; }
             _lastFrame = frame; PrepareSky(buffers);
-            var s = _packet.Settings;
-            bool catchUp = NeedsLightingCatchUp(s);
+            var s = _renderSettings;
+            string tag = $"DDGI {GetInstanceId()} ";
+            _rd.CaptureTimestamp(tag + "begin");
+            if (NeedsLightingCatchUp(s, out float radianceScale)) _relightRemaining = s.Total;
+            if (radianceScale < 1 && !Dispatch("rescale", new() { Image(0, "irradiance") },
+                DdgiBytes.Of(new[] { radianceScale, 0f, 0f, 0f }), new((s.Counts.X * s.Counts.Z * 10 + 7) / 8, (s.Counts.Y * 10 + 7) / 8, 1))) return;
+            bool catchUp = _relightRemaining > 0;
             if (catchUp) s = s with { History = 0 };
-            int count = Math.Min(catchUp ? Math.Max(s.Budget, 256) : s.Budget, s.Total), size = count * s.Rays * 32;
+            int count = Math.Min(s.Budget, s.Total), size = count * s.Rays * 32;
             if (!_buffers.TryGetValue("rays", out var rays) || rays.Size != size) Buffer("rays", new byte[size]);
             const int visibilityRayCount = 256;
             int visibilitySize = count * visibilityRayCount * 32;
@@ -431,7 +541,6 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
             if (!_buffers.TryGetValue("emissive_samples", out var emissiveBuffer) || emissiveBuffer.Size != emissiveSize) Buffer("emissive_samples", new byte[emissiveSize]);
             Buffer("sampling_layout", DdgiBytes.Of(new[] { visibilityRayCount, emissiveSamples, 0, 0 }));
             byte[] constants = Constants(s, count);
-            string tag = $"DDGI {GetInstanceId()} ";
             if (_timestampFrame != _rd.GetCapturedTimestampsFrame())
             {
                 _timestampFrame = _rd.GetCapturedTimestampsFrame(); ulong begin = ulong.MaxValue;
@@ -447,10 +556,9 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
             Rid traceSet = GetUniformSet("trace", TraceUniforms()), visibilitySet = GetUniformSet("trace", TraceUniforms(true));
             Rid classifySet = GetUniformSet("classify", new() { Storage(0, "rays"), Image(1, "state"), Image(2, "epochs") });
             Rid integrateSet = GetUniformSet("integrate", new() { Storage(0, "rays"), Image(1, "irradiance"), Image(2, "distance"), Image(3, "state"), Image(4, "epochs"), Storage(5, "temporal"), Storage(6, "visibility_rays"), Storage(7, "emissive_samples"), Storage(8, "sampling_layout") });
-            _rd.CaptureTimestamp(tag + "begin");
             if (!DispatchBound("temporal", temporalSet, constants, Vector3I.One)) return;
-            int updated = catchUp ? s.Total : count;
-            // Reuse budget-sized scratch buffers; publish only after every stale probe is relit.
+            int updated = count;
+            // Catch-up resets history across a round without exceeding the frame budget.
             for (int remaining = updated; remaining > 0;)
             {
                 int batchCount = Math.Min(count, remaining);
@@ -465,11 +573,13 @@ public partial class DdgiEffect : CompositorEffect, ISerializationListener
                 _nextProbe = (_nextProbe + batchCount) % s.Total; remaining -= batchCount;
             }
             _rd.CaptureTimestamp(tag + "end");
+            _relightRemaining = Math.Max(0, _relightRemaining - updated);
             _rotation++; Publish(buffers);
-            Status("state", "running"); Status("updates", _rotation); Status("generation", _generation); Status("instances", _packet.Instances.Count);
+            Status("state", "running"); Status("native_receiver", true); Status("updates", _rotation); Status("generation", _generation); Status("instances", _packet.Instances.Count);
             Status("blas", _geometry.Count); Status("probes", s.Total); Status("rays_per_update", updated * s.Rays); Status("next_probe", _nextProbe); Status("ray_query", true);
             Status("lighting_epoch", _lightingEpoch); Status("visibility_epoch", _visibilityEpoch); Status("history_weight", s.History);
             Status("lighting_catch_up", catchUp); Status("updated_probes", updated);
+            Status("relight_remaining", _relightRemaining);
             Status("emissive_triangles", emissiveTriangles); Status("emissive_shadow_ray_budget", updated * emissiveSamples);
             using var warnings = new GDictionary(); foreach (var (key, value) in _packet.Warnings) warnings[key] = value; Status("warnings", warnings);
             using var protocols = new GDictionary(); foreach (var (key, value) in _packet.MaterialCounts) protocols[key] = value; Status("material_counts", protocols);

@@ -1,6 +1,6 @@
 # Godot 4.8 源码与构建
 
-main 使用官方仓库 https://github.com/godotengine/godot.git 加项目 DDGI 先决、原生接收与天空桥接补丁，源码与产物位于 D:\DCC\Godot_4.8，当前默认编辑器为 bin/ddgi_scene/godot.windows.editor.x86_64.mono.ddgi_scene.exe。
+main 使用官方仓库 https://github.com/godotengine/godot.git 加项目 DDGI 先决、原生接收与天空桥接补丁。源码构建默认目录为 D:\DCC\Godot_4.8；本机使用 C 盘的 DDGI 便携包，实际入口配置在 `.vscode/settings.json`，启动脚本会打印最终路径。
 
 源码基线为 4d10419cacd6d3009976e8f9fd3abd970fd58018，版本为 4.8-beta .NET。构建使用源码目录内独立的 .venv、SCons 4.10.0、zstandard 0.25.0、MSVC 和 .NET 10 SDK，目标为 Windows x64 编辑器，保留调试符号及 compile_commands.json。默认启用 Vulkan/OpenGL，关闭 D3D12、ANGLE 和 AccessKit。yu 的目标框架为 net10.0。
 
@@ -42,11 +42,12 @@ git -C D:/DCC/Godot_4.8 apply D:/Project/GitHub/yu/scripts/tools/engine/patches/
 
 DDGI 不依赖 NVIDIA 分支。构建与启动脚本默认 `-ProgramSuffix ddgi_scene -RuntimeDirectory bin/ddgi_scene`：原生链接产物仍由 SCons 生成在 bin，再复制到包含配套 GodotSharp 的独立运行目录，复用已有对象文件。明确需要无后缀、原 bin 目录构建时传 `-ProgramSuffix '' -RuntimeDirectory bin`。场景使用与支持范围见 [DDGI 指南](../rendering/ddgi-implementation.md)。
 
-原生接收新增了 RenderSceneBuffersRD API，首次构建必须包含托管生成，不能传 `-SkipManaged`。脚本将生成的 API 与编辑器 Tools / nupkgs 一并打包到 bin/ddgi_scene/GodotSharp。NuGet.Config 将 Godot 包绑定到该运行目录的 Tools/nupkgs，缓存位于 .godot/nuget-packages-ddgi-scene，避免相同版本号的旧 API 包被复用。yu.csproj 使用 Godot.NET.Sdk/4.8.0-beta；引擎 ABI 改变后需重新生成托管包并刷新项目的对应本地缓存。
+原生接收新增了 RenderSceneBuffersRD API，首次构建必须包含托管生成，不能传 `-SkipManaged`。脚本将生成的 API 与编辑器 Tools / nupkgs 一并打包到 bin/ddgi_scene/GodotSharp。启动脚本把所选运行目录的配套 nupkgs 按内容同步到 `.godot/godot-nupkgs`，NuGet.Config 使用此项目相对源；缓存仍在 `.godot/nuget-packages-ddgi-scene`。yu.csproj 使用 Godot.NET.Sdk/4.8.0-beta；引擎 ABI 改变后需重新生成托管包并刷新项目的对应本地缓存。
 
 ## 打开项目
 
 ```powershell
+.\scripts\tools\engine\launch_godot.ps1 -SetupOnly
 dotnet restore yu.csproj
 dotnet build yu.csproj --no-restore
 .\scripts\tools\engine\launch_godot.ps1
@@ -60,7 +61,9 @@ dotnet build yu.csproj --no-restore
 
 切换默认路径不能改变已经运行的进程。先保存并退出旧编辑器 / 游戏，再用上述入口重开；启动时会打印实际引擎路径。旧 `.mono.exe` 不含 Ray Query 修复，旧 `.mono.ddgi.exe` 不含原生接收 API，旧 `.mono.ddgi_native.exe` 不含天空 API，均不能替代当前默认版本。
 
-VS Code 的编辑器与运行/调试配置均指向上述 ddgi_scene 运行目录。维护时先编译 C#、导入资源，再运行 [DDGI 指南](../rendering/ddgi-implementation.md#验证)中的验证入口并检查实际 ForestTownLevel。性能和硬件覆盖边界见同一指南。
+路径解析顺序为显式 `-EngineDirectory` / `-RuntimeDirectory`、`YU_GODOT_RUNTIME` 环境变量、默认源码产物；默认产物不存在时，读取 `.vscode/settings.json` 的 `godotTools.editorPath.godot4`。VS Code 的启动配置复用该设置，构建任务先执行 `-SetupOnly`。移动便携包时更新此设置；清理 `.godot` 后先执行 SetupOnly，再 restore。`-SetupOnly` 不启动编辑器。
+
+维护时先编译 C#、导入资源，再运行 [DDGI 指南](../rendering/ddgi-implementation.md)中的验证入口并检查实际 ForestTownLevel。性能和硬件覆盖边界见同一指南。
 
 保存场景的 C# 句柄释放和后台文档扫描异常，见 [2026-11-08 排查记录](godot-save-crash-2026-11-08.md)。
 

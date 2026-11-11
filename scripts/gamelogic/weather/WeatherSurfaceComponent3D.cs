@@ -24,6 +24,7 @@ public partial class WeatherSurfaceComponent3D : Component3D
     private readonly Dictionary<Material, Material> _copies = new();
     private readonly List<ShaderMaterial> _materials = new();
     private readonly Dictionary<string, object> _appliedValues = new();
+    private bool _giMaterialChanged;
     private float _standardWetness = float.NaN;
     private bool _standardSnowLayer;
     private (float Darkening, float Roughness, float Specular) _standardProfile;
@@ -125,6 +126,8 @@ public partial class WeatherSurfaceComponent3D : Component3D
         if (_appliedValues.TryGetValue(name, out object previous) && previous is T typed
             && EqualityComparer<T>.Default.Equals(typed, value)) return;
         _appliedValues[name] = value;
+        if (name is "weather_wetness" or "weather_puddles" or "weather_puddle_coverage" or "weather_puddle_scale"
+            or "weather_darkening" or "weather_snow" or "weather_snow_color") _giMaterialChanged = true;
         using var uniform = new StringName(name);
         using var parameter = Variant.From(value);
         foreach (var material in _materials) material.SetShaderParameter(uniform, parameter);
@@ -200,6 +203,11 @@ public partial class WeatherSurfaceComponent3D : Component3D
         ApplyParameter("weather_snow_roughness", Mathf.Clamp(profile.SnowRoughness, .4f, 1));
         // Only ripple animation consumes time; a dry surface needs no per-frame writes.
         if (_weather.RainAmount > 0 && profile.RainRipplesEnabled) ApplyParameter("weather_time", seconds);
+        if (_giMaterialChanged)
+        {
+            foreach (var material in _materials) material.EmitChanged();
+            _giMaterialChanged = false;
+        }
         bool snowLayer = profile.SnowCoverEnabled && Snow > .001f;
         var standardProfile = (profile.WetDarkening, profile.WetRoughness, profile.WetSpecular);
         if (_standardWetness == wetness && _standardSnowLayer == snowLayer && _standardProfile == standardProfile) return;

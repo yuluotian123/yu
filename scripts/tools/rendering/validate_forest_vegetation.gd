@@ -25,7 +25,8 @@ func run() -> void:
 	scene.add_child(camera)
 	camera.current = true
 	camera.position = Vector3(1.56,4.15,32.12)
-	var actor_position: Vector3 = authored.get_node("CameraFramingTarget").position
+	var entry: Node3D = authored.get_node("EntryDefault")
+	var actor_position: Vector3 = entry.transform * entry.get_node("Arrival").position
 	authored.free()
 	var player: Node3D = load("res://assets/scenes/player.tscn").instantiate()
 	var visual: Node3D = player.get_node("VisualRoot")
@@ -152,10 +153,10 @@ func run() -> void:
 	scene.add_child(box)
 	await frames(8)
 	assert(active_gi.call("GetStatus").get("instances",0) == baseline_instances+1)
-	var epoch := int(active_gi.call("GetStatus").get("visibility_epoch",0))
+	var epoch := int(active_gi.call("GetStatus").get("local_invalidations",0))
 	box.position.x += 1.0
 	await frames(8)
-	assert(int(active_gi.call("GetStatus").get("visibility_epoch",0)) > epoch)
+	assert(int(active_gi.call("GetStatus").get("local_invalidations",0)) > epoch)
 	box.free()
 	await frames(8)
 	assert(active_gi.call("GetStatus").get("instances",0) == baseline_instances)

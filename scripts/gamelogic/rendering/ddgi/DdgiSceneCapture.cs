@@ -22,8 +22,8 @@ internal readonly record struct DdgiSettings(bool Enabled, bool EnvironmentSky,
         d.ContainsKey("stable_directions") && d["stable_directions"].AsBool());
 }
 
-internal sealed record DdgiGeometry(string Key, byte[] Positions, int VertexCount, byte[] Indices, int IndexCount, byte[] Triangles);
-internal readonly record struct DdgiInstance(string Key, Transform3D Transform, int Material);
+internal sealed record DdgiGeometry(string Key, byte[] Positions, int VertexCount, byte[] Indices, int IndexCount, byte[] Triangles, Aabb Bounds);
+internal readonly record struct DdgiInstance(ulong NodeId, int Surface, string Key, Transform3D Transform, int Material, Aabb Bounds);
 internal sealed class DdgiPacket
 {
     public DdgiSettings Settings;
@@ -35,6 +35,16 @@ internal sealed class DdgiPacket
     public readonly List<byte[]> TextureData = new(), DataTextures = new();
     public readonly Dictionary<string, string> Warnings = new();
     public readonly Dictionary<string, int> MaterialCounts = new();
+    public bool ReusedScene;
+
+    public DdgiPacket() { }
+    public DdgiPacket(DdgiPacket source, DdgiSettings settings, byte[] lights, List<DdgiInstance> instances = null)
+    {
+        Settings = settings; Lights = lights; Geometry = source.Geometry; Instances = instances ?? source.Instances;
+        Materials = source.Materials; Emitters = source.Emitters; TextureKeys = source.TextureKeys; DataKeys = source.DataKeys;
+        TextureData = source.TextureData; DataTextures = source.DataTextures; Warnings = source.Warnings; MaterialCounts = source.MaterialCounts;
+        ReusedScene = true;
+    }
 }
 
 internal static class DdgiBytes
@@ -61,6 +71,17 @@ internal sealed class DdgiSceneCapture
     private readonly Dictionary<string, DdgiGeometry> _meshes = new();
     private readonly Dictionary<string, byte[]> _textures = new();
     private readonly HashSet<ulong> _usedResources = new();
+    private sealed record MaterialCache(byte[] Bytes, DdgiPacket Textures, Dictionary<ulong, int> Dependencies, int Frame);
+    private readonly Dictionary<ulong, MaterialCache> _materials = new();
+    private Dictionary<ulong, int> _materialDependencies;
+    private int _frame;
+    private bool _physical;
+    private sealed record MeshState(MeshInstance3D Node, Mesh Mesh, Skin Skin, Transform3D Transform, bool Visible, bool Contribute, bool Traced, Material[] Materials);
+    private readonly List<MeshState> _meshStates = new();
+    private readonly List<DirectionalLight3D> _lights = new();
+    private DdgiPacket _lastScene;
+    private bool _resourcesDirty = true;
+    private int _nodeRevision, _capturedNodeRevision;
     private readonly List<Node3D> _captureNodes = new();
     private Node3D _captureRoot;
     private SceneTree _tree;
@@ -80,6 +101,7 @@ internal sealed class DdgiSceneCapture
         }
         if (!_nodesDirty) return;
         _captureNodes.Clear();
+        _lights.Clear();
         var pending = new Stack<Node>(); pending.Push(root);
         while (pending.TryPop(out Node node))
         {
@@ -89,8 +111,10 @@ internal sealed class DdgiSceneCapture
             foreach (Node child in children) pending.Push(child);
             if (node is MeshInstance3D or DirectionalLight3D or MultiMeshInstance3D)
                 _captureNodes.Add((Node3D)node);
+            if (node is DirectionalLight3D light) _lights.Add(light);
         }
         _nodesDirty = false;
+        _nodeRevision++;
     }
 
     private static byte[] CreateWhiteTexture()
@@ -107,10 +131,11 @@ internal sealed class DdgiSceneCapture
         if (!_versions.ContainsKey(id))
         {
             _versions[id] = 0;
-            Action changed = () => _versions[id] = _versions.GetValueOrDefault(id) + 1;
+            Action changed = () => { _versions[id] = _versions.GetValueOrDefault(id) + 1; _resourcesDirty = true; };
             _watched[id] = new(resource, changed);
             resource.Changed += changed;
         }
+        if (_materialDependencies != null) _materialDependencies[id] = _versions[id];
         return $"{id}:{_versions[id]}";
     }
 
@@ -147,7 +172,7 @@ internal sealed class DdgiSceneCapture
             for (int v = 0; v < 3; v++) DdgiBytes.Vector(writer, indices[t + v] < normals.Length ? normals[indices[t + v]] : face);
             for (int v = 0; v < 3; v++) DdgiBytes.Color(writer, indices[t + v] < colors.Length ? colors[indices[t + v]] : Colors.White);
         }
-        var record = new DdgiGeometry(key, DdgiBytes.Of(vertices), vertices.Length, DdgiBytes.Of(indices), indices.Length, stream.ToArray());
+        var record = new DdgiGeometry(key, DdgiBytes.Of(vertices), vertices.Length, DdgiBytes.Of(indices), indices.Length, stream.ToArray(), mesh.GetAabb());
         _meshes[key] = record;
         return record;
     }
@@ -287,21 +312,162 @@ internal sealed class DdgiSceneCapture
             foliage.X, foliage.Y, foliage.Z, foliage.W, lower.X, lower.Y, lower.Z, lower.W, upper.X, upper.Y, upper.Z, upper.W });
     }
 
+    private MaterialCache ReadMaterial(Material source, bool physical)
+    {
+        ulong id = source.GetInstanceId();
+        bool refresh = !_materials.TryGetValue(id, out var cached);
+        if (!refresh)
+        {
+            // Shader uniforms do not emit Changed. Stagger a bounded fallback poll;
+            // producers that emit Changed (including weather) refresh immediately.
+            refresh = _frame >= cached.Frame;
+            foreach (var dependency in cached.Dependencies)
+                if (_versions.GetValueOrDefault(dependency.Key, -1) != dependency.Value) { refresh = true; break; }
+        }
+        if (refresh)
+        {
+            var textures = new DdgiPacket();
+            textures.TextureData.Add(WhiteTexture); textures.DataTextures.Add(WhiteTexture);
+            _materialDependencies = new();
+            Version(source);
+            if (source is ShaderMaterial shader && shader.Shader != null) Version(shader.Shader);
+            byte[] bytes = MaterialData(source, textures, physical);
+            cached = new(bytes, textures, _materialDependencies, _frame + (cached == null ? 1 + (int)(id % 15) : 15));
+            _materialDependencies = null;
+            _materials[id] = cached;
+        }
+        return cached;
+    }
+
+    private byte[] CachedMaterial(Material source, DdgiPacket packet, bool physical)
+    {
+        var cached = ReadMaterial(source, physical);
+        foreach (ulong dependency in cached.Dependencies.Keys) _usedResources.Add(dependency);
+        foreach (var warning in cached.Textures.Warnings) packet.Warnings[warning.Key] = warning.Value;
+        if (cached.Bytes == null) return null;
+        byte[] mapped = (byte[])cached.Bytes.Clone();
+        var values = MemoryMarshal.Cast<byte, float>(mapped.AsSpan());
+        values[13] = MapTexture(cached.Textures, (int)values[13], packet, false);
+        if (values[23] >= 0) values[23] = MapTexture(cached.Textures, (int)values[23], packet, true);
+        if ((int)values[22] == 1 && values[38] > .5f)
+            values[36] = MapTexture(cached.Textures, (int)values[36], packet, true);
+        if (values[13] < 0 || (MemoryMarshal.Cast<byte, float>(cached.Bytes)[23] >= 0 && values[23] < 0)
+            || ((int)values[22] == 1 && values[38] > .5f && values[36] < 0)) return null;
+        return mapped;
+    }
+
+    private static int MapTexture(DdgiPacket source, int layer, DdgiPacket target, bool linear)
+    {
+        var sourceKeys = linear ? source.DataKeys : source.TextureKeys;
+        var targetKeys = linear ? target.DataKeys : target.TextureKeys;
+        var targetData = linear ? target.DataTextures : target.TextureData;
+        string key = sourceKeys[layer];
+        int index = targetKeys.IndexOf(key);
+        if (index >= 0) return index;
+        if (targetKeys.Count >= MaxTextures)
+        { target.Warnings["texture_limit"] = "Too many GI textures; affected surfaces are excluded."; return -1; }
+        targetKeys.Add(key); targetData.Add((linear ? source.DataTextures : source.TextureData)[layer]);
+        return targetKeys.Count - 1;
+    }
+
+    private bool SceneUnchanged(bool physical, out Dictionary<ulong, Transform3D> moved)
+    {
+        moved = null;
+        if (_lastScene == null || _resourcesDirty || _capturedNodeRevision != _nodeRevision || _physical != physical) return false;
+        foreach (var state in _meshStates)
+        {
+            var node = state.Node;
+            if (!GodotObject.IsInstanceValid(node) || node.Mesh != state.Mesh || node.Skin != state.Skin
+                || node.IsVisibleInTree() != state.Visible || node.GetMeta("ddgi_contribute", true).AsBool() != state.Contribute) return false;
+            if (!state.Visible || !state.Contribute || state.Mesh == null) continue;
+            if (state.Traced)
+            {
+                Transform3D transform = node.GlobalTransform;
+                if (transform != state.Transform)
+                {
+                    // Moving emitters also require rebuilding their world-space triangles.
+                    if (BitConverter.ToInt32(_lastScene.Emitters, 0) > 0) return false;
+                    moved ??= new(); moved[node.GetInstanceId()] = transform;
+                }
+            }
+            // Deformed meshes are excluded, but changing blend weights can make them eligible again.
+            if (state.Mesh is ArrayMesh mesh && mesh.GetBlendShapeCount() > 0) return false;
+            for (int surface = 0; surface < state.Materials.Length; surface++)
+                if (node.GetActiveMaterial(surface) != state.Materials[surface]) return false;
+        }
+        foreach (ulong id in _materials.Keys.ToArray())
+        {
+            var before = _materials[id];
+            if (_frame < before.Frame) continue;
+            var after = ReadMaterial((Material)_watched[id].Resource, physical);
+            if (!(before.Bytes ?? System.Array.Empty<byte>()).AsSpan().SequenceEqual(after.Bytes ?? System.Array.Empty<byte>())
+                || !before.Textures.TextureKeys.SequenceEqual(after.Textures.TextureKeys)
+                || !before.Textures.DataKeys.SequenceEqual(after.Textures.DataKeys)) return false;
+        }
+        return true;
+    }
+
+    private byte[] CaptureLights(bool physical)
+    {
+        using var stream = new MemoryStream(); using var writer = new BinaryWriter(stream);
+        foreach (var light in _lights)
+        {
+            if (!light.IsVisibleInTree() || light.LightIndirectEnergy <= 0) continue;
+            Vector3 direction = light.GlobalBasis.Z.Normalized(); Color color = light.LightColor.SrgbToLinear();
+            float energy = light.LightEnergy * light.LightIndirectEnergy * (light.LightNegative ? -1 : 1) * (physical ? light.LightIntensityLux : Mathf.Pi);
+            DdgiBytes.Vector(writer, direction); DdgiBytes.Vector(writer, new Vector3(color.R, color.G, color.B) * energy);
+        }
+        return stream.ToArray();
+    }
+
+    private void RememberScene(DdgiPacket packet)
+    {
+        _meshStates.Clear();
+        var traced = packet.Instances.Select(instance => instance.NodeId).ToHashSet();
+        foreach (var node in _captureNodes)
+        {
+            if (node is not MeshInstance3D mesh || !GodotObject.IsInstanceValid(mesh)) continue;
+            Mesh source = mesh.Mesh;
+            var materials = new Material[source?.GetSurfaceCount() ?? 0];
+            for (int surface = 0; surface < materials.Length; surface++) materials[surface] = mesh.GetActiveMaterial(surface);
+            _meshStates.Add(new(mesh, source, mesh.Skin, mesh.GlobalTransform, mesh.IsVisibleInTree(), mesh.GetMeta("ddgi_contribute", true).AsBool(), traced.Contains(mesh.GetInstanceId()), materials));
+        }
+        _capturedNodeRevision = _nodeRevision; _resourcesDirty = false; _lastScene = packet;
+    }
+
     public DdgiPacket Capture(Node3D root, DdgiSettings settings)
     {
+        _frame++;
+        RefreshNodes(root);
+        bool physical = ProjectSettings.GetSetting("rendering/lights_and_shadows/use_physical_light_units", false).AsBool();
+        if (SceneUnchanged(physical, out var moved))
+        {
+            List<DdgiInstance> instances = null;
+            if (moved != null)
+            {
+                instances = new(_lastScene.Instances.Count);
+                foreach (var instance in _lastScene.Instances)
+                    instances.Add(moved.TryGetValue(instance.NodeId, out var transform)
+                        ? instance with { Transform = transform, Bounds = transform * _lastScene.Geometry[instance.Key].Bounds } : instance);
+                for (int i = 0; i < _meshStates.Count; i++)
+                    if (moved.TryGetValue(_meshStates[i].Node.GetInstanceId(), out var transform))
+                        _meshStates[i] = _meshStates[i] with { Transform = transform };
+            }
+            return _lastScene = new DdgiPacket(_lastScene, settings, CaptureLights(physical), instances);
+        }
         var packet = new DdgiPacket { Settings = settings };
         _usedResources.Clear();
         packet.TextureData.Add(WhiteTexture); packet.DataTextures.Add(WhiteTexture);
-        // Cache only within this snapshot: shared surfaces reuse their reads, while
-        // weather/uniform changes are still captured on the very next frame.
+        // Map each shared material once per packet; immutable material snapshots
+        // survive frames until a dependency changes or its fallback poll is due.
         var materialCache = new Dictionary<Material, byte[]>();
+        var geometryCache = new Dictionary<(Mesh, int), DdgiGeometry>();
         byte[] defaultMaterial = null;
         using var materials = new MemoryStream(); using var lights = new MemoryStream(); using var lightWriter = new BinaryWriter(lights);
         using var emitters = new MemoryStream(); using var emitterWriter = new BinaryWriter(emitters);
         emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0); emitterWriter.Write(0);
         int emitterCount = 0;
-        RefreshNodes(root);
-        bool physical = ProjectSettings.GetSetting("rendering/lights_and_shadows/use_physical_light_units", false).AsBool();
+        if (_physical != physical) { _materials.Clear(); _physical = physical; }
         foreach (Node3D node in _captureNodes)
         {
             if (!GodotObject.IsInstanceValid(node)) continue;
@@ -315,29 +481,32 @@ internal sealed class DdgiSceneCapture
             }
             if (node is not MeshInstance3D instance || !instance.IsVisibleInTree()
                 || !instance.GetMeta("ddgi_contribute", true).AsBool() || instance.Mesh == null) continue;
+            Mesh sourceMesh = instance.Mesh;
+            Transform3D transform = instance.GlobalTransform;
             bool deformed = instance.Skin != null || (!instance.Skeleton.IsEmpty && instance.GetNodeOrNull(instance.Skeleton) is Skeleton3D);
-            if (instance.Mesh is ArrayMesh mesh)
+            if (sourceMesh is ArrayMesh mesh)
                 for (int shape = 0; shape < mesh.GetBlendShapeCount(); shape++) deformed |= Mathf.Abs(instance.GetBlendShapeValue(shape)) > .0001;
             if (deformed) { packet.Warnings["deformed_mesh"] = "Skinned or blend-shaped meshes need a static GI proxy."; continue; }
-            if (Mathf.Abs(instance.GlobalBasis.Determinant()) < 1e-8) continue;
-            for (int surface = 0; surface < instance.Mesh.GetSurfaceCount(); surface++)
+            if (Mathf.Abs(transform.Basis.Determinant()) < 1e-8) continue;
+            int surfaceCount = sourceMesh.GetSurfaceCount();
+            for (int surface = 0; surface < surfaceCount; surface++)
             {
                 Material material = instance.GetActiveMaterial(surface);
                 byte[] bytes;
                 if (material == null)
                     bytes = defaultMaterial ??= MaterialData(null, packet, physical);
                 else if (!materialCache.TryGetValue(material, out bytes))
-                    materialCache[material] = bytes = MaterialData(material, packet, physical);
+                    materialCache[material] = bytes = CachedMaterial(material, packet, physical);
                 if (bytes == null) continue;
                 var parameters = MemoryMarshal.Cast<byte, float>(bytes);
                 string protocol = (int)parameters[22] switch { 1 => "town", 2 => "plant", 3 => "leaf", _ => "standard" };
                 packet.MaterialCounts[protocol] = packet.MaterialCounts.GetValueOrDefault(protocol) + 1;
-                var geometry = Geometry(instance.Mesh, surface);
+                if (!geometryCache.TryGetValue((sourceMesh, surface), out var geometry))
+                    geometryCache[(sourceMesh, surface)] = geometry = Geometry(sourceMesh, surface);
                 if (geometry == null) continue;
                 packet.Geometry[geometry.Key] = geometry;
                 int materialIndex = (int)materials.Length / MaterialStride;
-                Transform3D transform = instance.GlobalTransform;
-                packet.Instances.Add(new(geometry.Key, transform, materialIndex));
+                packet.Instances.Add(new(instance.GetInstanceId(), surface, geometry.Key, transform, materialIndex, transform * geometry.Bounds));
                 materials.Write(bytes);
                 if (parameters[12] >= 0 && Math.Max(parameters[4], Math.Max(parameters[5], parameters[6])) > 0)
                     packet.Warnings["alpha_emission"] = "Alpha-tested emission uses ray sampling; deterministic area integration currently supports opaque emitters.";
@@ -368,6 +537,8 @@ internal sealed class DdgiSceneCapture
             if (GodotObject.IsInstanceValid(watch.Resource)) watch.Resource.Changed -= watch.Changed;
             _watched.Remove(id); _versions.Remove(id);
         }
+        foreach (ulong id in _materials.Keys.Where(id => !_usedResources.Contains(id)).ToArray()) _materials.Remove(id);
+        RememberScene(packet);
         return packet;
     }
 
@@ -377,6 +548,7 @@ internal sealed class DdgiSceneCapture
         _tree = null; _captureRoot = null; _captureNodes.Clear(); _nodesDirty = true;
         foreach (var watch in _watched.Values)
             if (GodotObject.IsInstanceValid(watch.Resource)) watch.Resource.Changed -= watch.Changed;
-        _watched.Clear(); _versions.Clear(); _meshes.Clear(); _textures.Clear();
+        _watched.Clear(); _versions.Clear(); _meshes.Clear(); _textures.Clear(); _materials.Clear();
+        _meshStates.Clear(); _lights.Clear(); _lastScene = null; _resourcesDirty = true;
     }
 }

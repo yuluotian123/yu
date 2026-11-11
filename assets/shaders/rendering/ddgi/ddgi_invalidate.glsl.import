@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://d4ihfqshmrd2"
+path="res://.godot/imported/ddgi_invalidate.glsl-6edc1de860a7854387051ac8ee5773cd.res"
+
+[deps]
+
+source_file="res://assets/shaders/rendering/ddgi/ddgi_invalidate.glsl"
+dest_files=["res://.godot/imported/ddgi_invalidate.glsl-6edc1de860a7854387051ac8ee5773cd.res"]
+
+[params]
+

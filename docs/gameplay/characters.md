@@ -99,7 +99,7 @@ Released(player_jump)
 
 Pressed(player_stance_high/mid/low) -> WeaponEquipment.RequestStance()
 
-Register Ability -> 武器配置自动展开三套普攻（一个注册节点）；攻击输入、动画和粒子位于各自技能图
+Register Ability -> 武器配置自动展开三套普攻（一个注册节点）；攻击输入和完整动画位于各自技能图
 ```
 
 CharacterGraph 的 Action 菜单隐藏组件 Call/Get/Set 包装和 Use Ability。组件操作使用直接成员节点；技能激活使用专用节点，确保打断窗口与关系规则生效。其他 Flow 与行为树仍可使用这些通用动作。旧的 Character 移动节点、专用 Sequence/WaitEvent 类型和加载时兼容迁移代码已删除。
@@ -323,12 +323,12 @@ Ability Input(player_attack)，条件为当前装备与架势，排除切中段�
   -> Grant / Cooldown / Priority 检查
   -> 注册移动与跳跃锁
   -> Attack Ability Timeline
-       |-- 完整攻击与收势 Animation / Weapon Trail
+       |-- 完整攻击与收势 Animation
        |-- Return
        +-- Complete 或 Cancel 清理
 ```
 
-普攻在技能图内处理输入、完整单段动画及粒子时段；角色图只注册对应武器技能。输入窗口与续招条件仍可用于以后配置连招。`TryPrimaryAttack` 保留为 AI、工具或其他调用者的通用入口。当前玩家只装备大剑，没有武器切换输入。
+普攻在技能图内处理输入、完整单段动画；角色图只注册对应武器技能。输入窗口与续招条件仍可用于以后配置连招。`TryPrimaryAttack` 保留为 AI、工具或其他调用者的通用入口。当前玩家只装备大剑，没有武器切换输入。
 
 攻击 v12 重做中段的肩胯配合与直接回架，减少逆向拧腰；中段 38 帧，上、下段保留 v11 全部像素，整套共 101 帧。时长仍为 1.060 / 0.997 / 0.911 秒，包含 377–426 毫秒蓄势与 406–484 毫秒连续收刀。角色与剑使用同一姿势帧和动画时钟，Timeline 在完整回架后释放动作锁；上段压身重劈，中段以腰肩带动横切，下段保持向前平刺。
 

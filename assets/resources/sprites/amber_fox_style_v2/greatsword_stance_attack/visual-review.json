@@ -1,7 +1,7 @@
 {
   "date": "2026-11-12",
-  "revision": 12,
-  "status": "reviewed_and_integrated",
+  "revision": 13,
+  "status": "reviewed_and_integrated_effects_removed",
   "pose_frames": 101,
   "single_attack_seconds": {
     "high": 1.06,
@@ -50,7 +50,7 @@
     "Middle preparation, cut and recovery retain a consistent shallow three-quarter body view, aligned shoulder/pelvis facing and stable support-foot order. Removed the previous large waist coil and counter-turn.",
     "Initial full take contributes only stable preparation. Snapped/glowing release and reverse waist sweep are rejected. The first return take contributes only the raised guide and late guard settling; the below-leg loop is excluded.",
     "The direct front-point lift uses explicitly reversed samples of a controlled lowering reference, then joins the matching raised guide before guard settling. Every source index is recorded; no video-frame body repainting or per-frame recentering.",
-    "Both rendered facings inspected at windup frame 35, release/contact 45 and recovery 63. Runtime traces verify two complete single attacks per stance and one finish accent each."
+    "Both rendered facings recaptured without weapon FX. Runtime traces verify two complete single attacks per stance; art pixels and attack timing remain v12."
   ],
   "pixel_repairs": {
     "high": {
@@ -73,11 +73,10 @@
   "validation": {
     "build": {
       "errors": 0,
-      "warnings": 0,
-      "incremental": true,
-      "note": "No C# gameplay changes; existing full-build warnings are not claimed fixed."
+      "warnings": 8,
+      "note": "Existing editor deprecated API and unassigned UI fields; no new build errors."
     },
-    "gameplay": "Full STANCE_CHECK passed, including physical left clicks, stance selection, single recovery, particles, generic combo framework, movement, persistence and instance isolation.",
+    "gameplay": "STANCE_CHECK PASS: physical left clicks, spam/hold, complete recovery, facing lock and cancellation, no weapon effect nodes, generic combo framework, stance effects, movement, persistence and instance isolation.",
     "godot_art": {
       "checked_frames": 101,
       "durations": {
@@ -115,19 +114,13 @@
       "runtime_ticks": 2968,
       "strikes": {
         "high": {
-          "forward": true,
-          "seconds": 0.0960000000000001,
-          "tip_y_span": 264.0
+          "seconds": 0.0960000000000001
         },
         "low": {
-          "forward": true,
-          "seconds": 0.0800000000000001,
-          "tip_y_span": 7.0
+          "seconds": 0.0800000000000001
         },
         "mid": {
-          "forward": true,
-          "seconds": 0.0960000000000001,
-          "tip_y_span": 5.0
+          "seconds": 0.0960000000000001
         }
       },
       "visible_rgb_and_alpha_exact": true
@@ -153,7 +146,238 @@
       }
     },
     "media": "media-validation.json",
-    "runtime": "runtime-preview.json",
+    "runtime": {
+      "revision": 13,
+      "date": "2026-11-12",
+      "source_fps": 60,
+      "render_size": [
+        1536,
+        864
+      ],
+      "camera_size": 4.2,
+      "preview": "greatsword-stance-attacks-runtime-v13.gif",
+      "preview_frames": 108,
+      "preview_seconds": 3.6,
+      "preview_crop": {
+        "labels": [
+          0,
+          20,
+          1536,
+          60
+        ],
+        "action": [
+          0,
+          280,
+          1536,
+          430
+        ]
+      },
+      "inspected_capture_frames": {
+        "windup": 35,
+        "release_contact": 45,
+        "recovery": 63
+      },
+      "checks": {
+        "right": {
+          "high": {
+            "segments": [
+              {
+                "animation": "idle_high",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_high",
+                "start": 15,
+                "end": 77
+              },
+              {
+                "animation": "idle_high",
+                "start": 78,
+                "end": 108
+              },
+              {
+                "animation": "attack_high",
+                "start": 109,
+                "end": 171
+              },
+              {
+                "animation": "idle_high",
+                "start": 172,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": 1,
+            "weapon_attack_effects": false
+          },
+          "mid": {
+            "segments": [
+              {
+                "animation": "idle_mid",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_mid",
+                "start": 15,
+                "end": 73
+              },
+              {
+                "animation": "idle_mid",
+                "start": 74,
+                "end": 108
+              },
+              {
+                "animation": "attack_mid",
+                "start": 109,
+                "end": 167
+              },
+              {
+                "animation": "idle_mid",
+                "start": 168,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": 1,
+            "weapon_attack_effects": false
+          },
+          "low": {
+            "segments": [
+              {
+                "animation": "idle_low",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_low",
+                "start": 15,
+                "end": 68
+              },
+              {
+                "animation": "idle_low",
+                "start": 69,
+                "end": 108
+              },
+              {
+                "animation": "attack_low",
+                "start": 109,
+                "end": 162
+              },
+              {
+                "animation": "idle_low",
+                "start": 163,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": 1,
+            "weapon_attack_effects": false
+          }
+        },
+        "left": {
+          "high": {
+            "segments": [
+              {
+                "animation": "idle_high",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_high",
+                "start": 15,
+                "end": 77
+              },
+              {
+                "animation": "idle_high",
+                "start": 78,
+                "end": 108
+              },
+              {
+                "animation": "attack_high",
+                "start": 109,
+                "end": 171
+              },
+              {
+                "animation": "idle_high",
+                "start": 172,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": -1,
+            "weapon_attack_effects": false
+          },
+          "mid": {
+            "segments": [
+              {
+                "animation": "idle_mid",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_mid",
+                "start": 15,
+                "end": 73
+              },
+              {
+                "animation": "idle_mid",
+                "start": 74,
+                "end": 108
+              },
+              {
+                "animation": "attack_mid",
+                "start": 109,
+                "end": 167
+              },
+              {
+                "animation": "idle_mid",
+                "start": 168,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": -1,
+            "weapon_attack_effects": false
+          },
+          "low": {
+            "segments": [
+              {
+                "animation": "idle_low",
+                "start": 0,
+                "end": 14
+              },
+              {
+                "animation": "attack_low",
+                "start": 15,
+                "end": 68
+              },
+              {
+                "animation": "idle_low",
+                "start": 69,
+                "end": 108
+              },
+              {
+                "animation": "attack_low",
+                "start": 109,
+                "end": 162
+              },
+              {
+                "animation": "idle_low",
+                "start": 163,
+                "end": 202
+              }
+            ],
+            "attack_runs": 2,
+            "facing": -1,
+            "weapon_attack_effects": false
+          }
+        }
+      },
+      "frames_per_facing": 203,
+      "weapon_attack_effects": false
+    },
     "unchanged_high_low_png_files": 63,
     "references": {
       "weapon_references_resolved": true,
@@ -178,8 +402,9 @@
     "Headless tools report system certificate, editor help-cache/RichTextLabel and user MCP registry diagnostics; no missing production resources or parse failures. Rendered shutdown reports rendering RID leak diagnostics. All affected checks and both captures exit normally."
   ],
   "cleanup": {
-    "files": 33,
-    "bytes": 86069732,
-    "reason": "Superseded middle v10 source takes, workflow/prompt files and keypose inputs; v11 previews; nine surplus middle frame/review outputs. Current source provenance and generic combo code retained."
-  }
+    "files": 10,
+    "reason": "Removed attack-trail Action and UID, runtime player and UID, trail Resource class and UID, three trajectory resources and weapon attack particle scene; packaging generation and current FX metadata removed."
+  },
+  "art_revision": 12,
+  "weapon_attack_effects": false
 }

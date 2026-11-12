@@ -1885,7 +1885,7 @@
     "revision": 12,
     "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
   },
-  "preview": "greatsword-stance-attacks-v12.gif",
+  "preview": "greatsword-stance-attacks-v13.gif",
   "reference_design": {
     "character": "Eula official movement rhythm as a balance and step reference, adapted to this same young fox swordswoman with continuous two-handed grip.",
     "high": "Monster Hunter greatsword weight: rear-hip loading, torso-led overhead cut, front-knee catch and deliberate lift to guard.",
@@ -1927,7 +1927,9 @@
     "revision": 11,
     "source_revision": 10
   },
-  "revision": 12,
+  "revision": 13,
   "schema": 1,
-  "timing": "Source-part index lists define playback order, including any explicitly reversed recovery segment. Authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json."
+  "timing": "Source-part index lists define playback order, including any explicitly reversed recovery segment. Authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json.",
+  "art_revision": 12,
+  "weapon_attack_effects": "Removed: animation-only attacks; stance-switch effects remain separate."
 }

@@ -8,22 +8,9 @@ namespace GameLogic
     {
         private readonly GameObject3D _owner;
         private readonly Dictionary<string, ParticleScene> _scenes = new(StringComparer.Ordinal);
-        public WeaponTrailPlayer3D Trail { get; private set; }
 
         public AbilityEffectPlayer3D(GameObject3D owner) => _owner = owner;
 
-        public bool PlayTrail(WeaponAttackTrail trail, PackedScene scene, string ownerKey)
-        {
-            if (scene == null || trail?.IsValid != true) return false;
-            if (Trail == null || Trail.ScenePath != scene.ResourcePath)
-            {
-                Trail?.Dispose();
-                Trail = new WeaponTrailPlayer3D(_owner, scene);
-            }
-            return Trail.PlayTrail(trail, ownerKey);
-        }
-
-        public void EndTrail(string ownerKey, bool cancelled) => Trail?.EndTrail(ownerKey, cancelled);
         public bool IsScenePlaying(string key) => _scenes.TryGetValue(key, out var scene) && scene.Root.Visible;
 
         public void PlayParticles(string key, PackedScene packedScene, object ownerKey, double duration)
@@ -52,17 +39,13 @@ namespace GameLogic
             if (_scenes.TryGetValue(key, out ParticleScene scene) && scene.OwnerKey == ownerKey) scene.Stop();
         }
 
-        public void Update(double delta) => Trail?.Update(delta);
         public void Clear()
         {
-            Trail?.Stop();
             foreach (ParticleScene scene in _scenes.Values) scene.Stop();
         }
 
         public void Dispose()
         {
-            Trail?.Dispose();
-            Trail = null;
             foreach (ParticleScene scene in _scenes.Values) scene.Dispose();
             _scenes.Clear();
         }

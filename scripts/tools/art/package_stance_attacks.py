@@ -88,9 +88,8 @@ def pack_apng(path, frames, times):
             assert abs(check.info['duration'] - times[n]) < 0.001
 
 
-def update_ability_timelines(config, manifest):
+def update_ability_timelines(config):
     """Keep authored Timeline clips on the same clock as their source poses."""
-    records = {clip['key']: clip['records'] for clip in manifest['clips']}
     for stance in ('high', 'mid', 'low'):
         specs = [spec for spec in config['clips'] if spec['stance'] == stance]
         base = 'greatsword_attack' + ('' if stance == 'mid' else '_' + stance)
@@ -101,7 +100,6 @@ def update_ability_timelines(config, manifest):
         assert nodes['entry']['$type'] == 'yu:GameLogic.AbilityInputNodeData'
         for spec in specs:
             step = spec['step']
-            poses = records[spec['key']]
             link = spec.get('link_time_ms', spec['duration_ms']) / 1000
             hit = nodes[f'hit_{step}']
             hit['Duration'] = link
@@ -111,15 +109,6 @@ def update_ability_timelines(config, manifest):
                     if kind == 'AbilityPlayAnimationAction':
                         track['Name'], clip['Name'] = '动画', '完整普攻' if len(specs) == 1 else f'第{step}击'
                         clip['Duration'] = link
-                    elif kind == 'AbilityAttackTrailAction':
-                        track['Name'], clip['Name'] = '刀光粒子', '挥出与落点'
-                        first = spec['indices'].index(spec['blade_keys'][0][0])
-                        start = poses[first]['runtime_first_frame'] / 1000
-                        impact = poses[spec['holds']['impact_frame']]
-                        end = (impact['runtime_first_frame'] + impact['duration_ms']) / 1000
-                        clip['StartTime'] = start
-                        clip['Duration'] = round(end - start, 3)
-                        assert end <= link
                     elif kind == 'AbilityInputWindowAction':
                         track['Name'], clip['Name'] = '续招输入', '缓存下一次普攻'
                         window = min(spec.get('input_window_ms', 320) / 1000, link - .04)
@@ -207,24 +196,9 @@ def package(config):
             'recorded_matte_edits_exact': True, 'binary_alpha': True,
             'start_and_idle_endpoints_alpha_and_visible_rgb_exact': True, 'atlas_rgba_exact': True,
             'apng_rgba_and_frame_times_exact': True, 'independent_full_silhouette_mask': False}
-        if spec.get('blade_keys'):
-            keys = spec['blade_keys']
-            assert all(key[0] in spec['indices'] for key in keys)
-            assert all(a[0] < b[0] for a, b in zip(keys, keys[1:]))
-            # The hilt may remain near the rear hip during a thrust; only the luminous outer edge must face forward.
-            assert all(key[1] * .22 + key[3] * .78 >= config['foot_anchor'][0] and key[3] >= config['foot_anchor'][0] for key in keys), 'Light must stay in front'
-            frame_keys = ', '.join(str(clip['records'][spec['indices'].index(key[0])]['runtime_first_frame']) for key in keys)
-            poses = ', '.join(str(value) for key in keys for value in key[1:])
-            trail = ('[gd_resource type="Resource" script_class="WeaponAttackTrail" format=3]\n\n'
-                     '[ext_resource type="Script" path="res://scripts/gamelogic/weapons/WeaponAttackTrail.cs" id="script"]\n\n'
-                     '[resource]\nscript = ExtResource("script")\n'
-                     f'Animation = &"attack_{key}"\n'
-                     f'Frames = PackedFloat32Array({frame_keys})\nBladePoses = PackedVector4Array({poses})\n'
-                     f'FinishStrength = {spec.get("finish_strength", 1.0)}\n')
-            (ROOT / f'assets/resources/weapons/greatsword_attack_{key}_trail.tres').write_text(trail, encoding='utf-8')
     write_json(META / 'manifest.json', manifest)
     write_json(META / 'media-validation.json', validation)
-    update_ability_timelines(config, manifest)
+    update_ability_timelines(config)
     print(json.dumps(validation, ensure_ascii=False))
 
 

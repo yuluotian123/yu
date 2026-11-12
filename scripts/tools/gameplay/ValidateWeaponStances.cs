@@ -57,7 +57,7 @@ public partial class ValidateWeaponStances : Node3D
                 GD.Print("MOVEMENT_START_CHECK: PASS"); GetTree().Quit(); return;
             }
             await CheckStanceAttacks();
-            await CheckAttackParticles();
+            await CheckAttackFacing();
             await CheckSingleAttacks();
             await CheckComboFramework();
 
@@ -278,9 +278,8 @@ public partial class ValidateWeaponStances : Node3D
             Check(other.GetComponent<WeaponEquipmentComponent3D>().CurrentStance == "mid", "instances have independent stances");
             Check(!other.GetComponent<AbilitySystemComponent3D>().Effects.IsScenePlaying("stance-switch") &&
                 other.GetComponent<CharacterAnimationComponent3D>().Sprite.MaterialOverlay == null, "flash is local to the switching character");
-            Check(other.GetComponent<AbilitySystemComponent3D>().Effects.Trail == null &&
-                !ReferenceEquals(_abilities.Effects, other.GetComponent<AbilitySystemComponent3D>().Effects),
-                "sword particle pools belong to individual actors");
+            Check(!ReferenceEquals(_abilities.Effects, other.GetComponent<AbilitySystemComponent3D>().Effects),
+                "effect state belongs to individual actors");
             Check(_equipment.CurrentWeapon.AnimationProfile.AdditionalFrames.GetAnimationNames().Length == 3, "shared art remains unchanged");
             Check(!_equipment.CurrentWeapon.AnimationProfile.Frames.HasAnimation("idle_high"), "base frames are not mutated");
             Check(!_equipment.CurrentWeapon.AnimationProfile.Frames.HasAnimation("run_high") &&
@@ -300,16 +299,10 @@ public partial class ValidateWeaponStances : Node3D
             Check(_equipment.PendingStance == string.Empty, "recycle clears transient stance");
             Check(!_equipment.IsTransitioning && !_player.GetComponent<CharacterMovementComponent3D>().MovementLocked, "recycle releases transition lock");
             Check(!effect.IsScenePlaying("stance-switch") && _animation.Sprite.MaterialOverlay == null, "recycle clears the flash");
-            Check(_abilities.Effects.Trail == null,
-                "recycle clears the sword light");
             var children = _player.GetChildren();
             using (var childrenOwner = (Godot.Collections.Array)children)
                 Check(children.Count(child => child.Name == "AbilityEffect_stance-switch") == 0,
                     "recycle frees the lazily created particle scene");
-            var attackChildren = _player.GetChildren();
-            using (var attackChildrenOwner = (Godot.Collections.Array)attackChildren)
-                Check(attackChildren.Count(child => child.Name == "WeaponTrail") == 0,
-                    "recycle frees the lazily created sword particle pool");
             foreach (string source in new[] { "high", "mid", "low" })
                 foreach (string target in new[] { "high", "mid", "low" })
                 {
@@ -439,11 +432,8 @@ public partial class ValidateWeaponStances : Node3D
                 foreach (var actor in actors)
                 {
                     var animation = actor.GetComponent<CharacterAnimationComponent3D>();
-                    var effect = actor.GetComponent<AbilitySystemComponent3D>().Effects.Trail;
                     actorFrames.Add(new JsonObject { ["animation"] = animation.ActiveAnimation.ToString(),
                         ["frame"] = animation.Sprite.Frame, ["progress"] = animation.Sprite.FrameProgress,
-                        ["particle_bursts"] = effect?.EmittedBursts ?? 0, ["finish_accents"] = effect?.EmittedAccents ?? 0, ["effect_active"] = effect?.IsPlaying == true,
-                        ["played_trails"] = effect?.PlayedTrails ?? 0,
                         ["facing"] = actor.GetComponent<CharacterMovementComponent3D>().Facing });
                 }
                 trace.Add(new JsonObject { ["capture_frame"] = frame, ["actors"] = actorFrames });
@@ -602,6 +592,10 @@ public partial class ValidateWeaponStances : Node3D
                 Check(ability.Graph.Nodes.OfType<AbilityInputNodeData>().Any(), "registered skill owns its input");
                 Check(ability.Graph.Nodes.Count == 3 && ability.Graph.Nodes.OfType<AbilityTimelineNodeData>().Count() == 1,
                     "equipped attack contains one full Timeline and one exit");
+                var timeline = ability.Graph.Nodes.OfType<AbilityTimelineNodeData>().Single();
+                Check(timeline.Tracks.Count == 1 && timeline.Tracks[0].Clips.Count == 1 &&
+                    timeline.Tracks[0].Clips[0].Action is AbilityPlayAnimationAction && timeline.CancelActions.Count == 0,
+                    "equipped attack Timeline contains only animation");
             }
         }
         foreach (string stance in new[] { "high", "mid", "low" })
@@ -610,7 +604,6 @@ public partial class ValidateWeaponStances : Node3D
             await SettleStance();
             var runtime = _abilities.GetRuntime(_equipment.CurrentPrimaryAttack.AbilityId);
             for (int i = 0; i < 100 && _abilities.CanActivateAbility(runtime.AbilityId) != AbilityActivationResult.Activated; i++) await Frames(1);
-            int trails = _abilities.Effects.Trail?.PlayedTrails ?? 0;
             await MouseTap(MouseButton.Left);
             ulong version = runtime.ActivationVersion;
             Check(runtime.IsRunning, "physical left click activates the graph");
@@ -629,10 +622,9 @@ public partial class ValidateWeaponStances : Node3D
             await Frames(12); // Holding the button through recovery must not retrigger.
             MouseInput(MouseButton.Left, false);
             await Frames(2);
-            Check(_abilities.Effects.Trail.PlayedTrails == trails + 1 && runtime.ActivationVersion == version,
+            Check(runtime.ActivationVersion == version,
                 stance + " repeated/held input executes exactly one complete attack");
-            Check(!runtime.HasBufferedInput("primary_attack") && !runtime.IsInputWindowOpen("primary_attack") &&
-                _abilities.Effects.Trail?.IsPlaying != true, "completion leaves no queued attack or particles");
+            Check(!runtime.HasBufferedInput("primary_attack") && !runtime.IsInputWindowOpen("primary_attack"), "completion leaves no queued attack");
             Check(!_player.GetComponent<CharacterMovementComponent3D>().MovementLocked, "recovery releases movement");
             ExpectIdle(stance);
             await MouseTap(MouseButton.Left);
@@ -711,11 +703,9 @@ public partial class ValidateWeaponStances : Node3D
         GD.Print("COMBO_FRAMEWORK_CHECK: PASS (in-memory graph, 1/2/3 stages, one input per window, cancellation)");
     }
 
-    private async Task CheckAttackParticles()
+    private async Task CheckAttackFacing()
     {
-        var effect = _abilities.Effects.Trail;
         var movement = _player.GetComponent<CharacterMovementComponent3D>();
-        Check(effect?.IsPlaying != true, "attack particles are separate and idle outside attacks");
         foreach (string stance in new[] { "high", "mid", "low" })
         foreach (int facing in new[] { 1, -1 })
         {
@@ -725,46 +715,25 @@ public partial class ValidateWeaponStances : Node3D
             AbilityRuntime runtime = _abilities.GetRuntime(_equipment.CurrentPrimaryAttack.AbilityId);
             for (int i = 0; i < 180 && _abilities.CanActivateAbility(runtime.AbilityId) != AbilityActivationResult.Activated; i++)
                 await Frames(1);
-            int trails = effect?.PlayedTrails ?? 0;
-            Check(_equipment.TryPrimaryAttack(), "particle check starts " + stance);
-            Check(effect?.IsPlaying != true, "Timeline does not start the sword light during windup");
+            Check(_equipment.TryPrimaryAttack(), "facing check starts " + stance);
             KeyInput(facing > 0 ? Key.A : Key.D, true);
-            for (int i = 0; i < 180 && ((_abilities.Effects.Trail?.PlayedTrails ?? 0) == trails || (_abilities.Effects.Trail?.EmittedBursts ?? 0) == 0) && runtime.IsRunning; i++) await Frames(1);
+            await Frames(30);
             KeyInput(facing > 0 ? Key.A : Key.D, false);
-            effect = _abilities.Effects.Trail;
-            Check(effect != null && effect.PlayedTrails == trails + 1 && effect.EmittedBursts > 0 && effect.AttackFacing == facing && movement.Facing == facing,
-                "Timeline starts one forward trail and the attack does not turn mid-swing");
-            var visual = _player.GetNode<Node3D>("WeaponTrail");
-            bool visibleBlade = false;
-            var bursts = visual.GetChildren();
-            using var burstsOwner = (Godot.Collections.Array)bursts;
-            foreach (Node3D burst in bursts)
-            {
-                if (!burst.Visible) continue;
-                visibleBlade = true;
-                foreach (Vector3 point in burst.GetNode<CpuParticles3D>("Blade").EmissionPoints)
-                    Check(point.X * facing >= -0.005f, "blade light stays in the facing hemisphere");
-            }
-            Check(visibleBlade && visual.Visible, "strike has visible independent particle emitters");
+            Check(movement.Facing == facing, "attack direction remains locked through the strike");
+            Check(!_player.HasNode("WeaponTrail"), "animation-only attack creates no weapon particle scene");
             if (facing < 0)
             {
-                _abilities.CancelAbility(runtime.AbilityId, "ParticleCancellationCheck");
-                Check(!effect.IsPlaying && !visual.Visible, "cancellation clears the light immediately");
-                int accents = effect.EmittedAccents;
+                _abilities.CancelAbility(runtime.AbilityId, "FacingCancellationCheck");
+                Check(!runtime.IsRunning, "attack cancellation stops the Timeline");
                 await Frames(3);
-                Check(effect.EmittedAccents == accents, "cancellation cannot schedule a late finish accent");
+                Check(!movement.MovementLocked, "cancellation releases movement");
             }
-            else
-            {
-                await WaitForAttack(runtime);
-                Check(!effect.IsPlaying && !visual.Visible, "recovery leaves no particles behind");
-                Check(effect.EmittedAccents == 1, "the strike stop emits one accent without repeating through the hold");
-            }
+            else await WaitForAttack(runtime);
         }
         movement.RestoreFacing(1);
         _equipment.RequestStance("mid");
         await SettleStance();
-        GD.Print("ATTACK_PARTICLE_CHECK: PASS (all stances, both facings, forward emission, windup, completion, cancellation)");
+        GD.Print("ATTACK_FACING_CHECK: PASS (all stances, both facings, cancellation, no weapon effects)");
     }
 
     private async Task CheckMovementLeadIns()

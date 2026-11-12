@@ -1,6 +1,6 @@
 {
   "date": "2026-11-12",
-  "revision": 12,
+  "revision": 13,
   "canvas": [
     512,
     384
@@ -13,7 +13,7 @@
     96,
     0
   ],
-  "preview": "greatsword-stance-attacks-v12.gif",
+  "preview": "greatsword-stance-attacks-v13.gif",
   "clips": [
     {
       "stance": "high",
@@ -290,57 +290,6 @@
           ]
         }
       ],
-      "blade_keys": [
-        [
-          9,
-          325,
-          191,
-          297,
-          83
-        ],
-        [
-          10,
-          343,
-          198,
-          362,
-          95
-        ],
-        [
-          11,
-          350,
-          207,
-          385,
-          105
-        ],
-        [
-          12,
-          360,
-          241,
-          440,
-          167
-        ],
-        [
-          13,
-          354,
-          285,
-          462,
-          275
-        ],
-        [
-          14,
-          340,
-          299,
-          441,
-          337
-        ],
-        [
-          15,
-          335,
-          301,
-          435,
-          347
-        ]
-      ],
       "strike_source_range": [
         9,
         15
@@ -351,7 +300,6 @@
         "impact_frame": 15,
         "recovery_frame": 16
       },
-      "finish_strength": 1.5,
       "ability_id": "greatsword_attack_high",
       "selection_note": "v10 reference remake: rear-hip loading and compressed knees, body-led accelerating downcut to a low braced finish, then continuous forward blade lift and elbow-led high-guard recovery. Body/sword source poses are newly authored; external white source wedges are masked in Aseprite.",
       "rejected_source_frames": {
@@ -675,43 +623,6 @@
           ]
         }
       ],
-      "blade_keys": [
-        [
-          13,
-          270,
-          252,
-          330,
-          257
-        ],
-        [
-          14,
-          298,
-          255,
-          427,
-          255
-        ],
-        [
-          15,
-          315,
-          254,
-          447,
-          254
-        ],
-        [
-          16,
-          318,
-          252,
-          425,
-          252
-        ],
-        [
-          17,
-          318,
-          252,
-          425,
-          252
-        ]
-      ],
       "strike_source_range": [
         10,
         17
@@ -722,7 +633,6 @@
         "impact_frame": 17,
         "recovery_frame": 18
       },
-      "finish_strength": 1.3,
       "ability_id": "greatsword_attack",
       "selection_note": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged.",
       "rejected_source_frames": {
@@ -978,43 +888,6 @@
           ]
         }
       ],
-      "blade_keys": [
-        [
-          9,
-          248,
-          266,
-          363,
-          258
-        ],
-        [
-          10,
-          257,
-          265,
-          381,
-          258
-        ],
-        [
-          11,
-          288,
-          260,
-          408,
-          258
-        ],
-        [
-          12,
-          355,
-          252,
-          475,
-          251
-        ],
-        [
-          13,
-          365,
-          252,
-          485,
-          251
-        ]
-      ],
       "strike_source_range": [
         9,
         13
@@ -1025,7 +898,6 @@
         "impact_frame": 13,
         "recovery_frame": 14
       },
-      "finish_strength": 1.4,
       "ability_id": "greatsword_attack_low",
       "selection_note": "v10 reference remake: bent-knee rear-leg loading, tightly held hilt at ribs, a near-level direct forward thrust with compact footwork, immediate elbow flexion and hilt retraction before restoring low guard.",
       "rejected_source_frames": {},
@@ -1042,7 +914,6 @@
     ],
     "source_rate": 24,
     "output_resize": "512x384 nearest; source RGB retained except recorded local steel repairs in pixel-corrections.json",
-    "runtime_fx": "Timeline Weapon Trail clips explicitly start/end the independent CPUParticles3D renderer; cancellation clears all pooled particles.",
     "runtime_timing": "Uniform 1 ms SpriteFrames ticks sharing the original AtlasTexture poses; avoids previous-frame speed carryover at duration changes in the current AnimatedSprite3D engine build.",
     "combo": "Each equipped stance currently uses entry -> one complete attack Timeline -> finished. Generic input-window/consume branching remains available and tested with an in-memory combo graph.",
     "matte_corrections": "Aseprite applies the exact erase/restore coordinates; package verifies full expected RGBA, all unchanged retained RGB, atlas, APNG and continuation endpoints."
@@ -1174,5 +1045,7 @@
     "previous_middle_seconds": 0.997,
     "middle_seconds": 0.997,
     "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
-  }
+  },
+  "weapon_attack_effects": "Removed: animation-only attacks; stance-switch effects remain separate.",
+  "art_revision": 12
 }

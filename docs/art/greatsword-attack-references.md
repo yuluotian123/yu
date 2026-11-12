@@ -38,14 +38,13 @@
 - 双手抓同一连续剑柄，剑身保持结构与长度；不在贴图上绘制刀光、粒子或模糊。三段能力由武器配置选择，技能时间轴负责各自播放。
 - 包装保留选中源帧的次序，以逐帧时间调节蓄力与顿帧。拼接使用 FFV1 无损 RGB 并逐帧验证与原视频解码像素相同；排除原因与源帧映射记录在制作配置。每个动作从原始待机开始并完整回到原始待机。透明 PNG/APNG 为像素依据，GIF 用于观看。
 - 对人脸、耳朵、衣服、双手握柄、剑刃与护手、支撑脚和尾巴逐帧复核；刀气遮住钢刃、双剑重影、无合理透视的短刃、明显剑身增长、弯曲或剑尖出框的段落不交付。上段首稿只取准备姿势，舍弃遮刃挥出；v12 中段整段首稿只取稳定准备，舍弃跳变且带白光的挥出及反向回扫。中段回架首稿只取抬高姿势之后的稳定归位，绕腿段不交付；提剑改用连续下降参考的逆序采样，再接入相同抬高姿势，源帧号与反向播放说明保存在 source_parts。保留实际采用的原视频、输入、工作流、源帧和 Aseprite 工程。
-- 刀光完全由 `CPUParticles3D` 实时产生。每招单独标定剑根与剑尖轨迹，按动画实际帧时钟发射，左右朝向只镜像一次；准备和回架阶段不发射刀光。蓄满停顿不发光，落点停顿期间仅保留已经发出的粒子自然淡出。配置与生命周期见[武器系统](../gameplay/weapons.md#攻击刀光)。
 - 第三方演示只作为动作参考，不把其视频帧作为游戏素材或重新发布。
 
 ## 重新封装
 
-v12 仅重做中段，38 张新姿势逐帧审查并重新抠图；上、下段 63 张 PNG 与 v11 的 SHA-256 全部一致。中段提剑采用慢速下降参考的反向源帧序列，保持剑尖在身前上提，再接入抬高姿势之后的归位段；这是显式记录的源片段反向采样，不插补或重画视频帧。APNG、Aseprite、Godot、Timeline 和粒子均按制作配置同步。
+v12 仅重做中段，38 张新姿势逐帧审查并重新抠图；上、下段 63 张 PNG 与 v11 的 SHA-256 全部一致。中段提剑采用慢速下降参考的反向源帧序列，保持剑尖在身前上提，再接入抬高姿势之后的归位段；这是显式记录的源片段反向采样，不插补或重画视频帧。APNG、Aseprite、Godot 和 Timeline 按制作配置同步。武器攻击特效已移除。
 
-读取 `assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json`。使用含 PyAV、NumPy 和 Pillow 的 Python 运行 `scripts/tools/art/package_stance_attacks.py --assemble`（三段无损拼接），再运行 `--prepare`。随后在 Aseprite 执行 `scripts/tools/art/build_stance_attacks.lua`，最后再次运行 Python 包装脚本，生成 APNG、审计映射、三段刀光资源，并同步三套技能图的 Timeline 时段。
+读取 `assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json`。使用含 PyAV、NumPy 和 Pillow 的 Python 运行 `scripts/tools/art/package_stance_attacks.py --assemble`（三段无损拼接），再运行 `--prepare`。随后在 Aseprite 执行 `scripts/tools/art/build_stance_attacks.lua`，最后再次运行 Python 包装脚本，生成 APNG、审计映射，并同步三套技能图的 Timeline 时段。
 
 `pixel-corrections.json` 保存 Aseprite 逐像素修正：清理外轮廓一像素范围的绿色残边、游离杂点和上段完整钢刃外的源白色特效；上段保留 2 个钢刃孔洞修复，中段只修改 alpha，没有内部 RGB 修补。没有重画被特效遮住的剑身，也没有靴子借帧修补。包装逐项核对修改坐标与 RGBA，其余保留像素与原视频 RGB 精确一致，没有全图减色。原视频审计仍显示有意修正带来的差异；没有独立全轮廓标注，需结合深浅底全帧和局部放大复核。
 
@@ -55,8 +54,8 @@ v12 仅重做中段，38 张新姿势逐帧审查并重新抠图；上、下段 
 | 中段 | 391 ms | 96 ms | 48 ms | 462 ms | 0.997 秒 |
 | 下段 | 377 ms | 80 ms | 48 ms | 406 ms | 0.911 秒 |
 
-仅调整节奏时直接修改 `timing_spans` 与 `holds`，同步技能时间轴和冷却后执行 Aseprite 封装及 Python 包装；不重新生成视频。`holds` 记录蓄满、挥出起点、落点和收势起点，帧号从 0 开始。刀光窗口按实际剑路落在挥出与落点区间；中段从刃口转到前方后才发射，前后摇不发光。
+仅调整节奏时直接修改 `timing_spans` 与 `holds`，同步技能时间轴和冷却后执行 Aseprite 封装及 Python 包装；不重新生成视频。`holds` 记录蓄满、挥出起点、落点和收势起点，帧号从 0 开始。三套技能 Timeline 仅含完整动画。
 
-Godot 播放资源使用 1 毫秒等长时间槽，复用 101 张姿势对应的 AtlasTexture，不重复贴图。这样避免当前引擎在长短帧切换时沿用前一帧速度、吞掉顿帧时长的问题。制作清单的 `records` 保存每张原图的 `runtime_first_frame` 和 `runtime_frames`，刀光关键帧同步转换为时间槽下标；APNG 与 Aseprite 保留直观的原帧时长。
+Godot 播放资源使用 1 毫秒等长时间槽，复用 101 张姿势对应的 AtlasTexture，不重复贴图。这样避免当前引擎在长短帧切换时沿用前一帧速度、吞掉顿帧时长的问题。制作清单的 `records` 保存每张原图的 `runtime_first_frame` 和 `runtime_frames`；APNG 与 Aseprite 保留直观的原帧时长。
 
 当前预览、接入状态与核验结果见[主角人物档案](../characters/protagonist.md)。

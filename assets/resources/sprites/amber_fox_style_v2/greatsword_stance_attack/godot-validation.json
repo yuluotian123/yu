@@ -35,19 +35,13 @@
   "runtime_ticks": 2968,
   "strikes": {
     "high": {
-      "forward": true,
-      "seconds": 0.0960000000000001,
-      "tip_y_span": 264.0
+      "seconds": 0.0960000000000001
     },
     "low": {
-      "forward": true,
-      "seconds": 0.0800000000000001,
-      "tip_y_span": 7.0
+      "seconds": 0.0800000000000001
     },
     "mid": {
-      "forward": true,
-      "seconds": 0.0960000000000001,
-      "tip_y_span": 5.0
+      "seconds": 0.0960000000000001
     }
   },
   "visible_rgb_and_alpha_exact": true

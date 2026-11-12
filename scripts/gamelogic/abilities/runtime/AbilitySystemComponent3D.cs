@@ -50,7 +50,6 @@ namespace GameLogic
             }
         }
 
-        public override void OnUpdate(double delta) => Effects?.Update(delta);
 
         private void PollInputs()
         {

@@ -81,7 +81,7 @@ Ability 由 `AbilityResource`、`AbilitySetResource` 和 `AbilityFlowGraphAsset`
 
 Ability Timeline 可以请求动画、速度覆盖、移动锁、镜头效果和事件。AbilitySystem 会再次检查授权、冷却、并发和优先级，因此 CharacterGraph 的关系边不是最终授权来源。
 
-需要组件的通用 Ability Action 使用显式组件引用。可以独立创建节点的 Action 通过 `Component Reference` 节点连入 `Component` 端口；Timeline Clip、Marker 等嵌套 Action 可将右侧 `Components` 面板中的组件拖到 Action Inspector。Weapon Trail、Particle Scene 和输入窗口使用技能执行上下文中的运行时，不要求 Player 挂载额外特效组件。
+需要组件的通用 Ability Action 使用显式组件引用。可以独立创建节点的 Action 通过 `Component Reference` 节点连入 `Component` 端口；Timeline Clip、Marker 等嵌套 Action 可将右侧 `Components` 面板中的组件拖到 Action Inspector。Particle Scene 和输入窗口使用技能执行上下文中的运行时，不要求 Player 挂载额外特效组件。
 
 <a id="locomotion-animgraph"></a>
 ## 移动动画图

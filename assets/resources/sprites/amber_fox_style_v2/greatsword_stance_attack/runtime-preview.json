@@ -1,5 +1,5 @@
 {
-  "revision": 12,
+  "revision": 13,
   "date": "2026-11-12",
   "source_fps": 60,
   "render_size": [
@@ -7,7 +7,7 @@
     864
   ],
   "camera_size": 4.2,
-  "preview": "greatsword-stance-attacks-runtime-v12.gif",
+  "preview": "greatsword-stance-attacks-runtime-v13.gif",
   "preview_frames": 108,
   "preview_seconds": 3.6,
   "preview_crop": {
@@ -59,13 +59,9 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": 1,
+        "weapon_attack_effects": false
       },
       "mid": {
         "segments": [
@@ -95,13 +91,9 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": 1,
+        "weapon_attack_effects": false
       },
       "low": {
         "segments": [
@@ -131,13 +123,9 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": 1,
+        "weapon_attack_effects": false
       }
     },
     "left": {
@@ -169,13 +157,9 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": -1,
+        "weapon_attack_effects": false
       },
       "mid": {
         "segments": [
@@ -205,13 +189,9 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": -1,
+        "weapon_attack_effects": false
       },
       "low": {
         "segments": [
@@ -241,15 +221,12 @@
             "end": 202
           }
         ],
-        "complete_single_attack_twice": true,
-        "played_trails": 2,
-        "one_finish_accent_per_attack": true,
-        "returned_to_idle": true,
-        "effect_cleared": true,
-        "windup_without_particles": true,
-        "recovery_clear_after_tail": true
+        "attack_runs": 2,
+        "facing": -1,
+        "weapon_attack_effects": false
       }
     }
   },
-  "frames_per_facing": 203
+  "frames_per_facing": 203,
+  "weapon_attack_effects": false
 }

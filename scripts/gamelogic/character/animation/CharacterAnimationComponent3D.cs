@@ -10,7 +10,6 @@ namespace GameLogic
     {
         private HfsmGraphAsset _locomotionGraph;
         private AnimatedSprite3D _sprite;
-        private int _spriteProcessPriority;
         public override int Priority => 20;
 
         [Export] public NodePath SpritePath { get; set; } = new("VisualRoot/AnimatedSprite3D");
@@ -71,9 +70,6 @@ namespace GameLogic
                 Debugger.Warn("[CharacterAnimationComponent3D] Missing AnimatedSprite3D.");
             else
             {
-                // Advance native frames before the host samples them for presentation effects.
-                _spriteProcessPriority = _sprite.ProcessPriority;
-                _sprite.ProcessPriority = Math.Min(_sprite.ProcessPriority, Owner.ProcessPriority - 1);
                 _sprite.AddToGroup(RelinkPostProcessEffect.CharacterSpriteGroup);
             }
             AnimationInstance = new CharacterAnimationInstance();
@@ -91,7 +87,6 @@ namespace GameLogic
         {
             if (GodotObject.IsInstanceValid(_sprite))
             {
-                _sprite.ProcessPriority = _spriteProcessPriority;
                 if (_sprite.IsInGroup(RelinkPostProcessEffect.CharacterSpriteGroup))
                     _sprite.RemoveFromGroup(RelinkPostProcessEffect.CharacterSpriteGroup);
             }

@@ -141,10 +141,9 @@ func make_template(kind: String, index: int) -> ArrayMesh:
 	tool.index()
 	var mesh := tool.commit()
 	mesh.resource_name = "Forest flora · %s %d" % [kind,index]
-	var path := MODEL_ROOT+"%s_%02d.mesh.res" % [kind,index]
-	save_mesh(mesh,path)
 	var arrays := mesh.surface_get_arrays(0)
-	template_arrays[path] = arrays
+	# Non-instanced plants are merged into patches; their templates stay in memory.
+	template_arrays[mesh] = arrays
 	return mesh
 
 func make_grass_template(index: int) -> ArrayMesh:
@@ -249,7 +248,7 @@ func plant(kind: String, at: Vector2, scale_: float, palette_mix := 0.0) -> void
 	if not chunks.has(key): chunks[key] = {"vertices":PackedVector3Array(),"normals":PackedVector3Array(),"colors":PackedColorArray(),"uv":PackedVector2Array(),"indices":PackedInt32Array(),"lod1":PackedInt32Array(),"lod2":PackedInt32Array(),"kind":kind,"plants":0}
 	var chunk: Dictionary = chunks[key]
 	var mesh: ArrayMesh = variants[kind][rng.randi()%variants[kind].size()]
-	var arrays: Array = template_arrays[mesh.resource_path]
+	var arrays: Array = template_arrays[mesh]
 	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 	var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
 	var colors: PackedColorArray = arrays[Mesh.ARRAY_COLOR]

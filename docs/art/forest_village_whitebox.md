@@ -1,4 +1,4 @@
-2026-11-04 当前版本采用[角色配套版森林植被](forest_vegetation.md)和像素表面图集。路肩由实际石路覆盖向草甸衰减，5,531 丛立体草使用 361 个分块。三种灌木共 488 丛，采用较小、通透的错层枝扇及共享的树叶光照材质。正式关卡启用[场景坐标像素取样](../rendering/relink-post.md)。下文较早的草密度和分块统计保留为历史制作记录。
+当前正式关卡采用[角色配套版森林植被](forest_vegetation.md)和像素表面图集。路肩由实际石路覆盖向草甸衰减，5,531 丛立体草使用 361 个分块。三种灌木共 488 丛，采用较小、通透的错层枝扇及共享的树叶光照材质。正式关卡启用[场景坐标像素取样](../rendering/relink-post.md)。
 
 森林聚落已替换正式森林关卡 `res://assets/scenes/levels/forest_town_level.tscn` 的旧布局，沿用原关卡世界身份、角色、天气、NPC 和仓储间往返入口。默认从南入口开始，镜头使用聚落步行构图，标注默认隐藏；基于新场景碰撞烘焙的导航覆盖十户住宅。场景可直接编辑，房屋、植被、河水和路面已复用森林资源；24 段栅栏与溪流木桥已替换为[带法线与粗糙度的正式木构模型](forest_village_structures.md)，其余公共设施与生产道具仍保留部分布局白模。
 
@@ -8,41 +8,27 @@
 
 正式关卡的林下照明以“暖日照、低饱和蓝绿阴影”为目标。DDGI 间接光倍率由 0.25 调至 2.5，白天天空亮度端点为 45000；天顶、地平线与下半球采用较柔和的蓝灰、青灰和林地绿，正午太阳色温为 5300K。昼夜配置与场景静态天空、太阳数值保持同步。保留真实树冠遮挡、接触阴影及既有曝光、LUT、天气驱动；暗部通过环境辐照恢复层次，不依赖地表自发光。仅提高天空亮度会使角色精灵泛白，因此同时控制天空强度与 DDGI 倍率。
 
-材质 v4 使用暖米色墙面、橙陶瓦、褐色木构、灰米色石板和黄绿林地，树皮保留冷灰暗面并加入浅苔藓色块。新版图集位于 `assets/textures/environment/forest_town/painterly_atlas_v4.png`，专用树皮为同目录 `bark_painted_v4.png`；均用内置 imagegen 生成，最终提示词分别保存在`docs/art/prompts/` 中的 `forest_village_materials_v4.prompt.txt` 与 `forest_village_bark_v4.prompt.txt`。运行时使用带 mipmap、可供 DDGI 读取的原生 `.res` 纹理。
+正式关卡的像素表面图集位于 `assets/textures/environment/forest_village/character_style/`。早期手绘材质与图集仍由房屋制作、工具和其他场景复用；它们的提示词保存在 `docs/art/prompts/`。运行时使用带 mipmap、可供 DDGI 读取的原生 `.res` 纹理。
 
 灌木底部亮青边缘由 DDGI 的局部可见性统计误差放大：距离矩曾直接使用最远 100 米的天空 miss，与近处叶片混合后产生过大的方差，削弱遮蔽。现在只在可见性积分中将距离限制到探针单元对角线的 1.5 倍；辐射追踪距离、天空强度、GI 倍率与叶片原色保持原配置。灌木已恢复原始顶点色，撤回按高度压暗底色的补偿。实现和验证入口见 `docs/rendering/ddgi-implementation.md`。
 
 草地使用独立的 `assets/materials/environment/forest_village/grass.tres` 与 `assets/textures/environment/forest_village/groundcover_v4.res`，UV 按每米 0.85 次连续平铺，避免在地形各网格上拉伸图集单元；石板与石缝保留各自的暖灰、土色参数。树皮从原图集 UV 解码后采样专用贴图，不修改模型或树结修复。材质仍使用原生受光和既有积雪、湿润、积水、涟漪流程。地面接触图按实际材质的纹理平铺、底色和饱和度重新烘焙；草簇直接使用烘焙色，避免二次叠加草地染色。
 
-林地 `GroundFlora` 在入口转向及道路更新后包含 39746 簇贴片草、491 株羽状蕨、766 丛阔叶地被和 517 丛白花/赭黄小花。每个草簇由三张交叉贴片组成，每张展示十八片离线绘制的弯曲草叶；近景每簇十二个三角形，远处六个。草簇贴片宽 0.56 米、高 0.60 米，横向与高度分别缩放；图集透明留白不计入可见草尖高度。间距从 0.32 米缩至 0.27 米，保留原世界覆盖范围，草簇数增加约 40%。主体草形成角色小腿至膝部附近的覆盖，以低频噪声混入更高的草丛，路肩继续压低。使用六种图集轮廓、随机旋转和连续的颜色/高度变化，根部通过实例自定义数据采样实际地形底色。避开溪流、石板主通行带、房屋碰撞、门口、四处生产种植地、炉台和洗涤台。
+当前 `GroundFlora` 的场景元数据记录 5,531 丛草、496 株蕨、791 丛阔叶地被和 514 丛野花。草簇使用共享网格与 MultiMesh 分块；其他植被的模板在制作时合并到分块网格，无需独立保存模板资源。摆放避开溪流、石板通行带、房屋碰撞、门口和生产空间。
 
-植被为纯装饰，无碰撞、不改变导航或 NPC。模型与分块资源位于 `assets/models/environment/forest_village/ground_flora/`，四种材质位于 `assets/materials/environment/forest_village/ground_flora/`。草由 387 个四米 MultiMesh 分块绘制，共享六种小网格；每簇仅存变换和地表颜色/色调数据。其余植被仍有 523 个六米 MeshInstance 分块及原有 LOD，共计 910 个分块。全部植被 LOD0 约 108 万三角形，草约 48 万；模型资源约 17.5 MiB。此前高面数草方案约 792 万三角形、253.4 MiB。草按补偿后的相机位置在 28–36 米间逐渐沉入同色地表；当前正交相机后移 4 米，分块实际剔除距离相应为 44 米；使用硬裁剪保留深度，无透明混合排序。草不单独投射微小阴影，蕨、地被与花保留投影；全部接收已有日月、树冠阴影和 DDGI。
+植被为纯装饰，无碰撞、不改变导航或 NPC。模型与分块资源位于 `assets/models/environment/forest_village/ground_flora/`，材质位于 `assets/materials/environment/forest_village/ground_flora/`。草使用硬裁剪保留深度，不单独投射微小阴影；蕨、地被与花保留投影，全部接收日月、树冠阴影和 DDGI。当前模型与表面接线详见[森林植被](forest_vegetation.md)，不再沿用旧贴片草的数量、面数和显存统计。
 
 草簇使用 `grass_tuft.gdshader`，通过顶点高度固定根部、按世界位置形成风浪，积雪时减弱摆动。`WeatherSurfaceComponent3D` 对 MultiMesh 的材质覆盖创建场景独立副本，并只写入变化的天气参数；不再对静止的晴天表面每帧重复写入所有常量。干燥、无积雪时跳过雪色/法线噪声计算。原来的 `plant_painterly.gdshader` 继续负责其他三类植被。
 
 雨天响应按材质分别设置。`wet_darkening_strength`、`wet_film_strength` 和 `wet_roughness_min` 是材质自身参数，天气组件继续只驱动公共含水量、雨量和积雪量。树皮水膜权重为 0.08、湿润目标粗糙度下限为 0.82，以吸水变深为主；树叶与蕨类保留较柔和的湿叶光泽。草簇和下方土壤使用相同的 0.85 压暗权重，草地、树干与落叶土不生成平整水洼。石板和石缝水膜权重为 0.48、湿润目标粗糙度下限为 0.35，局部积水覆盖倍率与湿润 specular 倍率均为 0.60；世界坐标积水与涟漪仍连续，保留部分反光水洼。草簇增加高粗糙度的弱反射，以协调雨天草地与石板的材质差异。
 
-树皮法线为 `assets/textures/environment/forest_town/bark_painted_v4_normal.png`，运行时使用同名 `.res`，1024×1024、线性 OpenGL 切线空间，带重新归一化的 mipmap。`bark_relief.gd` 从原手绘树皮的宽色块推导沟槽高度，平滑细碎颜色变化后离线烘焙法线。法线与底色共用原 UV 解码，强度 0.65，根部地表过渡和积雪覆盖处逐渐减弱。三种树模型已有完整切线，274 棵树的地表接缝材质副本也接入此贴图。仅刷新当前场景的这些材质可运行 `rebuild_surface_response.gd`，保留植被摆放、道路几何和导航；完整材质重建也复用相同配置。
-
-本轮原生验证检查了 274 棵树的有效切线、实际运行时法线与天气材质副本，并渲染法线开关对照；晴天、雨天、雪天及 GI 更新检查通过。1080p、RTX 5080、关闭限帧的完整关卡雨天 240 帧短测：117.4 FPS，P95 13.9 ms，GPU 4.2 ms，显存 863 MiB。树皮法线通过 Godot 的 [NORMAL_MAP 切线空间输入](https://docs.godotengine.org/en/4.6/tutorials/shaders/shader_reference/spatial_shader.html) 接入原生光照。
+正式森林植被的树皮材质使用 `assets/textures/environment/forest_village/character_style/bark_normal.res`，法线强度为 0.65。旧森林模型继续使用 `forest_town/bark_painted_v4_normal.res`；制作工具仍保留这些资源的生成入口。当前植被模型与运行时材质以[森林植被](forest_vegetation.md)为准。
 
 图集源形状和运行时贴片位于 `grass_cards.gd`。先用 Vulkan 渲染运行 `bake_grass_atlas.gd`，将源网格离线烘为六簇 RGBA 图集 `assets/textures/environment/forest_village/ground_flora/grass_clumps.png` 及带 mipmap 的原生 `.res`；随后可用 headless 运行 `rebuild_flora.gd` 保存植被。MultiMesh 必须一次性写入完整 float buffer：当前引擎的 dummy renderer 不保存逐实例 setter 的变换，生成器已断言缓冲区长度。确定性种子仍为 2026102607；完整场景、道路和材质重建均复用该工具。只清理本目录内不再使用的 `patch_*.mesh.res` / `patch_*.multimesh.res`。
 
 DDGI 捕获缓存相关节点列表，SceneTree 的层级变化会使其失效；每帧仍读取可见性、变换、材质和灯光，保留运动和天气响应。`GroundFlora` 标为静态装饰子树，不进入 GI 贡献遍历，微小植被继续接收 GI。探针、射线预算、能量和局部可见性积分沿用原配置。`validate_forest_vegetation.gd` 验证序列化实例、材质天气副本，并实测添加、移动和删除网格后 GI 更新。
 
-前一轮阴影性能配置将项目方向光图集由 8192/Ultra PCF 调至 4096/Medium PCF，森林关卡当时使用两段级联、42 米覆盖。1080p、RTX 5080、V-Sync/限帧关闭、完整森林关卡的同镜头 240 帧样本：平均 66.9 → 117.3 FPS，P95 帧时 21.9 → 13.6 ms，GPU 12.0 → 4.4 ms，DDGI 捕获 CPU 6.7 → 2.7 ms，显存统计 1613 → 857 MiB。结果是本机短测，不代表所有位置或硬件；MultiMesh 的几何量应按实例数计算，不能单独依赖 Godot 可见三角形计数器。
-
-当前森林阴影范围扩大到 80 米，日月光均采用四段级联，分段比例为 0.20 / 0.42 / 0.72，第一段覆盖约 16 米。场景静态灯光、昼夜配置与 `replace_forest_level.gd` 同步，避免运行时或重建后恢复短距离。草叶使用各向异性 mipmap 采样与 MSAA alpha-to-coverage，处理风动时细叶透明轮廓的跳变；保留风动和草地密度。实现依据 [Godot 的 alpha 抗锯齿说明](https://docs.godotengine.org/en/4.6/tutorials/3d/standard_material_3d.html#alpha-antialiasing)。固定镜头对照中，暂停草风动后的低频亮度 RMS 降至约 0.05–0.10/255；加入轮廓抗锯齿后，固定 GI、保留风动的三个草地区域 RMS 从 0.59 / 0.80 / 0.37 降至 0.51 / 0.76 / 0.29，另一区域从 2.26 降至 2.06。该度量包含正常摆动造成的像素变化，只表明细碎闪动减轻。扩大阴影与抗锯齿后的 1080p 完整关卡 240 帧短测为 115.5 FPS、P95 14.0 ms、GPU 5.8 ms。
-
-上一轮全场景阴影检查确认，冻结日光方向会使房屋与树干上的变化明显降低，关闭 DDGI 仍存在的阴影跳变需要从方向光处理。该轮使用 4096 图集、High PCF 和 2.0 过滤宽度，保留 80 米四段级联、正常昼夜推进和草地风动；未启用会让像素角色与场景整体变软的 TAA。固定镜头、冻结 GI、以相同加速日光轨迹逐帧对照，静态房屋区域的亮度二阶差分 RMS 从 1.57/255 降至 0.87/255，表示采样跳变减轻，不能据此认定所有镜头的闪动都已消失。临时尝试的原生过滤器未保留，引擎源文件已恢复。过滤采样由 Medium 的 8 次提高到 High 的 16 次；该轮全关卡性能采样期间其他程序持续占用 GPU，帧率与之前短测不可直接比较，未作为有效性能结论。
-
-静止镜头仍闪的后续修正：`TimeOfDayProfile` 改用固定的天球轨道轴构建日月 Basis，消除世界 Up 引起的额外阴影图滚转，光照方向和昼夜推进保持一致。当前正式关卡、日月节点及替换工具的过滤宽度改为 6.0，保持 High 的 16 次 PCF 采样和原 4096 图集；Ultra 在对照中增加了较多 GPU 开销，未保留。该轮关卡采用正交镜头（size 7、far 200），其阴影覆盖使用相机远裁剪，并不能直接按 Profile 的 80 米推算级联距离；本轮未修改用户镜头。
-
-原生固定镜头、冻结 GI、关闭体积雾后，以同一条 4 倍日光轨迹对照。采样区限定在实体墙面、树干和石板内部，排除旁边的风动草：两轮墙面亮度二阶差分均约 0.90→0.34/255，道路约 3.55→1.84/255，分别下降约 62% 和 48%；树干本身的变化约 0.06–0.09/255。关闭阴影的对照三处均约 0.09/255，说明道路和墙面残差仍有阴影采样变化，不能表述为全场景零闪烁。High/6 两轮 GPU 均值为 2.74→4.25 ms、2.67→2.95 ms，两轮开销不一致、短测波动较大，不作为稳定帧率承诺。可运行 `scripts/tools/rendering/validate_forest_shadow_stability.gd` 重现方向一致性、两轮画面对照、关闭阴影对照及 GPU 成本采样，结果保存在 `.godot/forest-shadow-stability/`。
-
-该修正已通过 C# 构建（0 错误、8 个既有警告）和原生运行验证；日月轨道方向保持一致，Profile 刷新保留 6.0 过滤宽度。再次运行林间光束验证，晴雨、夜晚、重复刷新、恢复晴天及移动镜头检查均通过。
-
-第四版参考《鸣潮》草地的密度与相对人物高度，继续使用本项目自己的图集；当时没有调整光照、镜头或阴影预算。同样的 1080p 完整关卡短测为 117.1 FPS，P95 14.3 ms，GPU 4.1 ms，显存 858 MiB；与第三版约 117.3 FPS 相近。原生验证确认 40347 个实例的有效变换、独立天气材质、雨雪切换、GI 接收及零植被碰撞；C# 构建通过。
+当前森林阴影范围扩大到 80 米，日月光均采用四段级联，分段比例为 0.20 / 0.42 / 0.72，第一段覆盖约 16 米。场景静态灯光、昼夜配置与 `replace_forest_level.gd` 同步，避免运行时或重建后恢复短距离。草叶使用各向异性 mipmap 采样与 MSAA alpha-to-coverage，处理风动时细叶透明轮廓的跳变；保留风动和草地密度。实现依据 [Godot 的 alpha 抗锯齿说明](https://docs.godotengine.org/en/4.6/tutorials/3d/standard_material_3d.html#alpha-antialiasing)。固定镜头对照中，暂停草风动后的低频亮度 RMS 降至约 0.05–0.10/255；加入轮廓抗锯齿后，固定 GI、保留风动的三个草地区域 RMS 从 0.59 / 0.80 / 0.37 降至 0.51 / 0.76 / 0.29，另一区域从 2.26 降至 2.06。该度量包含正常摆动造成的像素变化，只表明细碎闪动减轻。当前性能需使用完整主场景及现行镜头复测。
 
 草簇实现参考 [NVIDIA GPU Gems 的多草叶贴图与交叉贴片方案](https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-7-rendering-countless-blades-waving-grass) 和 [Godot 的 MultiMesh 分区批绘制](https://docs.godotengine.org/en/stable/tutorials/performance/using_multimesh.html)。图集由本项目的源几何烘焙，保持当前画风；不使用两款商业游戏的资产。
 
@@ -111,15 +97,13 @@ DDGI 捕获缓存相关节点列表，SceneTree 的层级变化会使其失效�
 
 当前镜头的最终美术概念图为 `assets/textures/concepts/forest_village/final_level_camera_v1.png`，由 imagegen 以实机镜头和现有狐耳剑士图为参考生成；提示词保存在 `docs/art/prompts/forest_village_concept_v1.prompt.txt`。它用于美术方向参考。
 
-正式关卡的林间光束使用原生体积雾：`EnvironmentRig/ForestLightShafts` 实例化 `assets/scenes/environment/forest_village_light_shafts.tscn`，在路口、井边、北侧林道、西侧林道和溪边布置 5 个厚实、柔边的局部 FogVolume。全局体积雾密度为 0，局部密度 0.022，太阳体积散射能量 6；树冠和建筑的实际阴影切出光束，方向跟随昼夜太阳。当前计算镜头前 60 米（原 56 米加正交相机后移补偿 4 米），沿用默认 64/64 体素网格、空间过滤和 0.9 时域重投影；不增加投影灯，不向体积雾注入环境光或 GI，不开启画面 TAA。近地路径与前景保持清楚，原有远景深度雾继续独立使用。
+正式关卡的林间光束使用原生体积雾：`EnvironmentRig/ForestLightShafts` 实例化 `assets/scenes/environment/forest_village_light_shafts.tscn`，在路口、井边、北侧林道、西侧林道和溪边布置 5 个厚实、柔边的局部 FogVolume。全局体积雾密度为 0，局部密度 0.022，太阳体积散射能量 6；树冠和建筑的实际阴影切出光束，方向跟随昼夜太阳。当前计算镜头前 60 米，沿用默认 64/64 体素网格、空间过滤和 0.9 时域重投影；不增加投影灯，不向体积雾注入环境光或 GI，不开启画面 TAA。近地路径与前景保持清楚，原有远景深度雾继续独立使用。
 
-天气组件在本关卡开启 `DriveVolumetricLightFromWeather`，体积散射按晴空比例平方衰减；雨天仅保留晴天 1% 的散射倍率，再叠加已有日光照度衰减。月亮散射设为 0，避免夜间曝光把光束放大。可以在子场景的共享 FogMaterial 调整局部密度，在 Sun 调整散射强度。替换关卡的工具通过 `forest_light_shafts.gd` 保留这些配置。原生验证脚本为 `scripts/tools/rendering/validate_forest_godrays.gd`，截图和开关对照数据写入 `.godot/forest-godrays/`。
-
-林间光束原生验证通过晴雨昼夜切换、重复昼夜刷新不累计衰减、恢复晴天和关闭天气驱动检查。RTX 5080、1920×1080、固定镜头并冻结 DDGI 更新，两轮 90 帧开关对照的 GPU 平均耗时分别为 6.67→6.64 ms、6.72→6.91 ms，配对差约 +0.08 ms；差异接近短测波动，仅用于新增效果的成本参考，不作为完整关卡帧率保证。场景截图位于 `01-clear.png`、`02-rain.png`、`03-night.png`，移动镜头截图为 `07-camera-move-end.png`。C# 构建 0 错误，8 个既有警告。
+天气组件在本关卡开启 `DriveVolumetricLightFromWeather`，体积散射按晴空比例平方衰减；雨天仅保留晴天 1% 的散射倍率，再叠加已有日光照度衰减。月亮散射设为 0，避免夜间曝光把光束放大。可以在子场景的共享 FogMaterial 调整局部密度，在 Sun 调整散射强度。替换关卡的工具通过 `forest_light_shafts.gd` 保留这些配置。光束效果通过当前主场景切换晴雨、昼夜并移动镜头检查；旧固定构图的性能脚本已退役。
 
 布局更新后运行 `res://scripts/tools/art/forest_village_whitebox/replace_forest_level.gd`，把环境应用到原正式关卡、更新出生点与门口位置、重新烘焙 `res://assets/resources/world/navigation/forest_town.tres`；然后在正式关卡根节点的世界组件上导出关卡配置，刷新入口和 NPC 路线目录。正式关卡沿用原菜单和世界入口，预览场景仍供 F1/F2/F3 检查布局。
 
-仅对现有布局应用入口朝向时，可运行 `res://scripts/tools/art/forest_village_whitebox/reframe_village.gd`，保留现有树木、河道与房屋位置，重建门前铺装和地被避让；随后仍需运行正式关卡替换、导航和目录导出流程。当前正式镜头为正交 Size 5.8，20° 俯角；位置 CameraOffset 与角度 CameraRotationDegrees 统一在 SceneCameraComponent3D 调整。CameraOcclusionComponent3D 对持续完全遮挡角色的树木、房屋进行整体隐藏，同一物体的全部子网格同步渐隐，保留碰撞、阴影和 GI；NearFadeDistance 独立管理近处 1.5 米的表面渐隐。详细参数见 `docs/rendering/hd2d-camera.md`。入口调整后原生验证通过 60/60 项布局检查和 13 条导航连接；八处原生试拍覆盖出生点、六处转向入口与村长家。
+仅对现有布局应用入口朝向时，可运行 `res://scripts/tools/art/forest_village_whitebox/reframe_village.gd`，保留现有树木、河道与房屋位置，重建门前铺装和地被避让；随后仍需运行正式关卡替换、导航和目录导出流程。当前正式镜头为透视 FOV 35°、25° 俯角；位置 CameraOffset 与角度 CameraRotationDegrees 统一在 SceneCameraComponent3D 调整。CameraOcclusionComponent3D 对持续完全遮挡角色的树木、房屋进行整体隐藏，同一物体的全部子网格同步渐隐，保留碰撞、阴影和 GI；NearFadeDistance 为 1.0 米，仅在正交模式启用。详细参数见 `docs/rendering/hd2d-camera.md`。入口调整后原生验证通过 60/60 项布局检查和 13 条导航连接；八处原生试拍覆盖出生点、六处转向入口与村长家。
 
 仅更新导航时运行 `res://scripts/tools/art/forest_village_whitebox/rebuild_navigation.gd`，不会重写场景摆放。它与替换工具共用 `village_navigation.gd`：只解析物理碰撞，使用 0.05 米高度体素；项目默认导航地图的 `cell_height` 同步为 0.05 米。旧的 0.2 米体素让平地上的导航点抬高到约 0.3 米，超过 NPC 的 0.2 米路径点到达容差，导致居民在首点附近反复折返；重新烘焙后该段路径高度约 0.1 米，沿用原 NPC 导航逻辑即可通行。工具保存前检查十户门前、居民出生点、桥面和东岸共 13 条连接。
 

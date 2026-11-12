@@ -32,7 +32,7 @@ func prepare_materials() -> void:
 	var texture := ImageTexture.create_from_image(pixels)
 	PALETTE.new().save_resource(texture,"res://assets/textures/environment/forest_village/houses/painterly_house_atlas_v3.res")
 	var data_maps: Dictionary = {}
-	for suffix: String in ["normal","roughness","orm"]:
+	for suffix: String in ["normal","roughness"]:
 		var path := "res://assets/textures/environment/forest_village/houses/painterly_house_atlas_v3_"+suffix
 		var data := Image.load_from_file(path+".png")
 		assert(data.get_width() == 2048 and data.get_height() == 2048)

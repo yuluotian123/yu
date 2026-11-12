@@ -29,7 +29,7 @@ Profile 保留原有关卡的雾、曝光、灯光与泛光参考值；只有显
 
 日月方向和天空动画遵循世界时钟；灯光能量倍率、间接光倍率及相机曝光互不绑定，默认直接编辑场景中的灯光与 CameraAttributes。
 
-日月灯光朝向以垂直于天球轨道的固定轴构建 Basis，保留原光照方向，避免使用世界 Up 时阴影图随高空太阳额外滚转。连续推进、编辑器预览和主动跳时共用此计算。`ShadowFilterBlur` 支持 0–8；森林关卡使用 High PCF 和 6.0 过滤宽度，只柔化投影边界，未启用全画面 TAA。当前正交镜头的阴影覆盖由相机远裁剪决定，`ShadowDistance` 主要适用于透视镜头。原生静止镜头对照入口为 `scripts/tools/rendering/validate_forest_shadow_stability.gd`，记录方向一致性、墙面/树干/道路的时间变化及配对 GPU 开销；输出位于 `.godot/forest-shadow-stability/`。
+日月灯光朝向以垂直于天球轨道的固定轴构建 Basis，保留原光照方向，避免使用世界 Up 时阴影图随高空太阳额外滚转。连续推进、编辑器预览和主动跳时共用此计算。`ShadowFilterBlur` 支持 0–8；森林关卡使用 High PCF 和 6.0 过滤宽度，只柔化投影边界，未启用全画面 TAA。当前森林使用透视镜头，ShadowDistance 为 80 米。旧正交固定构图的对照脚本已退役；阴影效果通过主场景正常昼夜推进与跳时检查。
 
 DriveExposureFromProfile 默认关闭，保留手动 CameraAttributes；原生 AutoExposure 开关始终独立。灯罩材质和自发光仍由对应资源控制。
 

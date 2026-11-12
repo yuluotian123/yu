@@ -1,9 +1,8 @@
 # HD-2D 场景镜头
 
-ForestTownLevel/CameraRig/Camera3D 当前使用透视投影、FOV 45°、20° 俯角；CameraOffset 为 (0, 3, 8)。Size 5.8 保留为正交模式的备用配置。
+ForestTownLevel/CameraRig/Camera3D 当前使用透视投影、FOV 35°、25° 俯角；CameraOffset 为 (0, 3.5, 8)。Size 5.8 保留为正交模式的备用配置。
 镜头位置和角度统一在 CameraRig 的 SceneCameraComponent3D 中调整：开启 UseComponentFraming，使用 CameraOffset 和 CameraRotationDegrees。Camera3D 保留投影、Size、Near/Far；hd2d_free_3d.tres 调整跟随、死区和前视。构图参数支持编辑器预览；保存前恢复 Camera3D 备用构图，避免把预览位置重复写入场景。关闭 UseComponentFraming 的其他关卡沿用原节点构图。
-CameraFramingTarget 是编辑器构图时角色所在位置的参照点；它不会传送或限制角色。
-森林和工坊的 SceneCameraComponent3D.FramingOriginPath 均绑定到独立的 CameraFramingTarget。只调整出生点时，移动 EntryDefault 或其子节点 Arrival 即可，不移动 CameraFramingTarget；运行时镜头会按原构图平移到玩家的新位置。FramingOriginPath 留空会把激活时玩家的位置算作构图基准，导致更改出生点后镜头仍保留原场景位置；绑定到 Arrival 则会让移动出生点同时改变构图基准。
+森林已移除 CameraFramingTarget，FramingOriginPath 留空；UseComponentFraming 开启时，运行时直接使用跟随目标加 CameraOffset 构图，出生点由 EntryDefault/Arrival 管理。工坊仍保留独立 CameraFramingTarget，用于编辑器构图预览。只有关闭 UseComponentFraming、沿用节点构图的场景，才按 FramingOriginPath 计算原始相对偏移。
 读档后相机按同一构图跟随恢复后的角色位置，不把存档位置误当作镜头偏移基准。
 
 Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格跳跃。
@@ -28,10 +27,10 @@ Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格
 | 参数 / 位置 | 当前值 | 调整效果 |
 | --- | --- | --- |
 | SceneCameraComponent3D / UseComponentFraming | true | 启用组件构图；关闭后使用 Camera3D 的备用位置和旋转。 |
-| SceneCameraComponent3D / CameraOffset | (0, 3, 8) | 相对于构图参照点/运行时跟随目标的世界空间位置，单位米；不随帧数累积。 |
-| SceneCameraComponent3D / CameraRotationDegrees | (-20, 0, 0) | 世界空间欧拉角；X 接近 0 更平视，更负则更俯视。28° 对照会引入过多树冠，因此使用 20°。 |
+| SceneCameraComponent3D / CameraOffset | (0, 3.5, 8) | 相对于运行时跟随目标的世界空间位置，单位米；不随帧数累积。 |
+| SceneCameraComponent3D / CameraRotationDegrees | (-25, 0, 0) | 世界空间欧拉角；X 接近 0 更平视，更负则更俯视。 |
 | Camera3D / Projection | Perspective | 透视投影，物体大小随距离变化。 |
-| Camera3D / FOV | 45 | 透视视野角度；越小视野越窄、人物越大。 |
+| Camera3D / FOV | 35 | 透视视野角度；越小视野越窄、人物越大。 |
 | Camera3D / Size | 5.8 | 仅正交模式生效，越小人物越大。 |
 | Camera3D / Near | 0.001 | 最近裁切距离。 |
 | CameraRig / CameraOcclusionComponent3D / NearFadeDistance | 1.0 | 正交近处表面渐隐范围，单位米；当前透视模式不启用，0 关闭，编辑器可预览。 |
@@ -52,7 +51,7 @@ Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格
 | Profile / LookUpAction / LookDownAction | camera_up / camera_down | 非 Free3D 模式下手动观察使用的输入动作。 |
 | Profile / ManualLookDistance | 0.8 | 手动观察最大高度偏移，有输入时替代跳跃前视。 |
 
-当前 CameraFramingTarget 为 (1.56, 0.55, 22.62)。运行时使用“玩家位置＋镜头相对构图参照点的偏移”，保留原构图、跟随死区和前视。透视模式通过 FOV 或 CameraOffset 调整人物大小；正交模式使用 Size。
+森林默认 Arrival 为 (1.56, 0.55, 22.62)。组件构图使用玩家位置与 CameraOffset，并叠加跟随平滑和前视；透视模式通过 FOV 或 CameraOffset 调整人物大小，正交模式使用 Size。
 
 近处渐隐统一由 `CameraOcclusionComponent3D.NearFadeDistance` 管理。选中 `CameraRig`，展开 Components 中的 `CameraOcclusionComponent3D` 即可调整，当前为 1.0 米，0 关闭，仅正交模式生效。组件在 `OccluderRootPath` 范围内查找 `camera_near_fade` 分组，当前包含 274 棵乔木和 10 栋房屋；模型实例不再单独保存距离。切换到其他镜头、退出组件或编辑器保存前会恢复原实例参数，保存后自动恢复预览。
 
@@ -63,4 +62,4 @@ Player 的 MovementSpace=Free3D：W/S 控制世界 -Z/+Z，A/D 控制 X；空格
 着色器 `assets/shaders/town/camera_near_fade.gdshaderinc` 只负责逐表面渲染：靠近正交近裁面的表面按固定 4×4 有序图案渐隐，当前范围下 0.25 米内清空；没有逐帧随机噪声，也不会因为某部分接近镜头就隐藏整栋旁边的房屋。阴影通道跳过此处理。角色被完整遮挡后的原有持续检测仍独立工作。
 
 镜头位置与角度保存在 `SceneCameraComponent3D`，投影、FOV、Size 和裁切面保存在 `Camera3D`，遮挡、近处渐隐和穿入保护保存在 `CameraOcclusionComponent3D`；布局替换工具保留这些配置。草地与环境配置不随 `NearFadeDistance` 或 `HideCameraInteriors` 改变。
-重新选择编辑器构图参照位置时移动 CameraFramingTarget；组件预览相机会跟随。单独改变出生位置不需要移动参照点。该节点不会修改存档或传送角色。
+有 CameraFramingTarget 的关卡可用它调整编辑器预览位置；森林按当前组件偏移在实机检查构图。出生位置统一修改 Arrival。

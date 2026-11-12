@@ -44,7 +44,8 @@ end
 -- 工程约定：主角当前仅使用大剑；跳跃文档只展示完整动作。
 local order = {"run", "jump", "hurt", "death"}
 local included = {}
-for _, name in ipairs(order) do included[name] = true end
+-- Movement now comes from the three stance previews; do not regenerate the retired run GIF.
+for _, name in ipairs({"jump", "hurt", "death"}) do included[name] = true end
 local labels = {run="跑步", jump="完整跳跃", hurt="受击", death="倒地"}
 local status = {run="循环播放", jump="跳高约 0.6 米；全程可平移", hurt="已有素材，当前玩家图未接入", death="已有素材，当前玩家图未接入"}
 local profiles = {{key="greatsword", label="大剑"}}

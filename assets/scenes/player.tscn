@@ -22,6 +22,11 @@
 [ext_resource type="Resource" uid="uid://b7dyeq2jcvjxl" path="res://assets/resources/character/player/profile.tres" id="character_profile_player"]
 [ext_resource type="PackedScene" path="res://assets/scenes/ui/world_interaction_hud.tscn" id="world_interaction_hud"]
 [ext_resource type="Script" uid="uid://snljhur7pc0n" path="res://scripts/gamelogic/player/interaction/PlayerWorldInteractionComponent3D.cs" id="world_interaction_script"]
+[ext_resource type="Script" path="res://scripts/gamelogic/character/presentation/CharacterContactShadowComponent3D.cs" id="contact_shadow_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/characters/contact_shadow.tres" id="contact_shadow_texture"]
+
+[sub_resource type="Resource" id="contact_shadow_component"]
+script = ExtResource("contact_shadow_script")
 
 [sub_resource type="Resource" id="character_data_player"]
 script = ExtResource("character_data_script")
@@ -87,7 +92,19 @@ size = Vector3(0.468, 0.936, 0.468)
 [node name="Player" type="Node3D" unique_id=587364041]
 script = ExtResource("1_gobj")
 PersistentId = "player"
-Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence"), SubResource("world_interaction")])
+Components = Array[ExtResource("2_0hrit")]([SubResource("character_data_player"), SubResource("sub_player_input"), SubResource("sub_character_graph"), SubResource("sub_ability_system"), SubResource("sub_movement_component"), SubResource("sub_animation"), SubResource("sub_equipment"), SubResource("sub_inventory"), SubResource("sub_persistence"), SubResource("world_interaction"), SubResource("contact_shadow_component")])
+
+[node name="ContactShadow" type="Decal" parent="."]
+editor_description = "脚下接触阴影由 CharacterContactShadowComponent3D 对齐实际地面；离地后扩大并淡出。"
+visible = false
+size = Vector3(1.1, 0.2, 0.72)
+texture_albedo = ExtResource("contact_shadow_texture")
+normal_fade = 0.8
+upper_fade = 0.1
+lower_fade = 0.1
+distance_fade_enabled = true
+distance_fade_begin = 25.0
+distance_fade_length = 5.0
 
 [node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=817041810]
 

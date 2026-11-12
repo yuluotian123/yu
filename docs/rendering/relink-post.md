@@ -77,8 +77,8 @@ GPU 清理通过 `relink_gpu_cleanup.gd` 在渲染线程执行。其原生回调
 
 ## 复现与验证
 
-1. 用 RenderDoc 1.46 的 `qrenderdoc.exe --python D:/Project/GitHub/yu/scripts/tools/rendering/extract_relink_post.py` 提取。`YU_PROJECT` 和 `RELINK_RDC` 可覆盖路径；事件编号对应上述完整捕获。临时输出在 `.godot/relink-analysis`。
-2. 使用本项目的 Godot 4.6.1 Mono **Forward+** 执行 `--path D:/Project/GitHub/yu --script res://scripts/tools/rendering/import_relink_luts.gd`。需要实际 RenderingDevice；不能用 dummy headless 或 Compatibility 保存浮点 LUT。脚本校验原始半浮点字节后才保存。
+1. 使用 RenderDoc 1.46，在项目根目录运行 `qrenderdoc.exe --python scripts/tools/rendering/extract_relink_post.py` 提取。源捕获默认放在 `.godot/relink-analysis/standard_d3d11_frame10803.rdc`，`YU_PROJECT` 和 `RELINK_RDC` 可覆盖路径；事件编号对应上述完整捕获。临时输出在 `.godot/relink-analysis`。
+2. 使用本项目配套的 Godot 4.8 Mono **Forward+ Vulkan**，在项目根目录执行 `--path . --rendering-driver vulkan --script res://scripts/tools/rendering/import_relink_luts.gd`。需要实际 RenderingDevice；不能用 dummy headless 或 Compatibility 保存浮点 LUT。脚本校验原始半浮点字节后才保存。
 
 此前 4.6.1 的验证在 D3D12 / RTX 5080 下完成：两套 LUT 字节一致，近/远调色和泛光均有实际像素变化；正午、午夜、黄昏及开关对照已检查，退出时没有新增 GPU RID 泄漏。
 

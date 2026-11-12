@@ -48,4 +48,4 @@
 
 复建顺序：Blender 后台运行 `build_vegetation.py`；Godot headless 运行 `import_vegetation.gd`。`review_vegetation.gd` 在原生 Vulkan 中生成总览与人物同框预览。渲染预览、日志和一次性检查放在忽略目录 `.godot/vegetation_v5/`。
 
-导入检查逐表面核对顶点色、UV、单位长度法线、三角面预算与 LOD；现有村落通行验证 60/60 通过。渲染总览与人物对照已目视检查。完整森林场景使用 `D:/DCC/Godot_4.8/bin/shadow_tent/Godot.windows.editor.x86_64.mono.ddgi_scene.console.exe` 验证：274 棵树全部来自新预制体、制作法线保留、叶片风动启用，雨天含水量与雪天积雪参数绑定通过。不要使用 `bin/` 根目录的旧版 GodotSharp API 检验当前 DDGI，否则会出现 `GetDdgiSky` 方法缺失。此套资源的美术细节由项目实际灯光与曝光决定，独立总览使用自己的检视灯光。
+导入检查逐表面核对顶点色、UV、单位长度法线、三角面预算与 LOD；现有村落通行验证 60/60 通过。渲染总览与人物对照已目视检查。完整森林场景的原生验证检查：274 棵树全部来自新预制体、制作法线保留、叶片风动启用，雨天含水量与雪天积雪参数绑定通过。当前引擎与 API 版本按[引擎说明](../tools/engine.md)配置，避免使用旧版 GodotSharp 包造成 `GetDdgiSky` 方法缺失。此套资源的美术细节由项目实际灯光与曝光决定，独立总览使用自己的检视灯光。

@@ -13,10 +13,10 @@ from pathlib import Path
 
 import renderdoc as rd
 
-root = Path(os.environ.get("YU_PROJECT", "D:/Project/GitHub/yu"))
+root = Path(os.environ.get("YU_PROJECT", Path(__file__).resolve().parents[3]))
 output = root / ".godot" / "relink-analysis"
 output.mkdir(parents=True, exist_ok=True)
-capture_path = Path(os.environ.get("RELINK_RDC", "D:/Project/GitHub/MyMissionSystem/Captures/Relink/standard_d3d11_frame10803.rdc"))
+capture_path = Path(os.environ.get("RELINK_RDC", output / "standard_d3d11_frame10803.rdc"))
 capture = controller = None
 status = {"capture": str(capture_path), "state": "opening"}
 

@@ -1,1 +1,128 @@
-{"generated_at": "2026-11-12 01:39:11", "previews": {"idle": {"file": "greatsword-stance-idle-current.gif", "fps": 24, "frames": 72, "runtime_replaced": true, "source_duration_seconds": 3}, "stance_attacks": {"clips": {"high": {"duration_seconds": 1.0600000000000001, "frames": 34, "variable_frame_times": true}, "low": {"duration_seconds": 0.91100000000000003, "frames": 29, "variable_frame_times": true}, "mid": {"duration_seconds": 0.997, "frames": 38, "variable_frame_times": true}}, "file": "greatsword-stance-attacks-v12.gif", "revision": 12, "runtime_file": "greatsword-stance-attacks-runtime-v12.gif", "runtime_replaced": true, "source": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/manifest.json"}, "stance_movement": {"canvas": [320, 384], "date": "2026-11-09", "description": "保留已确认的全部人物和剑像素，下段步频提高约 27%。上、中段循环各 36 帧 / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 1.1 秒。", "file": "greatsword-stance-low-speed-v13.gif", "foot_anchor": [160, 347], "fps": {"high": 36, "high_start": 36, "low": 30.909090909090907, "mid": 36, "mid_start": 36}, "frames": {"high": 36, "high_start": 12, "low": 34, "mid": 36, "mid_start": 12}, "gif_fps": 30, "loop_seconds": {"high": 1, "low": 1.1000000000000001, "mid": 1}, "method": "comfyui_walk_with_imagegen_aseprite_local_guard_repair", "runtime_file": "greatsword-stance-low-speed-runtime-v13.gif", "runtime_replaced": true, "source": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/manifest.json", "source_fps": 30, "status": "generated_integrated_and_reviewed"}, "stance_particles": {"amount": 18, "directed_edges": 6, "duration_seconds": 0.32000000000000001, "engine": "CPUParticles3D", "file": "greatsword-stance-particles-forest-v2.gif", "gif_fps": 50, "particle_size_meters": 0.042000000000000003, "scene": "assets/scenes/vfx/stance_switch_particles.tscn", "source": "Godot Forward+ forest runtime capture, fixed 60 fps, Relink detail particles", "source_fps": 60}, "transitions": {"directed_edges": 6, "file": "greatsword-stance-transitions-62fps.gif", "fps": 62.399999999999999, "gif_fps": 50, "pairs": 3}}, "schema": 1, "weapons": {"greatsword": {"animations": {"death": {"file": "greatsword-death.gif", "fps": 24, "frames": 16, "gif_duration_seconds": 0.67000000000000004, "loop": false, "source_duration_seconds": 0.66666666666666652}, "hurt": {"file": "greatsword-hurt.gif", "fps": 20, "frames": 8, "gif_duration_seconds": 0.40000000000000002, "loop": false, "source_duration_seconds": 0.39999999999999997}, "jump": {"file": "greatsword-jump.gif", "fps": 18, "frames": 15, "gif_duration_seconds": 0.82999999999999996, "loop": false, "source_duration_seconds": 0.83333333333333359}, "run": {"file": "greatsword-run.gif", "fps": 12, "frames": 18, "gif_duration_seconds": 1.5, "loop": true, "source_duration_seconds": 1.4999999999999996}}, "atlas": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/all-actions-atlas.png", "profile": "assets/resources/weapons/greatsword_animation.tres", "sprite_frames": "assets/resources/sprites/amber_fox_style_v2/greatsword_v4/sprite_frames.tres"}}}
+{
+  "generated_at": "2026-11-12 01:39:11",
+  "previews": {
+    "idle": {
+      "file": "greatsword-stance-idle-current.gif",
+      "fps": 24,
+      "frames": 72,
+      "runtime_replaced": true,
+      "source_duration_seconds": 3
+    },
+    "stance_attacks": {
+      "clips": {
+        "high": {
+          "duration_seconds": 1.06,
+          "frames": 34,
+          "variable_frame_times": true
+        },
+        "low": {
+          "duration_seconds": 0.911,
+          "frames": 29,
+          "variable_frame_times": true
+        },
+        "mid": {
+          "duration_seconds": 0.997,
+          "frames": 38,
+          "variable_frame_times": true
+        }
+      },
+      "file": "greatsword-stance-attacks-v12.gif",
+      "revision": 12,
+      "runtime_file": "greatsword-stance-attacks-runtime-v12.gif",
+      "runtime_replaced": true,
+      "source": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/manifest.json"
+    },
+    "stance_movement": {
+      "canvas": [
+        320,
+        384
+      ],
+      "date": "2026-11-09",
+      "description": "保留已确认的全部人物和剑像素，下段步频提高约 27%。上、中段循环各 36 帧 / 1 秒，起步各 12 帧 / 0.333 秒；下段 34 帧 / 1.1 秒。",
+      "file": "greatsword-stance-low-speed-v13.gif",
+      "foot_anchor": [
+        160,
+        347
+      ],
+      "fps": {
+        "high": 36,
+        "high_start": 36,
+        "low": 30.909090909090907,
+        "mid": 36,
+        "mid_start": 36
+      },
+      "frames": {
+        "high": 36,
+        "high_start": 12,
+        "low": 34,
+        "mid": 36,
+        "mid_start": 12
+      },
+      "gif_fps": 30,
+      "loop_seconds": {
+        "high": 1,
+        "low": 1.1,
+        "mid": 1
+      },
+      "method": "comfyui_walk_with_imagegen_aseprite_local_guard_repair",
+      "runtime_file": "greatsword-stance-low-speed-runtime-v13.gif",
+      "runtime_replaced": true,
+      "source": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/manifest.json",
+      "source_fps": 30,
+      "status": "generated_integrated_and_reviewed"
+    },
+    "stance_particles": {
+      "amount": 18,
+      "directed_edges": 6,
+      "duration_seconds": 0.32,
+      "engine": "CPUParticles3D",
+      "file": "greatsword-stance-particles-forest-v2.gif",
+      "gif_fps": 50,
+      "particle_size_meters": 0.042,
+      "scene": "assets/scenes/vfx/stance_switch_particles.tscn",
+      "source": "Godot Forward+ forest runtime capture, fixed 60 fps, Relink detail particles",
+      "source_fps": 60
+    },
+    "transitions": {
+      "directed_edges": 6,
+      "file": "greatsword-stance-transitions-62fps.gif",
+      "fps": 62.4,
+      "gif_fps": 50,
+      "pairs": 3
+    }
+  },
+  "schema": 1,
+  "weapons": {
+    "greatsword": {
+      "animations": {
+        "death": {
+          "file": "greatsword-death.gif",
+          "fps": 24,
+          "frames": 16,
+          "gif_duration_seconds": 0.67,
+          "loop": false,
+          "source_duration_seconds": 0.6666666666666665
+        },
+        "hurt": {
+          "file": "greatsword-hurt.gif",
+          "fps": 20,
+          "frames": 8,
+          "gif_duration_seconds": 0.4,
+          "loop": false,
+          "source_duration_seconds": 0.39999999999999997
+        },
+        "jump": {
+          "file": "greatsword-jump.gif",
+          "fps": 18,
+          "frames": 15,
+          "gif_duration_seconds": 0.83,
+          "loop": false,
+          "source_duration_seconds": 0.8333333333333336
+        }
+      },
+      "atlas": "assets/textures/sprites/amber_fox_style_v2/greatsword_v4/all-actions-atlas.png",
+      "profile": "assets/resources/weapons/greatsword_animation.tres",
+      "sprite_frames": "assets/resources/sprites/amber_fox_style_v2/greatsword_v4/sprite_frames.tres"
+    }
+  }
+}

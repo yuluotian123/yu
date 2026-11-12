@@ -42,7 +42,7 @@ Godot C# 游戏项目的统一文档入口。当前引擎与构建方式见[引�
 ## 开发工具与许可
 
 - [配置编辑器](tools/config-editor.md)、[运行时调试面板](tools/runtime-gm.md)
-- [架势资源清理与提交检查](tools/project-cleanup-2026-11-09.md)
+- [项目清理与工具维护](tools/project-maintenance.md)
 - [Godot MCP 工具包](tools/godot-mcp/README.md)、[工具包配套技能](tools/godot-mcp/skills/)
 - [项目许可中文说明](licenses/project-LICENSE.zh-CN.md)、[Godot MCP 许可](licenses/godot-mcp-LICENSE)、[第三方归属](licenses/godot-mcp-attributions.md)
 

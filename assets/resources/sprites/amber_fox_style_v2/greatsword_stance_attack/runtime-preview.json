@@ -1,14 +1,34 @@
 {
-  "revision": 8,
+  "revision": 12,
+  "date": "2026-11-12",
   "source_fps": 60,
-  "frames_per_facing": 189,
   "render_size": [
     1536,
     864
   ],
   "camera_size": 4.2,
-  "preview": "greatsword-stance-attacks-runtime-v8.gif",
-  "preview_frames": 102,
+  "preview": "greatsword-stance-attacks-runtime-v12.gif",
+  "preview_frames": 108,
+  "preview_seconds": 3.6,
+  "preview_crop": {
+    "labels": [
+      0,
+      20,
+      1536,
+      60
+    ],
+    "action": [
+      0,
+      280,
+      1536,
+      430
+    ]
+  },
+  "inspected_capture_frames": {
+    "windup": 35,
+    "release_contact": 45,
+    "recovery": 63
+  },
   "checks": {
     "right": {
       "high": {
@@ -21,28 +41,31 @@
           {
             "animation": "attack_high",
             "start": 15,
-            "end": 70
+            "end": 77
           },
           {
             "animation": "idle_high",
-            "start": 71,
-            "end": 101
+            "start": 78,
+            "end": 108
           },
           {
             "animation": "attack_high",
-            "start": 102,
-            "end": 157
+            "start": 109,
+            "end": 171
           },
           {
             "animation": "idle_high",
-            "start": 158,
-            "end": 188
+            "start": 172,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       },
       "mid": {
         "segments": [
@@ -54,28 +77,31 @@
           {
             "animation": "attack_mid",
             "start": 15,
-            "end": 69
+            "end": 73
           },
           {
             "animation": "idle_mid",
-            "start": 70,
-            "end": 101
+            "start": 74,
+            "end": 108
           },
           {
             "animation": "attack_mid",
-            "start": 102,
-            "end": 156
+            "start": 109,
+            "end": 167
           },
           {
             "animation": "idle_mid",
-            "start": 157,
-            "end": 188
+            "start": 168,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       },
       "low": {
         "segments": [
@@ -87,28 +113,31 @@
           {
             "animation": "attack_low",
             "start": 15,
-            "end": 70
+            "end": 68
           },
           {
             "animation": "idle_low",
-            "start": 71,
-            "end": 101
+            "start": 69,
+            "end": 108
           },
           {
             "animation": "attack_low",
-            "start": 102,
-            "end": 157
+            "start": 109,
+            "end": 162
           },
           {
             "animation": "idle_low",
-            "start": 158,
-            "end": 188
+            "start": 163,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       }
     },
     "left": {
@@ -122,28 +151,31 @@
           {
             "animation": "attack_high",
             "start": 15,
-            "end": 70
+            "end": 77
           },
           {
             "animation": "idle_high",
-            "start": 71,
-            "end": 101
+            "start": 78,
+            "end": 108
           },
           {
             "animation": "attack_high",
-            "start": 102,
-            "end": 157
+            "start": 109,
+            "end": 171
           },
           {
             "animation": "idle_high",
-            "start": 158,
-            "end": 188
+            "start": 172,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       },
       "mid": {
         "segments": [
@@ -155,28 +187,31 @@
           {
             "animation": "attack_mid",
             "start": 15,
-            "end": 69
+            "end": 73
           },
           {
             "animation": "idle_mid",
-            "start": 70,
-            "end": 101
+            "start": 74,
+            "end": 108
           },
           {
             "animation": "attack_mid",
-            "start": 102,
-            "end": 156
+            "start": 109,
+            "end": 167
           },
           {
             "animation": "idle_mid",
-            "start": 157,
-            "end": 188
+            "start": 168,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       },
       "low": {
         "segments": [
@@ -188,29 +223,33 @@
           {
             "animation": "attack_low",
             "start": 15,
-            "end": 70
+            "end": 68
           },
           {
             "animation": "idle_low",
-            "start": 71,
-            "end": 101
+            "start": 69,
+            "end": 108
           },
           {
             "animation": "attack_low",
-            "start": 102,
-            "end": 157
+            "start": 109,
+            "end": 162
           },
           {
             "animation": "idle_low",
-            "start": 158,
-            "end": 188
+            "start": 163,
+            "end": 202
           }
         ],
         "complete_single_attack_twice": true,
         "played_trails": 2,
+        "one_finish_accent_per_attack": true,
         "returned_to_idle": true,
-        "effect_cleared": true
+        "effect_cleared": true,
+        "windup_without_particles": true,
+        "recovery_clear_after_tail": true
       }
     }
-  }
+  },
+  "frames_per_facing": 203
 }

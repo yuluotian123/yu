@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("script")
 Animation = &"attack_low"
-Frames = PackedFloat32Array(360, 384, 408)
-BladePoses = PackedVector4Array(205, 247, 301, 251, 335, 267, 458, 267, 378, 267, 498, 267)
-FinishStrength = 1.35
+Frames = PackedFloat32Array(377, 397, 417, 437, 457)
+BladePoses = PackedVector4Array(248, 266, 363, 258, 257, 265, 381, 258, 288, 260, 408, 258, 355, 252, 475, 251, 365, 252, 485, 251)
+FinishStrength = 1.4

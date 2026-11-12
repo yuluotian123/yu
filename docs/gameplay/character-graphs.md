@@ -39,6 +39,8 @@ NPC 通过 Goal、Plan、Action 和选择器配置决策，执行流程见 [NPC 
 4. 在 CharacterGraph 注册武器技能；通用角色也可在 AbilitySystem 配置 `AbilitySet`。
 5. 在武器技能图内配置攻击输入和 Timeline；需要连招时可加入输入窗口与条件分支。当前三架势均为单次普攻。CharacterGraph 保留移动、跳跃和架势输入与组件 Action 节点。
 
+攻击 v12 的前摇与收势时长由武器技能 Timeline 管理，角色图无需添加延时、额外攻击注册或播放节点；收势完成后才解除移动限制并处理排队的换势。
+
 玩家场景示例：[player.tscn](../../assets/scenes/player.tscn)。
 
 ## CharacterGraph 输入

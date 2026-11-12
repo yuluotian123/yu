@@ -43,7 +43,7 @@ func _initialize() -> void:
 			seconds += pose_seconds
 			checked += 1
 		assert(is_equal_approx(seconds, float(clip.duration)))
-		assert(seconds <= 1.2, "重攻击包含蓄力、落点与收招，单段应在 1.2 秒内回架")
+		assert(seconds >= 0.85 and seconds <= 1.2, "单段保留蓄势与完整回架，整体节奏控制在 0.85 至 1.2 秒")
 		durations[animation] = seconds
 		var trail: Resource = load("res://assets/resources/weapons/greatsword_attack_%s_trail.tres" % clip.key)
 		assert(StringName(trail.get("Animation")) == animation)
@@ -62,26 +62,35 @@ func _initialize() -> void:
 			assert(tip_max_y - tip_min_y <= 32 and tip_min_y >= 200, "中段横扫不能变成过顶斩或上刺")
 		elif clip.stance == "low":
 			# Forward lunge may sink with the knees; the blade stays horizontal and never travels upward.
-			assert(tip_min_y >= 240 and tip_max_y - tip_min_y <= 18 and poses[-1].z - poses[0].z >= 80 and poses[-1].w >= poses[0].w - 4, "低位平刺向前送出，允许屈膝下沉，不得上挑")
+			var forward_travel := poses[-1].z - poses[0].z
+			assert(tip_min_y >= 240 and tip_max_y - tip_min_y <= 18 and forward_travel >= 80 and absf(poses[-1].w - poses[0].w) <= forward_travel * 0.15, "低位平刺以向前送出为主，剑尖起伏须小于前送距离的 15%，不得上挑")
+		var release_pose: Dictionary = clip.records[int(clip.holds.release_frame)]
+		var impact_pose: Dictionary = clip.records[int(clip.holds.impact_frame)]
+		var recovery_pose: Dictionary = clip.records[int(clip.holds.recovery_frame)]
+		var release_frame := int(release_pose.runtime_first_frame)
+		var impact_frame := int(impact_pose.runtime_first_frame)
+		var recovery_frame := int(recovery_pose.runtime_first_frame)
+		assert(int(keys[0]) >= release_frame and int(keys[-1]) <= impact_frame, "刀光只跟随出手与落点，不覆盖前后摇")
 		var strike_seconds := 0.0
-		for n in range(int(keys[0]), int(keys[-1])):
+		for n in range(release_frame, impact_frame):
 			strike_seconds += frames.get_frame_duration(animation, n) / frames.get_animation_speed(animation)
-		assert(strike_seconds <= 0.065, "单段重击的挥出集中于 65 毫秒内")
+		assert(strike_seconds >= 0.075 and strike_seconds <= 0.12, "挥出保留可读的转刃姿势，集中于 75 至 120 毫秒")
 		strike_checks[clip.key] = {"seconds":strike_seconds,"tip_y_span":tip_max_y-tip_min_y,"forward":true}
 		var windup := 0.0
-		for n in range(int(keys[0])):
+		for n in range(release_frame):
 			windup += frames.get_frame_duration(animation, n) / frames.get_animation_speed(animation)
 		var windup_pose: Dictionary = clip.records[int(clip.holds.windup_frame)]
-		var impact_pose: Dictionary = clip.records[int(clip.holds.impact_frame)]
 		var windup_frame := int(windup_pose.runtime_first_frame)
-		var impact_frame := int(impact_pose.runtime_first_frame)
-		assert(windup_frame < int(keys[0]) and impact_frame >= int(keys[-1]), "顿帧必须位于挥出窗口两侧")
+		assert(windup_frame < release_frame and impact_frame >= int(keys[-1]), "顿帧必须位于挥出窗口两侧")
 		var loaded_hold := float(windup_pose.runtime_frames) / frames.get_animation_speed(animation)
 		var impact_hold := float(impact_pose.runtime_frames) / frames.get_animation_speed(animation)
-		assert(windup >= 0.25 and windup <= 0.55 and windup >= strike_seconds * 2.5, "蓄力应形成慢蓄快出的对比")
-		assert(loaded_hold >= 0.12 and loaded_hold <= 0.18, "蓄满姿势停顿 120 至 180 毫秒")
-		assert(impact_hold >= 0.12 and impact_hold <= 0.15, "落点顿帧 120 至 150 毫秒")
-		rhythm_checks[clip.key] = {"windup_seconds":windup,"loaded_hold_seconds":loaded_hold,"impact_hold_seconds":impact_hold}
+		assert(windup >= 0.34 and windup <= 0.48 and windup >= strike_seconds * 3, "蓄势仍慢于出手，缩短等待后连续衔接挥出")
+		assert(loaded_hold >= 0.05 and loaded_hold <= 0.09, "蓄满短停 50 至 90 毫秒，避免长时间定住")
+		assert(impact_hold >= 0.04 and impact_hold <= 0.06, "落点短停 40 至 60 毫秒后连续收势")
+		var recovery_seconds := seconds - float(recovery_frame) / frames.get_animation_speed(animation)
+		assert(recovery_seconds >= 0.35 and recovery_seconds <= 0.55, "收势以连续姿势保留承重、屈肘与回架，控制在 350 至 550 毫秒")
+		assert(int(clip.frames) - int(clip.holds.recovery_frame) >= 12, "收势必须有连续姿势，不能只延长末帧")
+		rhythm_checks[clip.key] = {"windup_seconds":windup,"loaded_hold_seconds":loaded_hold,"impact_hold_seconds":impact_hold,"recovery_seconds":recovery_seconds}
 		if int(clip.step) > 1:
 			var start := Image.load_from_file("res://" + String(clip.start_frame))
 			start.convert(Image.FORMAT_RGBA8)

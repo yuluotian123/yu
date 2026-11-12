@@ -12,6 +12,8 @@
 
 左键启动一次完整普攻；攻击中连点或按住不续招，完整收势后再次点击才启动新攻击。每个架势的技能图只有输入、Timeline 和结束三个节点；通用连招窗口及条件节点继续保留。上段向前重劈、中段横扫、下段低位前刺。动作、蓄满和落点停留的实际时间统一记录在[制作配置](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json)和技能 Timeline 中。当前伤害与命中判定尚未接入。
 
+v12 重做中段，减少腰胯反向扭转，横切后先在身前提剑、再屈肘回架；上、下段沿用 v11。继续使用提速后的节奏：蓄势 377–426 毫秒、挥出 80–96 毫秒、落点短停 48–54 毫秒、连续收势 406–484 毫秒。蓄满停留由 130–140 毫秒缩短至 65–70 毫秒，减少停住等待。上段压身重劈后承重提剑，中段通过腰肩带动刃口横切后贴身回架，下段低位平刺后沿原路回收；101 张姿势帧采用独立定时。刀光关键帧重新贴合实际剑刃，冷却与动作锁同步覆盖全程。
+
 ## 资源与组件
 
 - [大剑定义](../../assets/resources/weapons/greatsword.tres)引用攻击能力和动画配置。`WeaponDefinition` 为共享只读配置；`WeaponAnimationProfile` 保存 SpriteFrames、画布、脚底锚点和像素比例。
@@ -19,8 +21,8 @@
 - `WeaponEquipmentComponent3D : Component3D` 在动画组件初始化后、持久化注册前初始化。实例独立维护两个固定槽位、当前槽位、架势、换势动作和待切换请求；通用装备 API 保留，当前玩家只配置大剑。
 - CharacterGraph 用一个注册节点引用武器配置，展开三套普攻；移动、跳跃和架势切换保留原来的输入与组件调用节点，架势切换不注册为能力。每个攻击技能图的 `AbilityInputNodeData` 监听 `player_attack`，排除 `player_stance_mid`，并用 `AbilityCurrentWeaponAttackCondition` 选择当前武器、当前已完成架势的技能。玩家不绑定武器切换和冲刺。
 - `StancePrimaryAttacks` 为各段配置独立 AbilityResource，初始化及装备时一次授予；`CurrentPrimaryAttack` 按当前已完成的架势选择技能。未配置该映射的武器回退到 `PrimaryAttack`，映射非空时须覆盖全部架势。中段保留旧 ID `greatsword_attack` 兼容存档。
-- 当前玩家通过一个 `CharacterRegisterAbilityNodeData` 的 `SourcePath` 引用大剑定义，统一注册其普攻；装备初始化的授予操作幂等，继续支持非玩家入口。`AttackFrames` 提供九个攻击动画并按装备实例合成；切换架势不重建能力实例或刷新冷却，攻击期间的有效换势等待收招。
-- 每击的 Timeline 同时编排动画、刀光与续招窗口。条件节点消费一次缓存后进入下一击，否则进入保持同一动画播放进度的收招段。三个结束分支各用独立 Return 节点，避免多个连接挤入只允许一条连接的输入端口。
+- 当前玩家通过一个 `CharacterRegisterAbilityNodeData` 的 `SourcePath` 引用大剑定义，统一注册其普攻；装备初始化的授予操作幂等，继续支持非玩家入口。`AttackFrames` 提供三个攻击动画并按装备实例合成；切换架势不重建能力实例或刷新冷却，攻击期间的有效换势等待收招。
+- 每套生产 Timeline 编排一段完整动画和刀光，结束后进入唯一 Return，不打开续招窗口。通用输入窗口和消费条件继续保留；以后配置多出口连招时，每个结束分支须使用独立 Return。
 - 当前动画和显示规格以[主角人物档案](../characters/protagonist.md)及[大剑动画配置](../../assets/resources/weapons/greatsword_animation.tres)为准。
 
 三段移动沿用短步幅与同一套移动物理；新攻击按准备、出手和回架独立定时。动作依据和来源见[双手大剑攻击参考](../art/greatsword-attack-references.md)。

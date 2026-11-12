@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-11",
-  "revision": 8,
+  "date": "2026-11-12",
+  "revision": 12,
   "canvas": [
     512,
     384
@@ -13,14 +13,14 @@
     96,
     0
   ],
-  "preview": "greatsword-stance-attacks-v8.gif",
+  "preview": "greatsword-stance-attacks-v12.gif",
   "clips": [
     {
       "stance": "high",
       "key": "high",
       "step": 1,
-      "job": "d51878aa-3916-469f-9b8c-037e3b99ce4d",
-      "seed": 202611100211,
+      "job": "cbbea9f2-b5c6-475f-83fd-2bb4052cdf81",
+      "seed": 202611111001,
       "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high.mkv",
       "idle_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/high/frames/idle_000.png",
       "indices": [
@@ -44,239 +44,332 @@
         17,
         18,
         19,
-        20
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
       ],
       "fps": 30,
       "timing_spans": [
         [
           0,
           0,
+          18
+        ],
+        [
+          1,
+          1,
+          33
+        ],
+        [
+          2,
+          2,
+          43
+        ],
+        [
+          3,
+          3,
+          49
+        ],
+        [
+          4,
+          4,
+          52
+        ],
+        [
+          5,
+          5,
+          57
+        ],
+        [
+          6,
+          6,
+          70
+        ],
+        [
+          7,
+          7,
+          70
+        ],
+        [
+          8,
+          8,
+          34
+        ],
+        [
+          9,
+          9,
+          17
+        ],
+        [
+          10,
+          10,
+          15
+        ],
+        [
+          11,
+          11,
+          15
+        ],
+        [
+          12,
+          12,
+          15
+        ],
+        [
+          13,
+          13,
+          17
+        ],
+        [
+          14,
+          14,
+          17
+        ],
+        [
+          15,
+          15,
+          54
+        ],
+        [
+          16,
+          16,
+          21
+        ],
+        [
+          17,
+          17,
+          22
+        ],
+        [
+          18,
+          18,
+          26
+        ],
+        [
+          19,
+          19,
+          26
+        ],
+        [
+          20,
+          20,
+          26
+        ],
+        [
+          21,
+          21,
+          26
+        ],
+        [
+          22,
+          22,
+          27
+        ],
+        [
+          23,
+          23,
+          27
+        ],
+        [
+          24,
+          24,
+          29
+        ],
+        [
+          25,
+          25,
+          29
+        ],
+        [
+          26,
+          26,
+          30
+        ],
+        [
+          27,
+          27,
+          30
+        ],
+        [
+          28,
+          28,
+          29
+        ],
+        [
+          29,
+          29,
+          29
+        ],
+        [
+          30,
+          30,
+          27
+        ],
+        [
+          31,
+          31,
+          26
+        ],
+        [
+          32,
+          32,
           24
         ],
         [
-          1,
-          1,
-          50
-        ],
-        [
-          2,
-          2,
-          170
-        ],
-        [
-          3,
-          3,
-          50
-        ],
-        [
-          4,
-          4,
-          44
-        ],
-        [
-          5,
-          5,
-          42
-        ],
-        [
-          6,
-          6,
-          10
-        ],
-        [
-          7,
-          7,
-          10
-        ],
-        [
-          8,
-          8,
-          10
-        ],
-        [
-          9,
-          9,
-          10
-        ],
-        [
-          10,
-          10,
-          10
-        ],
-        [
-          11,
-          11,
-          10
-        ],
-        [
-          12,
-          12,
-          140
-        ],
-        [
-          13,
-          13,
-          46
-        ],
-        [
-          14,
-          14,
-          42
-        ],
-        [
-          15,
-          15,
-          40
-        ],
-        [
-          16,
-          16,
-          40
-        ],
-        [
-          17,
-          17,
-          42
-        ],
-        [
-          18,
-          18,
-          44
-        ],
-        [
-          19,
-          19,
-          44
-        ],
-        [
-          20,
-          20,
-          56
+          33,
+          33,
+          30
         ]
       ],
-      "duration_ms": 934,
+      "duration_ms": 1060,
       "source_parts": [
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-clean.mov",
-          "job": "d51878aa-3916-469f-9b8c-037e3b99ce4d",
-          "seed": 202611100211,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-load-v10.mov",
+          "job": "cbbea9f2-b5c6-475f-83fd-2bb4052cdf81",
+          "seed": 202611111001,
           "indices": [
             0,
-            4,
-            5
+            5,
+            6,
+            8,
+            10,
+            12,
+            16,
+            23
           ]
         },
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-cut.mov",
-          "job": "8c8e44c3-35a6-4c97-9d4f-63e899d79b1d",
-          "seed": 202611100221,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-cut-v10.mov",
+          "job": "d06b5fc5-7c4e-4730-9b3f-dfbb20576073",
+          "seed": 202611111011,
           "indices": [
-            7,
+            2,
+            6,
             8,
             10,
+            11,
+            14,
+            16,
+            18
+          ]
+        },
+        {
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-return-v10.mov",
+          "job": "44203a5c-9373-4023-8ecc-8aa1f988167e",
+          "seed": 202611111012,
+          "indices": [
+            0,
+            6,
+            10,
+            11,
             12,
             13,
             14,
             15,
-            17,
+            16,
             18,
-            20
-          ]
-        },
-        {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-clean.mov",
-          "job": "d51878aa-3916-469f-9b8c-037e3b99ce4d",
-          "seed": 202611100211,
-          "indices": [
-            47,
-            48,
-            49,
-            50,
-            51,
-            52,
-            53,
-            72
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            34,
+            38
           ]
         }
       ],
       "blade_keys": [
         [
-          6,
-          326,
-          179,
-          328,
-          76
-        ],
-        [
-          7,
-          342,
-          199,
-          382,
-          103
-        ],
-        [
-          8,
-          351,
-          226,
-          418,
-          152
-        ],
-        [
           9,
-          357,
-          255,
-          453,
-          218
+          325,
+          191,
+          297,
+          83
         ],
         [
           10,
-          355,
-          276,
-          456,
-          267
+          343,
+          198,
+          362,
+          95
         ],
         [
           11,
-          352,
-          292,
-          454,
-          311
+          350,
+          207,
+          385,
+          105
         ],
         [
           12,
-          352,
-          292,
-          454,
-          311
+          360,
+          241,
+          440,
+          167
+        ],
+        [
+          13,
+          354,
+          285,
+          462,
+          275
+        ],
+        [
+          14,
+          340,
+          299,
+          441,
+          337
+        ],
+        [
+          15,
+          335,
+          301,
+          435,
+          347
         ]
       ],
       "strike_source_range": [
-        6,
-        12
+        9,
+        15
       ],
       "holds": {
-        "windup_frame": 2,
-        "impact_frame": 12
+        "windup_frame": 7,
+        "release_frame": 9,
+        "impact_frame": 15,
+        "recovery_frame": 16
       },
-      "finish_strength": 1.4,
+      "finish_strength": 1.5,
       "ability_id": "greatsword_attack_high",
-      "selection_note": "v8: one complete attack per click; reviewed body/sword poses unchanged. Deliberate loading, 48-60 ms release, 130-145 ms contact hold, full controlled recovery.",
+      "selection_note": "v10 reference remake: rear-hip loading and compressed knees, body-led accelerating downcut to a low braced finish, then continuous forward blade lift and elbow-led high-guard recovery. Body/sword source poses are newly authored; external white source wedges are masked in Aseprite.",
       "rejected_source_frames": {
-        "high-clean.mov": {
-          "10-19": "baked white blade smear"
+        "high-load-v10.mov": {
+          "24-37": "large baked white wedge hides the steel; only preparation is used"
         },
-        "high-cut.mov": {
-          "11": "duplicate blade"
+        "high-cut-v10.mov": {
+          "2,6,8,10,11,14,16": "steel intact; only external white wedge masked explicitly in Aseprite"
         }
       },
-      "source_video_sha256": "424b530993c8c221c3f9fbb1835ea1da445f0c7610258321b96c0e4ccc77fd42"
+      "source_video_sha256": "97f8c2c2a6154e04bec3238abaad34ea492e3f31bf44c97607fda9663fdab329"
     },
     {
       "stance": "mid",
       "key": "mid",
       "step": 1,
-      "job": "a8f27d0d-5fc7-4240-9e81-93e82544a179",
-      "seed": 202611100212,
+      "job": "bd03789b-89d6-4f9b-bf57-ab2fce31b88b",
+      "seed": 202611120101,
       "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid.mkv",
       "idle_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/mid/frames/idle_000.png",
       "indices": [
@@ -299,213 +392,358 @@
         16,
         17,
         18,
-        19
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
       ],
       "fps": 30,
       "timing_spans": [
         [
           0,
           0,
+          18
+        ],
+        [
+          1,
+          1,
+          26
+        ],
+        [
+          2,
+          2,
+          30
+        ],
+        [
+          3,
+          3,
+          36
+        ],
+        [
+          4,
+          4,
+          40
+        ],
+        [
+          5,
+          5,
+          44
+        ],
+        [
+          6,
+          6,
+          46
+        ],
+        [
+          7,
+          7,
+          48
+        ],
+        [
+          8,
+          8,
+          38
+        ],
+        [
+          9,
+          9,
+          65
+        ],
+        [
+          10,
+          10,
+          14
+        ],
+        [
+          11,
+          11,
+          14
+        ],
+        [
+          12,
+          12,
+          14
+        ],
+        [
+          13,
+          13,
+          14
+        ],
+        [
+          14,
+          14,
+          14
+        ],
+        [
+          15,
+          15,
+          13
+        ],
+        [
+          16,
+          16,
+          13
+        ],
+        [
+          17,
+          17,
+          48
+        ],
+        [
+          18,
+          18,
+          19
+        ],
+        [
+          19,
+          19,
+          19
+        ],
+        [
+          20,
+          20,
+          20
+        ],
+        [
+          21,
+          21,
+          21
+        ],
+        [
+          22,
+          22,
+          22
+        ],
+        [
+          23,
+          23,
+          23
+        ],
+        [
+          24,
+          24,
           24
         ],
         [
-          1,
-          1,
-          42
+          25,
+          25,
+          25
         ],
         [
-          2,
-          2,
-          40
+          26,
+          26,
+          26
         ],
         [
-          3,
-          3,
-          40
+          27,
+          27,
+          27
         ],
         [
-          4,
-          4,
-          40
+          28,
+          28,
+          27
         ],
         [
-          5,
-          5,
-          170
+          29,
+          29,
+          26
         ],
         [
-          6,
-          6,
-          16
+          30,
+          30,
+          25
         ],
         [
-          7,
-          7,
-          16
+          31,
+          31,
+          24
         ],
         [
-          8,
-          8,
-          16
+          32,
+          32,
+          23
         ],
         [
-          9,
-          9,
-          130
+          33,
+          33,
+          22
         ],
         [
-          10,
-          10,
-          42
+          34,
+          34,
+          21
         ],
         [
-          11,
-          11,
-          38
+          35,
+          35,
+          21
         ],
         [
-          12,
-          12,
-          36
+          36,
+          36,
+          20
         ],
         [
-          13,
-          13,
-          36
-        ],
-        [
-          14,
-          14,
-          36
-        ],
-        [
-          15,
-          15,
-          36
-        ],
-        [
-          16,
-          16,
-          38
-        ],
-        [
-          17,
-          17,
-          38
-        ],
-        [
-          18,
-          18,
-          40
-        ],
-        [
-          19,
-          19,
-          54
+          37,
+          37,
+          27
         ]
       ],
-      "duration_ms": 928,
+      "duration_ms": 997,
       "source_parts": [
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-clean.mov",
-          "job": "a8f27d0d-5fc7-4240-9e81-93e82544a179",
-          "seed": 202611100212,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v12.mov",
+          "job": "bd03789b-89d6-4f9b-bf57-ab2fce31b88b",
+          "seed": 202611120101,
           "indices": [
             0,
+            5,
+            6,
             7,
+            8,
             9,
+            10,
             12,
-            15,
             16,
-            17
+            20
           ]
         },
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-sweep.mov",
-          "job": "44bee3b4-a7df-4a81-a5e2-7f0b7ab674ae",
-          "seed": 202611100313,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v12.mov",
+          "job": "58c24f0f-b5ea-4256-91ad-4f6237136a0f",
+          "seed": 202611120102,
           "indices": [
             4,
-            8,
-            12
+            7,
+            10,
+            12,
+            15,
+            18,
+            26,
+            38
           ]
         },
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-return.mov",
-          "job": "6a40892a-24be-489a-9a4f-37262799e78a",
-          "seed": 202611100223,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-lift-v12.mov",
+          "job": "cd13a729-8a73-4137-9da6-96bc10df782b",
+          "seed": 202611120104,
           "indices": [
-            0,
-            7,
-            8,
-            10,
-            11,
-            13,
-            15,
-            18,
+            26,
+            22,
             20,
+            18,
+            16,
+            14,
+            12,
+            10,
+            8,
+            6,
+            4,
+            0
+          ],
+          "playback": "reverse: controlled lowering source is sampled backward as a direct point lift"
+        },
+        {
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+          "job": "ab810f3b-4cca-4977-80ad-a87d45667a90",
+          "seed": 202611120103,
+          "indices": [
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            30,
             38
           ]
         }
       ],
       "blade_keys": [
         [
-          6,
-          310,
-          242,
-          322,
-          241
+          13,
+          270,
+          252,
+          330,
+          257
         ],
         [
-          7,
-          352,
-          238,
-          485,
-          246
+          14,
+          298,
+          255,
+          427,
+          255
         ],
         [
-          8,
-          352,
-          239,
-          485,
-          240
+          15,
+          315,
+          254,
+          447,
+          254
         ],
         [
-          9,
-          352,
-          239,
-          485,
-          240
+          16,
+          318,
+          252,
+          425,
+          252
+        ],
+        [
+          17,
+          318,
+          252,
+          425,
+          252
         ]
       ],
       "strike_source_range": [
-        6,
-        9
+        10,
+        17
       ],
       "holds": {
-        "windup_frame": 5,
-        "impact_frame": 9
+        "windup_frame": 9,
+        "release_frame": 10,
+        "impact_frame": 17,
+        "recovery_frame": 18
       },
-      "finish_strength": 1.25,
+      "finish_strength": 1.3,
       "ability_id": "greatsword_attack",
-      "selection_note": "v8: one complete attack per click; reviewed body/sword poses unchanged. Deliberate loading, 48-60 ms release, 130-145 ms contact hold, full controlled recovery.",
+      "selection_note": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged.",
       "rejected_source_frames": {
-        "mid-clean.mov": {
-          "14": "excessive blade shortening during windup",
-          "60-61": "clipped tip"
+        "mid-load-v12.mov": {
+          "21-72": "Initial full take has a snapped/glowing cut and a reverse waist-level return; only stable preparation 0-20 and raw26 as imagegen guide are used."
         },
-        "mid-sweep.mov": {
-          "0-3": "duplicate windup already represented by source; front-facing pivot uses original mid-clean frame 17"
+        "mid-tail-v12.mov": {
+          "0-21": "Original direct-return attempt loops below the legs; raw22 is only the raised guide, and only 23+ is delivered."
+        },
+        "mid-lift-v12.mov": {
+          "27-38": "Long near-static horizontal hold omitted; 26 down to 0 are explicitly reversed for the direct lift."
         }
       },
-      "source_video_sha256": "8bc11d42b361dc8235328fdce4b1d020485444b4b87d3ceafedb3d3f01ec90b7"
+      "source_video_sha256": "3ea41f5d047c4ca86700a3308d853ad96385d1ec1d3c3dba01ce2064d272b59e"
     },
     {
       "stance": "low",
       "key": "low",
       "step": 1,
-      "job": "ea98e030-08bf-4102-9c33-82d4fd042d24",
-      "seed": 202611100512,
+      "job": "d3f68362-80b5-4873-bb13-7ef9ee4a91d5",
+      "seed": 202611111031,
       "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low.mkv",
       "idle_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_idle/low/frames/idle_000.png",
       "indices": [
@@ -526,198 +764,276 @@
         14,
         15,
         16,
-        17
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
       ],
       "fps": 30,
       "timing_spans": [
         [
           0,
           0,
-          24
+          18
         ],
         [
           1,
           1,
+          34
+        ],
+        [
+          2,
+          2,
+          43
+        ],
+        [
+          3,
+          3,
           48
         ],
         [
-          2,
-          2,
-          54
-        ],
-        [
-          3,
-          3,
-          54
-        ],
-        [
           4,
           4,
-          180
+          49
         ],
         [
           5,
           5,
-          24
+          45
         ],
         [
           6,
           6,
+          34
+        ],
+        [
+          7,
+          7,
+          41
+        ],
+        [
+          8,
+          8,
+          65
+        ],
+        [
+          9,
+          9,
+          20
+        ],
+        [
+          10,
+          10,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          12,
+          20
+        ],
+        [
+          13,
+          13,
+          48
+        ],
+        [
+          14,
+          14,
+          19
+        ],
+        [
+          15,
+          15,
+          22
+        ],
+        [
+          16,
+          16,
+          22
+        ],
+        [
+          17,
+          17,
           24
         ],
         [
-          7,
-          7,
-          145
+          18,
+          18,
+          24
         ],
         [
-          8,
-          8,
-          46
+          19,
+          19,
+          26
         ],
         [
-          9,
-          9,
-          38
+          20,
+          20,
+          27
         ],
         [
-          10,
-          10,
-          34
+          21,
+          21,
+          29
         ],
         [
-          11,
-          11,
+          22,
+          22,
+          30
+        ],
+        [
+          23,
+          23,
+          30
+        ],
+        [
+          24,
+          24,
           32
         ],
         [
-          12,
-          12,
+          25,
+          25,
           32
         ],
         [
-          13,
-          13,
-          34
+          26,
+          26,
+          30
         ],
         [
-          14,
-          14,
-          36
+          27,
+          27,
+          29
         ],
         [
-          15,
-          15,
-          38
-        ],
-        [
-          16,
-          16,
-          42
-        ],
-        [
-          17,
-          17,
-          56
+          28,
+          28,
+          30
         ]
       ],
-      "duration_ms": 941,
+      "duration_ms": 911,
       "source_parts": [
         {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-power.mov",
-          "job": "ea98e030-08bf-4102-9c33-82d4fd042d24",
-          "seed": 202611100512,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+          "job": "d3f68362-80b5-4873-bb13-7ef9ee4a91d5",
+          "seed": 202611111031,
           "indices": [
             0,
-            10,
-            12
-          ]
-        },
-        {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-drive.mov",
-          "job": "d4ee3453-27b1-41c9-934f-664a05fcbfd2",
-          "seed": 202611100524,
-          "indices": [
-            6,
-            8,
-            8
-          ]
-        },
-        {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-power.mov",
-          "job": "ea98e030-08bf-4102-9c33-82d4fd042d24",
-          "seed": 202611100512,
-          "indices": [
-            17,
-            18,
-            24
-          ]
-        },
-        {
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return.mov",
-          "job": "75a070e9-b04c-497f-9be9-1b920b53ceb7",
-          "seed": 202611100525,
-          "indices": [
-            4,
             6,
             7,
             8,
             9,
             10,
-            11,
-            13,
+            12,
+            30,
+            38
+          ]
+        },
+        {
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+          "job": "eb9dde34-0e60-492e-8f61-627f729c9d17",
+          "seed": 202611111003,
+          "indices": [
+            26,
+            27,
+            28,
+            30,
+            31
+          ]
+        },
+        {
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+          "job": "ec1a9d0f-ad7a-4ebe-9019-1de0bf619666",
+          "seed": 202611111032,
+          "indices": [
+            0,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            30,
             38
           ]
         }
       ],
       "blade_keys": [
         [
-          5,
-          205,
-          247,
-          301,
+          9,
+          248,
+          266,
+          363,
+          258
+        ],
+        [
+          10,
+          257,
+          265,
+          381,
+          258
+        ],
+        [
+          11,
+          288,
+          260,
+          408,
+          258
+        ],
+        [
+          12,
+          355,
+          252,
+          475,
           251
         ],
         [
-          6,
-          335,
-          267,
-          458,
-          267
-        ],
-        [
-          7,
-          378,
-          267,
-          498,
-          267
+          13,
+          365,
+          252,
+          485,
+          251
         ]
       ],
       "strike_source_range": [
-        5,
-        7
+        9,
+        13
       ],
       "holds": {
-        "windup_frame": 4,
-        "impact_frame": 7
+        "windup_frame": 8,
+        "release_frame": 9,
+        "impact_frame": 13,
+        "recovery_frame": 14
       },
-      "finish_strength": 1.35,
+      "finish_strength": 1.4,
       "ability_id": "greatsword_attack_low",
-      "selection_note": "v8: one complete attack per click; reviewed body/sword poses unchanged. Deliberate loading, 48-60 ms release, 130-145 ms contact hold, full controlled recovery.",
-      "rejected_source_frames": {
-        "low-power.mov": {
-          "11": "tall stretched preparation; omitted",
-          "43": "smeared hands on recovery; new return used"
-        },
-        "low-drive.mov": {
-          "9-20": "unwanted overhead arc and baked white trails; only crouched horizontal preparation selected"
-        }
-      },
-      "source_video_sha256": "b40302ba57d0ac5f322a7a689ca7ee0c95af0ba2d9ef734741d0ab2657534a0a"
+      "selection_note": "v10 reference remake: bent-knee rear-leg loading, tightly held hilt at ribs, a near-level direct forward thrust with compact footwork, immediate elbow flexion and hilt retraction before restoring low guard.",
+      "rejected_source_frames": {},
+      "source_video_sha256": "ff3f06909e7250e8a8991fdee360720796dbc71af348fb87b48da54c9ba3ddf0"
     }
   ],
   "chroma_dominance": 64,
-  "chroma_note": "Base green dominance >64 preserves tinted steel. Reviewed correction coordinates remove only one-pixel exterior green spill (>24) and detached debris; specific steel pinholes are restored from adjacent steel. No whole-image low-threshold keying.",
+  "chroma_note": "Base green dominance >64 preserves tinted steel. Aseprite applies explicit one-pixel exterior spill/debris removal and documented local repairs; high-cut external source effects remain locally removed. Per-clip counts are in pixel-corrections.json. No global recoloring or quantization.",
   "pipeline": {
     "assembly": "ffv1 RGB lossless, decoded frames checked against original source parts",
     "source_resolution": [
@@ -732,35 +1048,131 @@
     "matte_corrections": "Aseprite applies the exact erase/restore coordinates; package verifies full expected RGBA, all unchanged retained RGB, atlas, APNG and continuation endpoints."
   },
   "generation_input_files": {
-    "mid-return-workflow.json": {
-      "mid-return-start.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/return-start.png",
-      "mid-return-end.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/return-end.png"
+    "high-load-v10-workflow.json": {
+      "high-reference-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/input.png"
     },
-    "mid-clean-workflow.json": {
-      "stance-attack-mid-v1.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/input.png"
+    "high-cut-v10-workflow.json": {
+      "high-loaded-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/loaded-v10.png",
+      "high-impact-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/impact-v10.png"
     },
-    "high-cut-workflow.json": {
-      "high-cut-end.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/cut-end.png",
-      "high-cut-start.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/cut-start.png"
+    "high-return-v10-workflow.json": {
+      "high-impact-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/impact-v10.png",
+      "high-reference-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/input.png"
     },
-    "high-clean-workflow.json": {
-      "stance-attack-high-v1.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/input.png"
+    "low-load-v10-workflow.json": {
+      "low-reference-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/input.png",
+      "low-loaded-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/loaded-v10.png"
     },
-    "mid-sweep-workflow.json": {
-      "mid-clean-016-input.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/sweep-start.png",
-      "mid-clean-018-input.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/sweep-end.png"
+    "low-thrust-v10-workflow.json": {
+      "low-reference-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/input.png"
     },
-    "low-power-workflow.json": {
-      "attack-v5-low-input.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/input.png"
+    "low-return-v10-workflow.json": {
+      "low-impact-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/impact-v10.png",
+      "low-reference-input-v10.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/input.png"
     },
-    "low-drive-workflow.json": {
-      "v5-low-drive-start.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/drive-start.png",
-      "v5-low-drive-end.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/drive-end.png"
+    "mid-load-v12-workflow.json": {
+      "mid-stable-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/input.png"
     },
-    "low-return-workflow.json": {
-      "v5-low-return-start.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/return-start.png",
-      "v5-low-return-end.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/return-end.png"
+    "mid-cut-v12-workflow.json": {
+      "mid-loaded-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/loaded-v12.png",
+      "mid-impact-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-v12.png"
+    },
+    "mid-tail-v12-workflow.json": {
+      "mid-impact-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-v12.png",
+      "mid-stable-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/input.png"
+    },
+    "mid-lift-v12-workflow.json": {
+      "mid-raised-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/raised-v12.png",
+      "mid-impact-input-v12.png": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-v12.png"
     }
   },
-  "pixel_corrections": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/pixel-corrections.json"
+  "pixel_corrections": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/pixel-corrections.json",
+  "derived_inputs": [
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/loaded-v10.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-load-v10.mov",
+      "source_frame": 23,
+      "resize": "1024x768 -> 512x384 nearest -> 1024x768 nearest in Aseprite"
+    },
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/loaded-v10.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+      "source_frame": 9,
+      "resize": "1024x768 -> 512x384 nearest -> 1024x768 nearest in Aseprite"
+    },
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/low/sources/impact-v10.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+      "source_frame": 31,
+      "resize": "1024x768 -> 512x384 nearest -> 1024x768 nearest in Aseprite"
+    },
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/loaded-v12.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v12.mov",
+      "source_frame": 20,
+      "resize": "1024x768 -> 512x384 nearest -> 1024x768 nearest in Aseprite"
+    },
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-guide-v12.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v12.mov",
+      "source_frame": 26,
+      "resize": "1024x768 -> 512x384 nearest; unedited pose guide for imagegen"
+    },
+    {
+      "image": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/raised-v12.png",
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+      "source_frame": 22,
+      "resize": "1024x768 -> 512x384 nearest -> 1024x768 nearest in Aseprite"
+    }
+  ],
+  "keyposes": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/keyposes.json",
+  "reference_design": {
+    "high": "Monster Hunter greatsword weight: rear-hip loading, torso-led overhead cut, front-knee catch and deliberate lift to guard.",
+    "mid": "Horizontal edge cut with a stable shallow three-quarter view: aligned shoulders and pelvis, small knee-led weight transfer and a compact front-point recovery. No independent waist counter-rotation.",
+    "low": "Wapenkunst rules 4-5: elbow-led hilt retraction and stable point-forward thrust; rear-foot drive, then recovery along the same line.",
+    "character": "Eula official movement rhythm as a balance and step reference, adapted to this same young fox swordswoman with continuous two-handed grip."
+  },
+  "retiming": {
+    "revision": 11,
+    "source_revision": 10,
+    "request": "还是快一点连贯一点",
+    "method": "High and low keep their selected v10 poses and v11 timing. Middle uses the separately documented v12 motion correction.",
+    "changes": {
+      "high": {
+        "before_ms": 1427,
+        "after_ms": 1060,
+        "shorter_percent": 25.72,
+        "windup_ms": 426,
+        "release_ms": 96,
+        "loaded_hold_ms": 70,
+        "contact_ms": 54,
+        "recovery_ms": 484,
+        "poses": 34
+      },
+      "low": {
+        "before_ms": 1231,
+        "after_ms": 911,
+        "shorter_percent": 26.0,
+        "windup_ms": 377,
+        "release_ms": 80,
+        "loaded_hold_ms": 65,
+        "contact_ms": 48,
+        "recovery_ms": 406,
+        "poses": 29
+      }
+    },
+    "applies_to": [
+      "high",
+      "low"
+    ]
+  },
+  "motion_correction": {
+    "revision": 12,
+    "request": "中段扭得有点怪",
+    "replaces_stance": "mid",
+    "method": "Re-generated middle preparation, continuous horizontal cut and compact recovery with aligned shoulders/pelvis and unchanged support-foot order. High/low pose pixels and timing remain v11.",
+    "previous_middle_seconds": 0.997,
+    "middle_seconds": 0.997,
+    "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
+  }
 }

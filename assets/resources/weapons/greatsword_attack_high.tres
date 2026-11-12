@@ -14,6 +14,6 @@ BlocksJump = true
 script = ExtResource("1_script")
 AbilityId = "greatsword_attack_high"
 DisplayName = "上段重劈"
-Cooldown = 0.934
+Cooldown = 1.06
 ActivationPolicy = SubResource("attack_policy")
 Graph = ExtResource("3_timeline")

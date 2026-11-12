@@ -38,10 +38,10 @@ end
 local lines={'[gd_resource type="SpriteFrames" format=3]',''}
 local subs,animations,previewClips={},{},{}
 local manifest={schema=1,date=config.date,revision=config.revision,canvas=config.canvas,foot_anchor=config.foot_anchor,preview=config.preview,
- model='Local MiniMax H3 int8; 28 steps; acceleration LoRA disabled',
+ model='Local MiniMax H3 int8; 28 steps; acceleration LoRA disabled',keyposes=config.keyposes,reference_design=config.reference_design,retiming=config.retiming,motion_correction=config.motion_correction,
  reference_document='docs/art/greatsword-attack-references.md',
- alpha='Green chroma dominance > '..config.chroma_dominance..'; reviewed local matte and steel pinhole edits are recorded in pixel-corrections.json. Other retained video RGB is unchanged. Followups start on the preceding contact pose; every clip ends at the original idle.',
- timing='Selected source poses stay in order; authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json.',clips={}}
+ alpha='Green chroma dominance > '..config.chroma_dominance..'; reviewed local matte and steel pinhole edits are recorded in pixel-corrections.json. Other retained video RGB is unchanged. Clip start and end sources are recorded per frame; every clip ends at the original idle.',
+ timing='Source-part index lists define playback order, including any explicitly reversed recovery segment. Authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json.',clips={}}
 for s,spec in ipairs(config.clips)do
  local stance=spec.stance;local key=spec.key or stance;local name='attack_'..key;local path=tex..key..'/'
  for _,dir in ipairs({'frames/','source-rgb/','sources/','review/'})do

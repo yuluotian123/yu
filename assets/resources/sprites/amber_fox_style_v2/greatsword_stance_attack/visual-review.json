@@ -1,62 +1,89 @@
 {
-  "date": "2026-11-11",
-  "revision": 8,
+  "date": "2026-11-12",
+  "revision": 12,
   "status": "reviewed_and_integrated",
-  "pose_frames": 59,
-  "reviewed": [
-    "The 59 pose PNGs and three atlases are byte-identical to the reviewed v7 first attacks; body, sword, grip and matte edits are unchanged.",
-    "One complete attack per stance; slower loading and recovery surround a 48-60 ms release and 130-145 ms contact hold.",
-    "Both rendered facings checked at contact and recovery, with two single attacks logged per facing. Trail stays forward; finish accent occurs once and clears before idle."
-  ],
+  "pose_frames": 101,
+  "single_attack_seconds": {
+    "high": 1.06,
+    "mid": 0.997,
+    "low": 0.911
+  },
   "rhythm": {
     "high": {
-      "impact_hold_seconds": 0.14,
-      "loaded_hold_seconds": 0.17,
-      "windup_seconds": 0.38
+      "impact_hold_seconds": 0.054,
+      "loaded_hold_seconds": 0.07,
+      "recovery_seconds": 0.484000000000001,
+      "windup_seconds": 0.426
     },
     "low": {
-      "impact_hold_seconds": 0.145,
-      "loaded_hold_seconds": 0.18,
-      "windup_seconds": 0.36
+      "impact_hold_seconds": 0.048,
+      "loaded_hold_seconds": 0.065,
+      "recovery_seconds": 0.406000000000001,
+      "windup_seconds": 0.377
     },
     "mid": {
-      "impact_hold_seconds": 0.13,
-      "loaded_hold_seconds": 0.17,
-      "windup_seconds": 0.356
+      "impact_hold_seconds": 0.048,
+      "loaded_hold_seconds": 0.065,
+      "recovery_seconds": 0.462000000000001,
+      "windup_seconds": 0.391
     }
   },
-  "single_attack_seconds": {
-    "high": 0.934,
-    "mid": 0.928,
-    "low": 0.941
+  "motion_correction": {
+    "revision": 12,
+    "request": "中段扭得有点怪",
+    "replaces_stance": "mid",
+    "method": "Re-generated middle preparation, continuous horizontal cut and compact recovery with aligned shoulders/pelvis and unchanged support-foot order. High/low pose pixels and timing remain v11.",
+    "previous_middle_seconds": 0.997,
+    "middle_seconds": 0.997,
+    "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
   },
+  "source_pose_review": {
+    "new_middle_poses": 38,
+    "unchanged_high_low_png_files": 63,
+    "source_revision_high_low": 11,
+    "middle_source_parts": 4,
+    "middle_recovery_poses": 20,
+    "reverse_lift_explicitly_recorded": true
+  },
+  "reviewed": [
+    "Reviewed all new middle source takes and all 38 delivered middle poses on native dark/light sheets and local face, hands, blade, waist, legs and tail views.",
+    "Middle preparation, cut and recovery retain a consistent shallow three-quarter body view, aligned shoulder/pelvis facing and stable support-foot order. Removed the previous large waist coil and counter-turn.",
+    "Initial full take contributes only stable preparation. Snapped/glowing release and reverse waist sweep are rejected. The first return take contributes only the raised guide and late guard settling; the below-leg loop is excluded.",
+    "The direct front-point lift uses explicitly reversed samples of a controlled lowering reference, then joins the matching raised guide before guard settling. Every source index is recorded; no video-frame body repainting or per-frame recentering.",
+    "Both rendered facings inspected at windup frame 35, release/contact 45 and recovery 63. Runtime traces verify two complete single attacks per stance and one finish accent each."
+  ],
   "pixel_repairs": {
     "high": {
-      "edge_green_pixels_erased": 5595,
-      "steel_pinhole_pixels_restored": 17
+      "edge_green_pixels_erased": 8482,
+      "source_effect_pixels_erased": 43572,
+      "steel_pinhole_pixels_restored": 2
     },
     "mid": {
-      "edge_green_pixels_erased": 4571,
-      "steel_pinhole_pixels_restored": 6
+      "edge_green_pixels_erased": 7568,
+      "detached_debris_pixels_erased": 0,
+      "source_effect_pixels_erased": 0,
+      "steel_pinhole_pixels_restored": 0
     },
     "low": {
-      "edge_green_pixels_erased": 3638,
+      "edge_green_pixels_erased": 7030,
+      "source_effect_pixels_erased": 0,
       "steel_pinhole_pixels_restored": 0
     }
   },
   "validation": {
     "build": {
       "errors": 0,
-      "warnings": 8,
-      "note": "Existing CS0649 UI fields and CS0618 SpriteFrames loop API warning"
+      "warnings": 0,
+      "incremental": true,
+      "note": "No C# gameplay changes; existing full-build warnings are not claimed fixed."
     },
-    "gameplay": "STANCE_ATTACK_CHECK, ATTACK_PARTICLE_CHECK, SINGLE_ATTACK_CHECK, COMBO_FRAMEWORK_CHECK and full STANCE_CHECK passed; keyboard/mouse only",
+    "gameplay": "Full STANCE_CHECK passed, including physical left clicks, stance selection, single recovery, particles, generic combo framework, movement, persistence and instance isolation.",
     "godot_art": {
-      "checked_frames": 59,
+      "checked_frames": 101,
       "durations": {
-        "attack_high": 0.934000000000001,
-        "attack_low": 0.941000000000001,
-        "attack_mid": 0.928000000000001
+        "attack_high": 1.06,
+        "attack_low": 0.911000000000001,
+        "attack_mid": 0.997000000000001
       },
       "frame_size": [
         512,
@@ -67,381 +94,92 @@
       "per_frame_timing_exact": true,
       "rhythm": {
         "high": {
-          "impact_hold_seconds": 0.14,
-          "loaded_hold_seconds": 0.17,
-          "windup_seconds": 0.38
+          "impact_hold_seconds": 0.054,
+          "loaded_hold_seconds": 0.07,
+          "recovery_seconds": 0.484000000000001,
+          "windup_seconds": 0.426
         },
         "low": {
-          "impact_hold_seconds": 0.145,
-          "loaded_hold_seconds": 0.18,
-          "windup_seconds": 0.36
+          "impact_hold_seconds": 0.048,
+          "loaded_hold_seconds": 0.065,
+          "recovery_seconds": 0.406000000000001,
+          "windup_seconds": 0.377
         },
         "mid": {
-          "impact_hold_seconds": 0.13,
-          "loaded_hold_seconds": 0.17,
-          "windup_seconds": 0.356
+          "impact_hold_seconds": 0.048,
+          "loaded_hold_seconds": 0.065,
+          "recovery_seconds": 0.462000000000001,
+          "windup_seconds": 0.391
         }
       },
-      "runtime_ticks": 2803,
+      "runtime_ticks": 2968,
       "strikes": {
         "high": {
           "forward": true,
-          "seconds": 0.06,
-          "tip_y_span": 235.0
+          "seconds": 0.0960000000000001,
+          "tip_y_span": 264.0
         },
         "low": {
           "forward": true,
-          "seconds": 0.048,
-          "tip_y_span": 16.0
+          "seconds": 0.0800000000000001,
+          "tip_y_span": 7.0
         },
         "mid": {
           "forward": true,
-          "seconds": 0.048,
-          "tip_y_span": 6.0
+          "seconds": 0.0960000000000001,
+          "tip_y_span": 5.0
         }
       },
       "visible_rgb_and_alpha_exact": true
     },
     "pixel_audits": {
       "high": {
-        "frames": 19,
-        "original_video_comparison_status": "failed",
-        "intentional_rgb_difference_errors": 4,
-        "unexpected_numeric_errors": 0,
+        "frames": 32,
+        "status": "needs_visual_review",
+        "numeric_errors": 0,
         "independent_full_silhouette_mask": false
       },
       "mid": {
-        "frames": 18,
-        "original_video_comparison_status": "failed",
-        "intentional_rgb_difference_errors": 4,
-        "unexpected_numeric_errors": 0,
+        "frames": 36,
+        "status": "needs_visual_review",
+        "numeric_errors": 0,
         "independent_full_silhouette_mask": false
       },
       "low": {
-        "frames": 16,
-        "original_video_comparison_status": "needs_visual_review",
-        "intentional_rgb_difference_errors": 0,
-        "unexpected_numeric_errors": 0,
+        "frames": 27,
+        "status": "needs_visual_review",
+        "numeric_errors": 0,
         "independent_full_silhouette_mask": false
       }
     },
-    "runtime": {
-      "revision": 8,
-      "source_fps": 60,
-      "frames_per_facing": 189,
-      "render_size": [
-        1536,
-        864
-      ],
-      "camera_size": 4.2,
-      "preview": "greatsword-stance-attacks-runtime-v8.gif",
-      "preview_frames": 102,
-      "checks": {
-        "right": {
-          "high": {
-            "segments": [
-              {
-                "animation": "idle_high",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_high",
-                "start": 15,
-                "end": 70
-              },
-              {
-                "animation": "idle_high",
-                "start": 71,
-                "end": 101
-              },
-              {
-                "animation": "attack_high",
-                "start": 102,
-                "end": 157
-              },
-              {
-                "animation": "idle_high",
-                "start": 158,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          },
-          "mid": {
-            "segments": [
-              {
-                "animation": "idle_mid",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_mid",
-                "start": 15,
-                "end": 69
-              },
-              {
-                "animation": "idle_mid",
-                "start": 70,
-                "end": 101
-              },
-              {
-                "animation": "attack_mid",
-                "start": 102,
-                "end": 156
-              },
-              {
-                "animation": "idle_mid",
-                "start": 157,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          },
-          "low": {
-            "segments": [
-              {
-                "animation": "idle_low",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_low",
-                "start": 15,
-                "end": 70
-              },
-              {
-                "animation": "idle_low",
-                "start": 71,
-                "end": 101
-              },
-              {
-                "animation": "attack_low",
-                "start": 102,
-                "end": 157
-              },
-              {
-                "animation": "idle_low",
-                "start": 158,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          }
-        },
-        "left": {
-          "high": {
-            "segments": [
-              {
-                "animation": "idle_high",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_high",
-                "start": 15,
-                "end": 70
-              },
-              {
-                "animation": "idle_high",
-                "start": 71,
-                "end": 101
-              },
-              {
-                "animation": "attack_high",
-                "start": 102,
-                "end": 157
-              },
-              {
-                "animation": "idle_high",
-                "start": 158,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          },
-          "mid": {
-            "segments": [
-              {
-                "animation": "idle_mid",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_mid",
-                "start": 15,
-                "end": 69
-              },
-              {
-                "animation": "idle_mid",
-                "start": 70,
-                "end": 101
-              },
-              {
-                "animation": "attack_mid",
-                "start": 102,
-                "end": 156
-              },
-              {
-                "animation": "idle_mid",
-                "start": 157,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          },
-          "low": {
-            "segments": [
-              {
-                "animation": "idle_low",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_low",
-                "start": 15,
-                "end": 70
-              },
-              {
-                "animation": "idle_low",
-                "start": 71,
-                "end": 101
-              },
-              {
-                "animation": "attack_low",
-                "start": 102,
-                "end": 157
-              },
-              {
-                "animation": "idle_low",
-                "start": 158,
-                "end": 188
-              }
-            ],
-            "complete_single_attack_twice": true,
-            "played_trails": 2,
-            "returned_to_idle": true,
-            "effect_cleared": true
-          }
-        }
-      }
-    },
-    "gifs": {
-      "greatsword-stance-attacks-v8.gif": {
-        "frames": 84,
-        "seconds": 2.8,
-        "size": [
-          1536,
-          384
-        ],
-        "preview_only": true
-      },
-      "greatsword-stance-attacks-runtime-v8.gif": {
-        "frames": 102,
-        "seconds": 3.4,
-        "size": [
-          1536,
-          864
-        ],
-        "preview_only": true
-      }
-    },
-    "unchanged_pose_and_atlas_sha256": {
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\attack-atlas.png": "227ba282c03675159aef9b183b210b22b2008acb235b1d2d474618b5c8948528",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_000.png": "cb99727f35c4045b9c399ba43d5446c437084ec60ce4635fe935490de10e46ef",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_001.png": "be4349e887776ab70ecff3fe2e4133537800049cf1effc6c15ec7b123609721e",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_002.png": "66b057b83f9bfb90f0c3c6a1460bd618dd2f9a8325359238446dd7e126c5550d",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_003.png": "5de33339c921bcee352f7e396399c7382aea38b7d4c0223fd44d3334b61a15aa",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_004.png": "c20888bdeaa3163caecfcfaaf1353d9533e5a5e58bf41d3b2ac4f8d54f0d85c0",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_005.png": "62ef40fffdd1a40fdb5ad6a7f0b225ee7617ab3c5bbb131d5c9ed081021e2053",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_006.png": "e7248bc1049e2b926a88505c7bb60f2d4e25c54d3f6e3f8dc2919c26d4a41434",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_007.png": "2620a25b0f3225763c63ec87654c841d31ba17c603c18eb2099fc9de83da1310",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_008.png": "b185491773deec98a9fe2d9a1829b97172ed6dd340d187bc0df0558aa3f4ef2c",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_009.png": "814d8d10e1a22a5a9766b3e8ab5f225cb85c4c574ada95d58070894f5c54c2db",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_010.png": "e7da35f76131fe39b563bee66bf0e70599642eca0c874c94b4552f40e8875051",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_011.png": "d42330676e3d37975e1df8d55a0535cfb00537ab84e5cd7749179345807a9b0b",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_012.png": "78ceafdfdcb66c5d27e0d36fb4d66eec9477797e6b3e25b18a7679ed93294b60",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_013.png": "ef297a4bc2cb4be22970a031a5bb63ab63a75ca5378d14def99e7fa832a90692",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_014.png": "cbaa61887e9155100d9ca2fd0b3c37e5a72a491e20fba9cfa7033bba188adb60",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_015.png": "02ef6b460afd1be0fba4ad4dea5c4bbd1988bf8f8a2adc6010fa790c1ef55395",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_016.png": "6d6125f06bfff5584674bac3d4ca9c555528f78e2d21e0b370597112983d227d",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_017.png": "348a099b6ea8464612d2f82b52cfa1be5b93d2ac342a7896882f4d428e3aa7a1",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_018.png": "0e4813768b8f62e7072d1c067a594e4f3ccac88ef0cd1808752116816c5c5a30",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_019.png": "22186c5a615f3c6d96ac1a7aec20b0d2f2a2731b8512f9f1c4d214e44fa40a80",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_020.png": "cb99727f35c4045b9c399ba43d5446c437084ec60ce4635fe935490de10e46ef",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\attack-atlas.png": "014817b7c8b273c644003198c8bacf3be85dcf8e8591392503e5ca31678f596a",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_000.png": "cc12e21207b162eccdffca94c36de042cc52d4659196b9bf6ba4440df54ae9c2",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_001.png": "295e5b416ad73183450f56d613c8c41db4e6c5e4299ba7ab487db77c100ccdfa",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_002.png": "7631341e4b3f852cc24134b7f46aa0f79b6bc8408aa7226a73d517845c938453",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_003.png": "994f44bd76857bebc2d727df62638092d8fb09a722d096fbb9e11cf574896c6f",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_004.png": "17e5e8a4a9dd7d27a4023dfe79f69886272d8344d4c364e8fcdbd1ac2b6ae61f",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_005.png": "82888fbf14afc5a90e3754ef23e148c22cd0dd4ffd9d3bf1a5213c73d0c6fe98",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_006.png": "291fd3b45fc2e54292184483f68b4cc733731335f945be26467bd240e3e8070d",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_007.png": "7b606928aed27c947ef1dbe4235077aeb80e33456f1812b7897e868269518696",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_008.png": "8598b0badfb4e5361afefc2994a09cbdd6ccccddf88f7418a852e9dda0b8a64c",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_009.png": "674d3539cbdff86953e2f75b441bae815532068369fa5d8be6907dae18ba9fbb",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_010.png": "00c20a13314a79a2e132e67f4f590847c5f17f5f5382be239ce509259c4f4b4e",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_011.png": "1a31f3b50549b3cb5e02fb9e1cdbceea066f89811fdec010a5be72c0cd4721c7",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_012.png": "6d80b92f7f5c6d9468e7d9c93af665cfefe39f539cf9b99786b8629d808f0af4",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_013.png": "c1a59e5431adc9ff529e157d0e3421ba2ee1dc6bf71ed26bff11976281b97c31",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_014.png": "9e93d362ce92569130115ffb38b00d596aeacd1d47d21c88954f1ba3bf43c2f8",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_015.png": "1a6dd2d28a1e696994972130cd25b86f00cf93687e4d4df0b493418b88ac08a7",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_016.png": "15197156479ad137572142dce6f58cf943e7ff385cbefb3181b60e9e97ca8e25",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_017.png": "36bdf3493047439f8836cf38c30f788cb40e81c889ec670a8c50cdcb80e06e96",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_018.png": "cb18e238b6ed34ce2b17943d7c5b66741546502890ffd8710fc4ba4f5dbaff55",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\mid\\frames\\attack_019.png": "cc12e21207b162eccdffca94c36de042cc52d4659196b9bf6ba4440df54ae9c2",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\attack-atlas.png": "d8599a75637046c58b1a465ef291174c5b536b3bdd9892dbb801e3ecbed886ed",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_000.png": "58f2263d90cdffab467dfaee1e069766336ab63c657230dd400ac1597ae393d0",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_001.png": "23f4e4f4a640c2b8146a5191825a1497c2e0dc43b74ac7a60116c44c40809992",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_002.png": "92a2b93be187ed380efa8af6d0f07dc798bcc825e18e7aa36c2b0dff3f31b9f3",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_003.png": "db95771dbfc3871b53f8c74fd22349cb89b5d4f665be774704bce698db0c12e7",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_004.png": "a15b609b6218a1df9f8b2e604ef3abd881b3b21e6f598cdf5300acb6075eba2b",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_005.png": "a15b609b6218a1df9f8b2e604ef3abd881b3b21e6f598cdf5300acb6075eba2b",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_006.png": "aa7b1934fb5fe98c49e8b860d15da9b3265d0b1be218e8ad9002379aefb06da5",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_007.png": "1d702c34347d3faac635422f81469131deadc1a585ef3f86e72ed1054b166277",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_008.png": "d6a637ee400d3358102cc706c037e56f3fadffdbe74f9524ef8710952c34fa62",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_009.png": "20a5c8e9b79b84508e4862fc867da99bf65fca04a03f39dcd923eea9bd8f5202",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_010.png": "2f6741d4cc8ee5644fceed7d0815f63bf86db884a039acd8cf50ded3f129368f",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_011.png": "8269078289081319ba2b792b64dc43fd445b779468be4ea5b108b50792590487",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_012.png": "b5d317430ec789994bdb89d6778504ed8f0c6157a8892377cf8a4e92536d4f3e",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_013.png": "05a86c97735bc7360277a5601592ba3c3c6fe09a3d251cc2ef0d11638fbad6b1",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_014.png": "1331735cbd9e97cd35844e072f0031ebf78abb8d3f7f3a6e9fb0d57c01782ef0",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_015.png": "8fcfa2ed3dec3807a3948489aafb1dfdb7756c85b1b716afc18ee58c5823eb9f",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_016.png": "12522025b9bcdb7f3cb8135c25b5010412d3d0e19f7381c772eb99835f856dc4",
-      "assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\low\\frames\\attack_017.png": "58f2263d90cdffab467dfaee1e069766336ab63c657230dd400ac1597ae393d0"
-    },
-    "after_cleanup": {
+    "media": "media-validation.json",
+    "runtime": "runtime-preview.json",
+    "unchanged_high_low_png_files": 63,
+    "references": {
       "weapon_references_resolved": true,
-      "retained_source_workflows_and_inputs_exist": true,
-      "unused_followup_references": 0,
+      "source_workflows_and_inputs_exist": true,
+      "document_links_resolved": true,
+      "three_single_attack_graphs": true,
+      "cooldown_and_timeline_match": true,
+      "source_assembly_hashes_match": true,
+      "output_counts_exact": true,
       "editor_import_exit_code": 0,
-      "art_import_checked_frames": 59
+      "runtime_frames_per_facing": 203,
+      "runtime_gif_frames": 108,
+      "runtime_gif_seconds": 3.6
     }
   },
   "limits": [
-    "No independent full-silhouette masks; numeric checks plus visual review do not prove a perfect silhouette.",
-    "Generated sprite contours and perspective vary slightly; character and blade remain in the same authored frame, not a rigid skeletal rig.",
-    "Damage and hit detection are not part of this animation/input update.",
-    "Headless editor reports certificate, cache-write, RichTextLabel image and MCP registry diagnostics; no missing production resources or parse failures. Rendered shutdown reports rendering RID leaks. Gameplay, art validation and capture exit normally."
+    "No independent full-silhouette masks. Raw audits have zero numeric errors but still require visual review; this does not prove perfect silhouette retention.",
+    "Generated contours and blade perspective vary slightly; the character and sword share authored frames rather than a rigid skeletal rig.",
+    "Middle matte changes alpha only. The two retained high steel RGB repairs are separately recorded and verified by exact expected-RGBA packaging.",
+    "Reference videos were not measured frame by frame; all timing values describe these project clips.",
+    "Damage and hit detection are outside this art correction.",
+    "Headless tools report system certificate, editor help-cache/RichTextLabel and user MCP registry diagnostics; no missing production resources or parse failures. Rendered shutdown reports rendering RID leak diagnostics. All affected checks and both captures exit normally."
   ],
   "cleanup": {
-    "files": 505,
-    "bytes": 237313053,
-    "reason": "Unused second/third attack art, trails, source-only workflows/inputs, and obsolete combo previews. Generic combo code retained."
+    "files": 33,
+    "bytes": 86069732,
+    "reason": "Superseded middle v10 source takes, workflow/prompt files and keypose inputs; v11 previews; nine surplus middle frame/review outputs. Current source provenance and generic combo code retained."
   }
 }

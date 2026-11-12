@@ -7,15 +7,10 @@
     512,
     384
   ],
-  "frame_count": 19,
+  "frame_count": 32,
   "independent_masks_declared": false,
   "expected_mask_source": null,
-  "errors": [
-    "frame 7: interior_rgb_changed",
-    "frame 7: hands_and_weapon: rgb_changed",
-    "frame 13: interior_rgb_changed",
-    "frame 13: hands_and_weapon: rgb_changed"
-  ],
+  "errors": [],
   "review_items": [
     "Whole-silhouette retention has no independent expected mask",
     "frame 0: face: incomplete_retention_coverage",
@@ -131,7 +126,85 @@
     "frame 18: torso: incomplete_retention_coverage",
     "frame 18: hands_and_weapon: incomplete_retention_coverage",
     "frame 18: legs: incomplete_retention_coverage",
-    "frame 18: tail_and_pouch: incomplete_retention_coverage"
+    "frame 18: tail_and_pouch: incomplete_retention_coverage",
+    "frame 19: face: incomplete_retention_coverage",
+    "frame 19: hair: incomplete_retention_coverage",
+    "frame 19: torso: incomplete_retention_coverage",
+    "frame 19: hands_and_weapon: incomplete_retention_coverage",
+    "frame 19: legs: incomplete_retention_coverage",
+    "frame 19: tail_and_pouch: incomplete_retention_coverage",
+    "frame 20: face: incomplete_retention_coverage",
+    "frame 20: hair: incomplete_retention_coverage",
+    "frame 20: torso: incomplete_retention_coverage",
+    "frame 20: hands_and_weapon: incomplete_retention_coverage",
+    "frame 20: legs: incomplete_retention_coverage",
+    "frame 20: tail_and_pouch: incomplete_retention_coverage",
+    "frame 21: face: incomplete_retention_coverage",
+    "frame 21: hair: incomplete_retention_coverage",
+    "frame 21: torso: incomplete_retention_coverage",
+    "frame 21: hands_and_weapon: incomplete_retention_coverage",
+    "frame 21: legs: incomplete_retention_coverage",
+    "frame 21: tail_and_pouch: incomplete_retention_coverage",
+    "frame 22: face: incomplete_retention_coverage",
+    "frame 22: hair: incomplete_retention_coverage",
+    "frame 22: torso: incomplete_retention_coverage",
+    "frame 22: hands_and_weapon: incomplete_retention_coverage",
+    "frame 22: legs: incomplete_retention_coverage",
+    "frame 22: tail_and_pouch: incomplete_retention_coverage",
+    "frame 23: face: incomplete_retention_coverage",
+    "frame 23: hair: incomplete_retention_coverage",
+    "frame 23: torso: incomplete_retention_coverage",
+    "frame 23: hands_and_weapon: incomplete_retention_coverage",
+    "frame 23: legs: incomplete_retention_coverage",
+    "frame 23: tail_and_pouch: incomplete_retention_coverage",
+    "frame 24: face: incomplete_retention_coverage",
+    "frame 24: hair: incomplete_retention_coverage",
+    "frame 24: torso: incomplete_retention_coverage",
+    "frame 24: hands_and_weapon: incomplete_retention_coverage",
+    "frame 24: legs: incomplete_retention_coverage",
+    "frame 24: tail_and_pouch: incomplete_retention_coverage",
+    "frame 25: face: incomplete_retention_coverage",
+    "frame 25: hair: incomplete_retention_coverage",
+    "frame 25: torso: incomplete_retention_coverage",
+    "frame 25: hands_and_weapon: incomplete_retention_coverage",
+    "frame 25: legs: incomplete_retention_coverage",
+    "frame 25: tail_and_pouch: incomplete_retention_coverage",
+    "frame 26: face: incomplete_retention_coverage",
+    "frame 26: hair: incomplete_retention_coverage",
+    "frame 26: torso: incomplete_retention_coverage",
+    "frame 26: hands_and_weapon: incomplete_retention_coverage",
+    "frame 26: legs: incomplete_retention_coverage",
+    "frame 26: tail_and_pouch: incomplete_retention_coverage",
+    "frame 27: face: incomplete_retention_coverage",
+    "frame 27: hair: incomplete_retention_coverage",
+    "frame 27: torso: incomplete_retention_coverage",
+    "frame 27: hands_and_weapon: incomplete_retention_coverage",
+    "frame 27: legs: incomplete_retention_coverage",
+    "frame 27: tail_and_pouch: incomplete_retention_coverage",
+    "frame 28: face: incomplete_retention_coverage",
+    "frame 28: hair: incomplete_retention_coverage",
+    "frame 28: torso: incomplete_retention_coverage",
+    "frame 28: hands_and_weapon: incomplete_retention_coverage",
+    "frame 28: legs: incomplete_retention_coverage",
+    "frame 28: tail_and_pouch: incomplete_retention_coverage",
+    "frame 29: face: incomplete_retention_coverage",
+    "frame 29: hair: incomplete_retention_coverage",
+    "frame 29: torso: incomplete_retention_coverage",
+    "frame 29: hands_and_weapon: incomplete_retention_coverage",
+    "frame 29: legs: incomplete_retention_coverage",
+    "frame 29: tail_and_pouch: incomplete_retention_coverage",
+    "frame 30: face: incomplete_retention_coverage",
+    "frame 30: hair: incomplete_retention_coverage",
+    "frame 30: torso: incomplete_retention_coverage",
+    "frame 30: hands_and_weapon: incomplete_retention_coverage",
+    "frame 30: legs: incomplete_retention_coverage",
+    "frame 30: tail_and_pouch: incomplete_retention_coverage",
+    "frame 31: face: incomplete_retention_coverage",
+    "frame 31: hair: incomplete_retention_coverage",
+    "frame 31: torso: incomplete_retention_coverage",
+    "frame 31: hands_and_weapon: incomplete_retention_coverage",
+    "frame 31: legs: incomplete_retention_coverage",
+    "frame 31: tail_and_pouch: incomplete_retention_coverage"
   ],
   "frames": [
     {
@@ -147,7 +220,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3034,
+          "checked_pixels": 3077,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -159,7 +232,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3389,
+          "checked_pixels": 3328,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -171,7 +244,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4004,
+          "checked_pixels": 4055,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -183,7 +256,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5905,
+          "checked_pixels": 5869,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -195,7 +268,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2136,
+          "checked_pixels": 2008,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -207,7 +280,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3115,
+          "checked_pixels": 2993,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -236,7 +309,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3263,
+          "checked_pixels": 3289,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -248,7 +321,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3648,
+          "checked_pixels": 3553,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -260,7 +333,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3961,
+          "checked_pixels": 4264,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -272,7 +345,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6156,
+          "checked_pixels": 6223,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -284,7 +357,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2034,
+          "checked_pixels": 2163,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -296,7 +369,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2988,
+          "checked_pixels": 3067,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -325,7 +398,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3395,
+          "checked_pixels": 3171,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -337,7 +410,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4079,
+          "checked_pixels": 3617,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -349,7 +422,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4400,
+          "checked_pixels": 4033,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -361,7 +434,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6551,
+          "checked_pixels": 5996,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -373,7 +446,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2470,
+          "checked_pixels": 2278,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -385,7 +458,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3508,
+          "checked_pixels": 3108,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -414,7 +487,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3585,
+          "checked_pixels": 3226,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -426,7 +499,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3976,
+          "checked_pixels": 3579,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -438,7 +511,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4595,
+          "checked_pixels": 4121,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -450,7 +523,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6818,
+          "checked_pixels": 6027,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -462,7 +535,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2492,
+          "checked_pixels": 2457,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -474,7 +547,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3657,
+          "checked_pixels": 3256,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -503,7 +576,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3800,
+          "checked_pixels": 3027,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -515,7 +588,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4108,
+          "checked_pixels": 3389,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -527,7 +600,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4885,
+          "checked_pixels": 4381,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -539,7 +612,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 7044,
+          "checked_pixels": 6217,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -551,7 +624,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2544,
+          "checked_pixels": 2809,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -563,7 +636,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3816,
+          "checked_pixels": 3626,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -592,7 +665,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3873,
+          "checked_pixels": 3095,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -604,7 +677,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4195,
+          "checked_pixels": 3458,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -616,7 +689,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5101,
+          "checked_pixels": 4645,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -628,7 +701,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6994,
+          "checked_pixels": 6523,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -640,7 +713,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2592,
+          "checked_pixels": 3037,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -652,7 +725,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4024,
+          "checked_pixels": 3873,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -681,7 +754,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4194,
+          "checked_pixels": 3059,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -693,7 +766,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4493,
+          "checked_pixels": 3407,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -705,7 +778,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5317,
+          "checked_pixels": 4618,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -717,7 +790,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6912,
+          "checked_pixels": 6442,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -729,7 +802,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2437,
+          "checked_pixels": 3014,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -741,7 +814,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4117,
+          "checked_pixels": 3830,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -770,7 +843,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3785,
+          "checked_pixels": 2968,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -782,7 +855,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3891,
+          "checked_pixels": 3347,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -794,7 +867,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5567,
+          "checked_pixels": 4720,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -806,8 +879,8 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6836,
-          "rgb_max": 103,
+          "checked_pixels": 6456,
+          "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
         "legs": {
@@ -818,7 +891,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2483,
+          "checked_pixels": 2938,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -830,16 +903,13 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4653,
+          "checked_pixels": 3705,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
       },
-      "interior_rgb_max": 103,
-      "errors": [
-        "interior_rgb_changed",
-        "hands_and_weapon: rgb_changed"
-      ],
+      "interior_rgb_max": 0,
+      "errors": [],
       "review_items": [
         "face: incomplete_retention_coverage",
         "hair: incomplete_retention_coverage",
@@ -862,7 +932,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3363,
+          "checked_pixels": 2992,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -874,7 +944,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3441,
+          "checked_pixels": 3265,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -886,7 +956,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5130,
+          "checked_pixels": 4855,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -898,7 +968,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6613,
+          "checked_pixels": 6668,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -910,7 +980,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2507,
+          "checked_pixels": 3028,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -922,7 +992,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4645,
+          "checked_pixels": 3975,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -951,7 +1021,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2732,
+          "checked_pixels": 2829,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -963,7 +1033,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2741,
+          "checked_pixels": 3102,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -975,7 +1045,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4925,
+          "checked_pixels": 4586,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -987,7 +1057,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6447,
+          "checked_pixels": 6246,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -999,7 +1069,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2946,
+          "checked_pixels": 2897,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1011,7 +1081,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4641,
+          "checked_pixels": 4146,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1040,7 +1110,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2107,
+          "checked_pixels": 2449,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1052,7 +1122,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2107,
+          "checked_pixels": 2628,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1064,7 +1134,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4676,
+          "checked_pixels": 4470,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1076,7 +1146,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6100,
+          "checked_pixels": 5865,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1088,7 +1158,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3181,
+          "checked_pixels": 2924,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1100,7 +1170,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4571,
+          "checked_pixels": 4260,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1129,7 +1199,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2028,
+          "checked_pixels": 2368,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1141,7 +1211,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2028,
+          "checked_pixels": 2459,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1153,7 +1223,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4665,
+          "checked_pixels": 4648,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1165,7 +1235,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6105,
+          "checked_pixels": 6201,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1177,7 +1247,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3234,
+          "checked_pixels": 2927,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1189,7 +1259,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4579,
+          "checked_pixels": 4528,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1218,7 +1288,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 1843,
+          "checked_pixels": 2065,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1230,7 +1300,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 1843,
+          "checked_pixels": 2116,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1242,7 +1312,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4480,
+          "checked_pixels": 4291,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1254,7 +1324,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5853,
+          "checked_pixels": 5937,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1266,7 +1336,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3054,
+          "checked_pixels": 2916,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1278,7 +1348,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4387,
+          "checked_pixels": 4384,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1307,7 +1377,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2235,
+          "checked_pixels": 2115,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1319,7 +1389,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2240,
+          "checked_pixels": 2116,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1331,7 +1401,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4320,
+          "checked_pixels": 4401,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1343,8 +1413,8 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5631,
-          "rgb_max": 53,
+          "checked_pixels": 5739,
+          "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
         "legs": {
@@ -1355,7 +1425,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2547,
+          "checked_pixels": 3023,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1367,16 +1437,13 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3782,
+          "checked_pixels": 4568,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
       },
-      "interior_rgb_max": 53,
-      "errors": [
-        "interior_rgb_changed",
-        "hands_and_weapon: rgb_changed"
-      ],
+      "interior_rgb_max": 0,
+      "errors": [],
       "review_items": [
         "face: incomplete_retention_coverage",
         "hair: incomplete_retention_coverage",
@@ -1399,7 +1466,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2403,
+          "checked_pixels": 2543,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1411,7 +1478,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2458,
+          "checked_pixels": 2543,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1423,7 +1490,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4169,
+          "checked_pixels": 4699,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1435,7 +1502,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5446,
+          "checked_pixels": 5910,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1447,7 +1514,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2333,
+          "checked_pixels": 2984,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1459,7 +1526,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3651,
+          "checked_pixels": 4891,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1488,7 +1555,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3007,
+          "checked_pixels": 2036,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1500,7 +1567,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3081,
+          "checked_pixels": 2036,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1512,7 +1579,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4557,
+          "checked_pixels": 4723,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1524,7 +1591,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5605,
+          "checked_pixels": 5895,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1536,7 +1603,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2109,
+          "checked_pixels": 3298,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1548,7 +1615,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3340,
+          "checked_pixels": 4876,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1577,7 +1644,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3278,
+          "checked_pixels": 2054,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1589,7 +1656,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3549,
+          "checked_pixels": 2054,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1601,7 +1668,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4158,
+          "checked_pixels": 4730,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1613,7 +1680,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 5717,
+          "checked_pixels": 5899,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1625,7 +1692,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2116,
+          "checked_pixels": 3283,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1637,7 +1704,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3213,
+          "checked_pixels": 4868,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1666,7 +1733,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3078,
+          "checked_pixels": 2178,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1678,7 +1745,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3332,
+          "checked_pixels": 2178,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1690,7 +1757,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4525,
+          "checked_pixels": 4900,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1702,7 +1769,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6489,
+          "checked_pixels": 6081,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1714,7 +1781,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2613,
+          "checked_pixels": 3275,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1726,7 +1793,7 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3617,
+          "checked_pixels": 4821,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1755,7 +1822,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3094,
+          "checked_pixels": 2168,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1767,7 +1834,7 @@
             270
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3350,
+          "checked_pixels": 2168,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1779,7 +1846,7 @@
             315
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 4469,
+          "checked_pixels": 4885,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1791,7 +1858,7 @@
             345
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 6437,
+          "checked_pixels": 6136,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1803,7 +1870,7 @@
             365
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 2536,
+          "checked_pixels": 3263,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         },
@@ -1815,7 +1882,1164 @@
             355
           ],
           "coverage": "retained_interior_only",
-          "checked_pixels": 3542,
+          "checked_pixels": 4805,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 19,
+      "source_frame": 20,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_020.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2177,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2177,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4851,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6138,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3215,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4790,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 20,
+      "source_frame": 21,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_021.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2224,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2224,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4904,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6263,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3231,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4804,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 21,
+      "source_frame": 22,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_022.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2353,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2371,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4718,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6086,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2960,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4483,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 22,
+      "source_frame": 23,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_023.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2506,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2561,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4794,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6145,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2945,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4553,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 23,
+      "source_frame": 24,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_024.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2749,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2819,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4661,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5945,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2481,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4332,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 24,
+      "source_frame": 25,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_025.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2906,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2970,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4678,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5622,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2228,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3949,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 25,
+      "source_frame": 26,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_026.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3006,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3101,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4584,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5646,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2199,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3575,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 26,
+      "source_frame": 27,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_027.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3162,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3412,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4230,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5685,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2076,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3342,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 27,
+      "source_frame": 28,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_028.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3231,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3493,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4243,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5909,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2051,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3372,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 28,
+      "source_frame": 29,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_029.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3289,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3568,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4396,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6284,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2117,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3324,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 29,
+      "source_frame": 30,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_030.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3231,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3482,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4312,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6041,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2066,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3241,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 30,
+      "source_frame": 31,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_031.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3121,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3385,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4261,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 6096,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2177,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3215,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        }
+      },
+      "interior_rgb_max": 0,
+      "errors": [],
+      "review_items": [
+        "face: incomplete_retention_coverage",
+        "hair: incomplete_retention_coverage",
+        "torso: incomplete_retention_coverage",
+        "hands_and_weapon: incomplete_retention_coverage",
+        "legs: incomplete_retention_coverage",
+        "tail_and_pouch: incomplete_retention_coverage"
+      ]
+    },
+    {
+      "frame": 31,
+      "source_frame": 32,
+      "path": "D:\\Project\\GitHub\\yu\\assets\\textures\\sprites\\amber_fox_style_v2\\greatsword_stance_attack\\high\\frames\\attack_032.png",
+      "regions": {
+        "face": {
+          "bounds": [
+            205,
+            150,
+            365,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3111,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hair": {
+          "bounds": [
+            180,
+            130,
+            370,
+            270
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3363,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "torso": {
+          "bounds": [
+            180,
+            190,
+            370,
+            315
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 4099,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "hands_and_weapon": {
+          "bounds": [
+            45,
+            10,
+            490,
+            345
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 5943,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "legs": {
+          "bounds": [
+            170,
+            265,
+            365,
+            365
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 2027,
+          "rgb_max": 0,
+          "missing_opaque_pixels": 0
+        },
+        "tail_and_pouch": {
+          "bounds": [
+            135,
+            225,
+            370,
+            355
+          ],
+          "coverage": "retained_interior_only",
+          "checked_pixels": 3049,
           "rgb_max": 0,
           "missing_opaque_pixels": 0
         }
@@ -1832,6 +3056,6 @@
       ]
     }
   ],
-  "status": "failed",
+  "status": "needs_visual_review",
   "visual_review_required": true
 }

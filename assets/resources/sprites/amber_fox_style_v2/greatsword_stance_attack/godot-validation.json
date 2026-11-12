@@ -1,9 +1,9 @@
 {
-  "checked_frames": 59,
+  "checked_frames": 101,
   "durations": {
-    "attack_high": 0.934000000000001,
-    "attack_low": 0.941000000000001,
-    "attack_mid": 0.928000000000001
+    "attack_high": 1.06,
+    "attack_low": 0.911000000000001,
+    "attack_mid": 0.997000000000001
   },
   "frame_size": [
     512,
@@ -14,37 +14,40 @@
   "per_frame_timing_exact": true,
   "rhythm": {
     "high": {
-      "impact_hold_seconds": 0.14,
-      "loaded_hold_seconds": 0.17,
-      "windup_seconds": 0.38
+      "impact_hold_seconds": 0.054,
+      "loaded_hold_seconds": 0.07,
+      "recovery_seconds": 0.484000000000001,
+      "windup_seconds": 0.426
     },
     "low": {
-      "impact_hold_seconds": 0.145,
-      "loaded_hold_seconds": 0.18,
-      "windup_seconds": 0.36
+      "impact_hold_seconds": 0.048,
+      "loaded_hold_seconds": 0.065,
+      "recovery_seconds": 0.406000000000001,
+      "windup_seconds": 0.377
     },
     "mid": {
-      "impact_hold_seconds": 0.13,
-      "loaded_hold_seconds": 0.17,
-      "windup_seconds": 0.356
+      "impact_hold_seconds": 0.048,
+      "loaded_hold_seconds": 0.065,
+      "recovery_seconds": 0.462000000000001,
+      "windup_seconds": 0.391
     }
   },
-  "runtime_ticks": 2803,
+  "runtime_ticks": 2968,
   "strikes": {
     "high": {
       "forward": true,
-      "seconds": 0.06,
-      "tip_y_span": 235.0
+      "seconds": 0.0960000000000001,
+      "tip_y_span": 264.0
     },
     "low": {
       "forward": true,
-      "seconds": 0.048,
-      "tip_y_span": 16.0
+      "seconds": 0.0800000000000001,
+      "tip_y_span": 7.0
     },
     "mid": {
       "forward": true,
-      "seconds": 0.048,
-      "tip_y_span": 6.0
+      "seconds": 0.0960000000000001,
+      "tip_y_span": 5.0
     }
   },
   "visible_rgb_and_alpha_exact": true

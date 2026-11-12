@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "date": "2026-11-12",
+  "revision": 12,
+  "tool": "Built-in image_gen (identity-preserving edits)",
+  "normalization": "High keypose preserves its existing nearest whole-canvas normalization. Middle v12 normalization and one-time static baseline alignment are recorded on its keypose record.",
+  "role": "Authoring key poses supplied as ComfyUI endpoint constraints; runtime pixels come from the selected video frames and recorded local corrections",
+  "records": [
+    {
+      "key": "high_impact",
+      "original": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/impact-v10-original.png",
+      "normalized": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/impact-v10.png",
+      "reference_images": [
+        "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/cut-end.png"
+      ],
+      "prompt": "Use case: identity-preserve. Edit target: the supplied pixel-art game sprite on green. Create ONE corrected overhead-cut finishing key pose for the SAME exact fox girl, same covered cream tunic and long sleeves, warm yellow cape, brown leggings/belt/pouch, gold boots, golden hair and side ponytail, amber eyes, two fox ears and one golden cream-tipped tail. Keep the exact original coarse pixel-art scale, pixel clusters, simple flat materials and restrained shading; do not beautify, add outlines or render new facial detail. Keep the 4:3 1024x768 canvas, fixed camera, original character size and feet around y=690; generous green empty space, no cropping. Change the current pose into a forceful braced follow-through of a HEAVY OVERHEAD CUT: torso leans forward over the bent front knee, rear leg pushes back, both shoulders drop with the sword weight, both elbows slightly bent rather than locked. BOTH hands visibly wrap around the same brown hilt behind the same gold straight crossguard, never touch steel. The ONE unchanged rigid straight double-edged gray-blue greatsword now points diagonally DOWN-RIGHT: guard near (680,555), sword point near (875,675), one continuous steel blade roughly 240 pixels long, blade width about 42 pixels. The sword, guard, hilt and hands form one coherent held object, same weapon design as the input, not a new sword. No duplicated blade, no hand gaps, no tiny short blade. Feminine young-adult silhouette and controlled balanced footwork, not bulky muscles. Preserve the face and outfit identity. Plain flat bright chroma green background exactly as reference. NO white arc, NO glow, no trails, no particles, no dust, no speed lines, no shadow, no effects, no text or panels. One full-body sprite only."
+    },
+    {
+      "key": "mid_impact_v12",
+      "original": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-v12-original.png",
+      "normalized": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-v12.png",
+      "normalization": "1448x1086 -> 1024x768 nearest in Aseprite, then a single static +32 input-pixel Y translation to align the original boot baseline; no per-video-frame scaling or translation.",
+      "reference_images": [
+        "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/input.png",
+        "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/mid/sources/impact-guide-v12.png"
+      ],
+      "prompt": "Use case: identity-preserve pixel sprite edit. Edit target and exact identity/style: image 1, the original fox swordswoman on green. Image 2 is ONLY a rough pose guide for a horizontal-cut finishing pose; do not copy its missing arm, shortened blade or side-view body. Create ONE full-body endpoint sprite of the SAME character from image 1 after a waist-height horizontal cut toward screen-RIGHT. Same coarse original pixel scale and large connected color clusters; do not redraw as detailed art. Preserve exactly the golden hair and single side ponytail, amber eyes, small mouth, fox ears, yellow cape, fully covered cream long sleeves and tunic, brown belt/leggings, gold boots and ONE cream-tipped tail. SAME 4:3 canvas, original sprite scale, feet around y=690 on a 1024x768 layout, head around y=365. Stable shallow THREE-QUARTER body view like image 1, looking right. Chest clasp and front belt buckle BOTH remain visible and point the same direction; ribs stay stacked naturally over the pelvis, shoulders and hips aligned, only a tiny coordinated turn. Do not twist or narrow the waist, turn her back, or rotate shoulders opposite the hips. Maintain original foot spacing with a SMALL front-knee bend and slight forward weight transfer, no long lunge, no crossed legs, no foot swap. After the cut BOTH elbows remain slightly bent, not locked. Draw TWO clearly connected covered forearms and TWO hands wrapped around the SAME brown handle, hands spaced along that handle BEHIND the gold straight crossguard. Hands never touch steel. The same ONE rigid straight gray-blue greatsword now lies HORIZONTAL toward screen-RIGHT at lower-chest/waist height: hilt about x=565 to630,y=500; gold guard near (650,500); single steel blade extends to tip near (890,500), around 240 pixels long and 36 pixels wide with pale edges and center ridge. The two arms, hands and hilt must make one anatomically coherent held object. Sword stays its original physical dimensions, no thin short dagger, extra blade or motion duplicate. The body pose should look balanced and natural, with force transferred through the front leg, not wrung through the waist. Front of outfit remains clearly visible, pouch stays on the original visible right hip. Entire body and entire blade inside canvas. Exact same plain flat bright green background as image 1. No glow, no white arcs, particles, trails, blur, dust, shadows, labels or panels. ONE sprite only."
+    }
+  ]
+}

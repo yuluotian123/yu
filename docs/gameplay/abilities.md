@@ -37,6 +37,8 @@ AbilitySystem 负责授予、轮询技能输入、冷却、优先级、并发、
 
 当前三架势各保留一次完整普攻：`AbilityInput -> AbilityTimeline -> Return`，Timeline 不打开续招窗口，攻击中连点或按住不会续招。动画与刀光仍在技能图内，角色图注册方式不变。
 
+当前攻击 v12 的完整 Timeline 为上段 1.060 秒、中段 0.997 秒、下段 0.911 秒。前摇 377–426 毫秒、收势 406–484 毫秒，动画锁与冷却覆盖完整动作；刀光在挥出阶段按各自实际剑路启动，落点只触发一次短促闪光，48–54 毫秒落点短停期间让已发粒子自然淡出。时序由攻击制作配置统一同步，不能只延长动画而提前结束 Ability。
+
 通用连招逻辑继续保留：`AbilityInputWindowAction` 打开输入窗口，`AbilityConsumeInputCondition` 消费一次输入并选择下一段或收招。以后可在同一个 AbilityFlowGraph 中重新编排，无需武器连击状态机。每个结束分支使用独立 Return，避免单输入端口超限。集成检查用内存图覆盖 1/2/3 段、窗口重复输入和取消清理，不依赖已删除的连击素材。
 
 特效场景由 AbilitySystem 持有的 `AbilityEffectPlayer3D` 按需实例化，播放时段由 Timeline 的 Weapon Trail / Particle Scene Clip 控制。Player 不再挂载独立攻击刀光或换势特效组件。换势仍由装备组件处理排队与动画提交，实际开始时运行武器定义中的 `StanceEffectGraph`；它是无注册、无冷却的表现 Timeline。

@@ -1,24 +1,57 @@
 {
-  "alpha": "Green chroma dominance > 64.0; reviewed local matte and steel pinhole edits are recorded in pixel-corrections.json. Other retained video RGB is unchanged. Clip start and end sources are recorded per frame; every clip ends at the original idle.",
+  "alpha": "Green chroma dominance > 64; per-pixel Aseprite matte and steel repairs are recorded in pixel-corrections.json. Body and grip come from complete source poses; canonical idle endpoints are exact.",
+  "authoring_mode": "comfyui",
   "canvas": [
     512,
     384
   ],
   "clips": [
     {
-      "duration": 1.06,
-      "fps": 30,
-      "frames": 34,
+      "duration": 1.6,
+      "fps": 40,
+      "frames": 64,
       "holds": {
         "impact_frame": 15,
+        "impact_hold_frames": 1,
         "recovery_frame": 16,
-        "release_frame": 9,
-        "windup_frame": 7
+        "release_frame": 12,
+        "windup_frame": 10,
+        "windup_hold_frames": 2
       },
       "key": "high",
       "loop": false,
       "name": "attack_high",
-      "prompt_id": "cbbea9f2-b5c6-475f-83fd-2bb4052cdf81",
+      "phases": {
+        "blade_carry": [
+          16,
+          19
+        ],
+        "body_catch": [
+          19,
+          23
+        ],
+        "contact": [
+          15,
+          16
+        ],
+        "elbow_fold": [
+          23,
+          35
+        ],
+        "release": [
+          12,
+          15
+        ],
+        "rise": [
+          35,
+          64
+        ],
+        "windup": [
+          0,
+          12
+        ]
+      },
+      "prompt_id": "6d9ab985-04bf-4b7c-a7d7-e399118c2c78",
       "records": [
         {
           "bounds": [
@@ -27,12 +60,19 @@
             310,
             348
           ],
-          "duration_ms": 18,
+          "duration_ms": 25,
           "frame": 0,
           "opaque_pixels": 10476,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
           "runtime_first_frame": 0,
-          "runtime_frames": 18,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 0
+          },
           "video_frame": 0,
           "sha256": "cb99727f35c4045b9c399ba43d5446c437084ec60ce4635fe935490de10e46ef"
         },
@@ -43,510 +83,1424 @@
             310,
             348
           ],
-          "duration_ms": 33,
+          "duration_ms": 25,
           "frame": 1,
-          "opaque_pixels": 10078,
-          "runtime_first_frame": 18,
-          "runtime_frames": 33,
+          "opaque_pixels": 10031,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 1,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 2
+          },
           "video_frame": 1,
-          "sha256": "d7211964c34a24d7d7310e9f90b84a6d0529e3912710e5e08caa66da17b61498"
+          "sha256": "fb8f2898e56473b4ceae3c6802cde5aeb205f0640247a358327c26f27ef24c99"
         },
         {
           "bounds": [
-            200,
-            66,
-            311,
-            348
-          ],
-          "duration_ms": 43,
-          "frame": 2,
-          "opaque_pixels": 10356,
-          "runtime_first_frame": 51,
-          "runtime_frames": 43,
-          "source_kind": "video",
-          "video_frame": 2,
-          "sha256": "8bef6a2ae1c91e7f4951be8cc2382fff01468035780594108644a61e590486a7"
-        },
-        {
-          "bounds": [
-            172,
-            110,
-            312,
-            348
-          ],
-          "duration_ms": 49,
-          "frame": 3,
-          "opaque_pixels": 9769,
-          "runtime_first_frame": 94,
-          "runtime_frames": 49,
-          "source_kind": "video",
-          "video_frame": 3,
-          "sha256": "183fcd18fd6db51c02b86731992db484a7d645e176da2cec1932dbb1c891f9bd"
-        },
-        {
-          "bounds": [
-            157,
-            140,
-            314,
-            349
-          ],
-          "duration_ms": 52,
-          "frame": 4,
-          "opaque_pixels": 9725,
-          "runtime_first_frame": 143,
-          "runtime_frames": 52,
-          "source_kind": "video",
-          "video_frame": 4,
-          "sha256": "44e00964b2ed569e7f9df584de243748928b296c58f8340817ced9affb60e8ae"
-        },
-        {
-          "bounds": [
-            154,
-            168,
-            316,
-            349
-          ],
-          "duration_ms": 57,
-          "frame": 5,
-          "opaque_pixels": 9879,
-          "runtime_first_frame": 195,
-          "runtime_frames": 57,
-          "source_kind": "video",
-          "video_frame": 5,
-          "sha256": "82eb828a1c7a16c38d6577028401cdd72133e113ccf099aeb41d4809115eed3c"
-        },
-        {
-          "bounds": [
-            154,
-            168,
-            316,
-            349
-          ],
-          "duration_ms": 70,
-          "frame": 6,
-          "opaque_pixels": 10238,
-          "runtime_first_frame": 252,
-          "runtime_frames": 70,
-          "source_kind": "video",
-          "video_frame": 6,
-          "sha256": "406ff811da9b61d31381260d119a92c78227332dcf46051592a3beed64f59daa"
-        },
-        {
-          "bounds": [
-            154,
-            168,
-            316,
-            349
-          ],
-          "duration_ms": 70,
-          "frame": 7,
-          "opaque_pixels": 10137,
-          "runtime_first_frame": 322,
-          "runtime_frames": 70,
-          "source_kind": "video",
-          "video_frame": 7,
-          "sha256": "6a1fdfdbcf438cd6798424cab1afc0faa04a948a85ce5a7d7fafb8f4be327c08"
-        },
-        {
-          "bounds": [
-            191,
-            108,
-            319,
-            347
-          ],
-          "duration_ms": 34,
-          "frame": 8,
-          "opaque_pixels": 10433,
-          "runtime_first_frame": 392,
-          "runtime_frames": 34,
-          "source_kind": "video",
-          "video_frame": 8,
-          "sha256": "893146fd007bdf102bc4d0b06e71c230ad6870f6b33d02b1eb33754bae92f510"
-        },
-        {
-          "bounds": [
-            188,
-            83,
-            343,
-            347
-          ],
-          "duration_ms": 17,
-          "frame": 9,
-          "opaque_pixels": 10710,
-          "runtime_first_frame": 426,
-          "runtime_frames": 17,
-          "source_kind": "video",
-          "video_frame": 9,
-          "sha256": "746adcefc63916a89d5899f72e6067fd4f6ea33706a13283e3bbe72fda62a093"
-        },
-        {
-          "bounds": [
-            187,
-            95,
-            369,
-            346
-          ],
-          "duration_ms": 15,
-          "frame": 10,
-          "opaque_pixels": 10547,
-          "runtime_first_frame": 443,
-          "runtime_frames": 15,
-          "source_kind": "video",
-          "video_frame": 10,
-          "sha256": "3c2a8cccb11a8049fd5b6c9a0be0fac309fc784f9fdb2c3b5dc2319a9ad0c602"
-        },
-        {
-          "bounds": [
-            187,
-            104,
-            388,
-            346
-          ],
-          "duration_ms": 15,
-          "frame": 11,
-          "opaque_pixels": 10341,
-          "runtime_first_frame": 458,
-          "runtime_frames": 15,
-          "source_kind": "video",
-          "video_frame": 11,
-          "sha256": "7cc6cede924cb841be82f55bb31f2dfc4185f53a341393d03f0036eb5d23a697"
-        },
-        {
-          "bounds": [
-            184,
-            165,
-            441,
-            345
-          ],
-          "duration_ms": 15,
-          "frame": 12,
-          "opaque_pixels": 10670,
-          "runtime_first_frame": 473,
-          "runtime_frames": 15,
-          "source_kind": "video",
-          "video_frame": 12,
-          "sha256": "0f857e46585cf2b16f5867d1b6dd1c5e87b22d7cbabd3274f2c58a6f8ff4cdfe"
-        },
-        {
-          "bounds": [
-            190,
             202,
-            461,
-            345
-          ],
-          "duration_ms": 17,
-          "frame": 13,
-          "opaque_pixels": 10278,
-          "runtime_first_frame": 488,
-          "runtime_frames": 17,
-          "source_kind": "video",
-          "video_frame": 13,
-          "sha256": "7a6f14a1d977fd1d729b0fe52cfd72429eb42a51168b3c1812e33b513bc2779e"
-        },
-        {
-          "bounds": [
-            196,
-            204,
-            442,
-            345
-          ],
-          "duration_ms": 17,
-          "frame": 14,
-          "opaque_pixels": 10179,
-          "runtime_first_frame": 505,
-          "runtime_frames": 17,
-          "source_kind": "video",
-          "video_frame": 14,
-          "sha256": "d308a1422a07070319d29f93db32890bfebbb248a4bd0de4540ebeae14d5248e"
-        },
-        {
-          "bounds": [
-            194,
-            206,
-            438,
-            349
-          ],
-          "duration_ms": 54,
-          "frame": 15,
-          "opaque_pixels": 10160,
-          "runtime_first_frame": 522,
-          "runtime_frames": 54,
-          "source_kind": "video",
-          "video_frame": 15,
-          "sha256": "7821cd8812fe575e5074d1ce296fa82201f4850d361775e7abb68cb8d110f182"
-        },
-        {
-          "bounds": [
-            193,
-            207,
-            438,
-            349
-          ],
-          "duration_ms": 21,
-          "frame": 16,
-          "opaque_pixels": 10027,
-          "runtime_first_frame": 576,
-          "runtime_frames": 21,
-          "source_kind": "video",
-          "video_frame": 16,
-          "sha256": "a1c7180889c22152fe8b7e0cabed982aad33790f16faa06e3d4b17f8b70f6e72"
-        },
-        {
-          "bounds": [
-            193,
-            207,
-            438,
-            349
-          ],
-          "duration_ms": 22,
-          "frame": 17,
-          "opaque_pixels": 10033,
-          "runtime_first_frame": 597,
-          "runtime_frames": 22,
-          "source_kind": "video",
-          "video_frame": 17,
-          "sha256": "0d2eccf2dee5cdb842ee3af6e7c1bc443a7f1108111014a1a5dbb7122cbbd78a"
-        },
-        {
-          "bounds": [
-            192,
-            204,
-            448,
-            345
-          ],
-          "duration_ms": 26,
-          "frame": 18,
-          "opaque_pixels": 10030,
-          "runtime_first_frame": 619,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 18,
-          "sha256": "1a355e8d9a82e0c7d82e96e207c8332a66fadb98a4ff8dd61d679d5617c764b9"
-        },
-        {
-          "bounds": [
-            192,
-            204,
-            451,
-            345
-          ],
-          "duration_ms": 26,
-          "frame": 19,
-          "opaque_pixels": 10071,
-          "runtime_first_frame": 645,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 19,
-          "sha256": "f2d67f4214e06ad9d8449ca9912412809bfb3f1689a446a69e3af07ee0820c10"
-        },
-        {
-          "bounds": [
-            192,
-            204,
-            452,
-            345
-          ],
-          "duration_ms": 26,
-          "frame": 20,
-          "opaque_pixels": 10082,
-          "runtime_first_frame": 671,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 20,
-          "sha256": "7ca26116b042a1874504dba873086e545abb91eb68ebac99b44e332e3d746ece"
-        },
-        {
-          "bounds": [
-            193,
-            203,
-            456,
-            345
-          ],
-          "duration_ms": 26,
-          "frame": 21,
-          "opaque_pixels": 10046,
-          "runtime_first_frame": 697,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 21,
-          "sha256": "5f3786ccdab2b0d6cdc45d1e293603c33b3ea2a36c153ac4a64e31b5d5669438"
-        },
-        {
-          "bounds": [
-            193,
-            199,
-            458,
-            345
-          ],
-          "duration_ms": 27,
-          "frame": 22,
-          "opaque_pixels": 9932,
-          "runtime_first_frame": 723,
-          "runtime_frames": 27,
-          "source_kind": "video",
-          "video_frame": 22,
-          "sha256": "060e261e54bb5833613d8eeca14564e25ca1d3004d681935fe83f4bfc7f3c180"
-        },
-        {
-          "bounds": [
-            193,
-            198,
-            456,
-            345
-          ],
-          "duration_ms": 27,
-          "frame": 23,
-          "opaque_pixels": 10014,
-          "runtime_first_frame": 750,
-          "runtime_frames": 27,
-          "source_kind": "video",
-          "video_frame": 23,
-          "sha256": "2d8d732043db5eb9a2d437ecc888f2689d9a64f2084b4f916b60b780458bd1f5"
-        },
-        {
-          "bounds": [
-            192,
-            195,
-            452,
-            345
-          ],
-          "duration_ms": 29,
-          "frame": 24,
-          "opaque_pixels": 9838,
-          "runtime_first_frame": 777,
-          "runtime_frames": 29,
-          "source_kind": "video",
-          "video_frame": 24,
-          "sha256": "83c9d78f14c990746924d6fa89699d168d672d4b3d396a3e4c83ec1a5bfb09fb"
-        },
-        {
-          "bounds": [
-            193,
-            160,
-            428,
-            345
-          ],
-          "duration_ms": 29,
-          "frame": 25,
-          "opaque_pixels": 9558,
-          "runtime_first_frame": 806,
-          "runtime_frames": 29,
-          "source_kind": "video",
-          "video_frame": 25,
-          "sha256": "f14e1f920ce07f1c533b8739750de70e42e3988430df2f62def66389333f57c3"
-        },
-        {
-          "bounds": [
-            193,
-            125,
-            404,
-            345
-          ],
-          "duration_ms": 30,
-          "frame": 26,
-          "opaque_pixels": 9618,
-          "runtime_first_frame": 835,
-          "runtime_frames": 30,
-          "source_kind": "video",
-          "video_frame": 26,
-          "sha256": "409de3a26de17c8112580a21dd988675fa6fa197878616dea350f12ec6148964"
-        },
-        {
-          "bounds": [
-            194,
-            86,
-            365,
-            345
-          ],
-          "duration_ms": 30,
-          "frame": 27,
-          "opaque_pixels": 9582,
-          "runtime_first_frame": 865,
-          "runtime_frames": 30,
-          "source_kind": "video",
-          "video_frame": 27,
-          "sha256": "dacbf57e1104eedd369c93de63664d365eaba83d2132b3d325535c67a13fe19e"
-        },
-        {
-          "bounds": [
-            195,
-            73,
-            342,
-            345
-          ],
-          "duration_ms": 29,
-          "frame": 28,
-          "opaque_pixels": 9780,
-          "runtime_first_frame": 895,
-          "runtime_frames": 29,
-          "source_kind": "video",
-          "video_frame": 28,
-          "sha256": "99152e62d97aa71360c485cacf7cfc8910f5ced8d2ea450ec0dcb27197b0fd37"
-        },
-        {
-          "bounds": [
-            199,
-            58,
-            312,
-            346
-          ],
-          "duration_ms": 29,
-          "frame": 29,
-          "opaque_pixels": 10111,
-          "runtime_first_frame": 924,
-          "runtime_frames": 29,
-          "source_kind": "video",
-          "video_frame": 29,
-          "sha256": "4a18a51a0fb33db93a3cd0c05b4823234d443842e38d7f7826f856454fe8f207"
-        },
-        {
-          "bounds": [
-            200,
-            58,
-            310,
-            346
-          ],
-          "duration_ms": 27,
-          "frame": 30,
-          "opaque_pixels": 9909,
-          "runtime_first_frame": 953,
-          "runtime_frames": 27,
-          "source_kind": "video",
-          "video_frame": 30,
-          "sha256": "bbf8807494b8a378a3346ecf130abe6f2ab42638cf0a56d310b6fb40620bc140"
-        },
-        {
-          "bounds": [
-            201,
             55,
             310,
             348
           ],
-          "duration_ms": 26,
-          "frame": 31,
-          "opaque_pixels": 10101,
-          "runtime_first_frame": 980,
-          "runtime_frames": 26,
+          "duration_ms": 25,
+          "frame": 2,
+          "opaque_pixels": 10388,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 2,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 4
+          },
+          "video_frame": 2,
+          "sha256": "37057be02603d8036cfa32bcc54f33cbd1a4102f125b6fcf88a1dfb34487b163"
+        },
+        {
+          "bounds": [
+            197,
+            59,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 3,
+          "opaque_pixels": 10527,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 3,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 5
+          },
+          "video_frame": 3,
+          "sha256": "eba36209d5f9281fdfb0330abdc99bab7f824e7cc8eaf624d0e6e0e436336adf"
+        },
+        {
+          "bounds": [
+            171,
+            67,
+            303,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 4,
+          "opaque_pixels": 10496,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 4,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 7
+          },
+          "video_frame": 4,
+          "sha256": "e898fa9c010bdc1a351ff06c4ada55e5570e4acec52476a0102b94c0d39a95b1"
+        },
+        {
+          "bounds": [
+            168,
+            70,
+            295,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 5,
+          "opaque_pixels": 10416,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 5,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 9
+          },
+          "video_frame": 5,
+          "sha256": "1eddd849a7e4bd0578dfeed7c62d56027a97ff4e33177308fd595b8d6546c4e8"
+        },
+        {
+          "bounds": [
+            132,
+            108,
+            275,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 6,
+          "opaque_pixels": 9651,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 6,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 11
+          },
+          "video_frame": 6,
+          "sha256": "658cf45e5e7bc0839e936488d588d00134f4e098a319f2e89794ea8811285704"
+        },
+        {
+          "bounds": [
+            122,
+            120,
+            271,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 7,
+          "opaque_pixels": 9611,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 7,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 13
+          },
+          "video_frame": 7,
+          "sha256": "928182ca7483dd6915a831fbc246f8b24e5c433fffc468c962c786e5cd461c2f"
+        },
+        {
+          "bounds": [
+            118,
+            134,
+            276,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 8,
+          "opaque_pixels": 9554,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 8,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 15
+          },
+          "video_frame": 8,
+          "sha256": "9e11d023982a45f6b739643eec603f750b7c4c5ee6690dbffb503c76fb192e9c"
+        },
+        {
+          "bounds": [
+            118,
+            134,
+            276,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 9,
+          "opaque_pixels": 9542,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 9,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 16
+          },
+          "video_frame": 9,
+          "sha256": "f0054808185f451798be4830e003d60597a5c5c74366f7704dbebb755c8c85ca"
+        },
+        {
+          "bounds": [
+            117,
+            134,
+            276,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 10,
+          "opaque_pixels": 9590,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 10,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 17
+          },
+          "video_frame": 10,
+          "sha256": "ac3ce2d6575ea5d4f9e27b4879785000fb52efeac6c85d8f28c430f82dfc2e5c"
+        },
+        {
+          "bounds": [
+            117,
+            134,
+            276,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 11,
+          "opaque_pixels": 9590,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 11,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 17
+          },
+          "video_frame": 11,
+          "sha256": "ac3ce2d6575ea5d4f9e27b4879785000fb52efeac6c85d8f28c430f82dfc2e5c"
+        },
+        {
+          "bounds": [
+            159,
+            82,
+            302,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 12,
+          "opaque_pixels": 9953,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 12,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 20
+          },
+          "video_frame": 12,
+          "sha256": "ef15cf4f29993857545dd8d19bc7a25efc5f0f99bca8f53fb6e5ffa751cd2b5e"
+        },
+        {
+          "bounds": [
+            194,
+            64,
+            391,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 13,
+          "opaque_pixels": 11756,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 13,
+          "runtime_forward_pixels": 14,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 24
+          },
+          "video_frame": 13,
+          "sha256": "64a0eeb173cb5a9db0a99f15c9b82e309ee5aa656feea55a2b59f3981cada641"
+        },
+        {
+          "bounds": [
+            188,
+            176,
+            457,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 14,
+          "opaque_pixels": 11167,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 14,
+          "runtime_forward_pixels": 34,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 28
+          },
+          "video_frame": 14,
+          "sha256": "c8b89da24ed103659bd5a4b607eed770adc9cba4e1ebc520e65f703365b613ca"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            436,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 15,
+          "opaque_pixels": 10006,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 15,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 30
+          },
+          "video_frame": 15,
+          "sha256": "717bcf7e864d6b459ac312edb288dc50478fe2ee49176e6765a5e85c62f12eb0"
+        },
+        {
+          "bounds": [
+            185,
+            194,
+            424,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 16,
+          "opaque_pixels": 9621,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 16,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 32
+          },
+          "video_frame": 16,
+          "sha256": "1a7ad0e3e7cde29d809b0ba590cc01033a23a5ca86690283f02307e938879549"
+        },
+        {
+          "bounds": [
+            184,
+            194,
+            412,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 17,
+          "opaque_pixels": 9554,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 17,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 34
+          },
+          "video_frame": 17,
+          "sha256": "2d2a9ecfb1fcdc2fbff35c02c6c173c991a558b7ab1fde64d13076f978e57cb6"
+        },
+        {
+          "bounds": [
+            184,
+            194,
+            405,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 18,
+          "opaque_pixels": 9364,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 18,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 36
+          },
+          "video_frame": 18,
+          "sha256": "82ad6ddd76bcd28218c5650d586462b8ea56bcbee28582ef0bad87a2aef5fd3b"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            392,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 19,
+          "opaque_pixels": 9081,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 19,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 39
+          },
+          "video_frame": 19,
+          "sha256": "aadb8342a642b55d55706c8d7713897ac30f07798301be37eb353ef342e8d46c"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            392,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 20,
+          "opaque_pixels": 9060,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 20,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 43
+          },
+          "video_frame": 20,
+          "sha256": "355f6df8bdb46eba9b9458f50161418f0be53d5a75f4063158f3779b5577eb97"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            392,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 21,
+          "opaque_pixels": 9063,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 21,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 48
+          },
+          "video_frame": 21,
+          "sha256": "53dde95d608c6d68b87682c6d2fbe9f7605e1b45b9dd81199d4464d421ecc289"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            392,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 22,
+          "opaque_pixels": 9072,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 22,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov",
+            "frame": 55
+          },
+          "video_frame": 22,
+          "sha256": "1804660d489ade1a080d7328c6bb717ac6acf86be65d9ce61b97ac925f76f3d2"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            399,
+            353
+          ],
+          "duration_ms": 25,
+          "frame": 23,
+          "opaque_pixels": 9555,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 23,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 4
+          },
+          "video_frame": 23,
+          "sha256": "7a844e88d0cda8957cff7eae5fd5164566dbbfbc6a48444116a7eec013946b8d"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            399,
+            352
+          ],
+          "duration_ms": 25,
+          "frame": 24,
+          "opaque_pixels": 9544,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 24,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 6
+          },
+          "video_frame": 24,
+          "sha256": "0624a95b5a75278ccb6ef06d3eb9ad9307cb9747ce8a2d7f11efb9b2a6457096"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            396,
+            351
+          ],
+          "duration_ms": 25,
+          "frame": 25,
+          "opaque_pixels": 9467,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 25,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 9
+          },
+          "video_frame": 25,
+          "sha256": "6bd5105730c096bd47ac911b51064309f10e479c708d7ddb0fb3d3dd577ac66c"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            394,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 26,
+          "opaque_pixels": 9370,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 26,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 11
+          },
+          "video_frame": 26,
+          "sha256": "5d7eef106eb120c49e2996a17b94c4d9c2c015028329b44faf8ba068884ef2a3"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            393,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 27,
+          "opaque_pixels": 9278,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 27,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 13
+          },
+          "video_frame": 27,
+          "sha256": "df39fd04c88d6dbf9d2a0d86f9b405a43d6200768c19a645a6e0329f80039927"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            391,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 28,
+          "opaque_pixels": 9164,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 28,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 15
+          },
+          "video_frame": 28,
+          "sha256": "4e0c75fe9ef5d983b78aad791a141458a6d88885a69db3d0acf5a0e3ef2de3cf"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            389,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 29,
+          "opaque_pixels": 9111,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 29,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 17
+          },
+          "video_frame": 29,
+          "sha256": "90ac171255768bde620c461d442b15b58965124d413913317f44fb29ef9112bd"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            386,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 30,
+          "opaque_pixels": 9022,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 30,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 19
+          },
+          "video_frame": 30,
+          "sha256": "6188dae9114a713ef9a22d9fb13c3676d74db2459a3b37f8aea847af9bc134a9"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            384,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 31,
+          "opaque_pixels": 8986,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 31,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 21
+          },
           "video_frame": 31,
-          "sha256": "ccf38e68d5253cf661f9a77cfa6185a4f4e0cb13272fa670b9c293f6ce9711fc"
+          "sha256": "0b654d1577070724db95a07e07e3eb8677fef9ac2f857a4fcd947b4228acd901"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            380,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 32,
+          "opaque_pixels": 8966,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 32,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 23
+          },
+          "video_frame": 32,
+          "sha256": "33ffb84a2d0ad276dd7befc40cc0c1b4abe10173923d6ef829f73e0d9b341404"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            378,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 33,
+          "opaque_pixels": 8952,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 33,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 25
+          },
+          "video_frame": 33,
+          "sha256": "f25d7f321d955df97ac997623cadd7a0e9f45c2124da50640f7e2590a4c1f0ef"
+        },
+        {
+          "bounds": [
+            185,
+            192,
+            376,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 34,
+          "opaque_pixels": 8933,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 34,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov",
+            "frame": 34
+          },
+          "video_frame": 34,
+          "sha256": "e0874b80b00c199927f727afaeaaf302670bb352c4691d19c503a3b2172a38f5"
+        },
+        {
+          "bounds": [
+            182,
+            190,
+            376,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 35,
+          "opaque_pixels": 8967,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 35,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 8
+          },
+          "video_frame": 35,
+          "sha256": "0a08662e0357b2709f5e45eaaa0667e101ce8f19cf57a4687c387a36f8b45c09"
+        },
+        {
+          "bounds": [
+            180,
+            189,
+            377,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 36,
+          "opaque_pixels": 9057,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 36,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 10
+          },
+          "video_frame": 36,
+          "sha256": "8bd2d782b65d060d4157dc41834765042b9ec0f93cbd4ec26fec894173b31b33"
+        },
+        {
+          "bounds": [
+            180,
+            189,
+            385,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 37,
+          "opaque_pixels": 9147,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 37,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 12
+          },
+          "video_frame": 37,
+          "sha256": "4e9afd71e075855f02da525ef4a5058356d923e85ef0c574906f9b078c4c3525"
+        },
+        {
+          "bounds": [
+            180,
+            189,
+            387,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 38,
+          "opaque_pixels": 9150,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 38,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 13
+          },
+          "video_frame": 38,
+          "sha256": "7731fb6313c1d0c79f8a0925e4ffcf24e440dffea90b1b1c8a299418b29531d4"
+        },
+        {
+          "bounds": [
+            180,
+            186,
+            394,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 39,
+          "opaque_pixels": 9374,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 39,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 14
+          },
+          "video_frame": 39,
+          "sha256": "9ddbe87e756ce22c862e1fd51f935e3dbd62cf8167b293d2f63dbdf26d023df1"
+        },
+        {
+          "bounds": [
+            180,
+            186,
+            394,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 40,
+          "opaque_pixels": 9383,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 40,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 15
+          },
+          "video_frame": 40,
+          "sha256": "d77fa89069895633548ad8d32c5566dbfe5d127ef57505f437bf9f058f03b982"
+        },
+        {
+          "bounds": [
+            177,
+            183,
+            391,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 41,
+          "opaque_pixels": 9509,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 41,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 16
+          },
+          "video_frame": 41,
+          "sha256": "7f2ac56b472897e3328d6ec1791f908d6b9b4a9ffe002fabf2d5ce7e1ad7950c"
+        },
+        {
+          "bounds": [
+            176,
+            182,
+            386,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 42,
+          "opaque_pixels": 9560,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 42,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 17
+          },
+          "video_frame": 42,
+          "sha256": "8692d0011da5f698801f439674ba901d870a5d028d99d709bb2f88846a4c45e7"
+        },
+        {
+          "bounds": [
+            181,
+            160,
+            369,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 43,
+          "opaque_pixels": 9505,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 43,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 18
+          },
+          "video_frame": 43,
+          "sha256": "fc15d928a25b9bcb01714aede80e7e91edcca7f61e5f2f93f0f9b9241edb59c0"
+        },
+        {
+          "bounds": [
+            182,
+            159,
+            369,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 44,
+          "opaque_pixels": 9491,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 44,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 19
+          },
+          "video_frame": 44,
+          "sha256": "e51cb3cb3606f5ee583a6274dc513807a5d8c0a9a9c62fb064c928677667022b"
+        },
+        {
+          "bounds": [
+            186,
+            120,
+            352,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 45,
+          "opaque_pixels": 9583,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 45,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 20
+          },
+          "video_frame": 45,
+          "sha256": "eb2d94d60ce503eb0e4a03461c391b9127287a187682d1838a578d25aedd3740"
+        },
+        {
+          "bounds": [
+            186,
+            120,
+            352,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 46,
+          "opaque_pixels": 9591,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 46,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 21
+          },
+          "video_frame": 46,
+          "sha256": "9c08fdce377902938dc72434c2cfe8108b6d0fb464f50897da50025e11cbdcff"
+        },
+        {
+          "bounds": [
+            190,
+            99,
+            330,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 47,
+          "opaque_pixels": 9780,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 47,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 22
+          },
+          "video_frame": 47,
+          "sha256": "5f0a516d88a42c18778f1be2452254d7e0b4c3a0df2057bf19d931fbe9211c64"
+        },
+        {
+          "bounds": [
+            190,
+            99,
+            329,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 48,
+          "opaque_pixels": 9781,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 48,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 23
+          },
+          "video_frame": 48,
+          "sha256": "fa8cde04e80e9b4318228eac7fbb2301bd44186d4242a82e79a031d51207794f"
+        },
+        {
+          "bounds": [
+            197,
+            87,
+            327,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 49,
+          "opaque_pixels": 9911,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 49,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 24
+          },
+          "video_frame": 49,
+          "sha256": "0ea3c024bb0826e447295e3a15318b69489b42847b5fa1c756f531eb809c3960"
+        },
+        {
+          "bounds": [
+            197,
+            87,
+            327,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 50,
+          "opaque_pixels": 9918,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 50,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 25
+          },
+          "video_frame": 50,
+          "sha256": "ba448977aaa5298db96081e414990539ee46da452067a616179962cd2fedad28"
+        },
+        {
+          "bounds": [
+            200,
+            75,
+            324,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 51,
+          "opaque_pixels": 9967,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 51,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 26
+          },
+          "video_frame": 51,
+          "sha256": "8a25cc6a15b5bf7a0c1b7a8fb470a8ad8ea326bf5f256c189f7482c2e906263c"
+        },
+        {
+          "bounds": [
+            200,
+            75,
+            324,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 52,
+          "opaque_pixels": 9944,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 52,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 27
+          },
+          "video_frame": 52,
+          "sha256": "e083c0421965dd96def219118a28207f12ba9ecbe65dd8ec0cc2519546299fdf"
+        },
+        {
+          "bounds": [
+            201,
+            66,
+            313,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 53,
+          "opaque_pixels": 10036,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 53,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 28
+          },
+          "video_frame": 53,
+          "sha256": "b02d416b3cce58330789ab7326d0f93d066b2552b79dffdd731f368f5c647bc3"
         },
         {
           "bounds": [
             202,
-            54,
+            66,
+            312,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 54,
+          "opaque_pixels": 10039,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 54,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 29
+          },
+          "video_frame": 54,
+          "sha256": "000a4ca9f65584bb38dd618e6616f791fb74a4bcd290a6c3a178e0fdb14ed3f5"
+        },
+        {
+          "bounds": [
+            202,
+            59,
             310,
             348
           ],
-          "duration_ms": 24,
-          "frame": 32,
-          "opaque_pixels": 10181,
-          "runtime_first_frame": 1006,
-          "runtime_frames": 24,
+          "duration_ms": 25,
+          "frame": 55,
+          "opaque_pixels": 10088,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 55,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 32,
-          "sha256": "8e983225886d8ee700d6cef35e4bdf92955203687960745d34d0e720fb267c84"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 30
+          },
+          "video_frame": 55,
+          "sha256": "2b8148c25cf51a75495532675961da31d3bb728980d02fbbbb24828483137960"
+        },
+        {
+          "bounds": [
+            202,
+            59,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 56,
+          "opaque_pixels": 10088,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 56,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 31
+          },
+          "video_frame": 56,
+          "sha256": "cc4f6cc60236aaa72a089145fbc2e8f65c858a07951abd02283e77d1c2381cba"
+        },
+        {
+          "bounds": [
+            202,
+            57,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 57,
+          "opaque_pixels": 10044,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 57,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 32
+          },
+          "video_frame": 57,
+          "sha256": "2f15fffc817975ff64558062e21bd56f628b27b73fb7a77fafebf53e4afd9127"
+        },
+        {
+          "bounds": [
+            202,
+            57,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 58,
+          "opaque_pixels": 10037,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 58,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 33
+          },
+          "video_frame": 58,
+          "sha256": "c9d943af722c46f0fddfae8137a58051f6c3611888db9d798dc422282f6ebae4"
+        },
+        {
+          "bounds": [
+            201,
+            53,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 59,
+          "opaque_pixels": 9994,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 59,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 34
+          },
+          "video_frame": 59,
+          "sha256": "0af2233cb05e9fd084b9b75a4e502e95a84368805317dd3122285303649e46fa"
+        },
+        {
+          "bounds": [
+            201,
+            53,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 60,
+          "opaque_pixels": 9934,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 60,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 35
+          },
+          "video_frame": 60,
+          "sha256": "8bc58f2819a74e0c1265a60cb2fea2a473f9a6f1bf813b681525200da90e23a8"
+        },
+        {
+          "bounds": [
+            202,
+            55,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 61,
+          "opaque_pixels": 9898,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 61,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 36
+          },
+          "video_frame": 61,
+          "sha256": "5708448812f90dc4b466ae3cbcdcc7caff0dc151f430a6d615407d951e4bd169"
+        },
+        {
+          "bounds": [
+            202,
+            55,
+            310,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 62,
+          "opaque_pixels": 9886,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 62,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 37
+          },
+          "video_frame": 62,
+          "sha256": "65392d8a1f53b1e723e2a937d0a909590118252cdb2dea4a0067f1634776a8f1"
         },
         {
           "bounds": [
@@ -555,74 +1509,254 @@
             310,
             348
           ],
-          "duration_ms": 30,
-          "frame": 33,
+          "duration_ms": 25,
+          "frame": 63,
           "opaque_pixels": 10476,
-          "runtime_first_frame": 1030,
-          "runtime_frames": 30,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 25,
+          "runtime_first_frame": 63,
+          "runtime_forward_pixels": 48,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
-          "video_frame": 33,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov",
+            "frame": 38
+          },
+          "video_frame": 63,
           "sha256": "cb99727f35c4045b9c399ba43d5446c437084ec60ce4635fe935490de10e46ef"
         }
       ],
-      "runtime_fps": 1000,
-      "runtime_frames": 1060,
-      "seed": 202611111001,
+      "root_motion": {
+        "brake_frame": 15,
+        "clip_name": "下劈进身与触地站定",
+        "forward_pixels": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          14,
+          34,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48,
+          48
+        ],
+        "method": "v26 physical step finishes at frame 15. v27 uses complete in-place body poses through recovery; no stitched legs or upper-body recentering. Source extraction is zero; world advance stays fixed during recovery.",
+        "metres": 0.198620688,
+        "pixel_size": 0.004137931,
+        "source_forward_pixels": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "track_name": "下劈前移"
+      },
+      "runtime_fps": 40,
+      "runtime_frames": 64,
+      "seed": 202611150222,
       "source_parts": [
         {
           "indices": [
             0,
-            5,
-            6,
-            8,
-            10,
-            12,
-            16,
-            23
-          ],
-          "job": "cbbea9f2-b5c6-475f-83fd-2bb4052cdf81",
-          "seed": 202611111001,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-load-v10.mov"
-        },
-        {
-          "indices": [
             2,
-            6,
-            8,
-            10,
+            4,
+            5,
+            7,
+            9,
             11,
-            14,
+            13,
+            15,
             16,
-            18
+            17,
+            17,
+            20,
+            24,
+            28,
+            30,
+            32,
+            34,
+            36,
+            39,
+            43,
+            48,
+            55
           ],
-          "job": "d06b5fc5-7c4e-4730-9b3f-dfbb20576073",
-          "seed": 202611111011,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-cut-v10.mov"
+          "job": "6d9ab985-04bf-4b7c-a7d7-e399118c2c78",
+          "playback": "forward",
+          "seed": 202611150222,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-body-v22.mov"
         },
         {
           "indices": [
-            0,
+            4,
             6,
-            10,
+            9,
             11,
+            13,
+            15,
+            17,
+            19,
+            21,
+            23,
+            25,
+            34
+          ],
+          "job": "0acc1c78-26d1-470a-90b0-18b78a269242",
+          "playback": "forward",
+          "seed": 202611150104,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-catch-v17.mov"
+        },
+        {
+          "indices": [
+            8,
+            10,
             12,
             13,
             14,
             15,
             16,
+            17,
             18,
+            19,
             20,
+            21,
             22,
+            23,
             24,
+            25,
             26,
+            27,
             28,
+            29,
             30,
+            31,
+            32,
+            33,
             34,
+            35,
+            36,
+            37,
             38
           ],
-          "job": "44203a5c-9373-4023-8ecc-8aa1f988167e",
-          "seed": 202611111012,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-return-v10.mov"
+          "job": "6e38a302-5f5a-45f2-b88a-4d8297c30816",
+          "playback": "forward",
+          "seed": 202611150213,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high-rise-v21.mov"
         }
       ],
       "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/high.mkv",
@@ -630,19 +1764,51 @@
       "step": 1
     },
     {
-      "duration": 0.997,
-      "fps": 30,
-      "frames": 38,
+      "duration": 1.38,
+      "fps": 46.3768115942029,
+      "frames": 64,
       "holds": {
-        "impact_frame": 17,
-        "recovery_frame": 18,
-        "release_frame": 10,
-        "windup_frame": 9
+        "impact_frame": 23,
+        "impact_hold_frames": 2,
+        "recovery_frame": 25,
+        "release_frame": 14,
+        "windup_frame": 12,
+        "windup_hold_frames": 2
       },
       "key": "mid",
       "loop": false,
       "name": "attack_mid",
-      "prompt_id": "bd03789b-89d6-4f9b-bf57-ab2fce31b88b",
+      "phases": {
+        "blade_carry": [
+          25,
+          32
+        ],
+        "body_catch_and_fold": [
+          32,
+          42
+        ],
+        "contact": [
+          23,
+          25
+        ],
+        "front_lift": [
+          42,
+          54
+        ],
+        "release": [
+          14,
+          23
+        ],
+        "shoulder_settle": [
+          54,
+          64
+        ],
+        "windup": [
+          0,
+          14
+        ]
+      },
+      "prompt_id": "f1f20b0d-5ca2-464e-8e37-f5f8d83ad697",
       "records": [
         {
           "bounds": [
@@ -651,590 +1817,1447 @@
             321,
             347
           ],
-          "duration_ms": 18,
+          "duration_ms": 22,
           "frame": 0,
           "opaque_pixels": 8980,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
           "runtime_first_frame": 0,
-          "runtime_frames": 18,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 0
+          },
           "video_frame": 0,
           "sha256": "cc12e21207b162eccdffca94c36de042cc52d4659196b9bf6ba4440df54ae9c2"
         },
         {
           "bounds": [
             198,
-            142,
-            320,
+            138,
+            318,
             347
           ],
-          "duration_ms": 26,
+          "duration_ms": 21,
           "frame": 1,
-          "opaque_pixels": 8714,
-          "runtime_first_frame": 18,
-          "runtime_frames": 26,
+          "opaque_pixels": 8822,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 1,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 7
+          },
           "video_frame": 1,
-          "sha256": "582bb906b5634687fa1e3547243148f8c4348a77bd3bb4f45ce9bc5c21dedee0"
+          "sha256": "e30414ad6783b08d90e7e5df83cf275c17914fb03931172f4df971fca7ab9f13"
         },
         {
           "bounds": [
-            197,
-            104,
+            198,
+            117,
             309,
             347
           ],
-          "duration_ms": 30,
+          "duration_ms": 22,
           "frame": 2,
-          "opaque_pixels": 9444,
-          "runtime_first_frame": 44,
-          "runtime_frames": 30,
+          "opaque_pixels": 9477,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 2,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 12
+          },
           "video_frame": 2,
-          "sha256": "edac1b14e4efba8780a0fa60e2528596e28aed24024252cec8836e3a6f0863cb"
+          "sha256": "37f75b7f14b11dae61e875b6564f91208e5ed8909f0f26a996a6531bba2db7c7"
         },
         {
           "bounds": [
-            196,
-            102,
-            309,
-            347
-          ],
-          "duration_ms": 36,
-          "frame": 3,
-          "opaque_pixels": 9670,
-          "runtime_first_frame": 74,
-          "runtime_frames": 36,
-          "source_kind": "video",
-          "video_frame": 3,
-          "sha256": "4890352f96b75d4d2c01158a97cb275ceba41758a024cfa899ee6cb31a87f4a7"
-        },
-        {
-          "bounds": [
-            190,
-            99,
-            309,
-            347
-          ],
-          "duration_ms": 40,
-          "frame": 4,
-          "opaque_pixels": 9740,
-          "runtime_first_frame": 110,
-          "runtime_frames": 40,
-          "source_kind": "video",
-          "video_frame": 4,
-          "sha256": "bef5875628220306d89842e843a15ff94914e23b830cd31edef28222209f42b0"
-        },
-        {
-          "bounds": [
-            96,
-            156,
-            309,
-            347
-          ],
-          "duration_ms": 44,
-          "frame": 5,
-          "opaque_pixels": 9900,
-          "runtime_first_frame": 150,
-          "runtime_frames": 44,
-          "source_kind": "video",
-          "video_frame": 5,
-          "sha256": "8546d0c3691dbb0de720a42bb93413a6dc907687065d2dbc431ac2e0ab4b2657"
-        },
-        {
-          "bounds": [
-            73,
-            177,
-            309,
-            347
-          ],
-          "duration_ms": 46,
-          "frame": 6,
-          "opaque_pixels": 9659,
-          "runtime_first_frame": 194,
-          "runtime_frames": 46,
-          "source_kind": "video",
-          "video_frame": 6,
-          "sha256": "9f2940b3a12ee6f11f40ba3281d293c9aa205935c5216d2f1b033ec51d28cc41"
-        },
-        {
-          "bounds": [
-            73,
-            177,
-            309,
-            347
-          ],
-          "duration_ms": 48,
-          "frame": 7,
-          "opaque_pixels": 9694,
-          "runtime_first_frame": 240,
-          "runtime_frames": 48,
-          "source_kind": "video",
-          "video_frame": 7,
-          "sha256": "bba510d8c0bac1fbd4e9256435b384609896d85bfcb3e65a05c0379a9d0e1412"
-        },
-        {
-          "bounds": [
-            73,
-            178,
-            309,
-            347
-          ],
-          "duration_ms": 38,
-          "frame": 8,
-          "opaque_pixels": 9751,
-          "runtime_first_frame": 288,
-          "runtime_frames": 38,
-          "source_kind": "video",
-          "video_frame": 8,
-          "sha256": "e7a4c8801646699cd28692e8053960ff88bf5438a33629a88e7fd9389e6e017a"
-        },
-        {
-          "bounds": [
-            105,
-            178,
-            311,
-            347
-          ],
-          "duration_ms": 65,
-          "frame": 9,
-          "opaque_pixels": 9204,
-          "runtime_first_frame": 326,
-          "runtime_frames": 65,
-          "source_kind": "video",
-          "video_frame": 9,
-          "sha256": "8b050f6d64d9369060c69e4e54811909b9020192d8f7a8beb39a45c3c377fcec"
-        },
-        {
-          "bounds": [
+            200,
             104,
-            177,
-            310,
+            309,
             347
           ],
-          "duration_ms": 14,
-          "frame": 10,
-          "opaque_pixels": 9577,
-          "runtime_first_frame": 391,
-          "runtime_frames": 14,
+          "duration_ms": 21,
+          "frame": 3,
+          "opaque_pixels": 9915,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 3,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 10,
-          "sha256": "950dded1f9ddb836059472062e3f1d3dbeb52801531ca5615fcc9dd9aab18f8a"
-        },
-        {
-          "bounds": [
-            143,
-            176,
-            310,
-            347
-          ],
-          "duration_ms": 14,
-          "frame": 11,
-          "opaque_pixels": 8861,
-          "runtime_first_frame": 405,
-          "runtime_frames": 14,
-          "source_kind": "video",
-          "video_frame": 11,
-          "sha256": "a634a072c9c49434d0121a0310a0f51138ae03ce1750439190cd5bdecdee9001"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 14
+          },
+          "video_frame": 3,
+          "sha256": "8280a376b998cc209707f307a5de2bfc8ad8d1601f09bdbf1e3dd8fd84deff19"
         },
         {
           "bounds": [
             201,
-            176,
+            93,
             309,
             347
           ],
-          "duration_ms": 14,
-          "frame": 12,
-          "opaque_pixels": 6348,
-          "runtime_first_frame": 419,
-          "runtime_frames": 14,
+          "duration_ms": 22,
+          "frame": 4,
+          "opaque_pixels": 10454,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 4,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 12,
-          "sha256": "512e6052297c2796247c870f2ac455d82c22f75d98d600e53a798d6f4bd70f7c"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 16
+          },
+          "video_frame": 4,
+          "sha256": "37f896714f02998295213cd16bd759a8d6c25e84d7218d9df75d3854a8b2cbe8"
         },
         {
           "bounds": [
-            204,
-            175,
-            332,
-            347
-          ],
-          "duration_ms": 14,
-          "frame": 13,
-          "opaque_pixels": 7464,
-          "runtime_first_frame": 433,
-          "runtime_frames": 14,
-          "source_kind": "video",
-          "video_frame": 13,
-          "sha256": "ae9187cdbf6dab57be687a333b4ca5e48be8c154a32bfd80ae743d3d12e3ab38"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            426,
-            347
-          ],
-          "duration_ms": 14,
-          "frame": 14,
-          "opaque_pixels": 9372,
-          "runtime_first_frame": 447,
-          "runtime_frames": 14,
-          "source_kind": "video",
-          "video_frame": 14,
-          "sha256": "f8586e9d3928ff780b20ee308452c77c5885dc4e0eec29b20da1a0a4b02ea83e"
-        },
-        {
-          "bounds": [
-            204,
-            174,
-            448,
-            347
-          ],
-          "duration_ms": 13,
-          "frame": 15,
-          "opaque_pixels": 9778,
-          "runtime_first_frame": 461,
-          "runtime_frames": 13,
-          "source_kind": "video",
-          "video_frame": 15,
-          "sha256": "7e11a1d44a25d6abb53168c2d0d7b84434ed457944f50014c6a0b1136faecd48"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            425,
-            347
-          ],
-          "duration_ms": 13,
-          "frame": 16,
-          "opaque_pixels": 9233,
-          "runtime_first_frame": 474,
-          "runtime_frames": 13,
-          "source_kind": "video",
-          "video_frame": 16,
-          "sha256": "44fdcc4f091835b09d8b537e6d3b577613e2eab05ffb5bab592ad7b95a54dabc"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            425,
-            347
-          ],
-          "duration_ms": 48,
-          "frame": 17,
-          "opaque_pixels": 9204,
-          "runtime_first_frame": 487,
-          "runtime_frames": 48,
-          "source_kind": "video",
-          "video_frame": 17,
-          "sha256": "07fb8e3a3a343897a1dfa5d5ffa24c8ce321b16de95e440350021e51d6f56d3a"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            425,
-            347
-          ],
-          "duration_ms": 19,
-          "frame": 18,
-          "opaque_pixels": 9133,
-          "runtime_first_frame": 535,
-          "runtime_frames": 19,
-          "source_kind": "video",
-          "video_frame": 18,
-          "sha256": "602219a19c20243c699dcecfe6e448dd83c115bd99a545fe46ce8d62679fedea"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            423,
-            347
-          ],
-          "duration_ms": 19,
-          "frame": 19,
-          "opaque_pixels": 9077,
-          "runtime_first_frame": 554,
-          "runtime_frames": 19,
-          "source_kind": "video",
-          "video_frame": 19,
-          "sha256": "dee4d371218c663b8f9e5405c8accffb97bea3fc46efb8d5553e0745390be7b1"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            418,
-            347
-          ],
-          "duration_ms": 20,
-          "frame": 20,
-          "opaque_pixels": 9054,
-          "runtime_first_frame": 573,
-          "runtime_frames": 20,
-          "source_kind": "video",
-          "video_frame": 20,
-          "sha256": "60e95e47eecd33d09881e866ba18d2aebd2ba8f5d0b507107aaf396f0954dabd"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            414,
+            183,
+            92,
+            309,
             347
           ],
           "duration_ms": 21,
-          "frame": 21,
-          "opaque_pixels": 8991,
-          "runtime_first_frame": 593,
-          "runtime_frames": 21,
+          "frame": 5,
+          "opaque_pixels": 10947,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 5,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 21,
-          "sha256": "fbcb6264fb22e01c71beb0907b4829d01539a0fc9c5306c20843487e313c86c4"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 20
+          },
+          "video_frame": 5,
+          "sha256": "550c59cf8aab191dea40677b1bd424a792567290eb6f103d1dd9bdda29f437a9"
         },
         {
           "bounds": [
-            204,
-            173,
-            403,
-            347
-          ],
-          "duration_ms": 22,
-          "frame": 22,
-          "opaque_pixels": 8932,
-          "runtime_first_frame": 614,
-          "runtime_frames": 22,
-          "source_kind": "video",
-          "video_frame": 22,
-          "sha256": "ee184f0316f8dc16b2e9ad1129fe6f4b5c18a99fc4acae93807dfb1dc42a6149"
-        },
-        {
-          "bounds": [
-            204,
-            173,
-            375,
-            347
-          ],
-          "duration_ms": 23,
-          "frame": 23,
-          "opaque_pixels": 8623,
-          "runtime_first_frame": 636,
-          "runtime_frames": 23,
-          "source_kind": "video",
-          "video_frame": 23,
-          "sha256": "74fc97f15d59463d15c64a521362b087fbbef3df7c7fc12a4b34d5b1c21cf0ad"
-        },
-        {
-          "bounds": [
-            204,
-            167,
-            344,
-            347
-          ],
-          "duration_ms": 24,
-          "frame": 24,
-          "opaque_pixels": 8487,
-          "runtime_first_frame": 659,
-          "runtime_frames": 24,
-          "source_kind": "video",
-          "video_frame": 24,
-          "sha256": "46ff4a977dcd2489322617383b4fea7e84b452784e8fc5fcddd4584334940a29"
-        },
-        {
-          "bounds": [
-            204,
             144,
-            316,
-            347
-          ],
-          "duration_ms": 25,
-          "frame": 25,
-          "opaque_pixels": 7990,
-          "runtime_first_frame": 683,
-          "runtime_frames": 25,
-          "source_kind": "video",
-          "video_frame": 25,
-          "sha256": "6a9364b0976640b540fb3de9ad86eb43828122af723c5d7981558d4e3ffc5897"
-        },
-        {
-          "bounds": [
-            204,
-            124,
-            309,
-            347
-          ],
-          "duration_ms": 26,
-          "frame": 26,
-          "opaque_pixels": 8146,
-          "runtime_first_frame": 708,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 26,
-          "sha256": "a295613626effce8c33815824b585077ddab237afde688408ab0c2b41b28e279"
-        },
-        {
-          "bounds": [
-            204,
-            108,
-            309,
-            347
-          ],
-          "duration_ms": 27,
-          "frame": 27,
-          "opaque_pixels": 8937,
-          "runtime_first_frame": 734,
-          "runtime_frames": 27,
-          "source_kind": "video",
-          "video_frame": 27,
-          "sha256": "36bc1223ccd314f0bddb60376a41e5b0e8914568cc8222f91457dd9c6af5d865"
-        },
-        {
-          "bounds": [
-            204,
-            88,
-            309,
-            347
-          ],
-          "duration_ms": 27,
-          "frame": 28,
-          "opaque_pixels": 9476,
-          "runtime_first_frame": 761,
-          "runtime_frames": 27,
-          "source_kind": "video",
-          "video_frame": 28,
-          "sha256": "987ace2bf718e7aff44644ba9d9899cddffd1a64cb9a4d96e39c654d437e7af9"
-        },
-        {
-          "bounds": [
-            193,
-            83,
-            309,
-            347
-          ],
-          "duration_ms": 26,
-          "frame": 29,
-          "opaque_pixels": 9598,
-          "runtime_first_frame": 788,
-          "runtime_frames": 26,
-          "source_kind": "video",
-          "video_frame": 29,
-          "sha256": "ef4782060a8ded6687275a2337e9d8033945defd71448231982a35b0f69bc98d"
-        },
-        {
-          "bounds": [
-            197,
-            90,
-            309,
-            347
-          ],
-          "duration_ms": 25,
-          "frame": 30,
-          "opaque_pixels": 9526,
-          "runtime_first_frame": 814,
-          "runtime_frames": 25,
-          "source_kind": "video",
-          "video_frame": 30,
-          "sha256": "f118d288f635ccfce7e37f6c4e8a310e8394bd54546f3896d9becf3f0340e0a4"
-        },
-        {
-          "bounds": [
-            197,
-            104,
-            309,
-            347
-          ],
-          "duration_ms": 24,
-          "frame": 31,
-          "opaque_pixels": 9363,
-          "runtime_first_frame": 839,
-          "runtime_frames": 24,
-          "source_kind": "video",
-          "video_frame": 31,
-          "sha256": "0c19dd58a93967644ca1ccd965a468fd99b1f0a6b5751991ae7ac5d25d84368b"
-        },
-        {
-          "bounds": [
-            197,
-            111,
-            309,
-            347
-          ],
-          "duration_ms": 23,
-          "frame": 32,
-          "opaque_pixels": 9227,
-          "runtime_first_frame": 863,
-          "runtime_frames": 23,
-          "source_kind": "video",
-          "video_frame": 32,
-          "sha256": "41ef423102b810722788da792754db60062b5d282542525f4372429169155a00"
-        },
-        {
-          "bounds": [
-            198,
-            120,
-            309,
+            113,
+            310,
             347
           ],
           "duration_ms": 22,
-          "frame": 33,
-          "opaque_pixels": 9033,
-          "runtime_first_frame": 886,
-          "runtime_frames": 22,
+          "frame": 6,
+          "opaque_pixels": 10900,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 6,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 33,
-          "sha256": "77edcd6d076d1a818537e97fb54e7e83f6c4231b805cd6e2a296c5224233c0b2"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 22
+          },
+          "video_frame": 6,
+          "sha256": "93bd1955f4a6ccb992898f6d5a6e642dc3a0fd3f53f861f2c4b55f133b1feb96"
         },
         {
           "bounds": [
-            198,
-            128,
-            309,
+            107,
+            152,
+            310,
             347
           ],
           "duration_ms": 21,
-          "frame": 34,
-          "opaque_pixels": 8826,
-          "runtime_first_frame": 908,
-          "runtime_frames": 21,
+          "frame": 7,
+          "opaque_pixels": 10851,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 7,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 34,
-          "sha256": "74ab9c6b864439bdfb21e95b0480747e3d31e00ed9cf3e238083e1c4300b1329"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 25
+          },
+          "video_frame": 7,
+          "sha256": "4376dc0b93ca9c7b4557a05bf0fb66c68d1a7771684b29515fbff3228195019f"
         },
         {
           "bounds": [
-            198,
-            134,
+            94,
+            176,
+            311,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 8,
+          "opaque_pixels": 10790,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 8,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 27
+          },
+          "video_frame": 8,
+          "sha256": "d4781c909a5a76d6b4ba743ca2e5c33f8b9edfe2360178a7c2a79c87a2e734e2"
+        },
+        {
+          "bounds": [
+            91,
+            176,
+            311,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 9,
+          "opaque_pixels": 10524,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 9,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 29
+          },
+          "video_frame": 9,
+          "sha256": "b61e5dbfc76bd72ad7a0b5f87c3751525a95c917cf2cb9f9fcbe480f2945331e"
+        },
+        {
+          "bounds": [
+            100,
+            177,
             312,
             347
           ],
           "duration_ms": 21,
-          "frame": 35,
-          "opaque_pixels": 8731,
-          "runtime_first_frame": 929,
-          "runtime_frames": 21,
+          "frame": 10,
+          "opaque_pixels": 9890,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 10,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 33
+          },
+          "video_frame": 10,
+          "sha256": "d07c6c456e5fc422b78eaf9daaafaa7ca238bb65a1a731d5e7e9243f02647fe3"
+        },
+        {
+          "bounds": [
+            120,
+            178,
+            312,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 11,
+          "opaque_pixels": 8216,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 11,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 36
+          },
+          "video_frame": 11,
+          "sha256": "1cc692133d1ea5912b33534e8b725a104cf7617482ef9dc458bf15a16fe2b9de"
+        },
+        {
+          "bounds": [
+            126,
+            178,
+            312,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 12,
+          "opaque_pixels": 7308,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 12,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 38
+          },
+          "video_frame": 12,
+          "sha256": "26fd0c6e015638b06a6053724a009069f832f389708d5af2a387d632bd27faaf"
+        },
+        {
+          "bounds": [
+            126,
+            178,
+            312,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 13,
+          "opaque_pixels": 7308,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 13,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov",
+            "frame": 38
+          },
+          "video_frame": 13,
+          "sha256": "26fd0c6e015638b06a6053724a009069f832f389708d5af2a387d632bd27faaf"
+        },
+        {
+          "bounds": [
+            160,
+            183,
+            312,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 14,
+          "opaque_pixels": 7288,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 14,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 4
+          },
+          "video_frame": 14,
+          "sha256": "b671b0f1632593915820e7c489cc72e8f6a6d8238b8f97c080fb7c1a40f902ff"
+        },
+        {
+          "bounds": [
+            203,
+            184,
+            312,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 15,
+          "opaque_pixels": 7248,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 15,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 6
+          },
+          "video_frame": 15,
+          "sha256": "0bc66bdabec86d91149cf17834837fd08403135e8afe8636589f8324c660f5cd"
+        },
+        {
+          "bounds": [
+            205,
+            185,
+            323,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 16,
+          "opaque_pixels": 7822,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 16,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 9
+          },
+          "video_frame": 16,
+          "sha256": "95a07559274f89c4166c984d72d1e9c4a22a784ee37e14afdbc68eff41e2f41a"
+        },
+        {
+          "bounds": [
+            204,
+            186,
+            359,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 17,
+          "opaque_pixels": 7929,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 17,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 13
+          },
+          "video_frame": 17,
+          "sha256": "7dfb2aca930b0552ca065a31e9a28c1a3a877bc589d8b8e8cfd9c56540c7adc1"
+        },
+        {
+          "bounds": [
+            201,
+            187,
+            385,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 18,
+          "opaque_pixels": 8201,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 18,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 14
+          },
+          "video_frame": 18,
+          "sha256": "b211068dc39fc9423ffc78a42ff55fc5807c99f69ca1f2cea19ffdacbf101bc6"
+        },
+        {
+          "bounds": [
+            201,
+            187,
+            385,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 19,
+          "opaque_pixels": 8201,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 19,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 14
+          },
+          "video_frame": 19,
+          "sha256": "b211068dc39fc9423ffc78a42ff55fc5807c99f69ca1f2cea19ffdacbf101bc6"
+        },
+        {
+          "bounds": [
+            197,
+            187,
+            406,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 20,
+          "opaque_pixels": 8380,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 20,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 18
+          },
+          "video_frame": 20,
+          "sha256": "466c7976b7560353a327dc4f47931d638bbd98b38ff80390be0afbc5b7ce8cf6"
+        },
+        {
+          "bounds": [
+            193,
+            188,
+            418,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 21,
+          "opaque_pixels": 8392,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 21,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 21
+          },
+          "video_frame": 21,
+          "sha256": "dd1d30a75d05ccb943892282b7a9008c6fcebfd2228669cffb37142395ffda14"
+        },
+        {
+          "bounds": [
+            193,
+            188,
+            419,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 22,
+          "opaque_pixels": 8310,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 22,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 24
+          },
+          "video_frame": 22,
+          "sha256": "157817d93c76fdc1a3016a0fd639b1a38f27ef56fb7368bca730d8833d02f7a3"
+        },
+        {
+          "bounds": [
+            192,
+            189,
+            420,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 23,
+          "opaque_pixels": 8281,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 23,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 28
+          },
+          "video_frame": 23,
+          "sha256": "a43eef192908a7d7221b7c1ba6da96724819d6bbe08e760cde64ac907244aa39"
+        },
+        {
+          "bounds": [
+            192,
+            189,
+            420,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 24,
+          "opaque_pixels": 8281,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 24,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov",
+            "frame": 28
+          },
+          "video_frame": 24,
+          "sha256": "a43eef192908a7d7221b7c1ba6da96724819d6bbe08e760cde64ac907244aa39"
+        },
+        {
+          "bounds": [
+            191,
+            191,
+            423,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 25,
+          "opaque_pixels": 8310,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 25,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 1
+          },
+          "video_frame": 25,
+          "sha256": "cc18d52ad6434a5a3eb05c940a397c60ff537721f9e6e0c89bfd5dab18904be0"
+        },
+        {
+          "bounds": [
+            189,
+            191,
+            425,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 26,
+          "opaque_pixels": 8442,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 26,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 2
+          },
+          "video_frame": 26,
+          "sha256": "6826c14ce5875ac56ab95e18f84776619395134a9d561eb5d8f262f335387f7a"
+        },
+        {
+          "bounds": [
+            187,
+            191,
+            426,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 27,
+          "opaque_pixels": 8607,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 27,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 3
+          },
+          "video_frame": 27,
+          "sha256": "a292dda08e2138c93514bc76c3c97f4af8ffd9315af875a7d26f9b1abd56be94"
+        },
+        {
+          "bounds": [
+            187,
+            192,
+            426,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 28,
+          "opaque_pixels": 8563,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 28,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 4
+          },
+          "video_frame": 28,
+          "sha256": "72f0e815e18fba24bae8ae5cc90f396b54f4c78fff4f8be91bd24b7139999041"
+        },
+        {
+          "bounds": [
+            188,
+            192,
+            422,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 29,
+          "opaque_pixels": 8570,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 29,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 5
+          },
+          "video_frame": 29,
+          "sha256": "a180c74c66e81dca745d09f538303476e553a01048717619b2995bee19311431"
+        },
+        {
+          "bounds": [
+            189,
+            192,
+            420,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 30,
+          "opaque_pixels": 8480,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 30,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 6
+          },
+          "video_frame": 30,
+          "sha256": "cf8e58f46bfecaa91eb99b6a31c3eb4d9bf41b95dec698b755e6d508ef2d8c94"
+        },
+        {
+          "bounds": [
+            192,
+            193,
+            416,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 31,
+          "opaque_pixels": 8395,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 31,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 7
+          },
+          "video_frame": 31,
+          "sha256": "77fb89adb31e0641c45a5e35704d7111aa23dbdb658151188ff30a2c991a28bf"
+        },
+        {
+          "bounds": [
+            194,
+            193,
+            412,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 32,
+          "opaque_pixels": 8327,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 32,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 8
+          },
+          "video_frame": 32,
+          "sha256": "073c59fada71caaf1fee62d85bb62aa098265f09bd7f07c63ec60df8d97c3ffd"
+        },
+        {
+          "bounds": [
+            196,
+            193,
+            408,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 33,
+          "opaque_pixels": 8185,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 33,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 9
+          },
+          "video_frame": 33,
+          "sha256": "f4979566fe76fc194e10441ca2be855520977a92b9934ae395e78e85f8c89ce3"
+        },
+        {
+          "bounds": [
+            196,
+            194,
+            406,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 34,
+          "opaque_pixels": 8223,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 34,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 10
+          },
+          "video_frame": 34,
+          "sha256": "0e5ab6126e9433aeaabc58f2bd29f8ef79518112a5eeb12ca4a1069f46880060"
+        },
+        {
+          "bounds": [
+            196,
+            193,
+            400,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 35,
+          "opaque_pixels": 8439,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 35,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 11
+          },
           "video_frame": 35,
-          "sha256": "c25f1a9040c007f05171e50afc38a702a887bb4f595e9a330c463385ae6c515f"
+          "sha256": "fdd35c5c53aaeaaf4d50259552ca3db65fb9e014a7dcc6d06a31952b1aa37912"
+        },
+        {
+          "bounds": [
+            196,
+            193,
+            392,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 36,
+          "opaque_pixels": 8591,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 36,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 12
+          },
+          "video_frame": 36,
+          "sha256": "1a9ebf3ce748e367f42d6e9a69db2d65f216a76a33e4ade6c610d14a3a64eaed"
+        },
+        {
+          "bounds": [
+            195,
+            192,
+            383,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 37,
+          "opaque_pixels": 8857,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 37,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 13
+          },
+          "video_frame": 37,
+          "sha256": "1d021768076d19cb7617af5a557103e0f614c75edb016087649ca6026540cb60"
+        },
+        {
+          "bounds": [
+            193,
+            192,
+            378,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 38,
+          "opaque_pixels": 9261,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 38,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 14
+          },
+          "video_frame": 38,
+          "sha256": "45daf957c6a780958f5442482e1795a328ac493d4b74ad24b8d20a578a8066bd"
+        },
+        {
+          "bounds": [
+            192,
+            191,
+            386,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 39,
+          "opaque_pixels": 9264,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 39,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 15
+          },
+          "video_frame": 39,
+          "sha256": "629e3d3deabd5fd218c4719927b50a7b5fb537f11b489a79a8e805b88969131e"
+        },
+        {
+          "bounds": [
+            192,
+            190,
+            387,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 40,
+          "opaque_pixels": 9076,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 40,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 16
+          },
+          "video_frame": 40,
+          "sha256": "290ed3cfdd9bcfc2915c4bc3855a193cb3b37e575bed04957a03ffa53bd9a811"
+        },
+        {
+          "bounds": [
+            192,
+            189,
+            385,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 41,
+          "opaque_pixels": 8766,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 41,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 17
+          },
+          "video_frame": 41,
+          "sha256": "0db1a7aa8e779dfa6c312c720f79a96c51887ff6d2b8870d4d3b8b863ba8cae1"
+        },
+        {
+          "bounds": [
+            193,
+            187,
+            380,
+            348
+          ],
+          "duration_ms": 21,
+          "frame": 42,
+          "opaque_pixels": 8381,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 42,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 18
+          },
+          "video_frame": 42,
+          "sha256": "703556019dc1ca28145c57a5d7a76dd93bd8180edf802898165f5248cff0d71f"
+        },
+        {
+          "bounds": [
+            193,
+            185,
+            381,
+            348
+          ],
+          "duration_ms": 22,
+          "frame": 43,
+          "opaque_pixels": 8313,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 43,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 19
+          },
+          "video_frame": 43,
+          "sha256": "dee16e933c421402d84aefe1fad02679dade7e700cf9c92d26c4582ccb06ec12"
+        },
+        {
+          "bounds": [
+            194,
+            185,
+            375,
+            348
+          ],
+          "duration_ms": 21,
+          "frame": 44,
+          "opaque_pixels": 8235,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 44,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 20
+          },
+          "video_frame": 44,
+          "sha256": "cc423f828ca86719e3155d6423aecf4cb15af629829a35eee61385bae964873c"
+        },
+        {
+          "bounds": [
+            195,
+            184,
+            371,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 45,
+          "opaque_pixels": 8214,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 45,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 21
+          },
+          "video_frame": 45,
+          "sha256": "deafa2dacababb48c8ca061561cb20c58cb9c9a87a1d3e47d563959d57d90f28"
+        },
+        {
+          "bounds": [
+            198,
+            182,
+            361,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 46,
+          "opaque_pixels": 8235,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 46,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 22
+          },
+          "video_frame": 46,
+          "sha256": "f2f97dd7c9b0c3a87203626d002f30f8fa9cfd229d245583c4cd292af46b4cf3"
+        },
+        {
+          "bounds": [
+            200,
+            180,
+            353,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 47,
+          "opaque_pixels": 8220,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 47,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 23
+          },
+          "video_frame": 47,
+          "sha256": "ea379469afcca5f8a7eb2c7ea43635f466fb4dc8ac3fe460ff8cdc1109ac5fc6"
+        },
+        {
+          "bounds": [
+            202,
+            169,
+            346,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 48,
+          "opaque_pixels": 8303,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 48,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 24
+          },
+          "video_frame": 48,
+          "sha256": "1300807da42c4cb3f9bce9295fe6d0fe764d4ee99e9fd1a6eb96d5785e337b1d"
+        },
+        {
+          "bounds": [
+            202,
+            140,
+            322,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 49,
+          "opaque_pixels": 8726,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 49,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 26
+          },
+          "video_frame": 49,
+          "sha256": "70dfc9139d875c1f4a50adb5fd54a16888ef0c05e054c83effa0e685e514eb54"
+        },
+        {
+          "bounds": [
+            200,
+            126,
+            308,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 50,
+          "opaque_pixels": 9249,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 50,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 28
+          },
+          "video_frame": 50,
+          "sha256": "17c9cb83d9dfef8893d095a246ac4061dda029ef219c383f1a42a517c3db24c3"
+        },
+        {
+          "bounds": [
+            195,
+            108,
+            308,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 51,
+          "opaque_pixels": 9539,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 51,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 31
+          },
+          "video_frame": 51,
+          "sha256": "5a17ef299a530ee066cde06c4ad423c34f378ab923ca0066af53a8c18aa45229"
+        },
+        {
+          "bounds": [
+            196,
+            94,
+            308,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 52,
+          "opaque_pixels": 9452,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 52,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 34
+          },
+          "video_frame": 52,
+          "sha256": "7321a4e7fa5cbfa0db2b6e27f282701ed73459203d5165505ec4255745c0555a"
+        },
+        {
+          "bounds": [
+            193,
+            92,
+            308,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 53,
+          "opaque_pixels": 9126,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 53,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov",
+            "frame": 38
+          },
+          "video_frame": 53,
+          "sha256": "d305ae8a8c6a7c924f002b8b8cd4c8e89cc4466a413d092ffad90c8dc4ecb627"
+        },
+        {
+          "bounds": [
+            197,
+            98,
+            309,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 54,
+          "opaque_pixels": 9071,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 54,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 23
+          },
+          "video_frame": 54,
+          "sha256": "71a5c7a5a4aab6a7ca104bb0b7f2a12cbf4412761aea386f62d5cc73e6dc541a"
+        },
+        {
+          "bounds": [
+            197,
+            107,
+            309,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 55,
+          "opaque_pixels": 9038,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 55,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 24
+          },
+          "video_frame": 55,
+          "sha256": "01fdc3dbca7f7f218955c99e37a818f97c7bc6e2eb9d9563aa7175e8637c2e18"
+        },
+        {
+          "bounds": [
+            197,
+            115,
+            309,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 56,
+          "opaque_pixels": 8829,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 56,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 25
+          },
+          "video_frame": 56,
+          "sha256": "9746351a8d8d5bfbf9ffff90f4af5339625bf3cfeeb87194255aff105dc6f2ad"
+        },
+        {
+          "bounds": [
+            198,
+            126,
+            309,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 57,
+          "opaque_pixels": 8802,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 57,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 26
+          },
+          "video_frame": 57,
+          "sha256": "fe4cfc8e597fac74d57251c76652bb1fd216b258a616878578ad7249ec4cd49a"
+        },
+        {
+          "bounds": [
+            198,
+            132,
+            309,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 58,
+          "opaque_pixels": 8585,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 58,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 27
+          },
+          "video_frame": 58,
+          "sha256": "e7a401385176ebd9a076f219d75cc39d5f36e97a5f06319e9be3d9e741cebadf"
+        },
+        {
+          "bounds": [
+            198,
+            138,
+            313,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 59,
+          "opaque_pixels": 8548,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 59,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 28
+          },
+          "video_frame": 59,
+          "sha256": "e25ce44636c88e645eb01f81a843285f456aba012e80b9f74e61936096656ef5"
+        },
+        {
+          "bounds": [
+            198,
+            142,
+            317,
+            347
+          ],
+          "duration_ms": 21,
+          "frame": 60,
+          "opaque_pixels": 8491,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 60,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 29
+          },
+          "video_frame": 60,
+          "sha256": "3bf4ddfd65dd11adf0bf3e4a381b4c7e58aca1497d85bfee186aa3e9d4417fa7"
+        },
+        {
+          "bounds": [
+            199,
+            141,
+            316,
+            347
+          ],
+          "duration_ms": 22,
+          "frame": 61,
+          "opaque_pixels": 8498,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 61,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 30
+          },
+          "video_frame": 61,
+          "sha256": "9b0e501687a4a10f83a5fc9c4543e483bb5cb5b40546612b6ecdc15e84c14a01"
         },
         {
           "bounds": [
             199,
             142,
-            320,
+            318,
             347
           ],
-          "duration_ms": 20,
-          "frame": 36,
-          "opaque_pixels": 8691,
-          "runtime_first_frame": 950,
-          "runtime_frames": 20,
+          "duration_ms": 21,
+          "frame": 62,
+          "opaque_pixels": 8514,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 62,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 36,
-          "sha256": "46be3a2758cf07c07a039316921c1dba83b0951d2890edd7c858432d7276e56b"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 34
+          },
+          "video_frame": 62,
+          "sha256": "cf2760f0399d83906343105d9340c5ccb9a8f3f62524cd4f4a5b1abc9a872213"
         },
         {
           "bounds": [
@@ -1243,71 +3266,104 @@
             321,
             347
           ],
-          "duration_ms": 27,
-          "frame": 37,
+          "duration_ms": 22,
+          "frame": 63,
           "opaque_pixels": 8980,
-          "runtime_first_frame": 970,
-          "runtime_frames": 27,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 21.5625,
+          "runtime_first_frame": 63,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
-          "video_frame": 37,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov",
+            "frame": 38
+          },
+          "video_frame": 63,
           "sha256": "cc12e21207b162eccdffca94c36de042cc52d4659196b9bf6ba4440df54ae9c2"
         }
       ],
-      "runtime_fps": 1000,
-      "runtime_frames": 997,
-      "seed": 202611120101,
+      "runtime_fps": 46.3768115942029,
+      "runtime_frames": 64,
+      "seed": 202611150214,
       "source_parts": [
         {
           "indices": [
             0,
+            7,
+            12,
+            14,
+            16,
+            20,
+            22,
+            25,
+            27,
+            29,
+            33,
+            36,
+            38,
+            38
+          ],
+          "job": "50751f66-49dd-40b8-9a61-6fefbdb9072f",
+          "playback": "forward",
+          "seed": 202611150109,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v17.mov"
+        },
+        {
+          "indices": [
+            4,
+            6,
+            9,
+            13,
+            14,
+            14,
+            18,
+            21,
+            24,
+            28,
+            28
+          ],
+          "job": "9ea3fa88-cc62-47ff-8a5c-1fe629b65931",
+          "playback": "forward",
+          "seed": 202611150110,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v17.mov"
+        },
+        {
+          "indices": [
+            1,
+            2,
+            3,
+            4,
             5,
             6,
             7,
             8,
             9,
             10,
+            11,
             12,
-            16,
-            20
-          ],
-          "job": "bd03789b-89d6-4f9b-bf57-ab2fce31b88b",
-          "seed": 202611120101,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-load-v12.mov"
-        },
-        {
-          "indices": [
-            4,
-            7,
-            10,
-            12,
+            13,
+            14,
             15,
+            16,
+            17,
             18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
             26,
+            28,
+            31,
+            34,
             38
           ],
-          "job": "58c24f0f-b5ea-4256-91ad-4f6237136a0f",
-          "seed": 202611120102,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-cut-v12.mov"
-        },
-        {
-          "indices": [
-            26,
-            22,
-            20,
-            18,
-            16,
-            14,
-            12,
-            10,
-            8,
-            6,
-            4,
-            0
-          ],
-          "job": "cd13a729-8a73-4137-9da6-96bc10df782b",
-          "playback": "reverse: controlled lowering source is sampled backward as a direct point lift",
-          "seed": 202611120104,
-          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-lift-v12.mov"
+          "job": "f1f20b0d-5ca2-464e-8e37-f5f8d83ad697",
+          "playback": "forward",
+          "seed": 202611150214,
+          "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-inertia-v21.mov"
         },
         {
           "indices": [
@@ -1317,10 +3373,13 @@
             26,
             27,
             28,
+            29,
             30,
+            34,
             38
           ],
           "job": "ab810f3b-4cca-4977-80ad-a87d45667a90",
+          "playback": "forward",
           "seed": 202611120103,
           "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/mid-tail-v12.mov"
         }
@@ -1330,14 +3389,16 @@
       "step": 1
     },
     {
-      "duration": 0.911,
-      "fps": 30,
-      "frames": 29,
+      "duration": 1.267,
+      "fps": 50.5130228887135,
+      "frames": 64,
       "holds": {
-        "impact_frame": 13,
-        "recovery_frame": 14,
-        "release_frame": 9,
-        "windup_frame": 8
+        "impact_frame": 23,
+        "impact_hold_frames": 3,
+        "recovery_frame": 26,
+        "release_frame": 19,
+        "windup_frame": 16,
+        "windup_hold_frames": 3
       },
       "key": "low",
       "loop": false,
@@ -1351,14 +3412,67 @@
             342,
             347
           ],
-          "duration_ms": 18,
+          "duration_ms": 20,
           "frame": 0,
           "opaque_pixels": 9170,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
           "runtime_first_frame": 0,
-          "runtime_frames": 18,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 0
+          },
           "video_frame": 0,
           "sha256": "58f2263d90cdffab467dfaee1e069766336ab63c657230dd400ac1597ae393d0"
+        },
+        {
+          "bounds": [
+            187,
+            172,
+            341,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 1,
+          "opaque_pixels": 8955,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 1,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 1
+          },
+          "video_frame": 1,
+          "sha256": "ea994573fc574ddbfdcdb4e33d12d270c9f9989fe2abb38a57c93c573c7e3fc7"
+        },
+        {
+          "bounds": [
+            188,
+            172,
+            338,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 2,
+          "opaque_pixels": 8912,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 2,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 5
+          },
+          "video_frame": 2,
+          "sha256": "d896396d7dc598607e6518fb393c0caf18de3d2e87e628a5d3c29f19e05b2f90"
         },
         {
           "bounds": [
@@ -1367,13 +3481,20 @@
             338,
             347
           ],
-          "duration_ms": 34,
-          "frame": 1,
+          "duration_ms": 20,
+          "frame": 3,
           "opaque_pixels": 8799,
-          "runtime_first_frame": 18,
-          "runtime_frames": 34,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 3,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 1,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 6
+          },
+          "video_frame": 3,
           "sha256": "e287249a73f8260c1995e46d0dcb1d5090a7d1f626e07a3a511acffb95c2c8e3"
         },
         {
@@ -1383,13 +3504,43 @@
             337,
             347
           ],
-          "duration_ms": 43,
-          "frame": 2,
+          "duration_ms": 20,
+          "frame": 4,
           "opaque_pixels": 8707,
-          "runtime_first_frame": 52,
-          "runtime_frames": 43,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 4,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 2,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 7
+          },
+          "video_frame": 4,
+          "sha256": "820ad5accdb76a9072d4724c1d09ffd60f3964de8e0ca9b02b5bb151be4802a6"
+        },
+        {
+          "bounds": [
+            188,
+            176,
+            337,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 5,
+          "opaque_pixels": 8707,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 5,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 7
+          },
+          "video_frame": 5,
           "sha256": "820ad5accdb76a9072d4724c1d09ffd60f3964de8e0ca9b02b5bb151be4802a6"
         },
         {
@@ -1399,13 +3550,20 @@
             347,
             347
           ],
-          "duration_ms": 48,
-          "frame": 3,
+          "duration_ms": 20,
+          "frame": 6,
           "opaque_pixels": 8873,
-          "runtime_first_frame": 95,
-          "runtime_frames": 48,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 6,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 3,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 8
+          },
+          "video_frame": 6,
           "sha256": "f7b4799a0edcf8e5eb96d3bbe569b581cb42d5d1bee20a8f08931d54a3f747ed"
         },
         {
@@ -1415,30 +3573,67 @@
             348,
             347
           ],
-          "duration_ms": 49,
-          "frame": 4,
+          "duration_ms": 19,
+          "frame": 7,
           "opaque_pixels": 8622,
-          "runtime_first_frame": 143,
-          "runtime_frames": 49,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 7,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 4,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 9
+          },
+          "video_frame": 7,
           "sha256": "66fe96d8a90283b17168dbe553b0d46b3463a867c9dc0d6c7a6f35bf6b34cc94"
         },
         {
           "bounds": [
-            169,
-            191,
-            347,
+            177,
+            188,
+            348,
             347
           ],
-          "duration_ms": 45,
-          "frame": 5,
-          "opaque_pixels": 8742,
-          "runtime_first_frame": 192,
-          "runtime_frames": 45,
+          "duration_ms": 20,
+          "frame": 8,
+          "opaque_pixels": 8622,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 8,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 5,
-          "sha256": "ccef6a7eaf72a8f6ebc5fbce7623fc183fc7718d4c19f19fa1f14ed05a7f3ebf"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 9
+          },
+          "video_frame": 8,
+          "sha256": "66fe96d8a90283b17168dbe553b0d46b3463a867c9dc0d6c7a6f35bf6b34cc94"
+        },
+        {
+          "bounds": [
+            164,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 9,
+          "opaque_pixels": 8876,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 9,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 11
+          },
+          "video_frame": 9,
+          "sha256": "f6943a4e021052aada77c4ca18fbcf154ab53f3df95497164d3ef18382fab3ee"
         },
         {
           "bounds": [
@@ -1447,14 +3642,67 @@
             347,
             347
           ],
-          "duration_ms": 34,
-          "frame": 6,
+          "duration_ms": 20,
+          "frame": 10,
           "opaque_pixels": 8984,
-          "runtime_first_frame": 237,
-          "runtime_frames": 34,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 10,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 6,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 12
+          },
+          "video_frame": 10,
           "sha256": "6b13034c39681cd659776b71b13e0b20040b9c0effc86952c82101ce6cded619"
+        },
+        {
+          "bounds": [
+            160,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 11,
+          "opaque_pixels": 9089,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 11,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 13
+          },
+          "video_frame": 11,
+          "sha256": "6e87a8fd1b3b37cd700764e630438beee68f943c0310c5a155afcdf58eecb14e"
+        },
+        {
+          "bounds": [
+            166,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 12,
+          "opaque_pixels": 9013,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 12,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 15
+          },
+          "video_frame": 12,
+          "sha256": "897d176dfec237f53878846da9485791900a207398ab20538a91e2313c5d577a"
         },
         {
           "bounds": [
@@ -1463,13 +3711,66 @@
             348,
             347
           ],
-          "duration_ms": 41,
-          "frame": 7,
-          "opaque_pixels": 8924,
-          "runtime_first_frame": 271,
-          "runtime_frames": 41,
+          "duration_ms": 20,
+          "frame": 13,
+          "opaque_pixels": 9107,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 13,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 7,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 17
+          },
+          "video_frame": 13,
+          "sha256": "304cbb93660f4373fd575c26e3d0da3e1d311f46e51558130e14d308f085af72"
+        },
+        {
+          "bounds": [
+            171,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 14,
+          "opaque_pixels": 8966,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 14,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 22
+          },
+          "video_frame": 14,
+          "sha256": "b4d836f6690a3279106add74b84e45c7da345ff5de80ef609a07911f2f60702f"
+        },
+        {
+          "bounds": [
+            170,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 15,
+          "opaque_pixels": 8924,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 15,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 30
+          },
+          "video_frame": 15,
           "sha256": "25a074dd1cce29b8d3a630c52478513279e57df38af7bcb9b8060e157d0c9a55"
         },
         {
@@ -1479,13 +3780,66 @@
             348,
             347
           ],
-          "duration_ms": 65,
-          "frame": 8,
+          "duration_ms": 20,
+          "frame": 16,
           "opaque_pixels": 8910,
-          "runtime_first_frame": 312,
-          "runtime_frames": 65,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 16,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 8,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 38
+          },
+          "video_frame": 16,
+          "sha256": "04990a87bfff21aa178c001ccfa4ce55656b0885e92cdd61c5aa9b59de471a3a"
+        },
+        {
+          "bounds": [
+            171,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 17,
+          "opaque_pixels": 8910,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 17,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 38
+          },
+          "video_frame": 17,
+          "sha256": "04990a87bfff21aa178c001ccfa4ce55656b0885e92cdd61c5aa9b59de471a3a"
+        },
+        {
+          "bounds": [
+            171,
+            191,
+            348,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 18,
+          "opaque_pixels": 8910,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 18,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov",
+            "frame": 38
+          },
+          "video_frame": 18,
           "sha256": "04990a87bfff21aa178c001ccfa4ce55656b0885e92cdd61c5aa9b59de471a3a"
         },
         {
@@ -1496,12 +3850,19 @@
             347
           ],
           "duration_ms": 20,
-          "frame": 9,
+          "frame": 19,
           "opaque_pixels": 9457,
-          "runtime_first_frame": 377,
-          "runtime_frames": 20,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 19,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 9,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 26
+          },
+          "video_frame": 19,
           "sha256": "62dd43c554828c6ebbba61e923b54e63fba7c32fbdd19b302da32fa58d4353e5"
         },
         {
@@ -1512,29 +3873,43 @@
             347
           ],
           "duration_ms": 20,
-          "frame": 10,
+          "frame": 20,
           "opaque_pixels": 9923,
-          "runtime_first_frame": 397,
-          "runtime_frames": 20,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 20,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 10,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 27
+          },
+          "video_frame": 20,
           "sha256": "ed985b0b7e931bf7d17073943282367cdd932bfc41536fdc44a7f39055fda5f3"
         },
         {
           "bounds": [
-            186,
+            192,
             199,
             411,
             347
           ],
           "duration_ms": 20,
-          "frame": 11,
-          "opaque_pixels": 9700,
-          "runtime_first_frame": 417,
-          "runtime_frames": 20,
+          "frame": 21,
+          "opaque_pixels": 9747,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 21,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 11,
-          "sha256": "6d4db8eb2e8691c10ab045f3d1caed3a63dc1d3bf44e8ca2a64bc29e4760ef53"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 29
+          },
+          "video_frame": 21,
+          "sha256": "4bfabd2e697700c90a77cb4282478b69fd9c41020d636aaddc257e6e445539ef"
         },
         {
           "bounds": [
@@ -1543,13 +3918,20 @@
             479,
             347
           ],
-          "duration_ms": 20,
-          "frame": 12,
+          "duration_ms": 19,
+          "frame": 22,
           "opaque_pixels": 11746,
-          "runtime_first_frame": 437,
-          "runtime_frames": 20,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 22,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 12,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 30
+          },
+          "video_frame": 22,
           "sha256": "4a5d6cd89fa01e55c805c034597877714b149df1e31e8c73b45cee2a39e72b86"
         },
         {
@@ -1559,30 +3941,136 @@
             488,
             347
           ],
-          "duration_ms": 48,
-          "frame": 13,
+          "duration_ms": 20,
+          "frame": 23,
           "opaque_pixels": 11780,
-          "runtime_first_frame": 457,
-          "runtime_frames": 48,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 23,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 13,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 31
+          },
+          "video_frame": 23,
           "sha256": "3aff7fc50098f070bb254ff89459ba9f833d4c8852440dfd16f6e679797cb4f1"
         },
         {
           "bounds": [
             201,
             196,
-            490,
+            488,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 24,
+          "opaque_pixels": 11780,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 24,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 31
+          },
+          "video_frame": 24,
+          "sha256": "3aff7fc50098f070bb254ff89459ba9f833d4c8852440dfd16f6e679797cb4f1"
+        },
+        {
+          "bounds": [
+            201,
+            196,
+            488,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 25,
+          "opaque_pixels": 11780,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 25,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov",
+            "frame": 31
+          },
+          "video_frame": 25,
+          "sha256": "3aff7fc50098f070bb254ff89459ba9f833d4c8852440dfd16f6e679797cb4f1"
+        },
+        {
+          "bounds": [
+            200,
+            196,
+            488,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 26,
+          "opaque_pixels": 11955,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 26,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 1
+          },
+          "video_frame": 26,
+          "sha256": "5faa035651ae8911db5eb476c72f5f527ab442adf998b04d72fbe67592d07b43"
+        },
+        {
+          "bounds": [
+            200,
+            196,
+            487,
             347
           ],
           "duration_ms": 19,
-          "frame": 14,
-          "opaque_pixels": 11912,
-          "runtime_first_frame": 505,
-          "runtime_frames": 19,
+          "frame": 27,
+          "opaque_pixels": 11811,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 27,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 14,
-          "sha256": "0dfa4c7d8579eb2feb27f55fdbfb2abe8661a650f4fe984981bd6448d248ccbf"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 2
+          },
+          "video_frame": 27,
+          "sha256": "2e68cc8d4786655f0cb9b12a960d0f321673d3df37ce4a6cfb0a84b7fb6c27a4"
+        },
+        {
+          "bounds": [
+            199,
+            196,
+            485,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 28,
+          "opaque_pixels": 11707,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 28,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 3
+          },
+          "video_frame": 28,
+          "sha256": "cefd4b368d9ef0debe640ec316babb49103d706283b11464fe454a88e4fc21fa"
         },
         {
           "bounds": [
@@ -1591,13 +4079,43 @@
             482,
             347
           ],
-          "duration_ms": 22,
-          "frame": 15,
+          "duration_ms": 20,
+          "frame": 29,
           "opaque_pixels": 11465,
-          "runtime_first_frame": 524,
-          "runtime_frames": 22,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 29,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 15,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 4
+          },
+          "video_frame": 29,
+          "sha256": "f66d9ba9a4601b9d4c6f96319c8c8d75edc4b0e3e85e839f0dbbde89f454496c"
+        },
+        {
+          "bounds": [
+            196,
+            195,
+            482,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 30,
+          "opaque_pixels": 11465,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 30,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 4
+          },
+          "video_frame": 30,
           "sha256": "f66d9ba9a4601b9d4c6f96319c8c8d75edc4b0e3e85e839f0dbbde89f454496c"
         },
         {
@@ -1607,13 +4125,43 @@
             478,
             346
           ],
-          "duration_ms": 22,
-          "frame": 16,
+          "duration_ms": 20,
+          "frame": 31,
           "opaque_pixels": 11301,
-          "runtime_first_frame": 546,
-          "runtime_frames": 22,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 31,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 16,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 5
+          },
+          "video_frame": 31,
+          "sha256": "5ce9438b9beac05c74fa4d08e1eebcb7892ec8f70997de8540b7dd8185f01277"
+        },
+        {
+          "bounds": [
+            195,
+            194,
+            478,
+            346
+          ],
+          "duration_ms": 19,
+          "frame": 32,
+          "opaque_pixels": 11301,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 32,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 5
+          },
+          "video_frame": 32,
           "sha256": "5ce9438b9beac05c74fa4d08e1eebcb7892ec8f70997de8540b7dd8185f01277"
         },
         {
@@ -1623,13 +4171,20 @@
             469,
             347
           ],
-          "duration_ms": 24,
-          "frame": 17,
+          "duration_ms": 20,
+          "frame": 33,
           "opaque_pixels": 11221,
-          "runtime_first_frame": 568,
-          "runtime_frames": 24,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 33,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 17,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 6
+          },
+          "video_frame": 33,
           "sha256": "7f11e3f4cbf173671c43d70864b01ce63e0887f9af8a840ce72bb3772258f606"
         },
         {
@@ -1639,13 +4194,43 @@
             463,
             347
           ],
-          "duration_ms": 24,
-          "frame": 18,
+          "duration_ms": 20,
+          "frame": 34,
           "opaque_pixels": 11141,
-          "runtime_first_frame": 592,
-          "runtime_frames": 24,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 34,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 18,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 7
+          },
+          "video_frame": 34,
+          "sha256": "a808503878dbcc4293a4f4e5ce4a07f5ec601b923e599123a99dd17728923a32"
+        },
+        {
+          "bounds": [
+            191,
+            192,
+            463,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 35,
+          "opaque_pixels": 11141,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 35,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 7
+          },
+          "video_frame": 35,
           "sha256": "a808503878dbcc4293a4f4e5ce4a07f5ec601b923e599123a99dd17728923a32"
         },
         {
@@ -1655,14 +4240,67 @@
             457,
             347
           ],
-          "duration_ms": 26,
-          "frame": 19,
+          "duration_ms": 19,
+          "frame": 36,
           "opaque_pixels": 11157,
-          "runtime_first_frame": 616,
-          "runtime_frames": 26,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 36,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 19,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 8
+          },
+          "video_frame": 36,
           "sha256": "9d57e16c233a179509a4cd63456ed4d60784396ee0c589c22d75cf21470ea693"
+        },
+        {
+          "bounds": [
+            187,
+            191,
+            449,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 37,
+          "opaque_pixels": 11144,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 37,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 9
+          },
+          "video_frame": 37,
+          "sha256": "7aaf660e50ccff1118a733001de896896233981e0317ad73dfbf8de4ff535ad3"
+        },
+        {
+          "bounds": [
+            187,
+            191,
+            449,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 38,
+          "opaque_pixels": 11144,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 38,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 9
+          },
+          "video_frame": 38,
+          "sha256": "7aaf660e50ccff1118a733001de896896233981e0317ad73dfbf8de4ff535ad3"
         },
         {
           "bounds": [
@@ -1671,14 +4309,67 @@
             437,
             347
           ],
-          "duration_ms": 27,
-          "frame": 20,
+          "duration_ms": 20,
+          "frame": 39,
           "opaque_pixels": 10769,
-          "runtime_first_frame": 642,
-          "runtime_frames": 27,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 39,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 20,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 10
+          },
+          "video_frame": 39,
           "sha256": "c0311da82b935edcdf4edcf08121dbae1c000f60f588a1815c211f5981704703"
+        },
+        {
+          "bounds": [
+            188,
+            188,
+            429,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 40,
+          "opaque_pixels": 10604,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 40,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 11
+          },
+          "video_frame": 40,
+          "sha256": "777a48fde684a5ab074664add8f6f3a5755d67df68e2edb71440b526be7b862c"
+        },
+        {
+          "bounds": [
+            188,
+            188,
+            429,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 41,
+          "opaque_pixels": 10604,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 41,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 11
+          },
+          "video_frame": 41,
+          "sha256": "777a48fde684a5ab074664add8f6f3a5755d67df68e2edb71440b526be7b862c"
         },
         {
           "bounds": [
@@ -1687,14 +4378,67 @@
             420,
             347
           ],
-          "duration_ms": 29,
-          "frame": 21,
+          "duration_ms": 20,
+          "frame": 42,
           "opaque_pixels": 10224,
-          "runtime_first_frame": 669,
-          "runtime_frames": 29,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 42,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 21,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 12
+          },
+          "video_frame": 42,
           "sha256": "3dd97e47d235ffb563a39cb21687908d851b63f20c809d6899dd3986d918eb92"
+        },
+        {
+          "bounds": [
+            190,
+            188,
+            420,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 43,
+          "opaque_pixels": 10224,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 43,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 12
+          },
+          "video_frame": 43,
+          "sha256": "3dd97e47d235ffb563a39cb21687908d851b63f20c809d6899dd3986d918eb92"
+        },
+        {
+          "bounds": [
+            191,
+            186,
+            412,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 44,
+          "opaque_pixels": 10057,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 44,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 13
+          },
+          "video_frame": 44,
+          "sha256": "052159b5fd1f075e48c038500616877d9150e561375a4814c28f423206f89329"
         },
         {
           "bounds": [
@@ -1703,14 +4447,67 @@
             399,
             346
           ],
-          "duration_ms": 30,
-          "frame": 22,
+          "duration_ms": 20,
+          "frame": 45,
           "opaque_pixels": 9621,
-          "runtime_first_frame": 698,
-          "runtime_frames": 30,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 45,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 22,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 14
+          },
+          "video_frame": 45,
           "sha256": "b4520b9ba7617288b18daf4e13312db2a6d86d3fca4f176b9d0f740944da7845"
+        },
+        {
+          "bounds": [
+            190,
+            184,
+            399,
+            346
+          ],
+          "duration_ms": 19,
+          "frame": 46,
+          "opaque_pixels": 9621,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 46,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 14
+          },
+          "video_frame": 46,
+          "sha256": "b4520b9ba7617288b18daf4e13312db2a6d86d3fca4f176b9d0f740944da7845"
+        },
+        {
+          "bounds": [
+            190,
+            183,
+            392,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 47,
+          "opaque_pixels": 9639,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 47,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 15
+          },
+          "video_frame": 47,
+          "sha256": "1d5a0e2613d2215de6fc4bae6ae99f508db726ef9153840e647c8891c2754e64"
         },
         {
           "bounds": [
@@ -1719,14 +4516,90 @@
             384,
             346
           ],
-          "duration_ms": 30,
-          "frame": 23,
+          "duration_ms": 20,
+          "frame": 48,
           "opaque_pixels": 9340,
-          "runtime_first_frame": 728,
-          "runtime_frames": 30,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 48,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 23,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 16
+          },
+          "video_frame": 48,
           "sha256": "9bae4e18fbc4f42d86be1f9b259a2a46e64abb96f21940f49ecafa1587e25730"
+        },
+        {
+          "bounds": [
+            189,
+            181,
+            384,
+            346
+          ],
+          "duration_ms": 20,
+          "frame": 49,
+          "opaque_pixels": 9340,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 49,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 16
+          },
+          "video_frame": 49,
+          "sha256": "9bae4e18fbc4f42d86be1f9b259a2a46e64abb96f21940f49ecafa1587e25730"
+        },
+        {
+          "bounds": [
+            188,
+            180,
+            380,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 50,
+          "opaque_pixels": 9334,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 50,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 17
+          },
+          "video_frame": 50,
+          "sha256": "2c91d548cf6bf548bd769e5454061f420c0a3faf398281495ced024223cf71e3"
+        },
+        {
+          "bounds": [
+            188,
+            180,
+            380,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 51,
+          "opaque_pixels": 9334,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 51,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 17
+          },
+          "video_frame": 51,
+          "sha256": "2c91d548cf6bf548bd769e5454061f420c0a3faf398281495ced024223cf71e3"
         },
         {
           "bounds": [
@@ -1735,14 +4608,67 @@
             369,
             347
           ],
-          "duration_ms": 32,
-          "frame": 24,
+          "duration_ms": 20,
+          "frame": 52,
           "opaque_pixels": 9150,
-          "runtime_first_frame": 758,
-          "runtime_frames": 32,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 52,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 24,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 18
+          },
+          "video_frame": 52,
           "sha256": "0a89c23e186168e519926d4b6238526cd9c884bfd917cf6c6c377d6b87de984e"
+        },
+        {
+          "bounds": [
+            187,
+            176,
+            364,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 53,
+          "opaque_pixels": 9191,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 53,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 19
+          },
+          "video_frame": 53,
+          "sha256": "f3a0d87fbb80d230c34b8f0b9c44088f0dd9e2088898e0b75f74a9e650484260"
+        },
+        {
+          "bounds": [
+            187,
+            176,
+            364,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 54,
+          "opaque_pixels": 9191,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 54,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 19
+          },
+          "video_frame": 54,
+          "sha256": "f3a0d87fbb80d230c34b8f0b9c44088f0dd9e2088898e0b75f74a9e650484260"
         },
         {
           "bounds": [
@@ -1751,14 +4677,44 @@
             355,
             347
           ],
-          "duration_ms": 32,
-          "frame": 25,
+          "duration_ms": 20,
+          "frame": 55,
           "opaque_pixels": 8966,
-          "runtime_first_frame": 790,
-          "runtime_frames": 32,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 55,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 25,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 20
+          },
+          "video_frame": 55,
           "sha256": "c9009ee7164b3b8e5155dc10ff9d6fa459f76230496e7bbd98ffb7014b8b95c5"
+        },
+        {
+          "bounds": [
+            186,
+            174,
+            352,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 56,
+          "opaque_pixels": 9026,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 56,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 21
+          },
+          "video_frame": 56,
+          "sha256": "6567c62a75dc067c9b4f5322d9e3d81da3380bfee4d91e2e972fb44600edb617"
         },
         {
           "bounds": [
@@ -1767,14 +4723,44 @@
             346,
             347
           ],
-          "duration_ms": 30,
-          "frame": 26,
+          "duration_ms": 20,
+          "frame": 57,
           "opaque_pixels": 8947,
-          "runtime_first_frame": 822,
-          "runtime_frames": 30,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 57,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 26,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 22
+          },
+          "video_frame": 57,
           "sha256": "beedfa27c7cb6ac2b9bd30495034cd7100eab5ec2b09fd83456edddcf8dd49fc"
+        },
+        {
+          "bounds": [
+            187,
+            173,
+            343,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 58,
+          "opaque_pixels": 9009,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 58,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 23
+          },
+          "video_frame": 58,
+          "sha256": "17b3a7216e242c5fddf77232664633f566ce405ad30e6141b350af2754f8a68c"
         },
         {
           "bounds": [
@@ -1783,14 +4769,67 @@
             339,
             347
           ],
-          "duration_ms": 29,
-          "frame": 27,
-          "opaque_pixels": 8872,
-          "runtime_first_frame": 852,
-          "runtime_frames": 29,
+          "duration_ms": 20,
+          "frame": 59,
+          "opaque_pixels": 8956,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 59,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "video",
-          "video_frame": 27,
-          "sha256": "d3711f06b07c11924c44feb6359ffdd2ded570f5a77167d0b5fefda1cc498485"
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 24
+          },
+          "video_frame": 59,
+          "sha256": "666e635948e9713fd02075cfaa005129b1168cef7db22effc6e5dd3d8d354af9"
+        },
+        {
+          "bounds": [
+            187,
+            173,
+            341,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 60,
+          "opaque_pixels": 8948,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 60,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 25
+          },
+          "video_frame": 60,
+          "sha256": "aa17d2553c86091ab7843f5b689af842455f70843e00a8f86b9412a72aafa6b2"
+        },
+        {
+          "bounds": [
+            187,
+            173,
+            341,
+            347
+          ],
+          "duration_ms": 19,
+          "frame": 61,
+          "opaque_pixels": 8954,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 61,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "video",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 34
+          },
+          "video_frame": 61,
+          "sha256": "daf0e6a628f28035e2232a9030d13e6c29120d4c017e2706671bad815588241d"
         },
         {
           "bounds": [
@@ -1799,33 +4838,74 @@
             342,
             347
           ],
-          "duration_ms": 30,
-          "frame": 28,
+          "duration_ms": 20,
+          "frame": 62,
           "opaque_pixels": 9170,
-          "runtime_first_frame": 881,
-          "runtime_frames": 30,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 62,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
           "source_kind": "idle_endpoint",
-          "video_frame": 28,
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 38
+          },
+          "video_frame": 62,
+          "sha256": "58f2263d90cdffab467dfaee1e069766336ab63c657230dd400ac1597ae393d0"
+        },
+        {
+          "bounds": [
+            187,
+            173,
+            342,
+            347
+          ],
+          "duration_ms": 20,
+          "frame": 63,
+          "opaque_pixels": 9170,
+          "root_motion_pixels": 0,
+          "runtime_duration_ms": 19.796875,
+          "runtime_first_frame": 63,
+          "runtime_forward_pixels": 0,
+          "runtime_frames": 1,
+          "source_kind": "idle_endpoint",
+          "source_pose": {
+            "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov",
+            "frame": 38
+          },
+          "video_frame": 63,
           "sha256": "58f2263d90cdffab467dfaee1e069766336ab63c657230dd400ac1597ae393d0"
         }
       ],
-      "runtime_fps": 1000,
-      "runtime_frames": 911,
+      "runtime_fps": 50.5130228887135,
+      "runtime_frames": 64,
       "seed": 202611111031,
       "source_parts": [
         {
           "indices": [
             0,
+            1,
+            5,
             6,
+            7,
             7,
             8,
             9,
-            10,
+            9,
+            11,
             12,
+            13,
+            15,
+            17,
+            22,
             30,
+            38,
+            38,
             38
           ],
           "job": "d3f68362-80b5-4873-bb13-7ef9ee4a91d5",
+          "playback": "forward",
           "seed": 202611111031,
           "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-load-v10.mov"
         },
@@ -1833,33 +4913,60 @@
           "indices": [
             26,
             27,
-            28,
+            29,
             30,
+            31,
+            31,
             31
           ],
           "job": "eb9dde34-0e60-492e-8f61-627f729c9d17",
+          "playback": "forward",
           "seed": 202611111003,
           "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-thrust-v10.mov"
         },
         {
           "indices": [
-            0,
+            1,
+            2,
+            3,
             4,
+            4,
+            5,
             5,
             6,
             7,
+            7,
             8,
+            9,
+            9,
             10,
+            11,
+            11,
             12,
+            12,
+            13,
             14,
+            14,
+            15,
             16,
+            16,
+            17,
+            17,
             18,
+            19,
+            19,
             20,
+            21,
             22,
-            30,
+            23,
+            24,
+            25,
+            34,
+            38,
             38
           ],
           "job": "ec1a9d0f-ad7a-4ebe-9019-1de0bf619666",
+          "playback": "forward",
           "seed": 202611111032,
           "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_attack/low-return-v10.mov"
         }
@@ -1869,67 +4976,106 @@
       "step": 1
     }
   ],
-  "date": "2026-11-12",
+  "date": "2026-11-15",
   "foot_anchor": [
     256,
     347
   ],
   "keyposes": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/keyposes.json",
   "model": "Local MiniMax H3 int8; 28 steps; acceleration LoRA disabled",
-  "motion_correction": {
-    "method": "Re-generated middle preparation, continuous horizontal cut and compact recovery with aligned shoulders/pelvis and unchanged support-foot order. High/low pose pixels and timing remain v11.",
-    "middle_seconds": 0.997,
-    "previous_middle_seconds": 0.997,
-    "replaces_stance": "mid",
-    "request": "中段扭得有点怪",
-    "revision": 12,
-    "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
-  },
-  "preview": "greatsword-stance-attacks-v13.gif",
+  "preview": "greatsword-stance-attacks-v27.gif",
   "reference_design": {
     "character": "Eula official movement rhythm as a balance and step reference, adapted to this same young fox swordswoman with continuous two-handed grip.",
-    "high": "Monster Hunter greatsword weight: rear-hip loading, torso-led overhead cut, front-knee catch and deliberate lift to guard.",
+    "high": "Official Monster Hunter greatsword load, descending cut and knee/hip catch. Retains clean approved strike poses and newly stages low elbow fold/hilt retraction before rising back to high guard.",
     "low": "Wapenkunst rules 4-5: elbow-led hilt retraction and stable point-forward thrust; rear-foot drive, then recovery along the same line.",
-    "mid": "Horizontal edge cut with a stable shallow three-quarter view: aligned shoulders and pelvis, small knee-led weight transfer and a compact front-point recovery. No independent waist counter-rotation."
+    "mid": "LIER horizontal-cut mechanics: coiled pelvis/ribs, coordinated turn and front-leg weight transfer, one continuous waist-height blade arc with an edge-aligned follow-through."
   },
   "reference_document": "docs/art/greatsword-attack-references.md",
-  "retiming": {
-    "applies_to": [
-      "high",
-      "low"
-    ],
-    "changes": {
-      "high": {
-        "after_ms": 1060,
-        "before_ms": 1427,
-        "contact_ms": 54,
-        "loaded_hold_ms": 70,
-        "poses": 34,
-        "recovery_ms": 484,
-        "release_ms": 96,
-        "shorter_percent": 25.72,
-        "windup_ms": 426
-      },
-      "low": {
-        "after_ms": 911,
-        "before_ms": 1231,
-        "contact_ms": 48,
-        "loaded_hold_ms": 65,
-        "poses": 29,
-        "recovery_ms": 406,
-        "release_ms": 80,
-        "shorter_percent": 26,
-        "windup_ms": 377
-      }
-    },
-    "method": "High and low keep their selected v10 poses and v11 timing. Middle uses the separately documented v12 motion correction.",
-    "request": "还是快一点连贯一点",
-    "revision": 11,
-    "source_revision": 10
-  },
-  "revision": 13,
+  "revision": 27,
   "schema": 1,
-  "timing": "Source-part index lists define playback order, including any explicitly reversed recovery segment. Authored windup and contact holds preserve the fast release. Rejected source frames are listed in production.json.",
-  "art_revision": 12,
-  "weapon_attack_effects": "Removed: animation-only attacks; stance-switch effects remain separate."
+  "timing": "Source-part indices define pose order. Uniform runtime frames use runtime_fps; Aseprite/APNG durations round cumulative boundaries to milliseconds. Holds and optional end-exclusive phases describe the intended rhythm.",
+  "authoring_steps": [
+    "Use the approved character and weapon. High uses body-driven cut, coherent planted recovery and slow rise; middle uses a forward horizontal cut with continuous recovery; low uses the approved thrust.",
+    "Select forward source poses from source_parts and retain exact canonical idle endpoints; each attack has 64 frames.",
+    "Apply recorded Aseprite matte and steel edits, preserving the source body, grip and foreground occlusion. Do not splice upper/lower bodies or recenter each pose.",
+    "High physics advance finishes at frame 15 during the downstroke. The source-image offset curve is independent from the runtime curve; recovery stays at the contact position.",
+    "Verify source RGBA plus pixel corrections, independent Aseprite exports, atlas/APNG, Godot import and both-facing player playback."
+  ],
+  "art_revision": 27,
+  "stability_revision": {
+    "revision": 27,
+    "baseline_revision": 26,
+    "request": "为什么下砸后一直在抖",
+    "cause": "v26 combined planted legs with upper-body frames containing follow-step bobbing, plus per-frame horizontal alignment; the physics position was fixed, but sprite posture oscillated.",
+    "method": "Use coherent complete original-character planted recovery poses, with original hands and body retained together; reuse the same idle steel master for blade consistency. Remove the stitched lower body and frame-by-frame upper-body offsets.",
+    "edited_high_frames": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "source_art_revision": 22,
+    "physical_step_unchanged_from_v26": true,
+    "middle_and_low_unchanged": true,
+    "frame_count": 64,
+    "seconds": 1.6,
+    "phase": "low load -> elbow fold -> slow rise -> original idle",
+    "editable_source": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/whole-body-recovery-v27.aseprite",
+    "diagnostic": {
+      "v26": {
+        "head_warm_region_centroid_total_travel_xy_pixels": [
+          34.55019876261571,
+          14.774109643083307
+        ],
+        "max_adjacent_centroid_jump_pixels": 9.44243820956287
+      },
+      "v27": {
+        "head_warm_region_centroid_total_travel_xy_pixels": [
+          3.60739781306296,
+          2.8052828350356265
+        ],
+        "max_adjacent_centroid_jump_pixels": 1.4064011877851408
+      }
+    }
+  },
+  "authoring_sources": [
+    "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/blade-master-v24.aseprite",
+    "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/whole-body-recovery-v27.aseprite"
+  ]
 }

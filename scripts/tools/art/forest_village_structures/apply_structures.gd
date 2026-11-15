@@ -43,7 +43,9 @@ func run() -> void:
 	var packed := PackedScene.new()
 	assert(packed.pack(village) == OK)
 	preload("res://scripts/tools/art/forest_town/material_palette.gd").new().save_resource(packed,ENV)
-	var report := FileAccess.open("res://assets/resources/art/forest_village/structures_integration.json",FileAccess.WRITE)
+	var report_dir := "res://.godot/forest-village-structures/"
+	DirAccess.make_dir_recursive_absolute(report_dir)
+	var report := FileAccess.open(report_dir+"structures_integration.json",FileAccess.WRITE)
 	report.store_string(JSON.stringify({"fence_runs":changes,"bridge_center":str(bridge.position),"walkable_deck_y":0.015,"existing_rail_collision_preserved":true},"\t"))
 	print("STRUCTURES_APPLIED ",changes.size()," fence runs; creek bridge; existing entrances and walkable surfaces preserved")
 	village.free()

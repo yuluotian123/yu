@@ -35,7 +35,7 @@ V3 增加弧面搭接瓦与圆脊瓦、错缝不规则石块、倒角和轻微�
 - 十户模型展示场景：`assets/scenes/environment/forest_village/houses_gallery.tscn`
 - 共享材质：`assets/materials/environment/forest_village/houses/`
 - 模型、碰撞和四面特征清单：`assets/resources/art/forest_village/houses_models_v2.json`
-- 导入、关卡接线与原生检查记录：同目录 `houses_import_validation.json`、`houses_level_integration.json`、`houses_runtime_validation.json`。
+- 关卡接线历史保留在同目录 `houses_level_integration.json`，供重复应用时核对原始位置；导入与原生检查的临时报告输出到 `.godot/forest-village-houses/`。
 
 ## 重建与关卡接线
 

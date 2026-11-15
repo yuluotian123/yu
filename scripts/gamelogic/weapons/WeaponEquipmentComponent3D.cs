@@ -171,7 +171,7 @@ namespace GameLogic
                 PendingStance = string.Empty;
                 return true;
             }
-            if (IsAbilityRunning() || _movement?.IsOnFloor == false)
+            if (IsAbilityRunning() || _movement?.IsOnFloor == false || _movement?.IsJumpPreparing == true)
             {
                 PendingStance = stance;
                 return true;
@@ -188,7 +188,15 @@ namespace GameLogic
             string start = CurrentWeapon?.StanceMoveStartAnimations.TryGetValue(stance, out string startValue) == true ? startValue : null;
             _animation.SetAnimationAlias("idle", idle, false);
             _animation.SetAnimationAlias("run", move, false);
-            _animation.AnimationInstance?.SetAnimationLeadIn("run", start);
+            // Jump phases share the HFSM clock while keeping the equipped guard.
+            foreach (string phase in new[] { "jump_prepare", "jumpup", "inair", "isfalling", "land" })
+            {
+                string clip = phase + "_" + stance;
+                _animation.SetAnimationAlias(phase,
+                    CurrentWeapon?.AnimationProfile.HasAnimation(clip) == true ? clip : null, false);
+            }
+            // Landing already ends in a walking pose; do not replay the standing start.
+            _animation.AnimationInstance?.SetAnimationLeadIn("run", start, "land");
             if (refreshPlayback) _animation.AnimationInstance?.RefreshPlayback();
             StanceChanged?.Invoke(stance);
         }
@@ -394,7 +402,7 @@ namespace GameLogic
         {
             if (IsBusy) return;
             if (_pendingSlot >= 0) ApplySlot(_pendingSlot);
-            if (!string.IsNullOrEmpty(PendingStance) && _movement?.IsOnFloor != false)
+            if (!string.IsNullOrEmpty(PendingStance) && _movement?.IsOnFloor != false && _movement?.IsJumpPreparing != true)
                 StartStanceTransition(PendingStance);
         }
 

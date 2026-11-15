@@ -253,8 +253,7 @@ resource_local_to_scene = true
 script = ExtResource("22_6txhy")
 Profile = ExtResource("21_i4cks")
 UseComponentFraming = true
-CameraOffset = Vector3(0, 3.5, 8)
-CameraRotationDegrees = Vector3(-25, 0, 0)
+CameraOffset = Vector3(0, 3, 7)
 
 [sub_resource type="Resource" id="Resource_no8qj"]
 resource_local_to_scene = true

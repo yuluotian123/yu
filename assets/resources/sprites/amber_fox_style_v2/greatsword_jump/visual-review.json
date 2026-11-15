@@ -1,0 +1,307 @@
+{
+  "schema": 1,
+  "revision": 2,
+  "date": "2026-11-15",
+  "status": "generated_integrated_and_reviewed",
+  "authoring_mode": "comfyui_with_aseprite_contour_repairs_and_packaging",
+  "request": [
+    "轻快自然：小幅屈膝蓄力、腾空收腿、落地缓冲",
+    "三段分别制作：跳跃节奏一致，各自保持原架势持剑",
+    "以行走姿势为基础起跳，落地后继续迈步"
+  ],
+  "clips": {
+    "high": {
+      "frames": 30,
+      "duration_ms": 780,
+      "source_visible_rgb_exact_except_recorded_contour_repairs": true,
+      "repaired_contour_pixels": 11045,
+      "source_chroma_and_root_translation_exact": true,
+      "binary_alpha": true,
+      "independent_aseprite_export_exact": true,
+      "atlas_rgba_exact": true,
+      "apng_rgba_and_timing_exact": true,
+      "independent_foreground_mask_for_video": false
+    },
+    "mid": {
+      "frames": 30,
+      "duration_ms": 780,
+      "source_visible_rgb_exact_except_recorded_contour_repairs": true,
+      "repaired_contour_pixels": 10511,
+      "source_chroma_and_root_translation_exact": true,
+      "binary_alpha": true,
+      "independent_aseprite_export_exact": true,
+      "atlas_rgba_exact": true,
+      "apng_rgba_and_timing_exact": true,
+      "independent_foreground_mask_for_video": false
+    },
+    "low": {
+      "frames": 28,
+      "duration_ms": 780,
+      "source_visible_rgb_exact_except_recorded_contour_repairs": true,
+      "repaired_contour_pixels": 9032,
+      "source_chroma_and_root_translation_exact": true,
+      "binary_alpha": true,
+      "independent_aseprite_export_exact": true,
+      "atlas_rgba_exact": true,
+      "apng_rgba_and_timing_exact": true,
+      "independent_foreground_mask_for_video": false
+    }
+  },
+  "visual_review": {
+    "scope": "All 88 delivered frames and corresponding raw video frames; light/dark contact sheets, regional comparisons and actual Godot capture.",
+    "identity": "Current movement v13 frame 0 is the exact endpoint of each stance: covered sleeves, cape, single ponytail, tail, belt pouch and gray-blue greatsword with gold guard.",
+    "motion": "Side-facing walking body and staggered feet carry into takeoff, asymmetric leg tuck and landing step. Each stance retains its own two-handed guard. Moving landings resume the walk loop directly.",
+    "selection": "The first high draft only walked and was rejected; the delivered new high source contains one complete jump with an intact sword tip. Low uses its first hop and grounded recovery; its extra second hop is omitted.",
+    "root_motion": "Recorded integer vertical hip translation is removed only while airborne. Physics supplies world height and horizontal motion; ground compression remains in the poses.",
+    "edge_repairs": "Only recorded green-spill pixels in the two-pixel silhouette band are recolored in Aseprite; no full-image quantization or static face overlay.",
+    "limitations": [
+      "Raw video has no independent foreground segmentation; exact keyed alpha is not proof against false background removal.",
+      "Independent Aseprite RGBA validates the saved source and exports, not anatomy or artistic quality.",
+      "Minor source pixel and perspective variation remains. Jump starts from a fixed walking pose, rather than phase-matching every possible walk frame. GIF is a viewing copy; PNG/APNG are the pixel reference."
+    ]
+  },
+  "godot_import": {
+    "frames": 88,
+    "phase_animations": 15,
+    "phase_durations_exact": true,
+    "visible_rgb_and_alpha_exact": true
+  },
+  "resource_dependencies": {
+    "dependency_edges": 2975,
+    "missing": [],
+    "resources": 1195
+  },
+  "gameplay": {
+    "full": {
+      "Height": 0.5192168,
+      "HorizontalDistance": 0,
+      "PreparingFrames": 5,
+      "PreparationGrounded": true,
+      "Animations": [
+        "idle_mid",
+        "jump_prepare_mid",
+        "jumpup_mid",
+        "inair_mid",
+        "isfalling_mid",
+        "land_mid"
+      ]
+    },
+    "shortTap": {
+      "Height": 0.11374998,
+      "HorizontalDistance": 0,
+      "PreparingFrames": 5,
+      "PreparationGrounded": true,
+      "Animations": [
+        "idle_mid",
+        "jump_prepare_mid",
+        "jumpup_mid",
+        "inair_mid",
+        "isfalling_mid",
+        "land_mid"
+      ]
+    },
+    "moving": {
+      "Height": 0.51927644,
+      "HorizontalDistance": 1.313487,
+      "PreparingFrames": 5,
+      "PreparationGrounded": true,
+      "Animations": [
+        "idle_mid",
+        "jump_prepare_mid",
+        "jumpup_mid",
+        "inair_mid",
+        "isfalling_mid",
+        "land_mid"
+      ]
+    },
+    "guards": {
+      "high": {
+        "Height": 0.5188217,
+        "HorizontalDistance": 0,
+        "PreparingFrames": 5,
+        "PreparationGrounded": true,
+        "Animations": [
+          "idle_high",
+          "jump_prepare_high",
+          "jumpup_high",
+          "inair_high",
+          "isfalling_high",
+          "land_high"
+        ]
+      },
+      "low": {
+        "Height": 0.51874995,
+        "HorizontalDistance": 0,
+        "PreparingFrames": 5,
+        "PreparationGrounded": true,
+        "Animations": [
+          "idle_low",
+          "jump_prepare_low",
+          "jumpup_low",
+          "inair_low",
+          "isfalling_low",
+          "land_low"
+        ]
+      }
+    },
+    "walkJumps": {
+      "high": {
+        "Height": 0.51934713,
+        "HorizontalDistance": 2.666963,
+        "PreparingFrames": 5,
+        "PreparationGrounded": true,
+        "Animations": [
+          "run_high",
+          "jump_prepare_high",
+          "jumpup_high",
+          "inair_high",
+          "isfalling_high",
+          "land_high"
+        ]
+      },
+      "mid": {
+        "Height": 0.518808,
+        "HorizontalDistance": 2.6666994,
+        "PreparingFrames": 5,
+        "PreparationGrounded": true,
+        "Animations": [
+          "run_mid",
+          "jump_prepare_mid",
+          "jumpup_mid",
+          "inair_mid",
+          "isfalling_mid",
+          "land_mid"
+        ]
+      },
+      "low": {
+        "Height": 0.51882875,
+        "HorizontalDistance": 2.6667414,
+        "PreparingFrames": 5,
+        "PreparationGrounded": true,
+        "Animations": [
+          "run_low",
+          "jump_prepare_low",
+          "jumpup_low",
+          "inair_low",
+          "isfalling_low",
+          "land_low"
+        ]
+      }
+    },
+    "queuedStance": true,
+    "cancellation": true
+  },
+  "runtime_preview": {
+    "file": "docs/characters/media/protagonist/greatsword-stance-jumps-runtime-v2.gif",
+    "source_frames": 180,
+    "source_fps": 60,
+    "gif_duration_ms": 3000,
+    "facings": [
+      "right",
+      "left"
+    ],
+    "phase_boundaries": [
+      {
+        "capture_frame": 0,
+        "phase": "idle"
+      },
+      {
+        "capture_frame": 1,
+        "phase": "run_start"
+      },
+      {
+        "capture_frame": 21,
+        "phase": "run"
+      },
+      {
+        "capture_frame": 24,
+        "phase": "jump_prepare"
+      },
+      {
+        "capture_frame": 29,
+        "phase": "jumpup"
+      },
+      {
+        "capture_frame": 37,
+        "phase": "inair"
+      },
+      {
+        "capture_frame": 48,
+        "phase": "isfalling"
+      },
+      {
+        "capture_frame": 59,
+        "phase": "land"
+      },
+      {
+        "capture_frame": 72,
+        "phase": "run"
+      },
+      {
+        "capture_frame": 114,
+        "phase": "jump_prepare"
+      },
+      {
+        "capture_frame": 119,
+        "phase": "jumpup"
+      },
+      {
+        "capture_frame": 127,
+        "phase": "inair"
+      },
+      {
+        "capture_frame": 138,
+        "phase": "isfalling"
+      },
+      {
+        "capture_frame": 149,
+        "phase": "land"
+      },
+      {
+        "capture_frame": 162,
+        "phase": "run"
+      }
+    ],
+    "matching_jump_phase_clock_across_stances": true,
+    "continuous_horizontal_movement": true,
+    "moving_landings_resume_walk_without_standing_lead_in": true,
+    "rendering": "Real player/HFSM/physics, unshaded sprites; camera follows horizontal movement and floor ticks show translation."
+  },
+  "regression": {
+    "build_errors": 0,
+    "build_existing_warnings": 8,
+    "weapon_stances": "PASS",
+    "checks": [
+      "single attacks",
+      "both attack facings",
+      "collision root motion",
+      "cancellation",
+      "combo framework",
+      "stance input chords",
+      "locomotion",
+      "geometry",
+      "persistence",
+      "instance isolation"
+    ],
+    "unchanged_protected_attack_files": 824,
+    "known_preexisting_editor_error": "WorldAuthoringPlugin.cs:27 cannot cast Godot.Resource to GameLogic.Component3D; also present in .godot/stance-v27/import.log.",
+    "logs": ".godot/jump-v2/"
+  },
+  "regional_audit": {
+    "high": {
+      "status": "numeric_checks_passed",
+      "frame_count": 30,
+      "errors": []
+    },
+    "mid": {
+      "status": "numeric_checks_passed",
+      "frame_count": 30,
+      "errors": []
+    },
+    "low": {
+      "status": "numeric_checks_passed",
+      "frame_count": 28,
+      "errors": []
+    }
+  }
+}

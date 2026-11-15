@@ -27,7 +27,9 @@ func _initialize() -> void:
 			checked += 1
 	var report := {"ok": true, "checked_frames": checked, "animations": frames.get_animation_names(),
 		"frame_size": [320,384], "visible_rgb_and_alpha_exact": true, "loop_modes_match_manifest": true}
-	var output := FileAccess.open(meta + "godot-validation.json",FileAccess.WRITE)
+	var report_dir := "res://.godot/art-validation/greatsword_stance_movement/"
+	DirAccess.make_dir_recursive_absolute(report_dir)
+	var output := FileAccess.open(report_dir + "godot-validation.json",FileAccess.WRITE)
 	assert(output != null)
 	output.store_string(JSON.stringify(report,"  ") + "\n")
 	print("MOVEMENT_IMPORT_CHECK: " + JSON.stringify(report))

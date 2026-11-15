@@ -58,6 +58,7 @@ public partial class ValidateWeaponStances : Node3D
             }
             await CheckStanceAttacks();
             await CheckAttackFacing();
+            await CheckAttackMotionCollision();
             await CheckSingleAttacks();
             await CheckComboFramework();
 
@@ -432,9 +433,12 @@ public partial class ValidateWeaponStances : Node3D
                 foreach (var actor in actors)
                 {
                     var animation = actor.GetComponent<CharacterAnimationComponent3D>();
+                    var movement = actor.GetComponent<CharacterMovementComponent3D>();
                     actorFrames.Add(new JsonObject { ["animation"] = animation.ActiveAnimation.ToString(),
                         ["frame"] = animation.Sprite.Frame, ["progress"] = animation.Sprite.FrameProgress,
-                        ["facing"] = actor.GetComponent<CharacterMovementComponent3D>().Facing });
+                        ["facing"] = movement.Facing,
+                        ["position"] = new JsonArray(actor.GlobalPosition.X, actor.GlobalPosition.Y, actor.GlobalPosition.Z),
+                        ["velocity"] = new JsonArray(movement.Velocity.X, movement.Velocity.Y, movement.Velocity.Z) });
                 }
                 trace.Add(new JsonObject { ["capture_frame"] = frame, ["actors"] = actorFrames });
             }
@@ -593,9 +597,10 @@ public partial class ValidateWeaponStances : Node3D
                 Check(ability.Graph.Nodes.Count == 3 && ability.Graph.Nodes.OfType<AbilityTimelineNodeData>().Count() == 1,
                     "equipped attack contains one full Timeline and one exit");
                 var timeline = ability.Graph.Nodes.OfType<AbilityTimelineNodeData>().Single();
-                Check(timeline.Tracks.Count == 1 && timeline.Tracks[0].Clips.Count == 1 &&
-                    timeline.Tracks[0].Clips[0].Action is AbilityPlayAnimationAction && timeline.CancelActions.Count == 0,
-                    "equipped attack Timeline contains only animation");
+                var actions = timeline.Tracks.SelectMany(track => track.Clips).Select(clip => clip.Action).ToArray();
+                Check(actions.Count(action => action is AbilityPlayAnimationAction) == 1 &&
+                    actions.All(action => action is AbilityPlayAnimationAction or AbilityRootMotionAction) && timeline.CancelActions.Count == 0,
+                    "equipped attack Timeline contains animation and optional authored movement");
             }
         }
         foreach (string stance in new[] { "high", "mid", "low" })
@@ -715,25 +720,88 @@ public partial class ValidateWeaponStances : Node3D
             AbilityRuntime runtime = _abilities.GetRuntime(_equipment.CurrentPrimaryAttack.AbilityId);
             for (int i = 0; i < 180 && _abilities.CanActivateAbility(runtime.AbilityId) != AbilityActivationResult.Activated; i++)
                 await Frames(1);
+            Vector3 start = _player.GlobalPosition;
+            var motion = runtime.Resource.Graph.Nodes.OfType<AbilityTimelineNodeData>()
+                .SelectMany(node => node.Tracks).SelectMany(track => track.Clips)
+                .Select(clip => clip.Action).OfType<AbilityRootMotionAction>().SingleOrDefault();
             Check(_equipment.TryPrimaryAttack(), "facing check starts " + stance);
             KeyInput(facing > 0 ? Key.A : Key.D, true);
-            await Frames(30);
+            bool interruptHighStep = stance == "high" && facing < 0;
+            await Frames(interruptHighStep ? 20 : 30);
             KeyInput(facing > 0 ? Key.A : Key.D, false);
             Check(movement.Facing == facing, "attack direction remains locked through the strike");
             Check(!_player.HasNode("WeaponTrail"), "animation-only attack creates no weapon particle scene");
+            if (interruptHighStep)
+            {
+                float advance = (_player.GlobalPosition.X - start.X) * facing;
+                Check(motion != null && advance > .005f && advance < motion.DistanceSamples[^1] - .005f,
+                    "high cancellation interrupts actual movement during the downward cut");
+            }
             if (facing < 0)
             {
                 _abilities.CancelAbility(runtime.AbilityId, "FacingCancellationCheck");
                 Check(!runtime.IsRunning, "attack cancellation stops the Timeline");
                 await Frames(3);
                 Check(!movement.MovementLocked, "cancellation releases movement");
+                Vector3 stopped = _player.GlobalPosition;
+                await Frames(6);
+                Check(Mathf.Abs(_player.GlobalPosition.X - stopped.X) < .0001f, "cancelled root motion leaves no residual slide");
             }
-            else await WaitForAttack(runtime);
+            else
+            {
+                await WaitForAttack(runtime);
+                float expected = motion == null ? 0f : motion.DistanceSamples[^1];
+                Check(Mathf.Abs((_player.GlobalPosition.X - start.X) * facing - expected) < .002f,
+                    stance + " collision body receives the full authored step");
+                Vector3 stopped = _player.GlobalPosition;
+                await Frames(6);
+                Check(Mathf.Abs(_player.GlobalPosition.X - stopped.X) < .0001f, "completed recovery keeps its new position");
+            }
         }
         movement.RestoreFacing(1);
         _equipment.RequestStance("mid");
         await SettleStance();
         GD.Print("ATTACK_FACING_CHECK: PASS (all stances, both facings, cancellation, no weapon effects)");
+    }
+
+    private async Task CheckAttackMotionCollision()
+    {
+        var actor = CreatePlayer("MotionCollisionProbe", new Vector3(8, 0, 0));
+        var movement = actor.GetComponent<CharacterMovementComponent3D>();
+        var equipment = actor.GetComponent<WeaponEquipmentComponent3D>();
+        var abilities = actor.GetComponent<AbilitySystemComponent3D>();
+        actor.GetComponent<PlayerCharacterInputComponent3D>().GameplayBlocked = true;
+        await Frames(10);
+        foreach (string stance in new[] { "high", "mid" })
+        {
+            equipment.RequestStance(stance);
+            for (int i = 0; i < 120 && equipment.IsTransitioning; i++) await Frames(1);
+            movement.RestoreFacing(1);
+            Vector3 start = actor.GlobalPosition;
+            var wall = new StaticBody3D { Position = start + new Vector3(movement.HalfWidth + .10f, 0, 0) };
+            wall.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = new Vector3(.1f, 3f, 3f) } });
+            AddChild(wall);
+            await Frames(3);
+            Check(equipment.TryPrimaryAttack(), "start wall-constrained " + stance);
+            var runtime = abilities.GetRuntime(equipment.CurrentPrimaryAttack.AbilityId);
+            for (int i = 0; i < 150 && runtime.IsRunning; i++) await Frames(1);
+            Check(!runtime.IsRunning, "wall does not prevent recovery completing");
+            float advance = actor.GlobalPosition.X - start.X;
+            var motion = runtime.Resource.Graph.Nodes.OfType<AbilityTimelineNodeData>()
+                .SelectMany(node => node.Tracks).SelectMany(track => track.Clips)
+                .Select(clip => clip.Action).OfType<AbilityRootMotionAction>().SingleOrDefault();
+            if (motion == null)
+                Check(Mathf.Abs(advance) < .0001f, "in-place recovery introduces no sliding step");
+            else
+                Check(advance > .015f && advance < .055f, "authored step stops at collision wall");
+            wall.QueueFree();
+            Vector3 stopped = actor.GlobalPosition;
+            await Frames(8);
+            Check(Mathf.Abs(actor.GlobalPosition.X - stopped.X) < .0001f, "blocked motion is discarded, not released after removing wall");
+        }
+        actor.QueueFree();
+        await Frames(2);
+        GD.Print("ATTACK_ROOT_MOTION_CHECK: PASS (high collision, middle in-place recovery, no delayed movement)");
     }
 
     private async Task CheckMovementLeadIns()

@@ -1,410 +1,573 @@
 {
-  "date": "2026-11-12",
-  "revision": 13,
-  "status": "reviewed_and_integrated_effects_removed",
-  "pose_frames": 101,
+  "revision": 27,
+  "art_revision": 27,
+  "date": "2026-11-15",
+  "status": "reviewed_and_integrated",
+  "pose_frames": 192,
+  "runtime_frames": 192,
   "single_attack_seconds": {
-    "high": 1.06,
-    "mid": 0.997,
-    "low": 0.911
+    "high": 1.6,
+    "mid": 1.38,
+    "low": 1.267
   },
   "rhythm": {
     "high": {
-      "impact_hold_seconds": 0.054,
-      "loaded_hold_seconds": 0.07,
-      "recovery_seconds": 0.484000000000001,
-      "windup_seconds": 0.426
+      "impact_hold_seconds": 0.025,
+      "loaded_hold_seconds": 0.05,
+      "recovery_seconds": 1.2,
+      "windup_seconds": 0.3
     },
     "low": {
-      "impact_hold_seconds": 0.048,
-      "loaded_hold_seconds": 0.065,
-      "recovery_seconds": 0.406000000000001,
-      "windup_seconds": 0.377
+      "impact_hold_seconds": 0.0593906249867299,
+      "loaded_hold_seconds": 0.0593906249867299,
+      "recovery_seconds": 0.75228124983191,
+      "windup_seconds": 0.376140624915956
     },
     "mid": {
-      "impact_hold_seconds": 0.048,
-      "loaded_hold_seconds": 0.065,
-      "recovery_seconds": 0.462000000000001,
-      "windup_seconds": 0.391
+      "impact_hold_seconds": 0.0431249999946094,
+      "loaded_hold_seconds": 0.0431249999946094,
+      "recovery_seconds": 0.840937499894883,
+      "windup_seconds": 0.301874999962266
     }
-  },
-  "motion_correction": {
-    "revision": 12,
-    "request": "中段扭得有点怪",
-    "replaces_stance": "mid",
-    "method": "Re-generated middle preparation, continuous horizontal cut and compact recovery with aligned shoulders/pelvis and unchanged support-foot order. High/low pose pixels and timing remain v11.",
-    "previous_middle_seconds": 0.997,
-    "middle_seconds": 0.997,
-    "source_review": "v12 middle waist correction: stable shallow three-quarter torso, aligned shoulder/pelvis facing, same support-foot order and small knee-led loading. Continuous waist-level edge cut uses solid perspective poses; direct front-point lift is sampled backward from a controlled lowering take, then joins the original return take at its matching raised pose 22 and settles to idle. No source-frame body repainting or per-frame recentering. Retains v11 391/96/48/462 ms rhythm; high/low unchanged."
   },
   "source_pose_review": {
-    "new_middle_poses": 38,
-    "unchanged_high_low_png_files": 63,
-    "source_revision_high_low": 11,
-    "middle_source_parts": 4,
-    "middle_recovery_poses": 20,
-    "reverse_lift_explicitly_recorded": true
-  },
-  "reviewed": [
-    "Reviewed all new middle source takes and all 38 delivered middle poses on native dark/light sheets and local face, hands, blade, waist, legs and tail views.",
-    "Middle preparation, cut and recovery retain a consistent shallow three-quarter body view, aligned shoulder/pelvis facing and stable support-foot order. Removed the previous large waist coil and counter-turn.",
-    "Initial full take contributes only stable preparation. Snapped/glowing release and reverse waist sweep are rejected. The first return take contributes only the raised guide and late guard settling; the below-leg loop is excluded.",
-    "The direct front-point lift uses explicitly reversed samples of a controlled lowering reference, then joins the matching raised guide before guard settling. Every source index is recorded; no video-frame body repainting or per-frame recentering.",
-    "Both rendered facings recaptured without weapon FX. Runtime traces verify two complete single attacks per stance; art pixels and attack timing remain v12."
-  ],
-  "pixel_repairs": {
     "high": {
-      "edge_green_pixels_erased": 8482,
-      "source_effect_pixels_erased": 43572,
-      "steel_pinhole_pixels_restored": 2
+      "frames": 64,
+      "runtime_frames": 64,
+      "aseprite_rgba_and_timings_exact": true,
+      "unchanged_frames_from_v26": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        63
+      ],
+      "corrected_frames": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "max_apng_boundary_error_ms": 0,
+      "duration_seconds": 1.6
     },
     "mid": {
-      "edge_green_pixels_erased": 7568,
-      "detached_debris_pixels_erased": 0,
-      "source_effect_pixels_erased": 0,
-      "steel_pinhole_pixels_restored": 0
+      "frames": 64,
+      "runtime_frames": 64,
+      "aseprite_rgba_and_timings_exact": true,
+      "unchanged_frames_from_v26": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "corrected_frames": [],
+      "max_apng_boundary_error_ms": 0.5,
+      "duration_seconds": 1.38
     },
     "low": {
-      "edge_green_pixels_erased": 7030,
-      "source_effect_pixels_erased": 0,
-      "steel_pinhole_pixels_restored": 0
+      "frames": 64,
+      "runtime_frames": 64,
+      "aseprite_rgba_and_timings_exact": true,
+      "unchanged_frames_from_v26": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "corrected_frames": [],
+      "max_apng_boundary_error_ms": 0.5,
+      "duration_seconds": 1.267
     }
   },
-  "validation": {
-    "build": {
-      "errors": 0,
-      "warnings": 8,
-      "note": "Existing editor deprecated API and unassigned UI fields; no new build errors."
+  "pixel_repairs": {
+    "high": {
+      "erase_pixels_total": 20528,
+      "rgb_repair_pixels": 73259
     },
-    "gameplay": "STANCE_CHECK PASS: physical left clicks, spam/hold, complete recovery, facing lock and cancellation, no weapon effect nodes, generic combo framework, stance effects, movement, persistence and instance isolation.",
-    "godot_art": {
-      "checked_frames": 101,
-      "durations": {
-        "attack_high": 1.06,
-        "attack_low": 0.911000000000001,
-        "attack_mid": 0.997000000000001
-      },
-      "frame_size": [
-        512,
-        384
-      ],
-      "ok": true,
-      "one_shot": true,
-      "per_frame_timing_exact": true,
-      "rhythm": {
-        "high": {
-          "impact_hold_seconds": 0.054,
-          "loaded_hold_seconds": 0.07,
-          "recovery_seconds": 0.484000000000001,
-          "windup_seconds": 0.426
-        },
-        "low": {
-          "impact_hold_seconds": 0.048,
-          "loaded_hold_seconds": 0.065,
-          "recovery_seconds": 0.406000000000001,
-          "windup_seconds": 0.377
-        },
-        "mid": {
-          "impact_hold_seconds": 0.048,
-          "loaded_hold_seconds": 0.065,
-          "recovery_seconds": 0.462000000000001,
-          "windup_seconds": 0.391
-        }
-      },
-      "runtime_ticks": 2968,
-      "strikes": {
-        "high": {
-          "seconds": 0.0960000000000001
-        },
-        "low": {
-          "seconds": 0.0800000000000001
-        },
-        "mid": {
-          "seconds": 0.0960000000000001
-        }
-      },
-      "visible_rgb_and_alpha_exact": true
+    "low": {
+      "erase_pixels_total": 13184,
+      "rgb_repair_pixels": 0
     },
-    "pixel_audits": {
+    "mid": {
+      "erase_pixels_total": 20093,
+      "rgb_repair_pixels": 42917
+    }
+  },
+  "reviewed": [
+    "The v26 post-ground world position was stable, but upper-body posture oscillated against transplanted planted legs. Removed mixed upper/lower body and per-frame horizontal recentering.",
+    "Frames 23..62 now retain complete original-character planted recovery poses, with only a local steel repair using the original idle blade master. Reviewed guard connection, costume/face, feet, sword arc and idle handoff.",
+    "All 192 frames match source RGB/alpha plus recorded repairs, independent Aseprite exports, atlas/APNG and Godot import. 152 frames are pixel-identical to v26; body pixels outside the reviewed blade region match the coherent source poses.",
+    "Reviewed every changed frame on light and dark backgrounds and both-facing actual player captures. Image-space diagnostic on the same head region confirms reduced post-ground jumps; it is not a skeleton measurement or aesthetic score.",
+    "World movement remains exactly the v26 curve: finish by frame 15, stable through ground load and recovery. Two complete attacks per stance and facing preserve the 64-frame clocks and original idle endpoints."
+  ],
+  "numeric_validation": {
+    "godot_import_frames": 192,
+    "runtime_frames": 192,
+    "source_rgb_matte_and_recorded_root_translation_exact": true,
+    "atlas_apng_and_aseprite_exact": true,
+    "godot_alpha_and_visible_rgb_exact": true,
+    "one_shot": true,
+    "low_pixels_and_timing_unchanged": true,
+    "phase_ms": {
       "high": {
-        "frames": 32,
-        "status": "needs_visual_review",
-        "numeric_errors": 0,
-        "independent_full_silhouette_mask": false
+        "windup": 300,
+        "release": 75,
+        "contact": 25,
+        "blade_carry": 75,
+        "body_catch": 100,
+        "elbow_fold": 300,
+        "rise": 725
       },
       "mid": {
-        "frames": 36,
-        "status": "needs_visual_review",
-        "numeric_errors": 0,
-        "independent_full_silhouette_mask": false
-      },
-      "low": {
-        "frames": 27,
-        "status": "needs_visual_review",
-        "numeric_errors": 0,
-        "independent_full_silhouette_mask": false
+        "windup": 301.875,
+        "release": 194.0625,
+        "contact": 43.125,
+        "blade_carry": 150.9375,
+        "body_catch_and_fold": 215.625,
+        "front_lift": 258.75,
+        "shoulder_settle": 215.625
       }
     },
-    "media": "media-validation.json",
-    "runtime": {
-      "revision": 13,
-      "date": "2026-11-12",
-      "source_fps": 60,
-      "render_size": [
-        1536,
-        864
-      ],
-      "camera_size": 4.2,
-      "preview": "greatsword-stance-attacks-runtime-v13.gif",
-      "preview_frames": 108,
-      "preview_seconds": 3.6,
-      "preview_crop": {
-        "labels": [
-          0,
-          20,
-          1536,
-          60
+    "strikes": {
+      "high": {
+        "advance_end_seconds": 0.375,
+        "advance_fraction_at_contact": 1.0,
+        "post_contact_blade_descent_pixels": 53,
+        "rise_seconds": 0.725,
+        "root_motion_metres": 0.198620688,
+        "seconds": 0.075
+      },
+      "low": {
+        "seconds": 0.0791874999823065
+      },
+      "mid": {
+        "contact_blade_bounds": [
+          325,
+          256,
+          420,
+          261
         ],
-        "action": [
+        "root_motion_metres": 0.0,
+        "seconds": 0.194062499975742
+      }
+    },
+    "uniform_runtime_timing_exact": true,
+    "apng_max_boundary_error_ms": 0.5,
+    "corrected_high_frames": 40,
+    "all_source_pixels_and_recorded_repairs_exact": true,
+    "unchanged_rgba_frames_from_v26": 152,
+    "whole_body_source_preserved_outside_reviewed_blade_region": true,
+    "source_centering_zero": true
+  },
+  "raw_source_regional_audit": {
+    "historical_art_revision": 24,
+    "historical_difference_counts": {
+      "high": 197,
+      "mid": 146,
+      "low": 0
+    },
+    "rerun_for_v26": false,
+    "current_verification": "Current package validation compares all source RGB/alpha, every recorded Aseprite repair and extraction value. Historical raw audit counts are not v27 scores; current full-body source differs from v26, while local steel edits are intentional.",
+    "independent_full_silhouette_annotation": false,
+    "rerun_for_v27": false
+  },
+  "runtime_checks": {
+    "captured_facings": [
+      "right",
+      "left"
+    ],
+    "attack_runs_per_stance_and_facing": 2,
+    "all_64_frames_seen_in_each_run": true,
+    "max_playback_clock_error_seconds": 1.7296875043371074e-08,
+    "max_root_curve_error_metres": 2.880000001814764e-07,
+    "steps": {
+      "right": {
+        "high": [
+          0.1986205000000001,
+          0.19862040000000003
+        ],
+        "mid": [
           0,
-          280,
-          1536,
-          430
+          0
+        ],
+        "low": [
+          0.0,
+          0.0
         ]
       },
-      "inspected_capture_frames": {
-        "windup": 35,
-        "release_contact": 45,
-        "recovery": 63
-      },
-      "checks": {
-        "right": {
-          "high": {
-            "segments": [
-              {
-                "animation": "idle_high",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_high",
-                "start": 15,
-                "end": 77
-              },
-              {
-                "animation": "idle_high",
-                "start": 78,
-                "end": 108
-              },
-              {
-                "animation": "attack_high",
-                "start": 109,
-                "end": 171
-              },
-              {
-                "animation": "idle_high",
-                "start": 172,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": 1,
-            "weapon_attack_effects": false
-          },
-          "mid": {
-            "segments": [
-              {
-                "animation": "idle_mid",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_mid",
-                "start": 15,
-                "end": 73
-              },
-              {
-                "animation": "idle_mid",
-                "start": 74,
-                "end": 108
-              },
-              {
-                "animation": "attack_mid",
-                "start": 109,
-                "end": 167
-              },
-              {
-                "animation": "idle_mid",
-                "start": 168,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": 1,
-            "weapon_attack_effects": false
-          },
-          "low": {
-            "segments": [
-              {
-                "animation": "idle_low",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_low",
-                "start": 15,
-                "end": 68
-              },
-              {
-                "animation": "idle_low",
-                "start": 69,
-                "end": 108
-              },
-              {
-                "animation": "attack_low",
-                "start": 109,
-                "end": 162
-              },
-              {
-                "animation": "idle_low",
-                "start": 163,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": 1,
-            "weapon_attack_effects": false
-          }
-        },
-        "left": {
-          "high": {
-            "segments": [
-              {
-                "animation": "idle_high",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_high",
-                "start": 15,
-                "end": 77
-              },
-              {
-                "animation": "idle_high",
-                "start": 78,
-                "end": 108
-              },
-              {
-                "animation": "attack_high",
-                "start": 109,
-                "end": 171
-              },
-              {
-                "animation": "idle_high",
-                "start": 172,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": -1,
-            "weapon_attack_effects": false
-          },
-          "mid": {
-            "segments": [
-              {
-                "animation": "idle_mid",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_mid",
-                "start": 15,
-                "end": 73
-              },
-              {
-                "animation": "idle_mid",
-                "start": 74,
-                "end": 108
-              },
-              {
-                "animation": "attack_mid",
-                "start": 109,
-                "end": 167
-              },
-              {
-                "animation": "idle_mid",
-                "start": 168,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": -1,
-            "weapon_attack_effects": false
-          },
-          "low": {
-            "segments": [
-              {
-                "animation": "idle_low",
-                "start": 0,
-                "end": 14
-              },
-              {
-                "animation": "attack_low",
-                "start": 15,
-                "end": 68
-              },
-              {
-                "animation": "idle_low",
-                "start": 69,
-                "end": 108
-              },
-              {
-                "animation": "attack_low",
-                "start": 109,
-                "end": 162
-              },
-              {
-                "animation": "idle_low",
-                "start": 163,
-                "end": 202
-              }
-            ],
-            "attack_runs": 2,
-            "facing": -1,
-            "weapon_attack_effects": false
-          }
-        }
-      },
-      "frames_per_facing": 203,
-      "weapon_attack_effects": false
+      "left": {
+        "high": [
+          0.19862040000000003,
+          0.1986203999999998
+        ],
+        "mid": [
+          0,
+          0
+        ],
+        "low": [
+          -0.0,
+          -0.0
+        ]
+      }
     },
-    "unchanged_high_low_png_files": 63,
-    "references": {
-      "weapon_references_resolved": true,
-      "source_workflows_and_inputs_exist": true,
-      "document_links_resolved": true,
-      "three_single_attack_graphs": true,
-      "cooldown_and_timeline_match": true,
-      "source_assembly_hashes_match": true,
-      "output_counts_exact": true,
-      "editor_import_exit_code": 0,
-      "runtime_frames_per_facing": 203,
-      "runtime_gif_frames": 108,
-      "runtime_gif_seconds": 3.6
+    "downstroke_movement": {
+      "right": [
+        {
+          "furthest_during_downstroke_metres": 0.1793104000000001,
+          "max_post_brake_drift_metres": 0.0
+        },
+        {
+          "furthest_during_downstroke_metres": 0.17931030000000003,
+          "max_post_brake_drift_metres": 0.0
+        }
+      ],
+      "left": [
+        {
+          "furthest_during_downstroke_metres": 0.17931030000000003,
+          "max_post_brake_drift_metres": 0.0
+        },
+        {
+          "furthest_during_downstroke_metres": 0.17931039999999987,
+          "max_post_brake_drift_metres": 0.0
+        }
+      ]
+    },
+    "physics_curve_unchanged_from_v26": true,
+    "weapon_attack_effects": false,
+    "build": "dotnet build yu.csproj --no-restore --nologo -v:q: passed; 0 errors, 0 warnings (incremental).",
+    "prior_gameplay_regression": {
+      "revision": 26,
+      "checks": [
+        "STANCE_ATTACK_CHECK: PASS",
+        "ATTACK_FACING_CHECK: PASS",
+        "ATTACK_ROOT_MOTION_CHECK: PASS",
+        "SINGLE_ATTACK_CHECK: PASS",
+        "COMBO_FRAMEWORK_CHECK: PASS",
+        "STANCE_CHECK: PASS"
+      ],
+      "rerun_in_v27": false,
+      "reason": "No gameplay code, durations, input rules or physical movement curve changed; current asset loading and full actual playback were verified."
     }
   },
-  "limits": [
-    "No independent full-silhouette masks. Raw audits have zero numeric errors but still require visual review; this does not prove perfect silhouette retention.",
-    "Generated contours and blade perspective vary slightly; the character and sword share authored frames rather than a rigid skeletal rig.",
-    "Middle matte changes alpha only. The two retained high steel RGB repairs are separately recorded and verified by exact expected-RGBA packaging.",
-    "Reference videos were not measured frame by frame; all timing values describe these project clips.",
-    "Damage and hit detection are outside this art correction.",
-    "Headless tools report system certificate, editor help-cache/RichTextLabel and user MCP registry diagnostics; no missing production resources or parse failures. Rendered shutdown reports rendering RID leak diagnostics. All affected checks and both captures exit normally."
-  ],
-  "cleanup": {
-    "files": 10,
-    "reason": "Removed attack-trail Action and UID, runtime player and UID, trail Resource class and UID, three trajectory resources and weapon attack particle scene; packaging generation and current FX metadata removed."
+  "godot_integration": {
+    "status": "integrated_in_formal_player",
+    "player": "res://assets/scenes/player.tscn",
+    "weapon": "res://assets/resources/weapons/greatsword.tres",
+    "animation_profile": "res://assets/resources/weapons/greatsword_animation.tres",
+    "sprite_frames": "res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/sprite_frames.tres",
+    "checks": {
+      "formal_scene_and_weapon_references": true,
+      "timelines_and_cooldowns_synchronized": true,
+      "imported_pose_frames": 192,
+      "runtime_frames": 192,
+      "real_player_input_graph": [
+        "STANCE_ATTACK_CHECK: PASS",
+        "ATTACK_FACING_CHECK: PASS",
+        "ATTACK_ROOT_MOTION_CHECK: PASS",
+        "SINGLE_ATTACK_CHECK: PASS",
+        "COMBO_FRAMEWORK_CHECK: PASS",
+        "STANCE_CHECK: PASS"
+      ],
+      "high_root_motion_through_collision_body": true,
+      "mid_in_place_without_slide": true,
+      "high_advance_during_downstroke": true,
+      "cancellation_during_downstroke": true,
+      "stable_position_after_frame_15": true,
+      "no_rear_foot_follow_step_after_ground": true,
+      "whole_body_recovery_without_composite_offsets": true
+    },
+    "playback_seconds": {
+      "attack_high": 1.6,
+      "attack_mid": 1.38,
+      "attack_low": 1.267
+    },
+    "scope": "Maintained validator instantiates the actual player.tscn, input graph, weapon catalog, abilities and animation profile. Full main-menu/world flow was not launched in this confirmation pass."
   },
-  "art_revision": 12,
-  "weapon_attack_effects": false
+  "runtime_preview_metadata": {
+    "preview": "greatsword-stance-attacks-runtime-v27.gif",
+    "preview_frames": 142,
+    "preview_seconds": 4.73,
+    "preview_size": [
+      1281,
+      414
+    ],
+    "renderer": "Forward+",
+    "source_fps": 60,
+    "preview_fps": 30,
+    "preview_sampling": "First full attack and idle per facing, stride 2; right then left.",
+    "sha256": "768adcc7f096112934f718de7480686c5a3e9a521b25faa31b3171c48ca297a5"
+  },
+  "limitations": [
+    "Source poses retain small generated contour and perspective variations; no claim of identical face geometry across changing poses.",
+    "Head-region statistics diagnose image jumps and include pose/color changes; they do not prove physical mass or replace normal-speed review.",
+    "No independent full-silhouette annotation or human blind review. GIF uses a palette; PNG/APNG remain the pixel baseline."
+  ],
+  "blind_review_performed": false,
+  "references": "docs/art/greatsword-attack-references.md",
+  "report_storage": "Disposable reports remain under .godot; this is the current summary.",
+  "stability_revision": {
+    "revision": 27,
+    "baseline_revision": 26,
+    "request": "为什么下砸后一直在抖",
+    "cause": "v26 combined planted legs with upper-body frames containing follow-step bobbing, plus per-frame horizontal alignment; the physics position was fixed, but sprite posture oscillated.",
+    "method": "Use coherent complete original-character planted recovery poses, with original hands and body retained together; reuse the same idle steel master for blade consistency. Remove the stitched lower body and frame-by-frame upper-body offsets.",
+    "edited_high_frames": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "source_art_revision": 22,
+    "physical_step_unchanged_from_v26": true,
+    "middle_and_low_unchanged": true,
+    "frame_count": 64,
+    "seconds": 1.6,
+    "phase": "low load -> elbow fold -> slow rise -> original idle",
+    "editable_source": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_attack/high/sources/whole-body-recovery-v27.aseprite",
+    "diagnostic": {
+      "v26": {
+        "head_warm_region_centroid_total_travel_xy_pixels": [
+          34.55019876261571,
+          14.774109643083307
+        ],
+        "max_adjacent_centroid_jump_pixels": 9.44243820956287
+      },
+      "v27": {
+        "head_warm_region_centroid_total_travel_xy_pixels": [
+          3.60739781306296,
+          2.8052828350356265
+        ],
+        "max_adjacent_centroid_jump_pixels": 1.4064011877851408
+      }
+    }
+  },
+  "image_stability_diagnostic": {
+    "v26": {
+      "head_warm_region_centroid_total_travel_xy_pixels": [
+        34.55019876261571,
+        14.774109643083307
+      ],
+      "max_adjacent_centroid_jump_pixels": 9.44243820956287
+    },
+    "v27": {
+      "head_warm_region_centroid_total_travel_xy_pixels": [
+        3.60739781306296,
+        2.8052828350356265
+      ],
+      "max_adjacent_centroid_jump_pixels": 1.4064011877851408
+    },
+    "interpretation": "Image-space diagnostic for the same fixed head region on frames 23..38. Measures posture/matte changes, not a tracked anatomical joint or a quality score; reviewed with native images and actual runtime."
+  }
 }

@@ -13,6 +13,7 @@ namespace GameLogic
         [Export] public SpriteFrames TransitionFrames { get; set; }
         [Export] public SpriteFrames ActionFrames { get; set; }
         [Export] public SpriteFrames AttackFrames { get; set; }
+        [Export] public SpriteFrames JumpFrames { get; set; }
         [Export] public Vector2I FrameSize { get; set; } = new(224, 224);
         [Export] public Vector2I FootAnchor { get; set; } = new(112, 192);
         [Export] public float PixelSize { get; set; } = 0.0075f;
@@ -25,6 +26,7 @@ namespace GameLogic
 
         private SpriteFrames FramesFor(StringName animation) =>
             TransitionFrames?.HasAnimation(animation) == true ? TransitionFrames :
+            JumpFrames?.HasAnimation(animation) == true ? JumpFrames :
             AttackFrames?.HasAnimation(animation) == true ? AttackFrames :
             ActionFrames?.HasAnimation(animation) == true ? ActionFrames :
             AdditionalFrames?.HasAnimation(animation) == true ? AdditionalFrames : Frames;
@@ -46,9 +48,9 @@ namespace GameLogic
         // Compose per equipment instance; never mutate the shared art resources.
         public SpriteFrames CreatePlaybackFrames()
         {
-            if (AdditionalFrames == null && TransitionFrames == null && ActionFrames == null && AttackFrames == null) return Frames;
+            if (AdditionalFrames == null && TransitionFrames == null && ActionFrames == null && AttackFrames == null && JumpFrames == null) return Frames;
             var combined = (SpriteFrames)Frames.Duplicate();
-            foreach (SpriteFrames source in new[] { AdditionalFrames, ActionFrames, AttackFrames, TransitionFrames })
+            foreach (SpriteFrames source in new[] { AdditionalFrames, ActionFrames, AttackFrames, JumpFrames, TransitionFrames })
             {
                 if (source == null) continue;
                 foreach (StringName animation in source.GetAnimationNames())

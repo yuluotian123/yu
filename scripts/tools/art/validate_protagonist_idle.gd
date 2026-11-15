@@ -29,7 +29,9 @@ func _initialize() -> void:
 	assert(runtime != null and runtime.has_animation(&"attack") and runtime.has_animation(&"run"))
 	assert(not runtime.has_animation(&"idle"))
 	var report := {"ok":true,"checked_frames":checked,"animations":frames.get_animation_names(),"frame_size":[320,384],"visible_rgb_and_alpha_exact":true,"runtime_resource_loadable":true,"runtime_replaced":true}
-	var out := FileAccess.open(meta + "godot-validation.json",FileAccess.WRITE)
+	var report_dir := "res://.godot/art-validation/greatsword_stance_idle/"
+	DirAccess.make_dir_recursive_absolute(report_dir)
+	var out := FileAccess.open(report_dir + "godot-validation.json",FileAccess.WRITE)
 	assert(out != null)
 	out.store_string(JSON.stringify(report,"  ") + "\n")
 	print(JSON.stringify(report))

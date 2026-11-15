@@ -1,61 +1,49 @@
-# 双手大剑攻击参考
+# 双手大剑攻击参考与制作
 
-更新：2026-11-12，当前为攻击 v12：针对“中段扭得有点怪”重做中段，肩胯同向、转体收小，横切后先在身前提剑再屈肘归位；上、下段沿用 v11 的像素和时间。当前共 101 张姿势帧，继续采用提速后的节奏，前摇 377–426 毫秒、收势 406–484 毫秒；上段压身重劈、中段身体带动刃口横切、下段低位前刺。每次点击完成整段，攻击中连点或按住不会续招。通用连招代码保留，人物和剑共用同一帧时钟。
+更新：2026-11-15。当前采用用户确认的 **v27**，三架势各一次完整普攻、各 64 帧。预览和操作说明见[主角人物档案](../characters/protagonist.md)。本页只维护现用动作；旧版时长、已撤下的关键图提示词和失败方案不再作为制作要求。
 
-## 参考与取舍
+## 当前动作
 
-| 原始演示 | 前期查阅范围 | 用途 |
+| 架势 | 动作与收势 | 蓄势 | 挥出 | 触点 | 收势 | 总时长 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 上段 | 蹬腿送髋、胸肩下压带刀下劈；低位承重，收肘后慢提剑回高架 | 300 ms | 75 ms | 25 ms | 1200 ms | 1.600 秒 |
+| 中段 | 从后侧蓄剑，腰肩带刃向前横切；继续随挥、承重收柄，再回肩架 | 301.875 ms | 194.063 ms | 43.125 ms | 840.938 ms | 1.380 秒 |
+| 下段 | 先收柄到腰侧，后腿蹬地向前平刺，再沿原线收回低架 | 376.14 ms | 79.19 ms | 59.39 ms | 752.28 ms | 1.267 秒 |
+
+上段第 12–15 帧累计前移为 0、14、34、48 原生像素，对应 0.300–0.375 秒、总距离约 0.1986 米。实际位移通过 CharacterBody3D 碰撞执行；触点完成前移，之后站在落点收势。中、下段没有额外前移。
+
+上段 23–62 帧使用原角色完整的站定收势，身体、头肩、双手和腿来自同一姿势，不分段拼接，不逐帧居中。上段 40 帧和中段 31 帧的钢刃以现用待机母版修整，按护手连接并保留人物遮挡。首末帧精确接回原待机。
+
+## 动作参考
+
+以下来源用于动作分析，第三方视频或截图不进入游戏素材。表中时间是此前查阅范围；本项目的帧数和时长为自行设计，并非参考招式实测值。
+
+| 来源 | 查阅位置与用途 | 本项目取舍 |
 | --- | --- | --- |
-| PlayStation Japan：[《浪人崛起》武器、流派介绍「大剑」](https://www.youtube.com/watch?v=mjPeqAJJH2Q)；[官方系统页](https://teamninja-studio.com/ronin/us/system/)也收录此片 | 全片 58 秒，每 2 秒关键帧，重点看两种流派的持剑、挥动和回收 | 观察双手间距、腰肩承重和长剑减速；本项目收小位移与转身，保持像素角色的原视角 |
-| Onos Gaming：[Nioh 2 Odachi Weapon Showcase](https://www.youtube.com/watch?v=zCyY5fjI7dU) | 前 96 秒教学区域，每 2 秒关键帧 | 比较高位落刀、肩侧出刀与低位启动的动作轮廓，以及攻击后的回架 |
-| [《仁王 2》官方操作手册](https://www.gamecity.ne.jp/manual/t2wNiSht/steam/bri/2020.html) | Quick Attack 与 Change Stance | 沿用普通左键普攻、Shift 加滚轮上／左键／滚轮下选择架势；此轮不扩展残心或属性相性 |
+| [Monster Hunter 官方大剑演示](https://www.youtube.com/watch?v=t2h3Uxj7nNg) | 重点查看 10–15 秒蓄力、下劈及低位承重；后续对照 9.7–11.3、15.3–18.5 秒连续画面 | 借鉴腰腿带动和落刀后的承重，缩减长蓄力和多段追击 |
+| [LIER：How to Cut with a Longsword 05 - Horizontal Cuts](https://www.youtube.com/watch?v=jCFmBmdRU-U) | 0–7.6 秒试斩、170–177.6 秒示范；连续帧观察双手、转刃与切过后的控制 | 中段朝面向方向切出；刃口、护手与手腕处于同一切割平面，避免用宽剑面横拍 |
+| [Sean Franklin：Physics, Push-Pull with the longsword, bad cuts… and you!](https://swordstem.com/2018/05/23/physics-push-pull-with-the-longsword-bad-cuts-and-you/) | Follow Through、Body Structure、Edge Control | 以身体带动稳定双手结构，保留随挥与刃向控制 |
+| [Wapenkunst：Figueyredo 简单规则 1–16](https://www.youtube.com/watch?v=3ARRdoA35Po)；[Figueyredo 译本](https://oakeshott.org/wp-content/uploads/2016/10/Figueiredo_Montante_Translation_Myers_and_Hick_v2.pdf) | Rule 11 横切；Rule 4/5 收臂和平刺；Rule 2 上方斩击与回架。译本印刷页 14 的 Rule XI | 只取一次面向前方的横切或平刺，控制步幅和转身 |
+| [PlayStation Japan：《浪人崛起》大剑演示](https://www.youtube.com/watch?v=mjPeqAJJH2Q)；[官方系统页](https://teamninja-studio.com/ronin/us/system/) | 全片 58 秒，每 2 秒关键帧 | 对照双手间距、腰肩承重和长剑减速，保持原角色视角 |
+| [Onos Gaming：Nioh 2 Odachi Weapon Showcase](https://www.youtube.com/watch?v=zCyY5fjI7dU)；[《仁王 2》官方操作手册](https://www.gamecity.ne.jp/manual/t2wNiSht/steam/bri/2020.html) | 前 96 秒教学区域与 Quick Attack / Change Stance | 比较三段轮廓与回架；沿用三段直选，不扩展残心或属性机制 |
+| [Genshin Impact 官方：Eula: Surging Frost](https://www.youtube.com/watch?v=deByypNHedI)；[官方发布页](https://genshin.hoyoverse.com/en/news/detail/103931) | 普通攻击及舞步式剑法介绍 | 只取身体线条、步法和发尾韵律，保持当前角色与双手握剑 |
 
-### 2026-11-11 补充参考
+## 制作约束与来源
 
-本轮核对了以下原发布页面、官方说明及可提取的讲解。观看位置按视频主题或原作者规则编号标记；尚未记录逐帧拆解和实测时间，不把候选参考写成已经复刻的动作。
+- 原生画布 512×384、脚底锚点 (256,347)，由 320×384 待机水平加边；推理输入 1024×768，人物尺度不变。
+- 双手握同一连续剑柄，保持人物比例、衣服、腰包侧别及大剑结构；中段刀刃朝前切出，不倒放出刀作为收势。
+- 不在贴图上绘制刀光、模糊或粒子；当前三架势无武器攻击特效。换势周身粒子由独立场景管理。
+- 完整新动作采用本地 ComfyUI MiniMax H3，Aseprite 负责选帧、定时、透明化及局部修整；不将视频生成称为逐帧手绘。
+- [制作配置](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json)中的 `source_parts` 和 `source_pose_map` 是当前来源依据。v10、v12、v17、v21、v22 的文件名可能仍是现用源，不能仅按版本号删除。
+- `generation_input_files` 保存现用工作流与原始输入的对应关系；[关键姿势](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/keyposes.json)只保留当前制作所需记录及提示词。中段整段试片仅用于关键图来源，未直接作为播放片段。
+- [逐像素修正](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/pixel-corrections.json)记录 alpha 与钢刃修改；原始视频、RGB 源帧、可编辑 Aseprite 和独立导出一起保留。PNG/APNG 是像素依据，GIF 用于观看。
 
-| 参考 | 优先看的部分 | 适合借鉴的内容 | 本项目取舍 |
-| --- | --- | --- | --- |
-| Monster Hunter 官方：[《怪物猎人：荒野》大剑武器介绍](https://www.youtube.com/watch?v=t2h3Uxj7nNg) | 蓄力斩、出手和攻击后的恢复 | 用作上段重量与节奏参考：观察压身蓄力、出手加速和落刀后的承重，而非只加长停帧 | 保留清楚的单次重劈轮廓；长蓄力、较大位移和多段追击按本项目普攻节奏缩减 |
-| Wapenkunst：[Figueyredo 双手大剑简单规则 1–16](https://www.youtube.com/watch?v=3ARRdoA35Po) | **Rule 11 横向切割**；Rule 4、5 的收臂与刺击；Rule 2 的上方斩击和回架 | 中段首要参考。作者明确讲到用刃完成切割、收臂稳定后再刺，以及较水平的切割。用真人演示核对双手握柄、切割平面和回收路径 | 刃口方向须与挥动形成的切割平面一致，不能仅靠把剑面画窄表现“砍”；只借鉴面向前方的一次横切或平刺，控制步幅 |
-| Genshin Impact 官方：[优菈拾枝杂谈：Eula: Surging Frost](https://www.youtube.com/watch?v=deByypNHedI)；[官方发布页](https://genshin.hoyoverse.com/en/news/detail/103931) | 普通攻击展示与开篇对舞步式剑法的说明 | 少女角色的身体韵律参考：观察步法、转体与攻击节奏如何结合。官方以舞者节拍和浪潮般的出手描述其风格 | 主要取步法与身体线条；本角色继续以双手握剑、稳定剑身和明确承重为动作约束 |
+## 重新封装与验证
 
-本次将这些参考转化为设计原则：中段按 Rule 11 的切割平面安排腰肩带剑、横向出手与屈肘回架；下段按 Rule 4、5 的收臂和稳定安排向前送剑；上段结合 Rule 2 与怪猎的重量表达安排压身蓄力和落刀承重。优菈只用于脚步、身体线条和发尾跟随的韵律。参考视频尚未逐帧实测；下文时间均为本项目新作的定时，不是原视频招式数据。
+读取当前 `production.json`，使用含 PyAV、NumPy、Pillow 的 Python 运行 `scripts/tools/art/package_stance_attacks.py --assemble` 无损拼接，再运行 `--prepare` 提取 RGB；随后在 Aseprite 执行 `scripts/tools/art/build_stance_attacks.lua`，最后运行 Python 包装脚本生成 APNG、审计映射及技能时间轴。
 
-以下是本项目的动作设计，不是对原作招式的一比一复刻：
+每招使用 64 个等长 Godot 播放条目，上段 40 fps，中段约 46.376812 fps，下段约 50.513023 fps。Aseprite/APNG 按累计边界取整到毫秒；`records` 分别保存整数 `duration_ms` 与运行时 `runtime_duration_ms`。`holds` 记录节奏点，`phases` 使用从 0 开始、右端不含的帧范围。
 
-| 架势 | 设计 | 检查重点 |
-| --- | --- | --- |
-| 上段 | 高举蓄力后向身前重劈，伸臂、压膝并明显前倾，再回高位 | 落刀从前上方贯穿到前下方，握柄连续，腰腿随剑一起承重 |
-| 中段 | 小幅屈膝蓄剑，肩胯保持同向，双臂带刃横切；先在身前提剑，再屈肘归位 | 头、胸廓和骨盆自然对齐，支撑脚顺序稳定；剑身转向连续、切割平面可读；回架不逆向拧腰或绕腿画圈 |
-| 下段 | 先把剑收至腰侧，后腿蹬地、屈前膝，剑尖沿低位向前直送，再直接拉回 | 剑身基本平行地面，不抬至头部；身体与握柄连续，剑刃不随伸直停顿而变长 |
+高架攻击的 `root_motion.source_forward_pixels` 描述源图提取偏移，`root_motion.forward_pixels` 描述物理前移，两者独立。当前源图不需要逐帧水平抵消。技能 Timeline 与冷却覆盖完整动作；换势等待收势完成，连续点击不续招。
 
-## 制作约束
-
-- imagegen 关键姿势保留上段承重落点，新增肩胯自然对齐的中段横切落点；准确提示词、原图、参考及静态脚底对齐记录保存在[关键姿势记录](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/keyposes.json)。本地 ComfyUI MiniMax H3 使用 28 步、无加速 LoRA。当前共采用 10 段源视频的可用姿势，其中中段为蓄剑、横切、提剑及归位四段；每招仍回到原待机。
-- 原生攻击画布 512×384、脚底锚点 (256,347)，由 320×384 待机水平加边得到；推理输入 1024×768，人物尺寸不变。
-- 每段包含一次攻击及完整收势。蓄势 377–426 毫秒，其中蓄满姿势短停 65–70 毫秒；挥出 80–96 毫秒，落点短停 48–54 毫秒，再用 406–484 毫秒连续完成回架。上、中、下段分别有 18 / 20 / 15 张收势姿势，明确表现承重、回收与归位。
-- 双手抓同一连续剑柄，剑身保持结构与长度；不在贴图上绘制刀光、粒子或模糊。三段能力由武器配置选择，技能时间轴负责各自播放。
-- 包装保留选中源帧的次序，以逐帧时间调节蓄力与顿帧。拼接使用 FFV1 无损 RGB 并逐帧验证与原视频解码像素相同；排除原因与源帧映射记录在制作配置。每个动作从原始待机开始并完整回到原始待机。透明 PNG/APNG 为像素依据，GIF 用于观看。
-- 对人脸、耳朵、衣服、双手握柄、剑刃与护手、支撑脚和尾巴逐帧复核；刀气遮住钢刃、双剑重影、无合理透视的短刃、明显剑身增长、弯曲或剑尖出框的段落不交付。上段首稿只取准备姿势，舍弃遮刃挥出；v12 中段整段首稿只取稳定准备，舍弃跳变且带白光的挥出及反向回扫。中段回架首稿只取抬高姿势之后的稳定归位，绕腿段不交付；提剑改用连续下降参考的逆序采样，再接入相同抬高姿势，源帧号与反向播放说明保存在 source_parts。保留实际采用的原视频、输入、工作流、源帧和 Aseprite 工程。
-- 第三方演示只作为动作参考，不把其视频帧作为游戏素材或重新发布。
-
-## 重新封装
-
-v12 仅重做中段，38 张新姿势逐帧审查并重新抠图；上、下段 63 张 PNG 与 v11 的 SHA-256 全部一致。中段提剑采用慢速下降参考的反向源帧序列，保持剑尖在身前上提，再接入抬高姿势之后的归位段；这是显式记录的源片段反向采样，不插补或重画视频帧。APNG、Aseprite、Godot 和 Timeline 按制作配置同步。武器攻击特效已移除。
-
-读取 `assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/production.json`。使用含 PyAV、NumPy 和 Pillow 的 Python 运行 `scripts/tools/art/package_stance_attacks.py --assemble`（三段无损拼接），再运行 `--prepare`。随后在 Aseprite 执行 `scripts/tools/art/build_stance_attacks.lua`，最后再次运行 Python 包装脚本，生成 APNG、审计映射，并同步三套技能图的 Timeline 时段。
-
-`pixel-corrections.json` 保存 Aseprite 逐像素修正：清理外轮廓一像素范围的绿色残边、游离杂点和上段完整钢刃外的源白色特效；上段保留 2 个钢刃孔洞修复，中段只修改 alpha，没有内部 RGB 修补。没有重画被特效遮住的剑身，也没有靴子借帧修补。包装逐项核对修改坐标与 RGBA，其余保留像素与原视频 RGB 精确一致，没有全图减色。原视频审计仍显示有意修正带来的差异；没有独立全轮廓标注，需结合深浅底全帧和局部放大复核。
-
-| 架势 | 蓄势 | 挥出 | 落点停顿 | 收势 | 总时长 |
-| --- | --- | --- | --- | --- | --- |
-| 上段 | 426 ms | 96 ms | 54 ms | 484 ms | 1.060 秒 |
-| 中段 | 391 ms | 96 ms | 48 ms | 462 ms | 0.997 秒 |
-| 下段 | 377 ms | 80 ms | 48 ms | 406 ms | 0.911 秒 |
-
-仅调整节奏时直接修改 `timing_spans` 与 `holds`，同步技能时间轴和冷却后执行 Aseprite 封装及 Python 包装；不重新生成视频。`holds` 记录蓄满、挥出起点、落点和收势起点，帧号从 0 开始。三套技能 Timeline 仅含完整动画。
-
-Godot 播放资源使用 1 毫秒等长时间槽，复用 101 张姿势对应的 AtlasTexture，不重复贴图。这样避免当前引擎在长短帧切换时沿用前一帧速度、吞掉顿帧时长的问题。制作清单的 `records` 保存每张原图的 `runtime_first_frame` 和 `runtime_frames`；APNG 与 Aseprite 保留直观的原帧时长。
-
-当前预览、接入状态与核验结果见[主角人物档案](../characters/protagonist.md)。
+v27 已核对 192 帧源图与修正台账、独立 Aseprite 导出、图集、APNG、Godot 导入，以及左右各两次实际播放。完整玩法、碰墙和取消检查沿用运行逻辑未变的 v26 结果。导出一致不能替代角色结构、力量感或连贯性的目视检查；没有独立全轮廓人工标注或盲审。详见[当前复核记录](../../assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/visual-review.json)。

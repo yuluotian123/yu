@@ -125,7 +125,7 @@ func run() -> void:
 	results["checks"] = checks
 	results["failures"] = failures
 	results["all_passed"] = failures == 0
-	var file := FileAccess.open("res://assets/resources/art/forest_village/structures_validation.json",FileAccess.WRITE)
+	var file := FileAccess.open(OUT+"structures_validation.json",FileAccess.WRITE)
 	file.store_string(JSON.stringify(results,"\t"))
 	print("STRUCTURES_VALIDATED ",checks," checks; failures=",failures)
 	quit(0 if failures == 0 else 1)

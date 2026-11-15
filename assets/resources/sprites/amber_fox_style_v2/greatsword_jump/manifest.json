@@ -1,0 +1,1518 @@
+{
+  "alpha": "Binary green chroma alpha; only recorded two-pixel contour green-spill repairs alter RGB. Independent Aseprite export verifies packaging, not artistic quality.",
+  "authoring_mode": "comfyui",
+  "canvas": [
+    512,
+    384
+  ],
+  "clips": [
+    {
+      "aseprite_durations_ms": [
+        20,
+        20,
+        20,
+        20,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        30,
+        31,
+        31,
+        30,
+        30,
+        31,
+        28,
+        28,
+        28,
+        27,
+        28,
+        28,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25
+      ],
+      "duration_ms": 780,
+      "frames": 30,
+      "phase_counts": {
+        "inair": 6,
+        "isfalling": 6,
+        "jump_prepare": 4,
+        "jumpup": 6,
+        "land": 8
+      },
+      "prompt_id": "8bc3b4a7-a452-4254-82d9-b2d4b8db96a5",
+      "records": [
+        {
+          "bounds": [
+            220,
+            37,
+            292,
+            344
+          ],
+          "duration_ms": 20,
+          "frame": 0,
+          "opaque_pixels": 9257,
+          "reference": true,
+          "root_y": 0,
+          "source": 0,
+          "sha256": "41d4d588bf577832eff83aadc1dc45ef619cc6a357fdc7cd86ad78e42bd20dce"
+        },
+        {
+          "bounds": [
+            218,
+            48,
+            292,
+            348
+          ],
+          "duration_ms": 20,
+          "frame": 1,
+          "opaque_pixels": 9647,
+          "reference": false,
+          "root_y": 0,
+          "source": 2,
+          "sha256": "a2e6770f9519bdfc453c855cc47fe130a3660b62b2f1b6c745c900355014a09c"
+        },
+        {
+          "bounds": [
+            211,
+            63,
+            293,
+            348
+          ],
+          "duration_ms": 20,
+          "frame": 2,
+          "opaque_pixels": 9558,
+          "reference": false,
+          "root_y": 0,
+          "source": 4,
+          "sha256": "12d828b562fa8bed82cc67a6b57db91778f1178f594e52eb14a23e6a3fe920aa"
+        },
+        {
+          "bounds": [
+            208,
+            71,
+            293,
+            348
+          ],
+          "duration_ms": 20,
+          "frame": 3,
+          "opaque_pixels": 9520,
+          "reference": false,
+          "root_y": 0,
+          "source": 6,
+          "sha256": "419f8b2177349927f36eb0c91365699706a3ed67b23721e6367efd7aa2ce6418"
+        },
+        {
+          "bounds": [
+            211,
+            64,
+            293,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 4,
+          "opaque_pixels": 9597,
+          "reference": false,
+          "root_y": 0,
+          "source": 8,
+          "sha256": "bbe2ca999be113d81f8381883d4954730a2d9cc6b0c345aabde60f3596cece13"
+        },
+        {
+          "bounds": [
+            213,
+            53,
+            292,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 5,
+          "opaque_pixels": 9765,
+          "reference": false,
+          "root_y": 0,
+          "source": 9,
+          "sha256": "02b1a841835a2d0f9474b93ded489eebbd21919ecc7364cacf9cdcb2e1102034"
+        },
+        {
+          "bounds": [
+            221,
+            38,
+            293,
+            355
+          ],
+          "duration_ms": 25,
+          "frame": 6,
+          "opaque_pixels": 10211,
+          "reference": false,
+          "root_y": 43,
+          "source": 10,
+          "sha256": "99b38b92b5a0fd31c334857f76a79bb3dc99152da87c6e18077378720134cb81"
+        },
+        {
+          "bounds": [
+            218,
+            38,
+            292,
+            349
+          ],
+          "duration_ms": 25,
+          "frame": 7,
+          "opaque_pixels": 9904,
+          "reference": false,
+          "root_y": 61,
+          "source": 11,
+          "sha256": "2cc741e4ad40a7e57801e0b557a261c3d13dff55e6c0f2695bfc2dd467a52338"
+        },
+        {
+          "bounds": [
+            212,
+            37,
+            292,
+            338
+          ],
+          "duration_ms": 25,
+          "frame": 8,
+          "opaque_pixels": 9734,
+          "reference": false,
+          "root_y": 83,
+          "source": 13,
+          "sha256": "fb6ef05040506d3dff6533a7b58df206a1889e300ac0fd0dc5597a618651da6a"
+        },
+        {
+          "bounds": [
+            208,
+            36,
+            292,
+            331
+          ],
+          "duration_ms": 25,
+          "frame": 9,
+          "opaque_pixels": 9763,
+          "reference": false,
+          "root_y": 100,
+          "source": 15,
+          "sha256": "30742d87ad4b14e796de2171335ce3bd6d0a5d01d799124f6f1851db8c2c7d1d"
+        },
+        {
+          "bounds": [
+            206,
+            36,
+            291,
+            328
+          ],
+          "duration_ms": 30,
+          "frame": 10,
+          "opaque_pixels": 9561,
+          "reference": false,
+          "root_y": 110,
+          "source": 17,
+          "sha256": "33e8e808121b6d00b36aaf19917dd364fcb0ac77a11a326b42b9cbe5ff44af11"
+        },
+        {
+          "bounds": [
+            203,
+            37,
+            291,
+            326
+          ],
+          "duration_ms": 31,
+          "frame": 11,
+          "opaque_pixels": 9544,
+          "reference": false,
+          "root_y": 121,
+          "source": 20,
+          "sha256": "be4486e7b8568e0152f996a756b6e41be020ea92fcce2abec12a8a968e335418"
+        },
+        {
+          "bounds": [
+            202,
+            36,
+            291,
+            328
+          ],
+          "duration_ms": 31,
+          "frame": 12,
+          "opaque_pixels": 9584,
+          "reference": false,
+          "root_y": 124,
+          "source": 23,
+          "sha256": "e1d0f8700171d932e52f2ba050e772cbf14edff2b1134127ab007efe21c3a30b"
+        },
+        {
+          "bounds": [
+            204,
+            36,
+            291,
+            331
+          ],
+          "duration_ms": 30,
+          "frame": 13,
+          "opaque_pixels": 9638,
+          "reference": false,
+          "root_y": 123,
+          "source": 26,
+          "sha256": "5f88d48c71e8b3b7aeed0182a5f7eae22276bde2a2a045ee14d3f6814fafb35e"
+        },
+        {
+          "bounds": [
+            206,
+            37,
+            291,
+            335
+          ],
+          "duration_ms": 30,
+          "frame": 14,
+          "opaque_pixels": 9691,
+          "reference": false,
+          "root_y": 119,
+          "source": 29,
+          "sha256": "8e6479f82862c836ea2b1f0c580f3fd07cb9e1ecaee91a6017b038214f91b730"
+        },
+        {
+          "bounds": [
+            210,
+            37,
+            291,
+            341
+          ],
+          "duration_ms": 31,
+          "frame": 15,
+          "opaque_pixels": 9839,
+          "reference": false,
+          "root_y": 109,
+          "source": 32,
+          "sha256": "eabc38617971dfdfd8f6a0176be2994e6997caf5ad110a12fcea9e40a127088f"
+        },
+        {
+          "bounds": [
+            210,
+            37,
+            291,
+            344
+          ],
+          "duration_ms": 28,
+          "frame": 16,
+          "opaque_pixels": 9871,
+          "reference": false,
+          "root_y": 99,
+          "source": 34,
+          "sha256": "f5f460c0b77a86b1c2e17a67930d97445959e50b18812b848a78564766b50c83"
+        },
+        {
+          "bounds": [
+            211,
+            37,
+            291,
+            345
+          ],
+          "duration_ms": 28,
+          "frame": 17,
+          "opaque_pixels": 9896,
+          "reference": false,
+          "root_y": 85,
+          "source": 36,
+          "sha256": "f96c9c7c9d5b1533a7c322956e6d4f01c7076c539b179135aabc314ac344978d"
+        },
+        {
+          "bounds": [
+            211,
+            38,
+            291,
+            347
+          ],
+          "duration_ms": 28,
+          "frame": 18,
+          "opaque_pixels": 9840,
+          "reference": false,
+          "root_y": 67,
+          "source": 38,
+          "sha256": "35cf2dbaf36f9a34835b70a5f1cb4eea5589725ad23d0c571369ea466caedce5"
+        },
+        {
+          "bounds": [
+            211,
+            37,
+            291,
+            349
+          ],
+          "duration_ms": 27,
+          "frame": 19,
+          "opaque_pixels": 9973,
+          "reference": false,
+          "root_y": 56,
+          "source": 39,
+          "sha256": "38ae02509ef5325b3c335bae4e02bf70f4a0aec8869837e27269d45df2d088e1"
+        },
+        {
+          "bounds": [
+            211,
+            38,
+            292,
+            348
+          ],
+          "duration_ms": 28,
+          "frame": 20,
+          "opaque_pixels": 9919,
+          "reference": false,
+          "root_y": 35,
+          "source": 40,
+          "sha256": "c3e6b32bbcd542c00224b41af2c9f285370f2d22c54dbec8969b3b19a96dbd1e"
+        },
+        {
+          "bounds": [
+            211,
+            37,
+            292,
+            344
+          ],
+          "duration_ms": 28,
+          "frame": 21,
+          "opaque_pixels": 9929,
+          "reference": false,
+          "root_y": 16,
+          "source": 41,
+          "sha256": "229bb60f0763ed486c348fbf8c161f2ff3d5fb61ea1122d74629410c24b9780e"
+        },
+        {
+          "bounds": [
+            211,
+            45,
+            292,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 22,
+          "opaque_pixels": 10071,
+          "reference": false,
+          "root_y": 0,
+          "source": 42,
+          "sha256": "00cb0ebc93dc5d0157d08d143fca7a1b4e6ad51e43c8d25d0a7c181f8687bbc6"
+        },
+        {
+          "bounds": [
+            211,
+            56,
+            292,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 23,
+          "opaque_pixels": 10049,
+          "reference": false,
+          "root_y": 0,
+          "source": 43,
+          "sha256": "2a997b76757f1ffe4857c7e1ebaa3d288c19715ce2ab7aa7a2a1412d04eb0906"
+        },
+        {
+          "bounds": [
+            210,
+            63,
+            293,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 24,
+          "opaque_pixels": 9951,
+          "reference": false,
+          "root_y": 0,
+          "source": 44,
+          "sha256": "ceb98eb36775c2e4fde4964ce168c5f0598b789f585a8ce9f1f4813d24325e53"
+        },
+        {
+          "bounds": [
+            208,
+            68,
+            294,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 25,
+          "opaque_pixels": 9836,
+          "reference": false,
+          "root_y": 0,
+          "source": 46,
+          "sha256": "6c0f31f8f1aab5673c927c3688e45343528962e33d122fa2285a730c1c585910"
+        },
+        {
+          "bounds": [
+            208,
+            66,
+            293,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 26,
+          "opaque_pixels": 9698,
+          "reference": false,
+          "root_y": 0,
+          "source": 48,
+          "sha256": "4274b32f01593745787e5c1c42962f399515fbf5f8788d294a502f61ea48afe5"
+        },
+        {
+          "bounds": [
+            213,
+            56,
+            293,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 27,
+          "opaque_pixels": 9532,
+          "reference": false,
+          "root_y": 0,
+          "source": 51,
+          "sha256": "e585d2de1cbcd0a2b78ffbeac7e1200974ef2e22d73c482c230f62184864c71f"
+        },
+        {
+          "bounds": [
+            219,
+            43,
+            292,
+            346
+          ],
+          "duration_ms": 25,
+          "frame": 28,
+          "opaque_pixels": 9446,
+          "reference": false,
+          "root_y": 0,
+          "source": 53,
+          "sha256": "0acc75a0943f9e555d82a734b4f89b3fa6bcda8355e9ac8963a5899cf810a404"
+        },
+        {
+          "bounds": [
+            220,
+            37,
+            292,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 29,
+          "opaque_pixels": 9257,
+          "reference": true,
+          "root_y": 0,
+          "source": 55,
+          "sha256": "41d4d588bf577832eff83aadc1dc45ef619cc6a357fdc7cd86ad78e42bd20dce"
+        }
+      ],
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/frames/move_000.png",
+      "seed": 202611150411,
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/high.mov",
+      "stance": "high"
+    },
+    {
+      "aseprite_durations_ms": [
+        20,
+        20,
+        20,
+        20,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        30,
+        31,
+        31,
+        30,
+        30,
+        31,
+        28,
+        28,
+        28,
+        27,
+        28,
+        28,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25
+      ],
+      "duration_ms": 780,
+      "frames": 30,
+      "phase_counts": {
+        "inair": 6,
+        "isfalling": 6,
+        "jump_prepare": 4,
+        "jumpup": 6,
+        "land": 8
+      },
+      "prompt_id": "d5ba4c54-89ae-4205-b779-e97e72fafe01",
+      "records": [
+        {
+          "bounds": [
+            196,
+            130,
+            320,
+            344
+          ],
+          "duration_ms": 20,
+          "frame": 0,
+          "opaque_pixels": 8852,
+          "reference": true,
+          "root_y": 0,
+          "source": 0,
+          "sha256": "e041413656bd897fda40e64027deb12a404cc1873f67317ff18f748a077027ae"
+        },
+        {
+          "bounds": [
+            194,
+            135,
+            320,
+            344
+          ],
+          "duration_ms": 20,
+          "frame": 1,
+          "opaque_pixels": 8547,
+          "reference": false,
+          "root_y": 0,
+          "source": 1,
+          "sha256": "72afa01e8584f90555f831671cd3ba04c5649cbe66226e080aa66e93dbb5c080"
+        },
+        {
+          "bounds": [
+            188,
+            154,
+            320,
+            344
+          ],
+          "duration_ms": 20,
+          "frame": 2,
+          "opaque_pixels": 9207,
+          "reference": false,
+          "root_y": 0,
+          "source": 2,
+          "sha256": "a673879da95b244fba49e93ba1cd70a7f59fb244c6d265a1b099e176b3d6e1cd"
+        },
+        {
+          "bounds": [
+            186,
+            145,
+            319,
+            344
+          ],
+          "duration_ms": 20,
+          "frame": 3,
+          "opaque_pixels": 9121,
+          "reference": false,
+          "root_y": 0,
+          "source": 3,
+          "sha256": "456754cb5c77efc8b43dcccfc642efd71bacab7b9e20108d68cadbc5f9bf8712"
+        },
+        {
+          "bounds": [
+            185,
+            137,
+            318,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 4,
+          "opaque_pixels": 9133,
+          "reference": false,
+          "root_y": 0,
+          "source": 4,
+          "sha256": "7d6984cd5a61be8fd61ef718cea224878041256537636b20c1f4645950c0ec13"
+        },
+        {
+          "bounds": [
+            186,
+            128,
+            318,
+            347
+          ],
+          "duration_ms": 25,
+          "frame": 5,
+          "opaque_pixels": 9212,
+          "reference": false,
+          "root_y": 3,
+          "source": 5,
+          "sha256": "5f01c1c9f4fe9dfd698cb9f9b7587769e3f49117d0beab63ee5a7e9c189fa7df"
+        },
+        {
+          "bounds": [
+            185,
+            129,
+            317,
+            349
+          ],
+          "duration_ms": 25,
+          "frame": 6,
+          "opaque_pixels": 9225,
+          "reference": false,
+          "root_y": 9,
+          "source": 6,
+          "sha256": "78fe11a3bbeaca2ed4bde9fb281ea39f06af9bac160f9b41b6fc3905c81c6ac6"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 7,
+          "opaque_pixels": 9199,
+          "reference": false,
+          "root_y": 14,
+          "source": 7,
+          "sha256": "cbc8216b7f4d08b4ca8cfefb7a8f56535768bdc63efd3b17745a959a7cfe8ca2"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 8,
+          "opaque_pixels": 9157,
+          "reference": false,
+          "root_y": 19,
+          "source": 8,
+          "sha256": "9715871994caaf0a2fdf4d3157944dffd37a68ad9c948f170997c2879374edce"
+        },
+        {
+          "bounds": [
+            184,
+            127,
+            318,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 9,
+          "opaque_pixels": 9178,
+          "reference": false,
+          "root_y": 23,
+          "source": 9,
+          "sha256": "f8ce291c792f79435cf7da4c3e120d624a8bddbc94d8cf9d5e39831ceec3acb9"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            317,
+            350
+          ],
+          "duration_ms": 30,
+          "frame": 10,
+          "opaque_pixels": 9166,
+          "reference": false,
+          "root_y": 30,
+          "source": 10,
+          "sha256": "387deace9d2f7fd470f44fdae1f7e4da1752cf4cde9d9653278f1c6d45f7912e"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            317,
+            350
+          ],
+          "duration_ms": 31,
+          "frame": 11,
+          "opaque_pixels": 9138,
+          "reference": false,
+          "root_y": 32,
+          "source": 11,
+          "sha256": "ee0514b55767142f21d6b0876c7da5f36e0a73ebb652c8e9d53caf7defa4c39e"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 31,
+          "frame": 12,
+          "opaque_pixels": 9071,
+          "reference": false,
+          "root_y": 38,
+          "source": 13,
+          "sha256": "1a9d3d33be2b4d8babc5a07e284ced79c02afcdeb48428cd2203a0021b3996d6"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 30,
+          "frame": 13,
+          "opaque_pixels": 9091,
+          "reference": false,
+          "root_y": 39,
+          "source": 15,
+          "sha256": "8ed05749019187c6f9cfa69597604ca95a71f3a8f3e65a4dafa6bf9b1c6c89a6"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 30,
+          "frame": 14,
+          "opaque_pixels": 9134,
+          "reference": false,
+          "root_y": 38,
+          "source": 17,
+          "sha256": "6f9e093756e0deb583317d43bb3c05b2f8db85b9aca12384c59636fb682b383b"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            350
+          ],
+          "duration_ms": 31,
+          "frame": 15,
+          "opaque_pixels": 9110,
+          "reference": false,
+          "root_y": 35,
+          "source": 18,
+          "sha256": "9a8aa45e384f0f9c9792e7434c48290e24467967af05b0ef00abd79b5e0ed901"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            351
+          ],
+          "duration_ms": 28,
+          "frame": 16,
+          "opaque_pixels": 9101,
+          "reference": false,
+          "root_y": 33,
+          "source": 19,
+          "sha256": "5b0a7a6d10daaab111995328444bd53bfa6723fee6530b6879535a592be14265"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            317,
+            350
+          ],
+          "duration_ms": 28,
+          "frame": 17,
+          "opaque_pixels": 9135,
+          "reference": false,
+          "root_y": 30,
+          "source": 20,
+          "sha256": "bb95eb12fb8d758b39c2821c1ea5da1e55cc67d3fb043f9d7e9d038fc40eb577"
+        },
+        {
+          "bounds": [
+            184,
+            127,
+            317,
+            350
+          ],
+          "duration_ms": 28,
+          "frame": 18,
+          "opaque_pixels": 9099,
+          "reference": false,
+          "root_y": 26,
+          "source": 21,
+          "sha256": "dd5c87360b8eb663d65e183416d49c719b3fde58458e44524a33cd90a314088f"
+        },
+        {
+          "bounds": [
+            184,
+            128,
+            318,
+            351
+          ],
+          "duration_ms": 27,
+          "frame": 19,
+          "opaque_pixels": 9158,
+          "reference": false,
+          "root_y": 19,
+          "source": 22,
+          "sha256": "a02709eeb4b9613c12a5aaef9db97e49a554b94dbc4139547f51abaff30d7ba6"
+        },
+        {
+          "bounds": [
+            185,
+            128,
+            318,
+            349
+          ],
+          "duration_ms": 28,
+          "frame": 20,
+          "opaque_pixels": 9228,
+          "reference": false,
+          "root_y": 13,
+          "source": 23,
+          "sha256": "240e93b5da8f04f14b7f5216582c277865f0a13c7cc9fdce048da28c4236eb16"
+        },
+        {
+          "bounds": [
+            186,
+            126,
+            317,
+            347
+          ],
+          "duration_ms": 28,
+          "frame": 21,
+          "opaque_pixels": 9251,
+          "reference": false,
+          "root_y": 6,
+          "source": 24,
+          "sha256": "42361c3b8c712c9ae35ce9d55c43fb0f8168728f9d82648c4b5257a7edcebd5e"
+        },
+        {
+          "bounds": [
+            188,
+            134,
+            319,
+            343
+          ],
+          "duration_ms": 25,
+          "frame": 22,
+          "opaque_pixels": 9085,
+          "reference": false,
+          "root_y": 0,
+          "source": 25,
+          "sha256": "97351c31ddabb6a01d3dce21cd377350aa86c43c0b73be52aeeedf084f3952c1"
+        },
+        {
+          "bounds": [
+            189,
+            150,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 23,
+          "opaque_pixels": 9191,
+          "reference": false,
+          "root_y": 0,
+          "source": 26,
+          "sha256": "cac37ecd2fec869d7538ee8bfa16f7fe27c67dafdf94348d030c48a47096de37"
+        },
+        {
+          "bounds": [
+            188,
+            150,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 24,
+          "opaque_pixels": 9153,
+          "reference": false,
+          "root_y": 0,
+          "source": 27,
+          "sha256": "9a6ae6a15fbabd6a24fb385e2f5cd8fcfa69eddfb9434bdd643ea0e6bfbd4233"
+        },
+        {
+          "bounds": [
+            188,
+            146,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 25,
+          "opaque_pixels": 9176,
+          "reference": false,
+          "root_y": 0,
+          "source": 28,
+          "sha256": "2c04881f8080c6224157d0163dca3588c38cfd1ebcee349ab68eb7706ce43471"
+        },
+        {
+          "bounds": [
+            187,
+            141,
+            319,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 26,
+          "opaque_pixels": 9059,
+          "reference": false,
+          "root_y": 0,
+          "source": 29,
+          "sha256": "2a1a2997f845ff2225cbee8081a0b52eaec695d815d3639e1e9d6fa115b45ab3"
+        },
+        {
+          "bounds": [
+            195,
+            131,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 27,
+          "opaque_pixels": 9026,
+          "reference": false,
+          "root_y": 0,
+          "source": 30,
+          "sha256": "915fe54c1bb483e5a4d4bbc2762c3270be5d042e754fcb6f1cd0282699ba506b"
+        },
+        {
+          "bounds": [
+            193,
+            128,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 28,
+          "opaque_pixels": 8881,
+          "reference": false,
+          "root_y": 0,
+          "source": 31,
+          "sha256": "9fe0355e2ea90dc0f5d6a9d15c2672c4ac341196a5e4b58dcc4718a76da9a3b8"
+        },
+        {
+          "bounds": [
+            196,
+            130,
+            320,
+            344
+          ],
+          "duration_ms": 25,
+          "frame": 29,
+          "opaque_pixels": 8852,
+          "reference": true,
+          "root_y": 0,
+          "source": 55,
+          "sha256": "e041413656bd897fda40e64027deb12a404cc1873f67317ff18f748a077027ae"
+        }
+      ],
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid/frames/move_000.png",
+      "seed": 202611150402,
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/mid.mov",
+      "stance": "mid"
+    },
+    {
+      "aseprite_durations_ms": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        38,
+        37,
+        37,
+        38,
+        46,
+        46,
+        45,
+        46,
+        42,
+        42,
+        41,
+        42,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25
+      ],
+      "duration_ms": 780,
+      "frames": 28,
+      "phase_counts": {
+        "inair": 4,
+        "isfalling": 4,
+        "jump_prepare": 8,
+        "jumpup": 4,
+        "land": 8
+      },
+      "prompt_id": "92f5abd6-8ce3-49c4-8d95-bc4922da7daf",
+      "records": [
+        {
+          "bounds": [
+            179,
+            170,
+            340,
+            348
+          ],
+          "duration_ms": 10,
+          "frame": 0,
+          "opaque_pixels": 8947,
+          "reference": true,
+          "root_y": 0,
+          "source": 0,
+          "sha256": "e1585648e36744424763bd327fbbb6402cadb4e2bb73742fb16906edd7a8a428"
+        },
+        {
+          "bounds": [
+            179,
+            170,
+            340,
+            348
+          ],
+          "duration_ms": 10,
+          "frame": 1,
+          "opaque_pixels": 8831,
+          "reference": false,
+          "root_y": 0,
+          "source": 6,
+          "sha256": "74b11b2b0c6ae02ac3e969e62f0c906a9c9cb853ca5fec085b83b46db2bfc4d3"
+        },
+        {
+          "bounds": [
+            178,
+            182,
+            340,
+            350
+          ],
+          "duration_ms": 10,
+          "frame": 2,
+          "opaque_pixels": 8838,
+          "reference": false,
+          "root_y": 0,
+          "source": 7,
+          "sha256": "46ea2b37df3764dfa587f65bdb9c46983be4aac6645ac2ac9aa05119914b9634"
+        },
+        {
+          "bounds": [
+            178,
+            182,
+            340,
+            350
+          ],
+          "duration_ms": 10,
+          "frame": 3,
+          "opaque_pixels": 8855,
+          "reference": false,
+          "root_y": 0,
+          "source": 8,
+          "sha256": "91bff24e3bab2f054eedaa7cdb5b5e56645612783becb9dad4a88f47d63eeced"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            351
+          ],
+          "duration_ms": 10,
+          "frame": 4,
+          "opaque_pixels": 8609,
+          "reference": false,
+          "root_y": 0,
+          "source": 9,
+          "sha256": "fa719c76ffe6d991e9af01dc744e272c80d1fed964730a6a76331eca4ba23217"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            351
+          ],
+          "duration_ms": 10,
+          "frame": 5,
+          "opaque_pixels": 8646,
+          "reference": false,
+          "root_y": 0,
+          "source": 10,
+          "sha256": "45bfafc09ea5cdd68da92a4ff0120a1809e499e3712726c6c1bba37ec66fb86f"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            350
+          ],
+          "duration_ms": 10,
+          "frame": 6,
+          "opaque_pixels": 8584,
+          "reference": false,
+          "root_y": 0,
+          "source": 11,
+          "sha256": "c2b333f06fde7dd9cc154afea6e3b60e2accd0d0ee82ed1899602f835e347956"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            351
+          ],
+          "duration_ms": 10,
+          "frame": 7,
+          "opaque_pixels": 8568,
+          "reference": false,
+          "root_y": 0,
+          "source": 13,
+          "sha256": "7b8447e085a57e77adbe7d4bcf28ec5ba745e10e64ff1788e6b08b59ce3cf228"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            350
+          ],
+          "duration_ms": 38,
+          "frame": 8,
+          "opaque_pixels": 8556,
+          "reference": false,
+          "root_y": 0,
+          "source": 14,
+          "sha256": "66971ddf691e3dfcb4ff99824c98bf440af1c3b374b29535f26b424dd1b767ed"
+        },
+        {
+          "bounds": [
+            176,
+            171,
+            340,
+            353
+          ],
+          "duration_ms": 37,
+          "frame": 9,
+          "opaque_pixels": 8529,
+          "reference": false,
+          "root_y": 3,
+          "source": 15,
+          "sha256": "ed74f87f926a086d144079cd18cf63b01e1b79db6768e9b6b8d2742c51a2838b"
+        },
+        {
+          "bounds": [
+            176,
+            170,
+            340,
+            350
+          ],
+          "duration_ms": 37,
+          "frame": 10,
+          "opaque_pixels": 8625,
+          "reference": false,
+          "root_y": 11,
+          "source": 16,
+          "sha256": "8873ba37cbb6f8719edceb8fac95d999674c4ca746462f6c5a8ba38c8189e135"
+        },
+        {
+          "bounds": [
+            176,
+            170,
+            340,
+            348
+          ],
+          "duration_ms": 38,
+          "frame": 11,
+          "opaque_pixels": 8604,
+          "reference": false,
+          "root_y": 16,
+          "source": 18,
+          "sha256": "71706746cd963f2d52c9a51567681228af4678d5b90bc100756e73603672285f"
+        },
+        {
+          "bounds": [
+            177,
+            171,
+            340,
+            347
+          ],
+          "duration_ms": 46,
+          "frame": 12,
+          "opaque_pixels": 8547,
+          "reference": false,
+          "root_y": 18,
+          "source": 19,
+          "sha256": "b9e559df5b191c66ed27adb97b65accd8c7a49359445acff88ba4b7ed454ba5b"
+        },
+        {
+          "bounds": [
+            177,
+            171,
+            340,
+            347
+          ],
+          "duration_ms": 46,
+          "frame": 13,
+          "opaque_pixels": 8543,
+          "reference": false,
+          "root_y": 18,
+          "source": 20,
+          "sha256": "7aecc7d48bfb35291d4210a5c986f0a7465e47ea6f0b90606e559fd4180a81bf"
+        },
+        {
+          "bounds": [
+            177,
+            170,
+            340,
+            345
+          ],
+          "duration_ms": 45,
+          "frame": 14,
+          "opaque_pixels": 8531,
+          "reference": false,
+          "root_y": 16,
+          "source": 21,
+          "sha256": "1a96711f7f6fc0236450428cf097bef5c5e5d3608502c9f23b9bf381108959c0"
+        },
+        {
+          "bounds": [
+            176,
+            170,
+            339,
+            345
+          ],
+          "duration_ms": 46,
+          "frame": 15,
+          "opaque_pixels": 8511,
+          "reference": false,
+          "root_y": 15,
+          "source": 22,
+          "sha256": "ccb33ccc93986b24c7f523be66ea26a78f4b42dc065009ff94a898aa659aef9c"
+        },
+        {
+          "bounds": [
+            176,
+            170,
+            339,
+            345
+          ],
+          "duration_ms": 42,
+          "frame": 16,
+          "opaque_pixels": 8511,
+          "reference": false,
+          "root_y": 15,
+          "source": 22,
+          "sha256": "ccb33ccc93986b24c7f523be66ea26a78f4b42dc065009ff94a898aa659aef9c"
+        },
+        {
+          "bounds": [
+            176,
+            171,
+            340,
+            345
+          ],
+          "duration_ms": 42,
+          "frame": 17,
+          "opaque_pixels": 8491,
+          "reference": false,
+          "root_y": 15,
+          "source": 23,
+          "sha256": "a773cc6d93ba218cf7af3879d9c42025606be0f81a3f08df57ea77d12a5a979f"
+        },
+        {
+          "bounds": [
+            175,
+            170,
+            340,
+            343
+          ],
+          "duration_ms": 41,
+          "frame": 18,
+          "opaque_pixels": 8559,
+          "reference": false,
+          "root_y": 12,
+          "source": 24,
+          "sha256": "eb2785df6fa7523dd6c13b97e6256c871f7ca4153b5ace89ecb7c6c020805663"
+        },
+        {
+          "bounds": [
+            175,
+            170,
+            340,
+            343
+          ],
+          "duration_ms": 42,
+          "frame": 19,
+          "opaque_pixels": 8566,
+          "reference": false,
+          "root_y": 12,
+          "source": 25,
+          "sha256": "4bbd5ac781a98e086bb0fca18fe9e7aca8c3172e17497a109bf3c8c35613c3c5"
+        },
+        {
+          "bounds": [
+            174,
+            185,
+            340,
+            351
+          ],
+          "duration_ms": 25,
+          "frame": 20,
+          "opaque_pixels": 8759,
+          "reference": false,
+          "root_y": 0,
+          "source": 26,
+          "sha256": "e0bc2daa0a0cf194fe6d61b68964f6220d0334fe4f1972ef46db11c1d9c26156"
+        },
+        {
+          "bounds": [
+            175,
+            185,
+            340,
+            351
+          ],
+          "duration_ms": 25,
+          "frame": 21,
+          "opaque_pixels": 8763,
+          "reference": false,
+          "root_y": 0,
+          "source": 27,
+          "sha256": "bf7e2824fb6d0e246c2abd7918f137cf9a05c302e65eae890bb55ba214d4e923"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            351
+          ],
+          "duration_ms": 25,
+          "frame": 22,
+          "opaque_pixels": 8682,
+          "reference": false,
+          "root_y": 0,
+          "source": 28,
+          "sha256": "d7d27c93c1c90aaad53b2d6a73015850b3281a27dacaaf33d310feeb883490a6"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 23,
+          "opaque_pixels": 8584,
+          "reference": false,
+          "root_y": 0,
+          "source": 30,
+          "sha256": "c76f4f9084e9b026b7e047555cd74954bf036d0bbfe03b0eca8dce339a1aa2c6"
+        },
+        {
+          "bounds": [
+            176,
+            191,
+            341,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 24,
+          "opaque_pixels": 8534,
+          "reference": false,
+          "root_y": 0,
+          "source": 32,
+          "sha256": "7c54b24f297008ccc89f2e2384d2e02e2d251039ebb3dd2d4a94746162117666"
+        },
+        {
+          "bounds": [
+            177,
+            186,
+            341,
+            350
+          ],
+          "duration_ms": 25,
+          "frame": 25,
+          "opaque_pixels": 8400,
+          "reference": false,
+          "root_y": 0,
+          "source": 53,
+          "sha256": "8eb7a5b26b03e011daf4792f0e241277992999721695bf51e6be175fbb66e73c"
+        },
+        {
+          "bounds": [
+            179,
+            170,
+            340,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 26,
+          "opaque_pixels": 8838,
+          "reference": false,
+          "root_y": 0,
+          "source": 54,
+          "sha256": "dc959d7461210e449248eea9d7035513bcf2bd94555101434eb842bebcfbefa0"
+        },
+        {
+          "bounds": [
+            179,
+            170,
+            340,
+            348
+          ],
+          "duration_ms": 25,
+          "frame": 27,
+          "opaque_pixels": 8947,
+          "reference": true,
+          "root_y": 0,
+          "source": 55,
+          "sha256": "e1585648e36744424763bd327fbbb6402cadb4e2bb73742fb16906edd7a8a428"
+        }
+      ],
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/low/frames/move_000.png",
+      "seed": 202611150403,
+      "source_video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/low.mov",
+      "stance": "low"
+    }
+  ],
+  "date": "2026-11-15",
+  "foot_anchor": [
+    256,
+    347
+  ],
+  "phases": [
+    {
+      "name": "jump_prepare",
+      "seconds": 0.08
+    },
+    {
+      "name": "jumpup",
+      "seconds": 0.15
+    },
+    {
+      "name": "inair",
+      "seconds": 0.18333333333333332
+    },
+    {
+      "name": "isfalling",
+      "seconds": 0.16666666666666666
+    },
+    {
+      "name": "land",
+      "seconds": 0.2
+    }
+  ],
+  "preview": "greatsword-stance-jumps-v2.gif",
+  "revision": 2,
+  "root_extraction": "Only the annotated vertical hip translation is removed; feet are not aligned per frame. Physics owns jump height.",
+  "schema": 1,
+  "source_canvas": [
+    384,
+    512
+  ],
+  "source_offset": [
+    64,
+    -128
+  ],
+  "timing": "Shared phase durations; physical velocity selects airborne phases. Landing lasts 0.2 seconds."
+}

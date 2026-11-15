@@ -11,7 +11,7 @@
 文件位置：
 
 - 模型、运行时网格与 Blender 源文件：`assets/models/environment/forest_village/structures/`；源文件在 `source/forest_village_structures.blend`，可按对象名分别编辑。
-- 可实例化模型：`assets/scenes/environment/forest_village/structures/`。
+- 木桥预制场景：`assets/scenes/environment/forest_village/structures/creek_bridge.tscn`。围栏由装配库直接复用木柱和栏片网格，不再保存三个没有使用方的独立场景副本。
 - 共享材质：`assets/materials/environment/forest_village/structures/`。
 - 制作、导入、替换和验证脚本：`scripts/tools/art/forest_village_structures/`。
 - 模型清单、接线记录和验证结果：`assets/resources/art/forest_village/structures_*.json`。
@@ -19,7 +19,7 @@
 重建顺序：
 
 1. Blender 后台执行 `build_structures.py`，输出四个 GLB 和独立源文件。
-2. 项目 Godot 执行 `--headless --path . --script res://scripts/tools/art/forest_village_structures/import_structures.gd`，生成共享材质、LOD 网格和预制场景。
+2. 项目 Godot 执行 `--headless --path . --script res://scripts/tools/art/forest_village_structures/import_structures.gd`，生成共享材质、四个 LOD 网格和木桥预制场景。
 3. 执行 `apply_structures.gd`，按保存的端点替换栅栏，并替换桥梁实例；可重复执行。只更新聚落中的这些结构。
 4. 执行既有 `forest_village_whitebox/rebuild_navigation.gd`，刷新导航并检查 13 条连接。完整 `build_village.gd` 已调用同一结构装配库，重建布局时继续使用正式模型。
 

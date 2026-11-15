@@ -104,7 +104,12 @@ def package(config_path):
         for kind in ['workflow.json', 'prompt.txt']:
             key = 'workflow_file' if kind == 'workflow.json' else 'prompt_file'
             source = ROOT / spec[key]
-            copy_source(source, META / f'{asset}-{kind}')
+            target = META / f'{asset}-{kind}'
+            shared = META / f'{stance}-{kind}'
+            if shared.exists() and shared.read_bytes() == source.read_bytes():
+                target = shared
+            copy_source(source, target)
+            spec[key] = target.relative_to(ROOT).as_posix()
         copy_source(ROOT / spec['input_file'], path / 'sources/input.png')
         differences = [int(np.any(rgba[n] != rgba[(n+1) % len(frames)], axis=2).sum()) for n in range(len(frames))]
         validation[asset] = {
@@ -139,10 +144,10 @@ def package(config_path):
         if repair:
             audit['intentional_edit'] = {'description': 'Arms, hands and sword use a documented shoulder-following repair layer. Original video RGB differences in this area remain in the audit report; the separate numerical validation verifies untouched pixels and the full repaired layer.',
                                         'config': relative(ROOT / spec['guard_repair_config']),
-                                        'separate_validation': relative(META / 'media-validation.json')}
+                                        'validation_note': 'package_stance_movement.py verifies original pixels outside repairs and reconstructs the documented repair layer; reports are temporary .godot outputs.'}
         write_json(audit_path, audit)
     write_json(META / 'manifest.json', manifest)
-    write_json(META / 'media-validation.json', validation)
+    write_json(ROOT / '.godot/art-validation/greatsword_stance_movement/media-validation.json', validation)
     # 后续封装只需归档资源，无须依赖可清理的 .godot 目录。
     for spec in config['clips']:
         stance = spec['stance']
@@ -151,7 +156,6 @@ def package(config_path):
         spec['rgb_directory'] = (TEX / asset / 'source-rgb').relative_to(ROOT).as_posix()
         spec['input_file'] = (TEX / asset / 'sources/input.png').relative_to(ROOT).as_posix()
         spec['workflow_file'] = (META / f'{asset}-workflow.json').relative_to(ROOT).as_posix()
-        spec['prompt_file'] = (META / f'{asset}-prompt.txt').relative_to(ROOT).as_posix()
     write_json(META / 'production.json', config)
     print(json.dumps(validation, ensure_ascii=False))
 

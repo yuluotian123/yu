@@ -7,6 +7,8 @@
 [ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/sprite_frames.tres" id="5_movement"]
 [ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_stance_attack/sprite_frames.tres" id="6_attacks"]
 
+[ext_resource type="SpriteFrames" path="res://assets/resources/sprites/amber_fox_style_v2/greatsword_jump/sprite_frames.tres" id="7_jumps"]
+
 [resource]
 script = ExtResource("1_script")
 Frames = ExtResource("2_frames")
@@ -14,10 +16,26 @@ AdditionalFrames = ExtResource("3_stances")
 TransitionFrames = ExtResource("4_transitions")
 ActionFrames = ExtResource("5_movement")
 AttackFrames = ExtResource("6_attacks")
+JumpFrames = ExtResource("7_jumps")
 FrameSize = Vector2i(256, 256)
 FootAnchor = Vector2i(128, 219)
 PixelSize = 0.004137931
 AnimationFootAnchors = Dictionary[StringName, Vector2i]({
+&"jump_prepare_high": Vector2i(256, 347),
+&"jumpup_high": Vector2i(256, 347),
+&"inair_high": Vector2i(256, 347),
+&"isfalling_high": Vector2i(256, 347),
+&"land_high": Vector2i(256, 347),
+&"jump_prepare_mid": Vector2i(256, 347),
+&"jumpup_mid": Vector2i(256, 347),
+&"inair_mid": Vector2i(256, 347),
+&"isfalling_mid": Vector2i(256, 347),
+&"land_mid": Vector2i(256, 347),
+&"jump_prepare_low": Vector2i(256, 347),
+&"jumpup_low": Vector2i(256, 347),
+&"inair_low": Vector2i(256, 347),
+&"isfalling_low": Vector2i(256, 347),
+&"land_low": Vector2i(256, 347),
 &"attack_high": Vector2i(256, 347),
 &"attack_mid": Vector2i(256, 347),
 &"attack_low": Vector2i(256, 347),

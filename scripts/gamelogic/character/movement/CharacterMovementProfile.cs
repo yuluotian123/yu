@@ -7,6 +7,7 @@ namespace GameLogic
     {
         [Export] public float MoveSpeed { get; set; } = 2.8f;
         [Export] public float JumpVelocity { get; set; } = 4.31f;
+        [Export(PropertyHint.Range, "0,0.2,0.01")] public float JumpAnticipationTime { get; set; }
         [Export] public float JumpBufferTime { get; set; } = 0.12f;
         [Export] public float CoyoteTime { get; set; } = 0.1f;
         [Export] public float Gravity { get; set; } = 16f;

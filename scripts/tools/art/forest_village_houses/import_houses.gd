@@ -160,7 +160,9 @@ func build() -> void:
 		prefab.free()
 		imported.free()
 	build_gallery(manifest)
-	var report := FileAccess.open("res://assets/resources/art/forest_village/houses_import_validation.json",FileAccess.WRITE)
+	var report_dir := "res://.godot/forest-village-houses/"
+	DirAccess.make_dir_recursive_absolute(report_dir)
+	var report := FileAccess.open(report_dir+"houses_import_validation.json",FileAccess.WRITE)
 	report.store_string(JSON.stringify({"assets":checks,"all_passed":true},"\t"))
 	print("FOREST_HOUSES_IMPORTED: 10 complete exteriors, shared weather materials, native LODs and simple collisions")
 	quit()

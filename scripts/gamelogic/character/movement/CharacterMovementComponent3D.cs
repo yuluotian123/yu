@@ -13,13 +13,15 @@ namespace GameLogic
             bool overrideHorizontal = true,
             bool overrideVertical = true,
             int priority = 0,
-            bool restoreBeforeMovement = false)
+            bool restoreBeforeMovement = false,
+            bool restoreAfterMovement = false)
         {
             Velocity = velocity;
             OverrideHorizontal = overrideHorizontal;
             OverrideVertical = overrideVertical;
             Priority = priority;
             RestoreBeforeMovement = restoreBeforeMovement;
+            RestoreAfterMovement = restoreAfterMovement;
         }
 
         public Vector3 Velocity { get; }
@@ -27,6 +29,7 @@ namespace GameLogic
         public bool OverrideVertical { get; }
         public int Priority { get; }
         public bool RestoreBeforeMovement { get; }
+        public bool RestoreAfterMovement { get; }
     }
 
     [Tool, GlobalClass]
@@ -66,6 +69,8 @@ namespace GameLogic
 
         [GraphValue("IsOnFloor", DisplayName = "是否在地面", Access = GraphValueAccess.ReadOnly)]
         public bool IsOnFloor => Body?.IsOnFloor() ?? false;
+        [GraphValue("IsJumpPreparing", DisplayName = "跳跃预备中", Access = GraphValueAccess.ReadOnly)]
+        public bool IsJumpPreparing => _jumpAnticipationTimer > 0f;
         public CharacterMovementMode MovementMode { get; private set; }
         public bool MovementLocked { get; private set; }
         public bool JumpLocked { get; private set; }
@@ -93,6 +98,10 @@ namespace GameLogic
                 case "IsOnFloor":
                     value = IsOnFloor;
                     return true;
+                case "Character.Movement.IsJumpPreparing":
+                case "IsJumpPreparing":
+                    value = IsJumpPreparing;
+                    return true;
                 case "Character.Movement.MoveAxisX":
                 case "MoveInputX":
                     value = MoveInputX;
@@ -112,6 +121,8 @@ namespace GameLogic
         private Node3D _visualRoot;
         private float _jumpBufferTimer;
         private float _coyoteTimer;
+        private float _jumpAnticipationTimer;
+        private bool _releasedDuringJumpPreparation;
         private bool _jumpSustainRequested;
         private bool _wasJumpSustainRequested;
         private bool _hasVelocityOverride;
@@ -173,9 +184,23 @@ namespace GameLogic
             UpdateHorizontalVelocity(dt);
             UpdateJump(command, dt);
             UpdateGravity(dt);
+            Vector3 velocityBeforeOverride = Velocity;
             ApplyVelocityOverride();
 
             Body.MoveAndSlide();
+            // Authored motion is a single physics-step contribution, not residual velocity.
+            if (_hasVelocityOverride && _velocityOverride.RestoreAfterMovement)
+            {
+                Vector3 velocity = Velocity;
+                if (_velocityOverride.OverrideHorizontal)
+                {
+                    velocity.X = velocityBeforeOverride.X;
+                    velocity.Z = velocityBeforeOverride.Z;
+                }
+                if (_velocityOverride.OverrideVertical)
+                    velocity.Y = velocityBeforeOverride.Y;
+                Velocity = velocity;
+            }
             Owner.GlobalPosition = Body.GlobalPosition;
 
 
@@ -194,6 +219,8 @@ namespace GameLogic
             Body = null;
             _jumpBufferTimer = 0f;
             _coyoteTimer = 0f;
+            _jumpAnticipationTimer = 0f;
+            _releasedDuringJumpPreparation = false;
             _jumpSustainRequested = false;
             _wasJumpSustainRequested = false;
             _hasVelocityOverride = false;
@@ -289,6 +316,9 @@ namespace GameLogic
             {
                 MovementMode = CharacterMovementMode.Disabled;
                 Velocity = Vector3.Zero;
+                _jumpAnticipationTimer = 0f;
+                _releasedDuringJumpPreparation = false;
+                _jumpBufferTimer = 0f;
             }
         }
 
@@ -326,6 +356,10 @@ namespace GameLogic
             Body.TopLevel = true;
             Body.GlobalPosition = Owner.GlobalPosition;
             // 出生、回池重用、传送/读档都不能从旧位置插值到新位置。
+            _jumpAnticipationTimer = 0f;
+            _releasedDuringJumpPreparation = false;
+            _jumpBufferTimer = 0f;
+            _coyoteTimer = 0f;
             Owner.ResetPhysicsInterpolation();
         }
 
@@ -367,15 +401,49 @@ namespace GameLogic
             else
                 _jumpBufferTimer = Mathf.Max(0f, _jumpBufferTimer - delta);
 
-            if (!JumpLocked && _jumpBufferTimer > 0f && _coyoteTimer > 0f)
+            bool sustainRequested = !JumpLocked && command.JumpSustainRequested;
+            bool launchedPreparedJump = false;
+            if (JumpLocked)
             {
-                SetVerticalVelocity(Settings.JumpVelocity);
+                _jumpAnticipationTimer = 0f;
+                _releasedDuringJumpPreparation = false;
                 _jumpBufferTimer = 0f;
-                _coyoteTimer = 0f;
+            }
+            else if (IsJumpPreparing)
+            {
+                _releasedDuringJumpPreparation |= !sustainRequested;
+                _jumpAnticipationTimer = Mathf.Max(0f, _jumpAnticipationTimer - delta);
+                if (!IsJumpPreparing)
+                {
+                    // A short tap during the crouch must still produce a short jump.
+                    if (_coyoteTimer > 0f)
+                    {
+                        float speed = Settings.JumpVelocity;
+                        if (Settings.CutJumpOnRelease && _releasedDuringJumpPreparation)
+                            speed *= Settings.JumpCutMultiplier;
+                        SetVerticalVelocity(speed);
+                        launchedPreparedJump = true;
+                    }
+                    _releasedDuringJumpPreparation = false;
+                    _jumpBufferTimer = 0f;
+                    _coyoteTimer = 0f;
+                }
+            }
+            else if (_jumpBufferTimer > 0f && _coyoteTimer > 0f)
+            {
+                _jumpBufferTimer = 0f;
+                // Grounded anticipation is opt-in; coyote jumps keep their immediate response.
+                _jumpAnticipationTimer = IsOnFloor ? Mathf.Clamp(Settings.JumpAnticipationTime, 0f, 0.2f) : 0f;
+                if (IsJumpPreparing)
+                    _releasedDuringJumpPreparation = !sustainRequested;
+                else
+                {
+                    SetVerticalVelocity(Settings.JumpVelocity);
+                    _coyoteTimer = 0f;
+                }
             }
 
-            bool sustainRequested = !JumpLocked && command.JumpSustainRequested;
-            if (Settings.CutJumpOnRelease &&
+            if (!launchedPreparedJump && Settings.CutJumpOnRelease &&
                 _wasJumpSustainRequested &&
                 !sustainRequested &&
                 Velocity.Y > 0f)

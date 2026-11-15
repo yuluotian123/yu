@@ -51,6 +51,11 @@ func run() -> void:
 		importer.generate_lods(60.0,0.0,[])
 		mesh = importer.get_mesh()
 		saver.save_resource(mesh,LIB.MODELS+asset.name+".mesh.res")
+		if asset.name != "creek_bridge":
+			# Fence runs assemble the shared meshes directly in structure_library.
+			print("STRUCTURE_IMPORTED ",asset.name," ",triangles," tris; tangent normals; native LODs")
+			source.free()
+			continue
 		var prefab := Node3D.new()
 		prefab.name = String(asset.name).to_pascal_case()
 		prefab.set_meta("asset_category","finished_timber_structure")
@@ -58,15 +63,14 @@ func run() -> void:
 		prefab.set_meta("triangles",triangles)
 		prefab.set_meta("features",asset.features)
 		library.visual(prefab,"Model",asset.name,Vector3.ZERO)
-		if asset.name == "creek_bridge":
-			var body := StaticBody3D.new()
-			body.name = "Collision"
-			body.collision_mask = 0
-			prefab.add_child(body)
-			library.collider(body,"Deck",Vector3(0,-0.11,0),Vector3(5.85,0.25,3.276))
-			for side: int in [-1,1]:
-				for i: int in 2:
-					library.collider(body,"Rail%d_%d" % [side,i],Vector3(0,0.38+i*0.35,side*1.716),Vector3(5.772,0.12,0.09))
+		var body := StaticBody3D.new()
+		body.name = "Collision"
+		body.collision_mask = 0
+		prefab.add_child(body)
+		library.collider(body,"Deck",Vector3(0,-0.11,0),Vector3(5.85,0.25,3.276))
+		for side: int in [-1,1]:
+			for i: int in 2:
+				library.collider(body,"Rail%d_%d" % [side,i],Vector3(0,0.38+i*0.35,side*1.716),Vector3(5.772,0.12,0.09))
 		library.own_children(prefab,prefab)
 		var packed := PackedScene.new()
 		assert(packed.pack(prefab) == OK)

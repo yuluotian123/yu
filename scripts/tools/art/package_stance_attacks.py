@@ -103,6 +103,20 @@ def update_ability_timelines(config):
             link = spec.get('link_time_ms', spec['duration_ms']) / 1000
             hit = nodes[f'hit_{step}']
             hit['Duration'] = link
+            hit['Tracks'] = [track for track in hit['Tracks'] if not any(
+                clip.get('Action', {}).get('$type') == 'yu:GameLogic.AbilityRootMotionAction' for clip in track['Clips'])]
+            motion = spec.get('root_motion')
+            if motion:
+                pixels = motion['forward_pixels']
+                assert len(pixels) == len(spec['indices']) and pixels[0] == 0
+                assert all(isinstance(value, int) and 0 <= value < config['canvas'][0] for value in pixels)
+                assert pixels == sorted(pixels)
+                hit['Tracks'].append({'$type': 'yu:FlowTimelineTrack', 'Name': motion.get('track_name', '随挥前移'), 'Enabled': True,
+                    'Clips': [{'$type': 'yu:FlowTimelineClip', 'Id': f'root_motion_{step}', 'Name': motion.get('clip_name', '落脚承重'), 'StartTime': 0.0, 'Duration': link,
+                        'Enabled': True, 'Action': {'$type': 'yu:GameLogic.AbilityRootMotionAction',
+                            'Movement': {'$type': 'yu:GraphActionComponentReference', 'ComponentTypeName': 'GameLogic.CharacterMovementComponent3D', 'ComponentSlot': 0},
+                            'DistanceSamples': [round(value * motion['pixel_size'], 9) for value in pixels],
+                            'MotionPriority': 100}}]})
             for track in hit['Tracks']:
                 for clip in track['Clips']:
                     kind = clip['Action']['$type'].split('.')[-1]
@@ -136,11 +150,27 @@ def update_ability_timelines(config):
 
 def package(config):
     manifest = json.loads((META / 'manifest.json').read_text(encoding='utf-8'))
+    manifest['authoring_mode'] = config.get('authoring_mode', 'comfyui')
+    manifest['authoring_steps'] = config.get('authoring_steps', [])
+    manifest['art_revision'] = config.get('art_revision', config['revision'])
+    manifest['authoring_sources'] = config.get('authoring_sources', [])
+    if config.get('stability_revision'):
+        manifest['stability_revision'] = config['stability_revision']
+    manifest['alpha'] = (f"Green chroma dominance > {config['chroma_dominance']}; "
+                         'per-pixel Aseprite matte and steel repairs are recorded in pixel-corrections.json. '
+                         'Body and grip come from complete source poses; canonical idle endpoints are exact.')
     corrections = json.loads((ROOT / config['pixel_corrections']).read_text(encoding='utf-8'))['clips'] if config.get('pixel_corrections') else {}
     validation = {}
     w, h = config['canvas']; ox, oy = config['idle_offset']
     for spec, clip in zip(config['clips'], manifest['clips']):
         stance = spec['stance']; key = spec.get('key', stance); path = TEX / key
+        motion = spec.get('root_motion', {})
+        source_curve = motion.get('source_forward_pixels', motion.get('forward_pixels'))
+        if source_curve:
+            assert len(source_curve) == len(spec['indices'])
+            assert clip['root_motion'] == motion, 'Rebuild the manifest after changing root motion'
+            assert [record['root_motion_pixels'] for record in clip['records']] == source_curve
+            assert [record['runtime_forward_pixels'] for record in clip['records']] == motion['forward_pixels']
         frames = [Image.open(path / 'frames' / f'attack_{n:03d}.png').convert('RGBA') for n in range(len(spec['indices']))]
         atlas = np.array(Image.open(path / 'attack-atlas.png').convert('RGBA'))
         idle = np.array(Image.open(ROOT / spec['idle_frame']).convert('RGBA'))
@@ -167,6 +197,11 @@ def package(config):
                 for x, y, r, g, b, a in edit.get('restore', []):
                     expected_alpha[y, x] = a > 0
                     expected_rgb[y, x] = [r, g, b]
+                root_x = record.get('root_motion_pixels', 0)
+                if root_x:
+                    assert not expected_alpha[:, :root_x].any(), 'Root extraction must not clip art'
+                    expected_alpha = np.pad(expected_alpha[:, root_x:], ((0, 0), (0, root_x)))
+                    expected_rgb = np.pad(expected_rgb[:, root_x:], ((0, 0), (0, root_x), (0, 0)))
                 assert np.array_equal(foreground, expected_alpha)
                 assert np.array_equal(rgba[foreground, :3], expected_rgb[foreground])
             assert np.array_equal(atlas[n//6*h:(n//6+1)*h, n%6*w:(n%6+1)*w], rgba)
@@ -182,11 +217,15 @@ def package(config):
             'legs': [170, 265, 365, 365], 'tail_and_pouch': [135, 225, 370, 355],
         }
         write_json(audit_path, {
+            'authoring_mode': config.get('authoring_mode', 'comfyui'),
             'video': relative(ROOT / spec['video']),
             'frames': [relative(path / 'frames' / f"attack_{r['frame']:03d}.png") for r in selected],
             'source_indices': [r['video_frame'] for r in selected], 'frame_size': config['canvas'],
+            'root_translation_x': [-r.get('root_motion_pixels', 0) for r in selected],
+            'frame_durations_ms': [r['duration_ms'] for r in selected],
             'binary_alpha': True, 'preserve_inset': 3, 'rgb_tolerance': 0,
-            'timing_note': 'Variable frame durations; full timing is in manifest.json. Start/contact and idle endpoints are checked separately in media-validation.json.',
+            'timing_note': 'Uniform runtime frames; Aseprite/APNG round cumulative boundaries to milliseconds. Full timing is in manifest.json.',
+            'validation_note': 'package_stance_attacks.py checks source RGB, recorded matte repairs and root_translation_x exactly over the full canvas. Raw reports go to .godot/art-validation/greatsword_stance_attack/.',
             'regions': spec.get('audit_regions', [{'name': name, 'bounds': bounds} for name, bounds in regions.items()]),
         })
         validation[key] = {'frames': len(frames), 'duration_seconds': sum(times)/1000,
@@ -194,10 +233,12 @@ def package(config):
             'visible_video_rgb_exact_except_recorded_repairs': True,
             'recorded_rgb_repair_pixels': sum(len(edit.get('restore', [])) for edit in corrections.get(key, {}).values()),
             'recorded_matte_edits_exact': True, 'binary_alpha': True,
+            'root_extraction_pixels': source_curve,
+            'runtime_forward_pixels': motion.get('forward_pixels'),
             'start_and_idle_endpoints_alpha_and_visible_rgb_exact': True, 'atlas_rgba_exact': True,
             'apng_rgba_and_frame_times_exact': True, 'independent_full_silhouette_mask': False}
     write_json(META / 'manifest.json', manifest)
-    write_json(META / 'media-validation.json', validation)
+    write_json(ROOT / '.godot/art-validation/greatsword_stance_attack/media-validation.json', validation)
     update_ability_timelines(config)
     print(json.dumps(validation, ensure_ascii=False))
 

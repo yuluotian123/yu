@@ -1,0 +1,843 @@
+{
+  "schema": 1,
+  "revision": 2,
+  "date": "2026-11-15",
+  "authoring_mode": "comfyui",
+  "model": "Local MiniMax H3 int8, 28 steps, no acceleration LoRA",
+  "request": "Jump from the existing walking poses; keep the stepping leg relationship and return directly to walking.",
+  "canvas": [
+    512,
+    384
+  ],
+  "source_canvas": [
+    384,
+    512
+  ],
+  "source_offset": [
+    64,
+    -128
+  ],
+  "foot_anchor": [
+    256,
+    347
+  ],
+  "reference_offset": [
+    96,
+    0
+  ],
+  "chroma_dominance": 64,
+  "phases": [
+    {
+      "name": "jump_prepare",
+      "seconds": 0.08
+    },
+    {
+      "name": "jumpup",
+      "seconds": 0.15
+    },
+    {
+      "name": "inair",
+      "seconds": 0.18333333333333332
+    },
+    {
+      "name": "isfalling",
+      "seconds": 0.16666666666666666
+    },
+    {
+      "name": "land",
+      "seconds": 0.2
+    }
+  ],
+  "preview": "greatsword-stance-jumps-v2.gif",
+  "clips": [
+    {
+      "stance": "high",
+      "job": "8bc3b4a7-a452-4254-82d9-b2d4b8db96a5",
+      "seed": 202611150411,
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/high.mov",
+      "workflow": "assets/resources/sprites/amber_fox_style_v2/greatsword_jump/workflows/high.json",
+      "input": "assets/textures/sprites/amber_fox_style_v2/greatsword_jump/high/sources/yu-walk-jump-high-v2.png",
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/frames/move_000.png",
+      "walk_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high/frames",
+      "walk_frames": 36,
+      "walk_seconds": 1.0,
+      "phase_counts": {
+        "jump_prepare": 4,
+        "jumpup": 6,
+        "inair": 6,
+        "isfalling": 6,
+        "land": 8
+      },
+      "frames": [
+        {
+          "source": 0,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 20
+        },
+        {
+          "source": 2,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 4,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 6,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 8,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 9,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 10,
+          "root_y": 43,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 11,
+          "root_y": 61,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 13,
+          "root_y": 83,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 15,
+          "root_y": 100,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 17,
+          "root_y": 110,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 20,
+          "root_y": 121,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 23,
+          "root_y": 124,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 26,
+          "root_y": 123,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 29,
+          "root_y": 119,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 32,
+          "root_y": 109,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 34,
+          "root_y": 99,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 36,
+          "root_y": 85,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 38,
+          "root_y": 67,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 39,
+          "root_y": 56,
+          "reference": false,
+          "duration_ms": 27
+        },
+        {
+          "source": 40,
+          "root_y": 35,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 41,
+          "root_y": 16,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 42,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 43,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 44,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 46,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 48,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 51,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 53,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 55,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 25
+        }
+      ],
+      "audit_regions": [
+        {
+          "name": "face",
+          "bounds": [
+            232,
+            158,
+            281,
+            231
+          ]
+        },
+        {
+          "name": "hair",
+          "bounds": [
+            202,
+            145,
+            285,
+            235
+          ]
+        },
+        {
+          "name": "torso",
+          "bounds": [
+            220,
+            210,
+            294,
+            300
+          ]
+        },
+        {
+          "name": "hands",
+          "bounds": [
+            192,
+            130,
+            303,
+            267
+          ]
+        },
+        {
+          "name": "weapon",
+          "bounds": [
+            197,
+            28,
+            306,
+            227
+          ]
+        },
+        {
+          "name": "legs",
+          "bounds": [
+            188,
+            256,
+            315,
+            376
+          ]
+        },
+        {
+          "name": "tail_and_pouch",
+          "bounds": [
+            152,
+            225,
+            302,
+            356
+          ]
+        }
+      ]
+    },
+    {
+      "stance": "mid",
+      "job": "d5ba4c54-89ae-4205-b779-e97e72fafe01",
+      "seed": 202611150402,
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/mid.mov",
+      "workflow": "assets/resources/sprites/amber_fox_style_v2/greatsword_jump/workflows/mid.json",
+      "input": "assets/textures/sprites/amber_fox_style_v2/greatsword_jump/mid/sources/yu-walk-jump-mid-v2.png",
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid/frames/move_000.png",
+      "walk_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid/frames",
+      "walk_frames": 36,
+      "walk_seconds": 1.0,
+      "phase_counts": {
+        "jump_prepare": 4,
+        "jumpup": 6,
+        "inair": 6,
+        "isfalling": 6,
+        "land": 8
+      },
+      "frames": [
+        {
+          "source": 0,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 20
+        },
+        {
+          "source": 1,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 2,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 3,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 20
+        },
+        {
+          "source": 4,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 5,
+          "root_y": 3,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 6,
+          "root_y": 9,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 7,
+          "root_y": 14,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 8,
+          "root_y": 19,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 9,
+          "root_y": 23,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 10,
+          "root_y": 30,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 11,
+          "root_y": 32,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 13,
+          "root_y": 38,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 15,
+          "root_y": 39,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 17,
+          "root_y": 38,
+          "reference": false,
+          "duration_ms": 30
+        },
+        {
+          "source": 18,
+          "root_y": 35,
+          "reference": false,
+          "duration_ms": 31
+        },
+        {
+          "source": 19,
+          "root_y": 33,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 20,
+          "root_y": 30,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 21,
+          "root_y": 26,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 22,
+          "root_y": 19,
+          "reference": false,
+          "duration_ms": 27
+        },
+        {
+          "source": 23,
+          "root_y": 13,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 24,
+          "root_y": 6,
+          "reference": false,
+          "duration_ms": 28
+        },
+        {
+          "source": 25,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 26,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 27,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 28,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 29,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 30,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 31,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 55,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 25
+        }
+      ],
+      "audit_regions": [
+        {
+          "name": "face",
+          "bounds": [
+            232,
+            158,
+            281,
+            231
+          ]
+        },
+        {
+          "name": "hair",
+          "bounds": [
+            202,
+            145,
+            285,
+            235
+          ]
+        },
+        {
+          "name": "torso",
+          "bounds": [
+            220,
+            210,
+            294,
+            300
+          ]
+        },
+        {
+          "name": "hands",
+          "bounds": [
+            192,
+            130,
+            303,
+            267
+          ]
+        },
+        {
+          "name": "weapon",
+          "bounds": [
+            190,
+            116,
+            335,
+            265
+          ]
+        },
+        {
+          "name": "legs",
+          "bounds": [
+            188,
+            256,
+            315,
+            376
+          ]
+        },
+        {
+          "name": "tail_and_pouch",
+          "bounds": [
+            152,
+            225,
+            302,
+            356
+          ]
+        }
+      ]
+    },
+    {
+      "stance": "low",
+      "job": "92f5abd6-8ce3-49c4-8d95-bc4922da7daf",
+      "seed": 202611150403,
+      "video": "assets/videos/characters/amber_fox_style_v2/greatsword_jump/low.mov",
+      "workflow": "assets/resources/sprites/amber_fox_style_v2/greatsword_jump/workflows/low.json",
+      "input": "assets/textures/sprites/amber_fox_style_v2/greatsword_jump/low/sources/yu-walk-jump-low-v2.png",
+      "reference_frame": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/low/frames/move_000.png",
+      "walk_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/low/frames",
+      "walk_frames": 34,
+      "walk_seconds": 1.1,
+      "phase_counts": {
+        "jump_prepare": 8,
+        "jumpup": 4,
+        "inair": 4,
+        "isfalling": 4,
+        "land": 8
+      },
+      "frames": [
+        {
+          "source": 0,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 10
+        },
+        {
+          "source": 6,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 7,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 8,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 9,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 10,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 11,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 13,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 10
+        },
+        {
+          "source": 14,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 38
+        },
+        {
+          "source": 15,
+          "root_y": 3,
+          "reference": false,
+          "duration_ms": 37
+        },
+        {
+          "source": 16,
+          "root_y": 11,
+          "reference": false,
+          "duration_ms": 37
+        },
+        {
+          "source": 18,
+          "root_y": 16,
+          "reference": false,
+          "duration_ms": 38
+        },
+        {
+          "source": 19,
+          "root_y": 18,
+          "reference": false,
+          "duration_ms": 46
+        },
+        {
+          "source": 20,
+          "root_y": 18,
+          "reference": false,
+          "duration_ms": 46
+        },
+        {
+          "source": 21,
+          "root_y": 16,
+          "reference": false,
+          "duration_ms": 45
+        },
+        {
+          "source": 22,
+          "root_y": 15,
+          "reference": false,
+          "duration_ms": 46
+        },
+        {
+          "source": 22,
+          "root_y": 15,
+          "reference": false,
+          "duration_ms": 42
+        },
+        {
+          "source": 23,
+          "root_y": 15,
+          "reference": false,
+          "duration_ms": 42
+        },
+        {
+          "source": 24,
+          "root_y": 12,
+          "reference": false,
+          "duration_ms": 41
+        },
+        {
+          "source": 25,
+          "root_y": 12,
+          "reference": false,
+          "duration_ms": 42
+        },
+        {
+          "source": 26,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 27,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 28,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 30,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 32,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 53,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 54,
+          "root_y": 0,
+          "reference": false,
+          "duration_ms": 25
+        },
+        {
+          "source": 55,
+          "root_y": 0,
+          "reference": true,
+          "duration_ms": 25
+        }
+      ],
+      "audit_regions": [
+        {
+          "name": "face",
+          "bounds": [
+            232,
+            158,
+            281,
+            231
+          ]
+        },
+        {
+          "name": "hair",
+          "bounds": [
+            202,
+            145,
+            285,
+            235
+          ]
+        },
+        {
+          "name": "torso",
+          "bounds": [
+            220,
+            210,
+            294,
+            300
+          ]
+        },
+        {
+          "name": "hands",
+          "bounds": [
+            192,
+            130,
+            303,
+            267
+          ]
+        },
+        {
+          "name": "weapon",
+          "bounds": [
+            195,
+            185,
+            355,
+            310
+          ]
+        },
+        {
+          "name": "legs",
+          "bounds": [
+            188,
+            256,
+            315,
+            376
+          ]
+        },
+        {
+          "name": "tail_and_pouch",
+          "bounds": [
+            152,
+            225,
+            302,
+            356
+          ]
+        }
+      ]
+    }
+  ],
+  "root_note": "Source input has 128 native pixels of headroom. Airborne hip translation is removed; ground compression and forward-plane leg articulation remain. No horizontal recentering.",
+  "selection_note": "Each clip uses one takeoff and landing. Extra generated walking/second-hop frames are omitted. Both endpoints are exact current walk frame 0, not standing idle.",
+  "pixel_corrections": "assets/resources/sprites/amber_fox_style_v2/greatsword_jump/pixel-corrections.json"
+}

@@ -255,8 +255,8 @@
       "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
       "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/high.mov",
       "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start/source-rgb",
-      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start-workflow.json",
-      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start-prompt.txt",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/high-prompt.txt",
       "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/high_start/sources/input.png",
       "audit_regions": {
         "face": [
@@ -331,8 +331,8 @@
       "source_file": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
       "video": "assets/videos/characters/amber_fox_style_v2/greatsword_stance_movement/mid.mov",
       "rgb_directory": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start/source-rgb",
-      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start-workflow.json",
-      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start-prompt.txt",
+      "workflow_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid-workflow.json",
+      "prompt_file": "assets/resources/sprites/amber_fox_style_v2/greatsword_stance_movement/mid-prompt.txt",
       "input_file": "assets/textures/sprites/amber_fox_style_v2/greatsword_stance_movement/mid_start/sources/input.png",
       "audit_regions": {
         "face": [

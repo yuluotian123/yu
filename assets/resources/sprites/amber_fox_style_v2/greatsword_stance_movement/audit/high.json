@@ -115,6 +115,6 @@
   "intentional_edit": {
     "description": "Arms, hands and sword use a documented shoulder-following repair layer. Original video RGB differences in this area remain in the audit report; the separate numerical validation verifies untouched pixels and the full repaired layer.",
     "config": "../high-guard-repair.json",
-    "separate_validation": "../media-validation.json"
+    "validation_note": "package_stance_movement.py verifies original pixels outside repairs and reconstructs the documented repair layer; reports are temporary .godot outputs."
   }
 }

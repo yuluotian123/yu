@@ -107,7 +107,9 @@ func run() -> void:
 		save_scene(prefab,SCENES+asset+".tscn")
 		prefab.free(); source.free()
 		checks.append({"asset":asset,"triangles":triangles,"lod_counts":lods,"unit_normals":has_normals})
-	var output := FileAccess.open(META+"godot_validation.json",FileAccess.WRITE)
+	var report_dir := "res://.godot/forest-vegetation/"
+	DirAccess.make_dir_recursive_absolute(report_dir)
+	var output := FileAccess.open(report_dir+"godot_validation.json",FileAccess.WRITE)
 	output.store_string(JSON.stringify({"assets":checks,"placements_changed":false},"\t"))
 	print("FOREST_VEGETATION_IMPORTED ",JSON.stringify(checks))
 	quit()

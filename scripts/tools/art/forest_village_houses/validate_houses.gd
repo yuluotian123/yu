@@ -147,7 +147,7 @@ func run() -> void:
 	stage.queue_free()
 	await process_frame
 	await check_level()
-	var output := FileAccess.open("res://assets/resources/art/forest_village/houses_runtime_validation.json",FileAccess.WRITE)
+	var output := FileAccess.open(OUT+"houses_runtime_validation.json",FileAccess.WRITE)
 	output.store_string(JSON.stringify({"assets":results,"all_passed":failures == 0,"failures":failures},"\t"))
 	print("FOREST_HOUSES_VALIDATED: ten meshes, forty elevations, native rendering and material weather states; failures=",failures)
 	quit(0 if failures == 0 else 1)

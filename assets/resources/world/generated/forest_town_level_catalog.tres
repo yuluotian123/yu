@@ -9,7 +9,7 @@
 resource_name = "森林小镇 · 世界目录"
 script = ExtResource("4_gs7cx")
 LevelId = "209a74242d3e4c8ba415cd6ced08beea"
-SourceSignature = "153A3F794E7CDB9B11D38CC32E078B559FD3FE7BB8D1A8F74CD6155068BDB277/population-v3/209a74242d3e4c8ba415cd6ced08beea/6261f7cc6f33405ebc8f6b4eec32bf8c/portal-export-v1"
+SourceSignature = "EED270BD3E340BA1C18B242550D6FA628B07A7B4AB3D8CD35545BCF0051DFB54/population-v3/209a74242d3e4c8ba415cd6ced08beea/6261f7cc6f33405ebc8f6b4eec32bf8c/portal-export-v1"
 Actors = Array[Dictionary]([{
 "abstract": 45.0,
 "detailed": 30.0,

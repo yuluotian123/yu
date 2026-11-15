@@ -152,7 +152,7 @@ public partial class ForestInteriorValidation : Node
             _results.Add(new{name,household,automatic_entry=true,automatic_return=true,arrival_clear=true});
             GD.Print("HOUSE_ROUNDTRIP_OK "+household);
         }
-        string report=only==null?"res://assets/resources/art/forest_village/interiors_validation.json":Out+"validation_"+only+".json";
+        string report=Out+(only==null?"validation.json":"validation_"+only+".json");
         using(var file=FileAccess.Open(report,FileAccess.ModeFlags.Write))
             file.StoreString(System.Text.Json.JsonSerializer.Serialize(new{all_passed=true,checks=_checks,houses=_results,legacy_storage_preserved=true,rear_exits=0},new System.Text.Json.JsonSerializerOptions{WriteIndented=true}));
         GD.Print($"FOREST_INTERIORS_VALIDATED {_checks} checks; {_results.Count} physical round trips; rear sealed");

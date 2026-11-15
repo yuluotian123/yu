@@ -5,7 +5,6 @@ Uses the existing painted house atlas and its baked tangent normals/roughness.
 import bpy
 import bmesh
 import json
-import math
 import random
 import tempfile
 from pathlib import Path

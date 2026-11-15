@@ -41,6 +41,6 @@
 
 仅刷新十户室内寻路时执行 `res://scripts/tools/art/forest_village_interiors/rebuild_navigation.gd`。它复用房屋导航烘焙函数，只保存各关卡当前引用的导航资源，并检查出生点至出口、房间中央及仓储交互点的连通性。
 
-`probe_entrance_slopes.gd` 使用与实际玩家相同的 0.468 × 0.936 × 0.468 米方形碰撞体，逐户走上楼梯，不发出跳跃指令。`validate_interiors.gd` 使用真实世界会话和玩家运动组件，从院外沿楼梯进入、在室内移动，再自动返回本户院落；同时检查落点不误触、导航、法线和原仓储对象。`render_interiors.gd` 输出十户室内总览。截图和日志保存在 `.godot/forest-village-interiors/`，最终往返结果保存在 `assets/resources/art/forest_village/interiors_validation.json`。
+`validate_interiors.gd` 使用真实世界会话和玩家运动组件，从院外沿楼梯进入、在室内移动，再自动返回本户院落；同时检查落点不误触、导航、法线和原仓储对象。楼梯通行统一由该入口覆盖，已移除单独模拟方形碰撞体的一次性探针。`render_interiors.gd` 输出十户室内总览。截图、日志和最终往返结果统一保存在 `.godot/forest-village-interiors/`，总报告为 `validation.json`。
 
 本轮验证：193 项室内运行检查、十户真实自动往返、十处方形角色无跳跃上楼检查全部通过；既有村落通行检查为 60/60，森林导航重烘后 2,496 个多边形、13 条连接通过。C# 构建 0 错误，8 个既有警告。

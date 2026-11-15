@@ -45,7 +45,7 @@ end
 local order = {"run", "jump", "hurt", "death"}
 local included = {}
 -- Movement now comes from the three stance previews; do not regenerate the retired run GIF.
-for _, name in ipairs({"jump", "hurt", "death"}) do included[name] = true end
+for _, name in ipairs({"hurt", "death"}) do included[name] = true end
 local labels = {run="跑步", jump="完整跳跃", hurt="受击", death="倒地"}
 local status = {run="循环播放", jump="跳高约 0.6 米；全程可平移", hurt="已有素材，当前玩家图未接入", death="已有素材，当前玩家图未接入"}
 local profiles = {{key="greatsword", label="大剑"}}
@@ -134,7 +134,7 @@ attack_preview.combo_seconds = nil
 attack_preview.runtime_file = attacks.preview:gsub("attacks%-v", "attacks-runtime-v"):gsub("combos%-v", "combos-runtime-v")
 attack_preview.clips = {}
 local attack_notes = {}
-local stance_labels = {high="上段下劈",mid="中段横扫",low="下段前刺"}
+local stance_labels = {high="上段下劈",mid="中段横砍",low="下段前刺"}
 for _, clip in ipairs(attacks.clips) do
   attack_preview.clips[clip.key or clip.stance] = {frames=clip.frames,duration_seconds=clip.duration,variable_frame_times=true}
 end
@@ -151,6 +151,9 @@ attack_preview.runtime_replaced = true
 manifest.previews.stance_attacks = attack_preview
 assert(app.fs.isFile(output .. "/" .. attack_preview.file), "当前三段攻击预览缺失")
 local rows = {"| 动作 | GIF | 动作相关信息 |", "| --- | --- | --- |"}
+local jumps=json.decode(read(root.."/assets/resources/sprites/amber_fox_style_v2/greatsword_jump/manifest.json"))
+manifest.previews.stance_jumps={file=jumps.preview,runtime_file=jumps.preview:gsub("jumps%-v","jumps-runtime-v"),revision=jumps.revision,runtime_replaced=true}
+assert(app.fs.isFile(output.."/"..manifest.previews.stance_jumps.runtime_file),"当前三段跳跃实机预览缺失")
 rows[#rows+1] = string.format("| 三段待机 | ![上、中、下段待机](media/protagonist/%s) | 各 72 帧 · 24 fps · 3 秒循环<br>已加大肩部起伏与尾摆；保留眨眼，脚底不增加位移 |", idle_preview.file)
 rows[#rows+1] = string.format("| 三架势攻击 | ![上、中、下架势普攻](media/protagonist/%s) | %s<br>点击左键执行完整攻击与收势 |",attack_preview.file,table.concat(attack_notes,"；"))
 rows[#rows+1] = "| 架势过渡 | ![六向架势切换](media/protagonist/greatsword-stance-transitions-62fps.gif) | 上↔中 7 帧 / 0.112 秒，中↔下及上↔下 10 帧 / 0.160 秒；均为 62.4 fps |"
@@ -158,6 +161,9 @@ for _, name in ipairs(order) do
   if name == "run" and manifest.previews.stance_movement then
     local movement = manifest.previews.stance_movement
     rows[#rows+1] = string.format("| 三段移动 | ![上、中、下段持剑移动](media/protagonist/%s) | %s |", movement.file, movement.description)
+  elseif name == "jump" then
+    local j=manifest.previews.stance_jumps
+    rows[#rows+1] = string.format("| 三段完整跳跃 | ![上、中、下段行走衔接完整跳跃](media/protagonist/%s) | 从各自行走姿势迈步蹬地，腾空收腿；保持持剑架势<br>80 毫秒预备，200 毫秒落地缓冲；移动中直接接回行走循环 |",j.runtime_file)
   else
   local a = assert(manifest.weapons.greatsword.animations[name])
   rows[#rows+1] = string.format("| %s | ![主角%s](media/protagonist/%s) | %d 帧 · %.3g fps · %.3g 秒<br>%s |", labels[name], labels[name], a.file, a.frames, a.fps, a.source_duration_seconds, status[name])

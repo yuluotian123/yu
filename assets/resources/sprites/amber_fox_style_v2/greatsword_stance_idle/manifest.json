@@ -54,6 +54,6 @@
   },
   "sources": "sources.json",
   "motion": "motion.json",
-  "verification": "media-validation.json",
-  "note": "PNG/APNG 为像素基准；GIF 仅供观看。自动核验没有独立全轮廓标注。"
+  "note": "PNG/APNG 为像素基准；GIF 仅供观看。自动核验没有独立全轮廓标注。",
+  "verification_script": "scripts/tools/art/validate_protagonist_idle.gd"
 }

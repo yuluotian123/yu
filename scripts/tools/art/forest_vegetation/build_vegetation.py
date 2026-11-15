@@ -7,7 +7,6 @@ import bpy
 import math
 import json
 import random
-import sys
 import tempfile
 from pathlib import Path
 from mathutils import Vector, Matrix

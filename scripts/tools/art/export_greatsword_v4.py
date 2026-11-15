@@ -192,7 +192,9 @@ def export():
     (META/'sprite_frames.tres').write_text('\n'.join(lines),encoding='utf8')
     (META/'animation-map.json').write_text(json.dumps({'frame_size':[256,256],'foot_anchor':[128,219],
         'unique_frames':len(unique),'animations':animation_map},indent=2),encoding='utf8')
-    (META/'processing-report.json').write_text(json.dumps({'clips':audit,'global_quantization':False,
+    report_dir = ROOT / '.godot/art-validation/greatsword_v4'
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir/'processing-report.json').write_text(json.dumps({'clips':audit,'global_quantization':False,
         'source_transform':'whole 512x512 canvas to 256x256, nearest; no per-frame fitting or translation',
         'alpha':'green chroma key; only isolated <=3px codec specks removed; spill recoloring restricted to outer 3px',
         'mask_coverage':'No independent full silhouette reference. Numerical checks prove retained interior RGB only; manual region review required.'},indent=2),encoding='utf8')

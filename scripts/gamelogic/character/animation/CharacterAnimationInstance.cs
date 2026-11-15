@@ -26,6 +26,7 @@ namespace GameLogic
         private readonly Dictionary<string, AnimationRequest> _animationRequests = new(StringComparer.Ordinal);
         private readonly Dictionary<string, string> _animationAliases = new(StringComparer.Ordinal);
         private readonly Dictionary<string, string> _animationLeadIns = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> _leadInSkipAfter = new(StringComparer.Ordinal);
         private readonly Dictionary<string, object> _variables = new(StringComparer.Ordinal);
         private readonly Dictionary<string, string> _variableSources = new(StringComparer.Ordinal);
         private readonly HashSet<string> _missingAnimationWarnings = new(StringComparer.Ordinal);
@@ -100,6 +101,7 @@ namespace GameLogic
             _animationRequests.Clear();
             _animationAliases.Clear();
             _animationLeadIns.Clear();
+            _leadInSkipAfter.Clear();
             _variables.Clear();
             _variableSources.Clear();
             _missingAnimationWarnings.Clear();
@@ -173,11 +175,15 @@ namespace GameLogic
 
         // An optional one-shot runs once before the requested loop. It uses the same
         // request priority, so stopping, jumping or an ability can interrupt normally.
-        public void SetAnimationLeadIn(string animation, string leadIn)
+        public void SetAnimationLeadIn(string animation, string leadIn, string skipAfterAnimation = null)
         {
             if (string.IsNullOrWhiteSpace(animation)) return;
             if (string.IsNullOrWhiteSpace(leadIn)) _animationLeadIns.Remove(animation);
             else _animationLeadIns[animation] = leadIn;
+            if (string.IsNullOrWhiteSpace(leadIn) || string.IsNullOrWhiteSpace(skipAfterAnimation))
+                _leadInSkipAfter.Remove(animation);
+            else
+                _leadInSkipAfter[animation] = skipAfterAnimation;
         }
 
         private void CaptureVariables()
@@ -230,8 +236,10 @@ namespace GameLogic
             string previousAnimation = _activeAnimation;
             if (!sameRequest || !sameTarget)
             {
+                bool skipLeadIn = _leadInSkipAfter.TryGetValue(best.Animation, out string skipAfter) &&
+                    _activeResolvedAnimation == ResolveAnimation(skipAfter);
                 _activeAnimation = _animationLeadIns.TryGetValue(best.Animation, out string leadIn) &&
-                    CanPlayAnimation(leadIn) ? leadIn : resolvedAnimation;
+                    !skipLeadIn && CanPlayAnimation(leadIn) ? leadIn : resolvedAnimation;
             }
             else if (_activeAnimation != resolvedAnimation && PlaybackBackend?.IsPlaying == false)
             {

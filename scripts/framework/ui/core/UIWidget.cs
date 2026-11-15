@@ -73,21 +73,11 @@ namespace Framework.UI
             OwnerWindow = window;
         }
 
-        internal override void InternalCreate()
-        {
-            base.InternalCreate();
-        }
-
         internal override void InternalDestroy()
         {
             base.InternalDestroy();
             OwnerWindow = null;
         }
 
-        internal override void InternalSetVisible(bool visible)
-        {
-            // UIWidget 的可见性由 Visible 属性统一管理，这里调用基类更新子 widgets 及回调
-            base.InternalSetVisible(visible);
-        }
     }
 }

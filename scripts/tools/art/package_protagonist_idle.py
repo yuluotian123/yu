@@ -18,6 +18,7 @@ POSES = ('high', 'mid', 'low')
 
 
 def write_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
@@ -122,7 +123,7 @@ def package():
     lines += ['', '[resource]', 'animations = [' + ',\n'.join(animations) + ']', '']
     (META / 'sprite_frames.tres').write_text('\n'.join(lines), encoding='utf-8')
     write_json(META / 'clips.json', clips)
-    write_json(META / 'media-validation.json', checks)
+    write_json(ROOT / '.godot/art-validation/greatsword_stance_idle/media-validation.json', checks)
     write_json(META / 'manifest.json', {
         'date': '2026-11-08', 'status': '三段待机已接入武器架势切换',
         'attacks': '本次三段攻击被否定并删除，待重新设计',
@@ -130,7 +131,7 @@ def package():
         'canvas': cfg['canvas'], 'foot_anchor': cfg['foot_anchor'], 'fps': 24, 'frames_per_pose': 72,
         'duration_seconds': 3, 'loop': True, 'clips': clips, 'runtime_replaced': True,
         'previews': {'idle': 'greatsword-stance-idle-current.gif', 'static': 'greatsword-stances.png'},
-        'sources': 'sources.json', 'motion': 'motion.json', 'verification': 'media-validation.json',
+        'sources': 'sources.json', 'motion': 'motion.json', 'verification_script': 'scripts/tools/art/validate_protagonist_idle.gd',
         'note': 'PNG/APNG 为像素基准；GIF 仅供观看。自动核验没有独立全轮廓标注。'})
     print(json.dumps({'frames': 216, 'clips': list(checks), 'checks': checks}, ensure_ascii=True))
 

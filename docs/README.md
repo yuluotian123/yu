@@ -36,7 +36,7 @@ Godot C# 游戏项目的统一文档入口。当前引擎与构建方式见[引�
 | [DDGI](rendering/ddgi-implementation.md) | 引擎实现、场景接线、参数与验证 |
 | [场景表面](rendering/town-rendering.md)、[后处理](rendering/relink-post.md) | 材质、光照、像素取样与颜色处理 |
 | [双手大剑移动参考](art/greatsword-movement-references.md) | 持剑步法参考、三段移动约束与来源 |
-| [双手大剑攻击参考](art/greatsword-attack-references.md) | 三段普攻、双手握持与回架动作来源 |
+| [双手大剑攻击参考](art/greatsword-attack-references.md) | 三段设定与参考配图、10 组 Bilibili 候选、握持与回架差异、骨骼源转帧方向 |
 | [主角三段跳跃](art/protagonist-jump.md) | 三段持剑跳跃、统一起落节奏、源文件与重建检查 |
 | [天空与云](rendering/sky-clouds.md)、[昼夜](rendering/time-of-day.md)、[天气](rendering/weather.md) | 环境渲染与运行时驱动 |
 
